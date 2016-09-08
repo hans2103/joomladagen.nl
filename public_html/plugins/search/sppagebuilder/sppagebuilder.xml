@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3" type="plugin" group="search" method="upgrade">
+	<name>plg_search_sppagebuilder</name>
+	<author>joomshaper.com</author>
+	<creationDate>July 2015</creationDate>
+	<copyright>Copyright (C) 2015 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>support@joomshaper.com</authorEmail>
+	<authorUrl>www.joomshaper.com</authorUrl>
+	<version>1.0.1</version>
+	<description>PLG_SEARCH_SPPAGEBUILDER_DESCRIPTION</description>
+	<files>
+		<filename plugin="sppagebuilder">sppagebuilder.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB.plg_search_sppagebuilder.ini</language>
+		<language tag="en-GB">language/en-GB.plg_search_sppagebuilder.sys.ini</language>
+	</languages>
+</extension>
