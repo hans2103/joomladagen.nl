@@ -1,0 +1,3 @@
+UPDATE #__extensions
+SET enabled = '1', params = '{"jQueryVersion":"1.5.1","source":"local","jqunique":"0","jqregex":"([\\\/a-zA-Z0-9_:\\.-]*)jquery([0-9\\.-]|min|pack)*?.js","stripCustom":"0","customScripts":"","stripMootools":"0","stripMootoolsMore":"0","replaceMootools":"0","mootoolsPath":"http:\/\/ajax.googleapis.com\/ajax\/libs\/mootools\/1.2.4\/mootools-yui-compressed.js","ie6Warning":"1","scrollTop":"1","scrollStyle":"dark","scrollText":"^ Back to Top","lazyLoad":"0","llSelector":"img","resizeImage":"1","riContent":"1","prettyPhoto":"1","ppContent":"1"}'
+WHERE element = 'jblibrary';

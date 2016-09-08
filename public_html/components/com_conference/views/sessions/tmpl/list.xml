@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CONFERENCE_VIEW_SESSIONS_LIST">
+		<message>
+				<![CDATA[COM_CONFERENCE_VIEW_SESSIONS_LIST_DESC]]>
+		</message>
+	</layout>
+	<fields name="params">
+		<fieldset name="basic" label="COM_CONFERENCE_FIELDSET_BASIC">
+			<field name="eventid" type="sql" default="0" label="COM_CONFERENCE_COMMON_EVENT_SELECT_LABEL" description="" query="SELECT '' AS `conference_event_id`, '- Select Event -' AS `title` UNION SELECT `conference_event_id`, `title` FROM `#__conference_events`" key_field="conference_event_id" value_field="title" />
+		</fieldset>
+	</fields>
+</metadata>

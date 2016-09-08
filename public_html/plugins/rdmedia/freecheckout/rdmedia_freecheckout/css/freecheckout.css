@@ -1,0 +1,44 @@
+#plg_rdmedia_freecheckout{
+	width:100%;
+	color: #999999;
+	border:#999999 solid 1px;
+	height:80px;
+	background: url(../images/paybycheck-logo-250.png) no-repeat;
+	margin-top: 25px;
+}
+
+#plg_rdmedia_freecheckout_cards{
+	width: 50%;
+	height: 40px;
+	margin-left: 185px;
+	margin-top: 23px;
+	padding-left: 3px;
+}
+
+#plg_rdmedia_ideal_confirmbutton{
+	width:116px;
+	height: 87px;
+	margin-left: 600px;
+	margin-top: -48px;
+	position: absolute;
+}
+
+.freecheckout_button {
+	height: 50px;
+	width: 116px;
+	background: url(../images/freecheckout_button.png) repeat-x top;
+	border:#dbdedf solid 1px;
+	color: #CCCCCC;
+	font-size: 85%;
+	text-transform: uppercase;
+}
+
+.freecheckout_button:hover {
+	height: 50px;
+	width: 116px;
+	background: url(../images/freecheckout_button.png) repeat-x top;
+	border:#003a54 solid 1px;
+	color: #CCCCCC;
+	font-size: 85%;
+	text-transform: uppercase;
+}

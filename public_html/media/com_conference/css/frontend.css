@@ -1,0 +1,205 @@
+.conference .thumbnail {
+	background: #fff;
+	margin-bottom: 5px;
+}
+
+/* Speaker */
+.speakersocial {
+	margin-top: 5px;
+}
+
+.speakersocial .btn-block {
+	text-align: left;
+	padding-left: 5px;
+}
+
+.conference.levels .label {
+	font-size: 14px;
+	padding: 4px 4px 2px;
+	line-height: 22px;
+}
+
+/* Schedule */
+.conference.schedule .nav-tabs {
+	margin-bottom: 0;
+	border-bottom: none;
+	margin-left: 10px;
+}
+
+.conference.schedule table {
+	margin: 0;
+}
+
+.conference.schedule table th, 
+.conference.schedule table td {
+	padding: 5px;
+	vertical-align: top;
+}
+
+.conference.schedule table th {
+	font-size: 12px;
+	text-align: center;
+}
+
+.conference.schedule .sessioninfo {
+	margin: 5px 0 10px;
+}
+
+.conference.schedule .session {
+	margin-top: 4px;
+}
+
+.conference.schedule .speaker {
+	width: 100%;
+	border-top: 1px solid #DDDDDD;
+	display: block;
+}
+
+.conference.schedule .speaker .icon-user {
+	font-size: 10px;
+	width: 10px;
+}
+
+.conference.schedule .label {
+	font-size: 11px;
+}
+
+.conference.schedule .lang {
+	margin-left: 5px;
+}
+
+.conference.schedule .visible-phone {
+	display: none !important;
+}
+
+/* my Speaker profile */
+.conference input#twitter {
+	width: 460px;
+}
+
+.conference input#facebook {
+	width: 319px;
+}
+
+.conference input#googleplus {
+	width: 338px;
+}
+
+.conference input#website {
+	width: 438px;
+}
+
+.input-append .add-on, 
+.input-prepend .add-on {
+	font-size: 12px;
+}
+
+.conference .form-horizontal .help-block {
+	font-size: 11px;
+	font-style: italic;
+	margin-top: 5px;
+}
+
+.conference .table {
+	background: #fff;
+}
+
+/* Special conference icomoons */
+@font-face {
+	font-family: 'conference';
+	src:url('../fonts/conference.eot');
+	src:url('../fonts/conference.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/conference.woff') format('woff'),
+		url('../fonts/conference.ttf') format('truetype'),
+		url('../fonts/conference.svg#conference') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'conference';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+/*
+Instead of a list of all class selectors,
+you can use the generic selector below, but it's slower:
+[class*="conference-"]:before {
+*/
+.conference-twitter:before, .conference-linkedin:before, .conference-google-plus:before, .conference-facebook:before, .conference-earth:before {
+	font-family: 'conference';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	margin-right: 4px;
+	top: 2px;
+	position: relative;
+}
+.conference-twitter:before {
+	content: "\e001";
+}
+.conference-linkedin:before {
+	content: "\e000";
+}
+.conference-google-plus:before {
+	content: "\e002";
+}
+.conference-facebook:before {
+	content: "\e003";
+}
+.conference-earth:before {
+	content: "\e004";
+}
+
+.btn:hover .conference-earth {
+	color: #000000;
+}
+.btn:hover .conference-twitter {
+	color: #35B0ED;
+}
+.btn:hover .conference-google-plus {
+	color: #C7563C;
+}
+.btn:hover .conference-facebook {
+	color: #3B5998;
+}
+.btn:hover .conference-linkedin {
+	color: #3F9DC8;
+}
+
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+	.conference.schedule table th, 
+	.conference.schedule table td {
+		display: block;
+	} 
+	
+	.info .visible-phone {
+		display: inline !important;
+	}
+	
+	.roomname {
+		float: left;
+		padding-right: 10px;
+	}
+	
+	.conference.schedule .speaker {
+	    border-top: none !important;
+	}
+	
+	.conference.schedule .hidden-phone {
+		display: none !important;
+	}
+	
+	.conference.schedule .visible-phone {
+		display: inherit !important;
+	}
+}

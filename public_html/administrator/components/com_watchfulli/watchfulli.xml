@@ -1,0 +1,51 @@
+<extension type="component" version="2.5.0" method="upgrade">
+    <name>WATCHFULLI</name>
+    <version>1.10.10</version>
+    <creationDate>2016-08-04</creationDate>
+    <description>COM_WATCHFULLI_XML_DESCRIPTION</description>
+    <license>GPL</license>
+    <author>watchful.li</author>
+    <authoremail>info@watchful.li</authoremail>
+    <authorUrl>https://watchful.li</authorUrl>
+    <files folder="site">
+        <filename>controller.php</filename>
+        <filename>watchfulli.php</filename>
+        <folder>views</folder>
+    </files>   
+    <administration>
+        <menu img="../administrator/components/com_watchfulli/watchfulli_picto_16x16.png" link="option=com_watchfulli">Watchfulli</menu>
+        <files folder="admin">
+            <filename>watchfulli.php</filename>
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>autoloader.php</filename>
+            <filename>watchfulli_picto_16x16.png</filename>
+            <filename>watchfulli_picto_48x48.png</filename>
+            <filename>icon_jmon.css</filename>
+            <folder>classes</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="admin/language">
+            <language tag="en-GB">en-GB/en-GB.com_watchfulli.ini</language>
+            <language tag="en-GB">en-GB/en-GB.com_watchfulli.sys.ini</language>
+            <language tag="es-ES">es-ES/es-ES.com_watchfulli.ini</language>
+            <language tag="es-ES">es-ES/es-ES.com_watchfulli.sys.ini</language>
+            <language tag="fr-FR">fr-FR/fr-FR.com_watchfulli.ini</language>
+            <language tag="fr-FR">fr-FR/fr-FR.com_watchfulli.sys.ini</language>
+            <language tag="it-IT">it-IT/it-IT.com_watchfulli.ini</language>
+            <language tag="it-IT">it-IT/it-IT.com_watchfulli.sys.ini</language>
+            <language tag="ru-RU">ru-RU/ru-RU.com_watchfulli.ini</language>
+            <language tag="ru-RU">ru-RU/ru-RU.com_watchfulli.sys.ini</language>
+            <language tag="nl-NL">nl-NL/nl-NL.com_watchfulli.ini</language>
+            <language tag="nl-NL">nl-NL/nl-NL.com_watchfulli.sys.ini</language>
+        </languages>
+    </administration> 
+    <scriptfile>install.watchfulli.php</scriptfile>
+    <updateservers>
+        <server type="extension" priority="1" name="Watchful Client Update">https://watchful.li/index.php?option=com_ars&amp;view=update&amp;task=stream&amp;format=xml&amp;id=1&amp;dummy=extension.xml</server>
+    </updateservers>
+    <compatibility>
+        <version>2.5</version>
+        <version>3</version>
+    </compatibility>
+</extension>

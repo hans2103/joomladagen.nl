@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="xmap" method="upgrade">
+    <name>PLG_XMAP_COM_CONTENT</name>
+    <author>Guillermo Vargas</author>
+    <creationDate>01/26/2011</creationDate>
+    <copyright>(c) 2005 - 2009 Joomla! Vargas. All rights reserved; (c) 2015 Branko Wilhelm. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>guille@vargas.co.cr</authorEmail>
+    <authorUrl>joomla.vargas.co.cr</authorUrl>
+    <version>3.0 rev 302</version>
+    <description>PLG_XMAP_COM_CONTENT_DESC</description>
+    <files>
+        <filename plugin="com_content">com_content.php</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.plg_xmap_com_content.ini</language>
+        <language tag="en-GB">en-GB/en-GB.plg_xmap_com_content.sys.ini</language>
+        <language tag="de-DE">de-DE/de-DE.plg_xmap_com_content.ini</language>
+        <language tag="de-DE">de-DE/de-DE.plg_xmap_com_content.sys.ini</language>
+        <language tag="es-ES">es-ES/es-ES.plg_xmap_com_content.ini</language>
+        <language tag="es-ES">es-ES/es-ES.plg_xmap_com_content.sys.ini</language>
+        <language tag="fa-IR">fa-IR/fa-IR.plg_xmap_com_content.ini</language>
+        <language tag="fa-IR">fa-IR/fa-IR.plg_xmap_com_content.sys.ini</language>
+        <language tag="fr-FR">fr-FR/fr-FR.plg_xmap_com_content.ini</language>
+        <language tag="fr-FR">fr-FR/fr-FR.plg_xmap_com_content.sys.ini</language>
+        <language tag="cs-CZ">cs-CZ/cs-CZ.plg_xmap_com_content.ini</language>
+        <language tag="cs-CZ">cs-CZ/cs-CZ.plg_xmap_com_content.sys.ini</language>
+        <language tag="nl-NL">nl-NL/nl-NL.plg_xmap_com_content.ini</language>
+        <language tag="nl-NL">nl-NL/nl-NL.plg_xmap_com_content.sys.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.plg_xmap_com_content.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.plg_xmap_com_content.sys.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="expand_categories" type="list" default="1" label="PLG_XMAP_COM_CONTENT_EXPAND_CATEGORIES" description="PLG_XMAP_COM_CONTENT_EXPAND_CATEGORIES_DESC">
+                    <option value="0">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                    <option value="1">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="2">PLG_XMAP_COM_CONTENT_OPTION_XML_ONLY</option>
+                    <option value="3">PLG_XMAP_COM_CONTENT_OPTION_HTML_ONLY</option>
+                </field>
+                <field name="expand_featured" type="list" default="1" label="PLG_XMAP_COM_CONTENT_EXPAND_FEATURED" description="PLG_XMAP_COM_CONTENT_EXPAND_FEATURED_DESC">
+                    <option value="0">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                    <option value="1">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="2">PLG_XMAP_COM_CONTENT_OPTION_XML_ONLY</option>
+                    <option value="3">PLG_XMAP_COM_CONTENT_OPTION_HTML_ONLY</option>
+                </field>
+                <field name="include_archived" type="list" default="2" label="PLG_XMAP_COM_CONTENT_INCLUDE_ARCHIVED" description="PLG_XMAP_COM_CONTENT_INCLUDE_ARCHIVED_DESC">
+                    <option value="0">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                    <option value="1">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="2">PLG_XMAP_COM_CONTENT_OPTION_XML_ONLY</option>
+                    <option value="3">PLG_XMAP_COM_CONTENT_OPTION_HTML_ONLY</option>
+                </field>
+                <field name="show_unauth" type="list" default="0" label="PLG_XMAP_COM_CONTENT_SHOW_UNAUTH_LINKS" description="PLG_XMAP_COM_CONTENT_SHOW_UNAUTH_LINKS_DESC">
+                    <option value="0">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                    <option value="1">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="2">PLG_XMAP_COM_CONTENT_OPTION_XML_ONLY</option>
+                    <option value="3">PLG_XMAP_COM_CONTENT_OPTION_HTML_ONLY</option>
+                </field>
+                <field name="add_pagebreaks" type="list" default="1" label="PLG_XMAP_COM_CONTENT_ADD_PAGEBREAKS_LABEL" description="PLG_XMAP_COM_CONTENT_ADD_PAGEBREAKS_DESC">
+                    <option value="0">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                    <option value="1">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="2">PLG_XMAP_COM_CONTENT_OPTION_XML_ONLY</option>
+                    <option value="3">PLG_XMAP_COM_CONTENT_OPTION_HTML_ONLY</option>
+                </field>
+                <field name="max_art" type="text" default="0" label="PLG_XMAP_COM_CONTENT_MAX_ART_CAT" description="PLG_XMAP_COM_CONTENT_MAX_ART_CAT_DESC" />
+                <field name="max_art_age" type="text" default="0" label="PLG_XMAP_COM_CONTENT_MAX_ART_AGE" description="PLG_XMAP_COM_CONTENT_MAX_ART_AGE_DESC" />
+            </fieldset>
+            <fieldset name="xml" label="PLG_XMAP_COM_CONTENT_FIELDSET_XML_LABEL">
+                <field name="add_images" type="list" default="1" label="PLG_XMAP_COM_CONTENT_ADD_IMAGES_LABEL" description="PLG_XMAP_COM_CONTENT_ADD_IMAGES_DESC">
+                    <option value="1">JYES</option>
+                    <option value="0">JNO</option>
+                </field>
+                <field name="cat_priority" type="list" default="-1" label="PLG_XMAP_COM_CONTENT_CAT_PRIORITY" description="PLG_XMAP_COM_CONTENT_CAT_PRIORITY_DESC">
+                    <option value="-1">PLG_XMAP_COM_CONTENT_OPTION_USE_PARENT_MENU</option>
+                    <option value="0.0">0.0</option>
+                    <option value="0.1">0.1</option>
+                    <option value="0.2">0.2</option>
+                    <option value="0.3">0.3</option>
+                    <option value="0.4">0.4</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.6">0.6</option>
+                    <option value="0.7">0.7</option>
+                    <option value="0.8">0.8</option>
+                    <option value="0.9">0.9</option>
+                    <option value="1">1</option>
+                </field>
+                <field name="cat_changefreq" type="list" default="-1" label="PLG_XMAP_COM_CONTENT_CAT_CHANCE_FREQ" description="PLG_XMAP_COM_CONTENT_CAT_CHANCE_FREQ_DESC">
+                    <option value="-1">PLG_XMAP_COM_CONTENT_OPTION_USE_PARENT_MENU</option>
+                    <option value="always">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="hourly">PLG_XMAP_COM_CONTENT_OPTION_HOURLY</option>
+                    <option value="daily">PLG_XMAP_COM_CONTENT_OPTION_DAILY</option>
+                    <option value="weekly">PLG_XMAP_COM_CONTENT_OPTION_WEEKLY</option>
+                    <option value="monthly">PLG_XMAP_COM_CONTENT_OPTION_MONTHLY</option>
+                    <option value="yearly">PLG_XMAP_COM_CONTENT_OPTION_YEARLY</option>
+                    <option value="never">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                </field>
+                <field name="art_priority" type="list" default="-1" label="PLG_XMAP_COM_CONTENT_ART_PRIORITY" description="PLG_XMAP_COM_CONTENT_ART_PRIORITY_DESC">
+                    <option value="-1">PLG_XMAP_COM_CONTENT_OPTION_USE_PARENT_MENU</option>
+                    <option value="0.0">0.0</option>
+                    <option value="0.1">0.1</option>
+                    <option value="0.2">0.2</option>
+                    <option value="0.3">0.3</option>
+                    <option value="0.4">0.4</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.6">0.6</option>
+                    <option value="0.7">0.7</option>
+                    <option value="0.8">0.8</option>
+                    <option value="0.9">0.9</option>
+                    <option value="1">1</option>
+                </field>
+                <field name="art_changefreq" type="list" default="-1" label="PLG_XMAP_COM_CONTENT_ART_CHANCE_FREQ" description="PLG_XMAP_COM_CONTENT_ART_CHANCE_FREQ_DESC">
+                    <option value="-1">PLG_XMAP_COM_CONTENT_OPTION_USE_PARENT_MENU</option>
+                    <option value="always">PLG_XMAP_COM_CONTENT_OPTION_ALWAYS</option>
+                    <option value="hourly">PLG_XMAP_COM_CONTENT_OPTION_HOURLY</option>
+                    <option value="daily">PLG_XMAP_COM_CONTENT_OPTION_DAILY</option>
+                    <option value="weekly">PLG_XMAP_COM_CONTENT_OPTION_WEEKLY</option>
+                    <option value="monthly">PLG_XMAP_COM_CONTENT_OPTION_MONTHLY</option>
+                    <option value="yearly">PLG_XMAP_COM_CONTENT_OPTION_YEARLY</option>
+                    <option value="never">PLG_XMAP_COM_CONTENT_OPTION_NEVER</option>
+                </field>
+            </fieldset>
+            <fieldset name="news" label="PLG_XMAP_COM_CONTENT_FIELDSET_NEWS_LABEL">
+                <field name="keywords" type="list" default="1" label="PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_LABEL" description="PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_DESC">
+                    <option value="metakey">PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_METAKEYS</option>
+                    <option value="category">PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_CATTITLE</option>
+                    <option value="both">PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_METAKEYS_CATTITLE</option>
+                    <option value="none">PLG_XMAP_COM_CONTENT_NEWS_KEYWORDS_NONE</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

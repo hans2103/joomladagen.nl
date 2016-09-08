@@ -1,0 +1,31 @@
+
+.rdmedia_payment_plugins{
+	height:100px;
+	line-height:40px; 
+	margin-bottom: 9px; 
+	text-align:center; 
+	clear:both; 
+	border-bottom: 1px solid #d1d1d1;
+	-webkit-box-shadow: 0px 1px px #ffffff;
+	-moz-box-shadow: 0px 0px 1px #ffffff;
+	box-shadow: 0px 1px 0px #ffffff;
+}
+
+.rdmedia_payment_plugins_input{
+	float:left; 
+	width:15%; 
+	height:90px;
+	height:100%; 
+	line-height:35px; 
+}
+
+.rdmedia_payment_plugins_logo{
+	float:left;
+	height:90px;
+	/* background: url(logo.jpg) no-repeat; */
+	width:84%;
+}
+
+.mollie_logo{
+	background: url(mollie-logo.png) no-repeat;
+}

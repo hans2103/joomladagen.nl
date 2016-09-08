@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="rdmedia" method="upgrade">
+        <name>RDMedia Mollie Plugin</name>
+        <author>Robert Dam</author>
+        <creationDate>Oktober 2014</creationDate>
+        <copyright>Copyright (C) 2014-2015 RD-Media. All rights reserved.</copyright>
+        <license>GNU General Public License</license>
+        <authorEmail>info@rd-media.org</authorEmail>
+        <authorUrl>http:rd-media.org</authorUrl>
+        <version>3.2.0</version>
+        <description> 
+		<![CDATA[
+			<h3>IDeal, Sofort Banking, Mr Cash or PayPal?:</h3>
+			Wilt u extra korting op IDEAL betalingen van Mollie? RD-Media biedt u transacties aan voor 0.65 euro per transactie. Om u aan te melden kunt u deze <a href="https://www.mollie.nl/aanmelden/1069201">link</a> gebruiken.<br/>Deze plugin laat alle betaal mogelijkheden zien welke u beschikbaar heeft (en voor aangemeld bent) binnen Mollie. Als men op de link klikt dan wordt men door verwezen naar Mollie waar de klant uiteindelijk zijn betaal mogelijkheid kies. Volledige vrijheid welke betalingen u wel en niet aan hebt staan en laat zien..<br/><br/>
+			<h3>English Version:</h3>
+			Mollie accepts Mr Cash, Sofort Banking, PayPal and Credit Cards too, every EU customer with an IBAN number can sign up with Mollie. The transactions being made by Mollie are secure fast and reliable! The servers are fast and you get paid on a weekly base, when having many transactions thay are able to make payouts more often.<br/><br/>
+			More information about Mollie can be found on the Mollie website (http://mollie.nl)
+		]]>
+		</description>
+
+		<files>
+			<filename plugin="mollie">mollie.php</filename>
+			<folder>Mollie</folder>
+			<folder>assets</folder>
+		</files>
+		
+		<languages>
+			<language tag="en-GB">language/en-GB.plg_rdmedia_mollie.ini</language>
+		</languages>					
+
+		<config>
+			<fields name="params">
+			
+				<fieldset name="basic">
+
+					<field name="api_key" type="text"
+						default=""
+						size="40"
+						description="PLG_TICKETMSTER_MOLLIE_API_KEY_DESC"
+						label="PLG_TICKETMSTER_MOLLIE_API_KEY"
+					/>	
+
+					<field name="show_methods" 
+						type="list"
+						default="0"
+						description="PLG_TICKETMSTER_MOLLIE_SHOW_METHODS_DESC"
+						label="PLG_TICKETMSTER_MOLLIE_SHOW_METHODS"
+					>
+						<option value="0">PLG_TICKETMSTER_MOLLIE_NO</option>
+						<option value="1">PLG_TICKETMSTER_MOLLIE_YES</option>
+
+					</field>								
+
+					<field name="methods" 
+						type="list"
+						multiple="true"
+						default="0"
+						description="PLG_TICKETMSTER_MOLLIE_SELECT_METHOD_DESC"
+						label="PLG_TICKETMSTER_MOLLIE_SELECT_METHOD"
+					>
+						<option value="ideal">PLG_TICKETMSTER_MOLLIE_IDEAL</option>
+						<option value="mistercash">PLG_TICKETMSTER_MOLLIE_MRCASH</option>
+						<option value="sofort">PLG_TICKETMSTER_MOLLIE_SOFORTBANKING</option>
+						<option value="bitcoin">PLG_TICKETMSTER_MOLLIE_BITCOIN</option>
+						<option value="paypal">PLG_TICKETMSTER_MOLLIE_PAYPAL</option>
+						<option value="paysafecard">PLG_TICKETMSTER_MOLLIE_PAYSAFE CARD</option>
+
+					</field>							
+					
+					<field name="send_confirmation" 
+						type="list"
+						default="0"
+						description="PLG_TICKETMSTER_MOLLIE_SEND_CONFIRMATION_DESC"
+						label="PLG_TICKETMSTER_MOLLIE_SEND_CONFIRMATION"
+					>
+						<option value="0">PLG_TICKETMSTER_MOLLIE_NO</option>
+						<option value="1">PLG_TICKETMSTER_MOLLIE_YES</option>
+
+					</field>												
+
+					<field name="success_tpl" type="text"
+						default="0"
+						size="15"
+						description="PLG_TICKETMSTER_RDMIDEAL_SUCCESS_PAGE_DESC"
+						label="PLG_TICKETMSTER_RDMIDEAL_SUCCESS_PAGE"
+					/>	
+					
+					<field name="pending_tpl" type="text"
+						default="0"
+						size="15"
+						description="PLG_TICKETMSTER_RDMIDEAL_PENDING_PAGE_DESC"
+						label="PLG_TICKETMSTER_RDMIDEAL_PENDING_PAGE"
+					/>						
+	
+					<field name="failure_tpl" type="text"
+						default="0"
+						size="15"
+						description="PLG_TICKETMSTER_RDMIDEAL_FAILED_PAGE_DESC"
+						label="PLG_TICKETMSTER_RDMIDEAL_FAILED_PAGE"
+					/>	
+							
+					
+				</fieldset>
+				
+			</fields>
+		</config>
+
+</extension>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="authentication" method="upgrade">
+	<name>PLG_AUTHENTICATION_YUBIKEY</name>
+	<author>Akeeba Ltd</author>
+	<creationDate>2013-10-12</creationDate>
+	<copyright>Copyright (C) 2013 Akeeba Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>nicholas@akeebabackup.com</authorEmail>
+	<authorUrl>www.akeebabackup.com</authorUrl>
+	<version>1.0</version>
+	<description>PLG_AUTHENTICATION_YUBIKEY_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="yubikey">yubikey.php</filename>
+		<filename>cacert.pem</filename>
+		<filename>index.html</filename>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_authentication_yubikey.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_authentication_yubikey.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+
+			<fieldset name="basic">
+				<field name="masterkey" type="text"
+					default=""
+					description="PLG_AUTHENTICATION_YUBIKEY_MASTERKEY_DESC"
+					label="PLG_AUTHENTICATION_YUBIKEY_MASTERKEY_LABEL"
+				/>
+                
+                <field name="customurl" type="text"
+					default=""
+					description="PLG_AUTHENTICATION_YUBIKEY_CUSTOMURL_DESC"
+					label="PLG_AUTHENTICATION_YUBIKEY_CUSTOMURL_LABEL"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="yubikey">
+		<fieldset name="yubikey"
+			label="PLG_USER_YUBIKEY_OPTIONS_LABEL"
+		>
+			<field
+				name="publickey"
+				type="text"
+				id="publickey"
+				description="PLG_USER_YUBIKEY_FIELD_YUBIKEY_DESC"
+				filter="string"
+				label="PLG_USER_YUBIKEY_FIELD_YUBIKEY_LABEL"
+				message="PLG_USER_YUBIKEY_FIELD_YUBIKEY_MESSAGE"
+				required="false"
+				readonly="false"
+				default=""
+			/>
+		</fieldset>
+	</fields>
+</form>

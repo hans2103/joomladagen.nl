@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <fieldset name="basic" label="COM_XMAP_CONFIG_BASIC_LABEL" description="COM_XMAP_CONFIG_BASIC_DESC">
+        <field name="show_link_html" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_HTML_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_HTML_DESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+        <field name="show_link_xml" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_XML_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_XML_DESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+        <field name="show_link_news" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_NEWS_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_NEWS_DESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+        <field name="show_link_images" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_IMAGES_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_IMAGES_dESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+        <field name="show_link_videos" type="radio" default="0" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_VIDEOS_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_VIDEOS_DESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+        <field name="show_link_mobile" type="radio" default="0" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_SHOW_LINK_MOBILE_LABEL" description="COM_XMAP_CONFIG_SHOW_LINK_MOBILE_DESC">
+            <option value="1">JSHOW</option>
+            <option value="0">JHIDE</option>
+        </field>
+    </fieldset>
+    <fieldset name="ping" label="COM_XMAP_CONFIG_PING_LABEL" description="COM_XMAP_CONFIG_PING_DESC">
+        <field name="ping_google" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_PING_GOOGLE_LABEL">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field name="ping_bing" type="radio" default="1" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_PING_BING_LABEL">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+    </fieldset>
+    <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+        <field name="rules" type="rules" label="JCONFIG_PERMISSIONS_LABEL" validate="rules" filter="rules" component="com_xmap" section="component" />
+    </fieldset>
+    <fieldset name="advanced" label="JGLOBAL_FIELDSET_ADVANCED">
+        <field name="ping_timeout" type="text" filter="integer" default="10" class="btn-group btn-group-yesno" label="COM_XMAP_CONFIG_PING_TIMEOUT_LABEL" description="COM_XMAP_CONFIG_PING_TIMEOUT_DESC" />
+    </fieldset>
+</config>

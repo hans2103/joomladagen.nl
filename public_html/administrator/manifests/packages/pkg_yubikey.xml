@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" version="2.5" method="upgrade">
+	<packagename>yubikey</packagename>
+	<name>YubiKey Authentication Plugins for Joomla!</name>
+	<version>1.0</version>
+	<description>A set of plugins to provide YubiKey authentication to Joomla!-powered websites.</description>
+	
+	<author>Akeeba Ltd</author>
+	<creationDate>2013-10-12</creationDate>
+	<copyright>Copyright (C) 2013 Akeeba Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>nicholas@akeebabackup.com</authorEmail>
+	<authorUrl>www.akeebabackup.com</authorUrl>
+	<url>https://www.akeebabackup.com/</url>
+	<packager>Akeeba Ltd</packager>
+	<packagerurl>https://www.akeebabackup.com/</packagerurl>
+	
+	<files folder="packages">
+		<file type="plugin" id="authyubikey" group="authentication">plg_authentication_yubikey.zip</file>
+		<file type="plugin" id="tfayubikey" group="twofactorauth">plg_twofactorauth_yubikey.zip</file>
+		<file type="plugin" id="useryubikey" group="user">plg_user_yubikey.zip</file>
+	</files>
+
+	<update>http://cdn.akeebabackup.com/updates/yubikey.xml</update>
+</extension>

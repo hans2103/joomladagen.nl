@@ -1,0 +1,46 @@
+# Joomla System Files (i.e. cache, etc.) #
+/public_html/administrator/cache
+/public_html/cache
+#/public_html/images
+/public_html/logs
+/public_html/tmp
+/public_html/configuration.php
+/public_html/.htaccess
+/public_html/LICENSE.txt
+/public_html/README.txt
+/public_html/htaccess.txt
+/public_html/robots.txt.dist
+/public_html/web.config.txt
+
+# Htaccess in the main root
+/.htaccess
+
+# Backup Files
+/public_html/administrator/components/com_akeeba/backup/
+
+# Log Files
+/log
+
+# IDE & System Related Files #
+.buildpath
+.project
+.settings
+.DS_Store
+.idea
+
+# OSX #
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows #
+Thumbs.db
+Desktop.ini
+
+# Tools #
+/bourbon
+/bower_components
+/node_modules
+/.vagrant
+/puphpet
+

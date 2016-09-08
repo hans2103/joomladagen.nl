@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="user" method="upgrade">
+	<name>PLG_USER_YUBIKEY</name>
+	<author>Akeeba Ltd</author>
+	<creationDate>2013-10-12</creationDate>
+	<copyright>Copyright (C) 2013 Akeeba Ltd. All rights reserved.</copyright>
+	<license>GNU General Public License version 3 or later; see LICENSE.txt</license>
+	<authorEmail>nicholas@akeebabackup.com</authorEmail>
+	<authorUrl>www.akeebabackup.com</authorUrl>
+	<version>1.0</version>
+	<description>PLG_USER_YUBIKEY_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="yubikey">yubikey.php</filename>
+		<filename>index.html</filename>
+		<folder>form</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_user_yubikey.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_user_yubikey.sys.ini</language>
+	</languages>
+</extension>

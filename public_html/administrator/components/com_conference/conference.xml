@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="component" method="upgrade">
+	<name>COM_CONFERENCE</name>
+	<author>Sander Potjer</author>
+	<creationDate>2013-02-17</creationDate>
+	<copyright>Copyright (C) 2011-2013 Sander Potjer Webdevelopment. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+	<authorEmail>mail@sanderpotjer.nl</authorEmail>
+	<authorUrl>www.sanderpotjer.nl</authorUrl>
+	<version>0.9.4</version>
+	<description>Conference Schedule Manager for Joomla</description>
+
+	<!-- Public front end files -->
+	<files folder="frontend">
+		<filename>index.html</filename>
+		<filename>conference.php</filename>
+		<filename>dispatcher.php</filename>
+		<filename>router.php</filename>
+		
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>views</folder>
+	</files>
+
+	<!-- Front end translation files -->
+	<languages folder="language/frontend">
+		<language tag="en-GB">en-GB/en-GB.com_conference.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.com_conference.ini</language>
+	</languages>
+
+	<!-- SQL query files to execute on installation -->
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/install.sql</file>
+			<file driver="mysql">sql/install/mysql/install.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/install.sql</file>
+			<file driver="mysqli">sql/install/mysql/install.sql</file>
+		</sql>
+	</install>
+
+	<!-- SQL query files to execute on uninstallation -->
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysql">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli" charset="utf8">sql/install/mysql/uninstall.sql</file>
+			<file driver="mysqli">sql/install/mysql/uninstall.sql</file>
+		</sql>
+	</uninstall>
+
+	<!-- Media files -->
+	<media destination="com_conference" folder="media">
+		<folder>css</folder>
+		<folder>fonts</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+
+	<!-- Administrator back-end section -->
+	<administration>
+		<!-- Administration menu -->
+		<menu>COM_CONFERENCE</menu>
+		<menu 
+			link="option=com_conference&amp;view=sessions" 
+			view="sessions" 
+			>COM_CONFERENCE_TITLE_SESSIONS</menu>
+		<menu 
+			link="option=com_conference&amp;view=speakers" 
+			view="speakers"
+			>COM_CONFERENCE_TITLE_SPEAKERS</menu>
+		<menu 
+			link="option=com_conference&amp;view=levels" 
+			view="levels"
+			>COM_CONFERENCE_TITLE_LEVELS</menu>
+		<menu 
+			link="option=com_conference&amp;view=rooms" 
+			view="rooms"
+			>COM_CONFERENCE_TITLE_ROOMS</menu>
+		<menu 
+			link="option=com_conference&amp;view=days" 
+			view="days"
+			>COM_CONFERENCE_TITLE_DAYS</menu>
+		<menu 
+			link="option=com_conference&amp;view=slots" 
+			view="slots"
+			>COM_CONFERENCE_TITLE_SLOTS</menu>
+
+		<!-- Back-end files -->
+		<files folder="backend">
+			<filename>access.xml</filename>
+			<filename>conference.php</filename>
+			<filename>config.xml</filename>
+			<filename>dispatcher.php</filename>
+			<filename>index.html</filename>
+			<filename>toolbar.php</filename>
+
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+
+		<!-- Back-end translation files -->
+		<languages folder="language/backend">
+			<language tag="en-GB">en-GB/en-GB.com_conference.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_conference.sys.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_conference.ini</language>
+			<language tag="nl-NL">nl-NL/nl-NL.com_conference.sys.ini</language>
+		</languages>
+
+	</administration>
+
+	<!-- Installation / uninstallation script file -->
+	<scriptfile>script.conference.php</scriptfile>
+
+</extension>

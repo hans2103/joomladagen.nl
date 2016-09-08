@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+    <name>COM_XMAP</name>
+    <creationDate>2015-03-01</creationDate>
+    <author>Branko Wilhelm</author>
+    <copyright>(c) 2005 - 2009 Joomla! Vargas. All rights reserved; (c) 2015 Branko Wilhelm. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <authorEmail>branko.wilhelm@gmail.com</authorEmail>
+    <authorUrl>www.z-index.net</authorUrl>
+    <version>3.0 rev 302</version>
+    <description>mapX - Sitemap Generator for Joomla!</description>
+    <install folder="admin">
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+    <scriptfile>script.installer.php</scriptfile>
+    <updateservers>
+        <server type="collection" priority="1" name="z-index development">http://www.z-index.net/en/extensions.xml</server>
+    </updateservers>
+    <files folder="site">
+        <folder>controllers</folder>
+        <folder>displayer</folder>
+        <folder>helpers</folder>
+        <folder>models</folder>
+        <folder>views</folder>
+        <filename>controller.php</filename>
+        <filename>router.php</filename>
+        <filename>xmap.php</filename>
+    </files>
+    <languages folder="site/language">
+        <language tag="en-GB">en-GB/en-GB.com_xmap.ini</language>
+        <language tag="de-DE">en-GB/en-GB.com_xmap.ini</language>
+        <language tag="es-ES">es-ES/es-ES.com_xmap.ini</language>
+        <language tag="fa-IR">fa-IR/fa-IR.com_xmap.ini</language>
+        <language tag="fr-FR">fr-FR/fr-FR.com_xmap.ini</language>
+        <language tag="cs-CZ">cs-CZ/cs-CZ.com_xmap.ini</language>
+        <language tag="nl-NL">nl-NL/nl-NL.com_xmap.ini</language>
+        <language tag="ru-RU">ru-RU/ru-RU.com_xmap.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_XMAP_TITLE</menu>
+        <files folder="admin">
+            <folder>controllers</folder>
+            <folder>helpers</folder>
+            <folder>models</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <filename>controller.php</filename>
+            <filename>xmap.php</filename>
+        </files>
+        <languages folder="admin/language">
+            <language tag="en-GB">en-GB/en-GB.com_xmap.ini</language>
+            <language tag="en-GB">en-GB/en-GB.com_xmap.sys.ini</language>
+            <language tag="de-DE">de-DE/de-DE.com_xmap.ini</language>
+            <language tag="de-DE">de-DE/de-DE.com_xmap.sys.ini</language>
+            <language tag="es-ES">es-ES/es-ES.com_xmap.ini</language>
+            <language tag="es-ES">es-ES/es-ES.com_xmap.sys.ini</language>
+            <language tag="fa-IR">fa-IR/fa-IR.com_xmap.ini</language>
+            <language tag="fa-IR">fa-IR/fa-IR.com_xmap.sys.ini</language>
+            <language tag="fr-FR">fr-FR/fr-FR.com_xmap.ini</language>
+            <language tag="fr-FR">fr-FR/fr-FR.com_xmap.sys.ini</language>
+            <language tag="cs-CZ">cs-CZ/cs-CZ.com_xmap.ini</language>
+            <language tag="cs-CZ">cs-CZ/cs-CZ.com_xmap.sys.ini</language>
+            <language tag="nl-NL">nl-NL/nl-NL.com_xmap.ini</language>
+            <language tag="nl-NL">nl-NL/nl-NL.com_xmap.sys.ini</language>
+            <language tag="ru-RU">ru-RU/ru-RU.com_xmap.ini</language>
+            <language tag="ru-RU">ru-RU/ru-RU.com_xmap.sys.ini</language>
+        </languages>
+    </administration>
+</extension>

@@ -1,0 +1,28 @@
+.conference .search button.add-on {
+    height: inherit !important;
+    padding-top: 6px;
+    padding-bottom: 4px;
+}
+
+.conference .search .searchinput {
+	width: 200px;
+	min-height: 30px;
+}
+
+.conference .status button {
+    height: inherit !important;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+.conference .status .icon-unpublish.icon-white:before,
+.conference .status .icon-publish.icon-white:before{
+	color: #fff;
+}
+
+.conference .badge .icon-checkmark:before,
+.conference .badge .icon-delete:before {
+	color: #fff;
+	position: relative;
+	top:1px;
+}

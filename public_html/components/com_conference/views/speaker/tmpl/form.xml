@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CONFERENCE_VIEW_SPEAKER_ADD">
+		<message>
+				<![CDATA[COM_CONFERENCE_VIEW_SPEAKER_ADD_DESC]]>
+		</message>
+	</layout>
+</metadata>

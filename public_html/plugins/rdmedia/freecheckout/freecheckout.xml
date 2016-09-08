@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="rdmedia" method="upgrade">
+    <name>RD-Media Free Checkout</name>
+    <author>Robert Dam</author>
+    <creationDate>September 2013</creationDate>
+    <copyright>2011 Robert Dam</copyright>
+    <license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+    <authorEmail>info@rd-media.org</authorEmail>
+    <authorUrl>www.rd-media.org</authorUrl>
+    <version>3.0.1</version>
+    <description>Free Checkout Processor for RD-Media for Ticketmaster version 2.5.0 or higher. Note this one works only when the checkout has a value of 0.00</description>
+
+	<files>
+		<filename plugin="freecheckout">freecheckout.php</filename>
+		<folder>rdmedia_freecheckout</folder>
+	</files>
+
+	<config>
+		<fields name="params">
+		
+			<fieldset name="basic">
+				
+				<field name="infobox" type="text"
+					default="0"
+					size="40"
+					description="Give information for your payment.(This will be shown in the paymentbox)"
+					label="Message for Customer"
+				/>	
+				
+				<field name="j3buttontext" type="text"
+					default="0"
+					size="40"
+					description="When using Joomla 3 or Bootstrapped Joomla 2.5, please provide us the text for the button. (needs to be a short texture)"
+					label="Joomla3 Button Text"
+				/>	
+				
+				<field name="layout" type="list"
+					default="0"
+					description="If you have Twitter Bootstrap enabled in the Ticketmaster Configuration or you are running Joomla 3 you may set this value to Vertical View."
+					label="Plugin Layout"
+				>
+					<option value="0">Horizontal View</option>
+					<option value="1">Vertical View</option>
+				</field>																			
+
+				<field name="email_tpl" type="text"
+					default="0"
+					size="15"
+					description="This is e the email that will be send on success. Note, this email doesn't contain the tickets, it's only a message of the successfull order."
+					label="Success Email"
+				/>	
+
+				<field name="success_tpl" type="text"
+					default="0"
+					size="15"
+					description="Message to be shown on success, this is a page. Please get the EID from the messagecenter. The message and subject will be shown in the screen."
+					label="Successfull Page"
+				/>	
+								
+			</fieldset>
+			
+		</fields>
+	</config>
+
+</extension>
