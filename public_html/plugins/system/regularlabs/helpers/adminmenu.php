@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -47,13 +47,15 @@ class PlgSystemRegularLabsAdminMenuHelper
 		{
 			preg_match('#class="(?:no-dropdown )?menu-(.*?)"#s', $menu_item, $icon);
 
+			$icon = str_replace('icon-icon-', 'icon-', 'icon-' . $icon['1']);
+
 			$menu_item = str_replace(
 				array('>Regular Labs - ', '>Regular Labs '),
-				'><span class="icon-reglab icon-' . $icon['1'] . '"></span> ',
+				'><span class="icon-reglab ' . $icon . '"></span> ',
 				$menu_item
 			);
 
-			if ($icon['1'] != 'regularlabsmanager')
+			if ($icon != 'icon-regularlabsmanager')
 			{
 				continue;
 			}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,9 +20,11 @@ class RLHtmlFix
 			return $string;
 		}
 
-		$string = function_exists('mb_convert_encoding')
-			? mb_convert_encoding($string, 'html-entities', 'utf-8')
-			: utf8_encode($string);
+		// Convert utf8 characters to html entities
+		if (function_exists('mb_convert_encoding'))
+		{
+			$string = mb_convert_encoding($string, 'html-entities', 'utf-8');
+		}
 
 		$string = self::protectSpecialCode($string);
 
@@ -35,6 +37,15 @@ class RLHtmlFix
 			: self::custom($string);
 
 		$string = self::unprotectSpecialCode($string);
+
+		// Convert html entities back to utf8 characters
+		if (function_exists('mb_convert_encoding'))
+		{
+			// Make sure &lt; and &gt; don't get converted
+			$string = str_replace(array('&lt;', '&gt;'), array('&amp;lt;', '&amp;gt;'), $string);
+
+			$string = mb_convert_encoding($string, 'utf-8', 'html-entities');
+		}
 
 		return $string;
 	}

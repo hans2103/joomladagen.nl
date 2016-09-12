@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,13 +23,24 @@ class RLTags
 
 	public static function getValuesFromString($string = '', $main_key = 'title', $known_boolean_keys = array())
 	{
+		// Replace html entity quotes to normal quotes
+		$string = str_replace('&quot;', '"', $string);
+
+		self::protectSpecialChars($string);
+
+		// replace weird whitespace
+		$string = str_replace(chr(194) . chr(160), ' ', $string);
+
+		// Replace html entity spaces between attributes to normal spaces
+		$string = preg_replace('#((?:^|")\s*)&nbsp;(\s*(?:[a-z]|$))#s', '\1 \2', $string);
+
 		// Only one value, so return simple key/value object
 		if (strpos($string, '="') == false && strpos($string, '|') == false)
 		{
+			self::unprotectSpecialChars($string);
+
 			return (object) array($main_key => $string);
 		}
-
-		self::protectSpecialChars($string);
 
 		// No foo="bar" syntax found, so assume old syntax
 		if (strpos($string, '="') == false)
@@ -43,16 +54,18 @@ class RLTags
 		}
 
 		// Cannot find right syntax, so return simple key/value object
-		if (!preg_match_all('#([a-z0-9-_]+)\s*=\s*"(.*?)"#si', $string, $values))
+		if (!preg_match_all('#(?:^|\s)([a-z0-9-_]+)\s*=\s*"(.*?)"#si', $string, $matches, PREG_SET_ORDER))
 		{
+			self::unprotectSpecialChars($string);
+
 			return (object) array($main_key => $string);
 		}
 
 		$tag = new stdClass;
 
-		foreach ($values['1'] as $i => $key)
+		foreach ($matches as $match)
 		{
-			$value = $values['2'][$i];
+			$value = $match['2'];
 
 			self::unprotectSpecialChars($value);
 
@@ -66,7 +79,7 @@ class RLTags
 			$value = ($value === 'true' ? true : $value);
 			$value = ($value === 'false' ? false : $value);
 
-			$tag->{$key} = $value;
+			$tag->{$match['1']} = $value;
 		}
 
 		return $tag;
@@ -100,7 +113,8 @@ class RLTags
 				array(self::$protected_characters['='], self::$protected_characters['"']),
 				$tag
 			);
-			$string    = str_replace($tag, $protected, $string);
+
+			$string = str_replace($tag, $protected, $string);
 		}
 	}
 
@@ -189,19 +203,18 @@ class RLTags
 				}
 				$tag_values->{$key} = $val;
 				unset($keys[$i]);
+
+				continue;
 			}
-			else
+
+			// else add as defined in the string
+			if (isset($keyval['1']))
 			{
-				// else add as defined in the string
-				if (isset($keyval['1']))
-				{
-					$tag_values->{$keyval['0']} = $keyval['1'];
-				}
-				else
-				{
-					$tag_values->params[] = implode($equal, $keyval);
-				}
+				$tag_values->{$keyval['0']} = $keyval['1'];
+				continue;
 			}
+
+			$tag_values->params[] = implode($equal, $keyval);
 		}
 
 		return $tag_values;

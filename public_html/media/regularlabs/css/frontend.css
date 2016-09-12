@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -1128,8 +1128,19 @@ legend + .control-group {
   padding-left: 180px;
 }
 /*Fix for tooltips wrong positioning*/
+.control-label .hasPopover,
 .control-label .hasTooltip {
   display: inline-block;
+}
+/* Field subform repeatable */
+.subform-repeatable-wrapper .btn-group > .btn.button {
+  min-width: 0;
+}
+.subform-repeatable-wrapper .ui-sortable-helper {
+  background: #ffffff;
+}
+.subform-repeatable-wrapper tr.ui-sortable-helper {
+  display: table;
 }
 .dropup,
 .dropdown {
@@ -1413,6 +1424,22 @@ button.close {
   background: transparent;
   border: 0;
   -webkit-appearance: none;
+}
+.alert-options {
+  float: right;
+  line-height: 20px;
+  color: #000000;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+.alert-options:hover,
+.alert-options:focus {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.4;
+  filter: alpha(opacity=40);
 }
 .btn {
   display: inline-block;
@@ -2676,6 +2703,22 @@ th .tooltip-inner {
 .dropdown-menu {
   text-align: left;
 }
+.alert-link {
+  font-weight: bold;
+}
+.alert .alert-link {
+  color: #a47e3c;
+}
+.alert-success .alert-link {
+  color: #356635;
+}
+.alert-danger .alert-link,
+.alert-error .alert-link {
+  color: #953b39;
+}
+.alert-info .alert-link {
+  color: #2d6987;
+}
 @font-face {
   font-family: 'IcoMoon';
   src: url('../../../../media/jui/fonts/IcoMoon.eot');
@@ -3464,7 +3507,7 @@ th .tooltip-inner {
 }
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

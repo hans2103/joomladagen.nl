@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -199,7 +199,10 @@ class RLProtect
 	 */
 	public static function getFormRegex($regex_format = 0)
 	{
-		$regex = '(<' . 'form\s[^>]*((id|name)="(adminForm|postform|submissionForm|default_action_user)|action="[^"]*option=com_myjspace&(amp;)?view=see)")';
+		$regex = '(<' . 'form\s[^>]*('
+			. '(id|name)="(adminForm|postform|submissionForm|default_action_user|seblod_form)"'
+			. '|action="[^"]*option=com_myjspace&(amp;)?view=see"'
+			. '))';
 
 		if (!$regex_format)
 		{

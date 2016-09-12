@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -17,27 +17,39 @@ class RLAssignmentsTags extends RLAssignment
 {
 	public function passTags()
 	{
-		$is_content = in_array($this->request->option, array('com_content', 'com_flexicontent'));
+		if (in_array($this->request->option, array('com_content', 'com_flexicontent')))
+		{
+			return $this->passTagsContent();
+		}
 
-		if (!$is_content)
+		if ($this->request->option != 'com_tags'
+			|| $this->request->view != 'tag'
+			|| !$this->request->id
+		)
 		{
 			return $this->pass(false);
 		}
 
+		return $this->passTag($this->request->id);
+	}
+
+	private function passTagsContent()
+	{
 		$is_item     = in_array($this->request->view, array('', 'article', 'item'));
 		$is_category = in_array($this->request->view, array('category'));
 
-		if ($is_item)
+		switch (true)
 		{
-			$prefix = 'com_content.article';
-		}
-		else if ($is_category)
-		{
-			$prefix = 'com_content.category';
-		}
-		else
-		{
-			return $this->pass(false);
+			case ($is_item):
+				$prefix = 'com_content.article';
+				break;
+
+			case ($is_category):
+				$prefix = 'com_content.category';
+				break;
+
+			default:
+				return $this->pass(false);
 		}
 
 		// Load the tags.

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -95,6 +95,12 @@ class RLAssignmentsGeo extends RLAssignment
 		$geo = new GeoIp($ip);
 
 		$this->geo = $geo->get();
+
+		if (JDEBUG)
+		{
+			JLog::addLogger(array('text_file' => 'regularlabs_geoip.log.php'), JLog::ALL, array('regularlabs_geoip'));
+			JLog::add(json_encode($this->geo), JLog::DEBUG, 'regularlabs_geoip');
+		}
 
 		return $this->geo;
 	}

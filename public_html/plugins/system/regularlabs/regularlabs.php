@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.7.11143
+ * @version         16.9.1281
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -44,6 +44,8 @@ class PlgSystemRegularLabs extends JPlugin
 	public function onAfterRender()
 	{
 		$this->combineAdminMenu();
+
+		$this->addAdminHelpMenuItem();
 	}
 
 	private function renderQuickPage()
@@ -130,6 +132,40 @@ class PlgSystemRegularLabs extends JPlugin
 		$helper = new PlgSystemRegularLabsAdminMenuHelper();
 
 		$helper->combine();
+	}
+
+	private function addAdminHelpMenuItem()
+	{
+		if (JFactory::getApplication()->isSite()
+			|| JFactory::getDocument()->getType() != 'html'
+			|| !$this->params->get('show_help_menu', 1)
+		)
+		{
+			return;
+		}
+
+		$html = JFactory::getApplication()->getBody();
+
+		if ($html == '')
+		{
+			return;
+		}
+
+		$shop_item = '(<li>\s*<a [^>]*class="[^"]*menu-help-)shop("\s[^>]*)href="https://shop\.joomla\.org"([^>]*>)[^<]*(</a>s*</li>)';
+
+		$html = preg_replace(
+			'#' . $shop_item . '#s',
+			'\0<li class="divider"><span></span></li>\1dev\2href="https://www.regularlabs.com"\3Regular Labs Extensions\4',
+			$html
+		);
+
+		// Just in case something fails
+		if ($html == '')
+		{
+			return;
+		}
+
+		JFactory::getApplication()->setBody($html);
 	}
 }
 
