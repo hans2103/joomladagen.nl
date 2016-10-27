@@ -11,17 +11,26 @@
   "bugs": {
     "url": "https://github.com/stichtingsympathy/joomladagen.nl/issues"
   },
+  "scripts": {
+    "postinstall": "bower cache clean && bower install"
+  },
   "devDependencies": {
     "grunt": "^1.0.*",
+    "grunt-autoprefixer": "latest",
+    "grunt-contrib-concat": "latest",
     "grunt-contrib-cssmin": "latest",
     "grunt-contrib-jshint": "latest",
-    "grunt-contrib-less": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-version-check": "^0.3.6",
-    "jit-grunt": "^0.10.0",
+    "grunt-modernizr": "latest",
+    "grunt-sass": "latest",
+    "grunt-shell": "latest",
+    "grunt-svgstore": "latest",
+    "grunt-version-check": "latest",
+    "grunt-webfont": "^1.6.0",
+    "jit-grunt": "latest",
     "jshint-stylish": "latest",
-    "load-grunt-config": "^0.19.2",
-    "time-grunt": "^1.4.0"
+    "load-grunt-config": "latest",
+    "time-grunt": "latest"
   }
 }

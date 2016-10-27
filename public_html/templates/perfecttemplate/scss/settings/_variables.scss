@@ -1,0 +1,88 @@
+$visual-grid: false;
+$visual-grid-color: red;
+$visual-grid-index: front;
+$visual-grid-opacity: 0.1;
+
+
+
+// Breakpoints
+$site-width:                $delta;
+$menu-width:                $delta;
+$max-width:                 $site-width;
+$site-spacing:              20px;
+$site-spacing-beta:         24px;
+$site-spacing-charlie:      28px;
+$container-width:           $site-width + ($site-spacing * 2);
+$container-width-beta:      $site-width + ($site-spacing-beta * 2);
+$container-width-charlie:   $site-width + ($site-spacing-charlie * 2);
+
+// Flexbox
+$flexbox:                   true;
+$flexbox-horizontal:        320px;
+$flexbox-vertical:          320px;
+
+//// Global radius
+//$radius:                    2px;
+//$radius-full:               99px;
+
+// Navigation
+$navigation--height:        50px;
+$navigation--height-full:   60px;
+
+
+// Transitions
+$transition:            all .1s cubic-bezier(0.195, 0.400, 0.450, 0.785);
+
+// Hamburger
+$button-color: rgb(80,80,80);
+
+
+
+
+/* Bitters base variables */
+// Breakpoints
+$medium-screen: 600px;
+$large-screen: 900px;
+
+// Typography
+$base-font-family: $font-family;
+$heading-font-family: $base-font-family;
+
+// Line height
+$base-line-height: 1.5;
+$heading-line-height: 1.2;
+
+// Other Sizes
+$base-border-radius: 2px;
+$base-spacing: $base-line-height * 1em;
+$small-spacing: $base-spacing / 2;
+$base-z-index: 0;
+
+// Colors
+$blue: #1565c0;
+$dark-gray: #333;
+$medium-gray: #999;
+$light-gray: #ddd;
+
+// Font Colors
+$base-font-color: $dark-gray;
+$action-color: $jd-blue;
+
+// Border
+$base-border-color: $light-gray;
+$base-border: 1px solid $base-border-color;
+
+// Background Colors
+$base-background-color: #fff;
+$secondary-background-color: tint($base-border-color, 75%);
+
+// Forms
+$form-box-shadow: inset 0 1px 3px rgba(#000, 0.06);
+$form-box-shadow-focus: $form-box-shadow, 0 0 5px adjust-color($action-color, $lightness: -5%, $alpha: -0.3);
+
+// Animations
+$base-duration: 150ms;
+$base-timing: ease;
+
+// Menu width
+$vjsm-menu-width: $charlie;

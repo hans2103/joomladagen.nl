@@ -1,0 +1,3 @@
+@mixin font($size: $font-size--p, $weight: $normal, $line-height: $line-height,$family: $font-family) {
+	font: $weight #{$size}/#{$line-height} #{$family};
+}

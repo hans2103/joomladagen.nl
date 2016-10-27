@@ -1,0 +1,45 @@
+.icon {
+
+	@include m('info-circle') {
+		display: inline-block;
+		@include icon-before(info-circle, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+	@include m('linkedin') {
+		display: inline-block;
+		@include icon-before(linkedin, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+	@include m('search') {
+		display: inline-block;
+		@include icon-before(search, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+	@include m('sitemap') {
+		display: inline-block;
+		@include icon-before(sitemap, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+	@include m('twitter') {
+		display: inline-block;
+		@include icon-before(twitter, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+	@include m('youtube') {
+		display: inline-block;
+		@include icon-before(youtube-play, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+	}
+
+}

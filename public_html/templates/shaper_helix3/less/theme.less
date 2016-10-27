@@ -1,7 +1,7 @@
 /**
 * @package Helix Framework
 * @author JoomShaper http://www.joomshaper.com
-* @copyright Copyright (c) 2010 - 2015 JoomShaper
+* @copyright Copyright (c) 2010 - 2016 JoomShaper
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 
@@ -204,19 +204,13 @@ ul.social-icons {
     z-index: 99;
 }
 
-#sp-header.fixed-header{
-    position:fixed;
-    z-index: 9999;
-    top: 0;
-}
-
 #sp-header {
     background: #ffffff none repeat scroll 0 0;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
     height: 90px;
     left: 0;
-    position: absolute;
-    top: 40px;
+    position: relative;
+    top: 0;
     width: 100%;
     z-index: 99;
     .logo {
@@ -241,9 +235,10 @@ ul.social-icons {
     .sp-retina-logo {
         display: none;
     }
-}
-#sp-page-title {
-    margin-top: 90px;
+    &.menu-fixed{
+        position: fixed;
+        z-index: 9999;
+    }
 }
 
 .sticky-wrapper.is-sticky {
@@ -914,27 +909,6 @@ article {
 /* ****************   END:: Footer   ****************** */
 /* **************************************************** */
 
-/* ****************   START Footer   ****************** */
-/* **************************************************** */
-
-#sp-copyright {
-    background-color: @gray-darker;
-
-}
-
-.sp-copyright {
-    .menu {
-
-        @media (min-width: @screen-sm-min) {
-            > li {
-                display: inline-block;
-            }
-        }
-    }
-}
-
-/* ****************   END:: Footer   ****************** */
-/* **************************************************** */
 
 /* ***************   START Comingsoon   *************** */
 /* **************************************************** */
@@ -1172,11 +1146,15 @@ table.category {
 /* **************************************************** */
 
 
+
+/* **********   START Helix 1.4 Loader Css  *********** */
+/* **************************************************** */
+
 /* ************   START Pre-Loader CSS   ************** */
 /* **************************************************** */
 
 .sp-pre-loader {
-    background: #22b8f0;
+    background: @preloader_bg;
     height: 100%;
     left: 0;
     position: fixed;
@@ -1186,7 +1164,7 @@ table.category {
 
     // Clock loader
     .sp-loader-clock {
-        border: 3px solid #fff;
+        border: 3px solid @preloader_tx;
         border-radius: 60px;
         bottom: 0;
         height: 80px;
@@ -1199,7 +1177,7 @@ table.category {
         &:after{
             content: "";
             position: absolute;
-            background-color: #fff;
+            background-color: @preloader_tx;
             top:2px;
             left: 48%;
             height: 38px;
@@ -1214,7 +1192,7 @@ table.category {
         &:before{
             content: "";
             position: absolute;
-            background-color: #fff;
+            background-color: @preloader_tx;
             top:6px;
             left: 48%;
             height: 35px;
@@ -1232,7 +1210,7 @@ table.category {
         height: 80px;
         width: 80px;
         border-radius: 80px;
-        border: 3px solid  rgba(255,255,255, .7);
+        border: 3px solid fade(@preloader_tx, 70%);
         left: 0;
         top: 0;
         right: 0;
@@ -1250,7 +1228,7 @@ table.category {
             width: 11px;
             height: 11px;
             border-radius: 10px;
-            background-color: #fff;
+            background-color: @preloader_tx;
         }
     }
     // Bubble Loop Loader
@@ -1264,7 +1242,7 @@ table.category {
         bottom: 0;
         margin: auto;
         border-radius: 12px;
-        background-color: #fff;
+        background-color: @preloader_tx;
         -webkit-transform-origin:  50% 50%;
         transform-origin:  50% 50% ;
         -webkit-animation: loader6 1s ease-in-out infinite;
@@ -1272,7 +1250,7 @@ table.category {
         &:before{
             content: "";
             position: absolute;
-            background-color: rgba(255, 255, 255, .5);
+            background-color: fade(@preloader_tx, 50%);
             top: 0px;
             left: -25px;
             height: 12px;
@@ -1282,7 +1260,7 @@ table.category {
         &:after{
             content: "";
             position: absolute;
-            background-color: rgba(255, 255 ,255 ,.5);
+            background-color: fade(@preloader_tx, 50%);
             top: 0px;
             left: 25px;
             height: 12px;
@@ -1307,7 +1285,7 @@ table.category {
         content: "";
         display: block;
         border-radius: 50%;
-        border: 2px solid #fff;
+        border: 2px solid @preloader_tx;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -1361,7 +1339,7 @@ table.category {
         position: absolute;
         width: 2px;
         height: 0;
-        background-color: #000;
+        background-color: @preloader_tx;
         bottom: 0;
     }
 
@@ -1400,7 +1378,7 @@ table.category {
     .sp-loader-audio-wave {
         width: 3em;
         height: 2em;
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
         animation: audioWave 1.5s linear infinite;
@@ -1428,13 +1406,12 @@ table.category {
             width: auto;
         }
         .line{
-            background: #000;
+            background: @preloader_tx;
             bottom: 0;
             height: 5px;
             left: 0;
             position: absolute;
             top: auto;
-            width: 0;
         }
     }
 }
@@ -1506,27 +1483,27 @@ table.category {
 // Audio Wave Loader Animation
 @keyframes audioWave {
     25% {
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
     }
     37.5% {
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
     }
     50% {
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em;
     }
     62.5% {
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em;
     }
     75% {
-        background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+        background: linear-gradient(@preloader_tx, @preloader_tx) 0 50%, linear-gradient(@preloader_tx, @preloader_tx) 0.625em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.25em 50%, linear-gradient(@preloader_tx, @preloader_tx) 1.875em 50%, linear-gradient(@preloader_tx, @preloader_tx) 2.5em 50%;
         background-repeat: no-repeat;
         background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em;
     }
@@ -1647,6 +1624,9 @@ table.category {
 /* ***********   END:: Loader Animation   ************* */
 /* **************************************************** */
 
+/* **********   END:: Helix 1.4 Loader Css   ********** */
+/* **************************************************** */
+
 /* ************ START Animations Header *************** */
 /* **************************************************** */
 
@@ -1686,5 +1666,96 @@ table.category {
     animation-name:fadeInDown;
 }
 
+//fadeinUp
+@-webkit-keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+
 /* ************ END:: Animations Header *************** */
+/* **************************************************** */
+
+/* *********   START Responsive Media Query   ********* */
+/* **************************************************** */
+//Tablet
+@media screen and (min-width: 768px) and (max-width: 1199px){
+    .scrollup {
+        bottom: 25px;
+        right: 25px;
+    }
+}
+//Mobile Device
+@media screen and (min-width: 320px) and (max-width: 767px){
+    //Top social
+    ul.social-icons {
+        margin: 0;
+        width: 100%;
+        text-align: center;
+        > li{
+            margin: 5px;
+        }
+    }
+    .sp-contact-info {
+        display: table;
+        float: none;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+        li{
+            margin: 0 5px;
+            font-size: 89%;
+        }
+    }
+    //Call to action
+    .sppb-animated{
+        .sppb-addon-cta{
+            .sppb-cta-title{
+                font-size: 40px !important;
+                line-height: 40px !important;
+            }
+        }
+    }
+    //Back to top
+    .scrollup {
+        bottom: 25px;
+        right: 25px;
+    }
+
+}
+@media screen and (min-width: 550px) and (max-width: 767px){
+    //top social
+    .sp-contact-info li {
+        margin: 0 5px;
+        font-size: 90%;
+    }
+}
+/* *********   END:: Responsive Media Query   ********* */
 /* **************************************************** */

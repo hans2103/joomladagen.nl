@@ -4,9 +4,16 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
 
     var config = {
-        src: 'public_html/templates/shaper_helix3',
-        dest: 'public_html/templates/shaper_helix3',
-        proxy: 'http://joomladagen.local'
+        src: 'public_html/templates/perfecttemplate',
+        dest: 'public_html/templates/perfecttemplate',
+        proxy: 'http://joomladagen.local',
+        templateScripts: [
+            'bower_components/apollo.js/dist/apollo.min.js',
+            'bower_components/vanilla-js-responsive-menu/vanilla.js.responsive.menu.js',
+            //'bower_components/jquery/dist/jquery.min.js',
+            '<%= config.src %>/scripts/svg-injector.js',
+            '<%= config.src %>/scripts/main.js'
+        ]
     };
 
     // load grunt config
@@ -17,8 +24,6 @@ module.exports = function (grunt) {
     });
 
     // grunt tasks
-    grunt.registerTask('default', ['versioncheck', 'jshint', 'uglify', 'cssmin', 'less', 'watch']);
-
-    grunt.registerTask('local', ['jshint', 'uglify', 'cssmin', 'less', 'watch']);
+    grunt.registerTask('default', ['shell', 'modernizr', 'webfont', 'watch']);
 
 };

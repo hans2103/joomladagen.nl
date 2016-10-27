@@ -1,0 +1,60 @@
+/*
+Anchor
+
+.anchor        - Regular link
+.anchor--reset - Cloaked link
+.anchor--nav   - Navigation link
+
+markup:
+<a class="{$modifiers}" href="javascript:void();">I&rsquo;m a link</a>
+
+Styleguide 2.3
+*/
+
+@mixin anchor($color: $jd-blue, $color-hover: $jd-blue--dark, $underline: false, $border-bottom: false) {
+	& {
+		color: $color;
+		@if $underline == false {
+			text-decoration: none;
+		} @else if $underline == true {
+			@if $border-bottom == false {
+				text-decoration: underline;
+			} @else if $border-bottom == true {
+				border-bottom: 1px solid $color;
+			}
+		}
+		@include transition();
+	}
+	&:hover {
+		color: $color-hover;
+		@if $underline == false {
+			text-decoration: none;
+		} @else if $underline == true {
+			@if $border-bottom == false {
+				text-decoration: underline;
+			} @else if $border-bottom == true {
+				border-bottom: 1px solid $color;
+			}
+		}
+		@include transition();
+	}
+	&:active,
+	&:focus {
+		color: $color-hover;
+		@if $underline == false {
+			text-decoration: none;
+		} @else if $underline == true {
+			@if $border-bottom == false {
+				text-decoration: underline;
+			} @else if $border-bottom == true {
+				border-bottom: 1px solid $color;
+			}
+		}
+		@include transition();
+		outline: none;
+	}
+}
+
+//a {
+//	@include anchor;
+//}

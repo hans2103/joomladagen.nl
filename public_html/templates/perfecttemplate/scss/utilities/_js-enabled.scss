@@ -1,0 +1,6 @@
+// JS enabled
+@mixin js-enabled {
+	@at-root .js-enabled & {
+		@content;
+	}
+}

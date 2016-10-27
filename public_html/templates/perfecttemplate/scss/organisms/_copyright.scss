@@ -1,0 +1,54 @@
+.copyright {
+	background-color: $jd-blue--dark;
+
+	a,
+	.separator {
+		@include anchor($white, $white);
+		@include font($font-size--h6)
+	}
+
+	@include e('wrapper') {
+		@include outer-container;
+		@include block-spacing;
+		@include media($charlie) {
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	@include e('content') {
+		margin: 0;
+		@include media($charlie) {
+			@include display(flex);
+			@include flex-direction(row);
+			@include justify-content(space-between);
+		}
+	}
+
+	.module {
+		&:first-child {}
+		&:last-child {
+			@include media($charlie) {
+				text-align: right;
+			}
+		}
+	}
+
+	.menu {
+		@include media($charlie) {
+			> li {
+				padding: 1/8 * $base-spacing 1/2 * $base-spacing;
+				padding-left: 0;
+				display: inline-block;
+			}
+			li + li {
+				position: relative;
+				&:before {
+					content: "|";
+					color: $white;
+					padding-right: 1/2 * $base-spacing
+				}
+			}
+		}
+	}
+}

@@ -5,7 +5,7 @@ module.exports = {
     },
     build: {
         files: {
-            '<%= config.dest %>/js/main.min.js': '<%= config.src %>/js/main.js'
+            '<%= config.dest %>/js/scripts.js': '<%= config.templateScripts %>'
         }
     }
 };

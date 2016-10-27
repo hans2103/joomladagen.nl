@@ -1,0 +1,32 @@
+/*
+Breakpoints
+
+Styleguide 1.4
+*/
+
+/*
+Breakpoints settings
+
+$alpha - 320px;
+$beta - 664px;
+$charlie - 768px;
+$delta - 988px;
+$echo - 1024px;
+
+markup:
+<pre>{$modifiers}</pre>
+
+Styleguide 1.4.1
+*/
+
+$alpha:                 320px;
+$alpha--min:            $alpha - 1px;
+$alpha--plus:           440px;
+$beta:                  600px;
+$beta--min:             $beta -1px;
+$charlie:               760px;
+$charlie--min:          $charlie - 1px;
+$delta:                 1020px;
+$delta--min:            $delta - 1px;
+$echo:                  1294px;
+$echo--min:             $echo - 1px;

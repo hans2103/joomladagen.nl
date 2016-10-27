@@ -7,7 +7,8 @@ module.exports = {
     },
     build: {
         files: {
-            '<%= config.dest %>/css/template.css': '<%= config.src %>/css/master.css'
+            '<%= config.dest %>/css/style.css': '<%= config.src %>/css/style.css',
+            '<%= config.dest %>/css/font.css': '<%= config.src %>/css/font.css'
         }
     }
 };

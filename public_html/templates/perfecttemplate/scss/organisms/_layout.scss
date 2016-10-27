@@ -1,0 +1,20 @@
+.header {
+	@include e('wrapper') {
+		@include outer-container;
+	}
+}
+
+.main {
+	@include e('wrapper') {
+		@include outer-container;
+	}
+}
+
+.footer {
+	background-color: $jd-blue;
+	width: 100%;
+	@include e('wrapper') {
+		@include outer-container;
+	}
+}
+

@@ -1,0 +1,56 @@
+/*
+Base styling
+
+Styleguide 2.1
+*/
+/*
+Box size everything
+
+Styleguide 2.1.1
+*/
+
+//*, *:before, *:after {
+//	box-sizing: border-box;
+//}
+
+/*
+Body styling
+
+html        - HTML tag styling
+body        - BODY tag styling
+
+Styleguide 2.1.2
+*/
+
+body {
+	@include font($font-size, $normal, $line-height, $font-family);
+	letter-spacing: 0.02em;
+	color: $type;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	background: $white;
+}
+
+
+@mixin no-margin {
+	margin:0;
+}
+
+.content-no-padding {
+	.module__content {
+		padding: 0;
+	}
+}
+
+fieldset {
+	@include reset;
+}
+
+hr {
+	border-color: $jd-gray--dark;
+}
+
+.visually-hidden,
+.element-invisible {
+	@include visually-hidden;
+}

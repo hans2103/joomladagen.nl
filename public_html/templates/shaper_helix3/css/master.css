@@ -868,7 +868,7 @@ dl.article-info dd.hits span[class*=" icon-"] {
   display: none;
 }
 .sp-megamenu-parent .sp-dropdown .sp-dropdown-inner {
-  background: red;
+  background: purple;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
   padding: 20px;
 }
@@ -913,7 +913,7 @@ dl.article-info dd.hits span[class*=" icon-"] {
 .sp-megamenu-parent .sp-dropdown li.sp-menu-item > a {
   display: block;
   padding: 10px;
-  color: red;
+  color: green;
   cursor: pointer;
 }
 .sp-megamenu-parent .sp-dropdown li.sp-menu-item > a.sp-group-title {
@@ -943,294 +943,7 @@ dl.article-info dd.hits span[class*=" icon-"] {
   -webkit-animation: spMenuZoom 400ms;
   animation: spMenuZoom 400ms;
 }
-.sp-megamenu-parent.menu-fade-up .sp-has-child:hover > .sp-dropdown {
-  -webkit-animation: spMenuFadeInUp 400ms;
-  animation: spMenuFadeInUp 400ms;
-}
-.sp-megamenu-parent.menu-rotate .sp-has-child:hover > .sp-dropdown {
-  opacity: 1;
-  -webkit-transform: rotateX(0deg);
-  transform: rotateX(0deg);
-  visibility: visible;
-}
-.sp-megamenu-parent.menu-slide-down .sp-has-child:hover > .sp-dropdown {
-  opacity: 1;
-  visibility: visible;
-  top: 90px;
-}
-/* Menu Slide Down
-   ====================================================== */
-.menu-slide-down .sp-has-child > .sp-dropdown {
-  top: 60px;
-  opacity: 0;
-  visibility: hidden;
-  display: block;
-  transition: all 500ms ease;
-}
-.menu-slide-down .sp-has-child > .sp-dropdown.sp-dropdown-mega {
-  left: auto;
-  right: 0;
-}
-/*
-   Rotate Menu Drop Down
-   ==================================================== */
-.menu-rotate .sp-has-child {
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
-}
-.menu-rotate .sp-has-child > .sp-dropdown {
-  -webkit-transform-origin: top center;
-  transform-origin: top center;
-  -webkit-transform: rotateX(-70deg);
-  transform: rotateX(-70deg);
-  -webkit-transition: transform 0.4s ease 0s, opacity 0.2s ease 0s, visibility 0.2s ease 0s;
-  transition: transform 0.4s ease 0s, opacity 0.2s ease 0s, visibility 0.2s ease 0s;
-  opacity: 0;
-  visibility: hidden;
-  display: block;
-}
-.menu-rotate .sp-has-child > .sp-dropdown.sp-dropdown-mega {
-  left: auto;
-  right: 0;
-}
-/* Drop In
-   ========================================================================== */
-.menu-drop-in .sp-has-child .sp-dropdown-inner {
-  background: transparent none repeat scroll 0 0;
-  box-shadow: none;
-  padding: 0;
-}
-.menu-drop-in .sp-has-child .sp-dropdown-items {
-  margin: 0;
-  padding: 0;
-  perspective: 1000px;
-}
-.menu-drop-in .sp-has-child .sp-menu-item {
-  -webkit-transform: translate(0, 100px);
-  transform: translate(0, 100px);
-  opacity: 0;
-  padding: 0 20px !important;
-  background-color: red;
-}
-.menu-drop-in .sp-has-child .sp-menu-item:first-child {
-  padding-top: 20px !important;
-}
-.menu-drop-in .sp-has-child .sp-menu-item:last-child {
-  padding-bottom: 20px !important;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item {
-  -webkit-animation-timing-function: ease-in-out;
-  animation-timing-function: ease-in-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  -webkit-animation-name: dropup;
-  animation-name: dropup;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(1) {
-  -webkit-animation-duration: 0.3s;
-  animation-duration: 0.3s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(2) {
-  -webkit-animation-duration: 0.4s;
-  animation-duration: 0.4s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(3) {
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(4) {
-  -webkit-animation-duration: 0.6s;
-  animation-duration: 0.6s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(5) {
-  -webkit-animation-duration: 0.7s;
-  animation-duration: 0.7s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(6) {
-  -webkit-animation-duration: 0.8s;
-  animation-duration: 0.8s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(7) {
-  -webkit-animation-duration: 0.9s;
-  animation-duration: 0.9s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(8) {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-}
-.menu-drop-in .sp-has-child:hover .sp-menu-item:last-child {
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
-}
-.menu-drop-in .sp-has-child.menu-justify:hover .sp-dropdown {
-  -webkit-animation: spMenuFadeInUp 500ms;
-  animation: spMenuFadeInUp 500ms;
-}
-.menu-drop-in .sp-has-child.menu-justify .sp-dropdown-inner {
-  background: #fff none repeat scroll 0 0;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
-  padding: 20px !important;
-}
-.menu-drop-in .sp-has-child.menu-justify .sp-mega-group .sp-menu-item {
-  padding: 0 !important;
-  -webkit-animation-direction: normal;
-  animation-direction: normal;
-  -webkit-animation-fill-mode: none;
-  animation-fill-mode: none;
-  -webkit-animation-iteration-count: 0;
-  animation-iteration-count: 0;
-  -webkit-animation-name: none;
-  animation-name: none;
-  -webkit-animation-timing-function: ease;
-  animation-timing-function: ease;
-  opacity: 1;
-  -webkit-transform: none;
-  transform: none;
-}
-.menu-drop-in .sp-has-child.menu-justify .sp-mega-group .sp-menu-item:last-child {
-  box-shadow: none;
-}
-@keyframes dropup {
-  0% {
-    opacity: 0;
-    transform: translate(0, 100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
-@-webkit-keyframes dropup {
-  0% {
-    opacity: 0;
-    transform: translate(0, 100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
-/* Twist Menu
-   ========================================================================== */
-.menu-twist .sp-has-child .sp-dropdown-inner {
-  background: transparent none repeat scroll 0 0;
-  box-shadow: none;
-  padding: 0;
-}
-.menu-twist .sp-has-child .sp-dropdown-items {
-  margin: 0;
-  padding: 0;
-}
-.menu-twist .sp-has-child .sp-menu-item {
-  -webkit-transform: rotateY(90deg);
-  transform: rotateY(90deg);
-  padding: 0 20px !important;
-  background: #fff;
-}
-.menu-twist .sp-has-child .sp-menu-item:first-child {
-  padding-top: 20px !important;
-}
-.menu-twist .sp-has-child .sp-menu-item:last-child {
-  padding-bottom: 20px !important;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item {
-  -webkit-animation-direction: normal;
-  animation-direction: normal;
-  -webkit-animation-iteration-count: 1;
-  animation-iteration-count: 1;
-  -webkit-animation-timing-function: ease-in-out;
-  animation-timing-function: ease-in-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
-  -webkit-animation-name: twist;
-  animation-name: twist;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(1) {
-  -webkit-animation-duration: 0.4s;
-  animation-duration: 0.4s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(2) {
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(3) {
-  -webkit-animation-duration: 0.6s;
-  animation-duration: 0.6s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(4) {
-  -webkit-animation-duration: 0.7s;
-  animation-duration: 0.7s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(5) {
-  -webkit-animation-duration: 0.8s;
-  animation-duration: 0.8s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(6) {
-  -webkit-animation-duration: 0.9s;
-  animation-duration: 0.9s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(7) {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(8) {
-  -webkit-animation-duration: 1.1s;
-  animation-duration: 1.1s;
-}
-.menu-twist .sp-has-child:hover .sp-menu-item:last-child {
-  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
-}
-.menu-twist .sp-has-child.menu-justify:hover .sp-dropdown {
-  -webkit-animation: spMenuFadeInUp 500ms;
-  animation: spMenuFadeInUp 500ms;
-}
-.menu-twist .sp-has-child.menu-justify .sp-dropdown-inner {
-  background: #fff none repeat scroll 0 0;
-  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
-  padding: 20px !important;
-}
-.menu-twist .sp-has-child.menu-justify .sp-mega-group .sp-menu-item {
-  padding: 0 !important;
-  -webkit-animation-direction: normal;
-  animation-direction: normal;
-  -webkit-animation-fill-mode: none;
-  animation-fill-mode: none;
-  -webkit-animation-iteration-count: 0;
-  animation-iteration-count: 0;
-  -webkit-animation-name: none;
-  animation-name: none;
-  -webkit-animation-timing-function: ease;
-  animation-timing-function: ease;
-  opacity: 1;
-  -webkit-transform: none;
-  transform: none;
-}
-.menu-twist .sp-has-child.menu-justify .sp-mega-group .sp-menu-item:last-child {
-  box-shadow: none;
-}
-/* Twist Animation */
-@keyframes twist {
-  0% {
-    opacity: 0;
-    transform: rotateY(90deg);
-  }
-  100% {
-    opacity: 1;
-    transform: rotateY(0);
-  }
-}
-@-webkit-keyframes twist {
-  0% {
-    opacity: 0;
-    -webkit-transform: rotateY(90deg);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: rotateY(0);
-  }
-}
-/*=========================================
- *=======   Off Canvas   ============
- *=======================================*/
+/*=================  Off Canvas  ===============*/
 #offcanvas-toggler {
   float: right;
   line-height: 87px;
@@ -1431,8 +1144,351 @@ dl.article-info dd.hits span[class*=" icon-"] {
 .menu .nav-child.small {
   font-size: inherit;
 }
-/* Slide Top Off Canvas Menu
-   ============================================================== */
+/* *************   START Helix 1.4 CSS Block   *************** */
+/* *********************************************************** */
+.sp-megamenu-parent.menu-fade-up .sp-has-child:hover > .sp-dropdown {
+  -webkit-animation: spMenuFadeInUp 400ms;
+  animation: spMenuFadeInUp 400ms;
+}
+.sp-megamenu-parent.menu-rotate .sp-has-child:hover > .sp-dropdown {
+  opacity: 1;
+  -webkit-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+  visibility: visible;
+}
+.sp-megamenu-parent.menu-slide-down .sp-has-child:hover > .sp-dropdown {
+  opacity: 1;
+  visibility: visible;
+  top: 90px;
+}
+.sp-megamenu-parent.menu-slide-down .sp-has-child:hover > .sp-dropdown .sp-dropdown {
+  top: 0;
+}
+/* ================== Menu Slide Down ================== */
+.menu-slide-down .sp-has-child > .sp-dropdown {
+  top: 60px;
+  opacity: 0;
+  visibility: hidden;
+  display: block;
+  transition: all 500ms ease;
+}
+.menu-slide-down .sp-has-child > .sp-dropdown.sp-dropdown-mega {
+  left: auto;
+  right: 0;
+}
+/* =================== Rotate Menu Drop Down =============== */
+.menu-rotate .sp-has-child {
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+}
+.menu-rotate .sp-has-child > .sp-dropdown {
+  -webkit-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-transform: rotateX(-70deg);
+  transform: rotateX(-70deg);
+  -webkit-transition: transform 0.4s ease 0s, opacity 0.2s ease 0s, visibility 0.2s ease 0s;
+  transition: transform 0.4s ease 0s, opacity 0.2s ease 0s, visibility 0.2s ease 0s;
+  opacity: 0;
+  visibility: hidden;
+  display: block;
+}
+.menu-rotate .sp-has-child > .sp-dropdown.sp-dropdown-mega {
+  left: auto;
+  right: 0;
+}
+/* ======================== Drop In ====================== */
+.menu-drop-in .sp-has-child .sp-dropdown-inner {
+  background: transparent none repeat scroll 0 0;
+  box-shadow: none;
+  padding: 0;
+}
+.menu-drop-in .sp-has-child .sp-dropdown-items {
+  margin: 0;
+  padding: 0;
+  perspective: 1000px;
+}
+.menu-drop-in .sp-has-child .sp-menu-item {
+  -webkit-transform: translate(0, 100px);
+  transform: translate(0, 100px);
+  opacity: 0;
+  padding: 0 20px !important;
+  background-color: purple;
+}
+.menu-drop-in .sp-has-child .sp-menu-item:first-child {
+  padding-top: 20px !important;
+}
+.menu-drop-in .sp-has-child .sp-menu-item:last-child {
+  padding-bottom: 20px !important;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item {
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-name: dropup;
+  animation-name: dropup;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(1) {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(2) {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(3) {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(4) {
+  -webkit-animation-duration: 0.6s;
+  animation-duration: 0.6s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(5) {
+  -webkit-animation-duration: 0.7s;
+  animation-duration: 0.7s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(6) {
+  -webkit-animation-duration: 0.8s;
+  animation-duration: 0.8s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(7) {
+  -webkit-animation-duration: 0.9s;
+  animation-duration: 0.9s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:nth-child(8) {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
+.menu-drop-in .sp-has-child:hover .sp-menu-item:last-child {
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
+}
+.menu-drop-in .sp-has-child.menu-justify:hover .sp-dropdown {
+  -webkit-animation: spMenuFadeInUp 500ms;
+  animation: spMenuFadeInUp 500ms;
+}
+.menu-drop-in .sp-has-child.menu-justify .sp-dropdown-inner {
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px !important;
+}
+.menu-drop-in .sp-has-child.menu-justify .sp-mega-group .sp-menu-item {
+  padding: 0 !important;
+  -webkit-animation-direction: normal;
+  animation-direction: normal;
+  -webkit-animation-fill-mode: none;
+  animation-fill-mode: none;
+  -webkit-animation-iteration-count: 0;
+  animation-iteration-count: 0;
+  -webkit-animation-name: none;
+  animation-name: none;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  opacity: 1;
+  -webkit-transform: none;
+  transform: none;
+}
+.menu-drop-in .sp-has-child.menu-justify .sp-mega-group .sp-menu-item:last-child {
+  box-shadow: none;
+}
+@keyframes dropup {
+  0% {
+    opacity: 0;
+    transform: translate(0, 100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@-webkit-keyframes dropup {
+  0% {
+    opacity: 0;
+    transform: translate(0, 100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+/* ================== Twist Menu =================== */
+.menu-twist .sp-has-child .sp-dropdown-inner {
+  background: transparent none repeat scroll 0 0;
+  box-shadow: none;
+  padding: 0;
+}
+.menu-twist .sp-has-child .sp-dropdown-items {
+  margin: 0;
+  padding: 0;
+}
+.menu-twist .sp-has-child .sp-menu-item {
+  -webkit-transform: rotateY(90deg);
+  transform: rotateY(90deg);
+  padding: 0 20px !important;
+  background: #fff;
+}
+.menu-twist .sp-has-child .sp-menu-item:first-child {
+  padding-top: 20px !important;
+}
+.menu-twist .sp-has-child .sp-menu-item:last-child {
+  padding-bottom: 20px !important;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item {
+  -webkit-animation-direction: normal;
+  animation-direction: normal;
+  -webkit-animation-iteration-count: 1;
+  animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-name: twist;
+  animation-name: twist;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(1) {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(2) {
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(3) {
+  -webkit-animation-duration: 0.6s;
+  animation-duration: 0.6s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(4) {
+  -webkit-animation-duration: 0.7s;
+  animation-duration: 0.7s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(5) {
+  -webkit-animation-duration: 0.8s;
+  animation-duration: 0.8s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(6) {
+  -webkit-animation-duration: 0.9s;
+  animation-duration: 0.9s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(7) {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:nth-child(8) {
+  -webkit-animation-duration: 1.1s;
+  animation-duration: 1.1s;
+}
+.menu-twist .sp-has-child:hover .sp-menu-item:last-child {
+  box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
+}
+.menu-twist .sp-has-child.menu-justify:hover .sp-dropdown {
+  -webkit-animation: spMenuFadeInUp 500ms;
+  animation: spMenuFadeInUp 500ms;
+}
+.menu-twist .sp-has-child.menu-justify .sp-dropdown-inner {
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px !important;
+}
+.menu-twist .sp-has-child.menu-justify .sp-mega-group .sp-menu-item {
+  padding: 0 !important;
+  -webkit-animation-direction: normal;
+  animation-direction: normal;
+  -webkit-animation-fill-mode: none;
+  animation-fill-mode: none;
+  -webkit-animation-iteration-count: 0;
+  animation-iteration-count: 0;
+  -webkit-animation-name: none;
+  animation-name: none;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  opacity: 1;
+  -webkit-transform: none;
+  transform: none;
+}
+.menu-twist .sp-has-child.menu-justify .sp-mega-group .sp-menu-item:last-child {
+  box-shadow: none;
+}
+/* Twist Animation */
+@keyframes twist {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0);
+  }
+}
+@-webkit-keyframes twist {
+  0% {
+    opacity: 0;
+    -webkit-transform: rotateY(90deg);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: rotateY(0);
+  }
+}
+/*===========	Menu Animation   ============*/
+@-webkit-keyframes spMenuFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes spMenuFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes spMenuZoom {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes spMenuZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+  }
+}
+@-webkit-keyframes spMenuFadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 30px, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+  }
+}
+@keyframes spMenuFadeInUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* =============== Slide Top Off Canvas Menu ============== */
 .slide-top-menu .offcanvas-menu {
   -webkit-transform: translateX(0);
   transform: translateX(0);
@@ -1449,8 +1505,7 @@ dl.article-info dd.hits span[class*=" icon-"] {
   background-color: #000000;
   visibility: visible;
 }
-/* Full Screen Off Canvas Menu
-   ================================================================= */
+/* ========= Full Screen Off Canvas Menu ========= */
 .full-screen .offcanvas-menu {
   right: -100%;
   width: 100%;
@@ -1463,7 +1518,9 @@ dl.article-info dd.hits span[class*=" icon-"] {
   text-align: center;
 }
 .full-screen .offcanvas-menu .offcanvas-inner .sp-module {
+  margin-bottom: 0;
   margin-top: 80px;
+  padding-bottom: 0;
 }
 .full-screen .offcanvas-menu .offcanvas-inner .sp-module ul {
   background: transparent;
@@ -1506,8 +1563,15 @@ dl.article-info dd.hits span[class*=" icon-"] {
 .full-screen .offcanvas-menu .offcanvas-inner .sp-module ul li:focus a {
   background: transparent;
 }
-.full-screen .offcanvas-menu .offcanvas-inner .sp-module:first-child {
-  display: none;
+.full-screen .offcanvas-menu .offcanvas-inner .sp-module ul.nav.menu {
+  padding-bottom: 75px;
+}
+.full-screen .offcanvas-menu .offcanvas-inner .sp-module .search {
+  max-width: 300px;
+  margin: 25px auto 0;
+}
+.full-screen .offcanvas-menu .offcanvas-inner .sp-module .sp-module-title {
+  font-size: 28px;
 }
 .full-screen .offcanvas-menu .close-offcanvas {
   font-size: 20px;
@@ -1524,8 +1588,7 @@ dl.article-info dd.hits span[class*=" icon-"] {
   width: 100%;
   right: 0;
 }
-/* Full Screen Off Canvas From Top
-   ================================================================= */
+/* =============== Full Screen Off Canvas From Top ================== */
 .full-screen-ftop .offcanvas-menu {
   right: 0;
   width: 100%;
@@ -1540,7 +1603,9 @@ dl.article-info dd.hits span[class*=" icon-"] {
   text-align: center;
 }
 .full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module {
+  margin-bottom: 0;
   margin-top: 80px;
+  padding-bottom: 0;
 }
 .full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module ul {
   background: transparent;
@@ -1548,7 +1613,9 @@ dl.article-info dd.hits span[class*=" icon-"] {
 }
 .full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module ul > li {
   opacity: 0;
+  -webkit-transform: translate3d(0px, -80px, 0px);
   transform: translate3d(0px, -80px, 0px);
+  -webkit-transition: transform 0.5s ease 0s, opacity 0.5s ease 0s;
   transition: transform 0.5s ease 0s, opacity 0.5s ease 0s;
 }
 .full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module ul li {
@@ -1588,8 +1655,15 @@ dl.article-info dd.hits span[class*=" icon-"] {
 .full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module ul li:focus a {
   background: transparent;
 }
-.full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module:first-child {
-  display: none;
+.full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module ul.nav.menu {
+  padding-bottom: 75px;
+}
+.full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module .search {
+  max-width: 300px;
+  margin: 25px auto 0;
+}
+.full-screen-ftop .offcanvas-menu .offcanvas-inner .sp-module .sp-module-title {
+  font-size: 28px;
 }
 .full-screen-ftop .offcanvas-menu .close-offcanvas {
   font-size: 20px;
@@ -1616,10 +1690,10 @@ dl.article-info dd.hits span[class*=" icon-"] {
 }
 .full-screen-off-canvas-ftop.ltr .offcanvas-menu .sp-module ul > li {
   opacity: 1;
+  -webkit-transform: translate3d(0px, 0px, 0px);
   transform: translate3d(0px, 0px, 0px);
 }
-/* New Look Off Canvas Menu
-   ================================================================= */
+/* =================== New Look Off Canvas Menu ================ */
 .new-look .offcanvas-menu {
   background-color: #2b2f3b;
 }
@@ -1690,91 +1764,19 @@ dl.article-info dd.hits span[class*=" icon-"] {
   -webkit-transform: translateX(0);
   transform: translateX(0);
 }
-/* Firefox Only Css
-   ========================================================================== */
+/* ====================== Firefox Only Css ==================== */
 @-moz-document url-prefix() {
   .offcanvas-menu {
     right: -320px;
     transform: translateX(0px);
   }
 }
-/* Header Shrink
-   ========================================================================== */
-.shrink-header .is-sticky #sp-header {
-  height: 70px;
-}
-.shrink-header .is-sticky #sp-header .logo {
-  height: 70px;
-}
-.shrink-header .is-sticky #sp-header .sp-megamenu-parent > li > a {
-  line-height: 70px;
-  transition: line-height 400ms ease;
-}
-/*=========================================
- *======= 	Menu Animation   ============
- *=======================================*/
-@-webkit-keyframes spMenuFadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@keyframes spMenuFadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-@-webkit-keyframes spMenuZoom {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-  }
-}
-@keyframes spMenuZoom {
-  0% {
-    opacity: 0;
-    transform: scale(0.8);
-    -webkit-transform: scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    -webkit-transform: scale(1);
-  }
-}
-@-webkit-keyframes spMenuFadeInUp {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, 30px, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-  }
-}
-@keyframes spMenuFadeInUp {
-  0% {
-    opacity: 0;
-    transform: translate3d(0, 30px, 0);
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-  }
-}
+/* *************   END:: Helix 1.4 CSS Block   ************** */
+/* ********************************************************** */
 /**
 * @package Helix Framework
 * @author JoomShaper http://www.joomshaper.com
-* @copyright Copyright (c) 2010 - 2015 JoomShaper
+* @copyright Copyright (c) 2010 - 2016 JoomShaper
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 /* ************   START TABLE OF CONTENT   ************ */
@@ -2141,18 +2143,13 @@ ul.social-icons > li a {
   position: relative;
   z-index: 99;
 }
-#sp-header.fixed-header {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-}
 #sp-header {
   background: #ffffff none repeat scroll 0 0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
   height: 90px;
   left: 0;
-  position: absolute;
-  top: 40px;
+  position: relative;
+  top: 0;
   width: 100%;
   z-index: 99;
 }
@@ -2178,8 +2175,9 @@ ul.social-icons > li a {
 #sp-header .sp-retina-logo {
   display: none;
 }
-#sp-page-title {
-  margin-top: 90px;
+#sp-header.menu-fixed {
+  position: fixed;
+  z-index: 9999;
 }
 .sticky-wrapper.is-sticky {
   position: relative;
@@ -2696,7 +2694,7 @@ article.item {
 }
 .helix-social-share .helix-social-share-icon ul li div a:hover,
 .helix-social-share .helix-social-share-icon ul li div a:focus {
-  background: red;
+  background: blue;
   color: #fff;
 }
 /* ******************   END:: Blog   ****************** */
@@ -2754,18 +2752,6 @@ article.item {
 }
 #sp-footer-wrapper .copyright {
   display: block;
-}
-/* ****************   END:: Footer   ****************** */
-/* **************************************************** */
-/* ****************   START Footer   ****************** */
-/* **************************************************** */
-#sp-copyright {
-  background-color: #222222;
-}
-@media (min-width: 768px) {
-  .sp-copyright .menu > li {
-    display: inline-block;
-  }
 }
 /* ****************   END:: Footer   ****************** */
 /* **************************************************** */
@@ -2976,10 +2962,12 @@ table.category tbody > tr td {
 }
 /* ***************   END:: Mixed CSS   **************** */
 /* **************************************************** */
+/* **********   START Helix 1.4 Loader Css  *********** */
+/* **************************************************** */
 /* ************   START Pre-Loader CSS   ************** */
 /* **************************************************** */
 .sp-pre-loader {
-  background: #22b8f0;
+  background: red;
   height: 100%;
   left: 0;
   position: fixed;
@@ -2988,7 +2976,7 @@ table.category tbody > tr td {
   z-index: 99999;
 }
 .sp-pre-loader .sp-loader-clock {
-  border: 3px solid #fff;
+  border: 3px solid orange;
   border-radius: 60px;
   bottom: 0;
   height: 80px;
@@ -3002,7 +2990,7 @@ table.category tbody > tr td {
 .sp-pre-loader .sp-loader-clock:after {
   content: "";
   position: absolute;
-  background-color: #fff;
+  background-color: orange;
   top: 2px;
   left: 48%;
   height: 38px;
@@ -3016,7 +3004,7 @@ table.category tbody > tr td {
 .sp-pre-loader .sp-loader-clock:before {
   content: "";
   position: absolute;
-  background-color: #fff;
+  background-color: orange;
   top: 6px;
   left: 48%;
   height: 35px;
@@ -3032,7 +3020,7 @@ table.category tbody > tr td {
   height: 80px;
   width: 80px;
   border-radius: 80px;
-  border: 3px solid rgba(255, 255, 255, 0.7);
+  border: 3px solid rgba(255, 165, 0, 0.7);
   left: 0;
   top: 0;
   right: 0;
@@ -3051,7 +3039,7 @@ table.category tbody > tr td {
   width: 11px;
   height: 11px;
   border-radius: 10px;
-  background-color: #fff;
+  background-color: orange;
 }
 .sp-pre-loader .sp-loader-bubble-loop {
   position: absolute;
@@ -3063,7 +3051,7 @@ table.category tbody > tr td {
   bottom: 0;
   margin: auto;
   border-radius: 12px;
-  background-color: #fff;
+  background-color: orange;
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50% ;
   -webkit-animation: loader6 1s ease-in-out infinite;
@@ -3072,7 +3060,7 @@ table.category tbody > tr td {
 .sp-pre-loader .sp-loader-bubble-loop:before {
   content: "";
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 165, 0, 0.5);
   top: 0px;
   left: -25px;
   height: 12px;
@@ -3082,7 +3070,7 @@ table.category tbody > tr td {
 .sp-pre-loader .sp-loader-bubble-loop:after {
   content: "";
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 165, 0, 0.5);
   top: 0px;
   left: 25px;
   height: 12px;
@@ -3105,7 +3093,7 @@ table.category tbody > tr td {
   content: "";
   display: block;
   border-radius: 50%;
-  border: 2px solid #fff;
+  border: 2px solid orange;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -3157,7 +3145,7 @@ table.category tbody > tr td {
   position: absolute;
   width: 2px;
   height: 0;
-  background-color: #000;
+  background-color: orange;
   bottom: 0;
 }
 .sp-pre-loader .wave-two li:nth-child(1) {
@@ -3193,7 +3181,7 @@ table.category tbody > tr td {
 .sp-pre-loader .sp-loader-audio-wave {
   width: 3em;
   height: 2em;
-  background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+  background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
   background-repeat: no-repeat;
   background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
   animation: audioWave 1.5s linear infinite;
@@ -3220,13 +3208,12 @@ table.category tbody > tr td {
   width: auto;
 }
 .sp-pre-loader .sp-loader-with-logo .line {
-  background: #000;
+  background: orange;
   bottom: 0;
   height: 5px;
   left: 0;
   position: absolute;
   top: auto;
-  width: 0;
 }
 /* *************   END:: Pre-Loader CSS   ************* */
 /* **************************************************** */
@@ -3318,27 +3305,27 @@ table.category tbody > tr td {
 }
 @keyframes audioWave {
   25% {
-    background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+    background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
     background-repeat: no-repeat;
     background-size: 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
   }
   37.5% {
-    background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+    background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
     background-repeat: no-repeat;
     background-size: 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em;
   }
   50% {
-    background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+    background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
     background-repeat: no-repeat;
     background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em, 0.5em 0.25em;
   }
   62.5% {
-    background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+    background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
     background-repeat: no-repeat;
     background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em, 0.5em 0.25em;
   }
   75% {
-    background: linear-gradient(#ffffff, #ffffff) 0 50%, linear-gradient(#ffffff, #ffffff) 0.625em 50%, linear-gradient(#ffffff, #ffffff) 1.25em 50%, linear-gradient(#ffffff, #ffffff) 1.875em 50%, linear-gradient(#ffffff, #ffffff) 2.5em 50%;
+    background: linear-gradient(orange, orange) 0 50%, linear-gradient(orange, orange) 0.625em 50%, linear-gradient(orange, orange) 1.25em 50%, linear-gradient(orange, orange) 1.875em 50%, linear-gradient(orange, orange) 2.5em 50%;
     background-repeat: no-repeat;
     background-size: 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 0.25em, 0.5em 2em;
   }
@@ -3451,6 +3438,8 @@ table.category tbody > tr td {
 }
 /* ***********   END:: Loader Animation   ************* */
 /* **************************************************** */
+/* **********   END:: Helix 1.4 Loader Css   ********** */
+/* **************************************************** */
 /* ************ START Animations Header *************** */
 /* **************************************************** */
 .animated {
@@ -3487,6 +3476,79 @@ table.category tbody > tr td {
   -webkit-animation-name: fadeInDown;
   animation-name: fadeInDown;
 }
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
 /* ************ END:: Animations Header *************** */
+/* **************************************************** */
+/* *********   START Responsive Media Query   ********* */
+/* **************************************************** */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  .scrollup {
+    bottom: 25px;
+    right: 25px;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  ul.social-icons {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+  ul.social-icons > li {
+    margin: 5px;
+  }
+  .sp-contact-info {
+    display: table;
+    float: none;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+  }
+  .sp-contact-info li {
+    margin: 0 5px;
+    font-size: 89%;
+  }
+  .sppb-animated .sppb-addon-cta .sppb-cta-title {
+    font-size: 40px !important;
+    line-height: 40px !important;
+  }
+  .scrollup {
+    bottom: 25px;
+    right: 25px;
+  }
+}
+@media screen and (min-width: 550px) and (max-width: 767px) {
+  .sp-contact-info li {
+    margin: 0 5px;
+    font-size: 90%;
+  }
+}
+/* *********   END:: Responsive Media Query   ********* */
 /* **************************************************** */
 /*# sourceMappingURL=master.css.map */

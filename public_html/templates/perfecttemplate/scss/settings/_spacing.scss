@@ -1,0 +1,35 @@
+/*
+Spacing
+
+Styleguide 1.3
+*/
+
+/*
+Spacing settings
+
+$spacing - default spacing
+$spacing--half - half the default spacing
+$spacing--quarter - quart the default spacing
+$spacing--double - double the default spacing
+$spacing--triple - triple the default spacing
+
+markup:
+<pre>{$modifiers}</pre>
+
+Styleguide 1.3.1
+*/
+
+$spacing: 30px !default;
+$spacing--half: round($spacing / 2) !default;
+$spacing--third: round($spacing / 3) !default;
+$spacing--quarter: round($spacing / 4) !default;
+$spacing--micro: 5px;
+$spacing--double: $spacing * 2;
+$spacing--triple: $spacing * 3;
+
+// Spacing
+$spacing-tiny:          10px;
+$spacing-small:         15px;
+$spacing:               20px;
+$spacing-large:         45px;
+$spacing-huge:          60px;

@@ -1,0 +1,11 @@
+
+
+.color {
+	@include m('red') {
+		color: $jd-red;
+	}
+
+	@include m('blue') {
+		color: $jd-blue;
+	}
+}

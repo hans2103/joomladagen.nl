@@ -129,30 +129,9 @@ $doc->addScriptdeclaration("\nvar sp_offanimation = '" . $this->params->get('off
                 <!-- head -->
                 <jdoc:include type="head" />
                 <?php
-                $megabgcolor   = ($this->helix3->PresetParam('_megabg')) ? $this->helix3->PresetParam('_megabg') : '#ffffff';
-                $megabgtx      = ($this->helix3->PresetParam('_megatx')) ? $this->helix3->PresetParam('_megatx') : '#333333';
-                
                 // load css, less and js
-                $this->helix3->addCSS('bootstrap.min.css, font-awesome.min.css') // CSS Files
-                        ->addJS('bootstrap.min.js, main.js') // JS Files
-                        ->lessInit()->setLessVariables(array(
-                            'preset' => $this->helix3->Preset(),
-                            'bg_color' => $this->helix3->PresetParam('_bg'),
-                            'text_color' => $this->helix3->PresetParam('_text'),
-                            'major_color' => $this->helix3->PresetParam('_major'),
-                            'megabg_color' => $megabgcolor,
-                            'megatx_color' => $megabgtx,
-                        ))
-                        ->addLess('legacy/bootstrap', 'legacy')
-                        ->addLess('master', 'template');
-
-                //RTL
-                if ($this->direction == 'rtl') {
-                    $this->helix3->addCSS('bootstrap-rtl.min.css')
-                            ->addLess('rtl', 'rtl');
-                }
-
-                $this->helix3->addLess('presets', 'presets/' . $this->helix3->Preset(), array('class' => 'preset'));
+                $this->helix3->addCSS('bootstrap.min.css, font-awesome.min.css, legacy.css, template.css') // CSS Files
+                             ->addJS('bootstrap.min.js, main.js'); // JS Files
 
                 //Before Head
                 if ($before_head = $this->helix3->getParam('before_head')) {

@@ -1,0 +1,148 @@
+$text-inputs-list: 'input[type="color"]',
+'input[type="date"]',
+'input[type="datetime"]',
+'input[type="datetime-local"]',
+'input[type="email"]',
+'input[type="file"]',
+'input[type="month"]',
+'input[type="number"]',
+'input[type="password"]',
+'input[type="search"]',
+'input[type="tel"]',
+'input[type="text"]',
+'input[type="time"]',
+'input[type="url"]',
+'input[type="week"]',
+'input:not([type])',
+'textarea',
+'select',
+'.chzn-container';
+
+$all-text-inputs: assign-inputs($text-inputs-list);
+$all-text-inputs-active: assign-inputs($text-inputs-list, active);
+$all-text-inputs-focus: assign-inputs($text-inputs-list, focus);
+$all-text-inputs-hover: assign-inputs($text-inputs-list, hover);
+
+#{$all-text-inputs} {
+	border: 1px solid $jd-gray;
+}
+
+#{$all-text-inputs-focus},
+#{$all-text-inputs-hover} {
+	border: 1px solid $jd-gray--dark;
+}
+
+#{$all-text-inputs-active} {
+	border: 1px solid $jd-gray--dark;
+}
+
+
+#{$all-text-inputs} {
+	appearance: none;
+	background-color: $base-background-color;
+	border: $base-border;
+	border-radius: $base-border-radius;
+	box-shadow: $form-box-shadow;
+	box-sizing: border-box;
+	margin-bottom: $small-spacing;
+	padding: $base-spacing / 3;
+	transition: border-color $base-duration $base-timing;
+	width: 100%;
+
+	&:hover {
+		border-color: shade($base-border-color, 20%);
+	}
+
+	&:focus {
+		border-color: $action-color;
+		box-shadow: $form-box-shadow-focus;
+		outline: none;
+	}
+
+	&:disabled {
+		background-color: shade($base-background-color, 5%);
+		cursor: not-allowed;
+
+		&:hover {
+			border: $base-border;
+		}
+	}
+
+	&::placeholder {
+		color: tint($base-font-color, 40%);
+	}
+}
+
+select {
+	@include appearance(none);
+	margin-bottom: 0.5 * $base-spacing;
+	padding: 2/3 * 0.5 * $base-spacing;
+	background-color: $white;
+	color: $jd-gray;
+
+	&::-ms-expand {
+		display: none;
+	}
+}
+
+.chzn-container-single .chzn-single span {
+	font-size: $font-size;
+}
+
+.chzn-container-single .chzn-single,
+.chzn-container-active.chzn-with-drop .chzn-single,
+.chzn-container-active .chzn-choices,
+.chzn-container-multi .chzn-choices {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.chzn-container-single .chzn-single {
+	position: relative;
+	background-color: transparent;
+	@include icon-before(chevron-down, true) {
+		position: absolute;
+		right: 0.5 * $base-spacing;
+		top: 0.5 * $base-spacing;
+		z-index: -1;
+		color: $jd-gray;
+	}
+	b {
+		@include visually-hidden;
+	}
+}
+
+
+.custom-file-upload-hidden {
+	@include visually-hidden;
+	//display: none;
+	//visibility: hidden;
+	//position: absolute;
+	//left: -9999px;
+}
+.custom-file-upload {
+	display: block;
+	width: auto;
+	font-size: 16px;
+	margin-top: 30px;
+	//border: 1px solid #ccc;
+	label {
+		display: block;
+		margin-bottom: 5px;
+	}
+}
+
+.file-upload-wrapper {
+	position: relative;
+	margin-bottom: 5px;
+	//border: 1px solid #ccc;
+}
+.file-upload-input {
+	text-indent: 13 * $base-spacing;
+}
+.file-upload-button {
+	position: absolute;
+	top: 0;
+	padding: 0.4em;
+}

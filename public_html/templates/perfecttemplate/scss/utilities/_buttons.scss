@@ -1,0 +1,19 @@
+@mixin button-medium {
+	@include font($font-size--h4, $normal, $line-height, $font-family--roboto);
+	line-height: $font-size;
+	padding: floor(0.5 * $font-size);
+}
+
+@mixin button-large {
+	/* Smaller font size for mobile views */
+	font-size: $font-size--h2;
+	line-height: $font-size--h2;
+	padding: floor($font-size--h2);
+
+	/* Larger font on desktop views */
+	@include breakpoint($beta) {
+		font-size: $font-size--h1;
+		line-height: $font-size--h1;
+		padding: floor($font-size--h1);
+	}
+}
