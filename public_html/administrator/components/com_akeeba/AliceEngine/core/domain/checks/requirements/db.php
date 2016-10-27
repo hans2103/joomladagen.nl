@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRequirementsDb extends AliceCoreDomainChecksAbstract
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(20, JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE'), $logFile);
+		parent::__construct(20, 'COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE', $logFile);
 	}
 
 	public function check()
@@ -38,17 +38,20 @@ class AliceCoreDomainChecksRequirementsDb extends AliceCoreDomainChecksAbstract
 			if (version_compare($version, '5.0.47', 'lt'))
 			{
 				$this->setResult(-1);
+				$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 				throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 			}
 		}
 		elseif ($connector == 'oracle')
 		{
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'Oracle'));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'Oracle'));
 		}
 		elseif ($connector == 'pdo')
 		{
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'PDO'));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'PDO'));
 		}
 		elseif ($connector == 'postgresql')
@@ -56,6 +59,7 @@ class AliceCoreDomainChecksRequirementsDb extends AliceCoreDomainChecksAbstract
 			if (version_compare($version, '8.3.18', 'lt'))
 			{
 				$this->setResult(-1);
+				$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 				throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 			}
 		}
@@ -64,18 +68,21 @@ class AliceCoreDomainChecksRequirementsDb extends AliceCoreDomainChecksAbstract
 			if (version_compare($version, '10.50.1600.1', 'lt'))
 			{
 				$this->setResult(-1);
+				$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 				throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_VERSION_TOO_OLD', $version));
 			}
 		}
 		elseif ($connector == 'sqlite')
 		{
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'SQLite'));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNSUPPORTED', 'SQLite'));
 		}
 		else
 		{
 			// Unknown database type, throw exception
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNKNOWN', $connector));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DATABASE_UNKNOWN', $connector));
 		}
 

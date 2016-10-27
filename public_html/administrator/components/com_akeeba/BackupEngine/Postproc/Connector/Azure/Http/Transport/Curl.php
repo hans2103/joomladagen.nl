@@ -39,6 +39,7 @@ defined('AKEEBAENGINE') or die();
 use Akeeba\Engine\Postproc\Connector\Azure\Exception\Transport as TransportException;
 use Akeeba\Engine\Postproc\Connector\Azure\Http\Response;
 use Akeeba\Engine\Postproc\Connector\Azure\Http\Transport;
+use Akeeba\Engine\Postproc\Connector\S3v4\Input;
 
 /**
  * @category   Microsoft
@@ -63,15 +64,15 @@ class Curl extends Transport
 	/**
 	 * Perform request
 	 *
-	 * @param string $httpVerb  Http verb to use in the request
-	 * @param string $url       Url to request
-	 * @param array  $variables Array of key-value pairs to use in the request
-	 * @param array  $headers   Array of key-value pairs to use as additional headers
-	 * @param string $rawBody   Raw body to send to server
+	 * @param string $httpVerb    Http verb to use in the request
+	 * @param string $url         Url to request
+	 * @param array  $variables   Array of key-value pairs to use in the request
+	 * @param array  $headers     Array of key-value pairs to use as additional headers
+	 * @param string $inputObject Raw body to send to server
 	 *
 	 * @return Response
 	 */
-	public function request($httpVerb, $url, $variables = array(), $headers = array(), $rawBody = null)
+	public function request($httpVerb, $url, $variables = array(), $headers = array(), Input $inputObject = null)
 	{
 		// Create a new cURL instance
 		$curlHandle = curl_init();
@@ -129,14 +130,69 @@ class Curl extends Transport
 
 		// Set post fields / raw data
 		// http://www.php.net/manual/en/function.curl-setopt.php#81161
-		if (!is_null($rawBody) || (!is_null($variables) && count($variables) > 0))
+		switch ($httpVerb)
 		{
-			if (!is_null($rawBody))
-			{
-				unset($headers["Content-Length"]);
-				$headers["Content-Length"] = strlen($rawBody);
-			}
-			curl_setopt($curlHandle, CURLOPT_POSTFIELDS, is_null($rawBody) ? $variables : $rawBody);
+			case Transport::VERB_GET:
+				break;
+
+			case Transport::VERB_PUT:
+			case Transport::VERB_POST:
+
+				if (!is_object($inputObject) || !($inputObject instanceof Input))
+				{
+					$inputObject = new Input();
+				}
+
+				if (isset($headers["Content-Length"]))
+				{
+					unset($headers["Content-Length"]);
+				}
+
+				$headers["Content-Length"] = $inputObject->getSize();
+
+				$type = $inputObject->getInputType();
+
+				if ($type == Input::INPUT_DATA)
+				{
+					curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, $httpVerb);
+
+					$data = $inputObject->getDataReference();
+
+					if (strlen($data))
+					{
+						curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $data);
+					}
+
+					if ($headers["Content-Length"] > 0)
+					{
+						curl_setopt($curlHandle, CURLOPT_BUFFERSIZE, $headers["Content-Length"]);
+					}
+				}
+				else
+				{
+					curl_setopt($curlHandle, CURLOPT_PUT, true);
+					curl_setopt($curlHandle, CURLOPT_INFILE, $inputObject->getFp());
+
+					if ($headers["Content-Length"] > 0)
+					{
+						curl_setopt($curlHandle, CURLOPT_INFILESIZE, $headers["Content-Length"]);
+					}
+				}
+
+
+				break;
+
+			case 'HEAD':
+				curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'HEAD');
+				curl_setopt($curlHandle, CURLOPT_NOBODY, true);
+				break;
+
+			case 'DELETE':
+				curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'DELETE');
+				break;
+
+			default:
+				break;
 		}
 
 		// Set Content-Type header if required
@@ -151,10 +207,12 @@ class Curl extends Transport
 
 		// Add additional headers to cURL instance
 		$curlHeaders = array();
+
 		foreach ($headers as $key => $value)
 		{
 			$curlHeaders[] = $key . ': ' . $value;
 		}
+
 		curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $curlHeaders);
 
 		// DEBUG: curl_setopt($curlHandle, CURLINFO_HEADER_OUT, true);

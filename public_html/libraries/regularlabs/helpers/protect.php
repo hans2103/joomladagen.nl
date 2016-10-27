@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -153,7 +153,10 @@ class RLProtect
 			return false;
 		}
 
-		$restricted_components = is_array($restricted_components) ? $restricted_components : explode('|', $restricted_components);
+		$restricted_components =
+			is_array($restricted_components)
+				? $restricted_components
+				: explode(',', str_replace('|', ',', $restricted_components));
 
 		if (in_array(JFactory::getApplication()->input->get('option'), $restricted_components))
 		{
@@ -217,23 +220,66 @@ class RLProtect
 	 */
 	public static function protectFields(&$string)
 	{
-		if (strpos($string, '<input') === false && strpos($string, '<textarea') === false)
+		if (
+			empty($string)
+			|| (strpos($string, '<input') === false && strpos($string, '<textarea') === false)
+		)
 		{
 			return;
 		}
 
-		$param_name  = '[a-z][a-z0-9-_]*';
-		$params      = '(?:\s+' . $param_name . '(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
-		$type_values = '(?:text|email|hidden)';
-		$param_type  = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
+		// Split string for large forms to prevent memory issues
+		$split_on = '</label>';
+		if (
+			strlen($string) > 50000
+			&& strpos($string, $split_on) !== false
+		)
+		{
+			$parts = explode($split_on, $string);
 
-		self::protectByRegex(
-			$string,
-			'#(?:(?:'
-			. '(?:<' . 'input' . $params . $param_type . $params . '\s*/?>)'
-			. '|(?:<' . 'textarea[\s>].*?</textarea>)'
-			. ')\s*)+#si'
-		);
+			$string = array();
+
+			foreach ($parts as $part)
+			{
+				self::protectFields($part);
+				$string[] = $part;
+			}
+
+			$string = implode($split_on, $string);
+
+			return;
+		}
+
+		if (strpos($string, '<textarea') !== false)
+		{
+			// Only replace non-empty textareas
+			// Todo: maybe also prevent empty textareas but with a non-empty placeholder attribute
+			self::protectByRegex(
+				$string,
+				'#(?:'
+				. '<' . 'textarea(\s.*?)?>\s*[^\s].*?</textarea>'
+				. '\s*)+#si'
+			);
+		}
+
+		if (strpos($string, '<input') !== false)
+		{
+			$type_values = '(?:text|email|hidden)';
+			// must be of certain type
+			$param_type = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
+			// must have a non-empty value or placeholder attribute
+			$param_value = '\s+(?:value|placeholder)\s*=\s*(?:"[^"]+"|\'[^\']+\'])';
+			// Regex to match any other parameter
+			$params = '(?:\s+[a-z][a-z0-9-_]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
+
+			self::protectByRegex(
+				$string,
+				'#(?:(?:'
+				. '<' . 'input' . $params . $param_type . $params . $param_value . $params . '\s*/?>'
+				. '|<' . 'input' . $params . $param_value . $params . $param_type . $params . '\s*/?>'
+				. ')\s*)+#si'
+			);
+		}
 	}
 
 	/**

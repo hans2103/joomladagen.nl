@@ -16,18 +16,27 @@ abstract class AliceCoreDomainChecksAbstract
 {
 	/** @var int Check priority */
 	protected $priority = 0;
+
 	/** @var null Handle to log file */
 	protected $logFile = null;
+
 	/** @var string Human name of the running check */
 	protected $checkName = '';
 
+	/** @var string  Language key for the check. Used to display the result always in English */
+	protected $checkLangKey = '';
+
+	/** @var string  Language key for the error. Used to display the result always in English */
+	protected $errLangKey = '';
+
 	protected $result = 1;
 
-	public function __construct($priority, $checksName, $logFile = null)
+	public function __construct($priority, $checkKey, $logFile = null)
 	{
-		$this->priority  = $priority;
-		$this->checkName = $checksName;
-		$this->logFile   = $logFile;
+		$this->priority     = $priority;
+		$this->checkName    = JText::_($checkKey);
+		$this->checkLangKey = $checkKey;
+		$this->logFile      = $logFile;
 	}
 
 	/**
@@ -40,6 +49,11 @@ abstract class AliceCoreDomainChecksAbstract
 	 */
 	abstract public function check();
 
+	/**
+	 * Returns the solution that should be applied to fix the issue
+	 *
+	 * @return string       Steps required to fix the issue
+	 */
 	abstract public function getSolution();
 
 	/**
@@ -79,5 +93,37 @@ abstract class AliceCoreDomainChecksAbstract
 	public function setLogFile($log)
 	{
 		$this->logFile = $log;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getErrLangKey()
+	{
+		return $this->errLangKey;
+	}
+
+	/**
+	 * @param string $errLangKey
+	 */
+	public function setErrLangKey($errLangKey)
+	{
+		$this->errLangKey = $errLangKey;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCheckLangKey()
+	{
+		return $this->checkLangKey;
+	}
+
+	/**
+	 * @param string $checkLangKey
+	 */
+	public function setCheckLangKey($checkLangKey)
+	{
+		$this->checkLangKey = $checkLangKey;
 	}
 }

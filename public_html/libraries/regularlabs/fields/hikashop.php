@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -76,7 +76,7 @@ class JFormFieldRL_HikaShop extends RLFormGroupField
 		}
 
 		$query->clear('select')
-			->select('p.product_id as id, p.product_name AS name, p.product_published AS published')
+			->select('p.product_id as id, p.product_name AS name, p.product_published AS published, c.category_name AS cat')
 			->join('LEFT', '#__hikashop_product_category AS x ON x.product_id = p.product_id')
 			->join('INNER', '#__hikashop_category AS c ON c.category_id = x.category_id')
 			->group('p.product_id')

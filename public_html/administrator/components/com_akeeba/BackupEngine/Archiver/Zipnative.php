@@ -33,12 +33,6 @@ class Zipnative extends Base
 	/** @var string The name of the file holding the ZIP's data, which becomes the final archive */
 	private $_dataFileName;
 
-	/** @var integer The total number of files and directories stored in the ZIP archive */
-	private $_totalFileEntries;
-
-	/** @var string Archive full path without extension */
-	private $_dataFileNameBase = '';
-
 	/** @var \ZipArchive An instance of the PHP ZIPArchive class */
 	private $zip = null;
 

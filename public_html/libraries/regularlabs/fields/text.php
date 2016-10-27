@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -25,6 +25,7 @@ class JFormFieldRL_Text extends JFormFieldText
 
 		$element['label']                = $this->prepareText($element['label']);
 		$element['description']          = $this->prepareText($element['description']);
+		$element['hint']                 = $this->prepareText($element['hint']);
 		$element['translateDescription'] = false;
 
 		return parent::setup($element, $value, $group);

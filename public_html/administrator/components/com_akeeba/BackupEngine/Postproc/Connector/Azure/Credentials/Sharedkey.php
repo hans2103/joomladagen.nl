@@ -77,7 +77,14 @@ class Sharedkey extends Credentials
 	 */
 	public function signRequestHeaders($httpVerb = Transport::VERB_GET, $path = '/', $queryString = '', $headers = null, $forTableStorage = false, $resourceType = AzureStorage::RESOURCE_UNKNOWN, $requiredPermission = Credentials::PERMISSION_READ)
 	{
-		// http://github.com/sriramk/winazurestorage/blob/214010a2f8931bac9c96dfeb337d56fe084ca63b/winazurestorage.py
+		// Extract the Content-Length header
+		$contentLength = 0;
+
+		if (isset($headers['Content-Length']))
+		{
+			$contentLength = $headers['Content-Length'];
+			unset($headers['Content-Length']);
+		}
 
 		// Determine path
 		if ($this->_usePathStyleUri)
@@ -93,6 +100,7 @@ class Sharedkey extends Credentials
 
 		// Request date
 		$requestDate = '';
+
 		if (isset($headers[self::PREFIX_STORAGE_HEADER . 'date']))
 		{
 			$requestDate = $headers[self::PREFIX_STORAGE_HEADER . 'date'];
@@ -124,11 +132,14 @@ class Sharedkey extends Credentials
 
 		// Build canonicalized resource string
 		$canonicalizedResource = '/' . $this->_accountName;
+
 		if ($this->_usePathStyleUri)
 		{
 			$canonicalizedResource .= '/' . $this->_accountName;
 		}
+
 		$canonicalizedResource .= $path;
+
 		if ($queryString !== '')
 		{
 			$canonicalizedResource .= $queryString;
@@ -137,19 +148,28 @@ class Sharedkey extends Credentials
 		// Create string to sign
 		$stringToSign = array();
 		$stringToSign[] = strtoupper($httpVerb); // VERB
+		$stringToSign[] = ""; // Content-Encoding
+		$stringToSign[] = ""; // Content-Language
+		$stringToSign[] = empty($contentLength) ? '' : $contentLength; // Content-Length
 		$stringToSign[] = ""; // Content-MD5
 		$stringToSign[] = ""; // Content-Type
-		$stringToSign[] = "";
-		// Date already in $canonicalizedHeaders
+		$stringToSign[] = ""; // Date (already in $canonicalizedHeaders)
 		// $stringToSign[] = self::PREFIX_STORAGE_HEADER . 'date:' . $requestDate; // Date
+		$stringToSign[] = ""; // If-Modified-Since
+		$stringToSign[] = ""; // If-Match
+		$stringToSign[] = ""; // If-None-Match
+		$stringToSign[] = ""; // If-Unmodified-Since
+		$stringToSign[] = ""; // Range
 
+		// Canonicalized headers
 		if (!$forTableStorage && count($canonicalizedHeaders) > 0)
 		{
 			$stringToSign[] = implode("\n", $canonicalizedHeaders);
-		} // Canonicalized headers
+		}
 
 		$stringToSign[] = $canonicalizedResource; // Canonicalized resource
 		$stringToSign = implode("\n", $stringToSign);
+
 		$signString = base64_encode(hash_hmac('sha256', $stringToSign, $this->_accountKey, true));
 
 		// Sign request

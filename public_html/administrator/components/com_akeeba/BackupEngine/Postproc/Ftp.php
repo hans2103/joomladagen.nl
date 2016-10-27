@@ -50,6 +50,8 @@ class Ftp extends Base
 		// You can't fix stupid, but at least you get to shout at them
 		if (strtolower(substr($host, 0, 6)) == 'ftp://')
 		{
+			$this->setWarning('YOU ARE *** N O T *** SUPPOSED TO ENTER THE ftp:// PROTOCOL PREFIX IN THE FTP HOSTNAME FIELD OF THE Upload to Remote FTP POST-PROCESSING ENGINE. I am trying to fix your bad configuration setting, but the backup might fail anyway. You MUST fix this in your configuration.');
+
 			Factory::getLog()->log(LogLevel::WARNING, 'YOU ARE *** N O T *** SUPPOSED TO ENTER THE ftp:// PROTOCOL PREFIX IN THE FTP HOSTNAME FIELD OF THE Upload to Remote FTP POST-PROCESSING ENGINE.');
 			Factory::getLog()->log(LogLevel::WARNING, 'I am trying to fix your bad configuration setting, but the backup might fail anyway. You MUST fix this in your configuration.');
 			$host = substr($host, 6);

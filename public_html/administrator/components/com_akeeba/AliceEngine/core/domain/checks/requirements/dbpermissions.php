@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRequirementsDbpermissions extends AliceCoreDomainChec
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(40, JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS'), $logFile);
+		parent::__construct(40, 'COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS', $logFile);
 	}
 
 	public function check()
@@ -34,14 +34,20 @@ class AliceCoreDomainChecksRequirementsDbpermissions extends AliceCoreDomainChec
 		catch (Exception $e)
 		{
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . " Test failed, can't execute SHOW TABLES statement");
+
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR'));
 		}
 
 		if ( !$result)
 		{
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . " Test failed, can't execute SHOW TABLES statement");
+
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR'));
 		}
 
@@ -52,14 +58,20 @@ class AliceCoreDomainChecksRequirementsDbpermissions extends AliceCoreDomainChec
 		catch (Exception $e)
 		{
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . " Test failed, can't execute SHOW CREATE TABLE statement");
+
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR'));
 		}
 
 		if ( !$result)
 		{
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . " Test failed, can't execute SHOW CREATE TABLE statement");
+
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_DBPERMISSIONS_ERROR'));
 		}
 

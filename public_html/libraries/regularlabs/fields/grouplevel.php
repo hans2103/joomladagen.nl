@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,11 +21,12 @@ class JFormFieldRL_GroupLevel extends RLFormField
 	{
 		$this->params = $this->element->attributes();
 
-		$size     = (int) $this->get('size');
-		$multiple = $this->get('multiple');
-		$show_all = $this->get('show_all');
+		$size      = (int) $this->get('size');
+		$multiple  = $this->get('multiple');
+		$show_all  = $this->get('show_all');
+		$use_names = $this->get('use_names');
 
-		$options = $this->getUserGroups();
+		$options = $this->getUserGroups($use_names);
 
 		if ($show_all)
 		{
@@ -41,11 +42,12 @@ class JFormFieldRL_GroupLevel extends RLFormField
 		return RLHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
-	protected function getUserGroups()
+	protected function getUserGroups($use_names = false)
 	{
-		// Get the user groups from the database.
+		$value = $use_names ? 'a.title' : 'a.id';
+
 		$query = $this->db->getQuery(true)
-			->select('a.id as value, a.title as text, a.parent_id AS parent')
+			->select($value . ' as value, a.title as text, a.parent_id AS parent')
 			->from('#__usergroups AS a')
 			->select('COUNT(DISTINCT b.id) AS level')
 			->join('LEFT', '#__usergroups AS b ON a.lft > b.lft AND a.rgt < b.rgt')

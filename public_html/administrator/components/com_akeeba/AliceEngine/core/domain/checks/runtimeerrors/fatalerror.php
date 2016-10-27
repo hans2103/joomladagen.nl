@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRuntimeerrorsFatalerror extends AliceCoreDomainChecks
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(110, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_FATALERROR'), $logFile);
+		parent::__construct(110, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_FATALERROR', $logFile);
 	}
 
 	public function check()
@@ -84,6 +84,7 @@ class AliceCoreDomainChecksRuntimeerrorsFatalerror extends AliceCoreDomainChecks
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, fatal error detected');
 
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_FATALERROR_ERROR', "\n".$error));
 
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_FATALERROR_ERROR', '<br/>'.$error));
 		}

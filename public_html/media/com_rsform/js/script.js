@@ -8,6 +8,7 @@ if (typeof RSFormPro != 'object') {
 }
 
 RSFormPro.Forms = {};
+RSFormPro.Editors = {};
 RSFormPro.scrollToError = false;
 
 /* Handle HTML5 form fields validation for the forms without AjaxValidation enabled */
@@ -809,6 +810,7 @@ RSFormPro.Ajax = {
 			}
 
 			ids = data.response[1].split(',');
+			var doScroll = false;
 			for (i = 0; i < ids.length; i++) {
 				id = parseInt(ids[i]);
 				if (!isNaN(id) && typeof formComponents[id] != 'undefined') {
@@ -817,6 +819,9 @@ RSFormPro.Ajax = {
 						for (j = 0; j < formComponent.length; j++) {
 							if (formComponent[j]) {
 								formComponent[j].className = formComponent[j].className.replace(' rsform-error', '') + ' rsform-error';
+								if (!doScroll) {
+									doScroll = true;
+								}	
 								if (typeof data.parentErrorClass != 'undefined') {
 									try {
 										elementBlock = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(formComponents[id]));
@@ -827,12 +832,13 @@ RSFormPro.Ajax = {
 								}
 							}
 						}
-						// scroll to first error elment
-						if (RSFormPro.scrollToError){
-							RSFormPro.gotoErrorElement(formId);
-						}
 					}
 				}
+			}
+			
+			// scroll to first error elment
+			if (RSFormPro.scrollToError && doScroll){
+				RSFormPro.gotoErrorElement(formId);
 			}
 		}
 	},
@@ -910,7 +916,11 @@ RSFormPro.Ajax = {
 				formId = form.elements[i].value;
 			}
 
-			params.push(form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value));
+			if (typeof RSFormPro.Editors[form.elements[i].name] == 'function') {
+				params.push(form.elements[i].name + '=' + encodeURIComponent(RSFormPro.Editors[form.elements[i].name]()));
+			} else {
+				params.push(form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value));
+			}
 		}
 
 		errorFields = RSFormPro.HTML5.validation(formId);
@@ -1009,7 +1019,7 @@ RSFormPro.Ajax = {
 					}
 				}
 				
-				if (success == false && document.getElementById('rsform_error_' + formId))
+				if (success == false)
 				{
 					// The submits must be clickable again
 					for (i = 0; i < submits.length; i++) {
@@ -1022,7 +1032,9 @@ RSFormPro.Ajax = {
 						} else {
 							RSFormPro.callbacks.runCallback(formId, 'nextPageFailed'); // callback functions if validation fails when a specific page of the form is checked
 						}
-						document.getElementById('rsform_error_' + formId).style.display = 'block';
+						if (document.getElementById('rsform_error_' + formId)) {
+							document.getElementById('rsform_error_' + formId).style.display = 'block';
+						}
 					}
 					catch (err) { }
 				}
@@ -1031,6 +1043,10 @@ RSFormPro.Ajax = {
 					// Change the page if the validation passes
 					if (page) {
 						rsfp_changePage(formId, page, totalPages, false);
+						// The submits must be clickable again
+						for (i = 0; i < submits.length; i++) {
+							submits[i].disabled = false;
+						}
 					} else {
 						// the submit button has been presed so we need to submit the form
 						// if the submit button or any other element has the id submit the form.submit() function is overwritten

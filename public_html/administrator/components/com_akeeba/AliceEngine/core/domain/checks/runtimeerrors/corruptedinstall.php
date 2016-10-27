@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRuntimeerrorsCorruptedinstall extends AliceCoreDomain
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(60, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_CORRUPTED_INSTALL'), $logFile);
+		parent::__construct(60, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_CORRUPTED_INSTALL', $logFile);
 	}
 
 	public function check()
@@ -62,6 +62,8 @@ class AliceCoreDomainChecksRuntimeerrorsCorruptedinstall extends AliceCoreDomain
 			AliceUtilLogger::WriteLog(_AE_LOG_ERROR, $this->checkName . " Test error, most likely this installation is broken");
 
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_CORRUPTED_INSTALL_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_CORRUPTED_INSTALL_ERROR'));
 		}
 

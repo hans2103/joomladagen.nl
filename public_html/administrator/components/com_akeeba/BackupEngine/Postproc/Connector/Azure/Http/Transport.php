@@ -34,6 +34,8 @@
 namespace Akeeba\Engine\Postproc\Connector\Azure\Http;
 
 // Protection against direct access
+use Akeeba\Engine\Postproc\Connector\S3v4\Input;
+
 defined('AKEEBAENGINE') or die();
 
 /**
@@ -172,15 +174,15 @@ abstract class Transport
 	/**
 	 * Perform request
 	 *
-	 * @param string $httpVerb  Http verb to use in the request
-	 * @param string $url       Url to request
-	 * @param array  $variables Array of key-value pairs to use in the request
-	 * @param array  $headers   Array of key-value pairs to use as additional headers
-	 * @param string $rawBody   Raw body to send to server
+	 * @param string $httpVerb    Http verb to use in the request
+	 * @param string $url         Url to request
+	 * @param array  $variables   Array of key-value pairs to use in the request
+	 * @param array  $headers     Array of key-value pairs to use as additional headers
+	 * @param string $inputObject Raw body to send to server
 	 *
 	 * @return Response
 	 */
-	public abstract function request($httpVerb, $url, $variables = array(), $headers = array(), $rawBody = null);
+	public abstract function request($httpVerb, $url, $variables = array(), $headers = array(), Input $inputObject = null);
 
 	/**
 	 * Create channel

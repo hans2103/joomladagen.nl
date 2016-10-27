@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRuntimeerrorsToomanyrows extends AliceCoreDomainCheck
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(50, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMANYROWS'), $logFile);
+		parent::__construct(50, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMANYROWS', $logFile);
 	}
 
 	public function check()
@@ -97,10 +97,11 @@ class AliceCoreDomainChecksRuntimeerrorsToomanyrows extends AliceCoreDomainCheck
 					number_format((float)$rows) . ' ' . JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMANYROWS_ROWS');
 			}
 
-			// Let's raise only a warning, maybe the server is powerful enough to dumb huge tables and the problem is somewhere else
-			$this->setResult(0);
-
+			// Let's raise only a warning, maybe the server is powerful enough to dump huge tables and the problem is somewhere else
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, user is trying to backup huge tables (more than 1M of rows).');
+
+			$this->setResult(0);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMANYROWS_ERROR', "\n" . implode("\n", $errorMsg)));
 
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMANYROWS_ERROR', '<br/>' . implode('<br/>', $errorMsg)));
 		}

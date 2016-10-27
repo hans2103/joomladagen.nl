@@ -14,6 +14,7 @@
 	<extension name="CACHE_CLEANER" type="plg_system,mod" />
 	<extension name="CDN_FOR_JOOMLA" type="plg_system" />
 	<extension name="COMPONENTS_ANYWHERE" type="plg_system" />
+	<extension name="CONDITIONAL_CONTENT" type="plg_system" />
 	<extension name="CONTENT_TEMPLATER" type="com,plg_system,plg_editors-xtd" />
 	<extension name="DB_REPLACER" type="com" />
 	<extension name="DUMMY_CONTENT" type="plg_system,plg_editors-xtd" />
@@ -23,6 +24,7 @@
 	<extension name="MODALS" type="plg_system" />
 	<extension name="MODULES_ANYWHERE" type="plg_system,plg_editors-xtd" />
 	<extension name="REREPLACER" type="com,plg_system" />
+	<extension name="SIMPLE_USER_NOTES" type="plg_system" />
 	<extension name="SLIDERS" type="plg_system,plg_editors-xtd" />
 	<extension name="SNIPPETS" type="com,plg_system,plg_editors-xtd" />
 	<extension name="SOURCERER" type="plg_system,plg_editors-xtd" />

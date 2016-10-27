@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,7 +27,7 @@ class RLAssignmentsGeo extends RLAssignment
 			return $this->pass(false);
 		}
 
-		return $this->passSimple($this->geo->continentCode);
+		return $this->passSimple(array($this->geo->continent, $this->geo->continentCode));
 	}
 
 	/**
@@ -35,12 +35,15 @@ class RLAssignmentsGeo extends RLAssignment
 	 */
 	public function passCountries()
 	{
+		$this->getGeo();
+
 		if (!$this->getGeo() || empty($this->geo->countryCode))
 		{
 			return $this->pass(false);
 		}
 
-		return $this->passSimple($this->geo->countryCode);
+
+		return $this->passSimple(array($this->geo->country, $this->geo->countryCode));
 	}
 
 	/**

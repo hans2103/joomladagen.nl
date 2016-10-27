@@ -20,7 +20,7 @@ class AliceCoreDomainChecksRuntimeerrorsErrorfiles extends AliceCoreDomainChecks
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(80, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_ERRORFILES'), $logFile);
+		parent::__construct(80, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_ERRORFILES', $logFile);
 	}
 
 	public function check()
@@ -81,6 +81,8 @@ class AliceCoreDomainChecksRuntimeerrorsErrorfiles extends AliceCoreDomainChecks
 		if ($error_files)
 		{
 			$this->setResult(-1);
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_ERRORFILES_FOUND', implode("\n", $error_files)));
+
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_ERRORFILES_FOUND', implode('<br/>', $error_files)));
 		}
 

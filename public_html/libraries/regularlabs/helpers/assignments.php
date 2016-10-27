@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 
 require_once __DIR__ . '/cache.php';
 require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/text.php';
 
 /**
  * Assignments
@@ -44,7 +45,7 @@ class RLAssignmentsHelper
 		$this->has['virtuemart']    = RLFunctions::extensionInstalled('virtuemart');
 		$this->has['cookieconfirm'] = RLFunctions::extensionInstalled('cookieconfirm');
 
-		$this->types      = array(
+		$this->types        = array(
 			'menuitems'             => 'Menu',
 			'homepage'              => 'HomePage',
 			'date'                  => 'DateTime.Date',
@@ -52,6 +53,7 @@ class RLAssignmentsHelper
 			'months'                => 'DateTime.Months',
 			'days'                  => 'DateTime.Days',
 			'time'                  => 'DateTime.Time',
+			'accesslevels'          => 'Users.AccessLevels',
 			'usergrouplevels'       => 'Users.UserGroupLevels',
 			'users'                 => 'Users.Users',
 			'languages'             => 'Languages',
@@ -102,7 +104,37 @@ class RLAssignmentsHelper
 			'cookieconfirm'         => 'CookieConfirm',
 			'php'                   => 'PHP',
 		);
-		$this->thirdparty = array(
+		$this->type_aliases = array(
+			'matching_method'  => array('method'),
+			'menuitems'        => array('menu'),
+			'homepage'         => array('home'),
+			'date'             => array('daterange'),
+			'seasons'          => array(''),
+			'months'           => array(''),
+			'days'             => array(''),
+			'time'             => array(''),
+			'accesslevels'     => array('access'),
+			'usergrouplevels'  => array('usergroups', 'groups'),
+			'users'            => array(''),
+			'languages'        => array('langs'),
+			'ips'              => array('ipaddress', 'ipaddresses'),
+			'geocontinents'    => array('continents'),
+			'geocountries'     => array('countries'),
+			'georegions'       => array('regions'),
+			'geopostalcodes'   => array('postalcodes', 'postcodes'),
+			'templates'        => array(''),
+			'urls'             => array(''),
+			'devices'          => array(''),
+			'os'               => array(''),
+			'browsers'         => array(''),
+			'components'       => array(''),
+			'tags'             => array(''),
+			'contentpagetypes' => array('pagetypes'),
+			'cats'             => array('categories', 'category'),
+			'articles'         => array(''),
+			'php'              => array(''),
+		);
+		$this->thirdparty   = array(
 			'EasyBlog',
 			'FlexiContent',
 			'Form2Content',
@@ -115,7 +147,12 @@ class RLAssignmentsHelper
 			'VirtueMart',
 			'CookieConfirm',
 		);
-		$this->nonarray   = array(
+		$this->textareas    = array(
+			'IPs',
+			'URLs',
+			'PHP',
+		);
+		$this->nonarray     = array(
 			'PHP',
 		);
 
@@ -247,15 +284,16 @@ class RLAssignmentsHelper
 		$params->subtype  = $type['1'];
 	}
 
-	function passAll(&$assignments, $match_method = 'and', $article = 0)
+	function passAll(&$assignments, $matching_method = 'all', $article = 0)
 	{
 		if (empty($assignments))
 		{
 			return 1;
 		}
 
-		$aid  = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
-		$hash = md5('passAll_' . $aid . '_' . $match_method . '_' . json_encode($assignments));
+		$matching_method = in_array($matching_method, array('any', 'or')) ? 'any' : 'all';
+		$aid             = ($article && isset($article->id)) ? '[' . $article->id . ']' : '';
+		$hash            = md5('passAll_' . $aid . '_' . $matching_method . '_' . json_encode($assignments));
 
 		if (RLCache::has($hash))
 		{
@@ -266,15 +304,15 @@ class RLAssignmentsHelper
 
 		jimport('joomla.filesystem.file');
 
-		$pass = (bool) ($match_method == 'and');
+		$pass = (bool) ($matching_method == 'all');
 
 		foreach ($this->types as $type)
 		{
 			// Break if not passed and matching method is ALL
-			// Or if  passed and matching method is ANY
+			// Or if passed and matching method is ANY
 			if (
-				(!$pass && $match_method == 'and')
-				|| ($pass && $match_method == 'or')
+				(!$pass && $matching_method == 'all')
+				|| ($pass && $matching_method == 'any')
 			)
 			{
 				break;
@@ -508,6 +546,100 @@ class RLAssignmentsHelper
 		return $types;
 	}
 
+	public function getAssignmentsFromTagAttributes(&$attributes, $types = array())
+	{
+		$assignments = array();
+
+		RLTags::replaceKeyAliases($attributes, $this->type_aliases, true);
+
+		foreach ($attributes as $type => $value)
+		{
+			if (empty($value))
+			{
+				continue;
+			}
+
+			$type = isset($this->types[$type]) ? $type : $type . 's';
+
+			if (!isset($this->types[$type]))
+			{
+				continue;
+			}
+
+			if (!empty($types) && !in_array($type, $types))
+			{
+				continue;
+			}
+
+			$assignment_type = $this->types[$type];
+
+			$reverse = false;
+			$params  = new stdClass();
+
+			$selection = $this->getSelectionFromTagAttribute($assignment_type, $value, $params, $reverse);
+
+			$assignment = (object) array(
+				'assignment' => $reverse ? 2 : 1,
+				'selection'  => $selection,
+				'params'     => new stdClass(),
+			);
+
+			$this->addParams($assignment, $assignment_type, $type, $params);
+
+			$assignments[$assignment_type] = $assignment;
+		}
+
+		return $assignments;
+	}
+
+	private function getSelectionFromTagAttribute($type, $value, &$params, &$reverse)
+	{
+		if ($type == 'DateTime.Date')
+		{
+			$dates              = explode(' - ', str_replace(' to ', ' - ', $value));
+			$params->publish_up = date('Y-m-d H:i:s', strtotime($dates['0']));
+
+			if (isset($dates['1']))
+			{
+				$params->publish_down = date('Y-m-d H:i:s', strtotime($dates['1']));
+
+				return array();
+			}
+
+			$params->publish_down = date('Y-m-d H:i:s', strtotime($dates['0'] . ' + 1 days'));
+
+			return array();
+		}
+
+		if ($type == 'DateTime.Time')
+		{
+			$dates                = explode(' - ', str_replace(' to ', ' - ', $value));
+			$params->publish_up   = $dates['0'];
+			$params->publish_down = isset($dates['1']) ? $dates['1'] : $dates['0'];
+
+			return array();
+		}
+
+		if (in_array($type, $this->textareas))
+		{
+			$value = RLText::convertWysiwygToPlainText($value);
+		}
+
+		if (strpos($value, '!NOT!') === 0)
+		{
+			$reverse = true;
+			$value   = substr($value, 5);
+		}
+
+		if (!in_array($type, $this->nonarray))
+		{
+			$value = str_replace('[[:COMMA:]]', ',', str_replace(',', '[[:SPLIT:]]', str_replace('\\,', '[[:COMMA:]]', $value)));
+			$value = explode('[[:SPLIT:]]', $value);
+		}
+
+		return $value;
+	}
+
 	private function addParams(&$object, $type, $id, &$params)
 	{
 		$bool_params  = array();
@@ -651,6 +783,11 @@ class RLAssignmentsHelper
 		if (isset($params->{'assignto_' . $id . '_' . $key}))
 		{
 			return $params->{'assignto_' . $id . '_' . $key};
+		}
+
+		if (isset($params->{$key}))
+		{
+			return $params->{$key};
 		}
 
 		if ($is_array)

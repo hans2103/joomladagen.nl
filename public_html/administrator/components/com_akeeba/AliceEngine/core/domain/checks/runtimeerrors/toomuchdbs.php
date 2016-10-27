@@ -13,13 +13,13 @@
 defined('AKEEBAENGINE') or die();
 
 /**
- * Checks if the user is trying to backup too much databases, causing the system to fail
+ * Checks if the user is trying to backup too many databases, causing the system to fail
  */
 class AliceCoreDomainChecksRuntimeerrorsToomuchdbs extends AliceCoreDomainChecksAbstract
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(40, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMUCHDBS'), $logFile);
+		parent::__construct(40, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMUCHDBS', $logFile);
 	}
 
 	public function check()
@@ -103,6 +103,8 @@ class AliceCoreDomainChecksRuntimeerrorsToomuchdbs extends AliceCoreDomainChecks
 			}
 
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, user is trying to backup ' . count($ex_tables) . ' different databases at once.');
+
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMUCHDBS_ERROR');
 
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TOOMUCHDBS_ERROR'));
 		}

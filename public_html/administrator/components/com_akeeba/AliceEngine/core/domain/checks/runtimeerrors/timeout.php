@@ -20,7 +20,7 @@ class AliceCoreDomainChecksRuntimeerrorsTimeout extends AliceCoreDomainChecksAbs
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(20, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT'), $logFile);
+		parent::__construct(20, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT', $logFile);
 	}
 
 	public function check()
@@ -92,6 +92,8 @@ class AliceCoreDomainChecksRuntimeerrorsTimeout extends AliceCoreDomainChecksAbs
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Could not proceed, starting and saving steps are different.');
 
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT_KETTENRAD_BROKEN');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT_KETTENRAD_BROKEN'));
 		}
 
@@ -126,6 +128,8 @@ class AliceCoreDomainChecksRuntimeerrorsTimeout extends AliceCoreDomainChecksAbs
 			if ($duration > $maxExcution)
 			{
 				$this->setResult(-1);
+				$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT_MAX_EXECUTION', $duration));
+
 				throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_TIMEOUT_MAX_EXECUTION', $duration));
 			}
 		}

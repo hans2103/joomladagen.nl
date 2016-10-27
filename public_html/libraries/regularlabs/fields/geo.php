@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,7 +19,6 @@ class JFormFieldRL_Geo extends RLFormField
 
 	protected function getInput()
 	{
-
 		$this->params = $this->element->attributes();
 
 		if (!is_array($this->value))
@@ -27,7 +26,8 @@ class JFormFieldRL_Geo extends RLFormField
 			$this->value = explode(',', $this->value);
 		}
 
-		$group = $this->get('group', 'countries');
+		$group     = $this->get('group', 'countries');
+		$use_names = $this->get('use_names');
 
 		$options = array();
 		foreach ($this->{$group} as $key => $val)
@@ -35,16 +35,17 @@ class JFormFieldRL_Geo extends RLFormField
 			if (!$val)
 			{
 				$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
+				continue;
 			}
-			else if ($key['0'] == '-')
+
+			if ($key['0'] == '-')
 			{
 				$options[] = JHtml::_('select.option', '-', $val, 'value', 'text', true);
+				continue;
 			}
-			else
-			{
-				$val       = RLText::prepareSelectItem($val);
-				$options[] = JHtml::_('select.option', $key, $val);
-			}
+
+			$val       = RLText::prepareSelectItem($val);
+			$options[] = JHtml::_('select.option', $use_names ? $val : $key, $val);
 		}
 
 		$size     = (int) $this->get('size');

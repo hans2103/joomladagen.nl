@@ -29,7 +29,7 @@ class Alice extends Controller
 		parent::__construct($container, $config);
 
 		$this->setPredefinedTaskList([
-			'main', 'ajax', 'domains'
+			'main', 'ajax', 'domains', 'translate'
 		]);
 	}
 
@@ -69,6 +69,47 @@ class Alice extends Controller
 		foreach ($domains as $domain)
 		{
 			$return[] = array($domain['domain'], $domain['name']);
+		}
+
+		@ob_end_clean();
+		header('Content-type: text/plain');
+		echo '###' . json_encode($return) . '###';
+		flush();
+
+		$this->container->platform->closeApplication();
+	}
+
+	/**
+	 * Translates language key in English strings
+	 */
+	public function translate()
+	{
+		$return  = array();
+		$strings = $this->input->getString('keys', '');
+		$strings = json_decode($strings);
+
+		$lang = \JLanguage::getInstance('en-GB');
+		$lang->load('com_akeeba');
+
+		foreach ($strings as $string)
+		{
+			$temp['check'] = $lang->_($string->check);
+
+			// If I have an array, it means that I have to use sprintf to translate the error
+			if (is_array($string->error))
+			{
+				$trans[] = $lang->_($string->error[0]);
+				$args    = array_merge($trans, array_slice($string->error, 1));
+				$error   = call_user_func_array('sprintf', $args);
+			}
+			else
+			{
+				$error = $lang->_($string->error);
+			}
+
+			$temp['error'] = $error;
+
+			$return[] = $temp;
 		}
 
 		@ob_end_clean();

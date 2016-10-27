@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -60,7 +60,24 @@ class RLFormField extends JFormField
 
 	public function get($val, $default = '')
 	{
-		return (isset($this->params[$val]) && (string) $this->params[$val] != '') ? (string) $this->params[$val] : $default;
+		$return = $default;
+
+		if (isset($this->params[$val]) && (string) $this->params[$val] != '')
+		{
+			$return = (string) $this->params[$val];
+		}
+
+		if ($return === 'true')
+		{
+			$return = true;
+		}
+
+		if ($return === 'false')
+		{
+			$return = false;
+		}
+
+		return $return;
 	}
 
 	function getOptionsByList($list, $extras = array(), $levelOffset = 0)

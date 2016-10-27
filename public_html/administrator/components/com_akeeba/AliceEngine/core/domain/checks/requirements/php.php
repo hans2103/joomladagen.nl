@@ -20,6 +20,7 @@ class AliceCoreDomainChecksRequirementsPhp extends AliceCoreDomainChecksAbstract
 	public function __construct($logFile = null)
 	{
 		parent::__construct(10, JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_PHP_VERSION'), $logFile);
+		$this->setCheckLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_PHP_VERSION');
 	}
 
 	public function check()
@@ -51,6 +52,7 @@ class AliceCoreDomainChecksRequirementsPhp extends AliceCoreDomainChecksAbstract
 					AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, detected version: ' . $version);
 
 					$this->setResult(-1);
+					$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_PHP_VERSION_ERR_TOO_NEW');
 					throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_PHP_VERSION_ERR_TOO_NEW', $version));
 				}
 				/*

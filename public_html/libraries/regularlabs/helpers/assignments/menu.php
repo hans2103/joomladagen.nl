@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -66,6 +66,13 @@ class RLAssignmentsMenu extends RLAssignment
 	{
 		if (isset($this->request->menutype))
 		{
+			return $this->request->menutype;
+		}
+
+		if (JFactory::getApplication()->isSite())
+		{
+			$this->request->menutype = JFactory::getApplication()->getMenu()->getItem((int) $this->request->Itemid)->menutype;
+
 			return $this->request->menutype;
 		}
 

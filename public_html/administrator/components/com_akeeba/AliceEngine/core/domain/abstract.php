@@ -39,6 +39,7 @@ class AliceCoreDomainAbstract extends AliceAbstractPart
 		$this->stepName   = $stepName;
 
 		parent::__construct();
+
 		AliceUtilLogger::WriteLog(_AE_LOG_DEBUG, __CLASS__ . " :: New instance");
 	}
 
@@ -88,6 +89,8 @@ class AliceCoreDomainAbstract extends AliceAbstractPart
 				$error     = '';
 				$solution  = '';
 				$className = array_shift($this->checks);
+
+				/** @var AliceCoreDomainChecksAbstract $check */
 				$check     = new $className($this->log);
 
 				$this->setSubstep($check->getName());
@@ -113,7 +116,11 @@ class AliceCoreDomainAbstract extends AliceAbstractPart
 					'check'    => $check->getName(),
 					'result'   => $result,
 					'error'    => $error,
-					'solution' => $solution
+					'solution' => $solution,
+					'raw'      => array(
+						'check' => $check->getCheckLangKey(),
+						'error' => $check->getErrLangKey()
+					)
 				);
 
 				$registry->set('volatile.alice.feedback', $feedback);

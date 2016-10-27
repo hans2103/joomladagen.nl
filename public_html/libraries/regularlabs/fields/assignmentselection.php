@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -31,17 +31,17 @@ class JFormFieldRL_AssignmentSelection extends RLFormField
 		require_once __DIR__ . '/toggler.php';
 		$toggler = new RLFieldToggler;
 
-		$this->value = (int) $this->value;
-		$label       = $this->get('label');
-		$param_name  = $this->get('name');
-		$noshow      = $this->get('noshow', 0);
-		$showclose   = $this->get('showclose', 0);
+		$this->value     = (int) $this->value;
+		$label           = $this->get('label');
+		$param_name      = $this->get('name');
+		$use_main_toggle = $this->get('use_main_toggle', 1);
+		$showclose       = $this->get('showclose', 0);
 
 		$html = array();
 
 		if (!$label)
 		{
-			if (!$noshow)
+			if ($use_main_toggle)
 			{
 				$html[] = $toggler->getInput(array('div' => 1));
 			}
@@ -54,7 +54,7 @@ class JFormFieldRL_AssignmentSelection extends RLFormField
 		$label = RLText::html_entity_decoder(JText::_($label));
 
 		$html[] = '</div>';
-		if (!$noshow)
+		if ($use_main_toggle)
 		{
 			$html[] = $toggler->getInput(array('div' => 1, 'param' => 'show_assignments|' . $param_name, 'value' => '1|1,2'));
 		}

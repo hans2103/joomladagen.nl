@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -72,6 +72,18 @@ class JFormFieldRL_Agents extends RLFormField
 
 			/* Browsers */
 			case 'browsers':
+				if ($this->get('simple') && $this->get('simple') !== 'false')
+				{
+
+					$agents[] = array('Chrome', 'Chrome');
+					$agents[] = array('Firefox', 'Firefox');
+					$agents[] = array('Edge', 'Edge');
+					$agents[] = array('Internet Explorer', 'MSIE');
+					$agents[] = array('Opera', 'Opera');
+					$agents[] = array('Safari', 'Safari');
+					break;
+				}
+
 				$agents[] = array('Chrome (' . JText::_('JALL') . ')', 'Chrome');
 				$agents[] = array('Chrome 51-60', '#Chrome/(5[1-9]|60)\.#');
 				$agents[] = array('Chrome 41-50', '#Chrome/(4[1-9]|50)\.#');

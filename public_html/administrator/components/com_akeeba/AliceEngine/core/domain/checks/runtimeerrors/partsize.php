@@ -20,7 +20,7 @@ class AliceCoreDomainChecksRuntimeerrorsPartsize extends AliceCoreDomainChecksAb
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(70, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_PART_SIZE'), $logFile);
+		parent::__construct(70, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_PART_SIZE', $logFile);
 	}
 
 	public function check()
@@ -98,6 +98,8 @@ class AliceCoreDomainChecksRuntimeerrorsPartsize extends AliceCoreDomainChecksAb
 			AliceUtilLogger::WriteLog(_AE_LOG_ERROR, $this->checkName . " Test error, there is a post processing engine ($postproc) but no part size");
 
 			$this->setResult(0);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_PART_SIZE_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_PART_SIZE_ERROR'));
 		}
 

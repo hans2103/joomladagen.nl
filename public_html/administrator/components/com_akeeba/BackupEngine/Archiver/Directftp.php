@@ -136,6 +136,10 @@ class Directftp extends Base
 		return '';
 	}
 
+	public function finalize()
+	{
+		// Nothing to do
+	}
 
 	/**
 	 * The most basic file transaction: add a single entry (file or directory) to

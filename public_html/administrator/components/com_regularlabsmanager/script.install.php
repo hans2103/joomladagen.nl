@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.0.6
+ * @version         6.1.1
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

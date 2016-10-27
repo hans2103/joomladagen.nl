@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -34,6 +34,7 @@ class PlgSystemRegularLabsQuickPageHelper
 			'administrator/modules/mod_addtomenu/popup.php',
 			'media/rereplacer/images/popup.php',
 			'plugins/editors-xtd/articlesanywhere/popup.php',
+			'plugins/editors-xtd/conditionalcontent/popup.php',
 			'plugins/editors-xtd/contenttemplater/data.php',
 			'plugins/editors-xtd/contenttemplater/popup.php',
 			'plugins/editors-xtd/dummycontent/popup.php',

@@ -19,7 +19,7 @@ class AliceCoreDomainChecksFilesystemMultiplesites extends AliceCoreDomainChecks
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(10, JText::_('COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_MULTIPLE_SITES'), $logFile);
+		parent::__construct(10, 'COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_MULTIPLE_SITES', $logFile);
 	}
 
 	public function check()
@@ -82,6 +82,7 @@ class AliceCoreDomainChecksFilesystemMultiplesites extends AliceCoreDomainChecks
 			$this->setResult(0);
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, found the following Joomla! sub-directories:' . "\n" . implode("\n", $subfolders));
 
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_MULTIPLE_SITES_ERROR', "\n" . implode("\n", $subfolders)));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_MULTIPLE_SITES_ERROR', '<br/>' . implode('<br/>', $subfolders)));
 		}
 

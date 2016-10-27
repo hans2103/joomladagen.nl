@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,7 +20,8 @@ class JFormFieldRL_TextAreaPlus extends RLFormField
 	protected function getLabel()
 	{
 		$this->params = $this->element->attributes();
-		$resize       = $this->get('resize', 0);
+
+		$resize = $this->get('resize', 0);
 
 		$label = RLText::html_entity_decoder(JText::_($this->get('label')));
 
@@ -61,11 +62,13 @@ class JFormFieldRL_TextAreaPlus extends RLFormField
 
 	protected function getInput()
 	{
+		$this->params = $this->element->attributes();
+
 		$width  = $this->get('width', 600);
 		$height = $this->get('height', 80);
-		$class  = trim('rl_textarea ' . $this->get('class'));
-		$class  = 'class="' . $class . '"';
+		$class  = ' class="' . trim('rl_textarea ' . $this->get('class')) . '"';
 		$type   = $this->get('texttype');
+		$hint   = $this->get('hint');
 
 		if (is_array($this->value))
 		{
@@ -83,8 +86,19 @@ class JFormFieldRL_TextAreaPlus extends RLFormField
 			$this->value = str_replace('[:REGEX_ENTER:]', '\n', $this->value);
 		}
 
+		if ($this->get('translate') && $this->get('translate') !== 'false')
+		{
+			$this->value = JText::_($this->value);
+			$hint        = JText::_($hint);
+		}
+
 		$this->value = htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8');
 
-		return '<textarea name="' . $this->name . '" cols="' . (round($width / 7.5)) . '" rows="' . (round($height / 15)) . '" style="width:' . (($width == '600') ? '100%' : $width . 'px') . ';height:' . $height . 'px" ' . $class . ' id="' . $this->id . '" >' . $this->value . '</textarea>';
+		$hint = $hint ? ' placeholder="' . $hint . '"' : '';
+
+		return
+			'<textarea name="' . $this->name . '" cols="' . (round($width / 7.5)) . '" rows="' . (round($height / 15)) . '"'
+			. ' style="width:' . (($width == '600') ? '100%' : $width . 'px') . ';height:' . $height . 'px"'
+			. ' id="' . $this->id . '"' . $class . $hint . '>' . $this->value . '</textarea>';
 	}
 }

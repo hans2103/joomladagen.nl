@@ -156,4 +156,20 @@ class RSFormController extends JControllerLegacy
 			JError::raiseWarning(500, JText::_('RSFP_SUBMISSION_CONFIRMED_ERROR'));
 		}
 	}
+	
+	public function display($cachable = false, $safeurlparams = false)
+	{
+		$app	= JFactory::getApplication();
+		$vName	= $app->input->getCmd('view', '');
+		
+		jimport('joomla.filesystem.folder');
+		
+		$allowed = JFolder::folders(JPATH_COMPONENT.'/views');
+		
+		if (!in_array($vName, $allowed)) {
+			$app->input->set('view', 'rsform');
+		}
+
+		parent::display($cachable, $safeurlparams);
+	}
 }

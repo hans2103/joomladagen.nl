@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,7 @@ class RLTags
 		':' => '[[:COLON:]]',
 	);
 
-	public static function getValuesFromString($string = '', $main_key = 'title', $known_boolean_keys = array())
+	public static function getValuesFromString($string = '', $main_key = 'title', $known_boolean_keys = array(), $keep_escaped = array(','))
 	{
 		// Replace html entity quotes to normal quotes
 		$string = str_replace('&quot;', '"', $string);
@@ -35,17 +35,17 @@ class RLTags
 		$string = preg_replace('#((?:^|")\s*)&nbsp;(\s*(?:[a-z]|$))#s', '\1 \2', $string);
 
 		// Only one value, so return simple key/value object
-		if (strpos($string, '="') == false && strpos($string, '|') == false)
+		if (strpos($string, '|') == false && !preg_match('#=\s*"#s', $string))
 		{
-			self::unprotectSpecialChars($string);
+			self::unprotectSpecialChars($string, $keep_escaped);
 
 			return (object) array($main_key => $string);
 		}
 
 		// No foo="bar" syntax found, so assume old syntax
-		if (strpos($string, '="') == false)
+		if (!preg_match('#=\s*"#s', $string))
 		{
-			self::unprotectSpecialChars($string);
+			self::unprotectSpecialChars($string, $keep_escaped);
 
 			$values = self::getTagValues($string, array($main_key));
 			self::convertOldSyntax($values, $known_boolean_keys);
@@ -54,9 +54,9 @@ class RLTags
 		}
 
 		// Cannot find right syntax, so return simple key/value object
-		if (!preg_match_all('#(?:^|\s)([a-z0-9-_]+)\s*=\s*"(.*?)"#si', $string, $matches, PREG_SET_ORDER))
+		if (!preg_match_all('#(?:^|\s)(?P<key>[a-z0-9-_]+)\s*(?P<not>\!?)=\s*"(?P<value>.*?)"#si', $string, $matches, PREG_SET_ORDER))
 		{
-			self::unprotectSpecialChars($string);
+			self::unprotectSpecialChars($string, $keep_escaped);
 
 			return (object) array($main_key => $string);
 		}
@@ -65,9 +65,9 @@ class RLTags
 
 		foreach ($matches as $match)
 		{
-			$value = $match['2'];
+			$value = $match['value'];
 
-			self::unprotectSpecialChars($value);
+			self::unprotectSpecialChars($value, $keep_escaped);
 
 			// Convert numeric values to ints/floats
 			if (is_numeric($value))
@@ -76,10 +76,22 @@ class RLTags
 			}
 
 			// Convert boolean values to actual booleans
-			$value = ($value === 'true' ? true : $value);
-			$value = ($value === 'false' ? false : $value);
+			switch ($value)
+			{
+				case 'true':
+					$value = $match['not'] ? false : true;
+					break;
 
-			$tag->{$match['1']} = $value;
+				case 'false':
+					$value = $match['not'] ? true : false;
+					break;
+
+				default:
+					$value = $match['not'] ? '!NOT!' . $value : $value;
+					break;
+			}
+
+			$tag->{$match['key']} = $value;
 		}
 
 		return $tag;
@@ -87,15 +99,15 @@ class RLTags
 
 	public static function protectSpecialChars(&$string)
 	{
-		$escaped_chars = array_keys(self::$protected_characters);
-		array_walk($escaped_chars, function (&$char)
+		$unescaped_chars = array_keys(self::$protected_characters);
+		array_walk($unescaped_chars, function (&$char)
 		{
 			$char = '\\' . $char;
 		});
 
 		// replace escaped characters with special markup
 		$string = str_replace(
-			$escaped_chars,
+			$unescaped_chars,
 			array_values(self::$protected_characters),
 			$string
 		);
@@ -118,12 +130,26 @@ class RLTags
 		}
 	}
 
-	public static function unprotectSpecialChars(&$string)
+	public static function unprotectSpecialChars(&$string, $keep_escaped = false)
 	{
+		$unescaped_chars = array_keys(self::$protected_characters);
+
+		if (!empty($keep_escaped))
+		{
+			array_walk($unescaped_chars, function (&$char, $key, $keep_escaped)
+			{
+				if (is_array($keep_escaped) && !in_array($char, $keep_escaped))
+				{
+					return;
+				}
+				$char = '\\' . $char;
+			}, $keep_escaped);
+		}
+
 		// replace special markup with unescaped characters
 		$string = str_replace(
 			array_values(self::$protected_characters),
-			array_keys(self::$protected_characters),
+			$unescaped_chars,
 			$string
 		);
 	}
@@ -220,11 +246,11 @@ class RLTags
 		return $tag_values;
 	}
 
-	public static function replaceKeyAliases(&$values, $key_aliases = array())
+	public static function replaceKeyAliases(&$values, $key_aliases = array(), $handle_plurals = false)
 	{
 		foreach ($key_aliases as $key => $aliases)
 		{
-			if (isset($values->{$key}))
+			if (self::replaceKeyAlias($values, $key, $key, $handle_plurals))
 			{
 				continue;
 			}
@@ -236,10 +262,42 @@ class RLTags
 					continue;
 				}
 
-				$values->{$key} = $values->{$alias};
-				unset($values->{$alias});
+				if (self::replaceKeyAlias($values, $key, $alias, $handle_plurals))
+				{
+					break;
+				}
 			}
 		}
+	}
+
+	private static function replaceKeyAlias(&$values, $key, $alias, $handle_plurals = false)
+	{
+		if ($handle_plurals)
+		{
+			if (self::replaceKeyAlias($values, $key, $alias . 's'))
+			{
+				return true;
+			}
+
+			if (substr($alias, -1) == 's' && self::replaceKeyAlias($values, $key, substr($alias, 0, -1)))
+			{
+				return true;
+			}
+		}
+
+		if (isset($values->{$key}))
+		{
+			return true;
+		}
+
+		if (!isset($values->{$alias}))
+		{
+			return false;
+		}
+		$values->{$key} = $values->{$alias};
+		unset($values->{$alias});
+
+		return true;
 	}
 
 	public static function convertOldSyntax(&$values, $known_boolean_keys = array(), $extra_key = 'class')

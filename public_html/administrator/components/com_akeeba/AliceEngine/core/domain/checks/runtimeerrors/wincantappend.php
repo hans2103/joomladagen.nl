@@ -19,12 +19,11 @@ class AliceCoreDomainChecksRuntimeerrorsWincantappend extends AliceCoreDomainChe
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(30, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_WINCANTAPPEND'), $logFile);
+		parent::__construct(30, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_WINCANTAPPEND', $logFile);
 	}
 
 	public function check()
 	{
-
 		// Customer is not on windows, this problem happened on Windows only
 		if ( !$this->isWin())
 		{
@@ -87,6 +86,8 @@ class AliceCoreDomainChecksRuntimeerrorsWincantappend extends AliceCoreDomainChe
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, could not open backup file for append');
 
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_WINCANTAPPEND_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_WINCANTAPPEND_ERROR'));
 		}
 

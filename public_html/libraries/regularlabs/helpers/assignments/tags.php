@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -55,6 +55,7 @@ class RLAssignmentsTags extends RLAssignment
 		// Load the tags.
 		$query = $this->db->getQuery(true)
 			->select($this->db->quoteName('t.id'))
+			->select($this->db->quoteName('t.title'))
 			->from('#__tags AS t')
 			->join(
 				'INNER', '#__contentitem_tag_map AS m'
@@ -63,7 +64,7 @@ class RLAssignmentsTags extends RLAssignment
 				. ' AND m.content_item_id IN ( ' . $this->request->id . ')'
 			);
 		$this->db->setQuery($query);
-		$tags = $this->db->loadColumn();
+		$tags = $this->db->loadObjectList();
 
 		if (empty($tags))
 		{
@@ -72,7 +73,7 @@ class RLAssignmentsTags extends RLAssignment
 
 		foreach ($tags as $tag)
 		{
-			if (!$this->passTag($tag))
+			if (!$this->passTag($tag->id) && !$this->passTag($tag->title))
 			{
 				continue;
 			}

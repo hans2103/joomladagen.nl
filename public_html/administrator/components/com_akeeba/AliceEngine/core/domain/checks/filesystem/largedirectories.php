@@ -19,7 +19,7 @@ class AliceCoreDomainChecksFilesystemLargedirectories extends AliceCoreDomainChe
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(30, JText::_('COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_LARGE_DIRECTORIES'), $logFile);
+		parent::__construct(30, 'COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_LARGE_DIRECTORIES', $logFile);
 	}
 
 	public function check()
@@ -113,7 +113,7 @@ class AliceCoreDomainChecksFilesystemLargedirectories extends AliceCoreDomainChe
 			}
 
 			$this->setResult(-1);
-
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALIZE_FILESYSTEM_LARGE_DIRECTORIES_ERROR', "\n".implode("\n", $errorMsg)));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALIZE_FILESYSTEM_LARGE_DIRECTORIES_ERROR', '<br/>' . implode('<br/>', $errorMsg)));
 		}
 

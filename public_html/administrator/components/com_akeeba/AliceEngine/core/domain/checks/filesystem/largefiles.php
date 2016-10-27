@@ -19,7 +19,7 @@ class AliceCoreDomainChecksFilesystemLargefiles extends AliceCoreDomainChecksAbs
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(20, JText::_('COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_LARGE_FILES'), $logFile);
+		parent::__construct(20, 'COM_AKEEBA_ALICE_ANALYZE_FILESYSTEM_LARGE_FILES', $logFile);
 	}
 
 	public function check()
@@ -127,6 +127,7 @@ class AliceCoreDomainChecksFilesystemLargefiles extends AliceCoreDomainChecksAbs
 
 			AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, found the following bad files:' . "\n" . implode("\n", $errorMsg));
 
+			$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALIZE_FILESYSTEM_LARGE_FILES_ERROR', "\n" . implode("\n", $errorMsg)));
 			throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALIZE_FILESYSTEM_LARGE_FILES_ERROR', '<br/>' . implode('<br/>', $errorMsg)));
 		}
 

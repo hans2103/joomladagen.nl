@@ -354,9 +354,9 @@ ENDSTEPINFO;
 				$hostResolution = true;
 			}
 
-			if (!function_exists('mcrypt_module_open'))
+			if (!function_exists('mcrypt_module_open') && !function_exists('openssl_decrypt'))
 			{
-				$errors[]       = 'mcrypt is not available';
+				$errors[]       = 'Neither mcrypt nor OpenSSL PHP extension is available';
 				$hostResolution = true;
 			}
 

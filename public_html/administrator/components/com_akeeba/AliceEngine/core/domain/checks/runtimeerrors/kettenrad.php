@@ -20,7 +20,7 @@ class AliceCoreDomainChecksRuntimeerrorsKettenrad extends AliceCoreDomainChecksA
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(10, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_KETTENRAD'), $logFile);
+		parent::__construct(10, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_KETTENRAD', $logFile);
 	}
 
 	public function check()
@@ -107,6 +107,8 @@ class AliceCoreDomainChecksRuntimeerrorsKettenrad extends AliceCoreDomainChecksA
                     AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, step ' . $stepNumber . ' ran more once');
 
                     $this->setResult(-1);
+	                $this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_KETTENRAD_STARTING_MORE_ONCE', $stepNumber));
+
                     throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_KETTENRAD_STARTING_MORE_ONCE', $stepNumber));
                 }
 			}

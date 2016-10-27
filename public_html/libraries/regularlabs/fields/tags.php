@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,8 @@ class JFormFieldRL_Tags extends RLFormField
 	{
 		$this->params = $this->element->attributes();
 
-		$size = (int) $this->get('size');
+		$size      = (int) $this->get('size');
+		$use_names = $this->get('use_names');
 
 		// assemble items to the array
 		$options = array();
@@ -35,18 +36,19 @@ class JFormFieldRL_Tags extends RLFormField
 			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
 		}
 
-		$options = array_merge($options, $this->getTags());
+		$options = array_merge($options, $this->getTags($use_names));
 
 		require_once dirname(__DIR__) . '/helpers/html.php';
 
 		return RLHtml::selectlist($options, $this->name, $this->value, $this->id, $size, 1);
 	}
 
-	protected function getTags()
+	protected function getTags($use_names)
 	{
-		// Get the user groups from the database.
+		$value = $use_names ? 'a.title' : 'a.id';
+
 		$query = $this->db->getQuery(true)
-			->select('a.id as value, a.title as text, a.parent_id AS parent')
+			->select($value . ' as value, a.title as text, a.parent_id AS parent')
 			->from('#__tags AS a')
 			->select('COUNT(DISTINCT b.id) - 1 AS level')
 			->join('LEFT', '#__tags AS b ON a.lft > b.lft AND a.rgt < b.rgt')

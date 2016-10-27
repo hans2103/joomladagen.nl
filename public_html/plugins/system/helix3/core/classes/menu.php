@@ -250,6 +250,16 @@ class Helix3Menu {
 			$dropdown_style .= 'left: -'. $dropdown_width .'px;';
 		}
 
+		// $dropdown_data = array(
+		// 	'class' 			=> $class,
+		// 	'alignment' 		=> $alignment,
+		// 	'dropdown_style' 	=> $dropdown_style,
+		// 	'params' 			=> $item->params,
+		// );
+
+		//$getLayout = new JLayoutFile('menus.dropdown', $basePath = JPATH_ROOT .'/plugins/system/helix3/layouts');
+        //$this->menu .= $getLayout->render(array('data'=>$dropdown_style));
+
 		$this->menu .= '<div class="' . $class . ' sp-menu-'. $alignment .'" style="' . $dropdown_style . '">';
 		$this->menu .= '<div class="sp-dropdown-inner">';
 		$this->navigation($item, $firstitem, 0,  'sp-dropdown-items');

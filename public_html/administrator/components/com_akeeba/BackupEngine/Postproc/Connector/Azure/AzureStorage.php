@@ -40,6 +40,7 @@ use Akeeba\Engine\Postproc\Connector\Azure\Credentials\Sharedkey;
 use Akeeba\Engine\Postproc\Connector\Azure\Exception\Api;
 use Akeeba\Engine\Postproc\Connector\Azure\Http\Response;
 use Akeeba\Engine\Postproc\Connector\Azure\Http\Transport;
+use Akeeba\Engine\Postproc\Connector\S3v4\Input;
 
 /**
  * @category   Microsoft
@@ -282,13 +283,13 @@ class AzureStorage
 	 * @param string  $httpVerb           HTTP verb the request will use
 	 * @param array   $headers            x-ms headers to add
 	 * @param boolean $forTableStorage    Is the request for table storage?
-	 * @param mixed   $rawData            Optional RAW HTTP data to be sent over the wire
+	 * @param mixed   $inputObject        Optional RAW HTTP data to be sent over the wire
 	 * @param string  $resourceType       Resource type
 	 * @param string  $requiredPermission Required permission
 	 *
 	 * @return Response
 	 */
-	protected function performRequest($path = '/', $queryString = '', $httpVerb = Transport::VERB_GET, $headers = array(), $forTableStorage = false, $rawData = null, $resourceType = AzureStorage::RESOURCE_UNKNOWN, $requiredPermission = Credentials::PERMISSION_READ)
+	protected function performRequest($path = '/', $queryString = '', $httpVerb = Transport::VERB_GET, $headers = array(), $forTableStorage = false, Input $inputObject = null, $resourceType = AzureStorage::RESOURCE_UNKNOWN, $requiredPermission = Credentials::PERMISSION_READ)
 	{
 		// Clean path
 		if (strpos($path, '/') !== 0)
@@ -309,6 +310,19 @@ class AzureStorage
 		$path = self::urlencode($path);
 		$queryString = self::urlencode($queryString);
 
+		// Get the content length used for signing
+		$contentLength = 0;
+
+		if (!is_null($inputObject))
+		{
+			$contentLength = $inputObject->getSize();
+		}
+
+		if (!isset($headers['Content-Length']))
+		{
+			$headers['Content-Length'] = $contentLength;
+		}
+
 		// Generate URL and sign request
 		$requestUrl = $this->_credentials->signRequestUrl($this->getBaseUrl() . $path . $queryString, $resourceType, $requiredPermission);
 		$requestHeaders = $this->_credentials->signRequestHeaders($httpVerb, $path, $queryString, $headers, $forTableStorage, $resourceType, $requiredPermission);
@@ -322,7 +336,7 @@ class AzureStorage
 
 		$response = $this->_retryPolicy->execute(
 			array($requestClient, 'request'),
-			array($httpVerb, $requestUrl, array(), $requestHeaders, $rawData)
+			array($httpVerb, $requestUrl, array(), $requestHeaders, $inputObject)
 		);
 
 		$requestClient = null;

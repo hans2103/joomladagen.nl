@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -78,7 +78,7 @@ class RLFunctions
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '16.9.1281';
+			$version = '16.9.23873';
 		}
 
 		if (!$file = self::getFileByFolder('js', $file))
@@ -98,7 +98,7 @@ class RLFunctions
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '16.9.1281';
+			$version = '16.9.23873';
 		}
 
 		if (!$file = self::getFileByFolder('css', $file))

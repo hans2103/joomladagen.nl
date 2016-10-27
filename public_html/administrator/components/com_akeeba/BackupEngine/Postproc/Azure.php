@@ -35,6 +35,7 @@ class Azure extends Base
 		$key = trim($config->get('engine.postproc.azure.key', ''));
 		$container = $config->get('engine.postproc.azure.container', 0);
 		$directory = $config->get('volatile.postproc.directory', null);
+
 		if (empty($directory))
 		{
 			$directory = $config->get('engine.postproc.azure.directory', 0);
@@ -79,6 +80,7 @@ class Azure extends Base
 
 		// Calculate relative remote filename
 		$filename = basename($absolute_filename);
+
 		if (!empty($directory) && ($directory != '/'))
 		{
 			$filename = $directory . '/' . $filename;

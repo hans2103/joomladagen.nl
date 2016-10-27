@@ -19,7 +19,7 @@ class AliceCoreDomainChecksRequirementsMemory extends AliceCoreDomainChecksAbstr
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(30, JText::_('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_MEMORY'), $logFile);
+		parent::__construct(30, 'COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_MEMORY', $logFile);
 	}
 
 	public function check()
@@ -88,6 +88,8 @@ class AliceCoreDomainChecksRequirementsMemory extends AliceCoreDomainChecksAbstr
 				AliceUtilLogger::WriteLog(_AE_LOG_INFO, $this->checkName . ' Test failed, detected available memory: ' . $available);
 
 				$this->setResult(-1);
+				$this->setErrLangKey(array('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_MEMORY_TOO_FEW', $available));
+
 				throw new Exception(JText::sprintf('COM_AKEEBA_ALICE_ANALYZE_REQUIREMENTS_MEMORY_TOO_FEW', $available));
 			}
 

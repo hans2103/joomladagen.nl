@@ -20,7 +20,7 @@ class AliceCoreDomainChecksRuntimeerrorsDbaddwrong extends AliceCoreDomainChecks
 {
 	public function __construct($logFile = null)
 	{
-		parent::__construct(90, JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_WRONG'), $logFile);
+		parent::__construct(90, 'COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_WRONG', $logFile);
 	}
 
 	public function check()
@@ -59,6 +59,8 @@ class AliceCoreDomainChecksRuntimeerrorsDbaddwrong extends AliceCoreDomainChecks
 		if ( !$profile)
 		{
 			$this->setResult(0);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_NO_PROFILE');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_NO_PROFILE'));
 		}
 
@@ -107,6 +109,8 @@ class AliceCoreDomainChecksRuntimeerrorsDbaddwrong extends AliceCoreDomainChecks
 		if ($error)
 		{
 			$this->setResult(-1);
+			$this->setErrLangKey('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_WRONG_ERROR');
+
 			throw new Exception(JText::_('COM_AKEEBA_ALICE_ANALYZE_RUNTIME_ERRORS_DBADD_WRONG_ERROR'));
 		}
 

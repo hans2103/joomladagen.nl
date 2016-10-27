@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.9.1281
+ * @version         16.9.23873
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -43,6 +43,10 @@
   font-family: 'RegularLabs' !important;
   font-size: 14.2px !important;
 }
+h1 .icon-reglab:before,
+h2 .icon-reglab:before {
+  font-size: 16px !important;
+}
 .btn .icon-reglab {
   text-indent: -2px;
 }
@@ -66,9 +70,6 @@
 .icon-addtomenu:before {
   content: "\e001";
 }
-.icon-adminbardocker:before {
-  content: "\e002";
-}
 .icon-advancedmodulemanager:before {
   content: "\e003";
 }
@@ -89,6 +90,9 @@
 }
 .icon-componentsanywhere:before {
   content: "\e008";
+}
+.icon-conditionalcontent:before {
+  content: "\e019";
 }
 .icon-contenttemplater:before {
   content: "\e009";
@@ -117,6 +121,9 @@
 .icon-rereplacer:before {
   content: "\e00e";
 }
+.icon-simpleusernotes:before {
+  content: "\e01a";
+}
 .icon-sliders:before {
   content: "\e00f";
 }
@@ -128,9 +135,6 @@
 }
 .icon-tabs:before {
   content: "\e012";
-}
-.icon-timedstyles:before {
-  content: "\e013";
 }
 .icon-tooltips:before {
   content: "\e014";
