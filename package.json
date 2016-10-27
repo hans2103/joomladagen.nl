@@ -1,0 +1,27 @@
+{
+  "name": "joomladagen",
+  "version": "0.1.0",
+  "author": "hans2103",
+  "homepage": "http://hans2103.github.io/",
+  "description": "Joomladagen",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stichtingsympathy/joomladagen.nl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stichtingsympathy/joomladagen.nl/issues"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.*",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-version-check": "^0.3.6",
+    "jit-grunt": "^0.10.0",
+    "jshint-stylish": "latest",
+    "load-grunt-config": "^0.19.2",
+    "time-grunt": "^1.4.0"
+  }
+}
