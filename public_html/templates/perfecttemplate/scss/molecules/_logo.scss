@@ -1,0 +1,7 @@
+.logo {
+	@include font($font-size--h2, $medium, $line-height);
+	@include anchor($white, $white);
+	@include m('brand') {
+		font-weight: $bold;
+	}
+}

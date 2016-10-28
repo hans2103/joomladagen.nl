@@ -1,0 +1,25 @@
+.header {
+	background-color: $black;
+	color: $white;
+
+	@include e('wrapper') {
+		@include outer-container;
+		@include block-spacing;
+		@include clearfix;
+		position: relative;
+		z-index: 2;
+	}
+
+	@include e('logo') {
+		@include media($charlie) {
+			position: absolute;
+		}
+	}
+
+	@include e('navigation') {
+		@include media($charlie) {
+			@include span-columns(8);
+			@include shift(4);
+		}
+	}
+}

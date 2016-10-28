@@ -1,0 +1,7 @@
+
+
+.main {
+	@include e('wrapper') {
+		@include outer-container;
+	}
+}

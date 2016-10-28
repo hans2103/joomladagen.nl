@@ -18,7 +18,7 @@ function modChrome_tpl($module, &$params, &$attribs)
 
         if ($module->showtitle)
         {
-            echo '<div class="module__header"><' . $headerTag . '>' . $module->title . '</' . $headerTag . '></div>';
+            echo '<div class="module__header"><p class="module__title module__title--' . $headerTag . '">' . $module->title . '</p></div>';
         }
 
         echo '<div class="module__content">' . $module->content . '</div>';

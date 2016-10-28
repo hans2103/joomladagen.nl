@@ -1,0 +1,47 @@
+.footer {
+	background-color: $jd-blue;
+	color: $white;
+	width: 100%;
+
+	a,
+	.separator {
+		@include anchor($white, $white);
+	}
+
+	@include e('wrapper') {
+		@include outer-container;
+
+		padding-top: 2 * $base-spacing;
+		padding-bottom: 2 * $base-spacing;
+
+		@include media($charlie) {
+			@include m('about') {
+				@include span-columns(12 of 12);
+			}
+
+			@include m('links') {
+				@include span-columns(6 of 12);
+			}
+
+			@include m('form') {
+				@include span-columns(6 of 12);
+				@include omega();
+			}
+		}
+
+		@include media($delta) {
+			@include m('about') {
+				@include span-columns(6 of 12);
+			}
+
+			@include m('links') {
+				@include span-columns(3 of 12);
+			}
+
+			@include m('form') {
+				@include span-columns(3 of 12);
+				@include omega();
+			}
+		}
+	}
+}

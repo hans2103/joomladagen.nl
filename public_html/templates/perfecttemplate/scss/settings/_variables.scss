@@ -66,7 +66,7 @@ $light-gray: #ddd;
 
 // Font Colors
 $base-font-color: $dark-gray;
-$action-color: $jd-blue;
+$action-color: transparent;
 
 // Border
 $base-border-color: $light-gray;
@@ -86,3 +86,8 @@ $base-timing: ease;
 
 // Menu width
 $vjsm-menu-width: $charlie;
+
+
+// Hamburger
+$button-background: transparent;
+$button-color: $jd-orange;

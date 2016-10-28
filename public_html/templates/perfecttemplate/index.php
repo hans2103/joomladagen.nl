@@ -30,9 +30,7 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
     <div class="header__wrapper">
         <div class="header__logo">
             <a href="<?php echo JURI::base(); ?>" class="logo">
-                <img src="<?php echo JURI::base(); ?>/images/logo-kerstgeschenk-vu.svg"
-                     alt="logo Joomla!dagen"
-                     class="inject-me site-header__logo"/>
+                <span class="logo--brand">Joomla!</span>dagen 2017
             </a>
         </div>
         <div class="header__navigation">

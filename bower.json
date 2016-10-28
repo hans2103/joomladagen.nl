@@ -7,6 +7,7 @@
     "bourbon": "4.2.7",
     "neat": "^1.8.0",
     "bitters": "^1.4.0",
+    "refills": "^0.2.0",
     "normalize-scss": "3.0.3",
     "vanilla-js-responsive-menu": "1.1.4",
     "jquery": "2.2.4"
