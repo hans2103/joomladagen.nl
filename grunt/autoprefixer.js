@@ -6,7 +6,7 @@ module.exports = {
     files: {
         expand: true,
         flatten: true,
-        src: '<%= config.src %>/css/*.css',
+        src: '<%= config.dest %>/css/*.css',
         dest: '<%= config.dest %>/css/'
     }
 };

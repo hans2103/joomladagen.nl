@@ -8,6 +8,10 @@
 		@include anchor($white, $white);
 	}
 
+	form {
+		color: initial;
+	}
+
 	@include e('wrapper') {
 		@include outer-container;
 

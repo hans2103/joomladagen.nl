@@ -3,5 +3,5 @@ module.exports = {
     options: {
         reporter: require('jshint-stylish')
     },
-    build: ['Gruntfile.js', '<%= config.src %>/js/main.js']
+    build: ['Gruntfile.js', '<%= config.dest %>/js/main.js']
 };

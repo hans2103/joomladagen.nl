@@ -3,13 +3,13 @@ module.exports = {
     icons: {
         src: '<%= config.src %>/icons/svg/*.svg',
         dest: '<%= config.dest %>/fonts/icons',
-        destCss: '<%= config.dest %>/scss/utilities',
+        destCss: '<%= config.src %>/scss/utilities',
         options: {
             font: 'icons',
             hashes: false,
             stylesheet: 'scss',
             relativeFontPath: '../fonts/icons/',
-            template: '<%= config.dest %>/icons/template.css',
+            template: '<%= config.src %>/icons/template.css',
             htmlDemo: false
         }
     }

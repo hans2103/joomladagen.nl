@@ -1,0 +1,53 @@
+.conference {
+	.spreker {
+		.row-fluid {
+			@include outer-container(100%);
+			@include display(flex);
+			@include flex-wrap(wrap);
+			margin-bottom: $base-spacing;
+
+			padding: $base-spacing;
+			@include media ($charlie) {
+				padding: 0;
+			}
+		}
+
+		.span4 {
+			@include media ($charlie) {
+				@include flex-grow(1);
+				@include flex-shrink(1);
+				@include flex-basis(0);
+				padding-right: 2/3 * $base-spacing;
+			}
+		}
+
+		.span8 {
+
+			@include media ($charlie) {
+				@include flex-grow(3);
+				@include flex-shrink(1);
+				@include flex-basis(0);
+			}
+		}
+
+		.thumbnail {
+			display: block;
+			padding-left: $base-spacing;
+			padding-right: $base-spacing;
+		}
+	}
+}
+
+.view-speakers {
+	.conference {
+		.spreker {
+			.btn {
+				@extend button;
+				color: $white;
+				-webkit-appearance: inherit;
+				padding: 1/8 * 2/3 * $base-spacing 1/2 * $base-spacing;
+
+			}
+		}
+	}
+}

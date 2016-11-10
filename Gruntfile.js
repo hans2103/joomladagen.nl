@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
 
     var config = {
-        src: 'public_html/templates/perfecttemplate',
+        src: 'public_html/templates/perfecttemplate/assets',
         dest: 'public_html/templates/perfecttemplate',
         proxy: 'http://joomladagen.local',
         templateScripts: [
