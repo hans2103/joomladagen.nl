@@ -23,7 +23,13 @@ if ($params->get('tag_id') != null)
 	<?php
 	foreach ($list as $i => &$item)
 	{
-		$class = 'item-' . $item->id;
+	    $class = 'menu__item';
+
+		$class .= ' item-' . $item->id;
+
+		if($item->params->get('menu-anchor_css')) {
+		    $class .= ' ' . $item->params->get('menu-anchor_css');
+        }
 
 		if (($item->id == $active_id) OR ($item->type == 'alias' AND $item->params->get('aliasoptions') == $active_id))
 		{

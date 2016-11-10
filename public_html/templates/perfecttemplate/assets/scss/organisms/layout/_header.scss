@@ -4,7 +4,8 @@
 
 	@include e('wrapper') {
 		@include outer-container;
-		@include block-spacing;
+		//@include block-spacing;
+		padding: 0;
 		@include clearfix;
 		position: relative;
 		z-index: 2;
