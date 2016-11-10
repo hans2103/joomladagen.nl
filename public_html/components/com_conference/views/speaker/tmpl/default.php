@@ -29,19 +29,19 @@ $this->loadHelper('format');
 				</span>
 				<div class="speakersocial">
 					<?php if(($this->item->twitter) && (ConferenceHelperParams::getParam('twitter'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://twitter.com/<?php echo $this->item->twitter?>"><span class="icon conference-twitter"></span> <?php echo $this->item->twitter?></a>
+                        <a class="speakersocial__link btn btn-small btn-block" target="_blank" href="http://twitter.com/<?php echo $this->item->twitter?>"><span class="speakersocial__icon icon speakersocial__icon--twitter conference-twitter"></span> <span class="speakersocial__text"><?php echo $this->item->twitter?></span></a>
 					<?php endif;?>
 					<?php if(($this->item->facebook) && (ConferenceHelperParams::getParam('facebook'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://facebook.com/<?php echo $this->item->facebook?>"><span class="icon conference-facebook"></span> <?php echo $this->item->facebook?></a>
+						<a class="speakersocial__link btn btn-small btn-block" target="_blank" href="http://facebook.com/<?php echo $this->item->facebook?>"><span class="speakersocial__icon speakersocial__icon--facebook icon conference-facebook"></span> <span class="speakersocial__text"><?php echo $this->item->facebook?></span></a>
 					<?php endif;?>
 					<?php if(($this->item->googleplus) && (ConferenceHelperParams::getParam('googleplus'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://plus.google.com/<?php echo $this->item->googleplus?>"><span class="icon conference-google-plus"></span> <?php echo $this->item->title?></a>
+						<a class="speakersocial__link btn btn-small btn-block" target="_blank" href="http://plus.google.com/<?php echo $this->item->googleplus?>"><span class="speakersocial__icon speakersocial__icon--googleplus icon conference-google-plus"></span> <span class="speakersocial__text"><?php echo $this->item->title?></span></a>
 					<?php endif;?>
 					<?php if(($this->item->linkedin) && (ConferenceHelperParams::getParam('linkedin'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://www.linkedin.com/in/<?php echo $this->item->linkedin?>"><span class="icon conference-linkedin"></span> <?php echo $this->item->linkedin?></a>
+						<a class="speakersocial__link btn btn-small btn-block" target="_blank" href="http://www.linkedin.com/in/<?php echo $this->item->linkedin?>"><span class="speakersocial__icon speakersocial__icon--linkedin icon conference-linkedin"></span> <span class="speakersocial__text"><?php echo $this->item->linkedin?></span></a>
 					<?php endif;?>
 					<?php if(($this->item->website) && (ConferenceHelperParams::getParam('twitter'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://<?php echo $this->item->website?>"><span class="icon conference-earth"></span> <?php echo $this->item->website?></a>
+						<a class="speakersocial__link btn btn-small btn-block" target="_blank" href="http://<?php echo $this->item->website?>"><span class="speakersocial__icon speakersocial__icon--earth icon conference-earth"></span> <span class="speakersocial__text"><?php echo $this->item->website?></span></a>
 					<?php endif;?>
 				</div>
 			</div>

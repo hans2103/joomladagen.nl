@@ -1,7 +1,7 @@
 .module {
 	@include e('title') {
 		@include m('h3') {
-			@include font($font-size--h3)
+			@include font($font-size--h3, $bold)
 		}
 	}
 }

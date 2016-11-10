@@ -7,8 +7,8 @@ module.exports = {
     },
     build: {
         files: {
-            '<%= config.dest %>/css/style.css': '<%= config.src %>/css/style.css',
-            '<%= config.dest %>/css/font.css': '<%= config.src %>/css/font.css'
+            '<%= config.dest %>/css/style.css': '<%= config.dest %>/css/style.css',
+            '<%= config.dest %>/css/font.css': '<%= config.dest %>/css/font.css'
         }
     }
 };

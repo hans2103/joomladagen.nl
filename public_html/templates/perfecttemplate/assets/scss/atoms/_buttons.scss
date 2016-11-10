@@ -1,0 +1,17 @@
+#{$all-buttons} {
+	background-color: $jd-green;
+	border-bottom: 4px solid $black;
+	border-radius: 0;
+}
+
+#{$all-buttons-focus},
+#{$all-buttons-hover} {
+	background-color: darken($jd-green, 10%);
+	outline:none;
+}
+
+#{$all-buttons-active} {
+	background-color: darken($jd-green, 10%);
+	border-bottom: 0;
+	margin-top: 4px;
+}

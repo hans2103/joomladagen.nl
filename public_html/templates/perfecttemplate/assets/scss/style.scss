@@ -3,17 +3,17 @@
 @import "settings/variables";
 
 // Vendor
-@import '../../../../bower_components/bourbon/app/assets/stylesheets/bourbon';
-@import '../../../../bower_components/bitters/core/base';
-@import '../../../../bower_components/neat/app/assets/stylesheets/neat';
+@import '../../../../../bower_components/bourbon/app/assets/stylesheets/bourbon';
+@import '../../../../../bower_components/bitters/core/base';
+@import '../../../../../bower_components/neat/app/assets/stylesheets/neat';
 
 // Utilities
 @import "utilities";
 @import "utilities/icons";
 
 // Vendor
-@import "../../../../bower_components/normalize-scss/normalize.scss";
-@import "../../../../bower_components/vanilla-js-responsive-menu/scss/responsivemenu";
+@import "../../../../../bower_components/normalize-scss/normalize.scss";
+@import "../../../../../bower_components/vanilla-js-responsive-menu/scss/responsivemenu";
 @import "vendor/hamburger";
 
 

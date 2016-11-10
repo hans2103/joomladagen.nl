@@ -36,6 +36,10 @@
 				padding: 1/8 * $base-spacing 1/2 * $base-spacing;
 				padding-left: 0;
 				display: inline-block;
+
+				&:last-child {
+					padding-right: 0;
+				}
 			}
 			li + li {
 				position: relative;
