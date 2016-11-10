@@ -50,6 +50,16 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
     </div>
 </header>
 
+<?php if (PWTTemplateHelper::isHome() == true) : ?>
+	<?php if ($this->countModules('header')) : ?>
+        <div class="block__paralax block__header--home">
+            <div class="block__wrapper">
+                <jdoc:include type="modules" name="header" style="tpl"/>
+            </div>
+        </div>
+	<?php endif; ?>
+<?php endif; ?>
+
 <div class="main" role="main">
     <main class="main__wrapper">
 		<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
@@ -57,12 +67,6 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
 		<?php endif; ?>
 
 		<?php if (PWTTemplateHelper::isHome() == true) : ?>
-
-			<?php if ($this->countModules('header')) : ?>
-                <header>
-                    <jdoc:include type="modules" name="header" style="tpl"/>
-                </header>
-			<?php endif; ?>
 
 			<?php if ($this->countModules('block-info')) : ?>
                 <div class="block block--info">
