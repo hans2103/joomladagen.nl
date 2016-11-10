@@ -70,12 +70,6 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
                 </div>
 			<?php endif; ?>
 
-			<?php if ($this->countModules('block-info')) : ?>
-                <div class="block block--info">
-                    <jdoc:include type="modules" name="block-info" style="tpl"/>
-                </div>
-			<?php endif; ?>
-
 			<?php if ($this->countModules('block-news')) : ?>
                 <div class="block block--news">
                     <jdoc:include type="modules" name="block-news" style="tpl"/>
