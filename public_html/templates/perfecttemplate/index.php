@@ -11,14 +11,23 @@ defined('_JEXEC') or die;
 // Load Perfect Template Helper
 include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
+PWTTemplateHelper::getAnalytics();
+PWTTemplateHelper::setMetadata();
+PWTTemplateHelper::setFavicon();
+PWTTemplateHelper::unloadCss();
+PWTTemplateHelper::unloadJs();
+PWTTemplateHelper::loadCss();
+PWTTemplateHelper::loadJs();
+PWTTemplateHelper::localstorageFont('PerfectFont');
+
 ?>
 <!DOCTYPE html>
 <html class="html no-js" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
 <head>
-	<jdoc:include type="head"/>
+    <jdoc:include type="head"/>
 </head>
 
-<body class="<?php echo $helper->getBodySuffix(); ?>">
+<body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
 <?php
 if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
 {
@@ -41,23 +50,56 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
     </div>
 </header>
 
-<div class="main">
+<div class="main" role="main">
     <main class="main__wrapper">
-		<?php if ($this->countModules('breadcrumbs') && !$helper->isHome()) : ?>
-            <div class="breadcrumbs">
-                <jdoc:include type="modules" name="breadcrumbs" style="none"/>
-            </div>
-		<?php endif; ?>
 		<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
             <jdoc:include type="message"/>
 		<?php endif; ?>
-        <jdoc:include type="component"/>
-    </main>
-    <aside class="main__aside">
-		<?php if ($this->countModules('sidebar-a')) : ?>
-            <jdoc:include type="modules" name="sidebar-a" style="tpl"/>
+
+		<?php if (PWTTemplateHelper::isHome() == true) : ?>
+
+			<?php if ($this->countModules('header')) : ?>
+                <header>
+                    <jdoc:include type="modules" name="header" style="tpl"/>
+                </header>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('block-info')) : ?>
+                <div class="block block--info">
+                    <jdoc:include type="modules" name="block-info" style="tpl"/>
+                </div>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('block-info')) : ?>
+                <div class="block block--info">
+                    <jdoc:include type="modules" name="block-info" style="tpl"/>
+                </div>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('block-news')) : ?>
+                <div class="block block--news">
+                    <jdoc:include type="modules" name="block-news" style="tpl"/>
+                </div>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('block-interviews')) : ?>
+                <div class="block block--interviews">
+                    <jdoc:include type="modules" name="block-interviews" style="tpl"/>
+                </div>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('block-sponsors')) : ?>
+                <div class="block block--sponsors">
+                    <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
+                </div>
+			<?php endif; ?>
+
 		<?php endif; ?>
-    </aside>
+
+		<?php if (PWTTemplateHelper::isHome() == false) : ?>
+            <jdoc:include type="component"/>
+		<?php endif; ?>
+    </main>
 </div>
 
 <footer class="footer" role="contentinfo">
@@ -74,57 +116,12 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
     </div>
 </div>
 
-<?php if ($helper->settings['debug']) : ?>
-	<div class="overlay-grid-container" style="display: none;">
-		<div class="overlay-grid">
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-			<div class="overlay-grid__item"></div>
-		</div>
-		<script>
-			var isCtrl = false;
-			document.onkeyup = function (e) {
-				if (e.keyCode == 17) isCtrl = false;
-			};
-
-			document.onkeydown = function (e) {
-				e = e || window.event;
-				if (e.keyCode == 17) isCtrl = true;
-
-				// Grid (G key)
-				if (e.keyCode == 71 && isCtrl == true) {
-					var gridContainer = document.getElementsByClassName('overlay-grid-container')[0];
-					if (gridContainer.style.display == 'none') {
-						gridContainer.style.display = 'block';
-					} else {
-						gridContainer.style.display = 'none';
-					}
-				}
-
-				// Remove all modernizr classes
-				if (e.keyCode == 77 && isCtrl == true) { // M key
-					document.documentElement.className = "";
-				}
-			};
-		</script>
-	</div>
-<?php endif; ?>
-
 <script type="text/javascript">
-	responsivemenu.init({
-		wrapper: document.querySelector('.navigation_container'),
-		togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
-		width: 760
-	});
+    responsivemenu.init({
+        wrapper: document.querySelector('.navigation_container'),
+        togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
+        width: 760
+    });
 </script>
 
 </body>

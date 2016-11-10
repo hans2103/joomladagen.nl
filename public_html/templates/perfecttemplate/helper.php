@@ -1,79 +1,15 @@
 <?php
-/*
+/**
  * @package     perfecttemplate
  * @copyright   Copyright (c) Perfect Web Team / perfectwebteam.nl
  * @license     GNU General Public License version 3 or later
  */
 
-// Prevent direct access
 defined('_JEXEC') or die();
 
-// Define the base-path of this template
-define('TEMPLATE_BASE', dirname(__FILE__));
-
-// Instantiate the helper class
-$helper = new ThisTemplateHelper();
-
-// initiate changes to HEAD
-$helper->setMetadata($this);
-$helper->unloadCss();
-$helper->unloadJs();
-$helper->loadCss();
-$helper->loadJs();
-$helper->loadResponsiveMenuJS();
-
-// Font
-$helper->localstorageFont('Clear Sans');
-
-// Analytics
-$analyticsData = $helper->getAnalytics($this);
-
-/**
- * ThisTemplate class
- */
-class ThisTemplateHelper
+class PWTTemplateHelper
 {
-	/**
-	 * Template settings
-	 */
-	public $settings = array(
-		'debug'       => false,
-		'unset_css'   => array('com_finder', 'com_rsform', 'com_docman'),
-		'analytics'   => 0, // 0 = none, GA = Universal Google Analytics, GTM = Google Tag Manager, Mix = Mixpanel
-		'analyticsid' => '',
-		'pagelayout'  => '1column',
-	);
-
-	/**
-	 * Document instance
-	 */
-	protected $doc = null;
-	/**
-	 * Application instance
-	 */
-	protected $app = null;
-	/**
-	 * JInput instance
-	 */
-	protected $input = null;
-	/**
-	 * Menu instance
-	 */
-	protected $menu = null;
-
-	/**
-	 * Constructor called when instantiating this class
-	 */
-	public function __construct()
-	{
-		// Fetch system variables
-		$this->doc      = JFactory::getDocument();
-		$this->app      = JFactory::getApplication();
-		$this->config   = JFactory::getConfig();
-		$this->input    = $this->app->input;
-		$this->menu     = $this->app->getMenu();
-		$this->template = $this->app->getTemplate();
-	}
+	const template = 'perfecttemplate';
 
 	/**
 	 * Method to manually override the META-generator
@@ -83,41 +19,68 @@ class ThisTemplateHelper
 	 * @param string $generator
 	 *
 	 * @return null
+	 *
+	 * @since  PerfectSite2.1.0
 	 */
-	public function setGenerator($generator)
+	static public function setGenerator($generator)
 	{
-		$this->doc->setGenerator($generator);
+		JFactory::getDocument()->setGenerator($generator);
 	}
 
 	/**
 	 * Method to set some Meta data
 	 *
-	 * @param $template
+	 * @since PerfectSite2.1.0
 	 */
-	public function setMetadata($template)
+	static public function setMetadata()
 	{
-		$this->doc->setCharset('utf8');
-		$this->doc->setMetaData('X-UA-Compatible', 'IE=edge', true);
-		$this->doc->setMetaData('viewport', 'width=device-width, initial-scale=1.0');
-		$this->doc->setMetaData('mobile-web-app-capable', 'yes');
-		$this->doc->setMetaData('apple-mobile-web-app-capable', 'yes');
-		$this->doc->setMetaData('apple-mobile-web-app-status-bar-style', 'black');
-		$this->doc->setMetaData('apple-mobile-web-app-title', $this->config->get('sitename'));
-		$this->doc->setGenerator($this->config->get('sitename'));
+		$doc    = JFactory::getDocument();
+		$config = JFactory::getConfig();
+
+		$doc->setCharset('utf8');
+		$doc->setMetaData('X-UA-Compatible', 'IE=edge', true);
+		$doc->setMetaData('viewport', 'width=device-width, initial-scale=1.0');
+		$doc->setMetaData('mobile-web-app-capable', 'yes');
+		$doc->setMetaData('apple-mobile-web-app-capable', 'yes');
+		$doc->setMetaData('apple-mobile-web-app-status-bar-style', 'black');
+		$doc->setMetaData('apple-mobile-web-app-title', $config->get('sitename'));
+		$doc->setMetaData('apple-itunes-app', 'app-id=356566983');
+		$doc->setMetaData('google-play-app', 'app-id=nl.omroep.npo.radio1');
+		$doc->setGenerator($config->get('sitename'));
+	}
+
+	/**
+	 * Method to set Favicon
+	 *
+	 * @since PerfectSite2.1.0
+	 */
+	static public function setFavicon()
+	{
+		$doc = JFactory::getDocument();
+
+		$doc->addHeadLink('templates/' . self::template . '/images/favicon.ico', 'shortcut icon', 'rel', array('type' => 'image/ico'));
+		$doc->addHeadLink('templates/' . self::template . '/images/favicon.png', 'shortcut icon', 'rel', array('type' => 'image/png'));
+		$doc->addHeadLink('templates/' . self::template . '/images/xtouch-icon.png', 'apple-touch-icon', 'rel', array('type' => 'image/png'));
 	}
 
 	/**
 	 * Method to return the current Menu Item ID
 	 *
-	 * @access public
-	 *
-	 * @param null
-	 *
-	 * @return int
+	 * @since PerfectSite2.1.0
 	 */
-	public function getItemId()
+	static public function getItemId()
 	{
-		return $this->input->getInt('Itemid');
+		return JFactory::getApplication()->input->getInt('Itemid');
+	}
+
+	/**
+	 * Method to get the current sitename
+	 *
+	 * @since PerfectSite2.1.0
+	 */
+	static public function getSitename()
+	{
+		return JFactory::getConfig()->get('config.sitename');
 	}
 
 	/**
@@ -128,8 +91,9 @@ class ThisTemplateHelper
 	 * @param string $output Output type
 	 *
 	 * @return mixed
+	 * @since  PerfectSite2.1.0
 	 */
-	public function getPath($output = 'array')
+	static public function getPath($output = 'array')
 	{
 		$uri  = JURI::getInstance();
 		$path = $uri->getPath();
@@ -145,17 +109,17 @@ class ThisTemplateHelper
 	}
 
 	/**
-	 * Method to get the current sitename
+	 * get PageClass set with Menu Item
 	 *
-	 * @access public
-	 *
-	 * @param null
-	 *
-	 * @return string
+	 * @return mixed
+	 * @since  PerfectSite2.1.0
 	 */
-	public function getSitename()
+	static public function getPageClass()
 	{
-		return JFactory::getConfig()->get('config.sitename');
+		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
+		$pageclass  = ($activeMenu) ? $activeMenu->params->get('pageclass_sfx', '') : '';
+
+		return $pageclass;
 	}
 
 	/**
@@ -164,40 +128,31 @@ class ThisTemplateHelper
 	 * @param null
 	 *
 	 * @return bool
+	 * @since  PerfectSite2.1.0
 	 */
-	public function getBodySuffix()
+	static public function getBodySuffix()
 	{
-		$classes   = array();
-		$classes[] = 'option-' . str_replace('_', '-', $this->input->getCmd('option'));
-		$classes[] = 'view-' . $this->input->getCmd('view');
-		//$classes[] = 'layout-' . $this->input->getCmd('layout');
-		$classes[] = 'page-' . $this->getItemId();
-		$classes[] = $this->getPageClass();
+		$input = JFactory::getApplication()->input;
 
-		if ($this->isHome())
+		$classes   = array();
+		$classes[] = 'option-' . str_replace('_', '-', $input->getCmd('option'));
+		$classes[] = 'view-' . $input->getCmd('view');
+		$classes[] = 'page-' . self::getItemId();
+		$classes[] = PWTTemplateHelper::getPageClass();
+
+		if (self::isHome())
 		{
 			$classes[] = 'path-home';
 		}
-		else
+
+		if (!self::isHome())
 		{
-			$classes[] = 'path-' . implode('-', $this->getPath('array'));
+			$classes[] = 'path-' . implode('-', self::getPath('array'));
 		}
-		$classes[] = 'home-' . (int) $this->isHome();
+
+		//$classes[] = 'home-' . (int) self::isHome();
 
 		return implode(' ', $classes);
-	}
-
-	/**
-	 * get PageClass set with Menu Item
-	 *
-	 * @return mixed
-	 */
-	public function getPageClass()
-	{
-		$activeMenu = $this->menu->getActive();
-		$pageclass  = ($activeMenu) ? $activeMenu->params->get('pageclass_sfx', '') : '';
-
-		return $pageclass;
 	}
 
 	/**
@@ -208,11 +163,12 @@ class ThisTemplateHelper
 	 * @param null
 	 *
 	 * @return bool
+	 * @since  PerfectSite2.1.0
 	 */
-	public function isHome()
+	static public function isHome()
 	{
 		// Fetch the active menu-item
-		$activeMenu = $this->menu->getActive();
+		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
 
 		// Return whether this active menu-item is home or not
 		return (boolean) ($activeMenu) ? $activeMenu->home : false;
@@ -220,17 +176,20 @@ class ThisTemplateHelper
 
 	/**
 	 * Remove unwanted CSS
+	 * @since  PerfectSite2.1.0
 	 */
-	public function unloadCss()
+	static public function unloadCss()
 	{
-		$unset_css = $this->settings['unset_css'];
-		foreach ($this->doc->_styleSheets as $name => $style)
+		$doc = JFactory::getDocument();
+
+		$unset_css = array('com_finder', 'com_rsform');
+		foreach ($doc->_styleSheets as $name => $style)
 		{
 			foreach ($unset_css as $css)
 			{
 				if (strpos($name, $css) !== false)
 				{
-					unset($this->doc->_styleSheets[$name]);
+					unset($doc->_styleSheets[$name]);
 				}
 			}
 		}
@@ -238,18 +197,20 @@ class ThisTemplateHelper
 
 	/**
 	 * Load CSS
+	 * @since  PerfectSite2.1.0
 	 */
-	public function loadCss()
+	static public function loadCss()
 	{
-		$this->doc->addStyleSheet('templates/' . $this->template . '/css/style.css');
+		JFactory::getDocument()->addStyleSheet('templates/' . self::template . '/css/style.css');
 	}
 
 	/**
 	 * Remove unwanted JS
+	 * @since  PerfectSite2.1.0
 	 */
-	public function unloadJs()
+	static public function unloadJs()
 	{
-		return;
+		$doc = JFactory::getDocument();
 
 		// Call JavaScript to be able to unset it correctly
 		JHtml::_('behavior.framework');
@@ -258,28 +219,27 @@ class ThisTemplateHelper
 		JHtml::_('bootstrap.tooltip');
 
 		// Unset unwanted JavaScript
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/mootools-core.js']);
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/mootools-more.js']);
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/caption.js']);
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/core.js']);
-		//unset($this->doc->_scripts[$this->doc->baseurl . '/media/jui/js/jquery.min.js']);
-		//unset($this->doc->_scripts[$this->doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
-		//unset($this->doc->_scripts[$this->doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
-		//unset($this->doc->_scripts[$this->doc->baseurl . '/media/jui/js/bootstrap.min.js']);
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/tabs-state.js']);
-		unset($this->doc->_scripts[$this->doc->baseurl . '/media/system/js/validate.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-core.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
+		//unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/tabs-state.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/system/js/validate.js']);
 
-		if (isset($this->doc->_script['text/javascript']))
+		if (isset($doc->_script['text/javascript']))
 		{
-			$this->doc->_script['text/javascript'] = preg_replace('%jQuery\(window\)\.on\(\'load\'\,\s*function\(\)\s*\{\s*new\s*JCaption\(\'img.caption\'\);\s*}\s*\);\s*%', '', $this->doc->_script['text/javascript']);
-			$this->doc->_script['text/javascript'] = preg_replace("%\s*jQuery\(document\)\.ready\(function\(\)\{\s*jQuery\('\.hasTooltip'\)\.tooltip\(\{\"html\":\s*true,\"container\":\s*\"body\"\}\);\s*\}\);\s*%", '', $this->doc->_script['text/javascript']);
-			$this->doc->_script['text/javascript'] = preg_replace('%jQuery(.*)\.hasTooltip(.*)%', '', $this->doc->_script['text/javascript']);
-
+			$doc->_script['text/javascript'] = preg_replace('%jQuery\(window\)\.on\(\'load\'\,\s*function\(\)\s*\{\s*new\s*JCaption\(\'img.caption\'\);\s*}\s*\);\s*%', '', $doc->_script['text/javascript']);
+			$doc->_script['text/javascript'] = preg_replace("%\s*jQuery\(document\)\.ready\(function\(\)\{\s*jQuery\('\.hasTooltip'\)\.tooltip\(\{\"html\":\s*true,\"container\":\s*\"body\"\}\);\s*\}\);\s*%", '', $doc->_script['text/javascript']);
+			$doc->_script['text/javascript'] = preg_replace('%\s*jQuery\(function\(\$\)\{\s*\$\(\"\.hasTooltip\"\)\.tooltip\(\{\"html\":\s*true,\"container\":\s*\"body\"\}\);\s*\}\);\s*%', '', $doc->_script['text/javascript']);
 
 			// Unset completly if empty
-			if (empty($this->doc->_script['text/javascript']))
+			if (empty($doc->_script['text/javascript']))
 			{
-				unset($this->doc->_script['text/javascript']);
+				unset($doc->_script['text/javascript']);
 			}
 		}
 	}
@@ -287,31 +247,37 @@ class ThisTemplateHelper
 	/**
 	 * Load JS
 	 *
+	 * @since  PerfectSite2.1.0
 	 */
-	public function loadJs()
+	static public function loadJs()
 	{
-		$this->doc->addScript('templates/' . $this->template . '/js/modernizr.js');
-		$this->doc->addScript('templates/' . $this->template . '/js/scripts.js');
+		$doc = JFactory::getDocument();
+
+		$doc->addScript('templates/' . self::template . '/js/modernizr.js');
+		$doc->addScript('templates/' . self::template . '/js/scripts.js');
 	}
 
 	/**
 	 * Load script for Vanilla JS Responsive Menu
+	 * @since  PerfectSite2.1.0
 	 */
-	public function loadResponsiveMenuJS()
+	static public function loadResponsiveMenuJS()
 	{
 		$javascript = '<!-- Vanilla JS Responsive Menu -->
 function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"))}var el=document.documentElement;var cl="no-js";if(hasClass(el,cl)){var reg=new RegExp("(\\s|^)"+cl+"(\\s|$)");el.className=el.className.replace(reg," js")}
 		';
-		$this->doc->addScriptDeclaration($javascript);
+
+		JFactory::getDocument()->addScriptDeclaration($javascript);
 	}
 
 	/**
 	 * Load custom font in localstorage
 	 *
 	 * @param $fontname
+	 *
+	 * @since  PerfectSite2.1.0
 	 */
-
-	public function localstorageFont($fontname)
+	static public function localstorageFont($fontname)
 	{
 		$javascript = "<!-- Local Storage for font -->
   !function () {
@@ -325,7 +291,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
     try {
       if (localStorage[font])addFont(localStorage[font]); else {
         var request = new XMLHttpRequest;
-        request.open('GET', '" . JURI::Base() . "templates/" . $this->template . "/css/font.css', !0);
+        request.open('GET', '" . JURI::Base() . "templates/" . self::template . "/css/font.css', !0);
         request.onload = function () {
           request.status >= 200 && request.status < 400 && (localStorage[font] = request.responseText, addFont(request.responseText))
         }, request.send()
@@ -333,7 +299,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
     } catch (d) {
     }
   }();";
-		$this->doc->addScriptDeclaration($javascript);
+		JFactory::getDocument()->addScriptDeclaration($javascript);
 	}
 
 	/**
@@ -344,13 +310,13 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 	 * @param string $shortname
 	 *
 	 * @return string
+	 * @since  PerfectSite2.1.0
 	 */
-	public function isBrowser($shortname = 'ie6')
+	static public function isBrowser($shortname = 'ie6')
 	{
 		jimport('joomla.environment.browser');
 		$browser = JBrowser::getInstance();
 
-		$rt = false;
 		switch ($shortname)
 		{
 			case 'edge':
@@ -392,18 +358,17 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 	 * @param $template
 	 *
 	 * @return array
+	 * @since  PerfectSite2.1.0
 	 */
-	public function getAnalytics($template)
+	static public function getAnalytics($analytics = NULL, $analyticsId = NULL)
 	{
-		$analytics   = $this->settings['analytics'];
-		$analyticsId = $this->settings['analyticsid'];
+		$doc = JFactory::getDocument();
 
-		// Analytics
 		switch ($analytics)
 		{
 			case 0:
 				break;
-			case GA:
+			case 'GA':
 				// Universal Google Universal Analytics - loaded in head
 				if ($analyticsId)
 				{
@@ -417,10 +382,10 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
         ga('create', '" . $analyticsId . "', 'auto');
         ga('send', 'pageview');
       ";
-					$this->doc->addScriptDeclaration($analyticsScript);
+					$doc->addScriptDeclaration($analyticsScript);
 				}
 				break;
-			case GTM:
+			case 'GTM':
 				// Google Tag Manager - party loaded in head
 				if ($analyticsId)
 				{
@@ -431,7 +396,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
   <!-- End Google Tag Manager -->
 
           ";
-					$this->doc->addScriptDeclaration($analyticsScript);
+					$doc->addScriptDeclaration($analyticsScript);
 
 					// Google Tag Manager - partly loaded directly after body
 					$analyticsScript = "<!-- Google Tag Manager -->
@@ -442,7 +407,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 					return array('script' => $analyticsScript, 'position' => 'after_body_start');
 				}
 				break;
-			case Mix:
+			case 'Mix':
 				// Mixpanel.com - loaded in head
 				if ($analyticsId)
 				{
@@ -452,9 +417,10 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement(\"script\");a.type=\"text/javascript\";a.async=!0;a.src=\"undefined\"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:\"file:\"===e.location.protocol&&\"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\".match(/^\/\//)?\"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\":\"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\";f=e.getElementsByTagName(\"script\")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
 mixpanel.init(\"" . $analyticsId . "\");<!-- end Mixpanel -->
       ";
-					$this->doc->addScriptDeclaration($analyticsScript);
+					$doc->addScriptDeclaration($analyticsScript);
 				}
 				break;
 		}
 	}
+
 }
