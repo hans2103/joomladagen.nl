@@ -61,9 +61,14 @@
 				.module {
 					padding: $base-spacing;
 
+					&:first-child {
+						color: $white;
+					}
+
 					&:last-child {
 						background-color: $white;
 					}
+
 					@include media ($charlie) {
 						&:first-child {
 							@include span-columns(5 of 12);
