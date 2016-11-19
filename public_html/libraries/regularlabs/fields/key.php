@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,11 +27,11 @@ class JFormFieldRL_Key extends RLFormField
 		if (!$key)
 		{
 			return '<div id="' . $this->id . '_field" class="btn-wrapper input-append clearfix">'
-			. '<input type="text" class="rl_codefield" name="' . $this->name . '" id="' . $this->id . '" autocomplete="off" value="">'
-			. '<button href="#" class="btn btn-success" title="' . JText::_('JAPPLY') . '" onclick="' . $action . '">'
-			. '<span class="icon-checkmark"></span>'
-			. '</button>'
-			. '</div>';
+				. '<input type="text" class="rl_codefield" name="' . $this->name . '" id="' . $this->id . '" autocomplete="off" value="">'
+				. '<button href="#" class="btn btn-success" title="' . JText::_('JAPPLY') . '" onclick="' . $action . '">'
+				. '<span class="icon-checkmark"></span>'
+				. '</button>'
+				. '</div>';
 		}
 
 		$cloak_length = max(0, strlen($key) - 4);

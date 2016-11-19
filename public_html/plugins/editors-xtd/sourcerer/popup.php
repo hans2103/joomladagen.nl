@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.2.1PRO
+ * @version         6.3.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,6 +15,7 @@ $user = JFactory::getUser();
 if ($user->get('guest')
 	|| (
 		!$user->authorise('core.edit', 'com_content')
+		&& !$user->authorise('core.edit.own', 'com_content')
 		&& !$user->authorise('core.create', 'com_content')
 	)
 )
@@ -77,8 +78,8 @@ class PlgButtonSourcererPopup
 		";
 		JFactory::getDocument()->addScriptDeclaration($script);
 
-		RLFunctions::script('sourcerer/script.min.js', '6.2.1.p');
-		RLFunctions::stylesheet('sourcerer/popup.min.css', '6.2.1.p');
+		RLFunctions::script('sourcerer/script.min.js', '6.3.6.p');
+		RLFunctions::stylesheet('sourcerer/popup.min.css', '6.3.6.p');
 
 		$this->params->code = '';
 		if ($this->params->use_example_code == 1 || (JFactory::getApplication()->isAdmin() && $this->params->use_example_code == 2))
@@ -143,7 +144,7 @@ class PlgButtonSourcererPopup
 
 					<?php if (JFactory::getApplication()->isAdmin() && JFactory::getUser()->authorise('core.admin', 1)) : ?>
 						<div class="btn-wrapper" id="toolbar-options">
-							<button onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=sourcerer');" class="btn btn-small">
+							<button onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=<?php echo JText::_('SOURCERER') ?>');" class="btn btn-small">
 								<span class="icon-options"></span> <?php echo JText::_('JOPTIONS') ?>
 							</button>
 						</div>

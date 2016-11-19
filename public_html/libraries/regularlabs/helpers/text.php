@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -780,6 +780,26 @@ class RLText
 		return array_filter(explode($separator, trim($string)));
 	}
 
+	static function pregQuote($string = '', $delimiter = '#')
+	{
+		if (is_array($string))
+		{
+			return '(' . implode('|', self::pregQuoteArray($string, $delimiter)) . ')';
+		}
+
+		return preg_quote($string, $delimiter);
+	}
+
+	static function pregQuoteArray($array = array(), $delimiter = '#')
+	{
+		array_walk($array, function (&$part, $key, $delimiter)
+		{
+			$part = preg_quote($part, $delimiter);
+		}, $delimiter);
+
+		return $array;
+	}
+
 	static function stringContains($haystacks, $needles)
 	{
 		$haystacks = (array) $haystacks;
@@ -839,10 +859,55 @@ class RLText
 		// convert protected html entities &_...; -> &...;
 		$string = preg_replace('#&_([a-z0-9\#]+?);#i', '&\1;', $string);
 
-		// Convert escaped characters to unescaped
-		RLTags::protectSpecialChars($string);
-		RLTags::unprotectSpecialChars($string);
-
 		return $string;
+	}
+
+	public static function splitString($string, $delimiters = array(), $max_length = 10000, $maximize_parts = true)
+	{
+		// String is too short to split
+		if (strlen($string) < $max_length)
+		{
+			return array($string);
+		}
+
+		// No delimiters given or found
+		if (empty($delimiters) || !RLText::stringContains($string, $delimiters))
+		{
+			return array($string);
+		}
+
+		// preg_quote all delimiters
+		$array = preg_split('#' . RLText::pregQuote($delimiters) . '#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+
+		if (!$maximize_parts)
+		{
+			return $array;
+		}
+
+		$new_array = array();
+		foreach ($array as $part)
+		{
+			// First element, add to new array
+			if (!count($new_array))
+			{
+				$new_array[] = $part;
+				continue;
+			}
+
+			$last_part = end($new_array);
+			$last_key  = key($new_array);
+
+			// If last and current parts are longer than max_length, then simply add as new value
+			if (strlen($last_part) + strlen($part) > $max_length)
+			{
+				$new_array[] = $part;
+				continue;
+			}
+
+			// Concatenate part to previous part
+			$new_array[$last_key] .= $part;
+		}
+
+		return $new_array;
 	}
 }

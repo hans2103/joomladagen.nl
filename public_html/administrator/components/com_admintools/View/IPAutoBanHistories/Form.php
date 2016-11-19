@@ -10,6 +10,7 @@ namespace Akeeba\AdminTools\Admin\View\IPAutoBanHistories;
 defined('_JEXEC') or die;
 
 use Akeeba\AdminTools\Admin\View\Mixin\SystemPluginExists;
+use FOF30\Model\DataModel;
 use FOF30\View\DataView\Form as BaseView;
 
 class Form extends BaseView

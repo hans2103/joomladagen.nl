@@ -1,4 +1,23 @@
 <?php die() ?>
+Admin Tools 4.0.2
+================================================================================
++ Added warning if database updates are stuck due to table corruption
++ Added font files to the expiration optimization features of NignX and Htaccess Maker
++ Added a Published field to the WAF Blacklist records, allowing you to enable/disable rules
++ Added mitigation for user registration exploit in Joomla! 3.4.4 to 3.6.3 (inclusive). The mitigation rule is added in the WAF Blacklist feature.
+~ .htaccess Maker: Remove default expiration time for HTML documents because it conflicts with back-end editing
+# [HIGH] NginX Conf Maker generates invalid code for allowed PHP files
+# [HIGH] WAF Blacklist was incompatible with SEF URLs as it was being triggered onAfterInitialize instead of onAfterRoute
+# [MEDIUM] Web.config Maker: Block access from specific user agents feature causes a 500 Internal Server Error
+# [MEDIUM] Fixed custom HTML template used to display the block message
+# [LOW] The automatic redirection to HTTP when you're using the HSTS header in the .htaccess Maker would end up in an invalid URL on some servers with a bad configuration
+# [LOW] The Security Exceptions page had the wrong default ordering
+# [LOW] Fixed modal windows when graphs are not displayed in the Control Panel
+# [LOW] NginX Conf Maker and Web.config Maker claim they are not supported when they actually are
+# [LOW] NginX Conf Maker: “Optimise file handle cache” and “Optimise output buffering” options were mixed up
+# [LOW] Removed unused option in “Admin Tools Joomla! Update Email” system plugin
+# [LOW] Could not preview generated nginx.conf and web.config
+
 Admin Tools 4.0.1
 ================================================================================
 ! YOU MUST UPDATE TO THIS RELEASE MANUALLY. The Download ID was not registered with Joomla, making updates from 4.0.0.b1, 4.0.0.b2, 4.0.0.rc1 and 4.0.0 impossible.

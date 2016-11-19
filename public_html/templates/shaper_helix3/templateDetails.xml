@@ -5,19 +5,19 @@
     <author>JoomShaper.com</author>
     <authorEmail>support@joomshaper.com</authorEmail>
     <authorUrl>http://www.joomshaper.com</authorUrl>
-    <copyright>Copyright (C) 2010 - 2015 JoomShaper.com. All rights reserved.</copyright>
+    <copyright>Copyright (C) 2010 - 2016 JoomShaper.com. All rights reserved.</copyright>
     <license>http://www.gnu.org/licenses/gpl-2.0.html GPLv2 or later</license>
-    <version>1.4</version>
+    <version>1.7</version>
     <description>Shaper Helix3 - Starter Template of Helix3 framework</description>
 
-    <updateservers> 
-        <server type="extension" priority="1" name="shaper_helix3">http://www.joomshaper.com/updates/shaper-helix3.xml</server>
+    <updateservers>
+        <server type="extension" priority="1" name="shaper_helix3">https://www.joomshaper.com/updates/shaper-helix3.xml</server>
     </updateservers>
 
     <languages>
         <language tag="en-GB">en-GB.tpl_shaper_helix3.ini</language>
     </languages>
-    
+
     <positions>
         <position>title</position>
         <position>top1</position>
@@ -82,7 +82,7 @@
 
                 <field type="asset" />
                 <field type="group" title="HELIX_GLOBAL" />
-                <field name="preloader" class="parent preloader" type="radio" default="1" label="HELIX_PRELOADER" description="HELIX_PRELOADER_DESC">
+                <field name="preloader" class="parent preloader" type="radio" default="0" label="HELIX_PRELOADER" description="HELIX_PRELOADER_DESC">
                     <option value="1">HELIX_YES</option>
                     <option value="0">HELIX_NO</option>
                 </field>
@@ -97,12 +97,13 @@
                     <option value="logo">HELIX_PRELOADER_ANIMATION_LOGO</option>
                 </field>
 
+                <field name="preloader_bg" class="child preloader preloader_1" type="color" default="#f5f5f5" label="HELIX_PRELOADER_BG_COLOR" description="HELIX_PRELOADER_BG_COLOR_DESC" />
+                <field name="preloader_tx" class="child preloader preloader_1" type="color" default="#333333" label="HELIX_PRELOADER_TX_COLOR" description="HELIX_PRELOADER_TX_COLOR_DESC" />
 
-                <field name="goto_top" class="goto-top" type="radio" default="1" label="HELIX_GOTO_TOP" description="HELIX_GO_TOP_DESC">
+                <field name="goto_top" class="goto-top" type="radio" default="0" label="HELIX_GOTO_TOP" description="HELIX_GO_TOP_DESC">
                     <option value="1">HELIX_YES</option>
                     <option value="0">HELIX_NO</option>
                 </field>
-
 
                 <field type="group" title="HELIX_HEADER" />
                 <field name="sticky_header" class="parent mb_logo" type="radio" default="1" label="HELIX_STICKY_HEADER" description="HELIX_STICKY_HEADER_DESC">
@@ -247,7 +248,7 @@
             <fieldset name="preset"  addfieldpath="/plugins/system/helix3/fields">
                 <field type="group" title="HELIX_PRESETS" />
                 <field name="preset" type="presets"  default="preset1" label="HELIX_PRESETS" />
-                
+
                 <field type="group" title="HELIX_STYLEING_OPTIONS" />
 
                 <!--Start Preset1-->
@@ -312,11 +313,11 @@
                     <option value="menu-twist">HELIX_TWIST_ANIMATION</option>
                 </field>
 
-                <field name="offcanvas_animation" class="child menutype menutype_mega_offcanvas menutype_offcanvas" type="list" default="menu-fade" label="HELIX_MENU_OFFCANVAS_ANIMATION" description="HELIX_MENU_OFFCANVAS_ANIMATION_DESC">
+                <field name="offcanvas_animation" class="child menutype menutype_mega_offcanvas menutype_offcanvas" type="list" default="default" label="HELIX_MENU_OFFCANVAS_ANIMATION" description="HELIX_MENU_OFFCANVAS_ANIMATION_DESC">
                     <option value="default">HELIX_OFFANIMATION_DEFAULT</option>
                     <option value="fullscreen">HELIX_OFFANIMATION_FULLSCREEN</option>
                     <option value="fullScreen-top">HELIX_OFFANIMATION_FULLSCREEN_FROM_TOP</option>
-                    <option value="slidetop">HELIX_OFFANIMATION_SLIDE_TOP</option>
+                    <option value="slidetop">HELIX_OFFANIMATION_SLIDE_RIGHT</option>
                     <option value="drarkplus">HELIX_OFFANIMATION_DARK_PLUS</option>
                 </field>
             </fieldset>
@@ -326,7 +327,7 @@
             <fieldset name="typography" addfieldpath="/plugins/system/helix3/fields">
                 <field type="group" title="Google Fonts List" />
                 <field name="update_fonts" type="button" url="#" text="HELIX_UPDATE_FONTS_CLICK" label="HELIX_UPDATE_FONTS_LIST" description="HELIX_UPDATE_FONTS_LIST_DESC" class="btn-primary btn-update-fonts-list" />
-                
+
                 <field type="group" title="HELIX_BODY_FONT" subtitle="HELIX_BODY_FONT_DESC" />
                 <field name="enable_body_font" class="parent body_font" type="radio" default="1" label="HELIX_ENABLE_FONT" description="HELIX_ENABLE_FONT_DESC">
                     <option value="1">HELIX_YES</option>
@@ -471,13 +472,13 @@
                     <option value="0">HELIX_NO</option>
                 </field>
                 <field name="image_small_size" type="text" default="100X100" hint="100X100" class="child image_small image_small_1" label="HELIX_IMAGE_SMALL_SIZE" description="HELIX_IMAGE_SMALL_SIZE_DESC" />
-                
+
                 <field name="image_thumbnail" type="radio" default="1" class="parent image_thumbnail" label="HELIX_IMAGE_THUMBNAIL" description="HELIX_IMAGE_THUMBNAIL_DESC">
                     <option value="1">HELIX_YES</option>
                     <option value="0">HELIX_NO</option>
                 </field>
                 <field name="image_thumbnail_size" type="text" default="200X200" hint="200X200" class="child image_thumbnail image_thumbnail_1" label="HELIX_IMAGE_THUMBNAIL_SIZE" description="HELIX_IMAGE_THUMBNAIL_SIZE_DESC" />
-                
+
                 <field name="image_medium" type="radio" default="0" class="parent image_medium" label="HELIX_IMAGE_MEDIUM" description="HELIX_IMAGE_MEDIUM_DESC">
                     <option value="1">HELIX_YES</option>
                     <option value="0">HELIX_NO</option>
@@ -514,7 +515,7 @@
                 <field name="helix_doc" type="button" url="https://www.joomshaper.com/documentation/helix3/docs" target="_blank" text="HELIX_CLICK_TO_VIEW" label="HELIX3_DOCUMENTATION" description="HELIX3_DOCUMENTATION_DESC" class="btn-primary" />
 
             </fieldset>
-            <!--End Update Tab-->            
+            <!--End Update Tab-->
 
         </fields>
     </config>

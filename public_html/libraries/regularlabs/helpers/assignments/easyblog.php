@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -37,9 +37,7 @@ class RLAssignmentsEasyBlog extends RLAssignment
 			return $this->pass(false);
 		}
 
-		$cats = $this->makeArray(
-			$this->getCategories(), 1
-		);
+		$cats = $this->makeArray($this->getCategories());
 
 		$pass = $this->passSimple($cats, 'include');
 

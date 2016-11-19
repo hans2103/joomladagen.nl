@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.2.1PRO
+ * @version         6.3.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -66,8 +66,9 @@ class PlgSystemSourcererHelper
 			$this->src_params->tag_character_start . $this->src_params->syntax_word,
 		);
 
-		$this->src_params->trim         = (bool) $params->trim;
-		$this->src_params->include_path = str_replace('//', '/', ('/' . trim($params->include_path, ' /\\') . '/'));
+		$this->src_params->trim           = (bool) $params->trim;
+		$this->src_params->enable_in_head = (bool) $params->enable_in_head;
+		$this->src_params->include_path   = str_replace('//', '/', ('/' . trim($params->include_path, ' /\\') . '/'));
 
 		$user                            = JFactory::getUser();
 		$this->src_params->user_is_admin = $user->authorise('core.admin', 1);
@@ -199,8 +200,8 @@ class PlgSystemSourcererHelper
 	 */
 	public function onAfterDispatch()
 	{
-		// only in html
-		if (JFactory::getDocument()->getType() !== 'html' && !RLFunctions::isFeed())
+		// only in html, pdfs, ajax/raw and feeds
+		if (!in_array(JFactory::getDocument()->getType(), array('html', 'pdf', 'ajax', 'raw')) && !RLFunctions::isFeed())
 		{
 			return;
 		}
@@ -220,8 +221,8 @@ class PlgSystemSourcererHelper
 	 */
 	public function onAfterRender()
 	{
-		// only in html and feeds
-		if (JFactory::getDocument()->getType() !== 'html' && !RLFunctions::isFeed())
+		// only in html, pdfs, ajax/raw and feeds
+		if (!in_array(JFactory::getDocument()->getType(), array('html', 'pdf', 'ajax', 'raw')) && !RLFunctions::isFeed())
 		{
 			return;
 		}
@@ -238,13 +239,15 @@ class PlgSystemSourcererHelper
 
 		$this->protect($body);
 		$this->replaceInTheRest($body);
+
+		$this->cleanLeftoverJunk($body);
 		RLProtect::unprotect($body);
 
-		$this->cleanTagsFromHead($pre);
+		$this->src_params->enable_in_head
+			? $this->replace($pre, 'head')
+			: $this->cleanTagsFromHead($pre);
 
 		$html = $pre . $body . $post;
-
-		$this->cleanLeftoverJunk($html);
 
 		// Throw the body back (less gentle)
 		JFactory::getApplication()->setBody($html);
@@ -896,29 +899,9 @@ class PlgSystemSourcererHelper
 
 	function cleanText(&$string)
 	{
-		// Load common functions
 		require_once JPATH_LIBRARIES . '/regularlabs/helpers/text.php';
 
-		// replace chr style enters with normal enters
-		$string = str_replace(array(chr(194) . chr(160), '&#160;', '&nbsp;'), ' ', $string);
-
-		// replace linbreak tags with normal linebreaks (paragraphs, enters, etc).
-		$enter_tags = array('p', 'br');
-		$regex      = '#</?((' . implode(')|(', $enter_tags) . '))+[^>]*?>\n?#si';
-		$string     = preg_replace($regex, " \n", $string);
-
-		// replace indent characters with spaces
-		$string = preg_replace('#<' . 'img [^>]*/sourcerer/images/tab\.png[^>]*>#si', '    ', $string);
-
-		// strip all other tags
-		$regex  = '#<(/?\w+((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+\s*|\s*)/?)>#si';
-		$string = preg_replace($regex, "", $string);
-
-		// reset htmlentities
-		$string = RLText::html_entity_decoder($string);
-
-		// convert protected html entities &_...; -> &...;
-		$string = preg_replace('#&_([a-z0-9\#]+?);#i', '&\1;', $string);
+		$string = RLText::convertWysiwygToPlainText($string);
 	}
 
 	/**

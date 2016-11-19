@@ -356,7 +356,8 @@ class NginXConfMaker extends ServerConfigMaker
 		'Akeeba\AdminTools\Admin\Controller\NginXConfMaker::apply',
 		'Akeeba\AdminTools\Admin\Model\ServerConfigMaker::writeConfigFile',
 		'Akeeba\AdminTools\Admin\Model\NginXConfMaker::writeNginXConf',
-		'Akeeba\AdminTools\Admin\View\NginXConfMaker\Html::onBeforeMain'
+		'Akeeba\AdminTools\Admin\View\NginXConfMaker\Html::onBeforeMain',
+		'Akeeba\AdminTools\Admin\View\NginXConfMaker\Html::onBeforePreview'
 	];
 
 	/**
@@ -642,6 +643,12 @@ location ~* \.(css|js)$ {
 
 # Image files : 1 month
 location ~* \.(bmp|gif|jpg|jpeg|jp2|png|svg|tif|tiff|ico|wbmp|wbxml|smil)$ {
+		access_log off; log_not_found off;
+		expires 1M;
+}
+
+# Font files : 1 week
+location ~* \.(woff|ttf|otf|eot)$ {
 		access_log off; log_not_found off;
 		expires 1M;
 }
@@ -1005,7 +1012,6 @@ END;
 		{
 			foreach ($config->exceptionfiles as $file)
 			{
-				$file = $this->escape_string_for_regex($file);
 				if (substr($file, -4) == '.php')
 				{
 					$nginxConf .= <<<END

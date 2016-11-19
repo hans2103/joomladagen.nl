@@ -19,14 +19,18 @@ class AtsystemFeatureCustomblock extends AtsystemFeatureAbstract
 		if ($session->get('block', false, 'com_admintools'))
 		{
 			// This is an underhanded way to short-circuit Joomla!'s internal router.
-			$this->input->set('option', 'com_admintools');
+			$input = JFactory::getApplication()->input;
+			$input->set('option', 'com_admintools');
+			$input->set('view', 'Blocks');
+			$input->set('task', 'browse');
 
 			if (class_exists('JRequest'))
 			{
 				JRequest::set(array(
-					'option' => 'com_admintools'
+					'option' => 'com_admintools',
+					'view' => 'blocks'
 				), 'get', true);
 			}
 		}
 	}
-} 
+}

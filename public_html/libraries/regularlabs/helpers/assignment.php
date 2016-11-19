@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -62,7 +62,7 @@ class RLAssignment
 
 	public function passSimple($values = '', $caseinsensitive = false, $assignment = null, $selection = null)
 	{
-		$values     = $this->makeArray($values, true);
+		$values     = $this->makeArray($values);
 		$assignment = $assignment ?: $this->assignment;
 		$selection  = $selection ?: $this->selection;
 
@@ -234,21 +234,21 @@ class RLAssignment
 		);
 	}
 
-	public function makeArray($array = '', $onlycommas = false, $trim = true)
+	function makeArray($array = '', $delimiter = ',', $trim = 1)
 	{
 		if (empty($array))
 		{
 			return array();
 		}
 
-		$hash = md5('makeArray_' . json_encode($array) . '_' . $onlycommas . '_' . $trim);
+		$hash = md5('makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim);
 
 		if (RLCache::has($hash))
 		{
 			return RLCache::get($hash);
 		}
 
-		$array = $this->mixedDataToArray($array, $onlycommas);
+		$array = $this->mixedDataToArray($array, $delimiter);
 
 		if (empty($array))
 		{

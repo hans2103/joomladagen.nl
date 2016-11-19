@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -42,7 +42,7 @@ class JFormFieldRL_PlainText extends RLFormField
 		}
 
 		return '<label class="hasTooltip" title="<strong>' . $label . '</strong><br>' . htmlentities($tooltip) . '">'
-		. $label . '</label>';
+			. $label . '</label>';
 	}
 
 	protected function getInput()

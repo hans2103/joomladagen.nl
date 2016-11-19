@@ -22,36 +22,20 @@ $output ='';
 
         $output .= '<div class="sp-column ' . ($data->settings->custom_class) . '">';
 
-            $load_pos ='';
-            // get feature load possition
-            if (helix3::hasFeature($data->settings->name)) {
-                $load_pos = helix3::getInstance()->loadFeature[$data->settings->name];
-                $load_pos = $load_pos['load_pos'];
-            }
+        $features = (Helix3::hasFeature($data->settings->name))? helix3::getInstance()->loadFeature[$data->settings->name] : array();
 
-            // if feature load possition before
-            if(isset($load_pos) && $load_pos == 'before'){
-                $output .= '<jdoc:include type="modules" name="' . $data->settings->name . '" style="sp_xhtml" />';
-            }
-            // if feature position is blank
-            if ( $load_pos != 'before' &&  $load_pos != 'after' ) {
-                $output .= '<jdoc:include type="modules" name="' . $data->settings->name . '" style="sp_xhtml" />';
-            }
-
-            if (Helix3::hasFeature($data->settings->name))
-            {
-                $features = helix3::getInstance()->loadFeature[$data->settings->name]; //Feature
-
-                foreach ($features as $key => $feature){
-                    if ($key == 'feature') {
-                        $output .= $feature;
-                    }
+            foreach ($features as $key => $feature){
+                if (isset($feature['feature']) && $feature['load_pos'] == 'before' ) {
+                    $output .= $feature['feature'];
                 }
             }
 
-            // if feature load possition before
-            if(isset($load_pos) && $load_pos == 'after'){
-                $output .= '<jdoc:include type="modules" name="' . $data->settings->name . '" style="sp_xhtml" />';
+            $output .= '<jdoc:include type="modules" name="' . $data->settings->name . '" style="sp_xhtml" />';
+
+            foreach ($features as $key => $feature){
+                if (isset($feature['feature']) && $feature['load_pos'] != 'before' ) {
+                    $output .= $feature['feature'];
+                }
             }
         
         $output .= '</div>'; //.sp-column

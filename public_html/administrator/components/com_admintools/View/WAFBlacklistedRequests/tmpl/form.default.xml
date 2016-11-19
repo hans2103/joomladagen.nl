@@ -31,6 +31,8 @@
         <header name="query_content" label="COM_ADMINTOOLS_LBL_WAFBLACKLISTEDREQUEST_QUERY_CONTENT" filterclass="input-small"
                 buttons="false"
                 type="Searchable" searchfieldname="fquery_content"/>
+        <header name="enabled" type="Published" label="JPUBLISHED"
+                sortable="true" tdwidth="8%" />
     </headerset>
 
     <fieldset name="items">
@@ -60,5 +62,6 @@
                show_link="1"
                url="index.php?option=com_admintools&amp;view=WAFBlacklistedRequests&amp;task=edit&amp;id=[ITEM:ID]"
         />
+        <field name="enabled" type="Published" />
     </fieldset>
 </form>

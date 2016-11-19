@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -249,6 +249,9 @@ h2 .icon-reglab:before {
 }
 .icon-reglab-lifetime:before {
   content: "\e022";
+}
+.icon-reglab-magento:before {
+  content: "\e023";
 }
 .icon-reglab.icon-src_sourcetags:before {
   font-family: 'RegularLabsIcons' !important;
@@ -571,6 +574,9 @@ input.rl_keyfield {
 }
 .rl_footer .rl_footer_review {
   margin-top: 5px;
+}
+.rl_footer .rl_footer_review a.stars {
+  display: inline-block;
 }
 .rl_footer .rl_footer_review a.stars .icon-star {
   color: #fcac0a;

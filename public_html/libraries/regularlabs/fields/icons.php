@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -138,12 +138,14 @@ class JFormFieldRL_Icons extends RLFormField
 
 		foreach ($classes as $i => $class)
 		{
+			$id      = str_replace(' ', '_', $this->id . $class);
 			$checked = (in_array($class, $value) ? ' checked="checked"' : '');
-			$html[]  = '<fieldset class="pull-left">';
-			$html[]  = '<input type="radio" id="' . $this->id . $class . '" name="' . $this->name . '"'
+
+			$html[] = '<fieldset class="pull-left">';
+			$html[] = '<input type="radio" id="' . $id . '" name="' . $this->name . '"'
 				. ' value="' . htmlspecialchars($class, ENT_COMPAT, 'UTF-8') . '"' . $checked . '>';
-			$html[]  = '<label for="' . $this->id . $class . '" class="btn btn-small"><span class="icon-' . $class . '"></span></label>';
-			$html[]  = '</fieldset>';
+			$html[] = '<label for="' . $id . '" class="btn btn-small"><span class="icon-' . $class . '"></span></label>';
+			$html[] = '</fieldset>';
 		}
 
 		return '<div id="' . $this->id . '" class="btn-group radio rl_icon_group">' . implode('', $html) . '</div>';

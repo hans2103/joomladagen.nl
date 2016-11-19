@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -16,10 +16,10 @@ require_once __DIR__ . '/text.php';
 
 class RLProtect
 {
-	static $protect_start        = '<!-- RL_PROTECTED';
-	static $protect_end          = 'RL_PROTECTED -->';
-	static $protect_tags_start   = '<!-- RL_PROTECTED_TAGS';
-	static $protect_tags_end     = 'RL_PROTECTED_TAGS -->';
+	static $protect_start        = '<!-- ___RL_PROTECTED___';
+	static $protect_end          = '___RL_PROTECTED___ -->';
+	static $protect_tags_start   = '<!-- ___RL_PROTECTED_TAGS___';
+	static $protect_tags_end     = '___RL_PROTECTED_TAGS___ -->';
 	static $html_safe_start      = '___RL_PROTECTED___';
 	static $html_safe_end        = '___/RL_PROTECTED___';
 	static $html_safe_tags_start = '___RL_PROTECTED_TAGS___';
@@ -29,7 +29,7 @@ class RLProtect
 	/**
 	 * check if page should be protected for certain extensions
 	 */
-	public static function isProtectedPage($extension_alias = '', $hastags = 0, $exclude_formats = array('pdf'))
+	public static function isProtectedPage($extension_alias = '', $hastags = false, $exclude_formats = array('pdf'))
 	{
 		// return if disabled via url
 		if (($extension_alias && JFactory::getApplication()->input->get('disable_' . $extension_alias)))
@@ -218,68 +218,109 @@ class RLProtect
 	/**
 	 * protect all text based form fields
 	 */
-	public static function protectFields(&$string)
+	public static function protectFields(&$string, $search_strings = array())
+	{
+		// No specified strings tags found in the string
+		if (!self::containsStringsToProtect($string, $search_strings))
+		{
+			return;
+		}
+
+		$parts = RLText::splitString($string, array('</label>', '</select>'));
+
+		foreach ($parts as &$part)
+		{
+			if (!self::containsStringsToProtect($part, $search_strings))
+			{
+				continue;
+			}
+
+			self::protectFieldsPart($part);
+		}
+
+		$string = implode('', $parts);
+	}
+
+	private static function containsStringsToProtect(&$string, $search_strings = array())
 	{
 		if (
 			empty($string)
-			|| (strpos($string, '<input') === false && strpos($string, '<textarea') === false)
+			|| (
+				strpos($string, '<input') === false
+				&& strpos($string, '<textarea') === false
+				&& strpos($string, '<select') === false
+			)
 		)
+		{
+			return false;
+		}
+
+		// No specified strings tags found in the string
+		if (!empty($search_strings) && !RLText::stringContains($string, $search_strings))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private static function protectFieldsPart(&$string)
+	{
+		self::protectFieldsTextAreas($string);
+		self::protectFieldsInputFields($string);
+	}
+
+	public static function protectFieldsTextAreas(&$string)
+	{
+		if (strpos($string, '<textarea') === false)
 		{
 			return;
 		}
 
-		// Split string for large forms to prevent memory issues
-		$split_on = '</label>';
-		if (
-			strlen($string) > 50000
-			&& strpos($string, $split_on) !== false
-		)
+		// Only replace non-empty textareas
+		// Todo: maybe also prevent empty textareas but with a non-empty placeholder attribute
+
+		// Temporarily replace empty textareas
+		$temp_tag = '___TEMP_TEXTAREA___';
+		$string   = preg_replace(
+			'#<textarea((?:\s[^>]*)?)>(\s*)</textarea>#si',
+			'<' . $temp_tag . '\1>\2</' . $temp_tag . '>',
+			$string
+		);
+
+		self::protectByRegex(
+			$string,
+			'#(?:'
+			. '<' . 'textarea.*?<' . '/textarea>'
+			. '\s*)+#si'
+		);
+
+		// Replace back the temporarily replaced empty textareas
+		$string = str_replace($temp_tag, 'textarea', $string);
+	}
+
+	public static function protectFieldsInputFields(&$string)
+	{
+		if (strpos($string, '<input') === false)
 		{
-			$parts = explode($split_on, $string);
-
-			$string = array();
-
-			foreach ($parts as $part)
-			{
-				self::protectFields($part);
-				$string[] = $part;
-			}
-
-			$string = implode($split_on, $string);
-
 			return;
 		}
 
-		if (strpos($string, '<textarea') !== false)
-		{
-			// Only replace non-empty textareas
-			// Todo: maybe also prevent empty textareas but with a non-empty placeholder attribute
-			self::protectByRegex(
-				$string,
-				'#(?:'
-				. '<' . 'textarea(\s.*?)?>\s*[^\s].*?</textarea>'
-				. '\s*)+#si'
-			);
-		}
+		$type_values = '(?:text|email|hidden)';
+		// must be of certain type
+		$param_type = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
+		// must have a non-empty value or placeholder attribute
+		$param_value = '\s+(?:value|placeholder)\s*=\s*(?:"[^"]+"|\'[^\']+\'])';
+		// Regex to match any other parameter
+		$params = '(?:\s+[a-z][a-z0-9-_]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
 
-		if (strpos($string, '<input') !== false)
-		{
-			$type_values = '(?:text|email|hidden)';
-			// must be of certain type
-			$param_type = '\s+type\s*=\s*(?:"' . $type_values . '"|\'' . $type_values . '\'])';
-			// must have a non-empty value or placeholder attribute
-			$param_value = '\s+(?:value|placeholder)\s*=\s*(?:"[^"]+"|\'[^\']+\'])';
-			// Regex to match any other parameter
-			$params = '(?:\s+[a-z][a-z0-9-_]*(?:\s*=\s*(?:"[^"]*"|\'[^\']*\'|[0-9]+))?)*';
-
-			self::protectByRegex(
-				$string,
-				'#(?:(?:'
-				. '<' . 'input' . $params . $param_type . $params . $param_value . $params . '\s*/?>'
-				. '|<' . 'input' . $params . $param_value . $params . $param_type . $params . '\s*/?>'
-				. ')\s*)+#si'
-			);
-		}
+		self::protectByRegex(
+			$string,
+			'#(?:(?:'
+			. '<' . 'input' . $params . $param_type . $params . $param_value . $params . '\s*/?>'
+			. '|<' . 'input' . $params . $param_value . $params . $param_type . $params . '\s*/?>'
+			. ')\s*)+#si'
+		);
 	}
 
 	/**
@@ -493,8 +534,19 @@ class RLProtect
 	 */
 	public static function unprotect(&$string)
 	{
-		$regex = '#' . preg_quote(self::$protect_start, '#') . '(.*?)' . preg_quote(self::$protect_end, '#') . '#si';
+		self::unprotectByRegex(
+			$string,
+			'#' . preg_quote(self::$protect_tags_start, '#') . '(.*?)' . preg_quote(self::$protect_tags_end, '#') . '#si'
+		);
 
+		self::unprotectByRegex(
+			$string,
+			'#' . preg_quote(self::$protect_start, '#') . '(.*?)' . preg_quote(self::$protect_end, '#') . '#si'
+		);
+	}
+
+	private static function unprotectByRegex(&$string, $regex)
+	{
 		while (preg_match_all($regex, $string, $matches, PREG_SET_ORDER))
 		{
 			foreach ($matches as $match)
@@ -705,9 +757,14 @@ class RLProtect
 	/**
 	 * remove tags from tag attributes
 	 */
-	public static function removeFromHtmlTagAttributes(&$string, $tags, $attributes = array('title', 'alt'), $include_closing_tags = true)
+	public static function removeFromHtmlTagAttributes(&$string, $tags, $attributes = 'ALL', $include_closing_tags = true)
 	{
 		list($tags, $protected) = self::prepareTags($tags, $include_closing_tags);
+
+		if ($attributes == 'ALL')
+		{
+			$attributes = array('[a-z][a-z0-9-_]*');
+		}
 
 		if (!is_array($attributes))
 		{
@@ -716,21 +773,28 @@ class RLProtect
 
 		preg_match_all('#\s(?:' . implode('|', $attributes) . ')\s*=\s*".*?"#si', $string, $matches);
 
-		if (empty($matches))
+		if (empty($matches) || empty($matches['0']))
 		{
 			return;
 		}
 
 		$matches = array_unique($matches['0']);
 
+		// preg_quote all tags
+		$tags_regex = '#' . RLText::pregQuote($tags) . '.*?\}#si';
+
 		foreach ($matches as $match)
 		{
-			$title = $match;
-			foreach ($tags as $tag)
+			if (!RLText::stringContains($match, $tags))
 			{
-				$title = preg_replace('#' . preg_quote($tag, '#') . '.*?\}#si', '', $title);
+				continue;
 			}
-			$string = str_replace($match, $title, $string);
+
+			$title = $match;
+
+			$title = preg_replace($tags_regex, '', $title);
+
+			$string = RLText::strReplaceOnce($match, $title, $string);
 		}
 	}
 

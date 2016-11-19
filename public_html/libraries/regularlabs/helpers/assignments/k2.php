@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -41,7 +41,7 @@ class RLAssignmentsK2 extends RLAssignment
 			return $this->pass(false);
 		}
 
-		$cats = $this->makeArray($this->getCategories(), true);
+		$cats = $this->makeArray($this->getCategories());
 		$pass = $this->passSimple($cats, 'include');
 
 		if ($pass && $this->params->inc_children == 2)

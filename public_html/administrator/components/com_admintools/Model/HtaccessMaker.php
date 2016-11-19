@@ -435,7 +435,7 @@ END;
 ## site. This prevents unsafe redirections through HTTP.
 RewriteCond %{HTTPS} !=on [OR]
 RewriteCond %{HTTP:X-Forwarded-Proto} =http
-RewriteRule .* https://$httpsHost/$1 [R=302]
+RewriteRule .* https://$httpsHost%{REQUEST_URI} [L,R=301]
 
 
 END;
@@ -503,9 +503,6 @@ END;
 	# Enable expiration control
 	ExpiresActive On
 
-	# Default expiration: 1 hour after request
-	ExpiresDefault "now plus 1 hour"
-
 	# CSS and JS expiration: 1 week after request
 	ExpiresByType text/css "now plus 1 week"
 	ExpiresByType application/javascript "now plus 1 week"
@@ -529,6 +526,13 @@ END;
 	ExpiresByType image/vnd.wap.wbmp "now plus 1 month"
 	ExpiresByType application/vnd.wap.wbxml "now plus 1 month"
 	ExpiresByType application/smil "now plus 1 month"
+	
+	# Font files expiration: 1 week after request
+	ExpiresByType application/vnd.ms-fontobject "now plus 1 week"
+	ExpiresByType application/x-font-ttf "now plus 1 week"
+	ExpiresByType application/x-font-opentype "now plus 1 week"
+	ExpiresByType application/x-font-woff "now plus 1 week"
+	ExpiresByType image/svg+xml "now plus 1 week"
 
 	# Audio files expiration: 1 month after request
 	ExpiresByType audio/ogg "now plus 1 month"

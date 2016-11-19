@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -250,6 +250,9 @@ h2 .icon-reglab:before {
 .icon-reglab-lifetime:before {
   content: "\e022";
 }
+.icon-reglab-magento:before {
+  content: "\e023";
+}
 .icon-reglab.icon-src_sourcetags:before {
   font-family: 'RegularLabsIcons' !important;
   content: "\e01b";
@@ -275,6 +278,17 @@ body.reglab-popup {
 body.reglab-popup .container-fluid {
   padding: 0 20px;
 }
+body.reglab-popup .navbar .btn-toolbar {
+  margin: 2px 0;
+}
+body.reglab-popup .header {
+  margin-left: 0;
+  margin-right: 0;
+}
+body.reglab-popup .header.has-navbar-fixed-top {
+  margin-top: 38px;
+  margin-bottom: 10px;
+}
 body.reglab-popup .subhead {
   margin-left: 0;
   margin-right: 0;
@@ -283,10 +297,6 @@ body.reglab-popup .subhead {
 }
 body.reglab-popup .page-title {
   text-align: left;
-}
-body.reglab-popup .header {
-  margin-left: 0;
-  margin-right: 0;
 }
 body.reglab-popup label > span[class^="icon-reglab"] {
   padding: 1px 0 3px;

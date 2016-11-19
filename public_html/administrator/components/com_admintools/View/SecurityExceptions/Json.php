@@ -14,7 +14,7 @@ use FOF30\View\DataView\Json as BaseView;
 
 class Json extends BaseView
 {
-	public function onBeforeBrowse()
+	public function onBeforeBrowse($tpl = null)
 	{
 		$this->alreadyLoaded = true;
 

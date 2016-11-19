@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5.5" type="plugin" group="k2"  method="upgrade">
     <name>K2 - OSMeta K2</name>
-    <author>Alledia</author>
-    <creationDate>November 10, 2014</creationDate>
-    <copyright>Copyright (C) 2011, 2014 Alledia.com. All rights reserved.</copyright>
+    <author>Joomlashack</author>
+    <creationDate>October 11, 2016</creationDate>
+    <copyright>Copyright (C) 2011-2016 Open Source Training, LLC, All rights reserved.</copyright>
     <license>GPL v3</license>
-    <authorEmail>hello@alledia.com</authorEmail>
-    <authorUrl>https://www.alledia.com</authorUrl>
-    <version>1.2.4</version>
+    <authorEmail>help@joomlashack.com</authorEmail>
+    <authorUrl>https://www.joomlashack.com</authorUrl>
+    <version>1.4.0</version>
     <description>This system plugin prepares the K2 admin form to handle metadata.</description>
 
     <alledia>
@@ -21,4 +21,17 @@
         <filename>include.php</filename>
     </files>
 
+    <config>
+        <fieldset
+            name="basic"
+            addfieldpath="/administrator/components/com_osmeta/form/fields">
+
+            <field
+                type="customfooter"
+                name="customfooter"
+                media="com_osmeta"
+                showgoproad="0"
+                jedurl="http://extensions.joomla.org/extension/osmeta" />
+        </fieldset>
+    </config>
 </extension>

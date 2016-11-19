@@ -26,7 +26,7 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 	/**
 	 * Filters visitor access using WAF blacklist rules
 	 */
-	public function onAfterInitialise()
+	public function onAfterRoute()
 	{
 		$db = $this->db;
 
@@ -58,6 +58,7 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 		            ->where($db->qn('option') . ' IN(' . implode(',', $option) . ')')
 		            ->where($db->qn('view') . ' IN(' . implode(',', $view) . ')')
 		            ->where($db->qn('task') . ' IN(' . implode(',', $task) . ')')
+		            ->where($db->qn('enabled') . ' = ' . $db->q(1))
 		            ->group($db->qn('query'))
 		            ->order($db->qn('query') . ' ASC');;
 

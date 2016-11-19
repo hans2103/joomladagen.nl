@@ -32,10 +32,11 @@ foreach ($list as $i => &$item)
 	// get item params and decode it
 	$item_decode = json_decode($item->params);
 
-	$class = 'item-' . $item->id . ' '. $item_decode->class;
+	$custom_class = (isset($item_decode->class) && $item_decode->class) ? $item_decode->class : '';
 
-	if (($item->id == $active_id) OR ($item->type == 'alias' AND $item->params->get('aliasoptions') == $active_id))
-	{
+	$class = 'item-' . $item->id . ' '. $custom_class;
+
+	if (($item->id == $active_id) OR ($item->type == 'alias' AND $item->params->get('aliasoptions') == $active_id)){
 		$class .= ' current';
 	}
 

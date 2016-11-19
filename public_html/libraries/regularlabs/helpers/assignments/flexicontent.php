@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -84,7 +84,7 @@ class RLAssignmentsFlexiContent extends RLAssignment
 		$this->db->setQuery($query);
 		$type = $this->db->loadResult();
 
-		$types = $this->makeArray($type, 1);
+		$types = $this->makeArray($type);
 
 		return $this->passSimple($types);
 	}

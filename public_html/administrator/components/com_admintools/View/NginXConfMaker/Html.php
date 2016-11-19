@@ -49,6 +49,6 @@ class Html extends BaseView
 		/** @var NginXConfMaker $model */
 		$model             = $this->getModel();
 		$this->nginxconfig = $model->loadConfiguration();
-		$this->isSupported = ServerTechnology::isHtaccessSupported();
+		$this->isSupported = ServerTechnology::isNginxSupported();
 	}
 }

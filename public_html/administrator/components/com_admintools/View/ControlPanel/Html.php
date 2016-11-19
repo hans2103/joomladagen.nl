@@ -205,6 +205,13 @@ class Html extends BaseView
 	public $needsQuickSetup = false;
 
 	/**
+	 * Do I have stuck updates pending?
+	 *
+	 * @var  bool
+	 */
+	public $stuckUpdates = false;
+
+	/**
 	 * Main Control Panel task
 	 *
 	 * @return  void
@@ -274,7 +281,8 @@ class Html extends BaseView
 		$this->extension_id          = $controlPanelModel->getState('extension_id', 0, 'int');
 		$this->needsdlid             = $controlPanelModel->needsDownloadID();
 		$this->needsQuickSetup       = $controlPanelModel->needsQuickSetupWizard();
-		$this->changeLog = Coloriser::colorise(JPATH_COMPONENT_ADMINISTRATOR . '/CHANGELOG.php');
+		$this->changeLog             = Coloriser::colorise(JPATH_COMPONENT_ADMINISTRATOR . '/CHANGELOG.php');
+		$this->stuckUpdates          = ($this->container->params->get('updatedb', 0) == 1);
 
 		// Pro version secret word setup
 		if (defined('ADMINTOOLS_PRO') && ADMINTOOLS_PRO)
@@ -286,8 +294,8 @@ class Html extends BaseView
 
 		$this->addJavascriptFile('admin://components/com_admintools/media/js/ControlPanel.min.js');
 
-		// Pro version, control panel graphs
-		if (defined('ADMINTOOLS_PRO') && ADMINTOOLS_PRO)
+		// Pro version, control panel graphs (only if we enabled them in config options)
+		if (defined('ADMINTOOLS_PRO') && ADMINTOOLS_PRO && $this->showstats)
 		{
 			// Load CSS
 			$this->addCssFile('admin://components/com_admintools/media/css/jquery.jqplot.min.css');

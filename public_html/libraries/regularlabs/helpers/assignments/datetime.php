@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -243,7 +243,12 @@ class RLAssignmentsDateTime extends RLAssignment
 			return $this->dates[$id];
 		}
 
-		$this->dates[$id] = JFactory::getDate($date)->setTimeZone($this->getTimeZone());
+		$this->dates[$id] = JFactory::getDate($date);
+
+		if (empty($this->params->ignore_time_zone))
+		{
+			$this->dates[$id]->setTimeZone($this->getTimeZone());
+		}
 
 		return $this->dates[$id];
 	}
@@ -255,6 +260,8 @@ class RLAssignmentsDateTime extends RLAssignment
 			return $this->timezone;
 		}
 
-		return new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
+		$this->timezone = new DateTimeZone(JFactory::getApplication()->getCfg('offset'));
+
+		return $this->timezone;
 	}
 }

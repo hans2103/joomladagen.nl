@@ -157,7 +157,7 @@ class SecurityExceptions extends DataModel
 		}
 		elseif (!$overrideLimits)
 		{
-			$order = $this->getState('filter_order', null, 'cmd');
+			$order = $this->getState('filter_order', 'logdate', 'cmd');
 
 			if (!in_array($order, array_keys($this->knownFields)))
 			{
@@ -165,6 +165,7 @@ class SecurityExceptions extends DataModel
 			}
 
 			$dir = $this->getState('filter_order_Dir', 'DESC', 'cmd');
+
 			$query->order($order . ' ' . $dir);
 		}
 

@@ -125,13 +125,40 @@ $doc->addScriptdeclaration("\nvar sp_offanimation = '" . $this->params->get('off
                     $doc->addFavicon(JURI::base(true) . '/' . $favicon);
                 } else {
                     $doc->addFavicon($this->helix3->getTemplateUri() . '/images/favicon.ico');
-                } ?>
+                }
+                ?>
                 <!-- head -->
                 <jdoc:include type="head" />
                 <?php
+                $megabgcolor = ($this->helix3->PresetParam('_megabg')) ? $this->helix3->PresetParam('_megabg') : '#ffffff';
+                $megabgtx = ($this->helix3->PresetParam('_megatx')) ? $this->helix3->PresetParam('_megatx') : '#333333';
+
+                $preloader_bg = ($this->helix3->getParam('preloader_bg')) ? $this->helix3->getParam('preloader_bg') : '#f5f5f5';
+                $preloader_tx = ($this->helix3->getParam('preloader_tx')) ? $this->helix3->getParam('preloader_tx') : '#f5f5f5';
+
                 // load css, less and js
-                $this->helix3->addCSS('bootstrap.min.css, font-awesome.min.css, legacy.css, template.css') // CSS Files
-                             ->addJS('bootstrap.min.js, main.js'); // JS Files
+                $this->helix3->addCSS('bootstrap.min.css, font-awesome.min.css') // CSS Files
+                        ->addJS('bootstrap.min.js, jquery.sticky.js, main.js') // JS Files
+                        ->lessInit()->setLessVariables(array(
+                            'preset' => $this->helix3->Preset(),
+                            'bg_color' => $this->helix3->PresetParam('_bg'),
+                            'text_color' => $this->helix3->PresetParam('_text'),
+                            'major_color' => $this->helix3->PresetParam('_major'),
+                            'megabg_color' => $megabgcolor,
+                            'megatx_color' => $megabgtx,
+                            'preloader_bg' => $preloader_bg,
+                            'preloader_tx' => $preloader_tx,
+                        ))
+                        ->addLess('legacy/bootstrap', 'legacy')
+                        ->addLess('master', 'template');
+
+                //RTL
+                if ($this->direction == 'rtl') {
+                    $this->helix3->addCSS('bootstrap-rtl.min.css')
+                            ->addLess('rtl', 'rtl');
+                }
+
+                $this->helix3->addLess('presets', 'presets/' . $this->helix3->Preset(), array('class' => 'preset'));
 
                 //Before Head
                 if ($before_head = $this->helix3->getParam('before_head')) {
@@ -143,7 +170,7 @@ $doc->addScriptdeclaration("\nvar sp_offanimation = '" . $this->params->get('off
 
                     <div class="off-canvas-menu-wrap">
                         <div class="body-innerwrapper">
-                            <?php $this->helix3->generatelayout(); ?>
+<?php $this->helix3->generatelayout(); ?>
                         </div> <!-- /.body-innerwrapper -->
                     </div> <!-- /.off-canvas-menu-wrap -->
 
@@ -153,11 +180,11 @@ $doc->addScriptdeclaration("\nvar sp_offanimation = '" . $this->params->get('off
                         <div class="offcanvas-inner">
                             <?php if ($this->helix3->countModules('offcanvas')) { ?>
                                 <jdoc:include type="modules" name="offcanvas" style="sp_xhtml" />
-                            <?php } else { ?>
+                                <?php } else { ?>
                                 <p class="alert alert-warning">
-                                    <?php echo JText::_('HELIX_NO_MODULE_OFFCANVAS'); ?>
+                                <?php echo JText::_('HELIX_NO_MODULE_OFFCANVAS'); ?>
                                 </p>
-                            <?php } ?>
+<?php } ?>
                         </div> <!-- /.offcanvas-inner -->
                     </div> <!-- /.offcanvas-menu -->
 
@@ -182,7 +209,7 @@ $doc->addScriptdeclaration("\nvar sp_offanimation = '" . $this->params->get('off
                     <!-- Go to top -->
                     <?php if ($this->params->get('goto_top')) { ?>
                         <a href="javascript:void(0)" class="scrollup">&nbsp;</a>
-                    <?php } ?>
+<?php } ?>
 
                 </body>
                 </html>

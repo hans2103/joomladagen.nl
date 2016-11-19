@@ -22,6 +22,19 @@ $emptyRoot = empty($root);
 	</div>
 <?php endif; ?>
 
+<?php /* Stuck database updates warning */?>
+<?php if ($this->stuckUpdates):?>
+	<div class="alert alert-danger">
+		<p>
+			<?php
+			echo \JText::sprintf('COM_ADMINTOOLS_CPANEL_ERR_UPDATE_STUCK',
+				JFactory::getDbo()->getPrefix(),
+				'index.php?option=com_admintools&view=ControlPanel&task=forceUpdateDb'
+			)?>
+		</p>
+	</div>
+<?php endif;?>
+
 <?php if (isset($this->frontEndSecretWordIssue) && !empty($this->frontEndSecretWordIssue)): ?>
 	<div class="alert alert-danger">
 		<h3><?php echo \JText::_('COM_ADMINTOOLS_ERR_CONTROLPANEL_FESECRETWORD_HEADER'); ?></h3>

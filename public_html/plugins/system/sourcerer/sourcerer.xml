@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sourcerer</name>
 	<description>PLG_SYSTEM_SOURCERER_DESC</description>
-	<version>6.2.1PRO</version>
-	<creationDate>September 2016</creationDate>
+	<version>6.3.6PRO</version>
+	<creationDate>November 2016</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -45,9 +45,10 @@
 					   url="https://www.regularlabs.com/sourcerer" />
 			</fieldset>
 			<fieldset name="advanced">
+				<field name="@block_tag_a" type="rl_block" start="1" label="RL_TAG_SYNTAX" />
 				<field name="syntax_word" type="text" size="20" default="source" label="SRC_SYNTAX_WORD" description="SRC_SYNTAX_WORD_DESC" />
-				<field name="tag_characters" type="list" default="{.}" class="input-small" label="RL_TAG_CHARACTERS"
-					   description="RL_TAG_CHARACTERS_DESC">
+				<field name="tag_characters" type="list" default="{.}" class="input-small"
+					   label="RL_TAG_CHARACTERS" description="RL_TAG_CHARACTERS_DESC">
 					<option value="{.}">{...}</option>
 					<option value="[.]">[...]</option>
 					<option value="{{.}}">{{...}}</option>
@@ -55,11 +56,17 @@
 					<option value="[:.:]">[:...:]</option>
 					<option value="[%.%]">[%...%]</option>
 				</field>
-				<field name="trim" type="radio" class="btn-group" default="0" label="SRC_TRIM" description="SRC_TRIM_DESC">
+				<field name="@block_tag_b" type="rl_block" end="1" />
+				<field name="trim" type="radio" class="btn-group" default="0" label="RL_STRIP_SURROUNDING_TAGS" description="RL_STRIP_SURROUNDING_TAGS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="remove_from_search" type="radio" class="btn-group" default="0" label="SRC_REMOVE_FROM_SEARCH" description="SRC_REMOVE_FROM_SEARCH_DESC">
+				<field name="enable_in_head" type="radio" class="btn-group" default="0" label="SRC_ENABLE_IN_HEAD" description="SRC_ENABLE_IN_HEAD_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="remove_from_search" type="radio" class="btn-group" default="0"
+					label="SRC_REMOVE_FROM_SEARCH" description="SRC_REMOVE_FROM_SEARCH_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -76,8 +83,8 @@
 				<field name="@block_default_css_b" type="rl_block" end="1" />
 
 				<field name="@block_default_js_a" type="rl_block" start="1" label="SRC_JAVASCRIPT" />
-				<field name="enable_js" type="radio" class="btn-group" default="1" label="SRC_ALLOW_JAVASCRIPT_TAGS"
-					   description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC">
+				<field name="enable_js" type="radio" class="btn-group" default="1"
+					   label="SRC_ALLOW_JAVASCRIPT_TAGS" description="SRC_ALLOW_JAVASCRIPT_TAGS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -92,8 +99,8 @@
 				<field name="forbidden_php" type="textarea" rows="3" cols="40"
 					   default="dl, escapeshellarg, escapeshellcmd, exec, passthru, popen, proc_close, proc_open, shell_exec, symlink, system"
 					   label="SRC_FORBIDDEN_PHP_FUNCTIONS" description="SRC_FORBIDDEN_PHP_FUNCTIONS_DESC" />
-				<field name="forbidden_tags" type="rl_textareaplus" width="400" height="80" default="" label="SRC_FORBIDDEN_HTML_TAGS"
-					   description="SRC_FORBIDDEN_HTML_TAGS_DESC" />
+				<field name="forbidden_tags" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_FORBIDDEN_HTML_TAGS" description="SRC_FORBIDDEN_HTML_TAGS_DESC" />
 				<field name="@toggler_default_php_b" type="rl_toggler" />
 				<field name="@block_default_php_b" type="rl_block" end="1" />
 
@@ -101,14 +108,14 @@
 
 			<fieldset name="SRC_SECURITY_SETTINGS_ARTICLES">
 				<field name="@block_articles" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_ARTICLES_DESC" />
-				<field name="articles_enable" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_ARTICLES"
-					   description="SRC_ENABLE_IN_ARTICLES_DESC">
+				<field name="articles_enable" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_ARTICLES" description="SRC_ENABLE_IN_ARTICLES_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 				<field name="@toggler_articles_a" type="rl_toggler" param="articles_enable" value="1" />
-				<field name="articles_security_level" type="rl_grouplevel" default="-1" multiple="1" show_all="1" label="SRC_SECURITY_LEVEL"
-					   description="SRC_SECURITY_LEVEL_DESC" />
+				<field name="articles_security_level" type="rl_grouplevel" default="-1" multiple="1" show_all="1"
+					   label="SRC_SECURITY_LEVEL" description="SRC_SECURITY_LEVEL_DESC" />
 
 				<field name="@block_articles_css_a" type="rl_block" start="1" label="SRC_CSS" />
 				<field name="articles_enable_css" type="radio" default="-1" label="SRC_ALLOW_CSS_TAGS" description="SRC_ALLOW_CSS_TAGS_DESC">
@@ -122,8 +129,8 @@
 					<option value="1">JDEFAULT</option>
 				</field>
 				<field name="@toggler_articles_security_css_a" type="rl_toggler" param="articles_security_level_default_css" value="0" />
-				<field name="articles_security_level_css" type="rl_grouplevel" default="-1" multiple="1" show_all="1" label="SRC_CSS_SECURITY_LEVEL"
-					   description="SRC_CSS_SECURITY_LEVEL_DESC" />
+				<field name="articles_security_level_css" type="rl_grouplevel" default="-1" multiple="1" show_all="1"
+					   label="SRC_CSS_SECURITY_LEVEL" description="SRC_CSS_SECURITY_LEVEL_DESC" />
 				<field name="@toggler_articles_security_css_b" type="rl_toggler" />
 				<field name="@toggler_articles_css_b" type="rl_toggler" />
 				<field name="@block_articles_css_b" type="rl_block" end="1" />
@@ -140,8 +147,8 @@
 					<option value="1">JDEFAULT</option>
 				</field>
 				<field name="@toggler_articles_security_js_a" type="rl_toggler" param="articles_security_level_default_js" value="0" />
-				<field name="articles_security_level_js" type="rl_grouplevel" default="-1" multiple="1" show_all="1" label="SRC_JAVASCRIPT_SECURITY_LEVEL"
-					   description="SRC_JAVASCRIPT_SECURITY_LEVEL_DESC" />
+				<field name="articles_security_level_js" type="rl_grouplevel" default="-1" multiple="1" show_all="1"
+					   label="SRC_JAVASCRIPT_SECURITY_LEVEL" description="SRC_JAVASCRIPT_SECURITY_LEVEL_DESC" />
 				<field name="@toggler_articles_security_js_b" type="rl_toggler" />
 				<field name="@toggler_articles_js_b" type="rl_toggler" />
 				<field name="@block_articles_js_b" type="rl_block" end="1" />
@@ -158,13 +165,13 @@
 					<option value="1">JDEFAULT</option>
 				</field>
 				<field name="@toggler_articles_security_php_a" type="rl_toggler" param="articles_security_level_default_php" value="0" />
-				<field name="articles_security_level_php" type="rl_grouplevel" default="-1" multiple="1" show_all="1" label="SRC_PHP_SECURITY_LEVEL"
-					   description="SRC_PHP_SECURITY_LEVEL_DESC" />
+				<field name="articles_security_level_php" type="rl_grouplevel" default="-1" multiple="1" show_all="1"
+					   label="SRC_PHP_SECURITY_LEVEL" description="SRC_PHP_SECURITY_LEVEL_DESC" />
 				<field name="@toggler_articles_security_php_b" type="rl_toggler" />
-				<field name="articles_forbidden_php" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS"
-					   description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
-				<field name="articles_forbidden_tags" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_HTML_TAGS"
-					   description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
+				<field name="articles_forbidden_php" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS" description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
+				<field name="articles_forbidden_tags" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_HTML_TAGS" description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
 				<field name="@toggler_articles_php_b" type="rl_toggler" />
 				<field name="@block_articles_php_b" type="rl_block" end="1" />
 				<field name="@toggler_articles_b" type="rl_toggler" />
@@ -172,14 +179,14 @@
 
 			<fieldset name="SRC_SECURITY_SETTINGS_COMPONENTS">
 				<field name="@block_components" type="note" class="alert alert-info" description="SRC_SECURITY_SETTINGS_COMPONENTS_DESC" />
-				<field name="components_enable" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_COMPONENTS"
-					   description="SRC_ENABLE_IN_COMPONENTS_DESC">
+				<field name="components_enable" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_COMPONENTS" description="SRC_ENABLE_IN_COMPONENTS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 				<field name="@toggler_components_a" type="rl_toggler" param="components_enable" value="1" />
-				<field name="components" type="rl_components" default="" multiple="1" admin="0" label="RL_DISABLE_ON_COMPONENTS"
-					   description="SRC_DISABLE_ON_COMPONENTS_DESC" />
+				<field name="components" type="rl_components" default="" multiple="1" admin="0"
+					   label="RL_DISABLE_ON_COMPONENTS" description="SRC_DISABLE_ON_COMPONENTS_DESC" />
 
 				<field name="@block_components_css_a" type="rl_block" start="1" label="SRC_CSS" />
 				<field name="components_enable_css" type="radio" default="-1" label="SRC_ALLOW_CSS_TAGS" description="SRC_ALLOW_CSS_TAGS_DESC">
@@ -204,10 +211,10 @@
 					<option value="-1">JDEFAULT</option>
 				</field>
 				<field name="@toggler_components_php_a" type="rl_toggler" param="components_enable_php" value="1,-1" />
-				<field name="components_forbidden_php" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS"
-					   description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
-				<field name="components_forbidden_tags" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_HTML_TAGS"
-					   description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
+				<field name="components_forbidden_php" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS" description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
+				<field name="components_forbidden_tags" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_HTML_TAGS" description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
 				<field name="@toggler_components_php_b" type="rl_toggler" />
 
 				<field name="@wizard" type="radio" class="btn-group" default="0" label="SRC_SHOW_WIZARD">
@@ -253,10 +260,10 @@
 					<option value="-1">JDEFAULT</option>
 				</field>
 				<field name="@toggler_otherareas_php_a" type="rl_toggler" param="other_enable_php" value="1,-1" />
-				<field name="other_forbidden_php" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS"
-					   description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
-				<field name="other_forbidden_tags" type="rl_textareaplus" width="400" height="80" default="" label="SRC_EXTRA_FORBIDDEN_HTML_TAGS"
-					   description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
+				<field name="other_forbidden_php" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS" description="SRC_EXTRA_FORBIDDEN_PHP_FUNCTIONS_DESC" />
+				<field name="other_forbidden_tags" type="rl_textareaplus" width="400" height="80" default=""
+					   label="SRC_EXTRA_FORBIDDEN_HTML_TAGS" description="SRC_EXTRA_FORBIDDEN_HTML_TAGS_DESC" />
 				<field name="@toggler_otherareas_php_b" type="rl_toggler" />
 				<field name="@block_otherareas_php_b" type="rl_block" end="1" />
 				<field name="@toggler_otherareas_b" type="rl_toggler" />

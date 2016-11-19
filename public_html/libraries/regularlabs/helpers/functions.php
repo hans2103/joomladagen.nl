@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -78,7 +78,7 @@ class RLFunctions
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '16.9.23873';
+			$version = '16.11.9943';
 		}
 
 		if (!$file = self::getFileByFolder('js', $file))
@@ -98,7 +98,7 @@ class RLFunctions
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '16.9.23873';
+			$version = '16.11.9943';
 		}
 
 		if (!$file = self::getFileByFolder('css', $file))
@@ -526,16 +526,16 @@ class RLFunctions
 		return false;
 	}
 
-	public static function loadLanguage($extension = 'plg_system_regularlabs', $basePath = '')
+	public static function loadLanguage($extension = 'plg_system_regularlabs', $basePath = '', $reload = false)
 	{
-		if ($basePath && JFactory::getLanguage()->load($extension, $basePath))
+		if ($basePath && JFactory::getLanguage()->load($extension, $basePath, null, $reload))
 		{
 			return true;
 		}
 
 		$basePath = self::getExtensionPath($extension, $basePath, 'language');
 
-		return JFactory::getLanguage()->load($extension, $basePath);
+		return JFactory::getLanguage()->load($extension, $basePath, null, $reload);
 	}
 
 	public static function getExtensionPath($extension = 'plg_system_regularlabs', $basePath = JPATH_ADMINISTRATOR, $check_folder = '')
@@ -546,6 +546,8 @@ class RLFunctions
 		{
 			return $basePath;
 		}
+
+		$extension = str_replace('.sys', '', $extension);
 
 		switch (true)
 		{

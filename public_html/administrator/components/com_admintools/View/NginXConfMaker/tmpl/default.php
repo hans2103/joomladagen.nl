@@ -271,7 +271,7 @@ $nginxConfPath = rtrim(JPATH_ROOT, '/\\') . '/nginx.conf';
 			   for="optfhndlcache"><?php echo \JText::_('COM_ADMINTOOLS_LBL_HTACCESSMAKER_OPTFHNDLCACHE'); ?></label>
 
 		<div class="controls">
-			<?php echo Select::booleanlist('optoutbuf', array('class' => 'input-small'), $config->optfhndlcache); ?>
+			<?php echo Select::booleanlist('optfhndlcache', array('class' => 'input-small'), $config->optfhndlcache); ?>
 
 		</div>
 	</div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -36,8 +36,9 @@ class JFormFieldRL_Ajax extends RLFormField
 			. $loading
 			. "jQuery(\"#message_" . $this->id . "\").attr(\"class\", \"\").html(\"\");"
 			. "RegularLabsScripts.loadajax("
-			. "'" . addslashes($this->get('url')) . "',
-					'var data = data.trim();if(data == \"\" || data.substring(0,1) == \"+\") {"
+			. "'" . addslashes($this->get('url')) . "',"
+			. "'var data = data.trim();"
+			. "if(data == \"\" || data.substring(0,1) == \"+\") {"
 			. "data = data.replace(/^\\\\+/, \\'\\');"
 			. $success
 			. "} else {"

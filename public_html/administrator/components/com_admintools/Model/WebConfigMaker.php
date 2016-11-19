@@ -339,7 +339,8 @@ class WebConfigMaker extends ServerConfigMaker
 		'Akeeba\AdminTools\Admin\Controller\WebConfigMaker::apply',
 		'Akeeba\AdminTools\Admin\Model\ServerConfigMaker::writeConfigFile',
 		'Akeeba\AdminTools\Admin\Model\WebConfigMaker::writeWebConfig',
-		'Akeeba\AdminTools\Admin\View\WebConfigMaker\Html::onBeforeMain'
+		'Akeeba\AdminTools\Admin\View\WebConfigMaker\Html::onBeforeMain',
+		'Akeeba\AdminTools\Admin\View\WebConfigMaker\Html::onBeforePreview'
 	];
 
 	/**
@@ -473,7 +474,7 @@ XML;
 
 				$newPattern = implode('|', $patternCache);
 				$conditions .= <<< XML
-<add input="{HTTP_USER_AGENT}" patternCache="$newPattern" />
+<add input="{HTTP_USER_AGENT}" pattern="$newPattern" />
 XML;
 				$patternCache = array();
 			}
@@ -482,7 +483,7 @@ XML;
 			{
 				$newPattern = implode('|', $patternCache);
 				$conditions .= <<< XML
-						<add input="{HTTP_USER_AGENT}" patternCache="$newPattern" />
+						<add input="{HTTP_USER_AGENT}" pattern="$newPattern" />
 XML;
 			}
 
@@ -893,7 +894,6 @@ XML;
 
 		if ($config->cors == 1)
 		{
-			$action = version_compare($iisVersion, '2.0', 'ge') ? 'always set' : 'set';
 			$webConfig .= <<<XML
 				<!-- Cross-Origin Resource Sharing (CORS) - See http://enable-cors.org/ -->
 				<add name="Access-Control-Allow-Origin" value="*" />

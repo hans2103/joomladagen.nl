@@ -29,7 +29,7 @@ class ControlPanel extends Controller
 		parent::__construct($container, $config);
 
 		$this->predefinedTaskList = [
-			'browse', 'login', 'updategeoip', 'updateinfo', 'selfblocked', 'unblockme', 'applydlid', 'resetSecretWord'
+			'browse', 'login', 'updategeoip', 'updateinfo', 'selfblocked', 'unblockme', 'applydlid', 'resetSecretWord', 'forceUpdateDb'
 		];
 	}
 
@@ -39,7 +39,14 @@ class ControlPanel extends Controller
 		$model = $this->getModel();
 
 		// Upgrade the database schema if necessary
-		$model->checkAndFixDatabase();
+		try
+		{
+			$model->checkAndFixDatabase();
+		}
+		catch (\RuntimeException $e)
+		{
+			// The update is stuck. We will display a warning in the Control Panel
+		}
 
 		// Update the magic parameters
 		$model->updateMagicParameters();
@@ -254,5 +261,29 @@ ENDRESULT;
 		$url = 'index.php?option=com_admintools';
 
 		$this->setRedirect($url, $msg);
+	}
+
+	/**
+	 * Resets the "updatedb" flag and forces the database updates
+	 */
+	public function forceUpdateDb()
+	{
+		// Reset the flag so the updates could take place
+		$this->container->params->set('updatedb', null);
+		$this->container->params->save();
+
+		/** @var \Akeeba\AdminTools\Admin\Model\ControlPanel $model */
+		$model = $this->getModel();
+
+		try
+		{
+			$model->checkAndFixDatabase();
+		}
+		catch (\RuntimeException $e)
+		{
+			// This should never happen, since we reset the flag before execute the update, but you never know
+		}
+
+		$this->setRedirect('index.php?option=com_admintools');
 	}
 }

@@ -49,6 +49,6 @@ class Html extends BaseView
 		/** @var WebConfigMaker $model */
 		$model             = $this->getModel();
 		$this->wcconfig    = $model->loadConfiguration();
-		$this->isSupported = ServerTechnology::isHtaccessSupported();
+		$this->isSupported = ServerTechnology::isWebConfigSupported();
 	}
 }

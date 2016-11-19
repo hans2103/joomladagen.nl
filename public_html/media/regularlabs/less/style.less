@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -41,7 +41,7 @@ div.rl_well {
 	color: @grayDark;
 }
 
-.well-striped:nth-child(even){
+.well-striped:nth-child(even) {
 	background-color: lighten(@wellBackground, 3%);
 }
 
@@ -241,6 +241,8 @@ input.rl_keyfield {
 		margin-top: 5px;
 
 		a.stars {
+			display: inline-block;
+
 			.icon-star {
 				color:  mix(@yellow, @orange);
 				margin: 0;

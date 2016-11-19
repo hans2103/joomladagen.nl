@@ -7,23 +7,28 @@
 
 jQuery(function ($) {
 
-    // **************    START Offcarvas    *************** //
+    // ************    START Helix 1.4 JS    ************** //
     // **************************************************** //
+
+    //Default
+    if (typeof sp_offanimation === 'undefined' || sp_offanimation === '') {
+        sp_offanimation = 'default';
+    }
+
     if (sp_offanimation == 'default') {
-        //Default
         $('#offcanvas-toggler').on('click', function (event) {
-          event.preventDefault();
-          $('.off-canvas-menu-init').addClass('offcanvas');
+            event.preventDefault();
+            $('.off-canvas-menu-init').addClass('offcanvas');
         });
 
         $('<div class="offcanvas-overlay"></div>').insertBefore('.offcanvas-menu');
         $('.close-offcanvas, .offcanvas-overlay').on('click', function (event) {
-          event.preventDefault();
-          $('.off-canvas-menu-init').removeClass('offcanvas');
+            event.preventDefault();
+            $('.off-canvas-menu-init').removeClass('offcanvas');
         });
     }
-    // Slide Top Menu
 
+    // Slide Top Menu
     if (sp_offanimation == 'slidetop') {
         $('#offcanvas-toggler').on('click', function (event) {
             event.preventDefault();
@@ -37,8 +42,8 @@ jQuery(function ($) {
         });
     }
 
+    //Full Screen
     if (sp_offanimation == 'fullscreen') {
-        //Full Screen
         $('#offcanvas-toggler').on('click', function (event) {
             event.preventDefault();
             $('.off-canvas-menu-init').addClass('full-screen-off-canvas');
@@ -52,8 +57,8 @@ jQuery(function ($) {
         });
     }
 
+    //Full screen from top
     if (sp_offanimation == 'fullScreen-top') {
-        //Full screen from top
         $('#offcanvas-toggler').on('click', function (event) {
             event.preventDefault();
             $('.off-canvas-menu-init').addClass('full-screen-off-canvas-ftop');
@@ -67,8 +72,8 @@ jQuery(function ($) {
         });
     }
 
-    if (sp_offanimation == 'drarkplus') { 
-        //dark with plus
+    //Dark with plus
+    if (sp_offanimation == 'drarkplus') {
         $('#offcanvas-toggler').on('click', function (event) {
             event.preventDefault();
             $('.off-canvas-menu-init').addClass('new-look-off-canvas');
@@ -83,42 +88,39 @@ jQuery(function ($) {
         });
     }
 
-    // **************    END:: Offcarvas    *************** //
-    // **************************************************** //
-
-    // **************   START Mega SCRIPT   *************** //
-    // **************************************************** //
-
-    //mega menu
-    $('.sp-megamenu-wrapper').parent().parent().css('position', 'static').parent().css('position', 'relative');
-    $('.sp-menu-full').each(function () {
-        $(this).parent().addClass('menu-justify');
-    });
-
-    // boxlayout
-    if ($("body.layout-boxed").length > 0) {
-        var windowWidth = $('#sp-header').parent().outerWidth();
-        $("#sp-header").css({"width": windowWidth, "left": "auto"});
-    }
-
     // if sticky header
     if ($("body.sticky-header").length > 0) {
-        $(window).on('scroll', function () {
-            if ($(window).scrollTop() > 200){
-                $("#sp-header").addClass('fixed-header animated fadeInDown');
+        var fixedSection = $('#sp-header');
+        // sticky nav
+        var headerHeight = fixedSection.outerHeight();
+        var stickyNavTop = fixedSection.offset().top;
+        fixedSection.addClass('animated');
+        fixedSection.before('<div class="nav-placeholder"></div>');
+        $('.nav-placeholder').height('inherit');
+        //add class
+        fixedSection.addClass('menu-fixed-out');
+        var stickyNav = function () {
+            var scrollTop = $(window).scrollTop();
+            if (scrollTop > stickyNavTop) {
+                fixedSection.removeClass('menu-fixed-out').addClass('menu-fixed');
+                $('.nav-placeholder').height(headerHeight);
             } else {
-                $("#sp-header").removeClass('fixed-header animated fadeInDown');
+                if (fixedSection.hasClass('menu-fixed')) {
+                    fixedSection.removeClass('menu-fixed').addClass('menu-fixed-out');
+                    $('.nav-placeholder').height('inherit');
+                }
             }
+        };
+        stickyNav();
+        $(window).scroll(function () {
+            stickyNav();
         });
     }
-
-    // **************   END:: Mega SCRIPT   *************** //
-    // **************************************************** //
-
-    // **************  START Feature SCRIPT *************** //
-    // **************************************************** //
-
     // go to top
+    if (typeof sp_gotop === 'undefined') {
+        sp_gotop = '';
+    }
+
     if (sp_gotop) {
         // go to top
         $(window).scroll(function () {
@@ -138,8 +140,12 @@ jQuery(function ($) {
     } // has go to top
 
     // Preloader
+    if (typeof sp_preloader === 'undefined') {
+        sp_preloader = '';
+    }
+
     if (sp_preloader) {
-        $(window).load(function () {
+        $(window).on('load', function () {
             if ($('.sp-loader-with-logo').length > 0) {
                 move();
             }
@@ -162,10 +168,26 @@ jQuery(function ($) {
             }
         }
     }
-
-    // **************  START Feature SCRIPT *************** //
+    // ************    END:: Helix 1.4 JS    ************** //
     // **************************************************** //
 
+    // **************   START Mega SCRIPT   *************** //
+    // **************************************************** //
+
+    //mega menu
+    $('.sp-megamenu-wrapper').parent().parent().css('position', 'static').parent().css('position', 'relative');
+    $('.sp-menu-full').each(function () {
+        $(this).parent().addClass('menu-justify');
+    });
+
+    // boxlayout
+    if ($("body.layout-boxed").length > 0) {
+        var windowWidth = $('#sp-header').parent().outerWidth();
+        $("#sp-header").css({"max-width": windowWidth, "left": "auto"});
+    }
+
+    // **************   END:: Mega SCRIPT   *************** //
+    // **************************************************** //
 
     // **************  START Others SCRIPT  *************** //
     // **************************************************** //

@@ -98,6 +98,7 @@ class Dispatcher extends AdminDispatcher
 
 			// We have to go through JFactory to alter the application's input!
 			$input = JFactory::getApplication()->input;
+			$input->set('option', 'com_admintools');
 			$input->set('view', 'Blocks');
 			$input->set('task', 'browse');
 

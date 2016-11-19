@@ -147,10 +147,26 @@ class ControlPanel extends Model
 	 * Checks the database for missing / outdated tables using the $dbChecks
 	 * data and runs the appropriate SQL scripts if necessary.
 	 *
+	 * @throws  \RuntimeException    If the previous database update is stuck
+	 *
 	 * @return  $this
 	 */
 	public function checkAndFixDatabase()
 	{
+		$params = $this->container->params;
+
+		// First of all let's check if we are already updating
+		$stuck = $params->get('updatedb', 0);
+
+		if ($stuck)
+		{
+			throw new \RuntimeException('Previous database update is flagged as stuck');
+		}
+
+		// Then set the flag
+		$params->set('updatedb', 1);
+		$params->save();
+
 		// Install or update database
 		$db          = \JFactory::getDbo();
 		$dbInstaller = new Installer($db, JPATH_ADMINISTRATOR . '/components/com_admintools/sql/xml');
@@ -161,6 +177,10 @@ class ControlPanel extends Model
 		/** @var Stats $statsModel */
 		$statsModel = $this->container->factory->model('Stats')->tmpInstance();
 		$statsModel->checkAndFixCommonTables();
+
+		// And finally remove the flag if everything went fine
+		$params->set('updatedb', null);
+		$params->save();
 
 		return $this;
 	}

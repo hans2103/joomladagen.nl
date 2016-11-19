@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_regularlabs</name>
 	<description>PLG_SYSTEM_REGULARLABS_DESC</description>
-	<version>16.9.23873</version>
-	<creationDate>September 2016</creationDate>
+	<version>16.11.9943</version>
+	<creationDate>November 2016</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -28,7 +28,8 @@
 					   warning="REGULAR_LABS_LIBRARY_DESC_WARNING" />
 			</fieldset>
 			<fieldset name="basic">
-				<field name="combine_admin_menu" type="radio" class="btn-group" default="0" label="RL_COMBINE_ADMIN_MENU" description="RL_COMBINE_ADMIN_MENU_DESC">
+				<field name="combine_admin_menu" type="radio" class="btn-group" default="0"
+					label="RL_COMBINE_ADMIN_MENU" description="RL_COMBINE_ADMIN_MENU_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -36,8 +37,8 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="max_list_count" type="text" size="10" class="input-mini" default="2500" label="RL_MAX_LIST_COUNT"
-					   description="RL_MAX_LIST_COUNT_DESC" />
+				<field name="max_list_count" type="text" size="10" class="input-mini" default="2500"
+					   label="RL_MAX_LIST_COUNT" description="RL_MAX_LIST_COUNT_DESC" />
 			</fieldset>
 		</fields>
 	</config>

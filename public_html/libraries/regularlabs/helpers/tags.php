@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,6 +23,11 @@ class RLTags
 
 	public static function getValuesFromString($string = '', $main_key = 'title', $known_boolean_keys = array(), $keep_escaped = array(','))
 	{
+		if (empty($string))
+		{
+			return new stdClass;
+		}
+
 		// Replace html entity quotes to normal quotes
 		$string = str_replace('&quot;', '"', $string);
 
@@ -68,6 +73,11 @@ class RLTags
 			$value = $match['value'];
 
 			self::unprotectSpecialChars($value, $keep_escaped);
+
+			if (is_numeric($value) && in_array($match['key'], $known_boolean_keys))
+			{
+				$value = $value ? 'true' : 'false';
+			}
 
 			// Convert numeric values to ints/floats
 			if (is_numeric($value))

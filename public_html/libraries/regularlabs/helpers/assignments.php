@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -436,21 +436,21 @@ class RLAssignmentsHelper
 		}
 	}
 
-	function makeArray($array = '', $onlycommas = 0, $trim = 1)
+	function makeArray($array = '', $delimiter = ',', $trim = 1)
 	{
 		if (empty($array))
 		{
 			return array();
 		}
 
-		$hash = md5('makeArray_' . json_encode($array) . '_' . $onlycommas . '_' . $trim);
+		$hash = md5('makeArray_' . json_encode($array) . '_' . $delimiter . '_' . $trim);
 
 		if (RLCache::has($hash))
 		{
 			return RLCache::get($hash);
 		}
 
-		$array = $this->mixedDataToArray($array, $onlycommas);
+		$array = $this->mixedDataToArray($array, $delimiter);
 
 		if (empty($array))
 		{
@@ -478,12 +478,10 @@ class RLAssignmentsHelper
 		);
 	}
 
-	private function mixedDataToArray($array = '', $onlycommas = 0)
+	private function mixedDataToArray($array = '', $delimiter = ',')
 	{
 		if (!is_array($array))
 		{
-			$delimiter = ($onlycommas || strpos($array, '|') === false) ? ',' : '|';
-
 			return explode($delimiter, $array);
 		}
 
@@ -497,9 +495,9 @@ class RLAssignmentsHelper
 			return $array['0'];
 		}
 
-		if (count($array) === 1 && strpos($array['0'], ',') !== false)
+		if (count($array) === 1 && strpos($array['0'], $delimiter) !== false)
 		{
-			return explode(',', $array['0']);
+			return explode($delimiter, $array['0']);
 		}
 
 		return $array;
@@ -531,8 +529,7 @@ class RLAssignmentsHelper
 
 			if (isset($params->{'assignto_' . $id . '_selection'}))
 			{
-				$selection               = $params->{'assignto_' . $id . '_selection'};
-				$types[$type]->selection = in_array($type, $this->nonarray) ? $selection : $this->makeArray($selection);
+				$types[$type]->selection = $this->getSelection($params->{'assignto_' . $id . '_selection'}, $type);
 			}
 
 			$this->addParams($types[$type], $type, $id, $params);
@@ -544,6 +541,18 @@ class RLAssignmentsHelper
 		);
 
 		return $types;
+	}
+
+	private function getSelection($selection, $type = '')
+	{
+		if (in_array($type, $this->nonarray))
+		{
+			return $selection;
+		}
+
+		$delimiter = in_array($type, $this->textareas) ? "\n" : ',';
+
+		return $this->makeArray($selection, $delimiter);
 	}
 
 	public function getAssignmentsFromTagAttributes(&$attributes, $types = array())
@@ -596,8 +605,10 @@ class RLAssignmentsHelper
 	{
 		if ($type == 'DateTime.Date')
 		{
-			$dates              = explode(' - ', str_replace(' to ', ' - ', $value));
-			$params->publish_up = date('Y-m-d H:i:s', strtotime($dates['0']));
+			$dates = explode(' - ', str_replace(' to ', ' - ', $value));
+
+			$params->ignore_time_zone = true;
+			$params->publish_up       = date('Y-m-d H:i:s', strtotime($dates['0']));
 
 			if (isset($dates['1']))
 			{
@@ -653,7 +664,7 @@ class RLAssignmentsHelper
 				break;
 
 			case 'DateTime.Date':
-				$bool_params = array('publish_up', 'publish_down', 'recurring');
+				$bool_params = array('publish_up', 'publish_down', 'recurring', 'ignore_time_zone');
 				break;
 
 			case 'DateTime.Seasons':

@@ -8,6 +8,8 @@
         jsfiles="admin://components/com_admintools/media/js/wafblacklist.min.js"
 >
     <fieldset name="items">
+        <field name="enabled" type="Published" label="JPUBLISHED" />
+
         <field name="verb" type="GenericList"
                source_class="Akeeba\AdminTools\Admin\Helper\Select"
                source_method="httpVerbs"

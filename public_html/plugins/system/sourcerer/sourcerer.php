@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.2.1PRO
+ * @version         6.3.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -18,20 +18,20 @@ class PlgSystemSourcerer extends JPlugin
 {
 	public function __construct(&$subject, $config)
 	{
-		$this->_pass = 0;
+		$this->_pass = false;
 		parent::__construct($subject, $config);
 	}
 
 	public function onAfterRoute()
 	{
-		$this->_pass = 0;
+		$this->_pass = false;
 
 		jimport('joomla.filesystem.file');
 		if (JFile::exists(JPATH_LIBRARIES . '/regularlabs/helpers/protect.php'))
 		{
 			require_once JPATH_LIBRARIES . '/regularlabs/helpers/protect.php';
 			// return if page should be protected
-			if (RLProtect::isProtectedPage('', 1))
+			if (RLProtect::isProtectedPage('', true, array()))
 			{
 				return;
 			}
@@ -44,38 +44,33 @@ class PlgSystemSourcerer extends JPlugin
 		// return if Regular Labs Library plugin is not installed
 		if (!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php'))
 		{
-			if (JFactory::getApplication()->isAdmin() && JFactory::getApplication()->input->get('option') != 'com_login')
+			if (!JFactory::getApplication()->isAdmin() || JFactory::getApplication()->input->get('option') == 'com_login')
 			{
-				$msg = JText::_('SRC_REGULAR_LABS_LIBRARY_NOT_INSTALLED')
-					. ' ' . JText::sprintf('SRC_EXTENSION_CAN_NOT_FUNCTION', JText::_('SOURCERER'));
-				$mq  = JFactory::getApplication()->getMessageQueue();
-				foreach ($mq as $m)
+				return;
+			}
+
+			$msg = JText::_('SRC_REGULAR_LABS_LIBRARY_NOT_INSTALLED')
+				. ' ' . JText::sprintf('SRC_EXTENSION_CAN_NOT_FUNCTION', JText::_('SOURCERER'));
+			$mq  = JFactory::getApplication()->getMessageQueue();
+			foreach ($mq as $m)
+			{
+				if ($m['message'] == $msg)
 				{
-					if ($m['message'] == $msg)
-					{
-						$msg = '';
-						break;
-					}
+					$msg = '';
+					break;
 				}
-				if ($msg)
-				{
-					JFactory::getApplication()->enqueueMessage($msg, 'error');
-				}
+			}
+
+			if ($msg)
+			{
+				JFactory::getApplication()->enqueueMessage($msg, 'error');
 			}
 
 			return;
 		}
 
-		if (JFile::exists(JPATH_LIBRARIES . '/regularlabs/helpers/protect.php'))
-		{
-			require_once JPATH_LIBRARIES . '/regularlabs/helpers/protect.php';
-			// return if current page is an admin page
-			if (RLProtect::isAdmin())
-			{
-				return;
-			}
-		}
-		else if (JFactory::getApplication()->isAdmin())
+		// return if current page is an admin page
+		if ($this->isAdmin())
 		{
 			return;
 		}
@@ -94,7 +89,19 @@ class PlgSystemSourcerer extends JPlugin
 		$class         = get_class($this) . 'Helper';
 		$this->_helper = new $class ($params);
 
-		$this->_pass = 1;
+		$this->_pass = true;
+	}
+
+	private function isAdmin()
+	{
+		if (!JFile::exists(JPATH_LIBRARIES . '/regularlabs/helpers/protect.php'))
+		{
+			return JFactory::getApplication()->isAdmin();
+		}
+
+		require_once JPATH_LIBRARIES . '/regularlabs/helpers/protect.php';
+
+		return RLProtect::isAdmin();
 	}
 
 	public function onContentPrepare($context, &$article)

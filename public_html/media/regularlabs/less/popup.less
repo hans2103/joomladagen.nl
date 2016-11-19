@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.9.23873
+ * @version         16.11.9943
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,6 +15,19 @@ body.reglab-popup {
 	.container-fluid {
 		padding: 0 20px;
 	}
+	.navbar {
+		.btn-toolbar {
+			margin: 2px 0;
+		}
+	}
+	.header {
+		margin-left:  0;
+		margin-right: 0;
+		&.has-navbar-fixed-top {
+			margin-top: 38px;
+			margin-bottom: 10px;
+		}
+	}
 	.subhead {
 		margin-left:   0;
 		margin-right:  0;
@@ -23,10 +36,6 @@ body.reglab-popup {
 	}
 	.page-title {
 		text-align: left;
-	}
-	.header {
-		margin-left:  0;
-		margin-right: 0;
 	}
 	label > span[class^="icon-reglab"] {
 		padding: 1px 0 3px;
