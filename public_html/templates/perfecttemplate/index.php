@@ -20,6 +20,9 @@ PWTTemplateHelper::loadCss();
 PWTTemplateHelper::loadJs();
 PWTTemplateHelper::localstorageFont('PerfectFont');
 
+// Load JLayouts helper
+require_once JPATH_THEMES.'/'.$this->template.'/html/layouts/perfectlayout/render.php';
+
 ?>
 <!DOCTYPE html>
 <html class="html no-js" lang="<?php echo $this->language; ?>" dir="<?php echo $this->direction; ?>">
@@ -60,45 +63,52 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
 	<?php endif; ?>
 <?php endif; ?>
 
-<div class="main" role="main">
-    <main class="main__wrapper">
-		<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
-            <jdoc:include type="message"/>
-		<?php endif; ?>
-
-		<?php if (PWTTemplateHelper::isHome() == true) : ?>
-
-			<?php if ($this->countModules('block-info')) : ?>
-                <div class="block block--info">
+<main class="main" role="main">
+	<?php if (PWTTemplateHelper::isHome() == true) : ?>
+		<?php if ($this->countModules('block-info')) : ?>
+            <div class="block block--info">
+                <div class="block__wrapper">
                     <jdoc:include type="modules" name="block-info" style="tpl"/>
                 </div>
-			<?php endif; ?>
+            </div>
+		<?php endif; ?>
 
-			<?php if ($this->countModules('block-news')) : ?>
-                <div class="block block--news">
+		<?php if ($this->countModules('block-news')) : ?>
+            <div class="block block--news">
+                <div class="block__wrapper">
                     <jdoc:include type="modules" name="block-news" style="tpl"/>
                 </div>
-			<?php endif; ?>
+            </div>
+		<?php endif; ?>
 
-			<?php if ($this->countModules('block-interviews')) : ?>
-                <div class="block block--interviews">
+		<?php if ($this->countModules('block-interviews')) : ?>
+            <div class="block block--interviews">
+                <div class="block__wrapper">
                     <jdoc:include type="modules" name="block-interviews" style="tpl"/>
                 </div>
-			<?php endif; ?>
+            </div>
+		<?php endif; ?>
 
-			<?php if ($this->countModules('block-sponsors')) : ?>
-                <div class="block block--sponsors">
+		<?php if ($this->countModules('block-sponsors')) : ?>
+            <div class="block block--sponsors">
+                <div class="block__wrapper">
                     <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
                 </div>
+            </div>
+		<?php endif; ?>
+
+	<?php endif; ?>
+
+	<?php if (PWTTemplateHelper::isHome() == false) : ?>
+        <div class="main__wrapper">
+			<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
+                <jdoc:include type="message"/>
 			<?php endif; ?>
-
-		<?php endif; ?>
-
-		<?php if (PWTTemplateHelper::isHome() == false) : ?>
             <jdoc:include type="component"/>
-		<?php endif; ?>
-    </main>
-</div>
+        </div>
+	<?php endif; ?>
+
+</main>
 
 <footer class="footer" role="contentinfo">
     <div class="footer__wrapper">

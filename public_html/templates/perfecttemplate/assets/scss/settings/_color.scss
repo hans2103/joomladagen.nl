@@ -25,3 +25,7 @@ $alert-warning: rgb(220, 146, 0);
 
 $type: $jd-gray--dark;
 $action-color: $jd-green;
+
+
+$primary:                   $jd-green;
+$primary-lighter:           lighten($primary, 25%);
