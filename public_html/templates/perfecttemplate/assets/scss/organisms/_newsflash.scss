@@ -1,0 +1,30 @@
+.newsflash {
+
+	@include e('item') {
+		@include outer-container(100%);
+		margin: 1.5 * $base-spacing 0;
+	}
+
+	@include media($charlie) {
+		@include e('image') {
+			@include span-columns(3 of 12);
+			@include shift(1 of 12);
+		}
+
+		@include e('content') {
+			@include span-columns(6 of 12);
+			@include shift(1 of 12);
+		}
+
+		@include e('create') {
+			@include font($font-size--h6);
+		}
+
+		@include e('header') {
+			text-transform: uppercase;
+			a {
+				color: $type;
+			}
+		}
+	}
+}

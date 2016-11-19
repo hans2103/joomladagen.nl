@@ -1,0 +1,72 @@
+.block {
+	@include e('paralax') {
+		position: relative;
+		height: auto;
+		padding: 3 * $base-spacing 0;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+		background-size: cover;
+		&:after {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			z-index: 100;
+			content: ' ';
+		}
+	}
+
+	@include e('wrapper') {
+		@include outer-container;
+		padding: 3 * $base-spacing 0px;
+	}
+
+	@include e('header') {
+		@include m('home') {
+			background-image: url("../images/headers/header_afbeelding_jd17nl.jpg");
+			background-position: 50% 50%;
+
+			> div {
+				.module {
+
+					&:first-child {
+						color: $white;
+					}
+
+					&:last-child {
+						background-color: $white;
+						padding: $base-spacing;
+					}
+
+					@include media ($charlie) {
+						&:first-child {
+							@include span-columns(5 of 12);
+							@include shift(1 of 12);
+						}
+						&:last-child {
+							@include span-columns(4 of 12);
+							@include shift(1 of 12);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@include m('news') {
+		background-color: $jd-gray--light;
+
+		.module {
+			@include e('header') {
+				text-transform: uppercase;
+				text-align: center;
+				margin-bottom: 3 * $base-spacing;
+				p {
+					margin: 0;
+				}
+			}
+		}
+	}
+}

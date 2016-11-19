@@ -13,7 +13,7 @@ Styleguide 4.0
 */
 
 //@import "organisms/alphabetical";
-//@import "organisms/blocks";
+@import "organisms/blocks";
 //@import "organisms/card";
 @import "organisms/conference";
 //@import "organisms/currentweek";
@@ -22,8 +22,8 @@ Styleguide 4.0
 //@import "organisms/frontdoor";
 //@import "organisms/item";
 @import "organisms/layout";
-//@import "organisms/modules";
 @import "organisms/navigation";
+@import "organisms/newsflash";
 //@import "organisms/person";
 //@import "organisms/profile-edit";
 //@import "organisms/rsforms";
