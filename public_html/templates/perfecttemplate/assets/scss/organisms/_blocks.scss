@@ -6,7 +6,6 @@
 		background-position: 50% 50%;
 		background-repeat: no-repeat;
 		background-attachment: fixed;
-		background-size: cover;
 		&:after {
 			position: absolute;
 			left: 0;
@@ -30,7 +29,7 @@
 	@include e('header') {
 		@include m('home') {
 			background-image: url("../images/headers/header_afbeelding_jd17nl.jpg");
-			background-position: 50% 50%;
+			background-position: 50% 0;
 
 			> div {
 				.module {
