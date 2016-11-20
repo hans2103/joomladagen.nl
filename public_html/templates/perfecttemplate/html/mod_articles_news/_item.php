@@ -67,3 +67,4 @@ $images       = json_decode($item->images);
 	echo '</div>';
 	?>
 </div>
+
