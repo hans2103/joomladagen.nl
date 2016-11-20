@@ -20,7 +20,11 @@
 
 	@include e('wrapper') {
 		@include outer-container;
-		padding: 3 * $base-spacing 0px;
+		padding: 3 * $base-spacing $base-spacing;
+
+		@include media($charlie) {
+			padding: 3 * $base-spacing 0;
+		}
 	}
 
 	@include e('header') {
@@ -38,6 +42,10 @@
 					&:last-child {
 						background-color: $white;
 						padding: $base-spacing;
+						.module__title {
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
 					}
 
 					@include media ($charlie) {
@@ -69,4 +77,11 @@
 			}
 		}
 	}
+
+	@include m('interviews') {
+		.block__wrapper {
+			padding-bottom: 0;
+		}
+	}
+
 }

@@ -7,6 +7,7 @@ function modChrome_tpl($module, &$params, &$attribs)
     $moduleTag = $params->get('module_tag', 'div');
     $headerTag = htmlspecialchars($params->get('header_tag', 'h3'));
     $moduleClass = '';
+    $moduleClassSfx = htmlspecialchars($params->get('moduleclass_sfx', ''));
 
     if ( isset($attribs['class'])) {
         $moduleClass = $attribs['class'] . ' ';
@@ -14,7 +15,7 @@ function modChrome_tpl($module, &$params, &$attribs)
 
     if ($module->content)
     {
-        echo '<' . $moduleTag . ' class="' . $moduleClass . htmlspecialchars($params->get('moduleclass_sfx')) . ' module">';
+        echo '<' . $moduleTag . ' class="' . $moduleClass . $moduleClassSfx . ' module">';
 
         if ($module->showtitle)
         {

@@ -1,0 +1,27 @@
+.bannergroup {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	@include justify-content(center);
+}
+
+.banneritem {
+	@include flex-grow(0);
+	@include flex-shrink(1);
+
+	a {
+		display: block;
+		padding: 2/3 * $base-spacing;
+	}
+
+	.module__sponsor--diamant & {
+		@include flex-basis(320px);
+	}
+
+	.module__sponsor--goud & {
+		@include flex-basis(250px);
+	}
+
+	.module__sponsor--zilver & {
+		@include flex-basis(180px);
+	}
+}

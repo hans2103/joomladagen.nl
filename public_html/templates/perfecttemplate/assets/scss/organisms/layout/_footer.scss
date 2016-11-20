@@ -15,10 +15,11 @@
 	@include e('wrapper') {
 		@include outer-container;
 
-		padding-top: 2 * $base-spacing;
-		padding-bottom: 2 * $base-spacing;
+		padding: 2 * $base-spacing 2/3 * $base-spacing;
 
 		@include media($charlie) {
+			padding: 2 * $base-spacing 0;
+
 			@include m('about') {
 				@include span-columns(12 of 12);
 			}

@@ -38,3 +38,11 @@
 
 #{$all-buttons--ghost-active} {
 }
+
+.btn--ghost--inverse {
+	@extend .btn--ghost;
+	color: $jd-gray--dark;
+	border-color: $jd-gray--dark;
+	padding: 1/2 * 2/3 * $base-spacing;
+}
+
