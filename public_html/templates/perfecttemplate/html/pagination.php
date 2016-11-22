@@ -94,28 +94,28 @@ function pagination_item_active(&$item)
 	// Check for "Start" item
 	if ($item->text == JText::_('JLIB_HTML_START'))
 	{
-		$display = '<span>Start</span>';
+		$display = '<span>' . JText::_('JLIB_HTML_START') . '</span>';
         $class   = 'pagination__item pagination--first';
 	}
 
 	// Check for "Prev" item
 	if ($item->text == JText::_('JPREV'))
 	{
-		$display = '<span>Vorige</span>';
+		$display = '<span>' . JText::_('JPREV') . '</span>';
         $class   = 'pagination__item pagination--prev';
 	}
 
 	// Check for "Next" item
 	if ($item->text == JText::_('JNEXT'))
 	{
-		$display = '<span>Volgende</span>';
+		$display = '<span>' . JText::_('JNEXT') . '</span>';
         $class   = 'pagination__item pagination--next';
 	}
 
 	// Check for "End" item
 	if ($item->text == JText::_('JLIB_HTML_END'))
 	{
-		$display = '<span>Eind</span>';
+		$display = '<span>' . JText::_('JLIB_HTML_END') . '</span>';
         $class   = 'pagination__item pagination--last';
 	}
 
@@ -143,25 +143,25 @@ function pagination_item_inactive(&$item)
 	// Check for "Start" item
 	if ($item->text == JText::_('JLIB_HTML_START'))
 	{
-		return '<li class="pagination__item pagination--first pagination__item--inactive"><span class="pagination__item__content"><span>Start</span></span></li>';
+		return '<li class="pagination__item pagination--first pagination__item--inactive"><span class="pagination__item__content"><span>' . JText::_('JLIB_HTML_START') . '</span></span></li>';
 	}
 
 	// Check for "Prev" item
 	if ($item->text == JText::_('JPREV'))
 	{
-		return '<li class="pagination__item pagination--prev pagination__item--inactive"><span class="pagination__item__content"><span>Vorige</span></span></li>';
+		return '<li class="pagination__item pagination--prev pagination__item--inactive"><span class="pagination__item__content"><span>' . JText::_('JPREV') . '</span></span></li>';
 	}
 
 	// Check for "Next" item
 	if ($item->text == JText::_('JNEXT'))
 	{
-		return '<li class="pagination__item pagination--next pagination__item--inactive"><span class="pagination__item__content"><span>Volgende</span></span></li>';
+		return '<li class="pagination__item pagination--next pagination__item--inactive"><span class="pagination__item__content"><span>' . JText::_('JNEXT') . '</span></span></li>';
 	}
 
 	// Check for "End" item
 	if ($item->text == JText::_('JLIB_HTML_END'))
 	{
-		return '<li class="pagination__item pagination--last pagination__item--inactive"><span class="pagination__item__content"><span>Eind</span></span></li>';
+		return '<li class="pagination__item pagination--last pagination__item--inactive"><span class="pagination__item__content"><span>' . JText::_('JLIB_HTML_END') . '</span></span></li>';
 	}
 
 	// Check if the item is the active page

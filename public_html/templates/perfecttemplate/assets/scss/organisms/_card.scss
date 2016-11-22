@@ -1,0 +1,157 @@
+.blog {
+	.cards {
+		@include outer-container(100%);
+	}
+
+	.card {
+		@include clearfix;
+
+		&:hover {
+			background-color: $jd-blue;
+		}
+
+		@include e('image') {
+			img {
+				border: 1px solid $jd-gray;
+			}
+
+			@include m('noborder') {
+				img {
+					border: 0;
+				}
+			}
+		}
+
+		@include e('content') {
+			position: relative;
+		}
+
+		@include media($charlie) {
+			@include e('image') {
+				@include span-columns(2 of 8);
+			}
+
+			@include e('content') {
+				@include span-columns(6 of 8);
+			}
+		}
+
+		@include e('create') {
+			@include create;
+		}
+
+		@include e('body') {
+			a {
+				@include anchor($jd-blue, $jd-blue--dark, true, true);
+			}
+		}
+
+		@include media(max-width $charlie) {
+			.card--body,
+			.card--actions {
+				display: none;
+			}
+		}
+	}
+}
+
+.card {
+	padding: $base-spacing 0;
+	@include e('header') {
+		position: relative;
+		padding-right: 3 * $base-spacing;
+		h2 {
+			@include font($font-size--h2, $bold, $line-height--header, $font-family);
+
+			a {
+				@include anchor($jd-gray--dark, $black, false);
+			}
+		}
+
+		@include m('unread') {
+			background-color: $jd-gray;
+			color: $white;
+			text-transform: lowercase;
+			padding: 0 $base-spacing * 0.125;
+			@include font($font-size--h4, $normal, $line-height, $font-family);
+		}
+
+	}
+
+	& + & {
+		border-top: 1px solid $jd-gray;
+	}
+
+	@include m('read') {
+		.card {
+			@include e('image') {
+				a {
+
+					position: relative;
+					display: block;
+					&:before {
+						content: "";
+						display: block;
+						height: 100%;
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						background-color: rgba(255, 255, 255, .3);
+					}
+				}
+			}
+			@include e('header') {
+				h2 {
+					a {
+						@include anchor($jd-gray, $jd-gray--dark, false);
+					}
+				}
+			}
+			@include e('body') {
+				color: $jd-gray;
+			}
+		}
+	}
+}
+
+
+.card-links {
+	margin: $base-spacing 0;
+
+	@include e('item') {
+		@include outer-container(100%);
+		@include display(flex);
+		@include justify-content(space-between);
+		@include flex-wrap(wrap);
+		border-top: 1px solid $jd-gray;
+		padding: 0 0.5 * $base-spacing;
+
+		&:hover {
+			background-color: $jd-blue;
+		}
+	}
+
+	@include e('link') {
+		@include flex-basis(percentage(8/8));
+		@include font($font-size--h3, $bold, $line-height--header, $font-family);
+		@include anchor;
+	}
+
+	@include e('create') {
+		@include flex-basis(percentage(8/8));
+		@include font($font-size--h5, $normal, $line-height--header, $font-family);
+		color: $jd-blue;
+	}
+
+	@include media($charlie) {
+		@include e('link') {
+			@include flex-basis(percentage(6/8));
+		}
+
+		@include e('create') {
+			@include flex-basis(percentage(2/8));
+			text-align: right;
+		}
+	}
+}
