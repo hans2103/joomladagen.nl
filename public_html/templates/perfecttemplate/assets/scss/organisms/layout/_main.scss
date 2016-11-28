@@ -4,4 +4,13 @@
 	@include e('wrapper') {
 		@include outer-container;
 	}
+
+	@include e('content') {
+		@include span-columns(12 of 12);
+
+		@include media($charlie){
+			@include span-columns(10 of 12)
+			@include shift(1 of 12);
+		}
+	}
 }

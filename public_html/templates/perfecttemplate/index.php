@@ -21,7 +21,7 @@ PWTTemplateHelper::loadJs();
 PWTTemplateHelper::localstorageFont('PerfectFont');
 
 // Load JLayouts helper
-require_once JPATH_THEMES.'/'.$this->template.'/html/layouts/perfectlayout/render.php';
+require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout/render.php';
 
 ?>
 <!DOCTYPE html>
@@ -100,11 +100,18 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
 	<?php endif; ?>
 
 	<?php if (PWTTemplateHelper::isHome() == false) : ?>
+        <div class="main__title title">
+            <div class="title__wrapper">
+                <h1 class="title__text">Title</h1>
+            </div>
+        </div>
         <div class="main__wrapper">
-			<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
-                <jdoc:include type="message"/>
-			<?php endif; ?>
-            <jdoc:include type="component"/>
+            <div class="main__content">
+				<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>
+                    <jdoc:include type="message"/>
+				<?php endif; ?>
+                <jdoc:include type="component"/>
+            </div>
         </div>
 	<?php endif; ?>
 

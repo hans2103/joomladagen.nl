@@ -1,0 +1,25 @@
+.title {
+	@include background-image(url('../images/headers/header-background-pattern.png'));
+	background-position: center top, top left;
+	background-repeat: repeat;
+	height: 170px;
+
+	@include e('wrapper') {
+		@include outer-container;
+		position: relative;
+	}
+
+	@include e('text') {
+		@include span-columns(12);
+		@include font($font-size--h1, $bold, 1.5 * $font-size--h1);
+		color: $white;
+		text-align: center;
+		margin: $base-spacing 0;
+
+		@include media($charlie) {
+			@include span-columns(10);
+			@include shift(1);
+			@include omega;
+		}
+	}
+}
