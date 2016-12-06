@@ -74,6 +74,41 @@
 		}
 	}
 
+	@include m('info') {
+		@include outer-container;
+
+		.module {
+			@include span-columns(12 of 12);
+
+			@include media ($charlie) {
+				@include span-columns(8 of 12);
+				@include shift(2 of 12);
+			}
+		}
+
+		.custom {
+			@include outer-container(100%);
+
+			.block__figure {
+				@include reset;
+				@include span-columns(12 of 12);
+
+				@include media ($charlie) {
+					@include span-columns(4 of 12);
+				}
+			}
+
+			.block__content {
+				@include span-columns(12 of 12);
+
+				@include media ($charlie) {
+					@include span-columns(7 of 12);
+					@include shift(1 of 12);
+				}
+			}
+		}
+	}
+
 	@include m('news') {
 		background-color: $jd-gray--light;
 
