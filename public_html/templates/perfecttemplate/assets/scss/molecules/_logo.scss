@@ -4,4 +4,7 @@
 	@include m('brand') {
 		font-weight: $bold;
 	}
+	@include icon-before(joomladagen_logo, true) {
+
+	}
 }

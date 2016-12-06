@@ -17,6 +17,16 @@
 			z-index: 100;
 			content: ' ';
 		}
+
+		@include m('first') {
+			position: relative;
+			padding-top: 75px;
+		}
+
+		@include e('figure') {
+			@include position(absolute, -75px null null null);
+			@include size(100px);
+		}
 	}
 
 	@include e('wrapper') {

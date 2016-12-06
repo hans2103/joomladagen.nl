@@ -15,14 +15,16 @@ $this->loadHelper('schedule');
 ?>
 
 <div class="conference schedule">
+	<?php if ($this->params->get('show_page_heading',0)) : ?>
     <div class="row-fluid">
         <h1><?php echo JText::_('COM_CONFERENCE_DAYS_TITLE') ?></h1>
     </div>
+	<?php endif; ?>
 
     <ul class="accordion-tabs-minimal">
 		<?php if (!empty($this->items)) foreach ($this->items as $i => $item): ?>
             <li class="tab-header-and-content tab-header-and-content--<?php echo $item->slug ?>">
-                <a href="#" class="tab-link<?php if ($i == 1): ?> is-active<?php endif; ?>"><?php echo $item->title ?></a>
+                <a href="#" class="tab-link<?php /*if ($i == 1): ?> is-active<?php endif;*/ ?>"><?php echo $item->title ?></a>
                 <div class="tab-content">
 					<?php
 					$slots = ConferenceHelperSchedule::slots($item->conference_day_id);
