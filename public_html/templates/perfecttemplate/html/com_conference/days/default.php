@@ -15,9 +15,11 @@ $this->loadHelper('schedule');
 ?>
 
 <div class="conference schedule">
+	<?php if ($this->params->get('show_page_heading',0)) : ?>
     <div class="row-fluid">
         <h1><?php echo JText::_('COM_CONFERENCE_DAYS_TITLE') ?></h1>
     </div>
+	<?php endif; ?>
 
     <ul class="accordion-tabs-minimal">
 		<?php if (!empty($this->items)) foreach ($this->items as $i => $item): ?>

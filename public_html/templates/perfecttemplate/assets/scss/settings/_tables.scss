@@ -1,0 +1,21 @@
+$border-width: 1px !default;
+
+// 11. Tables
+//
+// Customizes the `.table` component with basic values, each used across all table variations.
+
+$table-cell-padding:            .75rem !default;
+$table-sm-cell-padding:         .3rem !default;
+
+$table-bg:                      transparent !default;
+$table-bg-inverse:              $jd-gray--dark !default;
+
+$table-bg-accent:               rgba(0,0,0,.05) !default;
+$table-bg-hover:                rgba(0,0,0,.075) !default;
+$table-bg-active:               $table-bg-hover !default;
+
+$table-head-bg:                 $jd-gray--light !default;
+$table-head-color:              $jd-gray !default;
+
+$table-border-width:            $border-width !default;
+$table-border-color:            $jd-gray--light !default;
