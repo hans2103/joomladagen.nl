@@ -24,7 +24,7 @@ $this->loadHelper('schedule');
     <ul class="accordion-tabs-minimal">
 		<?php if (!empty($this->items)) foreach ($this->items as $i => $item): ?>
             <li class="tab-header-and-content tab-header-and-content--<?php echo $item->slug ?>">
-                <a href="#" class="tab-link<?php if ($i == 1): ?> is-active<?php endif; ?>"><?php echo $item->title ?></a>
+                <a href="#" class="tab-link<?php /*if ($i == 1): ?> is-active<?php endif;*/ ?>"><?php echo $item->title ?></a>
                 <div class="tab-content">
 					<?php
 					$slots = ConferenceHelperSchedule::slots($item->conference_day_id);
