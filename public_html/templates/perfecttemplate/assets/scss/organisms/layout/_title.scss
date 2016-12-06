@@ -1,8 +1,9 @@
 .title {
-	@include background-image(url('../images/headers/header-background-pattern.png'));
+	background-color: $jd-blue--dark;
+	@include background-image(url('../images/headers/headerbeeld_laag.png'));
 	background-position: center top, top left;
-	background-repeat: repeat;
-	height: 170px;
+	background-repeat: no-repeat;
+	height: 216px;
 
 	@include e('wrapper') {
 		@include outer-container;
