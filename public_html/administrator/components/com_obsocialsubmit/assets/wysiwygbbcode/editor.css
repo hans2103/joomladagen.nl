@@ -1,0 +1,56 @@
+﻿.editorWYSIWYG {font: 10pt Arial;border:none;}
+.editorBBCODE {font: 9pt "Courier New";}
+
+div.richeditor div.editbar {
+	background: white;
+	border-left:1px solid silver;
+	border-right:1px solid silver;
+	border-top:1px solid silver;
+	border-bottom:1px solid silver;
+}
+
+div.richeditor div span{ 
+	margin: 5px;
+}
+
+div.richeditor div button{ 
+	vertical-align:middle;
+	height:25px;
+	//border:1px solid transparent;
+	//background-color:Transparent;
+	cursor:pointer;
+	color:Black;
+	background-position:center;
+	background-repeat:no-repeat;
+	background-image:none;
+	margin-right: 5px;
+}
+
+div.richeditor div button:hover{border:1px solid silver;}
+div.richeditor div.editor_container {padding:4px; background:white;border-top:none;border-bottom:1px solid silver;border-left:1px solid silver;border-right:1px solid silver;}
+div.richeditor textarea{padding:0px 0px 0px 0px;border:none;display:block; min-height:100px ;width:100%!important; margin:0!important;}
+div.richeditor iframe{background-color:#ffffff;border:none;display:block; width:100%!important;}
+
+
+.obss-insert-tag-btn-wrap, .obss-insert-tag-btn-wrap-active {
+	display: inline-block;
+	position: relative;
+	overflow: visible;
+	float: right;
+}
+
+.obss-tags-container {
+	position: absolute;
+	width: 300px;
+	background: #FCF8E6;
+}
+
+.obss-insert-tag-btn-wrap .obss-tags-container{
+	left: -999px;
+	visibility: hidden;
+}
+
+.obss-insert-tag-btn-wrap-active .obss-tags-container{
+	left: 0px;
+	visibility: visible;;
+}

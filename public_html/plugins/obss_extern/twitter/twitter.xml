@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="obss_extern" method="upgrade">
+	<name>Twitter</name>
+	<author>Phong Lo - foobla.com</author>
+	<creationDate>Dec 2013</creationDate>
+	<copyright>(C) 2007-2013 foobla.com. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
+	<authorEmail>phonglq@foobla.com</authorEmail>
+	<authorUrl>www.foobla.com</authorUrl>
+	<version>3.2</version>
+	<description>PLG_OBSS_EXTERN_TWITTER_XML_DESC</description>
+	<help>PLG_OBSS_EXTERN_TWITTER_XML_HELP</help>
+	<files>
+		<filename plugin="twitter">twitter.php</filename>
+		<filename plugin="twitter">twitter.xml</filename>
+		<filename>twitter.png</filename>
+		<filename>CHANGELOG</filename>
+		<filename>LICENSE</filename>
+		<filename>README</filename>
+		<filename>index.html</filename>
+		<folder>assets</folder>
+		<folder>elements</folder>
+		<folder>helpers</folder>
+		<folder>language</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_obss_extern_twitter.ini</language>
+	</languages>
+	<config>
+		<fields name="params" addfieldpath="/plugins/obss_extern/twitter/elements/">
+			<fieldset name="basic">
+				<field name="twitteroauth"
+					   type="twitteroauth"
+					   default=""
+					   label=""
+					   description="" />
+				<field name="consumer_key"
+					   type="text"
+					   class="input-block-level"
+					   default="ZgO1k57cxgodmNFa8Vkfg"
+					   label="COM_OBSOCIALSUBMIT_ADDON_TWITTER_CONSUMER_KEY"
+					   description="COM_OBSOCIALSUBMIT_ADDON_TWITTER_CONSUMER_KEY_DESC"
+					   required="true"/>
+				<field name="consumer_secret"
+					   type="text"
+					   class="input-block-level"
+					   default="HVchVmadIZcZnxZdOTr1S2gkwDdk64XzY3DxWMg9Xg"
+					   label="COM_OBSOCIALSUBMIT_ADDON_TWITTER_CONSUMER_SECRET"
+					   description="COM_OBSOCIALSUBMIT_ADDON_TWITTER_CONSUMER_KEY_DESC"
+					   required="true"/>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="oauth_token"
+					   type="text"
+					   class="input-block-level"
+					   default=""
+					   label="COM_OBSOCIALSUBMIT_ADDON_TWITTER_ACCESS_TOKEN"
+					   description="" />
+				<field name="oauth_token_secret"
+					   type="text"
+					   class="input-block-level"
+					   default=""
+					   label="COM_OBSOCIALSUBMIT_ADDON_TWITTER_ACCESS_TOKEN_SECRET"
+					   description="" />
+				<field name="debug" type="radio"
+					class="btn-group"
+					default="0"
+					label="COM_OBSOCIALSUBMIT_ADDON_TWITTER_DEBUG_LABEL"
+					description="COM_OBSOCIALSUBMIT_ADDON_TWITTER_DEBUG_DESC"
+					size="1">
+					<option value="1">JON</option>
+					<option value="0">JOFF</option>
+				</field>
+				<field name="upload_img" type="radio"
+					class="btn-group"
+					default="0"
+					description="PLG_OBSS_EXTERN_TWITTER_FIELD_UPLOAD_IMAGES_DESC"
+					label="PLG_OBSS_EXTERN_TWITTER_FIELD_UPLOAD_IMAGES_LABEL"
+					size="1">
+					<option value="1">JON</option>
+					<option value="0">JOFF</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

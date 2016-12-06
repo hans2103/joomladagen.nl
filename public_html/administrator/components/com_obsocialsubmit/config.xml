@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<config>
+
+	<fieldset name="Shortern_URL_service" label="OBSS_CONFIG_SHORTEN_URL_SERVICE" description="OBSS_CONFIG_SHORTEN_URL_SERVICE_DESC" addfieldpath="/administrator/components/com_obsocialsubmit/elements">
+
+		<field type="list" name="shorturl" default="goo" label="OBSS_CONFIG_SHORTEN_URL_SERVICE" description="OBSS_CONFIG_SHORTEN_URL_SERVICE_DESC" >
+
+			<option value="yourls">YOURLS</option>
+
+			<option value="bitly">bit.ly</option>
+
+			<option value="shurl">shURL</option>
+
+			<option value="goo">goo.gl</option>
+
+		</field>
+
+		<field type="text" name="yourls_api_url" size="75" label="OBSS_CONFIG_YOURLS_API_URL" description="OBSS_CONFIG_YOURLS_API_URL_DESC" />
+
+		<field type="text" name="yourls_api_signature" size="75" label="OBSS_CONFIG_YOURLS_SIGN" description="OBSS_CONFIG_YOURLS_SIGN_DESC" />
+
+		<field type="text" name="yourls_username" size="35" label="OBSS_CONFIG_YOURLS_USER" description="" />
+
+		<field type="password" name="yourls_password" size="35" label="OBSS_CONFIG_YOURLS_PASS" description="" />
+
+		<field type="text" name="bitly_login" size="35" label="OBSS_CONFIG_BITLY_LOGIN" description="" />
+
+		<field type="text" name="bitly_api_key" size="75" label="OBSS_CONFIG_BITLY_API_KEY" description="" />
+
+        <field type="text" name="googl_api_key" size="75" label="OBSS_CONFIG_GOOGL_API_KEY" description="OBSS_CONFIG_GOOGL_API_KEY_DESC" />
+
+	</fieldset>
+
+<!--
+	<fieldset name="Guideline" label="OBSS_CONFIGURE_GUIDELINE" description="OBSS_CONFIGURE_GUIDELINE_DESC">
+
+		<field type="list" name="guideline" class="ob_switch" default="1" label="OBSS_CONFIGURE_GUIDELINE" description="" >
+
+			<option value="0">OBSS_HIDE</option>
+
+			<option value="1">OBSS_SHOW</option>
+
+		</field>
+
+	</fieldset>
+-->
+	<fieldset name="CronJob" label="OBSS_CONFIG_CRONJOB" description="OBSS_CONFIGURE_CRONJOB_DESC">
+
+		<field type="list" name="cronjob" class="ob_switch" label="OBSS_CONFIGURE_CRONJOB" description="OBSS_CONFIG_CRONJOB_DESC" default="1">
+
+			<option value="0">JNO</option>
+
+			<option value="1">JYES</option>
+
+		</field>
+
+		<field name="js_cronjob" type="list"
+
+			description="Auto call cronjob Javascript "
+
+			label="JS Cronjob"
+
+			default="0">
+
+			<option value="0">JNo</option>
+
+			<option value="1">JYes</option>
+
+		</field>
+
+		<field type="textarea" name="allow_ips" size="75" label="Allow IPs" description="Input list of IP addresses which will be allow running cronjob. You could check your IP at http://ipaddress.com/. The list has format: IP1,IP2,IP3..." />
+
+		<field type="list" name="cronitems" label="OBSS_CONFIG_CRONITEMS" description="OBSS_CONFIG_CRONITEMS_DESC" default="1">
+
+			<option value="1">1</option>
+
+			<option value="2">2</option>
+
+			<option value="3">3</option>
+
+			<option value="4">4</option>
+
+			<option value="5">5</option>
+
+		</field>
+
+		<field type="text" name="logtime" default="30" label="OBSS_CONFIG_LOGTIME" description="OBSS_CONFIG_LOGTIME_DESC" />
+
+	</fieldset>
+
+	<fieldset name="obss_adapter" label="OBSS_CONFIG_ADAPTER" description="OBSS_CONFIG_ADAPTER_DESC" addfieldpath="/administrator/components/com_obsocialsubmit/elements">
+
+		<field type="list" name="republished" default="0" label="OBSS_CONFIG_REPUBLISHED" description="OBSS_CONFIG_REPUBLISHED_DESC" >
+
+			<option value="0">No</option>
+
+			<option value="1">Yes</option>
+
+		</field>
+
+		<field type="hidden" name="extern_status" default=""/>
+
+	</fieldset>
+
+</config>

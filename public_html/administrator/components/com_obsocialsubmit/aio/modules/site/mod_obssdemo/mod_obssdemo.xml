@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1" client="site" method="upgrade">
+	<name>mod_obssdemo</name>
+	<author>Tung Pham - foobla.com</author>
+	<creationDate>Apr 2014</creationDate>
+	<copyright>(C) 2007 - 2014 Open Source Matters. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>tung@foobla.com</authorEmail>
+	<authorUrl>www.foobla.com</authorUrl>
+	<version>1.0</version>
+	<description>MOD_OBSSDEMO_XML_DESCRIPTION</description>
+	<files>
+		<folder>tmpl</folder>
+		<filename module="mod_obssdemo">mod_obssdemo.php</filename>
+		<filename>index.html</filename>
+		<filename>mod_obssdemo.xml</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">language/en-GB/en-GB.mod_obssdemo.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.mod_obssdemo.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+					name="use_awesome"
+					type="radio"
+					default="1"
+					class="btn-group btn-group-yesno"
+					label="MOD_OBSSDEMO_FONT_AWESOME_LABEL"
+					description="MOD_OBSSDEMO_FONT_AWESOME_DESCRIPTION">
+					<option
+						value="1">JYES
+					</option>
+					<option
+						value="0">JNO
+					</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field
+					name="button_class"
+					type="text"
+					default="center"
+					label="MOD_OBSSDEMO_BUTTON_CLASS_LABEL"
+					description="MOD_OBSSDEMO_BUTTON_CLASS_DESC"/>
+				<field
+					name="layout"
+					type="modulelayout"
+					label="JFIELD_ALT_LAYOUT_LABEL"
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+				<field
+					name="moduleclass_sfx"
+					type="textarea" rows="3"
+					default=""
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

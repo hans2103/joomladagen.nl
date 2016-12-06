@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+	<name>obSocialSubmit</name>
+	<author>foobla</author>
+	<creationDate>Feb 2014</creationDate>
+	<copyright>2007-2016 foobla.com. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see	LICENSE.txt</license>
+	<authorEmail>info@foobla.com</authorEmail>
+	<authorUrl>www.foobla.com</authorUrl>
+	<version>3.5.16</version>
+	<description>COM_OBSOCIALSUBMIT_XML_DESCRIPTION</description>
+	<scriptfile>script.php</scriptfile>
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+    <updateservers>
+        <server type="extension" priority="1" name="obSocialSubmit Updates">http://foobla.com/updates/obsocialsubmit.xml</server>
+    </updateservers>
+	<administration>
+		<menu img="components/com_obsocialsubmit/assets/images/icons/social_14.png">COM_OBSOCIALSUBMIT</menu>
+		<submenu>
+			<menu link="option=com_obsocialsubmit&amp;view=connections" view="connections" img="class:obsocialsubmit-connections" 
+				alt="obSocialSubmit/Connections">COM_OBSOCIALSUBMIT_SUBMENU_CONNECTIONS</menu>
+			<menu link="option=com_obsocialsubmit&amp;view=logs" view="logs" img="class:obsocialsubmit-logs" 
+				alt="obSocialSubmit/Logs">COM_OBSOCIALSUBMIT_SUBMENU_MANAGER_LOGS</menu>
+			<menu link="option=com_obsocialsubmit&amp;view=plugins" view="plugins" img="class:obsocialsubmit-plugins"
+				  alt="obSocialSubmit/Adapters">COM_OBSOCIALSUBMIT_SUBMENU_MANAGER_PLUGINS</menu>
+		</submenu>
+		<files folder="admin">
+			<folder>aio</folder>
+			<folder>assets</folder>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>obsocialsubmit.php</filename>
+			<filename>CHANGELOG</filename>
+			<filename>LICENSE</filename>
+			<filename>README</filename>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB/en-GB.com_obsocialsubmit.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_obsocialsubmit.sys.ini</language>
+		</languages>
+	</administration>
+</extension>
