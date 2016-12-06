@@ -100,11 +100,9 @@ if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
 	<?php endif; ?>
 
 	<?php if (PWTTemplateHelper::isHome() == false) : ?>
-        <div class="main__title title">
-            <div class="title__wrapper">
-                <h1 class="title__text">Title</h1>
-            </div>
-        </div>
+
+        <?php echo PWTTemplateHelper::renderHelixTitle(); ?>
+
         <div class="main__wrapper">
             <div class="main__content">
 				<?php if (count(JFactory::getApplication()->getMessageQueue())) : ?>

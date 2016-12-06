@@ -360,7 +360,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 	 * @return array
 	 * @since  PerfectSite2.1.0
 	 */
-	static public function getAnalytics($analytics = NULL, $analyticsId = NULL)
+	static public function getAnalytics($analytics = null, $analyticsId = null)
 	{
 		$doc = JFactory::getDocument();
 
@@ -421,6 +421,72 @@ mixpanel.init(\"" . $analyticsId . "\");<!-- end Mixpanel -->
 				}
 				break;
 		}
+	}
+
+	static public function renderHelixTitle()
+	{
+
+		$menuitem = JFactory::getApplication()->getMenu()->getActive(); // get the active item
+
+		if (!$menuitem)
+		{
+			return false;
+		}
+
+		$params = $menuitem->params; // get the menu params
+
+		if (!$params->get('enable_page_title', 0))
+		{
+			return false;
+		}
+
+		$page_title          = $menuitem->title;
+		$page_title_alt      = $params->get('page_title_alt');
+		$page_subtitle       = $params->get('page_subtitle');
+		$page_title_bg_color = $params->get('page_title_bg_color');
+		$page_title_bg_image = $params->get('page_title_bg_image');
+
+		$style = '';
+
+		if ($page_title_bg_color)
+		{
+			$style .= 'background-color: ' . $page_title_bg_color . ';';
+		}
+
+		if ($page_title_bg_image)
+		{
+			$style .= 'background-image: url(' . JURI::root(true) . '/' . $page_title_bg_image . ');';
+		}
+
+		if ($style)
+		{
+			$style = 'style="' . $style . '"';
+		}
+
+		if ($page_title_alt)
+		{
+			$page_title = $page_title_alt;
+		}
+
+		$output = '';
+
+		$output .= '<div class="main__title title"' . $style . '>';
+		$output .= '    <div class="title__wrapper">';
+
+		$output .= '        <h1 class="title__text">' . $page_title . '</h1>';
+
+		if ($page_subtitle)
+		{
+			$output .= '		<h2>' . $page_subtitle . '</h2>';
+		}
+
+		$output .= '    </div>';
+		$output .= '</div>';
+
+		$output .= '<jdoc:include type="modules" name="breadcrumb" style="none" />';
+
+		return $output;
+
 	}
 
 }
