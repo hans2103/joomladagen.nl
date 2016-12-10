@@ -6,19 +6,15 @@
 	.card {
 		@include clearfix;
 
-		&:hover {
-			background-color: $jd-blue;
-		}
+		//&:hover {
+		//	background-color: $jd-blue;
+		//}
 
 		@include e('image') {
-			img {
-				border: 1px solid $jd-gray;
-			}
 
-			@include m('noborder') {
-				img {
-					border: 0;
-				}
+			@include m('border') {
+				border: 1px solid $jd-gray;
+				padding: 2 * $base-spacing 0;
 			}
 		}
 
@@ -114,7 +110,6 @@
 		}
 	}
 }
-
 
 .card-links {
 	margin: $base-spacing 0;
