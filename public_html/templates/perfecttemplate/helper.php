@@ -368,7 +368,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 		{
 			case 0:
 				break;
-			case 'GA':
+			case 1:
 				// Universal Google Universal Analytics - loaded in head
 				if ($analyticsId)
 				{
@@ -385,7 +385,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 					$doc->addScriptDeclaration($analyticsScript);
 				}
 				break;
-			case 'GTM':
+			case 2:
 				// Google Tag Manager - party loaded in head
 				if ($analyticsId)
 				{
@@ -407,7 +407,7 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 					return array('script' => $analyticsScript, 'position' => 'after_body_start');
 				}
 				break;
-			case 'Mix':
+			case 3:
 				// Mixpanel.com - loaded in head
 				if ($analyticsId)
 				{
