@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="images">
+        <field
+                name="showfulltextimage"
+                type="radio"
+                class="btn-group btn-group-yesno"
+                label="PLG_SYSTEM_PERFECTARTICLEOPTIONS_SHOWFULLTEXTIMAGE_LABEL"
+                description="PLG_SYSTEM_PERFECTARTICLEOPTIONS_SHOWFULLTEXTIMAGE_DESC"
+                default="1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+    </fields>
+</form>
