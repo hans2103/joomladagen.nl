@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="obss_intern" method="upgrade">
+	<name>Content</name>
+	<author>Phong Lo - foobla.com</author>
+	<creationDate>Dec 2013</creationDate>
+	<copyright>(C) 2007-2013 foobla.com. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE</license>
+	<authorEmail>phonglq@foobla.com</authorEmail>
+	<authorUrl>www.foobla.com</authorUrl>
+	<version>3.0.4</version>
+	<description>PLG_OBSS_INTERN_CONTENT_XML_DESC</description>
+	<files>
+		<filename plugin="content">content.php</filename>
+		<filename>index.html</filename>
+		<filename>content.xml</filename>
+		<filename>content.png</filename>
+		<folder>fields</folder>
+		<folder>language</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_obss_intern_content.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field addfieldpath="administrator/components/com_obsocialsubmit/models/forms/fields/" 
+					name="template"
+					type="obsstextarea" 
+					class="format_post input-block-level" 
+					cols="50" rows="3" 
+					default="New article: [title] read more at here [shorturl]" 
+					layout="0"
+					label="PLG_OBSS_INTERN_CONTENT_TEMPLATE_LABEL" 
+					description="PLG_OBSS_INTERN_CONTENT_TEMPLATE_DESC">
+						<option value="[title]">Article title</option>
+						<option value="[url]">Full URL to the article</option>
+						<option value="[shorturl]">Shorten URL to article</option>
+						<option value="[author]">Article's author</option>
+						<option value="[username]">Author's username</option>
+						<option value="[introtext:x]">Article's introtext (x is the number of characters)</option>
+						<option value="[fulltext]">Article's full text</option>
+				</field>
+				<field addfieldpath="administrator/components/com_obsocialsubmit/models/forms/fields/" 
+					name="desc_template"
+					type="obsstextarea" 
+					class="format_post input-block-level" 
+					cols="50" rows="3" 
+					default="New article: [title] read more at here [shorturl]" 
+					layout="0"
+					label="PLG_OBSS_INTERN_CONTENT_DESC_TEMPLATE_LABEL" 
+					description="PLG_OBSS_INTERN_CONTENT_DESC_TEMPLATE_DESC">
+						<option value="[title]">Article title</option>
+						<option value="[url]">Full URL to the article</option>
+						<option value="[shorturl]">Shorten URL to article</option>
+						<option value="[author]">Article's author</option>
+						<option value="[username]">Author's username</option>
+						<option value="[introtext:x]">Article's introtext (x is the number of characters)</option>
+						<option value="[fulltext]">Article's full text</option>
+				</field>
+				<!--<field type="placeholder" class="text text-info "
+					label="&lt;span  draggable=&quot;true&quot; class=&quot;label obss_tag drag_drop&quot;&gt;[title]&lt;/span&gt; Article title&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[shorturl]&lt;/span&gt; Shorten URL to the article&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[url]&lt;/span&gt; Full URL to the article&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[author]&lt;/span&gt; Article's author&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[username]&lt;/span&gt; Author's username&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[introtext:x]&lt;/span&gt; Article's introtext (x is the number of characters)&lt;br /&gt;
+					   &lt;span  draggable=&quot;true&quot;  class=&quot;label obss_tag drag_drop&quot;&gt;[fulltext]&lt;/span&gt; Article's full text"/>
+				-->
+<!--				<field type="textarea" class="format_post input-block-level" cols="50" rows="3" name="template" default="New article: [title] read more at here [shorturl]" label="PLG_OBSS_INTERN_CONTENT_TEMPLATE_LABEL" description="PLG_OBSS_INTERN_CONTENT_TEMPLATE_DESC" />
+				<field type="textarea" class="format_post input-block-level" cols="50" rows="3" name="desc_template" default="[introtext] [fulltext]" label="PLG_OBSS_INTERN_CONTENT_DESC_TEMPLATE_LABEL" description="PLG_OBSS_INTERN_CONTENT_DESC_TEMPLATE_DESC" />
+-->
+				<field name="category" type="category"
+					default="0"
+					description="PLG_OBSS_INTERN_CONTENT_CATEGORIES_DESC"
+					extension="com_content"
+					label="PLG_OBSS_INTERN_CONTENT_CATEGORIES_LABEL"
+					show_root="true"
+					multiple="multiple"
+				/>
+
+				<field type="radio" 
+					class="btn-group" 
+					name="include_subcats" 
+					default="0" 
+					label="PLG_OBSS_INTERN_CONTENT_INCLUDE_SUBCATEGORIES_LABEL" 
+					description="PLG_OBSS_INTERN_CONTENT_INCLUDE_SUBCATEGORIES_DESC">
+					<option value="0" class="btn-small">JNO</option>
+					<option value="1" class="btn-small">JYES</option>
+				</field>
+
+				<field type="radio" class="btn-group" name="action" default="all" label="PLG_OBSS_INTERN_CONTENT_ACTION_LABEL" description="PLG_OBSS_INTERN_CONTENT_ACTION_DESC">
+					<option value="all" class="btn-small">COM_OBSOCIALSUBMIT_ACTION_ALL</option>
+					<option value="edit" class="btn-small">COM_OBSOCIALSUBMIT_ACTION_EDIT</option>
+					<option value="new" class="btn-small">COM_OBSOCIALSUBMIT_ACTION_NEW</option>
+				</field>
+
+				<field type="radio" class="btn-group" name="post_option" default="0" label="PLG_OBSS_INTERN_CONTENT_POST_OPTION_LABEL" description="PLG_OBSS_INTERN_CONTENT_POST_OPTION_DESCRIPTION">
+					<option value="0">PLG_OBSS_INTERN_CONTENT_POST_OPTION_IMEDIATELY_TEXT</option>
+					<option value="1">PLG_OBSS_INTERN_CONTENT_POST_OPTION_ADD_TO_QUEUE_TEXT</option>
+				</field>
+
+				<field addfieldpath="plugins/obss_intern/content/fields/"
+						name="tags"
+					   type="obtag"
+					   label="JTAG"
+					   description="PLG_OBSS_INTERN_CONTENT_TAGS_DESC"
+					   multiple="true"
+						>
+				</field>
+				<field name="languages" type="obsslanguage" client="site" label="JFIELD_LANGUAGE_LABEL"
+					   description="JFIELD_LANGUAGE_LABEL"/>
+
+			</fieldset>
+			<fieldset name="advanced">
+				<field type="radio" name="sefurl" class="btn-group" label="PLG_OBSS_INTERN_CONTENT_SEFURL_LABEL" description="PLG_OBSS_INTERN_CONTENT_SEFURL_DESC" default="1">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field type="calendar" name="afterdate" label="PLG_OBSS_INTERN_CONTENT_AFTERDATE_LABEL" description="PLG_OBSS_INTERN_CONTENT_AFTERDATE_DESC" />
+
+				<field type="radio" name="publishbox" class="btn-group" default="0" label="PLG_OBSS_INTERN_CONTENT_PUBLISH_BOX_LABEL" description="PLG_OBSS_INTERN_CONTENT_PUBLISH_BOX_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+
+				<field type="radio" name="publishbox_default" class="btn-group" default="0" label="PLG_OBSS_INTERN_CONTENT_PUBLISH_BOX_DEFAULT_LABEL" description="PLG_OBSS_INTERN_CONTENT_PUBLISH_BOX_DEFAULT_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+
+				<field type="radio" name="opengraphprotocol" class="btn-group" default="0" label="PLG_OBSS_INTERN_CONTENT_OPEN_GRAPH_PROTOCOL_LABEL" description="PLG_OBSS_INTERN_CONTENT_OPEN_GRAPH_PROTOCOL_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				
+				<field type="radio" name="autoarticles"
+					class="btn-group"
+					default="1" 
+					label="PLG_OBSS_INTERN_CONTENT_AUTOARTICLES" description="PLG_OBSS_INTERN_CONTENT_AUTOARTICLES_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+
+				<field type="text" name="default_img" label="PLG_OBSS_INTERN_CONTENT_DEFAULT_IMAGE_LABEL" description="PLG_OBSS_INTERN_CONTENT_DEFAULT_IMAGE_DESC"/>
+				
+				<field name="debug" type="radio"
+					class="btn-group"
+					default="0"
+					label="PLG_OBSS_INTERN_CONTENT_DEBUG_LABEL"
+					description="PLG_OBSS_INTERN_CONTENT_DEBUG_DESC"
+					size="1">
+					<option value="1">JON</option>
+					<option value="0">JOFF</option>
+				</field>
+				<field type="text" name="ip" label="PLG_OBSS_INTERN_CONTENT_IP_LABEL" description="PLG_OBSS_INTERN_CONTENT_IP_DESC" />
+				<field type="note" name="current_ip_address" description="PLG_OBSS_INTERN_CONTENT_IPADDRESS_NOTE" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

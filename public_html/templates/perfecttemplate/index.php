@@ -83,14 +83,6 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
             </div>
 		<?php endif; ?>
 
-		<?php if ($this->countModules('block-sponsors')) : ?>
-            <div class="block block--sponsors">
-                <div class="block__wrapper">
-                    <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
-                </div>
-            </div>
-		<?php endif; ?>
-
 	<?php endif; ?>
 
 	<?php if (PWTTemplateHelper::isHome() == false) : ?>
@@ -105,6 +97,14 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
                 <jdoc:include type="component"/>
             </div>
         </div>
+	<?php endif; ?>
+
+	<?php if ($this->countModules('block-sponsors')) : ?>
+      <div class="block block--sponsors">
+          <div class="block__wrapper">
+              <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
+          </div>
+      </div>
 	<?php endif; ?>
 
 </main>

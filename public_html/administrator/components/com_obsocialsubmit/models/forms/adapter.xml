@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="text"
+			label="JGLOBAL_FIELD_ID_LABEL"
+			description="JGLOBAL_FIELD_ID_DESC"
+			default="0"
+			readonly="true"
+		/>
+		
+		<field name="addon" type="hidden"
+			description="COM_OBSOCIALSUBMIT_FIELD_ADDON_DESC"
+			label="COM_OBSOCIALSUBMIT_FIELD_ADDON_LABEL"
+			readonly="readonly"
+			size="20"
+		/>
+		
+		<field name="addon_type" type="hidden"
+			default="intern"
+			description="COM_OBSOCIALSUBMIT_FIELD_ADDON_DESC"
+			label="COM_OBSOCIALSUBMIT_FIELD_ADDON_LABEL"
+			readonly="readonly"
+		/>
+
+		<field name="title" type="text"
+			class="inputbox input-xxlarge"
+			description="COM_OBSOCIALSUBMIT_FIELD_TITLE_DESC"
+			label="JGLOBAL_TITLE"
+			maxlength="100"
+			required="true"
+			size="35"
+		/>
+
+		<field name="description" type="textarea"
+			class="input-block-level"
+			default=""
+			description="COM_OBSOCIALSUBMIT_FIELD_DESCRIPTION_DESC"
+			label="COM_OBSOCIALSUBMIT_FIELD_DESCRIPTION_LABEL"
+			rows="5"
+			/>
+
+		<field name="published" type="radio"
+			class="btn-group"
+			default="1"
+			description="COM_OBSOCIALSUBMIT_FIELD_PUBLISHED_DESC"
+			label="JSTATUS"
+			size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+
+		<field name="ordering" type="moduleorder"
+			description="JFIELD_ORDERING_DESC"
+			label="JFIELD_ORDERING_LABEL"
+		/>
+
+		<field 
+			addfieldpath="/administrator/components/com_obsocialsubmit/models/forms/fields" 
+			name="connections" 
+			type="obssinstances" 
+			addontype="extern" 
+			label="COM_OBSOCIALSUBMIT_ADAPTER_CONNECTIONS_LABEL" 
+			description="COM_OBSOCIALSUBMIT_ADAPTER_CONNECTIONS_DESC" 
+		/>
+	</fieldset>
+</form>

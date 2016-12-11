@@ -1,0 +1,123 @@
+#########################################################
+# $Id: CHANGELOG 323 2014-02-08 04:49:14Z phonglq $
+#########################################################
+/* 3.5.16 - 2016.01.25 */
+~ Changed the method of uploading images to Twitter.
+~ Fixed bug when checking exist images from Joomla Content.
++ Added new option in configuration area allows users could use their Google API Key.
+
+/* 3.5.15 - 2015.09.05 */
++ Added link to update-xml file.
+
+/* 3.5.14 - 2015.07.29 */
+~ Fixed bug when get link of articles when the site using multiple languages.
+
+/* 3.5.13 - 2015.06.29 */
+~ Display Publish Box following the language of articles
+~ Fixed bug with system plugin when turn on js cronjob (added mootools lib before call js).
+
+/* 3.5.12 - 2015.05.04 */
++ Added new option allows filtering by language with Content Stream
+~ Fixed bug with YOURLS service.
+
+/* 3.5.11 - 2015.02.05 */
+~ Fixed bugs not run Feeds stream
+
+/* 3.5.10 - 2015.01.21 */
+~ Avoided the conflict when use Authorization of Twitter Class
+
+/* 3.5.9 - 2014.12.16 */
+~ Made it become more suitable with new JED
+
+/* 3.5.8 - 2014.12.05 */
++ Added 1 option allow filtering by tags in Content adapter
+
+/* 3.5.7 - 2014.11.14 */
++ Added 1 option allow choosing method to upload images in Twitter
+
+/* 3.5.6 - 2014.11.14 */
+~ Fixed bugs when adding logs into the queue.
+~ Optimized the performance of Logs Manager
+
+/* 3.5.5 - 2014.08.26 */
+~ Fixed bugs when get list of subcategories with content-intern.
+
+/* 3.5.4 - 2014.07.07 */
+~ Fixed some minor issues
+
+/* 3.5.3 - 2014.06.18 */
+~ Fixed some language issues
++ Add option "include sub categories" field for Content plugin for obSocialSubmit
+
+/* 3.5.2 - 2014.05.21 */
+- Remove is.gd short url service
++ Add goo.gl short url service
+
+/* 3.5.1 - 2014.05.07 */
+~ Change UI & Text
+
+/* 3.5 - 2014.04.28 */
+~ Change UI
+
+/* 3.4.10 - 2014.04.05 */
+Fixed problems:
+~ Fixed some minor issues
++ Process multi logs items
+
+/* 3.4.9 - 2014.03.05 */
+Fixed problems:
+~ Log Manager cannot load after upgrade to version 3.x
+~ language in options  not load in Joomla 2.5
+
+/* 3.4.8 - 2014.03.04 */
+~ Fixed some minor issues
+
+/* 3.4.7 - 2014.02.08 */
+~ Fixed some problems on logs manager and plugin manager
+~ Fixed problem check version does't work correctly
+~ Fixed installing error issues
+
+/* 3.4.6 - 2014.02.01 */
+~ Improved UI/UX for Adapter & Connection Forms.
++ Added Dashboard.
+~ Fixed missing index.html file on plg_system_obsocialsubmit
+
+/* 3.4.5 - 2013.12.16 */
+~ Fixed logs issue.
+
+/* 3.4.4 - 2013.12.13 */
+~ Fixed some minor issue.
+
+/* 3.4.2 - 2013.11.29 */
+~ Fixed some minor issue.
+
+/* 3.4.1 - 2013.11.27 */
+~ Fixed some minor issue.
+
+/* 3.4 - 2013.11.04 */
++ Add Logs manager
+~ Fixed some minor issue on cronjob
+
+/* 3.3.5 - 2013.10.20 */
+~ Change layout edit connection and adapter
+~ Fixed some language issue
+~ Fixed some minor bug of content plugin
+
+/* 3.3.4 - 2013.07.22 */
+~ Fixed problem affter enable cronjob
+
+/* 3.3.3 - 2013.06.12 */
+~ Updated Twitter connection to compatible Twitter REST API v1.1.
+
+/* 3.3.2 - 2013.05.10 */
+~ Fixed issues add Open Graph Protocol tags.
+
+/* 3.3.1 - 2013.04.23 */
+~ Fixed published box feature of Content adapter.
+
+/* 3.1 - 2012.12.13 */
+~ Fixed more small problem with Content adapter and Twitter connection.
+
+/* 3.0 - 2012.11.12 */
++ The first release for Joomla 3.0
+~ Move addons structure to plugins.
