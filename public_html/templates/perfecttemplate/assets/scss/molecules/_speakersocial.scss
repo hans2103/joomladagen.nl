@@ -1,13 +1,55 @@
 .speakersocial {
-	padding-left: $base-spacing;
 
 	@include e('icon') {
-		&:before {
-			font-size: $font-size--h3;
-		}
-	}
+		//&:before {
+		//	font-size: $font-size--h3;
+		//}
 
-	@include e('text') {
-		@include visually-hidden;
+
+		@mixin speakersocialiconstyling {
+			background-color: $jd-blue;
+			color: $white;
+			padding: 1/2 * 2/3 * $base-spacing;
+			margin-right: 1/2 * 2/3 * $base-spacing;
+
+
+		}
+
+		@include m('twitter') {
+			@include icon-before(twitter, true) {
+				@include speakersocialiconstyling;
+			}
+			span {
+				@include visually-hidden;
+			}
+		}
+		@include m('facebook') {
+			@include icon-before(facebook, true) {
+				@include speakersocialiconstyling;
+			}
+			span {
+				@include visually-hidden;
+			}
+		}
+		@include m('linkedin') {
+			@include icon-before(linkedin, true) {
+				@include speakersocialiconstyling;
+			}
+			span {
+				@include visually-hidden;
+			}
+		}
+		@include m('googleplus') {
+			@include icon-before(google-plus, true) {
+				@include speakersocialiconstyling;
+			}
+			span {
+				@include visually-hidden;
+			}
+		}
+
+		@include m('website') {
+			@extend .btn;
+		}
 	}
 }

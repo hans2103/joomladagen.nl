@@ -26,6 +26,17 @@ JHtml::_('behavior.caption');
 		</div>
 	<?php endif; ?>
 
+    <?php if ($this->params->get('show_description', 1) || $this->params->def('show_description_image', 1)) : ?>
+        <div class="blog__desc">
+			<?php if ($this->params->get('show_description_image') && $this->category->getParams()->get('image')) : ?>
+                <img src="<?php echo $this->category->getParams()->get('image'); ?>" alt="<?php echo htmlspecialchars($this->category->getParams()->get('image_alt'), ENT_COMPAT, 'UTF-8'); ?>"/>
+			<?php endif; ?>
+			<?php if ($this->params->get('show_description') && $this->category->description) : ?>
+				<?php echo JHtml::_('content.prepare', $this->category->description, '', 'com_content.category'); ?>
+			<?php endif; ?>
+        </div>
+	<?php endif; ?>
+
 	<?php if (empty($this->lead_items) && empty($this->link_items) && empty($this->intro_items)) : ?>
 		<?php if ($this->params->get('show_no_articles', 1)) : ?>
 			<p><?php echo JText::_('COM_CONTENT_NO_ARTICLES'); ?></p>

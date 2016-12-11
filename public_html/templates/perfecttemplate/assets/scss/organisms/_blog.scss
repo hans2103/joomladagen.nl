@@ -1,0 +1,12 @@
+.blog {
+	@include e('desc') {
+		text-align: center;
+		border-bottom: 1px solid $jd-gray;
+		padding: $base-spacing 0;
+
+
+		h2 {
+			text-transform: uppercase;
+		}
+	}
+}

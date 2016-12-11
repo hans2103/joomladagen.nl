@@ -37,17 +37,16 @@ if ($unpublished)
 ?>
 
 <?php switch(true) {
-    case (isset($images->image_intro) && !empty($images->image_intro)):
-        echo '<div class="card__image  card__image--noborder">';
+	case (isset($images->image_intro) && !empty($images->image_intro) && $this->item->catid == 37):
+		echo '<div class="card__image card__image--border">';
 		echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
 		echo '</div>';
 		break;
-    case ($this->item->catid == 10):
-        echo '<div class="card__image  card__image--noborder">';
-        $image = JHtml::_('image', 'images/Memo-vacature_@2x.png', 'NLW Groep vacature');
-        echo JHtml::_('link', $link, $image);
-	    echo '</div>';
-	    break;
+    case (isset($images->image_intro) && !empty($images->image_intro)):
+        echo '<div class="card__image">';
+		echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
+		echo '</div>';
+		break;
     default:
 	    echo '<div class="card__image">';
         echo '&nbsp;';
@@ -77,6 +76,7 @@ if ($unpublished)
     </div>
     <div class="card__actions">
 		<?php echo JLayoutHelper::render('perfecttemplate.content.readmore', array('item' => $this->item, 'params' => $params, 'link' => $link)); ?>
+
     </div>
 </div>
 

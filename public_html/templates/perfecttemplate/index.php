@@ -11,7 +11,6 @@ defined('_JEXEC') or die;
 // Load Perfect Template Helper
 include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
-PWTTemplateHelper::getAnalytics();
 PWTTemplateHelper::setMetadata();
 PWTTemplateHelper::setFavicon();
 PWTTemplateHelper::unloadCss();
@@ -31,12 +30,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 </head>
 
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
-<?php
-if (!empty($analyticsData) && $analyticsData['position'] == 'after_body_start')
-{
-	echo $analyticsData['script'];
-}
-?>
+<?php echo PWTTemplateHelper::getAnalytics(2,'GTM-XXXXXX')['script']; ?>
 
 <header class="header" role="banner">
     <div class="header__wrapper">
