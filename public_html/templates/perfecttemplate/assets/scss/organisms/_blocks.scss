@@ -7,7 +7,6 @@
 		background-repeat: no-repeat;
 		background-attachment: fixed;
 
-
 		&:after {
 			position: absolute;
 			left: 0;
@@ -127,6 +126,38 @@
 	@include m('interviews') {
 		.block__wrapper {
 			padding-bottom: 0;
+		}
+	}
+
+	@include m('sponsors') {
+		.module {
+			display: inline-block;
+			position: relative;
+			color: $jd-gray;
+			@include font($font-size--h3, $light);
+
+			@include media($charlie) {
+				&:before,
+				&:after {
+					content: "";
+					position: absolute;
+					height: 0;
+					border-top: 1px solid $jd-gray;
+					top: 50%;
+					width: 100%;
+				}
+				&:before {
+					right: 100%;
+					margin-right: 15px;
+				}
+				&:after {
+					left: 100%;
+					margin-left: 15px;
+				}
+			}
+		}
+		.module__header {
+			text-align: center;
 		}
 	}
 
