@@ -60,7 +60,6 @@ if($showintroimage)
 		default:
 			echo '<div class="card__image">';
 			echo '&nbsp;';
-			echo PWTTemplateHelper::getItemId();
 			echo '</div>';
 	}
 }
