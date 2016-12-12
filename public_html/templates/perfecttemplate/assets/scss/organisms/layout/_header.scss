@@ -13,7 +13,7 @@
 
 	@include e('logo') {
 		@include media($charlie) {
-			position: absolute;
+			@include position(absolute,5px null null null);
 		}
 	}
 
