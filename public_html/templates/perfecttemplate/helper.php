@@ -491,7 +491,7 @@ mixpanel.init(\"" . $analyticsId . "\");<!-- end Mixpanel -->
 
 		if ($page_subtitle)
 		{
-			$output .= '		<h2>' . $page_subtitle . '</h2>';
+			$output .= '		<h2 class="title__subtext">' . $page_subtitle . '</h2>';
 		}
 
 		$output .= '    </div>';

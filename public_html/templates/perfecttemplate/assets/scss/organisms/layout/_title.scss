@@ -15,7 +15,20 @@
 		@include font($font-size--h1, $bold, 1.5 * $font-size--h1);
 		color: $white;
 		text-align: center;
-		margin: $base-spacing 0;
+		margin: $base-spacing 0 0;
+
+		@include media($charlie) {
+			@include span-columns(10);
+			@include shift(1);
+			@include omega;
+		}
+	}
+
+	@include e('subtext') {
+		@include span-columns(12);
+		@include font($font-size--h2, $bold, 1.5 * $font-size--h1);
+		color: $white;
+		text-align: center;
 
 		@include media($charlie) {
 			@include span-columns(10);
