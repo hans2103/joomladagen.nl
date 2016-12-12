@@ -60,6 +60,9 @@
 	@include e('header') {
 		position: relative;
 		padding-right: 3 * $base-spacing;
+		h1 {
+			margin-top: 0;
+		}
 		h2 {
 			@include font($font-size--h2, $bold, $line-height--header, $font-family);
 
