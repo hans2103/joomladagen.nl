@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="params">
+        <fieldset name="basic">
+            <field
+                    name="show_introimage"
+                    type="radio"
+                    class="btn-group btn-group-yesno"
+                    label="PLG_SYSTEM_PERFECTMENUOPTIONS_SHOWINTROIMAGE_LABEL"
+                    description="PLG_SYSTEM_PERFECTMENUOPTIONS_SHOWINTROIMAGE_DESC"
+                    default="1"
+            >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
+        </fieldset>
+    </fields>
+</form>
