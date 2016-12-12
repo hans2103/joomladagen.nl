@@ -113,6 +113,10 @@
 			}
 		}
 	}
+
+	@include e('presentations') {
+		margin: $base-spacing 0;
+	}
 }
 
 .card-links {

@@ -72,7 +72,8 @@ if($this->item->conference_speaker_id)
 			<div class="card__body">
 				<?php echo($this->item->description) ?>
 			</div>
-			<div class="card_presentations">
+
+			<div class="card__presentations">
 				<?php echo ($this->item->slides)?>
 			</div>
 		</div>

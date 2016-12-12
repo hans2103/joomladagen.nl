@@ -98,7 +98,7 @@ JHtml::addIncludePath(JPATH_THEMES . '/' . $this->template . '/helper.php');
 
             </div>
 
-            <div class="card_presentations">
+            <div class="card__presentations">
 				<?php if ($this->sessions): ?>
                     <h4><?php echo JText::_('COM_CONFERENCE_TITLE_SESSIONS') ?></h4>
                     <table class="table table-striped">
