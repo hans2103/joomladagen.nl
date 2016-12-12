@@ -19,6 +19,8 @@ $images  = json_decode($this->item->images);
 // Load Template helper
 $this->template = JFactory::getApplication()->getTemplate();
 include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+//// Load JLayouts helper
+//require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout/render.php';
 
 $showintroimage = PWTTemplateHelper::getParamShowintroimage();
 
@@ -67,6 +69,8 @@ if($showintroimage)
 
 <div class="card__content<?php echo $showintroimage ? "":" card__content--hideimage"; ?>">
     <div class="card__header">
+        <?php echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $this->item->created, 'class' => 'blog', 'format' => 'DATE_FORMAT_LC4')); ?>
+
         <h2 itemprop="name">
 			<?php echo JHtml::_('link', $link, $this->item->title, array('class' => 'anchor--header ')); ?>
         </h2>
