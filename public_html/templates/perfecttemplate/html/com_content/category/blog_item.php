@@ -16,6 +16,12 @@ $canEdit = $this->item->params->get('access-edit');
 $info    = $params->get('info_block_position', 0);
 $images  = json_decode($this->item->images);
 
+// Load Template helper
+$this->template = JFactory::getApplication()->getTemplate();
+include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+
+$showintroimage = PWTTemplateHelper::getParamShowintroimage();
+
 if ($params->get('access-view')) :
 	$link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid, $this->item->language));
 else :
@@ -36,24 +42,31 @@ if ($unpublished)
 }
 ?>
 
-<?php switch(true) {
-	case (isset($images->image_intro) && !empty($images->image_intro) && $this->item->catid == 37):
-		echo '<div class="card__image card__image--border">';
-		echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
-		echo '</div>';
-		break;
-    case (isset($images->image_intro) && !empty($images->image_intro)):
-        echo '<div class="card__image">';
-		echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
-		echo '</div>';
-		break;
-    default:
-	    echo '<div class="card__image">';
-        echo '&nbsp;';
-        echo '</div>';
-} ?>
+<?php
+if($showintroimage)
+{
+	switch (true)
+	{
+		case (isset($images->image_intro) && !empty($images->image_intro) && $this->item->catid == 37):
+			echo '<div class="card__image card__image--border">';
+			echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
+			echo '</div>';
+			break;
+		case (isset($images->image_intro) && !empty($images->image_intro)):
+			echo '<div class="card__image">';
+			echo JLayoutHelper::render('joomla.content.intro_image', $this->item);
+			echo '</div>';
+			break;
+		default:
+			echo '<div class="card__image">';
+			echo '&nbsp;';
+			echo PWTTemplateHelper::getItemId();
+			echo '</div>';
+	}
+}
+?>
 
-<div class="card__content">
+<div class="card__content<?php echo $showintroimage ? "":" card__content--hideimage"; ?>">
     <div class="card__header">
         <h2 itemprop="name">
 			<?php echo JHtml::_('link', $link, $this->item->title, array('class' => 'anchor--header ')); ?>

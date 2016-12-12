@@ -29,6 +29,10 @@
 
 			@include e('content') {
 				@include span-columns(6 of 8);
+
+				@include m('hideimage') {
+					@include span-columns(8 of 8);
+				}
 			}
 		}
 
