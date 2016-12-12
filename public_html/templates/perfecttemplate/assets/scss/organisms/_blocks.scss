@@ -131,34 +131,48 @@
 
 	@include m('sponsors') {
 		.module {
-			display: inline-block;
-			position: relative;
-			color: $jd-gray;
-			@include font($font-size--h3, $light);
+			@include e('header') {
+				text-align: center;
+			}
+			@include e('title') {
+				display: inline-block;
+				position: relative;
+				color: $jd-gray;
+				@include font($font-size--h3, $light);
 
-			@include media($charlie) {
-				&:before,
-				&:after {
-					content: "";
-					position: absolute;
-					height: 0;
-					border-top: 1px solid $jd-gray;
-					top: 50%;
-					width: 100%;
+				@include media($charlie) {
+					&:before,
+					&:after {
+						content: "";
+						position: absolute;
+						height: 0;
+						border-top: 1px solid $jd-gray;
+						top: 50%;
+						width: 100%;
+					}
+					&:before {
+						right: 100%;
+						margin-right: 15px;
+					}
+					&:after {
+						left: 100%;
+						margin-left: 15px;
+					}
 				}
-				&:before {
-					right: 100%;
-					margin-right: 15px;
-				}
-				&:after {
-					left: 100%;
-					margin-left: 15px;
+			}
+			@include e('content') {
+				text-align: center;
+				@include outer-container(100%);
+				.custom {
+					@include span-columns(12 of 12);
+					padding: 0 $base-spacing;
+					@include media($charlie) {
+						@include span(8 of 12);
+						@include shift(2 of 12);
+						padding: 0;
+					}
 				}
 			}
 		}
-		.module__header {
-			text-align: center;
-		}
 	}
-
 }
