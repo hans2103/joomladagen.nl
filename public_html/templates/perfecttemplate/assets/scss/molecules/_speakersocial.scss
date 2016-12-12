@@ -6,18 +6,16 @@
 		//}
 
 
-		@mixin speakersocialiconstyling {
-			background-color: $jd-blue;
+		@mixin speakersocialiconstyling($bg-color: $jd-blue) {
+			background-color: $bg-color;
 			color: $white;
 			padding: 1/2 * 2/3 * $base-spacing;
 			margin-right: 1/2 * 2/3 * $base-spacing;
-
-
 		}
 
 		@include m('twitter') {
 			@include icon-before(twitter, true) {
-				@include speakersocialiconstyling;
+				@include speakersocialiconstyling($color-twitter);
 			}
 			span {
 				@include visually-hidden;
@@ -25,7 +23,7 @@
 		}
 		@include m('facebook') {
 			@include icon-before(facebook, true) {
-				@include speakersocialiconstyling;
+				@include speakersocialiconstyling($color-facebook);
 			}
 			span {
 				@include visually-hidden;
@@ -33,7 +31,7 @@
 		}
 		@include m('linkedin') {
 			@include icon-before(linkedin, true) {
-				@include speakersocialiconstyling;
+				@include speakersocialiconstyling($color-linkedin);
 			}
 			span {
 				@include visually-hidden;
@@ -41,7 +39,7 @@
 		}
 		@include m('googleplus') {
 			@include icon-before(google-plus, true) {
-				@include speakersocialiconstyling;
+				@include speakersocialiconstyling($color-googleplus);
 			}
 			span {
 				@include visually-hidden;
