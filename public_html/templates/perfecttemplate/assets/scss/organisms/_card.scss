@@ -120,6 +120,19 @@
 	@include e('presentations') {
 		margin: $base-spacing 0;
 	}
+
+	@include e('meta') {
+		margin-bottom: $base-spacing;
+	}
+
+	@include e('meta-item') {
+		padding-right: 1/2 * 2/3 * $base-spacing;
+
+		& + & {
+			border-left: 1px solid $jd-gray;
+			padding-left: 1/2 * 2/3 * $base-spacing;
+		}
+	}
 }
 
 .card-links {
