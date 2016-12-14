@@ -129,7 +129,7 @@ $this->loadHelper('schedule');
 		<?php endforeach; ?>
     </ul>
 
-    <script>
+<?php /*    <script>
         jQuery(document).ready(function ($) {
             $('.accordion-tabs-minimal').each(function (index) {
                 $(this).children('li').first().children('a').addClass('is-active').next().addClass('is-open').show();
@@ -148,6 +148,6 @@ $this->loadHelper('schedule');
                 }
             });
         });
-    </script>
+    </script>*/ ?>
 
 </div>
