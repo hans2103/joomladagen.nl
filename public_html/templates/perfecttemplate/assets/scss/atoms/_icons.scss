@@ -42,4 +42,12 @@
 		}
 	}
 
+	&-grid-view {
+		display: inline-block;
+		@include icon-before(th-large, true) {
+			margin-right: $base-spacing * 0.125;
+		}
+
+	}
+
 }
