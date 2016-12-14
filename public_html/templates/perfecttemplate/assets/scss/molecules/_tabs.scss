@@ -63,7 +63,8 @@
 		width: 100%;
 
 		@include media($tab-mode) {
-			border-top: $tab-border;
+			//border-top: $tab-border;
+			border: $tab-border;
 			float: left;
 		}
 	}

@@ -30,7 +30,7 @@ $this->loadHelper('schedule');
 					$slots = ConferenceHelperSchedule::slots($item->conference_day_id);
 					$rooms = ConferenceHelperSchedule::rooms();
 					?>
-                    <table class="table table-bordered table-striped">
+                    <table class="table table-bordered">
                         <thead class="hidden-phone">
                         <tr>
                             <th width="10%"></th>
