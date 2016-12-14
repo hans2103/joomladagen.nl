@@ -68,4 +68,10 @@
 			float: left;
 		}
 	}
+
+	@include m('small') {
+		.tab-link {
+			padding: ($base-spacing / 2) ($gutter / 2);
+		}
+	}
 }
