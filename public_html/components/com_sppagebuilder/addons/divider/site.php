@@ -8,47 +8,58 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_divider','sp_divider_addon');
+class SppagebuilderAddonDivider extends SppagebuilderAddons {
 
-function sp_divider_addon($atts, $content){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'divider_type'			=> '',
-		'margin_top'			=> '',
-		'margin_bottom'			=> '',
-		'border_color'			=> '',
-		'border_style'			=> '',
-		'border_width'			=> '',
-		'divider_image'			=> '',
-		'background_repeat'		=> '',
-		'background_position'	=> '',
-		'divider_height'		=> '',
-		'class'					=> '',
-		), $atts));
+		$class 	 		= (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$divider_type	= (isset($this->addon->settings->divider_type) && $this->addon->settings->divider_type) ? $this->addon->settings->divider_type : '';
 
-	$style 						= '';
-	$style1 					= '';
-	$style2 					= '';
-
-	if($margin_top) $style .= 'margin-top:' . (int) $margin_top  . 'px;';
-
-	if($margin_bottom) $style .= 'margin-bottom:' . (int) $margin_bottom  . 'px;';
-
-	if($border_color) $style1 .= 'border-bottom-color:' . $border_color  . ';';
-
-	if($border_style) $style1 .= 'border-bottom-style:' . $border_style  . ';';
-
-	if($border_width) $style1 .= 'border-bottom-width:' . (int) $border_width  . 'px;';
-
-	if($divider_height) $style2 .= 'height:' . (int) $divider_height  . 'px;';
-
-	if($divider_image) $style2 .= 'background-image: url(' . JURI::base(true) . '/' . $divider_image  . ');background-repeat:' . $background_repeat . ';background-position:50% 50%;';
-	
-	if($divider_type=='image') {
-		$output = '<div class="sppb-divider sppb-divider-'.$divider_type.'" style="'.$style.' '. $style2 .'"></div>';
-	} else {
-		$output = '<div class="sppb-divider sppb-divider-'.$divider_type.'" style="'.$style.' '. $style1 .'"></div>';
+		return '<div class="sppb-divider sppb-divider-' . $divider_type . ' ' . $class . '"></div>';
 	}
 
-	return $output;
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+
+		$divider_type		= (isset($this->addon->settings->divider_type) && $this->addon->settings->divider_type) ? $this->addon->settings->divider_type : '';
+		$margin_top 	 	= (isset($this->addon->settings->margin_top) && $this->addon->settings->margin_top) ? $this->addon->settings->margin_top : 30;
+		$margin_bottom 	 	= (isset($this->addon->settings->margin_bottom) && $this->addon->settings->margin_bottom) ? $this->addon->settings->margin_bottom : 30;
+		$border_color 	 	= (isset($this->addon->settings->border_color) && $this->addon->settings->border_color) ? $this->addon->settings->border_color : '#eeeeee';
+		$border_style 	 	= (isset($this->addon->settings->border_style) && $this->addon->settings->border_style) ? $this->addon->settings->border_style : 'solid';
+		$border_width 	 	= (isset($this->addon->settings->border_width) && $this->addon->settings->border_width) ? $this->addon->settings->border_width : 1;
+		$divider_height 	= (isset($this->addon->settings->divider_height) && $this->addon->settings->divider_height) ? $this->addon->settings->divider_height : 10;
+		$divider_image 		= (isset($this->addon->settings->divider_image) && $this->addon->settings->divider_image) ? $this->addon->settings->divider_image : '';
+		$background_repeat 	= (isset($this->addon->settings->background_repeat) && $this->addon->settings->background_repeat) ? $this->addon->settings->background_repeat : 'no-repeat';
+
+		$css = '';
+
+		$style = '';
+		$style .= ($margin_top != '') ? 'margin-top:' . (int) $margin_top  . 'px;' : '';
+		$style .= ($margin_bottom != '') ? 'margin-bottom:' . (int) $margin_bottom  . 'px;' : '';
+
+		if($style) {
+			$css .= $addon_id . ' .sppb-divider {';
+			$css .= $style;
+			$css .= '}';
+		}
+
+		$inner_style = '';
+		if($divider_type == 'border') {
+			$inner_style .= $border_width ? 'border-bottom-width:' . (int) $border_width  . 'px;' : '';
+			$inner_style .= ($border_style) ? 'border-bottom-style:' . $border_style  . ';' : '';
+			$inner_style .= ($border_color) ? 'border-bottom-color:' . $border_color  . ';' : '';
+		} else {
+			$inner_style .= ($divider_height) ? 'height:' . (int) $divider_height  . 'px;' : '';
+			$inner_style .= ($divider_image) ? 'background-image: url(' . JURI::base(true) . '/' . $divider_image  . ');background-repeat:' . $background_repeat . ';background-position:50% 50%;' : '';
+		}
+
+		if($inner_style) {
+			$css .= $addon_id . ' .sppb-divider {';
+			$css .= $inner_style;
+			$css .= '}';
+		}
+
+		return $css;
+	}
+
 }

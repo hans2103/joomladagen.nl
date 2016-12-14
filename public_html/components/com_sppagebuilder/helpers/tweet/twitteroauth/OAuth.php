@@ -2,7 +2,7 @@
 /**
  * @package SP Page Builder
  * @author JoomShaper http://www.joomshaper.com
- * @copyright Copyright (c) 2010 - 2016 JoomShaper
+ * @copyright Copyright (c) 2010 - 2015 JoomShaper
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
@@ -12,7 +12,7 @@ defined ('_JEXEC') or die ('restricted aceess');
 
 /* Generic exception class
  */
-class PBOAuthException extends Exception {
+class OAuthException extends Exception {
   // pass
 }
 
@@ -437,7 +437,7 @@ class OAuthRequest {
     foreach ($this->parameters as $k => $v) {
       if (substr($k, 0, 5) != "oauth") continue;
       if (is_array($v)) {
-        throw new PBOAuthException('Arrays not supported in headers');
+        throw new OAuthException('Arrays not supported in headers');
       }
       $out .= ($first) ? ' ' : ',';
       $out .= OAuthUtil::urlencode_rfc3986($k) .
@@ -570,7 +570,7 @@ class OAuthServer {
       $version = '1.0';
     }
     if ($version !== $this->version) {
-      throw new PBOAuthException("OAuth version '$version' not supported");
+      throw new OAuthException("OAuth version '$version' not supported");
     }
     return $version;
   }
@@ -585,12 +585,12 @@ class OAuthServer {
     if (!$signature_method) {
       // According to chapter 7 ("Accessing Protected Ressources") the signature-method
       // parameter is required, and we can't just fallback to PLAINTEXT
-      throw new PBOAuthException('No signature method parameter. This parameter is required');
+      throw new OAuthException('No signature method parameter. This parameter is required');
     }
 
     if (!in_array($signature_method,
                   array_keys($this->signature_methods))) {
-      throw new PBOAuthException(
+      throw new OAuthException(
         "Signature method '$signature_method' not supported " .
         "try one of the following: " .
         implode(", ", array_keys($this->signature_methods))
@@ -605,12 +605,12 @@ class OAuthServer {
   private function get_consumer(&$request) {
     $consumer_key = @$request->get_parameter("oauth_consumer_key");
     if (!$consumer_key) {
-      throw new PBOAuthException("Invalid consumer key");
+      throw new OAuthException("Invalid consumer key");
     }
 
     $consumer = $this->data_store->lookup_consumer($consumer_key);
     if (!$consumer) {
-      throw new PBOAuthException("Invalid consumer");
+      throw new OAuthException("Invalid consumer");
     }
 
     return $consumer;
@@ -625,7 +625,7 @@ class OAuthServer {
       $consumer, $token_type, $token_field
     );
     if (!$token) {
-      throw new PBOAuthException("Invalid $token_type token: $token_field");
+      throw new OAuthException("Invalid $token_type token: $token_field");
     }
     return $token;
   }
@@ -653,7 +653,7 @@ class OAuthServer {
     );
 
     if (!$valid_sig) {
-      throw new PBOAuthException("Invalid signature");
+      throw new OAuthException("Invalid signature");
     }
   }
 
@@ -662,14 +662,14 @@ class OAuthServer {
    */
   private function check_timestamp($timestamp) {
     if( ! $timestamp )
-      throw new PBOAuthException(
+      throw new OAuthException(
         'Missing timestamp parameter. The parameter is required'
       );
     
     // verify that timestamp is recentish
     $now = time();
     if (abs($now - $timestamp) > $this->timestamp_threshold) {
-      throw new PBOAuthException(
+      throw new OAuthException(
         "Expired timestamp, yours $timestamp, ours $now"
       );
     }
@@ -680,7 +680,7 @@ class OAuthServer {
    */
   private function check_nonce($consumer, $token, $nonce, $timestamp) {
     if( ! $nonce )
-      throw new PBOAuthException(
+      throw new OAuthException(
         'Missing nonce parameter. The parameter is required'
       );
 
@@ -692,7 +692,7 @@ class OAuthServer {
       $timestamp
     );
     if ($found) {
-      throw new PBOAuthException("Nonce already used: $nonce");
+      throw new OAuthException("Nonce already used: $nonce");
     }
   }
 

@@ -8,102 +8,95 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_carousel','sp_carousel_addon');
-AddonParser::addAddon('sp_carousel_item','sp_carousel_item_addon');
+class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 
-function sp_carousel_addon($atts, $content){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'autoplay'=>'',
-		'controllers'=>'',
-		'arrows'=>'',
-		'background'=>'',
-		'color'=>'',
-		'alignment'=>'',
-		"class"=>'',
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? ' ' . $this->addon->settings->class : '';
 
-	if($background) {
-		$background = 'background-color:' . $background . ';';
+		//Addons option
+		$autoplay = (isset($this->addon->settings->autoplay) && $this->addon->settings->autoplay) ? ' data-sppb-ride="sppb-carousel"' : 0;
+		$controllers = (isset($this->addon->settings->controllers) && $this->addon->settings->controllers) ? $this->addon->settings->controllers : 0;
+		$arrows = (isset($this->addon->settings->arrows) && $this->addon->settings->arrows) ? $this->addon->settings->arrows : 0;
+		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : 0;
+		$carousel_autoplay = ($autoplay) ? ' data-sppb-ride="sppb-carousel"':'';
+
+		$output  = '<div id="sppb-carousel-'. $this->addon->id .'" class="sppb-carousel sppb-slide' . $class . '"'. $carousel_autoplay .'>';
+
+		if($controllers) {
+			$output .= '<ol class="sppb-carousel-indicators">';
+				foreach ($this->addon->settings->sp_carousel_item as $key1 => $value) {
+					$output .= '<li data-sppb-target="#sppb-carousel-'. $this->addon->id .'" '. (($key1 == 0) ? ' class="active"': '' ) .'  data-sppb-slide-to="'. $key1 .'"></li>' . "\n";
+				}
+			$output .= '</ol>';
+		}
+
+		$output .= '<div class="sppb-carousel-inner ' . $alignment . '">';
+
+		foreach ($this->addon->settings->sp_carousel_item as $key => $value) {
+
+			$output   .= '<div class="sppb-item'. (($value->bg) ? ' sppb-item-has-bg' : '') . (($key == 0) ? ' active' : '') .'">';
+			$output  .= ($value->bg) ? '<img src="' . $value->bg . '" alt="' . $value->title . '">' : '';
+
+			$output  .= '<div class="sppb-carousel-item-inner">';
+			$output  .= '<div class="sppb-carousel-caption">';
+			$output  .= '<div class="sppb-carousel-pro-text">';
+
+			if(($value->title) || ($value->content) ) {
+				$output  .= ($value->title) ? '<h2>' . $value->title . '</h2>' : '';
+				$output  .= $value->content;
+				if($value->button_text) {
+					$button_class = (isset($value->button_type) && $value->button_type) ? ' sppb-btn-' . $value->button_type : ' sppb-btn-default';
+					$button_class .= (isset($value->button_size) && $value->button_size) ? ' sppb-btn-' . $value->button_size : '';
+					$button_class .= (isset($value->button_shape) && $value->button_shape) ? ' sppb-btn-' . $value->button_shape: ' sppb-btn-rounded';
+					$button_class .= (isset($value->button_appearance) && $value->button_appearance) ? ' sppb-btn-' . $value->button_appearance : '';
+					$button_class .= (isset($value->button_block) && $value->button_block) ? ' ' . $value->button_block : '';
+					$button_icon = (isset($value->button_icon) && $value->button_icon) ? $value->button_icon : '';
+					$button_icon_position = (isset($value->button_icon_position) && $value->button_icon_position) ? $value->button_icon_position: 'left';
+					$button_target = (isset($value->button_target) && $value->button_target) ? $value->button_target : '_self';
+
+					if($button_icon_position == 'left') {
+						$value->button_text = ($button_icon) ? '<i class="fa ' . $button_icon . '"></i> ' . $value->button_text : $value->button_text;
+					} else {
+						$value->button_text = ($button_icon) ? $value->button_text . ' <i class="fa ' . $button_icon . '"></i>' : $value->button_text;
+					}
+
+					$output  .= '<a href="' . $value->button_url . '" target="' . $button_target . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
+				}
+			}
+
+			$output  .= '</div>';
+			$output  .= '</div>';
+
+			$output  .= '</div>';
+			$output  .= '</div>';
+		}
+
+		$output	.= '</div>';
+
+		if($arrows) {
+			$output	.= '<a href="#sppb-carousel-'. $this->addon->id .'" class="sppb-carousel-arrow left sppb-carousel-control" data-slide="prev"><i class="fa fa-chevron-left"></i></a>';
+			$output	.= '<a href="#sppb-carousel-'. $this->addon->id .'" class="sppb-carousel-arrow right sppb-carousel-control" data-slide="next"><i class="fa fa-chevron-right"></i></a>';
+		}
+
+		$output .= '</div>';
+
+		return $output;
 	}
 
-	if($color) {
-		$color = 'color:' . $color . ';';
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$layout_path = JPATH_ROOT . '/components/com_sppagebuilder/layouts';
+		$css = '';
+
+		// Buttons style
+		foreach ($this->addon->settings->sp_carousel_item as $key => $value) {
+			if($value->button_text) {
+				$css_path = new JLayoutFile('addon.css.button', $layout_path);
+				$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $this->addon->settings, 'id' => 'btn-' . ($this->addon->id + $key) ));
+			}
+		}
+
+		return $css;
 	}
-
-	$carousel_autoplay = ($autoplay)?'data-sppb-ride="sppb-carousel"':'';
-
-	$output  = '<div style="' . $background . $color . '" class="sppb-carousel sppb-slide ' . $class . '" ' . $carousel_autoplay . '>';
-
-	if($controllers) {
-	$output .= '<ol class="sppb-carousel-indicators">';
-    $output .= '</ol>';
-	}
-
-	$output .= '<div class="sppb-carousel-inner ' . $alignment . '">';
-	$output .= AddonParser::spDoAddon($content);
-	$output	.= '</div>';
-
-	if($arrows) {
-		$output	.= '<a style="' . $color . '" class="sppb-carousel-arrow left sppb-carousel-control" role="button" data-slide="prev"><i class="fa fa-chevron-left"></i></a>';
-		$output	.= '<a style="' . $color . '" class="sppb-carousel-arrow right sppb-carousel-control" role="button" data-slide="next"><i class="fa fa-chevron-right"></i></a>';
-	}
-	
-	$output .= '</div>';
-
-	return $output;
-
-}
-
-function sp_carousel_item_addon( $atts ){
-
-	extract(spAddonAtts(array(
-		"title"=>'',
-		"bg"=>'',
-		'content'=>'',
-		"button_text"=>'',
-		"button_url"=>'',
-		"button_size" => '',
-		"button_type"=>'',
-		"button_icon"=>'',
-		), $atts));
-
-	if($button_icon) {
-		$button_text = '<i class="fa ' . $button_icon . '"></i> ' . $button_text;
-	}
-
-	$has_bg = '';
-
-	if($bg) {
-		$has_bg = ' sppb-item-has-bg';
-	}
-	
-	$output   = '<div class="sppb-item'. $has_bg .'">';
-
-	if($bg) {
-		$output  .= '<img src="' . $bg . '" alt="' . $title . '">';
-	}
-
-	$output  .= '<div class="sppb-carousel-item-inner">';
-	$output  .= '<div class="sppb-carousel-caption">';
-	$output  .= '<div class="sppb-carousel-pro-text">';
-
-	if(($title) || ($content) ) {
-		
-		if($title!='') $output  .= '<h2>' . $title . '</h2>';
-        $output  .= '<p>' . $content . '</p>';
-
-        if($button_text && $button_url) {
-        	$output  .= '<a href="' . $button_url . '" class="sppb-btn sppb-btn-' . $button_type . ' sppb-btn-' . $button_size . '" role="button">' . $button_text . '</a>';
-        }
-	}
-
-	$output  .= '</div>';
-	$output  .= '</div>';
-
-	$output  .= '</div>';
-	$output  .= '</div>';
-
-	return $output;
-
 }

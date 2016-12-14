@@ -1,7 +1,7 @@
 /**
  * @package SP Page Builder
  * @author JoomShaper http://www.joomshaper.com
- * @copyright Copyright (c) 2010 - 2016 JoomShaper
+ * @copyright Copyright (c) 2010 - 2015 JoomShaper
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 
@@ -287,24 +287,26 @@
     $('.sppb-carousel').each(function (index) {
       var items = $(this).find('.sppb-item');
       var id = 'sppb-carousel' + (index+1);
+      var controller_items = '';
 
       //Set ID
       $(this).attr('id', id );
-      
+
       for (var i = 0; i < items.length; i++) {
         if(i==0) {
-          $('<li data-sppb-target="#' + id + '" class="active" data-sppb-slide-to="0"></li>').appendTo($(this).find('>.sppb-carousel-indicators'));
+          controller_items += '<li data-sppb-target="#' + id + '" class="active" data-sppb-slide-to="0"></li>';
         } else {
-          $('<li data-sppb-target="#' + id + '" data-sppb-slide-to="' + i + '"></li>').appendTo($(this).find('>.sppb-carousel-indicators'));
+          controller_items += '\n<li data-sppb-target="#' + id + '" data-sppb-slide-to="' + i + '"></li>';
         }
       };
+
+      $(this).find('>.sppb-carousel-indicators').html(controller_items);
 
       $(this).find('.sppb-carousel-control').attr('href', '#' + id);
 
       $(this).find('.sppb-item').first().addClass('active');
     });
   })
-
 
   // CAROUSEL DATA-API
   // =================
@@ -348,41 +350,24 @@
 +function ($) {
   'use strict';
 
-  $.fn.sppbAccordion = function(options){
+  $(document).on('click', '.sppb-panel-heading', function(event){
+    event.preventDefault();
+    var $this = $(this);
+    var $items = $this.closest('.sppb-panel-group').find('>div');
+    var $handlers = $items.find('.sppb-panel-heading');
+    var $panels = $items.find('.sppb-panel-collapse');
 
-    var settings = $.extend({
-      hidefirst: 0
-    }, options);
-
-    return this.each(function(){
-
-      var $items      = $(this).find('>div');
-      var $handlers   = $items.find('.sppb-panel-heading');
-      var $panels     = $items.find('.sppb-panel-collapse');
-      $items.first().addClass('active');
-      $handlers.first().addClass('active');
-      $panels.hide().first().removeAttr('style');
-
-      $handlers.on('click', function(){
-
-        if( $(this).hasClass('active') )
-        {
-          $(this).removeClass('active');
-          $panels.slideUp();
-        }
-        else
-        {
-          $handlers.removeClass('active');
-          $panels.slideUp();
-          $(this).addClass('active').next().slideDown();
-        }
-      });
-
-    });
-  };
-
-  $(document).ready(function(){
-    $('.sppb-panel-group').sppbAccordion();
+    if( $(this).hasClass('active') )
+    {
+      $(this).removeClass('active');
+      $panels.slideUp();
+    }
+    else
+    {
+      $handlers.removeClass('active');
+      $panels.slideUp();
+      $(this).addClass('active').next().slideDown();
+    }
   });
 
 }(jQuery);
@@ -518,7 +503,6 @@
       $(this).find('>.sppb-tab-content').children().each(function (index) {
         $(this).attr('id', id + '-' + (index+1) )
       });
-
     });
   });
 
@@ -1460,7 +1444,7 @@ if (typeof jQuery != 'undefined' && typeof MooTools != 'undefined' ) {
         if (this.video) {
             this.video.unbind(pluginName);
         }
-        
+
         delete $[pluginName].lookup[this.index];
         this.element.removeData(pluginName);
         this.wrapper.remove();
@@ -1555,7 +1539,7 @@ if (typeof jQuery != 'undefined' && typeof MooTools != 'undefined' ) {
             var c, d, e, f, g;
             for (g = this.keys, c = e = 0, f = g.length; f > e; c = ++e)
                 if (d = g[c], d === a) return void(this.values[c] = b);
-            return this.keys.push(a), this.values.push(b) 
+            return this.keys.push(a), this.values.push(b)
         }, a
     }()), a = this.MutationObserver || this.WebkitMutationObserver || this.MozMutationObserver || (a = function() {
         function a() {
@@ -1723,9 +1707,9 @@ jQuery(function($){
       //
       // By the way, iOS (iPad, iPhone, ...) seems to not execute, or at least delays
       // intervals while the user scrolls. Therefore the inview event might fire a bit late there
-      // 
+      //
       // Don't waste cycles with an interval until we get at least one element that
-      // has bound to the inview event.  
+      // has bound to the inview event.
       if (!timer && !$.isEmptyObject(inviewObjects)) {
          timer = setInterval(checkInView, 250);
       }
@@ -1797,7 +1781,7 @@ jQuery(function($){
             visiblePartX,
             visiblePartY,
             visiblePartsMerged;
-        
+
         // Don't ask me why because I haven't figured out yet:
         // viewportOffset and viewportSize are sometimes suddenly null in Firefox 5.
         // Even though it sounds weird:
@@ -1806,7 +1790,7 @@ jQuery(function($){
         if (!viewportOffset || !viewportSize) {
           return;
         }
-        
+
         if (elementOffset.top + elementSize.height > viewportOffset.top &&
             elementOffset.top < viewportOffset.top + viewportSize.height &&
             elementOffset.left + elementSize.width > viewportOffset.left &&
@@ -1831,7 +1815,7 @@ jQuery(function($){
   $(w).bind("scroll resize scrollstop", function() {
     viewportSize = viewportOffset = null;
   });
-  
+
   // IE < 9 scrolls to focused elements without firing the "scroll" event
   if (!documentElement.addEventListener && documentElement.attachEvent) {
     documentElement.attachEvent("onfocusin", function() {
@@ -1839,100 +1823,52 @@ jQuery(function($){
     });
   }
 
-  $(document).ready(function() {
-    //Animated Progress
-    $('.sppb-progress').bind('inview', function(event, visible, visiblePartX, visiblePartY) {
-      var $bar = $(this).find('.sppb-progress-bar');
-      if (visible) {
-        $bar.css('width', $bar.data('width'));
-        $(this).unbind('inview');
-      }
-    });
-
-    //Animated Number
-    $.fn.sppbanimateNumbers = function(stop, commas, duration, ease) {
-        return this.each(function() {
-            var $this = $(this);
-            var start = parseInt($this.text().replace(/,/g, ""));
-      commas = (commas === undefined) ? true : commas;
-            $({value: start}).animate({value: stop}, {
-              duration: duration == undefined ? 1000 : duration,
-              easing: ease == undefined ? "swing" : ease,
-              step: function() {
-                $this.text(Math.floor(this.value));
-          if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
-              },
-              complete: function() {
-                 if (parseInt($this.text()) !== stop) {
-                     $this.text(stop);
-             if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
-                 }
-              }
-            });
-        });
-    };
-
-    $('.sppb-animated-number').bind('inview', function(event, visible, visiblePartX, visiblePartY) {
-      var $this = $(this);
-      if (visible) {
-        $this.sppbanimateNumbers($this.data('digit'), false, $this.data('duration')); 
-        $this.unbind('inview');
-      }
-    });
-
+  //Animated Progress
+  $(document).on('inview', '.sppb-progress', function(event, visible, visiblePartX, visiblePartY) {
+    var $bar = $(this).find('.sppb-progress-bar');
+    if (visible) {
+      $bar.css('width', $bar.data('width'));
+      $(this).unbind('inview');
+    }
   });
 
-})(jQuery);
-
-
-//Flickr Photo Stream
-(function (document, $) {
-    "use strict";
- 
-    var sppbflickrPhotoStream = function ($el, options) {
-        var url = ['http://api.flickr.com/services/feeds/photos_public.gne?id=' + options.id + '&format=json&jsoncallback=?'].join('');
- 
-        return $.getJSON(url).done(function (data) {  
-
-          for (var i = 0; i < options.count; i = i + 1) {
-            var pic = data.items[i];
-
-            $("<img class='sppb-img-responsive' alt='"+pic.title+"' />")
-            .attr("src", pic.media.m)
-            .appendTo($el)
-            .wrap(options.container || '')
-            .wrap(['<a target="_blank" href="' + pic.link + '" title="' + pic.title + '"></a>'].join(''));
-          }
-
-        });
-    };
- 
-    $.fn.sppbflickrPhotoStream = function (options) {
-        return sppbflickrPhotoStream($(this).get(), options || {});
-    };
-
-    //Instance
-    $(document).ready(function(){
-      $('.sppb-flickr-gallery').each(function(){
-        var $this = $(this);
-        $this.sppbflickrPhotoStream({
-          id: $this.data('id'),
-          count: $this.data('count'),
-          container: '<li />'
-        });
+  //Animated Number
+  $.fn.sppbanimateNumbers = function(stop, commas, duration, ease) {
+      return this.each(function() {
+          var $this = $(this);
+          var start = parseInt($this.text().replace(/,/g, ""));
+    commas = (commas === undefined) ? true : commas;
+          $({value: start}).animate({value: stop}, {
+            duration: duration == undefined ? 1000 : duration,
+            easing: ease == undefined ? "swing" : ease,
+            step: function() {
+              $this.text(Math.floor(this.value));
+        if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
+            },
+            complete: function() {
+               if (parseInt($this.text()) !== stop) {
+                   $this.text(stop);
+           if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
+               }
+            }
+          });
       });
-    });
+  };
 
-})(document, jQuery);
+  $(document).on('inview', '.sppb-animated-number', function(event, visible, visiblePartX, visiblePartY) {
+    var $this = $(this);
+    if (visible) {
+      $this.sppbanimateNumbers($this.data('digit'), false, $this.data('duration'));
+      $this.unbind('inview');
+    }
+  });
 
-//Pie Chart
-jQuery(function($) {
-
-  $('.sppb-pie-chart').bind('inview', function(event, visible, visiblePartX, visiblePartY) {
+  // Pie Chart
+  $(document).on('inview', '.sppb-pie-chart', function(event, visible, visiblePartX, visiblePartY) {
       var $this = $(this);
 
       if (visible) {
-        
+
         $this.easyPieChart({
           barColor: $this.data('barcolor'),
           trackColor: $this.data('trackcolor'),
@@ -1948,14 +1884,12 @@ jQuery(function($) {
       }
     });
 
-  $('.sppb-addon-video').closest('.sppb-addon-container').addClass('no-animate-fill'); // video fullscreen issue fix
-});
+})(jQuery);
 
 //Ajax Contact Form
 jQuery(function($) {
-    $('.sppb-ajaxt-contact-form').on('submit', function(event) {
+    $(document).on('submit', '.sppb-ajaxt-contact-form', function(event) {
 
-        var $this = $(this);
         event.preventDefault();
 
         var $self   = $(this);
@@ -1975,8 +1909,7 @@ jQuery(function($) {
             },
             success: function (response) {
                 $self.find('.fa-spin').removeClass('fa-spinner fa-spin');
-                $this.find('input[type=text], input[type=email], input[type=number], textarea').val("");
-                $self.next('.sppb-ajax-contact-status').html($.parseJSON(response).data).fadeIn().delay(5000).fadeOut(500);;
+                $self.next('.sppb-ajax-contact-status').html($.parseJSON(response).data).fadeIn().delay(2000).fadeOut(500);;
             }
         });
 
@@ -1984,4 +1917,14 @@ jQuery(function($) {
     });
 });
 
-
+// Magnetic Popup
+jQuery(function($) {
+  $(document).on('click', '.sppb-magnific-popup', function(event) {
+    event.preventDefault();
+    var $this = $(this);
+    $this.magnificPopup({
+      type: $this.data('popup_type'),
+      mainClass: $this.data('mainclass')
+    }).magnificPopup('open');
+  });
+});

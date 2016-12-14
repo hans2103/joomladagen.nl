@@ -8,67 +8,43 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_facebook_likebox','sp_facebook_likebox_addon');
+class SppagebuilderAddonFacebook_likebox extends SppagebuilderAddons{
 
-function sp_facebook_likebox_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'title'					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',		
-		'url'					=> '',
-		'appid'					=> '354400064582736',
-		'width'					=> '',
-		'height'				=> '',
-		'colorscheme'			=> '',
-		'showposts'				=> '',
-		'class'					=> '',
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	if($width=='') {
-		$width = 292;
+		//Options
+		$appid = (isset($this->addon->settings->appid) && $this->addon->settings->appid) ? $this->addon->settings->appid : '';
+		$url = (isset($this->addon->settings->url) && $this->addon->settings->url) ? $this->addon->settings->url : '';
+		$width = (isset($this->addon->settings->width) && $this->addon->settings->width) ? $this->addon->settings->width : 292;
+		$height = (isset($this->addon->settings->height) && $this->addon->settings->height) ? $this->addon->settings->height : 300;
+		$colorscheme = (isset($this->addon->settings->colorscheme) && $this->addon->settings->colorscheme) ? $this->addon->settings->colorscheme : '';
+		$showposts = (isset($this->addon->settings->showposts) && $this->addon->settings->showposts) ? $this->addon->settings->showposts : '';
+
+		$output  = '<div class="sppb-addon sppb-addon-facebook-likebox ' . $class . '">';
+		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
+
+		if(!defined('_SPPB_FB')) {
+			define('_SPPB_FB', 1);
+
+			$output .= '<div id="fb-root"></div>';
+			$output .= '<script>(function(d, s, id) {
+						  var js, fjs = d.getElementsByTagName(s)[0];
+						  if (d.getElementById(id)) return;
+						  js = d.createElement(s); js.id = id;
+						  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId='.$appid.'&version=v2.0";
+						  fjs.parentNode.insertBefore(js, fjs);
+						}(document, "script", "facebook-jssdk"));</script>';
+		}
+
+		$output .= '<div class="fb-like-box" data-href="' . $url . '" data-height="' . (int) $height . '" data-width="' . (int) $width . '" data-colorscheme="' . $colorscheme . '" data-show-faces="true" data-header="false" data-stream="' . $showposts . '" data-show-border="false"></div>';
+
+		$output .= '</div>';
+
+		return $output;
 	}
-
-	if($height=='') {
-		$height = 300;
-	}
-
-	$output  = '<div class="sppb-addon sppb-addon-facebook-likebox ' . $class . '">';
-
-	if($title) {
-
-		$title_style = '';
-		if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-		if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-		if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-		if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-		if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-		$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
-	}
-
-	if(!defined('_SPPB_FB')) {
-
-		define('_SPPB_FB', 1);
-
-		$output .= '<div id="fb-root"></div>';
-		$output .= '<script>(function(d, s, id) {
-					  var js, fjs = d.getElementsByTagName(s)[0];
-					  if (d.getElementById(id)) return;
-					  js = d.createElement(s); js.id = id;
-					  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId='.$appid.'&version=v2.0";
-					  fjs.parentNode.insertBefore(js, fjs);
-					}(document, "script", "facebook-jssdk"));</script>';
-	}
-
-	$output .= '<div class="fb-like-box" data-href="'.$url.'" data-height="'.(int) $height.'" data-width="'.(int) $width.'" data-colorscheme="'.$colorscheme.'" data-show-faces="true" data-header="false" data-stream="'.$showposts.'" data-show-border="false"></div>';
-
-	$output .= '</div>';
-
-	return $output;
 
 }

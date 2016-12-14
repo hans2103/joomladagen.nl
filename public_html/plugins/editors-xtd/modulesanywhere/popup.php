@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.1PRO
+ * @version         6.0.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,6 +15,7 @@ $user = JFactory::getUser();
 if ($user->get('guest')
 	|| (
 		!$user->authorise('core.edit', 'com_content')
+		&& !$user->authorise('core.edit.own', 'com_content')
 		&& !$user->authorise('core.create', 'com_content')
 	)
 )
@@ -225,8 +226,8 @@ class PlgButtonModulesAnywherePopup
 				<div class="btn-toolbar" id="toolbar">
 					<div class="btn-wrapper" id="toolbar-options">
 						<button
-							onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=modules anywhere');"
-							class="btn btn-small">
+								onclick="window.open('index.php?option=com_plugins&filter_folder=system&filter_search=<?php echo JText::_('MODULES_ANYWHERE') ?>');"
+								class="btn btn-small">
 							<span class="icon-options"></span> <?php echo JText::_('JOPTIONS') ?>
 						</button>
 					</div>
@@ -262,7 +263,7 @@ class PlgButtonModulesAnywherePopup
 									<select name="style" id="style" class="inputbox">
 										<?php foreach (explode(',', $params->styles) as $s) : ?>
 											<option <?php echo ($s == $style) ? 'selected="selected"' : ''; ?>
-												value="<?php echo $s; ?>"><?php echo $s; ?><?php echo ($s == $params->style) ? ' *' : ''; ?></option>
+													value="<?php echo $s; ?>"><?php echo $s; ?><?php echo ($s == $params->style) ? ' *' : ''; ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
@@ -280,9 +281,9 @@ class PlgButtonModulesAnywherePopup
 								<fieldset id="showtitle" class="radio btn-group">
 									<input type="radio" id="showtitle0" name="showtitle" value="" <?php echo $params->showtitle === '' ? 'checked="checked"' : ''; ?>>
 									<label for="showtitle0"><?php echo JText::_('JDEFAULT'); ?></label>
-									<input type="radio" id="showtitle1" name="showtitle" value="0" <?php echo $params->showtitle === '0' ? 'checked="checked"' : ''; ?>>
+									<input type="radio" id="showtitle1" name="showtitle" value="false" <?php echo $params->showtitle === '0' ? 'checked="checked"' : ''; ?>>
 									<label for="showtitle1"><?php echo JText::_('JNO'); ?></label>
-									<input type="radio" id="showtitle2" name="showtitle" value="1" <?php echo $params->showtitle === '1' ? 'checked="checked"' : ''; ?>>
+									<input type="radio" id="showtitle2" name="showtitle" value="true" <?php echo $params->showtitle === '1' ? 'checked="checked"' : ''; ?>>
 									<label for="showtitle2"><?php echo JText::_('JYES'); ?></label>
 								</fieldset>
 							</div>
@@ -501,36 +502,44 @@ class PlgButtonModulesAnywherePopup
 
 					if (modulepos) {
 						str = t_start + '<?php echo $postag; ?> ' + id + t_end;
-					}
-					else {
-						str = t_start + '<?php echo $tag; ?> ' + id;
+					} else {
+						attribs = [];
+
 						<?php if ($params->override_style && (count(explode(',', $params->styles)) > 1 || $params->styles != $params->style)) : ?>
 						var style = $('select[name="style"]').val();
 						if (style && style != '<?php echo $params->style; ?>') {
-							str += '|' + style;
+							attribs.push('style="' + style + '"');
 						}
 						<?php endif; ?>
+
 						if ($('input[name="showtitle"]:checked').val()) {
-							str += '|showtitle=' + $('input[name="showtitle"]:checked').val();
+							attribs.push('showtitle="' + $('input[name="showtitle"]:checked').val() + '"');
 						}
-						str += t_end;
+
+						if (attribs.length) {
+							attribs = 'module="' + id + '" ' + attribs.join(' ');
+						} else {
+							attribs = id;
+						}
+
+						str = t_start + '<?php echo $tag; ?> ' + attribs + t_end;
 					}
 
 					if ($('input[name="enable_div"]:checked').val() == 1) {
 						var params = [];
 						if ($('input[name="div_width"]').val()) {
-							params[params.length] = 'width:' + $('input[name="div_width"]').val();
+							params.push('width="' + $('input[name="div_width"]').val() + '"');
 						}
 						if ($('input[name="div_height"]').val()) {
-							params[params.length] = 'height:' + $('input[name="div_height"]').val();
+							params.push('height="' + $('input[name="div_height"]').val() + '"');
 						}
 						if ($('input[name="div_float"]:checked').val() != 0) {
-							params[params.length] = 'float:' + $('input[name="div_float"]:checked').val();
+							params.push('float="' + $('input[name="div_float"]:checked').val()) + '"';
 						}
 						if ($('input[name="div_class"]').val()) {
-							params[params.length] = 'class:' + $('input[name="div_class"]').val();
+							params.push('class="' + $('input[name="div_class"]').val() + '"');
 						}
-						str = t_start + ('div ' + params.join('|') ).trim() + t_end
+						str = t_start + ('div ' + params.join(' ') ).trim() + t_end
 							+ str.trim()
 							+ t_start + '/div' + t_end;
 					}

@@ -5,81 +5,80 @@
  * @copyright Copyright (c) 2010 - 2016 JoomShaper
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
+
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_blocknumber','sp_blocknumber_addon');
+class SppagebuilderAddonBlocknumber extends SppagebuilderAddons{
 
-function sp_blocknumber_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		"title"					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',	
-		"heading"				=> '',
-		"text"					=> '',
-		"number"				=> '',
-		"size"					=> '',
-		"background"			=> '',
-		"color"					=> '',
-		"border_radius"			=> '',
-		"alignment"				=> '',
-		'class'					=> '',
-		), $atts));
+		$class  	= (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title  	= (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : '';
+		$text     	= (isset($this->addon->settings->text) && $this->addon->settings->text) ? $this->addon->settings->text : '';
+		$number     = (isset($this->addon->settings->number) && $this->addon->settings->number) ? $this->addon->settings->number : '';
+		$alignment  = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : '';
+		$heading  	= (isset($this->addon->settings->heading) && $this->addon->settings->heading) ? $this->addon->settings->heading : '';
 
-	$style = '';
-	$block_number = '';
-
-	if($number) {
-		if($size) $style .= 'width: ' . (int) $size . 'px; height: ' . (int) $size . 'px; line-height: ' . (int) $size . 'px;';
-		if($background) $style .= 'background-color: ' . $background . ';';
-		if($color) $style .= 'color: ' . $color . ';';
-		if($border_radius) $style .= 'border-radius: ' . (int) $border_radius . 'px;';
-		$block_number .= '<span class="sppb-blocknumber-number" style="'. $style .'">' . $number . '</span>';
-	}
-
-	if($text) {
-		$output  = '<div class="sppb-addon sppb-addon-blocknumber ' . $class . '">';
-
-		if($title) {
-
-			$title_style = '';
-			if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-			if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-			if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-			if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-			if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-			$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+		if ($number) {
+			$block_number = '<span class="sppb-blocknumber-number">' . $number . '</span>';
 		}
 
-		$output .= '<div class="sppb-addon-content">';
-		$output .= '<div class="sppb-blocknumber sppb-media">';
-		if( $alignment=='center' ) {
-			$output .= '<div class="sppb-text-center">'.$block_number.'</div>';
-			$output .= '<div class="sppb-media-body sppb-text-center">';
-			if($heading) $output .= '<h3 class="sppb-media-heading">'.$heading.'</h3>';
-			$output .= $text;
-		} else {
-			$output .= '<div class="pull-'.$alignment.'">'.$block_number.'</div>';
-			$output .= '<div class="sppb-media-body sppb-text-'. $alignment .'">';
-			if($heading) $output .= '<h3 class="sppb-media-heading">'.$heading.'</h3>';
-			$output .= $text;
+		if($text) {
+			$output  = '<div class="sppb-addon sppb-addon-blocknumber ' . $class . '">';
+
+			if($title) {
+				$output  .= '<' . $heading_selector . ' class="sppb-addon-title">' . $title .'</' . $heading_selector . '>';
+			}
+
+			$output .= '<div class="sppb-addon-content">';
+			$output .= '<div class="sppb-blocknumber sppb-media">';
+			if( $alignment =='center' ) {
+				if ($number) {
+					$output .= '<div class="sppb-text-center">'.$block_number.'</div>';
+				}
+				$output .= '<div class="sppb-media-body sppb-text-center">';
+				if($heading) $output .= '<h3 class="sppb-media-heading">'.$heading.'</h3>';
+				$output .= $text;
+			} else {
+				if ($number) {
+					$output .= '<div class="pull-'.$alignment.'">'.$block_number.'</div>';
+				}
+				$output .= '<div class="sppb-media-body sppb-text-'. $alignment .'">';
+				if($heading) $output .= '<h3 class="sppb-media-heading">'.$heading.'</h3>';
+				$output .= $text;
+			}
+
+			$output .= '</div>'; //.sppb-media-body
+			$output .= '</div>'; //.sppb-media
+			$output .= '</div>'; //.sppb-addon-content
+			$output .= '</div>'; //.sppb-addon-blocknumber
+
+			return $output;
 		}
 
-		$output .= '</div>';
-		$output .= '</div>';
-		$output .= '</div>';
-
-		$output .= '</div>';
-
-		return $output;
+		return ;
 	}
 
-	return;
-	
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$number_style = '';
+
+		//number_style
+		if($this->addon->settings->size) $number_style .= 'width: ' . (int) $this->addon->settings->size . 'px; height: ' . (int) $this->addon->settings->size . 'px; line-height: ' . (int) $this->addon->settings->size . 'px;';
+		if($this->addon->settings->background) $number_style .= 'background-color: ' . $this->addon->settings->background . ';';
+		if($this->addon->settings->color) $number_style .= 'color: ' . $this->addon->settings->color . ';';
+		if($this->addon->settings->border_radius) $number_style .= 'border-radius: ' . (int) $this->addon->settings->border_radius . 'px;';
+
+		$css = '';
+
+		if($number_style) {
+			$css .= $addon_id . ' .sppb-blocknumber-number {';
+			$css .= $number_style;
+			$css .= "\n" . '}' . "\n"	;
+		}
+
+		return $css;
+	}
 }

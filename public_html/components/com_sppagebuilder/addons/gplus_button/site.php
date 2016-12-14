@@ -8,21 +8,19 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_gplus_button','sp_gplus_button_addon');
+class SppagebuilderAddonGplus_button extends SppagebuilderAddons{
 
-function sp_gplus_button_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'size'=>'',
-		'annotation'=>'',
-		'width'=>'',
-		), $atts));
+		$size = (isset($this->addon->settings->size) && $this->addon->settings->size) ? $this->addon->settings->size : '';
+		$annotation = (isset($this->addon->settings->annotation) && $this->addon->settings->annotation) ? $this->addon->settings->annotation : '';
+		$width = (isset($this->addon->settings->width) && $this->addon->settings->width) ? $this->addon->settings->width : 292;
 
-	$doc = JFactory::getDocument();
-	$doc->addScript('https://apis.google.com/js/plusone.js');
+		$doc = JFactory::getDocument();
+		$doc->addScript('//apis.google.com/js/plusone.js');
+		$output = '<div class="g-plusone" data-href="' . JURI::current() . '" data-size="' . $size . '" data-annotation="' . $annotation . '"></div>';
 
-	$output = '<div class="g-plusone" data-href="' . JURI::current() . '" data-size="' . $size . '" data-annotation="' . $annotation . '"></div>';
+		return $output;
+	}
 
-	return $output;
-	
 }

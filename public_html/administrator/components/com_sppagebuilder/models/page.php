@@ -9,83 +9,101 @@
 defined ('_JEXEC') or die ('restricted aceess');
 
 jimport('joomla.application.component.modeladmin');
-jimport( 'joomla.filter.filteroutput' );
 
-class SppagebuilderModelPage extends JModelAdmin
-{
-    public function getTable($type = 'Page', $prefix = 'SppagebuilderTable', $config = array()) 
-    {
+class SppagebuilderModelPage extends JModelAdmin {
+
+    public function getTable($type = 'Page', $prefix = 'SppagebuilderTable', $config = array()) {
         return JTable::getInstance($type, $prefix, $config);
     }
 
-    public function getForm($data = array(), $loadData = true) 
-    {
+    public function getForm($data = array(), $loadData = true) {
         $form = $this->loadForm('com_sppagebuilder.page', 'page',array('control' => 'jform', 'load_data' => $loadData));
 
-        if (empty($form)) 
-        {
+        if (empty($form)) {
             return false;
         }
+
+        $jinput = JFactory::getApplication()->input;
+
+    		$id = $jinput->get('id', 0);
+
+    		// Determine correct permissions to check.
+    		if ($this->getState('page.id'))
+    		{
+    			$id = $this->getState('page.id');
+
+    			// Existing record. Can only edit in selected categories.
+    			$form->setFieldAttribute('catid', 'action', 'core.edit');
+
+    			// Existing record. Can only edit own pages in selected categories.
+    			$form->setFieldAttribute('catid', 'action', 'core.edit.own');
+    		}
+    		else
+    		{
+    			// New record. Can only create in selected categories.
+    			$form->setFieldAttribute('catid', 'action', 'core.create');
+    		}
+
+    		$user = JFactory::getUser();
+
+        // Modify the form based on Edit State access controls.
+    		if ($id != 0 && (!$user->authorise('core.edit.state', 'com_sppagebuilder.page.' . (int) $id))
+    			|| ($id == 0 && !$user->authorise('core.edit.state', 'com_sppagebuilder')))
+    		{
+    			// Disable fields for display.
+    			$form->setFieldAttribute('published', 'disabled', 'true');
+
+    			// Disable fields while saving.
+    			// The controller has already verified this is an page you can edit.
+    			$form->setFieldAttribute('published', 'filter', 'unset');
+    		}
+
         return $form;
     }
 
-    protected function loadFormData() 
-    {
+    protected function loadFormData() {
         $data = JFactory::getApplication()->getUserState('com_sppagebuilder.edit.page.data', array());
-        if (empty($data)) 
-        {
+
+        if (empty($data)) {
             $data = $this->getItem();
         }
-
-        if (isset($data->alias)) {
-            if ($data->alias)
-            {
-                $data->alias = JFilterOutput::stringURLSafe($data->alias);
-            }
-            else
-            {
-                $data->alias = JFilterOutput::stringURLSafe($data->title);
-            }
-        }
-
 
         $this->preprocessData('com_sppagebuilder.page', $data);
 
         return $data;
     }
 
-    public function save($data)
-    {
+    public function save($data) {
         $app = JFactory::getApplication();
-        if ($app->input->get('task') == 'save2copy')
-        {
-            list($title, $alias) = $this->pageGenerateNewTitle( $data['alias'], $data['title'] );
-            $data['title'] = $title;
-            $data['alias'] = $alias;
+        if ($app->input->get('task') == 'save2copy') {
+            $data['title'] = $this->pageGenerateNewTitle( $data['title'] );
         }
+
+        $data['created_by'] = $this->checkExistingUser($data['created_by']);
+
         parent::save($data);
         return true;
     }
-    
-    protected function prepareTable($table)
-    {
-        $jform = JRequest::getVar('jform');
-        if (!isset($jform['page_layout'])) {
-            $table->page_layout = 0;
+
+    protected function checkExistingUser($id) {
+      $currentUser = JFactory::getUser();
+      $user_id = $currentUser->id;
+
+      if($id) {
+        $user = JFactory::getUser($id);
+        if($user->id) {
+          $user_id = $id;
         }
+      }
+
+      return $user_id;
     }
 
-    public static function pageGenerateNewTitle($alias, $title )
-    {
+    public static function pageGenerateNewTitle($title ) {
         $pageTable = JTable::getInstance('Page', 'SppagebuilderTable');
 
-        while( $pageTable->load(array('alias'=>$alias)) ){
+        while( $pageTable->load(array('title'=>$title)) ) {
             $m = null;
-            if (preg_match('#-(\d+)$#', $alias, $m)) {
-                $alias = preg_replace('#-(\d+)$#', '-'.($m[1] + 1).'', $alias);
-            } else {
-                $alias .= '-2';
-            }
             if (preg_match('#\((\d+)\)$#', $title, $m)) {
                 $title = preg_replace('#\(\d+\)$#', '('.($m[1] + 1).')', $title);
             } else {
@@ -93,6 +111,6 @@ class SppagebuilderModelPage extends JModelAdmin
             }
         }
 
-        return array($title ,$alias);
+        return $title;
     }
 }

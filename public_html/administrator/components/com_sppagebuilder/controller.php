@@ -10,40 +10,42 @@ defined ('_JEXEC') or die ('restricted aceess');
 
 jimport('joomla.application.component.controller');
 
-class SppagebuilderController extends JControllerLegacy
-{
-	function display( $cachable = false, $urlparams = false )
-	{
-		$input = JFactory::getApplication()->input;
-		$input->set('view', $this->input->get('view', 'pages'));
-		SppagebuilderHelper::addSubmenu('pages');
-		parent::display($cachable, $urlparams);
+class SppagebuilderController extends JControllerLegacy {
+
+	protected $default_view = 'pages';
+
+	function display( $cachable = false, $urlparams = false ) {
+		$view   = $this->input->get('view', 'pages');
+		$layout = $this->input->get('layout', 'pages');
+		$id     = $this->input->getInt('id');
+
+		if ($view == 'page' && $layout == 'edit' && !$this->checkEditId('com_sppagebuilder.edit.page', $id)) {
+			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_sppagebuilder&view=pages', false));
+
+			return false;
+		}
+
+		return parent::display();
 	}
 
 	public function export(){
 		$input  = JFactory::getApplication()->input;
-
-		$id = $input->get('id','','INT');
-
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('text', 'alias')));
-		$query->from($db->quoteName('#__sppagebuilder'));
-		$query->where($db->quoteName('id') . ' = '. $db->quote($id));
-		$db->setQuery($query);
-		$result = $db->loadObject();
+		$template = $input->get('template','[]','RAW');
+		$filename = 'template'. rand(10000,99999);
 
 		header("Pragma: public");
 		header("Expires: 0");
-		header("Cache-Control: must-revalidate, post-check=0, pre-check=0"); 
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 		header("Content-Type: application/force-download");
 		header("Content-Type: application/octet-stream");
 		header("Content-Type: application/download");
-		header("Content-Disposition: attachment;filename=$result->alias.json");
+		header("Content-Disposition: attachment;filename=$filename.json");
 		header("Content-Type: application/json");
 		header("Content-Transfer-Encoding: binary ");
 
-		echo $result->text;
+		echo $template;
 		die();
 	}
 }

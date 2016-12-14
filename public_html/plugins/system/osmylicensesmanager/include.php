@@ -24,7 +24,7 @@ if (!defined('ALLEDIA_FRAMEWORK_LOADED')) {
 
 // Extension's library
 if (!defined('OSMYLICENSESMANAGER_LOADED')) {
-    AutoLoader::register('Alledia\\OSMyLicensesManager', JPATH_SITE . '/plugins/system/osmylicensesmanager/library');
+    AutoLoader::register('\\Alledia\\OSMyLicensesManager', JPATH_SITE . '/plugins/system/osmylicensesmanager/library');
 
     define('OSMYLICENSESMANAGER_LOADED', 1);
 }

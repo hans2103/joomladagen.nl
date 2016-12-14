@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.6PRO
+ * @version         6.3.7PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -37,12 +37,14 @@ class PlgSystemSourcerer extends JPlugin
 			}
 		}
 
-		// load the admin language file
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-		RLFunctions::loadLanguage('plg_' . $this->_type . '_' . $this->_name);
+		// load the language file
+		JFactory::getLanguage()->load('plg_' . $this->_type . '_' . $this->_name, JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name);
 
 		// return if Regular Labs Library plugin is not installed
-		if (!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php'))
+		if (
+			!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			|| !JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml')
+		)
 		{
 			if (!JFactory::getApplication()->isAdmin() || JFactory::getApplication()->input->get('option') == 'com_login')
 			{

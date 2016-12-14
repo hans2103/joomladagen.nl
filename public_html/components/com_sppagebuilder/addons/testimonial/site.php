@@ -8,64 +8,48 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_testimonial','sp_testimonial_addon');
+class SppagebuilderAddonTestimonial extends SppagebuilderAddons {
 
-function sp_testimonial_addon($atts, $content){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		"title"					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',		
-		"review"				=> '',
-		"name"					=> '',
-		"company"				=> '',
-		"avatar"				=> '',
-		"avatar_width"			=> '',
-		"avatar_position"		=> 'left',
-		"link"					=> '',
-		"link_target"			=> '',
-		"class"					=> '',
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$style = (isset($this->addon->settings->style) && $this->addon->settings->style) ? $this->addon->settings->style : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	$output  = '<div class="sppb-addon sppb-addon-testimonial ' . $class . '">';
+		//Options
+		$review = (isset($this->addon->settings->review) && $this->addon->settings->review) ? $this->addon->settings->review : '';
+		$name = (isset($this->addon->settings->name) && $this->addon->settings->name) ? $this->addon->settings->name : '';
+		$company = (isset($this->addon->settings->company) && $this->addon->settings->company) ? $this->addon->settings->company : '';
+		$avatar = (isset($this->addon->settings->avatar) && $this->addon->settings->avatar) ? $this->addon->settings->avatar : '';
+		$avatar_width = (isset($this->addon->settings->avatar_width) && $this->addon->settings->avatar_width) ? $this->addon->settings->avatar_width : '';
+		$avatar_position = (isset($this->addon->settings->avatar_position) && $this->addon->settings->avatar_position) ? $this->addon->settings->avatar_position : 'left';
+		$link = (isset($this->addon->settings->link) && $this->addon->settings->link) ? $this->addon->settings->link : '';
+		$link_target = (isset($this->addon->settings->link_target) && $this->addon->settings->link_target) ? ' target="' . $this->addon->settings->link_target . '"' : '';
 
-	if($title) {
+		//Output
+		$output  = '<div class="sppb-addon sppb-addon-testimonial ' . $class . '">';
+		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
+		$output .= '<div class="sppb-addon-content">';
+		$output .= '<div class="sppb-media">';
 
-		$title_style = '';
-		if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-		if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-		if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-		if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-		if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
+		if ($avatar) {
+			$output .= '<a' . $link_target . ' class="pull-'.$avatar_position.'" href="'.$link.'">';
+			$output .= '<img class="sppb-media-object" src="'.$avatar.'" width="' . $avatar_width . '" alt="'.$name.'">';
+			$output .= '</a>';
+		}
 
-		$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+		$output .= '<div class="sppb-media-body">';
+		$output .= '<blockquote>';
+		$output .= $review;
+		$output .= '<footer><strong>'.$name.'</strong> <cite>'.$company.'</cite></footer>';
+		$output .= '</blockquote>';
+		$output .= '</div>';
+		$output .= '</div>';
+		$output .= '</div>';
+		$output .= '</div>';
+
+		return $output;
+
 	}
-
-	$output .= '<div class="sppb-addon-content">';
-	$output .= '<div class="sppb-media">';
-
-	if ($avatar) {
-		$output .= '<a target="' . $link_target . '" class="pull-'.$avatar_position.'" href="'.$link.'">';
-		$output .= '<img class="sppb-media-object" src="'.$avatar.'" width="' . $avatar_width . '" alt="'.$name.'">';
-		$output .= '</a>';
-	}
-
-	$output .= '<div class="sppb-media-body">';
-	$output .= '<blockquote>';
-	$output .= $review;
-	$output .= '<footer><strong>'.$name.'</strong> <cite>'.$company.'</cite></footer>';
-	$output .= '</blockquote>';
-	$output .= '</div>';
-	$output .= '</div>';
-
-	$output .= '</div>';
-
-	$output .= '</div>';
-
-	return $output;
 }
-

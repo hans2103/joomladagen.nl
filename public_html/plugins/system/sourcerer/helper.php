@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.6PRO
+ * @version         6.3.7PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -49,13 +49,13 @@ class PlgSystemSourcererHelper
 
 		$this->src_params->regex = '#('
 			. '(?P<start_pre>' . $breaks_start . ')'
-			. $tag_start . preg_quote($this->src_params->syntax_word, '#') . $spaces . '(?P<data>' . $inside_tag . ')' . $tag_end
+			. $tag_start . RLText::pregQuote($this->src_params->syntax_word) . $spaces . '(?P<data>' . $inside_tag . ')' . $tag_end
 			. '(?P<start_post>' . $breaks_end . ')'
 
 			. '(?P<content>.*?)'
 
 			. '(?P<end_pre>' . $breaks_start . ')'
-			. $tag_start . '\/' . preg_quote($this->src_params->syntax_word, '#') . $tag_end
+			. $tag_start . '\/' . RLText::pregQuote($this->src_params->syntax_word) . $tag_end
 			. '(?P<end_post>' . $breaks_end . ')'
 			. ')#s';
 
@@ -946,7 +946,7 @@ class PlgSystemSourcererHelper
 		// Remove start tag with optional php stuff after it
 		$string = preg_replace(
 			'#'
-			. $tag_start . preg_quote($this->src_params->syntax_word, '#') . $spaces . '(' . $inside_tag . ')' . $tag_end
+			. $tag_start . RLText::pregQuote($this->src_params->syntax_word) . $spaces . '(' . $inside_tag . ')' . $tag_end
 			. '(\s*<\?php(.*?)\?>)?'
 			. '#s',
 			'',
@@ -956,7 +956,7 @@ class PlgSystemSourcererHelper
 		// Remove left over end tags
 		$string = preg_replace(
 			'#'
-			. $tag_start . '\/' . preg_quote($this->src_params->syntax_word, '#') . $tag_end
+			. $tag_start . '\/' . RLText::pregQuote($this->src_params->syntax_word) . $tag_end
 			. '#s',
 			'',
 			$string
@@ -975,8 +975,8 @@ class PlgSystemSourcererHelper
 
 		if ($quote)
 		{
-			$start = preg_quote($start, '#');
-			$end   = preg_quote($end, '#');
+			$start = RLText::pregQuote($start);
+			$end   = RLText::pregQuote($end);
 		}
 
 		return array($start, $end);

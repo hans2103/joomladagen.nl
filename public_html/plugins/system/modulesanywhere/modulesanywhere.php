@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.1PRO
+ * @version         6.0.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -96,7 +96,7 @@ class PlgSystemModulesAnywhere extends JPlugin
 			return false;
 		}
 
-		if (RLProtect::isProtectedPage($this->_alias, 1))
+		if (RLProtect::isProtectedPage($this->_alias, true, array()))
 		{
 			return false;
 		}
@@ -140,7 +140,10 @@ class PlgSystemModulesAnywhere extends JPlugin
 	{
 		jimport('joomla.filesystem.file');
 
-		if (!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php'))
+		if (
+			!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			|| !JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml')
+		)
 		{
 			$this->throwError($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_INSTALLED');
 

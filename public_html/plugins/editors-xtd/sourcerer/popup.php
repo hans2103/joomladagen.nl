@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.6PRO
+ * @version         6.3.7PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -78,8 +78,8 @@ class PlgButtonSourcererPopup
 		";
 		JFactory::getDocument()->addScriptDeclaration($script);
 
-		RLFunctions::script('sourcerer/script.min.js', '6.3.6.p');
-		RLFunctions::stylesheet('sourcerer/popup.min.css', '6.3.6.p');
+		RLFunctions::script('sourcerer/script.min.js', '6.3.7.p');
+		RLFunctions::stylesheet('sourcerer/popup.min.css', '6.3.7.p');
 
 		$this->params->code = '';
 		if ($this->params->use_example_code == 1 || (JFactory::getApplication()->isAdmin() && $this->params->use_example_code == 2))
@@ -93,8 +93,6 @@ class PlgButtonSourcererPopup
 
 	function getHTML()
 	{
-		JFactory::getApplication()->setUserState('editor.source.syntax', 'php');
-
 		$editor_plugin = JPluginHelper::getPlugin('editors', 'codemirror');
 
 		if (empty($editor_plugin))
@@ -160,7 +158,7 @@ class PlgButtonSourcererPopup
 				</div>
 
 				<div class="well well-small src_editor">
-					<?php echo $editor->display('source', $this->params->code, '100%', '100%', 10, 10, 0, null, null, null, array('linenumbers' => 1, 'tabmode' => 'shift')); ?>
+					<?php echo $editor->display('source', $this->params->code, '100%', '100%', 10, 10, 0, null, null, null, array('syntax' => 'php', 'linenumbers' => 1, 'tabmode' => 'shift')); ?>
 				</div>
 
 				<script type="text/javascript">

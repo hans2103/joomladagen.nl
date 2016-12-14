@@ -1,58 +1,63 @@
 <?php
 
-defined ('_JEXEC') or die('resticted aceess');
+/**
+ * @package SP Page Builder
+ * @author JoomShaper http://www.joomshaper.com
+ * @copyright Copyright (c) 2010 - 2016 JoomShaper
+ * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
+ */
+//no direct accees
+defined('_JEXEC') or die('restricted aceess');
 
-AddonParser::addAddon('sp_testimonialpro','sp_testimonialpro_addon');
-AddonParser::addAddon('sp_testimonialpro_item','sp_testimonialpro_item_addon');
+class SppagebuilderAddonTestimonialpro extends SppagebuilderAddons {
 
-function sp_testimonialpro_addon($atts, $content){
+    public function render() {
 
-	extract(spAddonAtts(array(
-		'autoplay'=>'',
-		'arrows'=>'',
-		"class"=>'',
-		), $atts));
+        $class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+        $style = (isset($this->addon->settings->style) && $this->addon->settings->style) ? $this->addon->settings->style : '';
 
-	$carousel_autoplay = ($autoplay)?'data-sppb-ride="sppb-carousel"':'';
+        //Options
+        $autoplay = (isset($this->addon->settings->autoplay) && $this->addon->settings->autoplay) ? ' data-sppb-ride="sppb-carousel"' : '';
+        $arrows = (isset($this->addon->settings->arrows) && $this->addon->settings->arrows) ? $this->addon->settings->arrows : '';
+        $controls = (isset($this->addon->settings->controls) && $this->addon->settings->controls) ? $this->addon->settings->controls : 0;
 
-	$output  = '<div class="sppb-carousel sppb-testimonial-pro sppb-slide ' . $class . ' sppb-text-center" ' . $carousel_autoplay . '>';
+        //Output
+        $output = '<div id="sppb-testimonial-pro-' . $this->addon->id . '" class="sppb-carousel sppb-testimonial-pro sppb-slide sppb-text-center' . $class . '"' . $autoplay . '>';
 
-	$output .= '<div class="sppb-carousel-inner">';
-	$output .= AddonParser::spDoAddon($content);
-	$output	.= '</div>';
+        if ($controls) {
+            $output .= '<ol class="sppb-carousel-indicators">';
+            foreach ($this->addon->settings->sp_testimonialpro_item as $key1 => $value) {
+                $output .= '<li data-sppb-target="#sppb-carousel-' . $this->addon->id . '" ' . (($key1 == 0) ? ' class="active"' : '' ) . '  data-sppb-slide-to="' . $key1 . '"></li>' . "\n";
+            }
+            $output .= '</ol>';
+        }
 
-	if($arrows) {
-		$output	.= '<a class="left sppb-carousel-control" role="button" data-slide="prev"><i class="fa fa-angle-left"></i></a>';
-		$output	.= '<a class="right sppb-carousel-control" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>';
-	}
-	
-	$output .= '</div>';
+        $output .= '<div class="sppb-carousel-inner">';
 
-	return $output;
+        foreach ($this->addon->settings->sp_testimonialpro_item as $key => $value) {
+            $output .= '<div class="sppb-item ' . (($key == 0) ? ' active' : '') . '">';
+            $title = '<strong class="pro-client-name">' . $value->title . '</strong>';
 
-}
+            if ($value->url)
+                $title .= ' - <span class="pro-client-url">' . $value->url . '</span>';
+            if ($value->avatar)
+                $output .= '<img class="sppb-img-responsive sppb-avatar ' . $value->avatar_style . '" src="' . $value->avatar . '" alt="">';
+            $output .= '<div class="sppb-testimonial-message">' . $value->message . '</div>';
+            if ($title)
+                $output .= '<div class="sppb-testimonial-client">' . $title . '</div>';
 
-function sp_testimonialpro_item_addon( $atts ){
+            $output .= '</div>';
+        }
+        $output .= '</div>';
 
-	extract(spAddonAtts(array(
-		"title"=>'',
-		"avatar"=>'',
-		"avatar_style"=>'',
-		'message'=>'',
-		"url"=>'',
-		), $atts));
+        if ($arrows) {
+            $output .= '<a href="#sppb-testimonial-pro-' . $this->addon->id . '" class="left sppb-carousel-control" data-slide="prev"><i class="fa fa-angle-left"></i></a>';
+            $output .= '<a href="#sppb-testimonial-pro-' . $this->addon->id . '" class="right sppb-carousel-control" data-slide="next"><i class="fa fa-angle-right"></i></a>';
+        }
 
-	$output   = '<div class="sppb-item">';
-	
-	$title = '<strong class="pro-client-name">'. $title .'</strong>';
+        $output .= '</div>';
 
-	if($url) $title .= ' - <span class="pro-client-url">'. $url .'</span>';
-	if($avatar) $output .= '<img class="sppb-img-responsive sppb-avatar '. $avatar_style .'" src="'. $avatar .'" alt="">';
-	$output  .= '<div class="sppb-testimonial-message">' . $message . '</div>';
-	if($title) $output .= '<div class="sppb-testimonial-client">' . $title . '</div>';
-	
-	$output  .= '</div>';
-
-	return $output;
+        return $output;
+    }
 
 }

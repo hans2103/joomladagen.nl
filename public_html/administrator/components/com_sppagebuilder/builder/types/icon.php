@@ -12,60 +12,71 @@ class SpTypeIcon{
 
 	static function getInput($key, $attr)
 	{
+
 		if(!isset($attr['std'])){
 			$attr['std'] = '';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
 		if($attr['std']) {
-			$output .= '<div class="fontawesome-icon-chooser has-fa-icon">';
+			$output .= '<div class="sp-pagebuilder-fontawesome-icon-chooser sp-pagebuilder-has-fa-icon">';
 		} else {
-			$output .= '<div class="fontawesome-icon-chooser">';
+			$output .= '<div class="sp-pagebuilder-fontawesome-icon-chooser">';
 		}
 
-		$output .= '<div class="fontawesome-icon-input">';
+		$output .= '<div class="sp-pagebuilder-fontawesome-icon-input">';
 
 		if($attr['std']) {
-			$output .= '<span><i class="fa '. $attr['std'] .'"></i> '. str_replace('fa-', '', $attr['std']) .'</span>';
+			$output .= '<span><i class="fa fa-'. str_replace('fa-', '', $attr['std']) .'"></i> '. str_replace('fa-', '', $attr['std']) .'</span>';
 		} else {
 			$output .= '<span>--'. JText::_('COM_SPPAGEBUILDER_ADDON_ICON_SELECT') .'--</span>';
 		}
 
-		$output .= '<a class="remove-fa-icon" href="#"><i class="fa fa-times"></i></a><i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i>';
+		$output .= '<a class="sp-pagebuilder-remove-fa-icon" href="#"><i class="fa fa-times"></i></a><i class="fa fa-chevron-up"></i><i class="fa fa-chevron-down"></i>';
 
 		$output .= '</div>';
 
-		$output .= '<input type="hidden" class="addon-input addon-input-fa" value="'. $attr['std'] .'" data-attrname="'.$key.'">';
+		$output	.= '<input type="hidden" class="sp-pagebuilder-form-control sp-pagebuilder-addon-input sp-pagebuilder-addon-input-fa" name="'. $key .'" value="' . $attr['std'] . '">';
 
-		$output .= '<div class="fontawesome-dropdown">';
+		$output .= '<div class="sp-pagebuilder-fontawesome-dropdown">';
 
-		$output	.= '<input class="form-control" type="text" placeholder="'. JText::_('COM_SPPAGEBUILDER_ADDON_ICON_SEARCH') .'" />';		
+		$output	.= '<input class="sp-pagebuilder-form-control" type="text" placeholder="'. JText::_('COM_SPPAGEBUILDER_ADDON_ICON_SEARCH') .'" />';
 
-		$output .= '<ul class="fontawesome-icons">';
+		$output .= '<ul class="sp-pagebuilder-fontawesome-icons">';
 
 		$fontawesome_icons = self::getIconsList();
 
 		foreach( $fontawesome_icons as $icon )
 		{
-			
+
 			if($attr['std'] == $icon) {
 				$active_cls = ' active';
 			} else {
 				$active_cls = '';
 			}
 
-			$output .= '<li class="fa-list-icon'. $active_cls .'" data-fontawesome_icon="'.$icon.'" data-fontawesome_icon_name="'.str_replace('fa-', '', $icon).'"><div><div><div><i class="fa '. $icon .'"></i><span>'. str_replace('fa-', '', $icon) .'</span></div></div></div></li>';
+			$output .= '<li class="sp-pagebuilder-fa-list-icon'. $active_cls .'" data-fontawesome_icon="'.$icon.'" data-fontawesome_icon_name="' . $icon . '"><div><div><div><i class="fa '. $icon .'"></i><span>'. str_replace('fa-', '', $icon) .'</span></div></div></div></li>';
 		}
 
 		$output .= '</ul>';
@@ -75,7 +86,7 @@ class SpTypeIcon{
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

@@ -21,13 +21,23 @@ class SpTypeCategory{
 			$attr['extension'] = 'com_content';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
 		$db = JFactory::getDbo();
@@ -56,10 +66,10 @@ class SpTypeCategory{
 			}
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$output .= '<select class="form-control addon-input" data-attrname="'.$key.'" id="field_'.$key.'">';
+		$output .= '<select class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" id="field_'.$key.'">';
 
 		$output .= '<option value=""> - All Categories - </option>';
 
@@ -72,7 +82,7 @@ class SpTypeCategory{
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

@@ -8,79 +8,40 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_clients','sp_clients_addon');
-AddonParser::addAddon('sp_clients_item','sp_clients_item_addon');
+class SppagebuilderAddonClients extends SppagebuilderAddons {
 
-$sppbClientsParam = array();
+	public function render() {
 
-function sp_clients_addon($atts, $content){
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : '';
+		$columns = (isset($this->addon->settings->count) && $this->addon->settings->count) ? $this->addon->settings->count : 2;
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	global $sppbClientsParam;
+		$output   = '';
+		$output  = '<div class="sppb-addon sppb-addon-clients ' . $alignment . ' ' . $class . '">';
 
-	extract(spAddonAtts(array(
-		'title'					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',
-		'count'					=> '',
-		'alignment'				=> '',
-		"class"					=> '',
-		), $atts));
+		if($title) {
+			$output .= '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>';
+		}
 
-	$sppbClientsParam['col'] = $count;
+		$output .= '<div class="sppb-addon-content">';
+		$output .= '<div class="sppb-row">';
 
-	$output  = '<div class="sppb-addon sppb-addon-clients ' . $alignment . ' ' . $class . '">';
+		foreach ($this->addon->settings->sp_clients_item as $key => $value) {
+			if($value->image) {
+				$output .= '<div class="' . $columns . '">';
+				if($value->url) $output .= '<a target="_blank" href="'. $value->url .'">';
+				$output .= '<img class="sppb-img-responsive" src="' . $value->image . '" alt="' . $value->title . '">';
+				if($value->url) $output .= '</a>';
+				$output .= '</div>';
+			}
+		}
 
-	if($title) {
+		$output  .= '</div>';
+		$output  .= '</div>';
+		$output  .= '</div>';
 
-		$title_style = '';
-		if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-		if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-		if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-		if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-		if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-		$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+		return $output;
 	}
-
-	$output .= '<div class="sppb-addon-content">';
-	$output .= '<div class="sppb-row">';
-	$output .= AddonParser::spDoAddon($content);
-	$output .= '</div>';
-	$output	.= '</div>';
-	
-	$output .= '</div>';
-
-	$sppbClientsParam = array();
-
-	return $output;
-
-}
-
-function sp_clients_item_addon( $atts ){
-
-	global $sppbClientsParam;
-
-	extract(spAddonAtts(array(
-		"image"	=> '',
-		"url"	=> '',
-		"title"	=> '',
-		), $atts));
-
-	$output = '';
-
-	if($image) {
-
-		$output .= '<div class="' . $sppbClientsParam['col'] . '">';
-		if($url) $output .= '<a target="_blank" href="'. $url .'">';
-		$output .= '<img class="sppb-img-responsive" src="' . $image . '" alt="' . $title . '">';
-		if($url) $output .= '</a>';
-		$output .= '</div>';
-	}
-
-	return $output;
-
 }

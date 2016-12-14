@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -50,11 +50,21 @@ div.rl_well {
 }
 
 .rl_btn-ignore.btn-danger.active {
-	.buttonBackground(@btnBackground, @btnBackgroundHighlight, @grayDark, 0 1px 1px rgba(255, 255, 255, .75));
+	background-color: @grayLight;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	&:hover,
+	&:focus {
+		background-color: darken(@grayLight, 15%);
+	}
 }
 
 .rl_btn-exclude.btn-success.active {
-	.buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
+	background-color: @btnDangerBackground;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	&:hover,
+	&:focus {
+		background-color: darken(@btnDangerBackground, 15%);
+	}
 }
 
 .rl_textarea {

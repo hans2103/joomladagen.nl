@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,6 +11,7 @@
 
 defined('_JEXEC') or die;
 
+require_once dirname(__DIR__) . '/text.php';
 require_once dirname(__DIR__) . '/string.php';
 require_once dirname(__DIR__) . '/assignment.php';
 
@@ -168,9 +169,9 @@ class RLAssignmentsHomePage extends RLAssignment
 			. '(/('
 			. 'index\.php'
 			. '|'
-			. '(index\.php\?)?' . preg_quote($home->alias, '#')
+			. '(index\.php\?)?' . RLText::pregQuote($home->alias)
 			. '|'
-			. preg_quote($home->link, '#')
+			. RLText::pregQuote($home->link)
 			. ')?)?'
 			. '(/?[\?&]Itemid=' . (int) $home->id . ')?'
 			. '$#i';

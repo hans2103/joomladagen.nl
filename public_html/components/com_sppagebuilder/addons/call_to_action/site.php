@@ -8,136 +8,101 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_call_to_action','sp_call_to_action_addon');
+class SppagebuilderAddonCall_to_action extends SppagebuilderAddons {
 
-function sp_call_to_action_addon($atts){
+	public function render() {
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$style = (isset($this->addon->settings->style) && $this->addon->settings->style) ? $this->addon->settings->style : 'panel-default';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	extract(spAddonAtts(array(
-		"title" 				=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',	
-		"subtitle_fontsize" 	=> '',		
-		"subtitle" 				=> '',
-		"subtitle_text_color" 	=> '',
-		"text" 					=> '',
-		"background" 			=> '',
-		"color" 				=> '',
-		"padding" 				=> '',
-		"button_text"			=> '',
-		"button_url"			=> '',
-		"button_size"			=> '',
-		"button_type"			=> '',
-		"button_icon"			=> '',
-		"button_block"			=> '',
-		"button_target"			=> '',
-		"button_position"		=> '',
-		"class"=>'',
-		), $atts));
+		//Addon Options
+		$subtitle = (isset($this->addon->settings->subtitle) && $this->addon->settings->subtitle) ? $this->addon->settings->subtitle : '';
+		$text = (isset($this->addon->settings->text) && $this->addon->settings->text) ? $this->addon->settings->text : '';
+		$button_text = (isset($this->addon->settings->button_text) && $this->addon->settings->button_text) ? $this->addon->settings->button_text : '';
+		$button_url = (isset($this->addon->settings->button_url) && $this->addon->settings->button_url) ? $this->addon->settings->button_url : '';
+		$button_classes = (isset($this->addon->settings->button_size) && $this->addon->settings->button_size) ? ' sppb-btn-' . $this->addon->settings->button_size : '';
+		$button_classes .= (isset($this->addon->settings->button_type) && $this->addon->settings->button_type) ? ' sppb-btn-' . $this->addon->settings->button_type : '';
+		$button_classes .= (isset($this->addon->settings->button_shape) && $this->addon->settings->button_shape) ? ' sppb-btn-' . $this->addon->settings->button_shape: ' sppb-btn-rounded';
+		$button_classes .= (isset($this->addon->settings->button_appearance) && $this->addon->settings->button_appearance) ? ' sppb-btn-' . $this->addon->settings->button_appearance : '';
+		$button_classes .= (isset($this->addon->settings->button_block) && $this->addon->settings->button_block) ? ' ' . $this->addon->settings->button_block : '';
+		$button_icon = (isset($this->addon->settings->button_icon) && $this->addon->settings->button_icon) ? $this->addon->settings->button_icon : '';
+		$button_icon_position = (isset($this->addon->settings->button_icon_position) && $this->addon->settings->button_icon_position) ? $this->addon->settings->button_icon_position: 'left';
 
-	$style = '';
+		$button_position = (isset($this->addon->settings->button_position) && $this->addon->settings->button_position) ? $this->addon->settings->button_position : '';
+		$button_attribs = (isset($this->addon->settings->button_target) && $this->addon->settings->button_target) ? ' target="' . $this->addon->settings->button_target . '"' : '';
+		$button_attribs .= (isset($this->addon->settings->button_url) && $this->addon->settings->button_url) ? ' href="' . $this->addon->settings->button_url . '"' : '';
 
-	if($button_icon) {
-		$button_text = '<i class="fa ' . $button_icon . '"></i> ' . $button_text;
-	}
+		// Generate Button
+		if($button_icon_position == 'left') {
+			$button_text = ($button_icon) ? '<i class="fa ' . $button_icon . '"></i> ' . $button_text : $button_text;
+		} else {
+			$button_text = ($button_icon) ? $button_text . ' <i class="fa ' . $button_icon . '"></i>' : $button_text;
+		}
+		$button_output = '<a' . $button_attribs . ' id="btn-'. $this->addon->id .'" class="sppb-btn' . $button_classes . '">' . $button_text . '</a>';
 
-	if($background) {
-		$style .= 'background-color: ' . $background . ';padding:40px 20px;';
-	}
+		// Addon Output
+		$output  = '<div class="sppb-addon sppb-addon-cta ' . $class . '">';
 
-	if($color) {
-		$style .= 'color: ' . $color . ';';
-	}
-
-	if($padding) {
-		$style .= 'padding: ' . (int)$padding . 'px;';
-	}
-
-	$button_output = '<a target="' . $button_target . '" href="' . $button_url . '" class="sppb-btn sppb-btn-' . $button_type . ' sppb-btn-' . $button_size . ' ' . $button_block . '" role="button">' . $button_text . '</a>';
-
-	$output  = '<div class="sppb-addon sppb-addon-cta ' . $class . '" style="' . $style . '">';
-
-	if($button_position=='right') {
-
-		$output .= '<div class="sppb-row">';
-
-		$output .= '<div class="sppb-col-sm-8">';
-
-		if($title) {
-
-			$title_style = '';
-			if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-			if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-			if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-			if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-			if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-			$output .= '<'.$heading_selector.' class="sppb-cta-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+		if($button_position=='right') {
+			$output .= '<div class="sppb-row">';
+			$output .= '<div class="sppb-col-sm-8">';
+			$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title sppb-cta-title">' . $title . '</'.$heading_selector.'>' : '';
+			$output .= ($subtitle) ? '<p class="sppb-lead sppb-cta-subtitle">' . $subtitle . '</p>' : '';
+			$output .= ($text) ? '<p class="sppb-cta-text">' . $text . '</p>' : '';
+			$output .= '</div>';
+			$output .= '<div class="sppb-col-sm-4 sppb-text-right">';
+			$output .= $button_output;
+			$output .= '</div>';
+			$output .= '</div>';
+		} else {
+			$output .= '<div class="text-center">';
+			$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title sppb-cta-title">' . $title . '</'.$heading_selector.'>' : '';
+			$output .= ($subtitle) ? '<p class="sppb-lead sppb-cta-subtitle">' . $subtitle . '</p>' : '';
+			$output .= ($text) ? '<p class="sppb-cta-text">' . $text . '</p>' : '';
+			$output .= '<div>';
+			$output .= $button_output;
+			$output .= '</div>';
+			$output .= '</div>';
 		}
 
-		if($subtitle) {
-
-			$subtitle_style = '';
-
-			if($subtitle_text_color) $subtitle_style .= 'color:' . $subtitle_text_color  . ';';
-			if($subtitle_fontsize) $subtitle_style .= 'font-size:'.$subtitle_fontsize.'px;line-height:'.$subtitle_fontsize.'px;"';
-			
-			$output .= '<p class="sppb-lead sppb-cta-subtitle" style="' . $subtitle_style . '">' . $subtitle . '</p>';
-		}		
-
-
-		if($text) $output .= '<p class="sppb-cta-text">' . $text . '</p>';
-		
 		$output .= '</div>';
 
-		$output .= '<div class="sppb-col-sm-4 sppb-text-right">';
-		$output .= $button_output;
-		$output .= '</div>';
-
-		$output .= '</div>';
-
-
-	} else {
-
-		$output .= '<div class="text-center">';
-
-		if($title) {
-
-			$title_style = '';
-			if($title_margin_top) $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-			if($title_margin_bottom) $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-			if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-			if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-			if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-			$output .= '<'.$heading_selector.' class="sppb-cta-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
-		}
-
-		if($subtitle) {
-
-			$subtitle_style = '';
-
-			if($subtitle_text_color) $subtitle_style .= 'color:' . $subtitle_text_color  . ';';
-			if($subtitle_fontsize) $subtitle_style .= 'font-size:'.$subtitle_fontsize.'px;line-height:'.$subtitle_fontsize.'px;"';
-			
-			$output .= '<p class="sppb-lead sppb-cta-subtitle" style="' . $subtitle_style . '">' . $subtitle . '</p>';
-		}	
-
-		if($text) $output .= '<p class="sppb-cta-text">' . $text . '</p>';
-		
-		$output .= '<div>';
-		$output .= $button_output;
-		$output .= '</div>';
-		
-		$output .= '</div>';
-
+		return $output;
 	}
 
-	$output .= '</div>';
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$layout_path = JPATH_ROOT . '/components/com_sppagebuilder/layouts';
+		$css_path = new JLayoutFile('addon.css.button', $layout_path);
+		$number_style = '';
+		$text_style = '';
 
-	return $output;
+		$style = (isset($this->addon->settings->background) && $this->addon->settings->background) ? "background-color: " . $this->addon->settings->background  . ";" : '';
+		$style .= (isset($this->addon->settings->color) && $this->addon->settings->color) ? "color: " . $this->addon->settings->color  . ";" : '';
+		$style .= (isset($this->addon->settings->padding) && $this->addon->settings->padding) ? "padding: " . $this->addon->settings->padding  . ";" : "padding: 40px 20px;";
+
+		// Sub title
+		$subtitle_style = (isset($this->addon->settings->subtitle_text_color) && $this->addon->settings->subtitle_text_color) ? 'color:' . $this->addon->settings->subtitle_text_color  . ';' : '';
+		$subtitle_style .= (isset($this->addon->settings->subtitle_fontsize) && $this->addon->settings->subtitle_fontsize) ? 'font-size: ' . $this->addon->settings->subtitle_fontsize . 'px; line-height: ' . $this->addon->settings->subtitle_fontsize . 'px;' : '';
+
+		$css = '';
+		if($style) {
+			$css .= $addon_id . ' .sppb-addon-cta {';
+			$css .= $style;
+			$css .= '}';
+		}
+
+		if($subtitle_style) {
+			$css .= $addon_id . ' .sppb-cta-subtitle {';
+			$css .= $subtitle_style;
+			$css .= '}';
+		}
+
+		// Button options
+		$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $this->addon->settings, 'id' => 'btn-' . $this->addon->id));;
+
+		return $css;
+	}
 
 }

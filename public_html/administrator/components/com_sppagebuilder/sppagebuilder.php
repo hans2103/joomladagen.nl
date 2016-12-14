@@ -10,8 +10,7 @@ defined ('_JEXEC') or die ('restricted aceess');
 
 JHtml::_('behavior.tabstate');
 
-if (!JFactory::getUser()->authorise('core.manage', 'com_sppagebuilder'))
-{
+if (!JFactory::getUser()->authorise('core.manage', 'com_sppagebuilder')) {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 

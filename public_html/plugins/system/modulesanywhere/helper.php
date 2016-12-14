@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.1PRO
+ * @version         6.0.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -43,8 +43,8 @@ class PlgSystemModulesAnywhereHelper
 		$this->params->modulepos_tag = trim($this->params->modulepos_tag);
 
 		$tags   = array();
-		$tags[] = preg_quote($this->params->module_tag, '#');
-		$tags[] = preg_quote($this->params->modulepos_tag, '#');
+		$tags[] = RLText::pregQuote($this->params->module_tag);
+		$tags[] = RLText::pregQuote($this->params->modulepos_tag);
 		if ($this->params->handle_loadposition)
 		{
 			$tags[] = 'loadposition';
@@ -843,7 +843,7 @@ class PlgSystemModulesAnywhereHelper
 
 	function protect(&$string)
 	{
-		RLProtect::protectFields($string);
+		RLProtect::protectFields($string, $this->params->protected_tags);
 		RLProtect::protectSourcerer($string);
 	}
 
@@ -878,7 +878,15 @@ class PlgSystemModulesAnywhereHelper
 				urlencode($this->params->comment_start), urlencode($this->params->comment_end),
 			), '', $string
 		);
-		$string = preg_replace('#' . preg_quote($this->params->message_start, '#') . '.*?' . preg_quote($this->params->message_end, '#') . '#', '', $string);
+		$string = preg_replace(
+			'#'
+			. RLText::pregQuote($this->params->message_start)
+			. '.*?'
+			. RLText::pregQuote($this->params->message_end)
+			. '#',
+			'',
+			$string
+		);
 	}
 
 	public function getTagCharacters($quote = false)
@@ -893,8 +901,8 @@ class PlgSystemModulesAnywhereHelper
 
 		if ($quote)
 		{
-			$start = preg_quote($start, '#');
-			$end   = preg_quote($end, '#');
+			$start = RLText::pregQuote($start);
+			$end   = RLText::pregQuote($end);
 		}
 
 		return array($start, $end);

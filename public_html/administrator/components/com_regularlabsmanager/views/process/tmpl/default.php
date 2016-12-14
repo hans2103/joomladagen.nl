@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.1
+ * @version         6.1.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,8 +29,8 @@ $script = "
 ";
 JFactory::getDocument()->addScriptDeclaration($script);
 
-RLFunctions::script('regularlabsmanager/process.min.js', '6.1.1');
-RLFunctions::stylesheet('regularlabsmanager/process.min.css', '6.1.1');
+RLFunctions::script('regularlabsmanager/process.min.js', '6.1.2');
+RLFunctions::stylesheet('regularlabsmanager/process.min.css', '6.1.2');
 ?>
 
 <div id="rlem">

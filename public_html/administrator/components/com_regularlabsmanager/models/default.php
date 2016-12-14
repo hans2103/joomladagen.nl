@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.1
+ * @version         6.1.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -388,12 +388,15 @@ class RegularLabsManagerModelDefault extends JModelList
 		switch ($type)
 		{
 			case 'com';
+				RLFunctions::loadLanguage('com_' . $element . '.sys', '', true);
 				$link = 'option=com_' . $element;
 				break;
 			case 'mod';
+				RLFunctions::loadLanguage('mod_' . $element . '.sys', '', true);
 				$link = 'option=com_modules&filter_client_id=' . $client_id . '&filter_module=mod_' . $element . '&filter_search=';
 				break;
 			case 'plg';
+				RLFunctions::loadLanguage('plg_'. $folder . '_' . $element . '.sys', '', true);
 				$name = JText::_($name);
 				$name = preg_replace('#^(.*?)\?.*$#', '\1', $name);
 				$link = 'option=com_plugins&filter_folder=' . $folder . '&filter_search=' . $name;

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -151,7 +151,7 @@ class PlgSystemRegularLabs extends JPlugin
 			return;
 		}
 
-		$shop_item = '(<li>\s*<a [^>]*class="[^"]*menu-help-)shop("\s[^>]*)href="https://shop\.joomla\.org"([^>]*>)[^<]*(</a>s*</li>)';
+		$shop_item = '(\s*<li>\s*<a [^>]*class="[^"]*menu-help-)shop("\s[^>]*)href="[^"]+\.joomla\.org[^"]*"([^>]*>)[^<]*(</a>s*</li>)';
 
 		$html = preg_replace(
 			'#' . $shop_item . '#s',

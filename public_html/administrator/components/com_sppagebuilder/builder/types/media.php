@@ -14,19 +14,6 @@ class SpTypeMedia
 	static function getInput($key, $attr)
 	{
 
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_UPLOAD_FILE');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_CLOSE');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_INSERT');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_SEARCH');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_CANCEL');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_DELETE');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_CONFIRM_DELETE');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_LOAD_MORE');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_UNSUPPORTED_FORMAT');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_BROWSE_MEDIA');
-		JText::script('COM_SPPAGEBUILDER_MEDIA_MANAGER_BROWSE_FOLDERS');
-
 		if(!isset($attr['std'])){
 			$attr['std'] = '';
 		}
@@ -37,36 +24,61 @@ class SpTypeMedia
 			$src = '';
 		}
 
-		// Depend
+		// Media Format
+		if(isset($attr['format']) && $attr['format']){
+			$media_format = $attr['format'];
+		} else {
+			$media_format = 'image';
+		}
+
+		if (!isset($attr['placeholder'])) {
+			$attr['placeholder'] = '';
+		}
+
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
+			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
+		}
+
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
+		$output .= '<label>' . $attr['title'] . '</label>';
+
+		if($attr['std']) {
+			if($media_format == 'image') {
+				$output .= '<img class="sp-pagebuilder-media-preview" src="' . JURI::root(true) . '/' . $attr['std'] . '" alt="" />';
+			}
+		} else {
+			if($media_format == 'image') {
+				$output .= '<img class="sp-pagebuilder-media-preview sp-pagebuilder-media-no-image" alt="" />';
 			}
 		}
 
-		JHtml::_('jquery.framework');
-
-		$doc = JFactory::getDocument();
-		$doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/media.js' );
-		
-		$output  = '<div class="form-group"' . $depend_data . '>';
-		$output .= '<label>' . $attr['title'] . '</label>';
-		
-		if($attr['std']) {
-			$output .= '<img class="sppb-media-preview" src="' . JURI::root(true) . '/' . $attr['std'] . '" alt="" />';
+		if($media_format == 'image') {
+			$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="hidden" name="'. $key .'" value="'.$attr['std'].'">';
 		} else {
-			$output .= '<img class="sppb-media-preview no-image" alt="" />';
+			$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="text" name="'. $key .'" value="'.$attr['std'].'" placeholder="'.$attr['placeholder'].'" autocomplete="off">';
 		}
 
-		$output .= '<input type="hidden" data-attrname="'.$key.'" class="input-media sppb-media-input addon-input" value="'.$attr['std'].'">';
-		$output .= '<a href="#" class="sppb-btn sppb-btn-primary sppb-btn-media-manager">'. JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_SELECT') .'</a>';
-		$output .= ' <a class="sppb-btn sppb-btn-danger btn-clear-image" href="#"><i class="icon-remove"></i></a>';
+		$output .= '<a href="#" class="sp-pagebuilder-btn sp-pagebuilder-btn-primary sp-pagebuilder-btn-media-manager" data-support="' . $media_format . '"><i class="fa fa-spinner fa-spin" style="display: none; margin-right: 5px;"></i> '. JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_UPLOAD_' . strtoupper($media_format)) .'</a>';
+		$output .= ' <a class="sp-pagebuilder-btn sp-pagebuilder-btn-danger sp-pagebuilder-btn-clear-media" href="#"><i class="icon-remove"></i></a>';
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

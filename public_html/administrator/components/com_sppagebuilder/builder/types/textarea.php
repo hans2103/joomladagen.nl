@@ -21,22 +21,37 @@ class SpTypeTextarea{
 			$attr['placeholder'] = '';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
-		$output .= '<label>'.$attr['title'].'</label>';		
-		$output	.= '<textarea class="form-control addon-input addon-'.$key.'" data-attrname="'.$key.'" placeholder="'.$attr['placeholder'].'">'.$attr['std'].'</textarea>';
+		$attribs = '';
+		if(isset($attr['css'])) {
+			$attribs .= ' style="' . $attr['css'] . '"';
+		}
+
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
+		$output .= '<label>'.$attr['title'].'</label>';
+		$output	.= '<textarea class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" placeholder="'.$attr['placeholder'].'"'. $attribs .'>'.$attr['std'].'</textarea>';
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

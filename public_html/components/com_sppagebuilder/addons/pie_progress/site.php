@@ -8,48 +8,63 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_pie_progress','sp_pie_progress_addon');
+class SppagebuilderAddonPie_progress extends SppagebuilderAddons{
 
-function sp_pie_progress_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'percentage'			=> '',
-		'border_color'			=> '',
-		'border_active_color'	=> '',
-		'border_width'			=> '',
-		'size'					=> '',
-		'icon_name'				=> '',
-		'icon_size'				=> '',
-		'title'					=> '',
-		'text'					=> '',
-		'class'					=> '',
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	$doc = JFactory::getDocument();
-	$doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/jquery.easypiechart.min.js');
+		//Options
+		$percentage = (isset($this->addon->settings->percentage) && $this->addon->settings->percentage) ? $this->addon->settings->percentage : '';
+		$border_color = (isset($this->addon->settings->border_color) && $this->addon->settings->border_color) ? $this->addon->settings->border_color : '#eeeeee';
+		$border_active_color = (isset($this->addon->settings->border_active_color) && $this->addon->settings->border_active_color) ? $this->addon->settings->border_active_color : '';
+		$border_width = (isset($this->addon->settings->border_width) && $this->addon->settings->border_width) ? $this->addon->settings->border_width : '';
+		$size = (isset($this->addon->settings->size) && $this->addon->settings->size) ? $this->addon->settings->size : '';
+		$icon_name = (isset($this->addon->settings->icon_name) && $this->addon->settings->icon_name) ? $this->addon->settings->icon_name : '';
+		$icon_size = (isset($this->addon->settings->icon_size) && $this->addon->settings->icon_size) ? $this->addon->settings->icon_size : '';
+		$text = (isset($this->addon->settings->text) && $this->addon->settings->text) ? $this->addon->settings->text : '';
 
-	$style = 'height: '. (int) $size .'px; width: '. (int) $size .'px;';
+		$output  = '<div class="sppb-addon sppb-addon-pie-progress '. $class .'">';
+		$output .= '<div class="sppb-addon-content sppb-text-center">';
+		$output .= '<div class="sppb-pie-chart" data-size="'. (int) $size .'" data-percent="'.$percentage.'" data-width="'.$border_width.'" data-barcolor="'.$border_active_color.'" data-trackcolor="'.$border_color.'">';
 
-	$output  = '<div class="sppb-addon sppb-addon-pie-progress '. $class .'">';
-	$output .= '<div class="sppb-addon-content sppb-text-center">';
-	$output .= '<div class="sppb-pie-chart" data-size="'. (int) $size .'" data-percent="'.$percentage.'" data-width="'.$border_width.'" data-barcolor="'.$border_active_color.'" data-trackcolor="'.$border_color.'" style="'. $style .'">';
+		if($icon_name) {
+			$output .= '<div class="sppb-chart-icon"><span><i class="fa '. $icon_name . ' ' .  $icon_size .'"></i></span></div>';
+		} else {
+			$output .= '<div class="sppb-chart-percent"><span></span></div>';
+		}
 
-	if($icon_name) {
-		$output .= '<div class="sppb-chart-icon"><span><i class="fa '. $icon_name . ' ' .  $icon_size .'"></i></span></div>';
-	} else {
-		$output .= '<div class="sppb-chart-percent"><span></span></div>';
+		$output .= '</div>';
+		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
+		$output .= '<div class="sppb-addon-text">';
+		$output .= $text;
+		$output .= '</div>';
+
+		$output .= '</div>';
+		$output .= '</div>';
+
+		return $output;
 	}
 
-	$output .= '</div>';
+	public function scripts() {
+		$js[] = JURI::base(true) . '/components/com_sppagebuilder/assets/js/jquery.easypiechart.min.js';
+		return $js;
+	}
 
-	if ($title) $output .= '<h3>' . $title . '</h3>';
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$css = '';
+		$style = (isset($this->addon->settings->size) && $this->addon->settings->size) ? 'height: '. (int) $this->addon->settings->size .'px; width: '. (int) $this->addon->settings->size .'px;' : '';
 
-	$output .= '<div class="sppb-addon-text">';
-	$output .= $text;
-	$output .= '</div>';
+		if($style) {
+			$css .= $addon_id . ' .sppb-pie-chart {';
+			$css .= $style;
+			$css .= '}';
+		}
 
-	$output .= '</div>';
-	$output .= '</div>';
+		return $css;
+	}
 
-	return $output;
 }

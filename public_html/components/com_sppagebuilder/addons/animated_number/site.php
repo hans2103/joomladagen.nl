@@ -8,52 +8,49 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_animated_number','sp_animated_number_addon');
+class SppagebuilderAddonAnimated_number extends SppagebuilderAddons{
 
-function sp_animated_number_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'number'			=> '',
-		'duration'			=> '',
-		'font_size'			=> '',
-		'border_color' 		=> '',
-		'border_width' 		=> '',
-		'border_radius' 	=> '',
-		'color' 			=> '',
-		'background' 		=> '',
-		'counter_title' 	=> '',
-		'title_font_size'	=> '',
-		'counter_color' 	=> '',
-		'alignment'			=> '',
-		'class'				=>'',
-		), $atts));
+		$number = (isset($this->addon->settings->number) && $this->addon->settings->number) ? $this->addon->settings->number : 0;
+		$duration = (isset($this->addon->settings->duration) && $this->addon->settings->duration) ? $this->addon->settings->duration : 0;
+		$counter_title = (isset($this->addon->settings->counter_title) && $this->addon->settings->counter_title) ? $this->addon->settings->counter_title : '';
+		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : '';
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
 
-	$style 			= '';
-	$number_style 	= '';
-	$text_style 	= '';
+		$output  = '<div class="sppb-addon sppb-addon-animated-number '. $alignment . ' ' . $class .'">';
+		$output .= '<div class="sppb-addon-content">';
+		$output .= '<div class="sppb-animated-number" data-digit="'. $number .'" data-duration="' . $duration . '">0</div>';
+		if($counter_title) {
+			$output .= '<div class="sppb-animated-number-title">' . $counter_title . '</div>';
+		}
+		$output .= '</div>';
+		$output .= '</div>';
 
-	if($background) $class .= $class . ' sppb-hasbg';
+		return $output;
+	}
 
-	if($background) $style .= 'background-color:' . $background  . ';';
-	if($border_color) $style .= 'border-style:solid;border-color:' . $border_color  . ';';
-	if($border_width) $style .= 'border-width:' . (int) $border_width  . 'px;';
-	if($border_radius) $style .= 'border-radius:' . (int) $border_radius  . 'px;';
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$number_style  = (isset($this->addon->settings->color) && $this->addon->settings->color) ? "\tcolor: " . $this->addon->settings->color  . ";\n" : '';
+		$number_style .= (isset($this->addon->settings->font_size) && $this->addon->settings->font_size) ? 'font-size:' . (int) $this->addon->settings->font_size . 'px;line-height:' . (int) $this->addon->settings->font_size . 'px;' : '';
+		$text_style = (isset($this->addon->settings->counter_color) && $this->addon->settings->counter_color) ? "\tcolor: " . $this->addon->settings->counter_color  . "px;\n" : '';
+		$text_style .= (isset($this->addon->settings->title_font_size) && $this->addon->settings->title_font_size) ? 'font-size:' . (int) $this->addon->settings->title_font_size . 'px;line-height:' . (int) $this->addon->settings->title_font_size . 'px;': '';
 
-	if($color) $number_style .= 'color:' . $color  . ';';
-	if($font_size) $number_style .= 'font-size:' . (int) $font_size . 'px;line-height:' . (int) $font_size . 'px;';
+		$css = '';
 
-	if($counter_color) $text_style .= 'color:' . $counter_color  . ';';
-	if($title_font_size) $text_style .= 'font-size:' . (int) $title_font_size . 'px;line-height:' . (int) $title_font_size . 'px;';
+		if($number_style) {
+			$css .= $addon_id . ' .sppb-animated-number {';
+			$css .= $number_style;
+			$css .= '}';
+		}
 
-	$output  = '<div class="sppb-addon sppb-addon-animated-number '. $alignment . ' ' . $class .'">';
+		if($text_style) {
+			$css .= $addon_id . ' .sppb-animated-number-title {';
+			$css .= $text_style;
+			$css .= '}';
+		}
 
-	$output .= '<div class="sppb-addon-content" style="' . $style . '">';
-	$output .= '<div class="sppb-animated-number" data-digit="'. $number .'" data-duration="' . $duration . '" style="'. $number_style .'">0</div>';
-	if($counter_title) $output .= '<div class="sppb-animated-number-title" style="' . $text_style . '">' . $counter_title . '</div>';
-	$output .= '</div>';
-
-	$output .= '</div>';
-
-	return $output;
-	
+		return $css;
+	}
 }

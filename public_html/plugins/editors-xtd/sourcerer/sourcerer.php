@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.6PRO
+ * @version         6.3.7PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -32,7 +32,7 @@ class PlgButtonSourcerer extends JPlugin
 		}
 
 		// return if Regular Labs Library plugin is not installed
-		if (!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php'))
+		if (!$this->isFrameworkInstalled())
 		{
 			return;
 		}
@@ -52,5 +52,19 @@ class PlgButtonSourcerer extends JPlugin
 		$helper = new $class($params);
 
 		return $helper->render($name);
+	}
+
+	/**
+	 * Check if the Regular Labs Library is installed
+	 *
+	 * @return bool
+	 */
+	private function isFrameworkInstalled()
+	{
+		jimport('joomla.filesystem.file');
+
+		return
+			JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			&& JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml');
 	}
 }

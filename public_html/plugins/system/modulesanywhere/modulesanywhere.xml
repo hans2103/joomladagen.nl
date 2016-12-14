@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_modulesanywhere</name>
 	<description>PLG_SYSTEM_MODULESANYWHERE_DESC</description>
-	<version>6.0.1PRO</version>
-	<creationDate>September 2016</creationDate>
+	<version>6.0.6PRO</version>
+	<creationDate>December 2016</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -44,10 +44,10 @@
 			</fieldset>
 			<fieldset name="basic">
 				<field name="@block_styling_a" type="rl_block" start="1" label="RL_STYLING" />
-				<field name="style" type="text" default="none" label="MA_DEFAULT_STYLE"
-					   description="MA_DEFAULT_STYLE_DESC" />
-				<field name="styles" type="text" default="none,division,tabs,well" label="MA_DEFAULT_STYLES"
-					   description="MA_DEFAULT_STYLES_DESC" />
+				<field name="style" type="text" default="none"
+					   label="MA_DEFAULT_STYLE" description="MA_DEFAULT_STYLE_DESC" />
+				<field name="styles" type="text" default="none,division,tabs,well"
+					   label="MA_DEFAULT_STYLES" description="MA_DEFAULT_STYLES_DESC" />
 				<field name="override_style" type="radio" class="btn-group" default="1"
 					   label="MA_ENABLE_STYLE_OVERRIDING" description="MA_ENABLE_STYLE_OVERRIDING_DESC">
 					<option value="0">JNO</option>
@@ -61,13 +61,13 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="ignore_access" type="radio" class="btn-group" default="0" label="MA_IGNORE_MODULE_ACCESS"
-					   description="MA_IGNORE_MODULE_ACCESS_DESC">
+				<field name="ignore_access" type="radio" class="btn-group" default="0"
+					   label="MA_IGNORE_MODULE_ACCESS" description="MA_IGNORE_MODULE_ACCESS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="ignore_state" type="radio" class="btn-group" default="0" label="MA_IGNORE_MODULE_STATE"
-					   description="MA_IGNORE_MODULE_STATE_DESC">
+				<field name="ignore_state" type="radio" class="btn-group" default="0"
+					   label="MA_IGNORE_MODULE_STATE" description="MA_IGNORE_MODULE_STATE_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -76,19 +76,19 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="ignore_caching" type="radio" class="btn-group" default="0" label="MA_IGNORE_CACHING"
-					   description="MA_IGNORE_CACHING_DESC">
+				<field name="ignore_caching" type="radio" class="btn-group" default="0"
+					   label="MA_IGNORE_CACHING" description="MA_IGNORE_CACHING_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 				<field name="@loadlanguage_config" type="rl_loadlanguage" extension="com_config" />
-				<field name="show_edit" type="radio" class="btn-group" default="0" label="MA_FRONTEND_EDITING"
-					   description="COM_CONFIG_FRONTEDITING_DESC">
+				<field name="show_edit" type="radio" class="btn-group" default="0"
+					   label="MA_FRONTEND_EDITING" description="COM_CONFIG_FRONTEDITING_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JDEFAULT</option>
 				</field>
-				<field name="place_comments" type="radio" class="btn-group" default="1" label="RL_PLACE_HTML_COMMENTS"
-					   description="RL_PLACE_HTML_COMMENTS_DESC">
+				<field name="place_comments" type="radio" class="btn-group" default="1"
+					   label="RL_PLACE_HTML_COMMENTS" description="RL_PLACE_HTML_COMMENTS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -96,10 +96,10 @@
 			</fieldset>
 
 			<fieldset name="RL_SETTINGS_SECURITY">
-				<field name="@block_articles_a" type="rl_block" start="1" label="RL_ARTICLES"
-					   description="MA_ARTICLES_DESC" />
-				<field name="articles_enable" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_ARTICLES"
-					   description="MA_ENABLE_IN_ARTICLES_DESC">
+				<field name="@block_articles_a" type="rl_block" start="1"
+					   label="RL_ARTICLES" description="MA_ARTICLES_DESC" />
+				<field name="articles_enable" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_ARTICLES" description="MA_ENABLE_IN_ARTICLES_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -109,8 +109,8 @@
 				<field name="@toggler_articles_enable_b" type="rl_toggler" />
 				<field name="@block_articles_b" type="rl_block" end="1" />
 
-				<field name="@block_components_a" type="rl_block" start="1" label="RL_COMPONENTS"
-					   description="MA_COMPONENTS_DESC" />
+				<field name="@block_components_a" type="rl_block" start="1"
+					   label="RL_COMPONENTS" description="MA_COMPONENTS_DESC" />
 				<field name="components_enable" type="radio" class="btn-group" default="1"
 					   label="RL_ENABLE_IN_COMPONENTS" description="MA_ENABLE_IN_COMPONENTS_DESC">
 					<option value="0">JNO</option>
@@ -127,10 +127,10 @@
 				<field name="@toggler_components_enable_b" type="rl_toggler" />
 				<field name="@block_components_b" type="rl_block" end="1" />
 
-				<field name="@block_otherareas_a" type="rl_block" start="1" label="RL_OTHER_AREAS"
-					   description="MA_OTHER_AREAS_DESC" />
-				<field name="other_enable" type="radio" class="btn-group" default="1" label="RL_ENABLE_OTHER_AREAS"
-					   description="MA_ENABLE_OTHER_AREAS_DESC">
+				<field name="@block_otherareas_a" type="rl_block" start="1"
+					   label="RL_OTHER_AREAS" description="MA_OTHER_AREAS_DESC" />
+				<field name="other_enable" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_OTHER_AREAS" description="MA_ENABLE_OTHER_AREAS_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
@@ -138,47 +138,47 @@
 			</fieldset>
 
 			<fieldset name="RL_SETTINGS_EDITOR_BUTTON">
-				<field name="button_text" type="text" default="Module" label="RL_BUTTON_TEXT"
-					   description="RL_BUTTON_TEXT_DESC" />
-				<field name="enable_frontend" type="radio" class="btn-group" default="1" label="RL_ENABLE_IN_FRONTEND"
-					   description="RL_ENABLE_IN_FRONTEND_DESC">
+				<field name="button_text" type="text" default="Module"
+					   label="RL_BUTTON_TEXT" description="RL_BUTTON_TEXT_DESC" />
+				<field name="enable_frontend" type="radio" class="btn-group" default="1"
+					   label="RL_ENABLE_IN_FRONTEND" description="RL_ENABLE_IN_FRONTEND_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 
-				<field name="@block_tag_a" type="rl_block" start="1" label="MA_DEFAULT_DATA_TAG_SETTINGS"
-					   description="MA_DEFAULT_DATA_TAG_SETTINGS_DESC" />
-				<field name="showtitle" type="radio" class="btn-group" default="" label="COM_MODULES_FIELD_SHOWTITLE_LABEL"
-					   description="COM_MODULES_FIELD_SHOWTITLE_DESC">
+				<field name="@block_tag_a" type="rl_block" start="1"
+					   label="MA_DEFAULT_DATA_TAG_SETTINGS" description="MA_DEFAULT_DATA_TAG_SETTINGS_DESC" />
+				<field name="showtitle" type="radio" class="btn-group" default=""
+					   label="COM_MODULES_FIELD_SHOWTITLE_LABEL" description="COM_MODULES_FIELD_SHOWTITLE_DESC">
 					<option value="">JDEFAULT</option>
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="div_enable" type="radio" class="btn-group" default="0" label="MA_EMBED_IN_A_DIV"
-					   description="MA_EMBED_IN_A_DIV_DESC">
+				<field name="div_enable" type="radio" class="btn-group" default="0"
+					   label="MA_EMBED_IN_A_DIV" description="MA_EMBED_IN_A_DIV_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 				<field name="div_width" type="text" default="" label="RL_WIDTH" description="MA_WIDTH_DESC" />
 				<field name="div_height" type="text" default="" label="RL_HEIGHT" description="MA_HEIGHT_DESC" />
-				<field name="div_float" type="radio" class="btn-group" default="" label="MA_ALIGNMENT"
-					   description="MA_ALIGNMENT_DESC">
+				<field name="div_float" type="radio" class="btn-group" default=""
+					   label="MA_ALIGNMENT" description="MA_ALIGNMENT_DESC">
 					<option value="">JNONE</option>
 					<option value="left">JGLOBAL_LEFT</option>
 					<option value="right">JGLOBAL_RIGHT</option>
 				</field>
-				<field name="div_class" type="text" default="" label="MA_DIV_CLASSNAME"
-					   description="MA_DIV_CLASSNAME_DESC" />
+				<field name="div_class" type="text" default=""
+					   label="MA_DIV_CLASSNAME" description="MA_DIV_CLASSNAME_DESC" />
 				<field name="@block_tag_b" type="rl_block" end="1" />
 			</fieldset>
 
 			<fieldset name="advanced">
 				<field name="@block_tag_a" type="rl_block" start="1" label="RL_TAG_SYNTAX" />
 				<field name="module_tag" type="text" default="module" label="MA_MODULE_TAG" description="MA_TAG_DESC" />
-				<field name="modulepos_tag" type="text" default="modulepos" label="MA_MODULEPOS_TAG"
-					   description="MA_TAG_DESC" />
-				<field name="tag_characters" type="list" default="{.}" class="input-small" label="RL_TAG_CHARACTERS"
-					   description="RL_TAG_CHARACTERS_DESC">
+				<field name="modulepos_tag" type="text" default="modulepos"
+					   label="MA_MODULEPOS_TAG" description="MA_TAG_DESC" />
+				<field name="tag_characters" type="list" default="{.}" class="input-small"
+					   label="RL_TAG_CHARACTERS" description="RL_TAG_CHARACTERS_DESC">
 					<option value="{.}">{...}</option>
 					<option value="[.]">[...]</option>
 					<option value="{{.}}">{{...}}</option>
@@ -192,8 +192,8 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="@toggler_10a" type="rl_toggler" param="handle_loadposition" value="1" />
-				<field name="activate_jumper" type="radio" class="btn-group" default="0" label="MA_ACTIVATE_JUMPER"
-					   description="MA_ACTIVATE_JUMPER_DESC">
+				<field name="activate_jumper" type="radio" class="btn-group" default="0"
+					   label="MA_ACTIVATE_JUMPER" description="MA_ACTIVATE_JUMPER_DESC">
 					<option value="0">JNO</option>
 					<option value="">JYES</option>
 				</field>

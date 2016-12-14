@@ -18,22 +18,42 @@ class SpTypeEditor
 			$attr['std'] = '';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
-		$output .= '<textarea class="form-control sppb-editor addon-input" data-attrname="'.$key.'">'.$attr['std'].'</textarea>';
+
+		$apps = JFactory::getApplication();
+
+		$conf   = JFactory::getConfig();
+		$name   = $conf->get('editor');
+
+		if ($name !== 'jce') {
+			$name = 'tinymce';
+		}
+		$editor = JEditor::getInstance($name);
+		$output	.= $editor->display( $key, htmlspecialchars($attr['std'], ENT_COMPAT, 'UTF-8'), '100%', 300, 100, 70,false);
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';
@@ -41,4 +61,4 @@ class SpTypeEditor
 		return $output;
 	}
 
-} 
+}

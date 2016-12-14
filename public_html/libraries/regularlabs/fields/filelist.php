@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,8 @@ defined('_JEXEC') or die;
 
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
-JFormHelper::loadFieldClass('list');
+
+require_once JPATH_LIBRARIES . '/joomla/form/fields/list.php';
 
 class JFormFieldRL_FileList extends JFormFieldList
 {

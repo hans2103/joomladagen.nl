@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,7 +29,7 @@ class RLHtml
 			$value = explode(',', $value);
 		}
 
-		if (count($value) == 1 && strpos($value['0'], ',') !== false)
+		if (count($value) === 1 && strpos($value['0'], ',') !== false)
 		{
 			$value = explode(',', $value['0']);
 		}

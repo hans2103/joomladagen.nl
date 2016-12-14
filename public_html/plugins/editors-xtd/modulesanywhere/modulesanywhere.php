@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.1PRO
+ * @version         6.0.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -113,6 +113,8 @@ class PlgButtonModulesAnywhere extends JPlugin
 	{
 		jimport('joomla.filesystem.file');
 
-		return JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php');
+		return
+			JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			&& JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml');
 	}
 }

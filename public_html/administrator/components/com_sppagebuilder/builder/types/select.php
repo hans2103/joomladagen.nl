@@ -16,30 +16,59 @@ class SpTypeSelect{
 			$attr['std'] = '';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+				if(!is_array($value)) {
+					$array[] = array(
+						$operand,
+						'=',
+						$value
+					);
+				} else {
+					$array = $attr['depends'];
+				}
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
+		// multiple
+		$multiple = false;
+		if(isset($attr['multiple'])) {
+			$multiple = 'multiple';
+		}
+
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$output .= '<select class="form-control addon-input" data-attrname="'.$key.'" id="field_'.$key.'">';
+		$output .= '<select class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" id="field_'.$key.'" '. $multiple .'>';
 
 		foreach( $attr['values'] as $key=>$value )
 		{
-			$output .= '<option value="'.$key.'" '.(($attr['std'] == $key )?'selected':'').'>'.$value.'</option>';
+
+			if($multiple) {
+				$selected = '';
+				if(is_array($attr['std']) && (in_array($key, $attr['std']))) {
+					$selected = ' selected';
+				} else if ($key == $attr['std']) {
+					$selected = ' selected';
+				}
+
+				$output .= '<option value="'. $key .'"'. $selected .'>'. $value .'</option>';
+			} else {
+				$output .= '<option value="'.$key.'" '.(($attr['std'] == $key )?'selected':'').'>'.$value.'</option>';
+			}
+
 		}
 
 		$output .= '</select>';
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

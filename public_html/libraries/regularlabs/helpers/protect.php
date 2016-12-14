@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -442,7 +442,11 @@ class RLProtect
 			return;
 		}
 
-		$regex = '#' . preg_quote('{' . self::$sourcerer_tag, '#') . '[\s\}].*?' . preg_quote('{/' . self::$sourcerer_tag . '}', '#') . '#si';
+		$regex = '#'
+			. RLText::pregQuote('{' . self::$sourcerer_tag)
+			. '[\s\}].*?'
+			. RLText::pregQuote('{/' . self::$sourcerer_tag . '}')
+			. '#si';
 
 		preg_match_all($regex, $string, $matches);
 
@@ -536,12 +540,12 @@ class RLProtect
 	{
 		self::unprotectByRegex(
 			$string,
-			'#' . preg_quote(self::$protect_tags_start, '#') . '(.*?)' . preg_quote(self::$protect_tags_end, '#') . '#si'
+			'#' . RLText::pregQuote(self::$protect_tags_start) . '(.*?)' . RLText::pregQuote(self::$protect_tags_end) . '#si'
 		);
 
 		self::unprotectByRegex(
 			$string,
-			'#' . preg_quote(self::$protect_start, '#') . '(.*?)' . preg_quote(self::$protect_end, '#') . '#si'
+			'#' . RLText::pregQuote(self::$protect_start) . '(.*?)' . RLText::pregQuote(self::$protect_end) . '#si'
 		);
 	}
 
@@ -725,6 +729,36 @@ class RLProtect
 	}
 
 	/**
+	 * remove left over plugin tags
+	 */
+	public static function removePluginTags(&$string, $tags, $character_start = '{', $character_end = '{', $keep_content = true)
+	{
+		$character_start = RLText::pregQuote($character_start);
+		$character_end   = RLText::pregQuote($character_end);
+
+		foreach ($tags as $tag)
+		{
+			if (!is_array($tag))
+			{
+				$tag = array($tag, $tag);
+			}
+
+			if (count($tag) < 2)
+			{
+				$tag = array($tag['0'], $tag['0']);
+			}
+
+			$regex = $character_start . RLText::pregQuote($tag['0']) . '(?:\s.*?)?' . $character_end
+				. '(.*?)'
+				. $character_start . '/' . RLText::pregQuote($tag['1']) . $character_end;
+
+			$replace = $keep_content ? '\1' : '';
+
+			$string = preg_replace('#' . $regex . '#si', $replace, $string);
+		}
+	}
+
+	/**
 	 * remove tags from title tags
 	 */
 	public static function removeFromHtmlTagContent(&$string, $tags, $include_closing_tags = true, $html_tags = array('title'))
@@ -748,7 +782,7 @@ class RLProtect
 			$content = $match['3'];
 			foreach ($tags as $tag)
 			{
-				$content = preg_replace('#' . preg_quote($tag, '#') . '.*?\}#si', '', $content);
+				$content = preg_replace('#' . RLText::pregQuote($tag) . '.*?\}#si', '', $content);
 			}
 			$string = str_replace($match['0'], $match['1'] . $content . $match['4'], $string);
 		}

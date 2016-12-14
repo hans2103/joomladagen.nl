@@ -8,74 +8,64 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_tab','sp_tab_addon');
-AddonParser::addAddon('sp_tab_item','sp_tab_item_addon');
+class SppagebuilderAddonTab extends SppagebuilderAddons {
 
-$sppbTabArray = array();
-function sp_tab_addon($atts, $content){
-	global $sppbTabArray;
+	public function render() {
 
-	extract(spAddonAtts(array(
-		"title"					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',		
-		"style"					=> '',
-		"class"					=> ''
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$style = (isset($this->addon->settings->style) && $this->addon->settings->style) ? $this->addon->settings->style : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	AddonParser::spDoAddon($content);
+		//Output
+		$output  = '<div class="sppb-addon sppb-addon-tab ' . $class . '">';
+		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
+		$output .= '<div class="sppb-addon-content sppb-tab">';
 
-	$output  = '<div class="sppb-addon sppb-addon-tab ' . $class . '">';
-	if($title) {
+		//Tab Title
+		$output .='<ul class="sppb-nav sppb-nav-' . $style . '">';
+		foreach ($this->addon->settings->sp_tab_item as $key => $tab) {
+			$title = (isset($tab->icon) && $tab->icon) ? '<i class="fa ' . $tab->icon . '"></i> ' . $tab->title : $tab->title;
+			$output .='<li class="'. ( ($key==0) ? "active" : "").'"><a data-toggle="sppb-tab" href="#sppb-tab-'. ($this->addon->id + $key) .'">'. $title .'</a></li>';
+		}
+		$output .='</ul>';
 
-		$title_style = '';
-		if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-		if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-		if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-		if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-		if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
+		//Tab Contnet
+		$output .='<div class="sppb-tab-content sppb-nav-' . $style . '-content">';
+		foreach ($this->addon->settings->sp_tab_item as $key => $tab) {
+			$output .='<div id="sppb-tab-'. ($this->addon->id + $key) .'" class="sppb-tab-pane sppb-fade'. ( ($key==0) ? " active in" : "").'">' . $tab->content .'</div>';
+		}
+		$output .='</div>';
+		$output .= '</div>';
+		$output .= '</div>';
 
-		$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+		return $output;
+
 	}
-	$output .= '<div class="sppb-addon-content sppb-tab">';
-	//Tab Title
-	$output .='<ul class="sppb-nav sppb-nav-' . $style . '">';
-	foreach ($sppbTabArray as $key=>$tab) {
-		$output .='<li class="'. ( ($key==0) ? "active" : "").'"><a role="tab" data-toggle="sppb-tab">'. $tab['icon'].' '. $tab['title'] .'</a></li>';
-	}
-	$output .='</ul>';
-	//Tab Contnet
-	$output .='<div class="sppb-tab-content">';
-	foreach ($sppbTabArray as $key=>$tab) {
-		$output .='<div class="sppb-tab-pane sppb-fade'. ( ($key==0) ? " active in" : "").'">' . $tab['content'] .'</div>';
-	}
-	$output .='</div>';
-	$output .= '</div>';
-	$output .= '</div>';
 
-	$sppbTabArray = array();
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$tab_style = (isset($this->addon->settings->style) && $this->addon->settings->style) ? $this->addon->settings->style : '';
+		$style = (isset($this->addon->settings->active_tab_color) && $this->addon->settings->active_tab_color) ? 'color: ' . $this->addon->settings->active_tab_color . ';': '';
 
-	return $output;
-
-}
-
-function sp_tab_item_addon( $atts ){
-	global $sppbTabArray;
-
-	extract(spAddonAtts(array(
-		"title"=>'',
-		"icon"=>'',
-		'content'=>''
-		), $atts));
-
-		if($icon!='') {
-			$icon = '<i class="fa ' . $icon . '"></i> ';
+		$css = '';
+		if($tab_style == 'pills') {
+			$style .= (isset($this->addon->settings->active_tab_bg) && $this->addon->settings->active_tab_bg) ? 'background-color: ' . $this->addon->settings->active_tab_bg . ';': '';
+			if($style) {
+				$css .= $addon_id . ' .sppb-nav-pills > li.active > a,' . $addon_id . ' .sppb-nav-pills > li.active > a:hover,' . $addon_id . ' .sppb-nav-pills > li.active > a:focus {';
+				$css .= $style;
+				$css .= '}';
+			}
+		} else if ($tab_style == 'lines') {
+			$style .= (isset($this->addon->settings->active_tab_bg) && $this->addon->settings->active_tab_bg) ? 'border-bottom-color: ' . $this->addon->settings->active_tab_bg . ';': '';
+			if($style) {
+				$css .= $addon_id . ' .sppb-nav-lines > li.active > a,' . $addon_id . ' .sppb-nav-lines > li.active > a:hover,' . $addon_id . ' .sppb-nav-lines > li.active > a:focus {';
+				$css .= $style;
+				$css .= '}';
+			}
 		}
 
-	$sppbTabArray[] = array('title'=>$title, 'icon'=>$icon, 'content'=>$content);
+		return $css;
+	}
 
 }

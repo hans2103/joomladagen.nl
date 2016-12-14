@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.1PRO
+ * @version         6.0.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -39,6 +39,7 @@ class PlgButtonModulesAnywhereHelper
 		if ($user->get('guest')
 			|| (
 				!$user->authorise('core.edit', 'com_content')
+				&& !$user->authorise('core.edit.own', 'com_content')
 				&& !$user->authorise('core.create', 'com_content')
 			)
 		)
@@ -68,7 +69,7 @@ class PlgButtonModulesAnywhereHelper
 		$button->link    = $link;
 		$button->text    = trim($text);
 		$button->name    = $icon;
-		$button->options = "{handler: 'iframe', size: {x:window.getSize().x-100, y: window.getSize().y-100}}";
+		$button->options = "{handler: 'iframe', size: {x: window.getSize().x-100, y: window.getSize().y-100}}";
 
 		return $button;
 	}

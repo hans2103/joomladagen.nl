@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,6 +12,7 @@
 defined('_JEXEC') or die;
 
 require_once dirname(__DIR__) . '/assignment.php';
+require_once dirname(__DIR__) . '/text.php';
 require_once dirname(__DIR__) . '/mobile_detect.php';
 
 class RLAssignmentsAgents extends RLAssignment
@@ -179,13 +180,13 @@ class RLAssignmentsAgents extends RLAssignment
 
 		if (!(strpos($browser, '#') === 0))
 		{
-			$selection = '#' . preg_quote($browser, '#') . '#';
+			$browser = '#' . RLText::pregQuote($browser) . '#';
 		}
 
 		// also check for _ instead of .
-		$selection = preg_replace('#\\\.([^\]])#', '[\._]\1', $selection);
-		$selection = str_replace('\.]', '\._]', $selection);
+		$browser = preg_replace('#\\\.([^\]])#', '[\._]\1', $browser);
+		$browser = str_replace('\.]', '\._]', $browser);
 
-		return preg_match($selection . 'i', $this->getAgent());
+		return preg_match($browser . 'i', $this->getAgent());
 	}
 }

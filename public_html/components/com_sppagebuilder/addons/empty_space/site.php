@@ -8,22 +8,26 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_empty_space','sp_empty_space_addon');
+class SppagebuilderAddonEmpty_space extends SppagebuilderAddons{
 
-function sp_empty_space_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		'gap'		=> '20',
-		'hidden_md'	=> '',
-		'hidden_sm'	=> '',
-		'hidden_xs'	=> '',
-		'class'		=> '',
-		), $atts));
+		$class  = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
 
-	//Responsive utilities
-	if($hidden_md) $class .= $class . ' sppb-hidden-md sppb-hidden-lg';
-	if($hidden_sm) $class .= $class . ' sppb-hidden-sm';
-	if($hidden_xs) $class .= $class . ' sppb-hidden-xs';
+		return '<div class="sppb-empty-space ' . $class . ' clearfix"></div>';
+	}
 
-	return '<div class="sppb-empty-space ' . $class . ' clearfix" style="margin-bottom:' . (int)$gap . 'px;"></div>';
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$gap = (isset($this->addon->settings->gap) && $this->addon->settings->gap) ? 'padding-bottom: ' . (int) $this->addon->settings->gap . 'px;': '';
+
+		if($gap) {
+			$css = $addon_id . ' .sppb-empty-space {';
+			$css .= $gap;
+			$css .= '}';
+		}
+
+		return $css;
+	}
+
 }

@@ -1,27 +1,27 @@
-jQuery(function($){
-  google.maps.event.addDomListener(window, 'load', function(){
+function initSPPageBuilderGMap() {
+  jQuery('.sppb-addon-gmap-canvas').each(function(index) {
+    var mapId = jQuery(this).attr('id'),
+    zoom = Number(jQuery(this).attr('data-mapzoom')),
+    mousescroll = jQuery(this).attr('data-mousescroll'),
+    maptype = jQuery(this).attr('data-maptype'),
+    latlng = {lat: Number(jQuery(this).attr('data-lat')), lng: Number(jQuery(this).attr('data-lng'))};
 
-    $('.sppb-addon-gmap-canvas').each(function(index){
-      var mapId = 'sppb-addon-gmap' + (index + 1);
-      var self = this;
-
-      $(this).attr('id', mapId);
-
-      var zoom = $(self).data('mapzoom');
-      var mousescroll = $(self).data('mousescroll');
-
-      var latlng = new google.maps.LatLng($(self).data('lat'), $(self).data('lng'));
-      var mapOptions = {
-        zoom: zoom,
-        center: latlng,
-        scrollwheel: mousescroll
-      };
-      var map = new google.maps.Map(document.getElementById(mapId), mapOptions);
-      var marker = new google.maps.Marker({position: latlng, map: map});
-      map.setMapTypeId(google.maps.MapTypeId[$(self).data('maptype')]);
-
+    var map = new google.maps.Map(document.getElementById(mapId), {
+      center: latlng,
+      zoom: zoom,
+      scrollwheel: mousescroll
     });
 
-  });
+    var marker = new google.maps.Marker({
+      position: latlng,
+      map: map
+    });
 
+    map.setMapTypeId(google.maps.MapTypeId[maptype]);
+
+  });
+};
+
+jQuery(window).load(function() {
+  initSPPageBuilderGMap();
 });

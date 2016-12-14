@@ -8,49 +8,32 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_soundcloud','sp_soundcloud_addon');
+class SppagebuilderAddonSoundcloud extends SppagebuilderAddons{
 
-function sp_soundcloud_addon($atts){
+	public function render() {
 
-	extract(spAddonAtts(array(
-		"title" 				=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',		
-		"embed" 				=> '',
-		"class"					=> '',
-		), $atts));
+		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-	if($embed) {
+		//Options
+		$embed = (isset($this->addon->settings->embed) && $this->addon->settings->embed) ? $this->addon->settings->embed : '';
 
+		//Output
+		if($embed) {
+			$output  = '<div class="sppb-addon sppb-addon-soundcloud ' . $class . '">';
+			$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
+			$output .= '<div class="sppb-addon-content">';
+			$output .= '<div class="sppb-embed-responsive sppb-embed-responsive-16by9">';
+			$output .= $embed;
+			$output .= '</div>';
+			$output .= '</div>';
+			$output .= '</div>';
 
-		$output  = '<div class="sppb-addon sppb-addon-soundcloud ' . $class . '">';
-
-		if($title) {
-
-			$title_style = '';
-			if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-			if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-			if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-			if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-			if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-			$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+			return $output;
 		}
 
-		$output .= '<div class="sppb-video-block sppb-embed-responsive sppb-embed-responsive-16by9">';
-		$output .= $embed;
-		$output .= '</div>';
-		
-		$output .= '</div>';
-
-		return $output;
-
+		return;
 	}
-
-	return;
 
 }

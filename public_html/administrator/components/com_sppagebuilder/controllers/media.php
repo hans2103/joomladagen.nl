@@ -13,60 +13,80 @@ jimport( 'joomla.application.component.helper' );
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 jimport('joomla.image.image');
-require_once JPATH_COMPONENT . '/helpers/image.php';
+jimport('joomla.filter.output');
+require_once JPATH_ROOT . '/administrator/components/com_sppagebuilder/helpers/image.php';
 
-class SppagebuilderControllerMedia extends JControllerForm
-{
+class SppagebuilderControllerMedia extends JControllerForm {
 
     // Upload File
     public function upload_media() {
         $model  = $this->getModel();
+        $user = JFactory::getUser();
         $input  = JFactory::getApplication()->input;
-        $image  = $input->files->get('image');
-        $dir    = $input->post->get('folder', '', 'PATH');
+        $file  = $_FILES['file'];
+        $dir  = $input->post->get('folder', '', 'PATH');
         $report = array();
 
-        // User is not authorised
-        if (!JFactory::getUser()->authorise('core.create', 'com_sppagebuilder')) {
-            $report['status'] = false;
-            $report['output'] = JText::_('You are not authorised to upload file.');
-            echo json_encode($report);
-            die;
+        $authorised = $user->authorise('core.edit', 'com_sppagebuilder') || $user->authorise('core.edit.own', 'com_sppagebuilder');
+    		if ($authorised !== true) {
+          $report['status'] = false;
+          $report['output'] = JText::_('JERROR_ALERTNOAUTHOR');
+          echo json_encode($report);
+          die();
         }
-        
-        if(count($image)) {
-            if ($image['error'] == UPLOAD_ERR_OK) {
 
-                // Check file format
-                $image_info = pathinfo($image['name']);
-                if((strtolower($image_info['extension']) == 'png') || (strtolower($image_info['extension']) == 'jpg') || (strtolower($image_info['extension']) == 'jpeg') || (strtolower($image_info['extension']) == 'gif') || (strtolower($image_info['extension']) == 'svg')) {
+        if(count($file)) {
+            if ($file['error'] == UPLOAD_ERR_OK) {
+                $error = false;
+                $params = JComponentHelper::getParams('com_media');
+                $contentLength = (int) $_SERVER['CONTENT_LENGTH'];
+                $mediaHelper = new JHelperMedia;
+                $postMaxSize = $mediaHelper->toBytes(ini_get('post_max_size'));
+                $memoryLimit = $mediaHelper->toBytes(ini_get('memory_limit'));
+                // Check for the total size of post back data.
+                if (($postMaxSize > 0 && $contentLength > $postMaxSize) || ($memoryLimit != -1 && $contentLength > $memoryLimit)) {
+                    $report['status'] = false;
+                    $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_MEDIA_TOTAL_SIZE_EXCEEDS');
+                    $error = true;
+                    echo json_encode($report);
+                    die;
+                }
+                $uploadMaxSize = $params->get('upload_maxsize', 0) * 1024 * 1024;
+                $uploadMaxFileSize = $mediaHelper->toBytes(ini_get('upload_max_filesize'));
+                if (($file['error'] == 1) || ($uploadMaxSize > 0 && $file['size'] > $uploadMaxSize) || ($uploadMaxFileSize > 0 && $file['size'] > $uploadMaxFileSize)) {
+                    $report['status'] = false;
+                    $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_MEDIA_LARGE');
+                    $error = true;
+                }
 
-                    $error = false;
-                    $params = JComponentHelper::getParams('com_media');
-                    $contentLength = (int) $_SERVER['CONTENT_LENGTH'];
-                    $mediaHelper = new JHelperMedia;
-                    $postMaxSize = $mediaHelper->toBytes(ini_get('post_max_size'));
-                    $memoryLimit = $mediaHelper->toBytes(ini_get('memory_limit'));
-                    // Check for the total size of post back data.
-                    if (($postMaxSize > 0 && $contentLength > $postMaxSize) || ($memoryLimit != -1 && $contentLength > $memoryLimit)) {
-                        $report['status'] = false;
-                        $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_MEDIA_TOTAL_SIZE_EXCEEDS');
-                        $error = true;
-                        echo json_encode($report);
-                        die;
-                    }
-                    $uploadMaxSize = $params->get('upload_maxsize', 0) * 1024 * 1024;
-                    $uploadMaxFileSize = $mediaHelper->toBytes(ini_get('upload_max_filesize'));
-                    if (($image['error'] == 1) || ($uploadMaxSize > 0 && $image['size'] > $uploadMaxSize) || ($uploadMaxFileSize > 0 && $image['size'] > $uploadMaxFileSize)) {
-                        $report['status'] = false;
-                        $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_MEDIA_LARGE');
-                        $error = true;
-                    }
+                // File formats
+                $accepted_file_formats = array(
+                    'image' => array('jpg', 'jpeg', 'png', 'gif', 'svg'),
+                    'video' => array('mp4', 'mov', 'wmv', 'avi', 'mpg', 'ogv', '3gp', '3g2'),
+                    'audio' => array('mp3', 'm4a', 'ogg', 'wav'),
+                    'attachment' => array('pdf', 'doc', 'docx', 'key', 'ppt', 'pptx', 'pps', 'ppsx', 'odt', 'xls', 'xlsx', 'zip')
+                    );
 
-                    // Upload if no error found
-                    if(!$error) {
-                        $date = JFactory::getDate();
-                        $folder = 'images/' . JHtml::_('date', $date, 'Y') . '/' . JHtml::_('date', $date, 'm') . '/' . JHtml::_('date', $date, 'd');
+                // Upload if no error found
+                if(!$error) {
+                    $date = JFactory::getDate();
+
+                    $file_ext = strtolower(JFile::getExt($file['name']));
+
+                    if(self::in_array($file_ext, $accepted_file_formats)) {
+                        $media_type = self::array_search($file_ext, $accepted_file_formats);
+
+                        if( $media_type == 'image' ) {
+                            $folder_root = 'images/';
+                        } elseif ( $media_type == 'video' ) {
+                            $folder_root = 'media/videos/';
+                        } elseif ( $media_type == 'audio' ) {
+                            $folder_root = 'media/audios/';
+                        } elseif ( $media_type == 'attachment' ) {
+                            $folder_root = 'media/attachments/';
+                        }
+
+                        $folder = $folder_root . JHtml::_('date', $date, 'Y') . '/' . JHtml::_('date', $date, 'm') . '/' . JHtml::_('date', $date, 'd');
 
                         if($dir != '') {
                             $folder = ltrim($dir, '/');
@@ -76,55 +96,67 @@ class SppagebuilderControllerMedia extends JControllerForm
                             JFolder::create(JPATH_ROOT . '/' . $folder, 0755);
                         }
 
-                        if(!JFolder::exists( JPATH_ROOT . '/' . $folder . '/_spmedia_thumbs' )) {
-                            JFolder::create(JPATH_ROOT . '/' . $folder . '/_spmedia_thumbs', 0755);
+                        if($media_type == 'image') {
+                            if(!JFolder::exists( JPATH_ROOT . '/' . $folder . '/_spmedia_thumbs' )) {
+                                JFolder::create(JPATH_ROOT . '/' . $folder . '/_spmedia_thumbs', 0755);
+                            }
                         }
 
-                        $name = $image['name'];
-                        $path = $image['tmp_name'];
+                        $name = $file['name'];
+                        $path = $file['tmp_name'];
                         // Do no override existing file
 
-                        $file = preg_replace('#\s+#', "-", JFile::makeSafe(basename($name)));
+                        $media_file = preg_replace('#\s+#', "-", JFile::makeSafe(basename(strtolower($name))));
                         $i = 0;
                         do {
-                            $base_name  = JFile::stripExt($file) . ($i ? "$i" : "");
-                            $ext        = JFile::getExt($file);
-                            $image_name = $base_name . '.' . $ext;
+                            $base_name  = JFile::stripExt($media_file) . ($i ? "$i" : "");
+                            $ext        = JFile::getExt($media_file);
+                            $media_name = $base_name . '.' . $ext;
                             $i++;
-                            $dest       = JPATH_ROOT . '/' . $folder . '/' . $image_name;
-                            $src        = $folder . '/'  . $image_name;
+                            $dest       = JPATH_ROOT . '/' . $folder . '/' . $media_name;
+                            $src        = $folder . '/'  . $media_name;
                         } while(file_exists($dest));
                         // End Do not override
 
-                        if(JFile::upload($path, $dest)) {
+                        if(JFile::upload($path, $dest, false, true)) {
+
                             $thumb = '';
 
-                            if(strtolower($ext) == 'svg') {
-                                $report['src'] = JURI::root(true) . '/' . $src;
-                            } else {
-                                $image = new SppagebuilderHelperImage($dest);
-                                if( ($image->getWidth() >300) || ($image->getWidth() >225) ) {
-                                    $image->createThumbs(array('spmedia_thumb'=>'300x225'), 5, '_spmedia_thumbs');
-                                    $report['src'] = JURI::root(true) . '/' . $folder . '/_spmedia_thumbs/' . $base_name . '.' . $ext;
-                                    $thumb      = $folder . '/_spmedia_thumbs/'  . $base_name . '.' . $ext;
-                                } else {
+                            if($media_type == 'image') {
+                                if(strtolower($ext) == 'svg') {
                                     $report['src'] = JURI::root(true) . '/' . $src;
+                                } else {
+                                    $image = new SppagebuilderHelperImage($dest);
+                                    if( ($image->getWidth() >300) || ($image->getWidth() >225) ) {
+                                        $image->createThumbs(array('spmedia_thumb'=>'300x225'), 5, '_spmedia_thumbs');
+                                        $report['src'] = JURI::root(true) . '/' . $folder . '/_spmedia_thumbs/' . $base_name . '.' . $ext;
+                                        $thumb      = $folder . '/_spmedia_thumbs/'  . $base_name . '.' . $ext;
+                                    } else {
+                                        $report['src'] = JURI::root(true) . '/' . $src;
+                                    }
                                 }
                             }
 
-                            $insertid = $model->insertMedia($base_name, $src, $thumb, 'image');
+                            $insertid = $model->insertMedia($base_name, $src, $thumb, $media_type);
                             $report['status'] = true;
                             $report['title'] = $base_name;
                             $report['id'] = $insertid;
                             $report['path'] = $src;
+
+                            $layout_path = JPATH_ROOT . '/administrator/components/com_sppagebuilder/layouts';
+                            $format_layout = new JLayoutFile('media.format', $layout_path);
+                        		$report['output'] = $format_layout->render( array( 'media'=>$model->getMediaByID($insertid), 'innerHTML' => true ));
+
+                        } else {
+                          $report['status'] = false;
+                          $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_UPLOAD_FAILED');
                         }
+
+                    } else {
+                        $report['status'] = false;
+                        $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_FILE_NOT_SUPPORTED');
                     }
-                    
-                } else {
-                    $report['status'] = false;
-                    $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_UNSUPPORTED_FORMAT');
-                    echo json_encode($report);
-                    die;
+
                 }
             }
         } else {
@@ -139,8 +171,9 @@ class SppagebuilderControllerMedia extends JControllerForm
     // Delete File
     public function delete_media() {
         $model  = $this->getModel();
+        $user = JFactory::getUser();
         $input  = JFactory::getApplication()->input;
-        $id     = $input->post->get('id', NULL, 'INT');
+        $id = $input->post->get('id', NULL, 'INT');
 
         if(!is_numeric($id)) {
             $report['status'] = false;
@@ -150,8 +183,17 @@ class SppagebuilderControllerMedia extends JControllerForm
         }
 
         $media = $model->getMediaByID($id);
+
+        $authorised = $user->authorise('core.edit', 'com_sppagebuilder') || ($user->authorise('core.edit.own', 'com_sppagebuilder') && ($media->created_by == $user->id));
+    		if ($authorised !== true) {
+          $report['status'] = false;
+          $report['output'] = JText::_('JERROR_ALERTNOAUTHOR');
+          echo json_encode($report);
+          die();
+        }
+
         $src = JPATH_ROOT . '/' . $media->path;
-       
+
         $report = array();
         $report['status'] = false;
 
@@ -175,6 +217,70 @@ class SppagebuilderControllerMedia extends JControllerForm
         // Remove from database
         $media = $model->removeMediaByID($id);
         $report['status'] = true;
+
+        echo json_encode($report);
+        die;
+    }
+
+
+    private static function in_array($needle, $haystack) {
+
+        $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($haystack));
+
+        foreach($it AS $element) {
+            if($element == $needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private static function array_search($needle, $haystack) {
+
+        foreach($haystack as $key=>$value) {
+            $current_key=$key;
+            if($needle===$value OR (is_array($value) && self::array_search($needle,$value) !== false)) {
+                return $current_key;
+            }
+        }
+        return false;
+    }
+
+    // Create folder
+    public function create_folder() {
+        $input  = JFactory::getApplication()->input;
+        $folder = $input->post->get('folder', '', 'STRING');
+        $report = array();
+        $report['status'] = false;
+        $report['output'] = JPATH_ROOT . $folder;
+
+        if(!JFolder::exists(JPATH_ROOT . $folder)) {
+            if(JFolder::create(JPATH_ROOT . $folder, 0755)) {
+                $report['status'] = true;
+                $report['output']  = '<li class="sp-pagebuilder-media-folder sp-pagebuilder-media-to-folder" data-path="'. $folder .'">';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<div>';
+            		$report['output'] .= '<i class="fa fa-folder"></i>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '<span class="sp-pagebuilder-media-title">' . basename($folder)  .'</span>';
+            		$report['output'] .= '</div>';
+            		$report['output'] .= '</li>';
+            } else {
+                $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_FOLDER_CREATION_FAILED');
+            }
+        } else {
+            $report['output'] = JText::_('COM_SPPAGEBUILDER_MEDIA_MANAGER_FOLDER_EXISTS');
+        }
 
         echo json_encode($report);
         die;

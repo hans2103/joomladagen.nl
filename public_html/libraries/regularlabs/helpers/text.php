@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -458,7 +458,7 @@ class RLText
 	public static function getAttribute($attributes, $string)
 	{
 		// get attribute from string
-		if (preg_match('#' . preg_quote($attributes, '#') . '="([^"]*)"#si', $string, $match))
+		if (preg_match('#' . RLText::pregQuote($attributes) . '="([^"]*)"#si', $string, $match))
 		{
 			return $match['1'];
 		}
@@ -794,7 +794,7 @@ class RLText
 	{
 		array_walk($array, function (&$part, $key, $delimiter)
 		{
-			$part = preg_quote($part, $delimiter);
+			$part = RLText::pregQuote($part, $delimiter);
 		}, $delimiter);
 
 		return $array;

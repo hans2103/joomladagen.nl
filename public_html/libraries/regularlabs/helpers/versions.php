@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -124,7 +124,7 @@ class RLVersions
 			var NNEM_TOKEN = '" . JSession::getFormToken() . "';
 		"
 		);
-		RLFunctions::script('regularlabsmanager/script.min.js', '6.3.6.p');
+		RLFunctions::script('regularlabsmanager/script.min.js', '6.1.2');
 
 		$url = 'http://download.regularlabs.com?ext=' . $alias . '&j=3';
 

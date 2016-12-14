@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,6 +12,7 @@
 defined('_JEXEC') or die;
 
 require_once __DIR__ . '/cache.php';
+require_once __DIR__ . '/text.php';
 
 class RLAssignment
 {
@@ -344,7 +345,7 @@ class RLAssignment
 
 		foreach ($this->params->content_keywords as $keyword)
 		{
-			if (!preg_match('#\b' . preg_quote($keyword, '#') . '\b#si', $text))
+			if (!preg_match('#\b' . RLText::pregQuote($keyword) . '\b#si', $text))
 			{
 				continue;
 			}

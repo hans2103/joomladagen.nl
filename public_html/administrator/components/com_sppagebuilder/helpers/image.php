@@ -8,8 +8,7 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-class SppagebuilderHelperImage extends JImage
-{
+class SppagebuilderHelperImage extends JImage {
 
 	public function createThumbs($thumbSizes, $creationMethod = self::SCALE_INSIDE, $thumbsFolder = null)
 	{

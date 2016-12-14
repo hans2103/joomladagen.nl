@@ -2,16 +2,13 @@
 /**
  * @package SP Page Builder
  * @author JoomShaper http://www.joomshaper.com
- * @copyright Copyright (c) 2010 - 2016 JoomShaper
+ * @copyright Copyright (c) 2010 - 2015 JoomShaper
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-if(!class_exists('TwitterOAuth')) {
-	require_once __DIR__ . '/twitteroauth/twitteroauth.php';
-}
-
+require_once __DIR__ . '/twitteroauth/twitteroauth.php';
 jimport( 'joomla.filesystem.folder' );
 
 class sppbAddonHelperTweet

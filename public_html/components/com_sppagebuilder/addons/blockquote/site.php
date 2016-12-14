@@ -8,52 +8,35 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-AddonParser::addAddon('sp_blockquote','sp_blockquote_addon');
+class SppagebuilderAddonBlockquote extends SppagebuilderAddons{
+	public function render(){
 
-function sp_blockquote_addon($atts){
+		$class  = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
+		$title  = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
+		$text   = (isset($this->addon->settings->text) && $this->addon->settings->text) ? $this->addon->settings->text : '';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : '';
+		$footer = (isset($this->addon->settings->footer) && $this->addon->settings->footer) ? $this->addon->settings->footer : '';
 
-	extract(spAddonAtts(array(
-		"title"					=> '',
-		"heading_selector" 		=> 'h3',
-		"title_fontsize" 		=> '',
-		"title_fontweight" 		=> '',
-		"title_text_color" 		=> '',
-		"title_margin_top" 		=> '',
-		"title_margin_bottom" 	=> '',		
-		"text"					=> '',
-		"footer"				=> '',
-		'class'					=> '',
-		), $atts));
+		if($text) {
 
-	if($text) {
-		$output  = '<div class="sppb-addon sppb-addon-blockquote ' . $class . '">';
+			$output  = '<div class="sppb-addon sppb-addon-blockquote ' . $class . '">';
+			if($title) {
+				$output  .= '<' . $heading_selector . ' class="sppb-addon-title">' . $title .'</' . $heading_selector . '>';
+			}
+			$output .= '<div class="sppb-addon-content">';
+			$output .= '<div class="sppb-blockquote">';
+			$output .= '<p>'. $text .'</p>';
+			if($footer) {
+				$output .= '<footer>'. $footer .'</footer>';
+			}
+			$output .= '</div>';
+			$output .= '</div>';
 
-		if($title) {
+			$output .= '</div>';
 
-			$title_style = '';
-			if($title_margin_top !='') $title_style .= 'margin-top:' . (int) $title_margin_top . 'px;';
-			if($title_margin_bottom !='') $title_style .= 'margin-bottom:' . (int) $title_margin_bottom . 'px;';
-			if($title_text_color) $title_style .= 'color:' . $title_text_color  . ';';
-			if($title_fontsize) $title_style .= 'font-size:'.$title_fontsize.'px;line-height:'.$title_fontsize.'px;';
-			if($title_fontweight) $title_style .= 'font-weight:'.$title_fontweight.';';
-
-			$output .= '<'.$heading_selector.' class="sppb-addon-title" style="' . $title_style . '">' . $title . '</'.$heading_selector.'>';
+			return $output;
 		}
 
-		$output .= '<div class="sppb-addon-content">';
-		$output .= '<div class="sppb-blockquote">';
-		$output .= '<p>'. $text .'</p>';
-		if($footer) {
-			$output .= '<footer>'. $footer .'</footer>';
-		}
-		$output .= '</div>';
-		$output .= '</div>';
-
-		$output .= '</div>';
-
-		return $output;
+		return ;
 	}
-
-	return;
-	
 }

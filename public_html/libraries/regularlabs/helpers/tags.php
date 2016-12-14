@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,8 @@
  */
 
 defined('_JEXEC') or die;
+
+require_once __DIR__ . '/text.php';
 
 class RLTags
 {
@@ -214,7 +216,7 @@ class RLTags
 			// unprotect tags in key and val
 			foreach ($keyval as $key => $val)
 			{
-				preg_match_all('#' . preg_quote($tag_start, '#') . '(.*?)' . preg_quote($tag_end, '#') . '#si', $val, $tags, PREG_SET_ORDER);
+				preg_match_all('#' . RLText::pregQuote($tag_start) . '(.*?)' . RLText::pregQuote($tag_end) . '#si', $val, $tags, PREG_SET_ORDER);
 
 				if (!empty($tags))
 				{

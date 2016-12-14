@@ -16,19 +16,29 @@ class SpTypeAnimation{
 			$attr['std'] = '';
 		}
 
-		// Depend
+		// Depends
 		$depend_data = '';
 		if(isset($attr['depends'])) {
-			$depends = $attr['depends'];
-			foreach ($depends as $selector => $value) {
-				$depend_data .= ' data-group_parent="' . $selector . '" data-depend="' . $value . '"';
+			$array = array();
+			foreach ($attr['depends'] as $operand => $value) {
+			  if(!is_array($value)) {
+			    $array[] = array(
+			      $operand,
+			      '=',
+			      $value
+			    );
+			  } else {
+			    $array = $attr['depends'];
+			  }
 			}
+
+			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$output  = '<div class="form-group"' . $depend_data . '>';
+		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$output .= '<select class="form-control addon-input chosen-select-deselect data-animation-select" data-attrname="'.$key.'" id="field_'.$key.'">';
+		$output .= '<select class="sp-pagebuilder-form-control sp-pagebuilder-addon-input chosen-select-deselect data-animation-select" name="'.$key.'" id="field_'.$key.'">';
 
 		$animations = array(
 				"fadeIn",
@@ -44,7 +54,7 @@ class SpTypeAnimation{
 				"flip",
 				"flipInX",
 				"flipInY",
-				
+
 				"rotateIn",
 				"rotateInDownLeft",
 				"rotateInDownRight",
@@ -76,7 +86,7 @@ class SpTypeAnimation{
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{
-			$output .= '<p class="help-block">' . $attr['desc'] . '</p>';
+			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
 
 		$output .= '</div>';

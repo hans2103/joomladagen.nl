@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.1
+ * @version         6.1.2
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -84,7 +84,10 @@ class RegularLabsManagerHelper
 	{
 		jimport('joomla.filesystem.file');
 
-		if (!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.php'))
+		if (
+			!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			|| !JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml')
+		)
 		{
 			$this->throwError(
 				JText::_($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_INSTALLED')

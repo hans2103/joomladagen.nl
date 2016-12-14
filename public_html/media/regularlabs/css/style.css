@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -274,7 +274,7 @@ h2 .icon-reglab:before {
 }
 .rl_tablelist td {
   height: 22px;
-  color: #555555;
+  color: #555;
 }
 .rl_tablelist td.has-context {
   height: 23px;
@@ -284,7 +284,7 @@ fieldset.rl_plaintext {
 }
 .rl_code {
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
-  color: #999999;
+  color: #999;
 }
 div.rl_well {
   padding-bottom: 0;
@@ -294,7 +294,7 @@ div.rl_well h4 {
 }
 .rl_well.alert-success,
 .rl_well.alert-error {
-  color: #333333;
+  color: #333;
 }
 .well-striped:nth-child(even) {
   background-color: #fdfdfd;
@@ -303,64 +303,20 @@ div.rl_well h4 {
   margin: 14px 0 0;
 }
 .rl_btn-ignore.btn-danger.active {
-  color: #333333;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  background-color: #f5f5f5;
-  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
-  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
-  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-  *background-color: #e6e6e6;
-  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-color: #999;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .rl_btn-ignore.btn-danger.active:hover,
-.rl_btn-ignore.btn-danger.active:focus,
-.rl_btn-ignore.btn-danger.active:active,
-.rl_btn-ignore.btn-danger.active.active,
-.rl_btn-ignore.btn-danger.active.disabled,
-.rl_btn-ignore.btn-danger.active[disabled] {
-  color: #333333;
-  background-color: #e6e6e6;
-  *background-color: #d9d9d9;
-}
-.rl_btn-ignore.btn-danger.active:active,
-.rl_btn-ignore.btn-danger.active.active {
-  background-color: #cccccc \9;
+.rl_btn-ignore.btn-danger.active:focus {
+  background-color: #737373;
 }
 .rl_btn-exclude.btn-success.active {
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #ad312b;
-  background-image: -moz-linear-gradient(top, #bd362f, #942a25);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bd362f), to(#942a25));
-  background-image: -webkit-linear-gradient(top, #bd362f, #942a25);
-  background-image: -o-linear-gradient(top, #bd362f, #942a25);
-  background-image: linear-gradient(to bottom, #bd362f, #942a25);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffbd362f', endColorstr='#ff942a25', GradientType=0);
-  border-color: #942a25 #942a25 #571916;
-  *background-color: #942a25;
-  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-color: #bd362f;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .rl_btn-exclude.btn-success.active:hover,
-.rl_btn-exclude.btn-success.active:focus,
-.rl_btn-exclude.btn-success.active:active,
-.rl_btn-exclude.btn-success.active.active,
-.rl_btn-exclude.btn-success.active.disabled,
-.rl_btn-exclude.btn-success.active[disabled] {
-  color: #ffffff;
-  background-color: #942a25;
-  *background-color: #802420;
-}
-.rl_btn-exclude.btn-success.active:active,
-.rl_btn-exclude.btn-success.active.active {
-  background-color: #6b1f1b \9;
+.rl_btn-exclude.btn-success.active:focus {
+  background-color: #802420;
 }
 .rl_textarea {
   -webkit-box-sizing: border-box;
@@ -477,7 +433,7 @@ div.chzn-container#advancedparams_color_chzn {
   min-width: 100%;
 }
 .btn-group-yesno-reverse .active.btn-success {
-  color: #ffffff;
+  color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #ad312b;
   background-image: -moz-linear-gradient(top, #bd362f, #942a25);
@@ -498,7 +454,7 @@ div.chzn-container#advancedparams_color_chzn {
 .btn-group-yesno-reverse .active.btn-success.active,
 .btn-group-yesno-reverse .active.btn-success.disabled,
 .btn-group-yesno-reverse .active.btn-success[disabled] {
-  color: #ffffff;
+  color: #fff;
   background-color: #942a25;
   *background-color: #802420;
 }
@@ -507,7 +463,7 @@ div.chzn-container#advancedparams_color_chzn {
   background-color: #6b1f1b \9;
 }
 .btn-group-yesno-reverse .active.btn-danger {
-  color: #ffffff;
+  color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #409740;
   background-image: -moz-linear-gradient(top, #46a546, #378137);
@@ -528,7 +484,7 @@ div.chzn-container#advancedparams_color_chzn {
 .btn-group-yesno-reverse .active.btn-danger.active,
 .btn-group-yesno-reverse .active.btn-danger.disabled,
 .btn-group-yesno-reverse .active.btn-danger[disabled] {
-  color: #ffffff;
+  color: #fff;
   background-color: #378137;
   *background-color: #2f6f2f;
 }
@@ -550,7 +506,7 @@ input.rl_keyfield {
   font-size: 14px !important;
 }
 .rl_keycode {
-  color: #999999;
+  color: #999;
   padding: 2px 0;
 }
 #key_button,

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.9943
+ * @version         16.11.15265
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,8 +12,7 @@
 defined('_JEXEC') or die;
 
 require_once dirname(__DIR__) . '/helpers/text.php';
-
-JFormHelper::loadFieldClass('password');
+require_once JPATH_LIBRARIES . '/joomla/form/fields/password.php';
 
 class JFormFieldRL_Password extends JFormFieldPassword
 {
