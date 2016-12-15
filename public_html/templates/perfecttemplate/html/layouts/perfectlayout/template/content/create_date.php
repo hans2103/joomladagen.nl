@@ -12,10 +12,12 @@ defined('JPATH_BASE') or die;
 $date   = $displayData['date'];
 $class  = $displayData['class'];
 $format = JText::_($displayData['format']);
-
+$show   = $displayData['show_create_date'];
 ?>
+<?php if ($show) : ?>
 <span class="<?php echo $class; ?>__create">
     <time datetime=" <?php echo JHtml::_('date', $date, 'c'); ?>"
           itemprop="dateCreated"><?php echo JHtml::_('date', $date, $format); ?>
 	</time>
 </span>
+<?php endif; ?>

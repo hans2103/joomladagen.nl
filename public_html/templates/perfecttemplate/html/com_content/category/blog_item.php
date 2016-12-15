@@ -69,7 +69,7 @@ if($showintroimage)
 
 <div class="card__content<?php echo $showintroimage ? "":" card__content--hideimage"; ?>">
     <div class="card__header">
-        <?php echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $this->item->created, 'class' => 'blog', 'format' => 'DATE_FORMAT_LC4')); ?>
+        <?php echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $this->item->created, 'class' => 'blog', 'format' => 'DATE_FORMAT_LC4', 'show_create_date' => $params->get('show_publish_date',1))); ?>
 
         <h2 itemprop="name">
 			<?php echo JHtml::_('link', $link, $this->item->title, array('class' => 'anchor--header ')); ?>

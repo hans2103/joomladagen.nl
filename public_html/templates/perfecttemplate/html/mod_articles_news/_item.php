@@ -23,7 +23,7 @@ $images       = json_decode($item->images);
 
 	echo '<div class="newsflash' . $moduleclass_sfx . '__content">';
 
-	echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $item->created, 'class' => 'newsflash' . $moduleclass_sfx . '', 'format' => 'DATE_FORMAT_LC4'));
+	echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $item->created, 'class' => 'newsflash' . $moduleclass_sfx . '', 'format' => 'DATE_FORMAT_LC4', 'show_create_date' => $params->get('show_publish_date',1)));
 
 
 	if ($params->get('item_title'))
