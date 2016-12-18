@@ -1,0 +1,12 @@
+.pager {
+	@include outer-container(100%);
+	margin: $base-spacing 0;
+
+	.previous {
+		float: left;
+	}
+
+	.next {
+		float: right;
+	}
+}
