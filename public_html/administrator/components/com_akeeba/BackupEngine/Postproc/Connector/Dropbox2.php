@@ -56,7 +56,7 @@ class Dropbox2
 	 */
 	private $defaultOptions = array(
 		CURLOPT_SSL_VERIFYPEER => true,
-		CURLOPT_SSL_VERIFYHOST => true,
+		CURLOPT_SSL_VERIFYHOST => 2,
 		CURLOPT_VERBOSE        => true,
 		CURLOPT_HEADER         => false,
 		CURLINFO_HEADER_OUT    => false,
@@ -255,20 +255,20 @@ class Dropbox2
 	/**
 	 * Download a remote file
 	 *
-	 * @param   string  $path       The path of the file in OneDrive
+	 * @param   string  $path       The path of the file in Dropbox
 	 * @param   string  $localFile  The absolute filesystem path where the file will be downloaded to
 	 */
 	public function download($path, $localFile)
 	{
 		$relativeUrl = 'files/download';
-		$path = $this->normalizePath($path, 'content');
+		$path = $this->normalizePath($path);
 
 		$params = array(
 			'path' => $path
 		);
 		$paramsForPost = json_encode($params);
 
-		$this->fetch('POST', self::contentRootUrl, $relativeUrl, array(
+		$this->fetch('GET', self::contentRootUrl, $relativeUrl, array(
 			'headers'   => array(
 				'Content-Type:', // WARNING: Content-Type MUST be empty!
 				'Dropbox-API-Arg: ' . $paramsForPost
@@ -824,12 +824,22 @@ class Dropbox2
 	 *
 	 * @param   string  $relativePath  The relative path to the Dropbox root
 	 *
-	 * @return string
+	 * @return  string
 	 */
 	protected function normalizePath($relativePath)
 	{
+		/**
+		 * Some users enter the base path as /foo/bar/ instead of /foo/bar. This results in relative paths in the form
+		 * of /foo/bar//baz.bat instead of /foo/bar/baz.bat. While the former doesn't cause a problem uploading(!) it
+		 * causes the download to fail with a 400 error and the signed URL to fail entirely with a Dropbox-side error
+		 * message. Therefore we need to replace // with / in the $relativePath.
+		 */
+		$relativePath = str_replace('//', '/', $relativePath);
+
+		// Remove trailing slashes from the relative path
 		$relativePath = trim($relativePath, '/');
 
+		// An empty path is normalized to an empty string.
 		if (empty($relativePath))
 		{
 			$path = '';
@@ -837,9 +847,15 @@ class Dropbox2
 			return $path;
 		}
 
+		// The path MUST start with a forward slash
 		$path = '/' . $relativePath;
 
-		if ($path == '/')
+		/**
+		 * If the path is just a forward slash OR a double forward slash then it's the root which MUST be normalized to
+		 * an empty string. Normally the check for the double forward slash should always be false (unless someone
+		 * screwed up the code above).
+		 */
+		if (($path == '/') || $path == '//')
 		{
 			$path = '';
 		}

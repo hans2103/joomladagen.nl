@@ -496,6 +496,9 @@ class Amazons3 extends Base
 		$disableMultipart = $config['disableMultipart'];
 		$bucket           = $config['bucket'];
 
+		// Required since we're returning by reference
+		$null = null;
+
 		if ($signatureMethod == 's3')
 		{
 			$signatureMethod = 'v2';
@@ -530,14 +533,14 @@ class Amazons3 extends Base
 		{
 			$this->setError('You have not set up your ' . $this->engineLogName . ' Access Key');
 
-			return null;
+			return $null;
 		}
 
 		if (empty($secretKey))
 		{
 			$this->setError('You have not set up your ' . $this->engineLogName . ' Secret Key');
 
-			return null;
+			return $null;
 		}
 
 		if ( !function_exists('curl_init'))
@@ -551,7 +554,7 @@ class Amazons3 extends Base
 		{
 			$this->setError('You have not set up your ' . $this->engineLogName . ' Bucket');
 
-			return null;
+			return $null;
 		}
 
 

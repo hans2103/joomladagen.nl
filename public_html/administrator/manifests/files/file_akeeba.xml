@@ -6,9 +6,9 @@
     <authorUrl>https://www.akeebabackup.com</authorUrl>
     <copyright>Copyright (c)2006-2016 Akeeba Ltd / Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
-    <version>5.2.3</version>
-    <creationDate>2016-09-16</creationDate>
-    <description>Akeeba Backup CLI scripts v.5.2.3</description>
+    <version>5.2.5</version>
+    <creationDate>2016-12-12</creationDate>
+    <description>Akeeba Backup CLI scripts v.5.2.5</description>
 
     <fileset>
         <files target="cli">

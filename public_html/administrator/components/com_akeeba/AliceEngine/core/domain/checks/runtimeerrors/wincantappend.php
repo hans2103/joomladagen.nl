@@ -73,7 +73,7 @@ class AliceCoreDomainChecksRuntimeerrorsWincantappend extends AliceCoreDomainChe
 				}
 			}
 
-			if (preg_match('#Could not open archive file.*? for append#i', $data, $tmp_matches) !== false)
+			if (preg_match('#Could not open archive file.*? for append#i', $data))
 			{
 				$error = true;
 			}
