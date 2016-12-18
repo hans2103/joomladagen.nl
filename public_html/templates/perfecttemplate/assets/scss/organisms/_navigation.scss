@@ -1,6 +1,6 @@
 .rm-togglebutton,
 .rm-subtoggle {
-	padding: 5px 10px;
+	padding: 5px 5px;
 	outline: none;
 	background: $button-background;
 	color: $white;
@@ -17,6 +17,18 @@
 
 	&:focus {
 		text-decoration: underline;
+	}
+}
+
+.rm-togglebutton {
+	.toggle-text {
+		@include visually-hidden;
+	}
+
+	&:hover,
+	&:active,
+	&:focus {
+		background-color: transparent;
 	}
 }
 
