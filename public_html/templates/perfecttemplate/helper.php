@@ -44,8 +44,6 @@ class PWTTemplateHelper
 		$doc->setMetaData('apple-mobile-web-app-capable', 'yes');
 		$doc->setMetaData('apple-mobile-web-app-status-bar-style', 'black');
 		$doc->setMetaData('apple-mobile-web-app-title', $config->get('sitename'));
-		$doc->setMetaData('apple-itunes-app', 'app-id=356566983');
-		$doc->setMetaData('google-play-app', 'app-id=nl.omroep.npo.radio1');
 		$doc->setGenerator($config->get('sitename'));
 	}
 
