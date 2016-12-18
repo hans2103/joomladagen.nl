@@ -22,7 +22,7 @@ include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 //// Load JLayouts helper
 //require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout/render.php';
 
-$showintroimage = PWTTemplateHelper::getParamShowintroimage();
+$showintroimage = PWTTemplateHelper::getParam('show_introimage');
 
 if ($params->get('access-view')) :
 	$link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid, $this->item->language));

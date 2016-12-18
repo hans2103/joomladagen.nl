@@ -41,7 +41,7 @@
 		}
 
 		@include e('body') {
-			a {
+			a:not(.btn) {
 				@include anchor($jd-blue, $jd-blue--dark, true, true);
 			}
 		}

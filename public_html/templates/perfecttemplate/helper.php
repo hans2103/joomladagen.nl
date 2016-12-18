@@ -128,10 +128,10 @@ class PWTTemplateHelper
 	 * @return mixed
 	 * @since  PerfectSite2.1.0
 	 */
-	static public function getParamShowintroimage()
+	static public function getParam($param)
 	{
 		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
-		$parameter  = ($activeMenu) ? $activeMenu->params->get('show_introimage', 1) : '';
+		$parameter  = ($activeMenu) ? $activeMenu->params->get($param, 1) : '';
 
 		return $parameter;
 	}

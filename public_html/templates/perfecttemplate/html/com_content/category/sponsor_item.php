@@ -22,7 +22,7 @@ include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 //// Load JLayouts helper
 //require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout/render.php';
 
-$showintroimage = PWTTemplateHelper::getParamShowintroimage();
+$showintroimage = PWTTemplateHelper::getParam('show_introimage');
 
 if ($params->get('access-view')) :
 	$link = JRoute::_(ContentHelperRoute::getArticleRoute($this->item->slug, $this->item->catid, $this->item->language));
@@ -69,7 +69,7 @@ if($showintroimage)
 
 <div class="card__content<?php echo $showintroimage ? "":" card__content--hideimage"; ?>">
     <div class="card__header">
-        <?php echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $this->item->created, 'class' => 'blog', 'format' => 'DATE_FORMAT_LC4')); ?>
+        <?php echo JLayoutHelper::render('perfectlayout.template.content.create_date', array('date' => $this->item->created, 'class' => 'blog', 'format' => 'DATE_FORMAT_LC4', 'show_create_date' => $params->get('show_create_date',1))); ?>
 
         <h2 itemprop="name">
 			<?php echo $this->item->title; ?>
@@ -85,7 +85,7 @@ if($showintroimage)
 		<?php echo $this->item->event->beforeDisplayContent; ?>
 
 		<?php if ($params->get('show_publish_date')) : ?>
-			<?php echo JLayoutHelper::render('perfecttemplate.content.create_date', array('date' => $this->item->created, 'class' => 'card', 'format' => 'DATE_FORMAT_LC4')); ?>
+			<?php echo JLayoutHelper::render('perfecttemplate.content.create_date', array('date' => $this->item->created, 'class' => 'card', 'format' => 'DATE_FORMAT_LC4', 'show_create_date' => $params->get('show_publish_date',1))); ?>
 		<?php endif; ?>
 
 		<?php echo $this->item->introtext; ?>

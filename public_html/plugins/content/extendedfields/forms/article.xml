@@ -7,7 +7,7 @@
                 label="Introafbeelding"
                 description="Selecteer image"
                 ratio="4/3"
-                width="290"
+                width="300"
         />
 
         <field
@@ -16,8 +16,8 @@
                 type="perfectimage"
                 label="Artikelafbeelding"
                 description="Selecteer image"
-                ratio="2/1"
-                width="760"
+                ratio="4/3"
+                width="300"
         />
     </fields>
 </form>
