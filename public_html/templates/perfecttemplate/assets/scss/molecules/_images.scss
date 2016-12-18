@@ -74,10 +74,12 @@
 
 
 .item-image {
-	&.pull-right {
-		margin-left: 2/3 * $base-spacing;
-	}
-	&.pull-left {
-		margin-right: 2/3 * $base-spacing;
+	@include media($charlie) {
+		&.pull-right {
+			margin-left: 2/3 * $base-spacing;
+		}
+		&.pull-left {
+			margin-right: 2/3 * $base-spacing;
+		}
 	}
 }

@@ -1,13 +1,13 @@
 .module {
 	@include e('title') {
 		@include m('h1') {
-			@include font($font-size--h1, $bold)
+			@include font($font-size--h1, $bold, $line-height--header)
 		}
 		@include m('h2') {
-			@include font($font-size--h2, $bold)
+			@include font($font-size--h2, $bold, $line-height--header)
 		}
 		@include m('h3') {
-			@include font($font-size--h3, $bold)
+			@include font($font-size--h3, $bold, $line-height--header)
 		}
 	}
 }
