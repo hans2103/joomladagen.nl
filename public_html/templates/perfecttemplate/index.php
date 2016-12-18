@@ -30,7 +30,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 </head>
 
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
-<?php echo PWTTemplateHelper::getAnalytics(2,'GTM-XXXXXX')['script']; ?>
+<?php echo PWTTemplateHelper::getAnalytics(2,'GTM-NQZ8SP')['script']; ?>
 
 <header class="header" role="banner">
     <div class="header__wrapper">
