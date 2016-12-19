@@ -114,7 +114,7 @@ class com_watchfulliInstallerScript
 
         $message = JText::_('COM_WATCHFULLI_INSTALL_MESSAGE')
                 . JText::_('COM_WATCHFULLI_INSTALL_BEFORE_FORM')
-                . '<form action="https://watchful.li/index.php" method="post" target="_blank">'
+                . '<form action="https://app.watchful.li/index.php" method="post" target="_blank">'
                 . '<input type="hidden" name="name" value="' . $sitename . '">'
                 . '<input type="hidden" name="access_url" value="' . JURI::root() . '">'
                 . '<input type="hidden" name="secret_word"value="' . $key . '">'
@@ -253,7 +253,7 @@ class com_watchfulliInstallerScript
      */
     private function updateMaster($old_generated_key, $new_secret_key)
     {
-        $api_endpoint = 'https://watchful.li/api/v1/sites/changekey'.
+        $api_endpoint = 'https://app.watchful.li/api/v1/sites/changekey'.
                 '?key='.$old_generated_key .
                 '&url='.urlencode(JURI::root()).
                 '&newkey='.$new_secret_key;

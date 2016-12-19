@@ -1,6 +1,6 @@
 <?php
 /**
- * @version     backend/classes/actions.php 2016-04-14 09:28:00 UTC gibiwatch
+ * @version     backend/classes/actions.php 2016-08-29 09:28:00 UTC Ch
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
@@ -93,10 +93,11 @@ class WatchfulliActions
             ));
         }
 
-        $extParams          = $this->getExtensionParameters();
-        $this->type         = empty($extParams->type) ? null : $extParams->type;
+        $extParams = $this->getExtensionParameters();
+        $this->type = empty($extParams->type) ? null : $extParams->type;
         $this->package_name = empty($extParams->package_name) ? null : $extParams->package_name;
-        $this->update_url   = empty($extParams->update_url) ? null : $extParams->update_url;
+        $this->update_url = empty($extParams->update_url) ? null : $extParams->update_url;
+        $this->jce_key = empty($extParams->jce_key) ? null : $extParams->jce_key;
 
         if ('1.5' == Watchfulli::joomla()->RELEASE)
         {
@@ -169,7 +170,7 @@ class WatchfulliActions
             $app->close("COM_JMONITORING_CANT_DOWNLOAD_UPDATE");
         }
 
-        $config   = JFactory::getConfig();
+        $config = JFactory::getConfig();
         $tmp_path = $config->get('tmp_path');
 
         // Rename the file with custom name
@@ -205,7 +206,7 @@ class WatchfulliActions
         // Cleanup the install files
         if (!is_file($package['packagefile']))
         {
-            $config                 = JFactory::getConfig();
+            $config = JFactory::getConfig();
             $package['packagefile'] = $config->get('tmp_path') . '/' . $package['packagefile'];
         }
 
@@ -225,7 +226,7 @@ class WatchfulliActions
     public function doInstallCore()
     {
         // init
-        $app  = JFactory::getApplication();
+        $app = JFactory::getApplication();
         $step = $app->input->get('step');
 
         // get update class
@@ -256,13 +257,13 @@ class WatchfulliActions
         if (file_exists(JPATH_PLUGINS . '/system/cachecleaner/helper.php'))
         {
             require_once JPATH_PLUGINS . '/system/cachecleaner/helper.php';
-            $params       = json_decode(json_encode(array(
+            $params = json_decode(json_encode(array(
                 'purge'         => 2,
                 'clean_tmp'     => 2,
                 'purge_opcache' => 2,
                 'purge_updates' => 2
             )));
-            $helper       = new PlgSystemCacheCleanerHelper($params);
+            $helper = new PlgSystemCacheCleanerHelper($params);
             $helper->type = 'button';
             $helper->purgeCache();
 
@@ -295,25 +296,19 @@ class WatchfulliActions
             $path = $app->input->getString('path');
             $args = $app->input->get('args', array(), 'array');
         }
-        // don't allow delete beyond web root
-        if (0 !== strpos($path, JPATH_ROOT))
-        {
-            $this->response(array(
-                'task' => 'fileManager',
-                'success' => false,
-                'message' => 'COM_JMONITORING_FILE_MANAGER_PATH_OUTSIDE_ROOT'
-            ));
-            return false;
-        }
+
+        $path = JPATH_ROOT . $path;
+
         // whitelist methods
         $allowed = array('chmod', 'delete', 'read', 'write');
         if (!in_array($action, $allowed))
         {
             $this->response(array(
-                'task' => 'fileManager',
+                'task'    => 'fileManager',
                 'success' => false,
                 'message' => 'COM_JMONITORING_FILE_MANAGER_UNKNOWN_ACTION'
             ));
+
             return false;
         }
 
@@ -324,20 +319,45 @@ class WatchfulliActions
             array_unshift($args, $path);
             $result = call_user_func_array($callback, $args);
             $this->response(array(
-                'task' => 'fileManager',
+                'task'    => 'fileManager',
                 'success' => true,
-                'result' => $result
+                'result'  => $result
             ));
         }
         catch (RuntimeException $e)
         {
             $this->response(array(
-                'task' => 'fileManager',
+                'task'    => 'fileManager',
                 'success' => false,
                 'message' => $e->getMessage()
             ));
+
             return false;
         }
+    }
+
+    /**
+     * Check extension update using native updater
+     */
+    public function checkExtensionsUpdates()
+    {
+        $updater = JUpdater::getInstance();
+        $results = $updater->findUpdates(0, 0);
+
+        if(!$results)
+        {
+            $this->response(array(
+                'task' => 'checkExtensionsUpdates',
+                'success' => false,
+                'result' => ''
+            ));
+        }
+
+        $this->response(array(
+            'task' => 'checkExtensionsUpdates',
+            'success' => true,
+            'result' => ''
+        ));
     }
 
     /**
@@ -377,67 +397,21 @@ class WatchfulliActions
      */
     private function doInstallJCEPlugins($id)
     {
+        $jceHelper = new WatchfulliExtensionsJce();
+
         jimport('joomla.filesystem.folder');
-        $jceBase = JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php';
-        if (!file_exists($jceBase))
+
+        if (!$jceHelper->jceIsInstalled())
         {
             return 'COM_JMONITORING_JCE_NOT_INSTALLED';
         }
 
-        require_once($jceBase);
-        require_once(JPATH_ADMINISTRATOR . '/components/com_jce/models/updates.php');
-
-        $WFModelUpdates = new WFModelUpdates();
-
-        JRequest::setVar('id', $id);
-        $result = json_decode($WFModelUpdates->download());
-
-        if (!$result->file)
+        if ($this->jce_key != $jceHelper->getJceKey())
         {
-            return "COM_JMONITORING_CANT_DOWNLOAD_UPDATE";
+            $jceHelper->saveJceKey($this->jce_key);
         }
 
-        JRequest::setVar('file', $result->file);
-        JRequest::setVar('hash', $result->hash, 'post');
-        JRequest::setVar('installer', $result->installer);
-        JRequest::setVar('type', $result->type);
-
-        $install = json_decode($WFModelUpdates->install());
-        if ($install->error)
-        {
-            return "COM_JMONITORING_CANT_INSTALL_UPDATE";
-        }
-
-        $plugin_name_parts = explode("_", $result->file);
-        if (count($plugin_name_parts) == 3)
-        {
-            $finalDir = $plugin_name_parts[1];
-        }
-        else
-        {
-            $finalDir = $plugin_name_parts[1] . '_' . $plugin_name_parts[2];
-        }
-
-        $source      = JPATH_ROOT . "/components/com_watchfulli/editor/tiny_mce/plugins/" . $finalDir;
-        $destination = JPATH_ROOT . "/components/com_jce/editor/tiny_mce/plugins/" . $finalDir;
-
-        if (!JFolder::delete($destination))
-        {
-            return 'JCE - can delete ' . $destination;
-        }
-
-        if (!JFolder::move($source, $destination))
-        {
-            return 'JCE - can move from ' . $source . ' to ' . $destination;
-        }
-
-        $path = JPATH_ROOT . "/components/com_watchfulli/editor/";
-        if (!JFolder::delete($path))
-        {
-            return 'JCE - can delete ' . $path;
-        }
-
-        return "ok_" . $result->file;
+        return $jceHelper->installJcePlugin($id);
     }
 
     /**
@@ -544,7 +518,8 @@ class WatchfulliActions
         try
         {
             $package = $this->unpackFile($file);
-        } catch (Exception $ex)
+        }
+        catch (Exception $ex)
         {
             $this->response(array(
                 'task'    => 'install',
@@ -694,9 +669,10 @@ if (Watchfulli::joomla()->getShortVersion() != '3.2.0')
 
         /**
          * Magic method to allow methods to fall through to the original application
-         * 
+         *
          * @param string $name
-         * @param array $arguments
+         * @param array  $arguments
+         *
          * @return mixed
          */
         public function __call($name, $arguments = array())

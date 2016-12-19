@@ -66,24 +66,36 @@ class WatchfulliExtension
         return $this->getXmlVariant();
     }
 
+	/**
+	 * Read version file for LiveUpdate-based components
+	 *
+	 * @return boolean
+	 */
+	private function readVersionFile()
+	{
+		$administrator_version_path = JPATH_ADMINISTRATOR . "/components/{$this->extension->element}/version.php";
+		if (file_exists($administrator_version_path))
+		{
+			require_once $administrator_version_path;
+			return true;
+		}
 
-    /**
-     * Read version file for LiveUpdate-based components
-     *
-     * @return boolean
-     */
-    private function readVersionFile()
-    {
-        $version_path = ($this->extension->client_id == '1' ? JPATH_ADMINISTRATOR : JPATH_SITE) . "/components/{$this->extension->element}/version.php";
-        if (!file_exists($version_path))
-        {
-            return false;
-        }
+		$site_version_path = JPATH_SITE . "/components/{$this->extension->element}/version.php";
+		if (file_exists($site_version_path))
+		{
+			require_once $site_version_path;
+			return true;
+		}
 
-        require_once $version_path;
+		$component_version_path = str_replace("/pkg_", "/com_", $administrator_version_path);
+		if (file_exists($component_version_path))
+		{
+			require_once $component_version_path;
+			return true;
+		}
 
-        return true;
-    }
+		return false;
+	}
 
     /**
      * Return the variant or level field in the extension XML file
@@ -155,7 +167,7 @@ class WatchfulliExtension
      */
     private function getLiveUpdateVariant()
     {
-        $liveupdate_extensions = array('com_admintools', 'com_akeeba', 'com_akeebasubs', 'com_ars', 'com_ats', 'com_hotspots', 'com_comment', 'com_matukio', 'com_cmigrator', 'com_tiles', 'com_ctransifex');
+        $liveupdate_extensions = array('com_admintools', 'pkg_admintools', 'com_akeeba', 'pkg_akeeba', 'com_akeebasubs', 'com_ars', 'com_ats', 'com_hotspots', 'com_comment', 'com_matukio', 'com_cmigrator', 'com_tiles', 'com_ctransifex');
 
         // We need to check BEFORE including the "version.php" file, because it 
         // may produce a fatal error if it's not in LiveUpdate format
@@ -172,8 +184,10 @@ class WatchfulliExtension
         switch ($this->extension->element)
         {
             case 'com_admintools':
+            case 'pkg_admintools':
                 return ADMINTOOLS_PRO ? 'Pro' : 'Core';
             case 'com_akeeba':
+            case 'pkg_akeeba':
                 return AKEEBA_PRO ? 'Pro' : 'Core';
             case 'com_akeebasubs':
                 return AKEEBASUBS_PRO ? 'Pro' : 'Core';

@@ -459,6 +459,12 @@ class WatchfulliSend
      */
     private function getJCEplugins()
     {
+        // Removed from JCE 2.6 (no plugins)
+        if (!file_exists(JPATH_ADMINISTRATOR . '/components/com_jce/models/installer.php'))
+        {
+            return array();
+        }
+
         require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
         require_once(JPATH_ADMINISTRATOR . '/components/com_jce/models/installer.php');
 

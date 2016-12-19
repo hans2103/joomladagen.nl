@@ -1,9 +1,9 @@
 <extension type="component" version="2.5.0" method="upgrade">
     <name>WATCHFULLI</name>
-    <version>1.10.10</version>
-    <creationDate>2016-08-04</creationDate>
+    <version>1.11.0</version>
+    <creationDate>20160831</creationDate>
     <description>COM_WATCHFULLI_XML_DESCRIPTION</description>
-    <license>GPL</license>
+    <license>GNU/GPL v3 or later</license>
     <author>watchful.li</author>
     <authoremail>info@watchful.li</authoremail>
     <authorUrl>https://watchful.li</authorUrl>

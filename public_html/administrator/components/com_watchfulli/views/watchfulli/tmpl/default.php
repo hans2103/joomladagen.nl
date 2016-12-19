@@ -14,7 +14,7 @@ defined('WATCHFULLI_PATH') or die;
 <h3><?php echo JText::_('COM_WATCHFULLI_AUTHENTICATION'); ?></h3>
 <p>    
     <?php echo JText::_('COM_WATCHFULLI_BEFORE_ADDSITE_FORM'); ?>
-    <form action="https://watchful.li/index.php" method="post" target="_blank">
+    <form action="https://app.watchful.li/index.php" method="post" target="_blank">
         <input type="hidden" name="name" value="<?php echo $this->sitename ?>">
         <input type="hidden" name="access_url" value="<?php echo JURI::root() ?>">
         <input type="hidden" name="secret_word"value="<?php echo $this->secret_key ?>">

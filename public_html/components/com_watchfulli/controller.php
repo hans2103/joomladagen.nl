@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version     frontend/site/controller.php 2015-02-24 13:45:00 UTC pav
+ * @version     frontend/site/controller.php 2016-08-29 13:45:00 UTC Ch
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
@@ -97,6 +97,11 @@ class watchfulliController extends WatchfulliBaseController
     public function fileManager()
     {
         $this->action->fileManager();
+    }
+
+    public function checkExtensionsUpdates()
+    {
+        $this->action->checkExtensionsUpdates();
     }
 
 }

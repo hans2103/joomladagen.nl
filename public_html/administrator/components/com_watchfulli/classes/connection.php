@@ -20,7 +20,7 @@ class WatchfulliConnection
     public static function getSignatures()
     {
         $config = array(
-            'url' => 'https://watchful.li/api/v1/signatures?limit=0',
+            'url' => 'https://app.watchful.li/api/v1/signatures?limit=0',
             'timeout' => 300,
             "follow_location" => false
         );

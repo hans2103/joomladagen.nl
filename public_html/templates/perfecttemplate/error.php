@@ -27,11 +27,11 @@ $navposition = $params->get('navposition');
 	<title><?php echo $this->error->getCode(); ?> - <?php echo htmlspecialchars($this->error->getMessage(), ENT_QUOTES, 'UTF-8'); ?></title>
 	<link href="<?php echo $this->baseurl; ?>/templates/system/css/system.css" rel="stylesheet" />
 	<link href="<?php echo $this->baseurl; ?>/templates/system/css/error.css" rel="stylesheet" />
-	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/position.css" rel="stylesheet" media="screen" />
-	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/layout.css" rel="stylesheet" media="screen" />
-	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/print.css" rel="stylesheet" media="print" />
-	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/<?php echo htmlspecialchars($color); ?>.css" rel="stylesheet" />
-	<?php $files = JHtml::_('stylesheet', 'templates/' . $this->template . '/css/general.css', null, false, true); ?>
+	<link href="<?php echo $this->baseurl; ?>/templates/beez3/css/position.css" rel="stylesheet" media="screen" />
+	<link href="<?php echo $this->baseurl; ?>/templates/beez3/css/layout.css" rel="stylesheet" media="screen" />
+	<link href="<?php echo $this->baseurl; ?>/templates/beez3/css/print.css" rel="stylesheet" media="print" />
+	<link href="<?php echo $this->baseurl; ?>/templates/beez3/css/red.css" rel="stylesheet" />
+	<?php $files = JHtml::_('stylesheet', 'templates/beez3/css/general.css', null, false, true); ?>
 	<?php if ($files) : ?>
 		<?php if (!is_array($files)) : ?>
 			<?php $files = array($files); ?>
@@ -40,7 +40,7 @@ $navposition = $params->get('navposition');
 			<link href="<?php echo $file; ?>" rel="stylesheet" />
 		<?php endforeach; ?>
 	<?php endif; ?>
-	<link href="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template; ?>/css/<?php echo htmlspecialchars($color, ENT_COMPAT, 'UTF-8'); ?>.css" rel="stylesheet" />
+	<link href="<?php echo $this->baseurl; ?>/templates/beez3/css/red.css" rel="stylesheet" />
 	<?php if ($this->direction == 'rtl') : ?>
 		<link href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/template_rtl.css" rel="stylesheet" />
 		<?php if (file_exists(JPATH_SITE . '/templates/' . $this->template . '/css/' . $color . '_rtl.css')) : ?>
