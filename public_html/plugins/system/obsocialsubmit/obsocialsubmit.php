@@ -25,9 +25,19 @@ class plgSystemObSocialSubmit extends JPlugin {
 	public $_externs = array();
 	public $_adapter = null;
 
-	function plgSystemObSocialSubmit( &$subject ) {
-		parent::__construct( $subject );
+	public function __construct()
+	{
+
 	}
+
+	public function plgSystemObSocialSubmit()
+	{
+		self::__construct();
+	}
+
+//	function plgSystemObSocialSubmit( &$subject ) {
+//		parent::__construct( $subject );
+//	}
 
 	public function onCronJob() {
 		#TODO: get config cronjob config of obSocialSubmit
