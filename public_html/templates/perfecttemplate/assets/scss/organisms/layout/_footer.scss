@@ -17,8 +17,12 @@
 
 		padding: 2 * $base-spacing 2/3 * $base-spacing;
 
-		@include media($charlie) {
+		@include m('disclaimer') {
+			margin-top: 2 * $base-spacing;
+			@include font($font-size--h6);
+		}
 
+		@include media($charlie) {
 			@include m('about') {
 				@include span-columns(12 of 12);
 			}
@@ -30,6 +34,10 @@
 			@include m('form') {
 				@include span-columns(6 of 12);
 				@include omega();
+			}
+
+			@include m('disclaimer') {
+				@include span-columns(12 of 12);
 			}
 		}
 
