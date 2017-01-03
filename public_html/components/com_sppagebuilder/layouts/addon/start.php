@@ -29,7 +29,7 @@ if(isset($addon->settings->global_use_animation) && $addon->settings->global_use
     }
 }
 
-$html = '<div id="sppb-addon-'. $addon->id .'" class="'. $custom_class .'clearfix"'.  $addon_attr .'>';
+$html = '<div id="sppb-addon-'. $addon->id .'" class="'. $custom_class .'clearfix" '.  $addon_attr .'>';
 
 // Load common css
 $app = JFactory::getApplication();

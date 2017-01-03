@@ -148,7 +148,7 @@ class obSocialSubmitHelper
 		}
 		return $html;
 	}
-
+	
 	public static function getItemTitle( $iid, $type ){
 		$types = self::getTypes();
 		if(in_array($type, $types)){
@@ -171,7 +171,7 @@ class obSocialSubmitHelper
 			}
 		}
 	}
-
+	
 	public static function getTypes(){
 		if(empty(self::$types)){
 			$db = JFactory::getDbo();

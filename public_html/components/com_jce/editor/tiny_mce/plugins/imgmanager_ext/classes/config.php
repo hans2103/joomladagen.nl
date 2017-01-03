@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2015 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -13,27 +13,19 @@ class WFImgmanager_extPluginConfig
 {
 	public static function getConfig(&$settings)
 	{
-		require_once(dirname(__FILE__) . '/imgmanager.php');
-                
+		require_once(dirname(__FILE__) . '/imgmanager_ext.php');
+
                 // set plugin
                 JRequest::setVar('plugin', 'imgmanager_ext');
-                
-                $plugin = new WFImageManagerExtendedPlugin();          
+
+                $plugin = new WFImageManagerExtPlugin();
 
                 if ($plugin->getParam('inline_upload', $plugin->getParam('dragdrop_upload', 1, 0), 0)) {
-                    
-                    // backwards compatability
-                    if (method_exists($plugin, 'getFileTypes')) {                      
-                        $types = $plugin->getFileTypes();
-                    } else {
-                        $settings['imgmanager_ext_dragdrop_upload'] = true;
-                        $types = $plugin->getBrowser()->getFileSystem()->get('filetypes');
-                    }
 
-                    $settings['imgmanager_ext_upload'] = json_encode(array(
+                    $settings['imgmanager_ext_upload'] =array(
                         'max_size'  => $plugin->getParam('max_size', 1024),
-                        'filetypes' => $types
-                    ));
+                        'filetypes' => $plugin->getFileTypes()
+                    );
                 }
 	}
 }

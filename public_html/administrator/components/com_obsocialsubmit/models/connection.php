@@ -110,6 +110,74 @@ class ObSocialSubmitModelConnection extends JModelAdmin {
 		return true;
 	}
 
+	/**
+	 * Method to delete rows.
+	 *
+	 * @param   array &$pks An array of item ids.
+	 *
+	 * @return  boolean  Returns true on success, false on failure.
+	 *
+	 * @since   1.6
+	 */
+	public function delete( &$pks ) {
+		$pks   = (array) $pks;
+		$user  = JFactory::getUser();
+		$table = $this->getTable();
+
+		// Iterate the items to delete each one.
+		foreach ( $pks as $pk ) {
+			if ( $table->load( $pk ) ) {
+				if ( ! $table->delete( $pk ) ) {
+					throw new Exception( $table->getError() );
+				}
+			} else {
+				throw new Exception( $table->getError() );
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Method to duplicate modules.
+	 *
+	 * @param   array &$pks An array of primary key IDs.
+	 *
+	 * @return  boolean  True if successful.
+	 *
+	 * @since   1.6
+	 * @throws  Exception
+	 */
+	public function duplicate( &$pks ) {
+		$user  = JFactory::getUser();
+		$db    = $this->getDbo();
+		$table = $this->getTable();
+
+		foreach ( $pks as $pk ) {
+			if ( $table->load( $pk, true ) ) {
+				// Reset the id to create a new record.
+				$table->id = 0;
+
+				// Alter the title.
+				$m = null;
+				if ( preg_match( '#\((\d+)\)$#', $table->title, $m ) ) {
+					$table->title = preg_replace( '#\(\d+\)$#', '(' . ( $m[1] + 1 ) . ')', $table->title );
+				} else {
+					$table->title .= ' (2)';
+				}
+				// Unpublish duplicate module
+				$table->published = 0;
+
+				if ( ! $table->check() || ! $table->store() ) {
+					throw new Exception( $table->getError() );
+				}
+			} else {
+				throw new Exception( $table->getError() );
+			}
+		}
+
+		return true;
+	}
 
 	/**
 	 * Method to get the record form.
@@ -292,9 +360,9 @@ class ObSocialSubmitModelConnection extends JModelAdmin {
 		$max_cur = $db->LoadResult();
 		$maxid   = $max_cur + 1;
 
-		$name = 'Connection_' . $addon . '_#' . $maxid;
+		$name    = 'Connection_' . $addon . '_#' . $maxid;
 		$created = date( 'Y-m-d H:i:s', time() );
-		$ins_q = "INSERT INTO `#__obsocialsubmit_instances` (`id`,`addon`,`title`,`addon_type`,`created`,`published`) "
+		$ins_q   = "INSERT INTO `#__obsocialsubmit_instances` (`id`,`addon`,`title`,`addon_type`,`created`,`published`) "
 			. "\n VALUES ({$maxid},'{$addon}', '{$name}', 'extern', '{$created}', 1)";
 		$db->setQuery( $ins_q );
 		if ( ! $db->query() ) {

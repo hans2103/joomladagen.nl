@@ -18,6 +18,7 @@
 
 	<fieldset name="publishing" label="JGLOBAL_FIELDSET_PUBLISHING">
 
+		<field name="boxed_layout" type="hidden" id="boxed_layout" default="0" />
 		<field name="catid" type="categoryedit" extension="com_sppagebuilder" label="COM_SPPAGEBUILDER_CATEGORY" description="COM_SPPAGEBUILDER_CATEGORY_DESC" addfieldpath="/administrator/components/com_categories/models/fields">
 			<option value="0">COM_SPPAGEBUILDER_SELECT_CATEGORY</option>
 		</field>

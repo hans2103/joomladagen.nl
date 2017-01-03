@@ -17,19 +17,19 @@ $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/cs
 			<div class="pagebuilder-links">
 				<ul>
 					<li>
-						<a target="_blank" href="https://www.joomshaper.com/documentation/joomla-extensions/sp-page-builder">
-							Docs
+						<a target="_blank" href="https://www.joomshaper.com/documentation/joomla-extensions/sp-page-builder-2-x">
+							Guide
 						</a>
 					</li>
 
 					<li>
-						<a target="_blank" href="https://www.youtube.com/playlist?list=PL43bbfiC0wjhYCvEbl8B-fBVhHx4uh1zS">
+						<a target="_blank" href="https://www.youtube.com/playlist?list=PL43bbfiC0wjhKrnJ1XRhSj3Sla8CJ1Jxd">
 							Videos
 						</a>
 					</li>
 
 					<li>
-						<a target="_blank" href="https://www.joomshaper.com/forums/categories/listings/sp-page-builder">
+						<a target="_blank" href="https://www.joomshaper.com/forums/categories/listings/sp-page-builder-2-x">
 							Support
 						</a>
 					</li>

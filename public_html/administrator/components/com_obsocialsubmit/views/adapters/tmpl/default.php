@@ -127,7 +127,18 @@ $sortFields = $this->getSortFields();
 												<i class="caret"></i>
 												<span class="element-invisible">Actions for: <?php echo $item->title; ?></span>
 											</button>
-
+											<ul class="dropdown-menu">
+												<li>
+													<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','adapters.duplicate')">
+														<span class="icon-save-copy"></span> <?php echo JText::_( "JTOOLBAR_DUPLICATE" ); ?>
+													</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','adapters.delete')">
+														<span class="icon-trash"></span> <?php echo JText::_( "JTOOLBAR_DELETE" ); ?>
+													</a>
+												</li>
+											</ul>
 										<?php endif; ?>
 									</div>
 								</td>

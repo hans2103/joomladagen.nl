@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2015 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -45,14 +45,16 @@ function com_install()
         $mainframe->enqueueMessage(WFText::_('WF_IMGMANAGER_EXT_GD_DESC').' - '.$info['GD Version']);
     }
 
-    $path = JPATH_SITE.'/components/com_jce/editor/tiny_mce/plugins/imgmanager_ext';
-
     // remove wideimage folder
-    if (JFolder::exists($path . '/classes/wideimage')) {
-      @JFolder::delete($path . '/classes/wideimage');
+    if (JFolder::exists(dirname(__FILE).'/classes/wideimage')) {
+      @JFolder::delete(dirname(__FILE).'/classes/wideimage');
     }
-    // remove pel folder
-    if (JFolder::exists($path . '/classes/pel')) {
-        @JFolder::delete($path . '/classes/pel');
+
+    if (JFolder::exists(dirname(__FILE).'/elements')) {
+        @JFolder::delete(dirname(__FILE).'/elements');
+    }
+    
+    if (JFolder::exists(dirname(__FILE).'/fonts')) {
+        @JFolder::delete(dirname(__FILE).'/fonts');
     }
 }

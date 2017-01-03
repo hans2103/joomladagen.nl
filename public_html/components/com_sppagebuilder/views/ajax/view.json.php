@@ -13,18 +13,6 @@ if(!class_exists('SppagebuilderHelperSite')) {
 	require_once JPATH_ROOT . '/components/com_sppagebuilder/helpers/helper.php';
 }
 
-$user = JFactory::getUser();
-$app  = JFactory::getApplication();
-
-$authorised = $user->authorise('core.edit', 'com_sppagebuilder') || ($user->authorise('core.edit.own', 'com_sppagebuilder') && ($this->item->created_by == $user->id));
-if ($authorised !== true)
-{
-	$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
-	$app->setHeader('status', 403, true);
-
-	return false;
-}
-
 SppagebuilderHelperSite::loadLanguage();
 
 jimport( 'joomla.filesystem.file' );
@@ -48,34 +36,30 @@ if ( $action === 'addon' ) {
 
 	require_once $addon_path.'/site.php';
 
-	$assets = array();
-	$css = JLayoutHelper::render('addon.css', array('addon' => $addon));
-
 	if ( class_exists( $class_name ) ) {
-			$addon_obj = new $class_name($addon);  // initialize addon class
-			$output .= $addon_obj->render();
-
-			// css
-			if (method_exists($class_name, 'css')) {
-				 $css .= $addon_obj->css();
-			}
-
-			// js
-			if (method_exists($class_name, 'js')) {
-					$assets['js'] = $addon_obj->js();
-			}
-
+			$addon_obj  = new $class_name( $addon, 0, 0 );  // initialize addon class
+			$output     .= $addon_obj->render();
 	} else {
 		$output .= AddonParser::spDoAddon( AddonParser::generateShortcode($addon, 0, 0));
 	}
 
-	if($css) {
-		$assets['css'] = $css;
-	}
-
 	$output .= JLayoutHelper::render('addon.end'); // end addon
 
-	echo json_encode(array('html' => htmlspecialchars_decode($output), 'status' => 'true', 'assets' => $assets )); die;
+
+	$assets = array();
+	$inlineCSS = JLayoutHelper::render('addon.css', array('addon' => $addon)); // start addon
+
+	if(isset($class_name::$assets)) {
+		$assets = $class_name::$assets;
+	}
+
+	if(isset($assets['inlineCSS'])) {
+			$assets['inlineCSS'] .= $inlineCSS;
+	} else {
+			$assets['inlineCSS'] = $inlineCSS;
+	}
+
+	echo json_encode(array('html' => htmlspecialchars_decode($output), 'status' => 'true', 'assets' => $assets, 'test' => json_encode($assets) )); die;
 }
 
 if ( $action === 'get-page-data' ) {
@@ -84,8 +68,8 @@ if ( $action === 'get-page-data' ) {
 		$content = file_get_contents( $page_path );
 		if (is_array(json_decode($content))) {
 			require_once JPATH_COMPONENT_ADMINISTRATOR . '/builder/classes/addon.php';
-			$content = SpPageBuilderAddonHelper::__($content, true);
-			//$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
+			$content = SpPageBuilderAddonHelper::__($content);
+			$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
 
 			echo json_encode(array('status'=>true, 'data'=>$content)); die;
 		}

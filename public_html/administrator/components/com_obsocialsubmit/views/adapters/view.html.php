@@ -88,10 +88,10 @@ class ObSocialSubmitViewAdapters extends JViewLegacy {
 		//JToolBarHelper::addNew('adapter.add');
 		//JToolbarHelper::editList('adapter.edit');
 
-
+		JToolbarHelper::custom( 'adapters.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true );
 		JToolbarHelper::publish( 'adapters.publish', 'JTOOLBAR_PUBLISH', true );
 		JToolbarHelper::unpublish( 'adapters.unpublish', 'JTOOLBAR_UNPUBLISH', true );
-
+		JToolbarHelper::trash( 'adapters.delete', 'JTOOLBAR_DELETE' );
 
 		# Add batch button
 		/*if(!$isJ25){

@@ -17,6 +17,7 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $doc = JFactory::getDocument();
 $doc->addScriptdeclaration('var pagebuilder_base="' . JURI::root() . '";');
+$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/apps.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/jquery.minicolors.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/pbfont.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/sppagebuilder.css' );
@@ -33,6 +34,7 @@ $app = JFactory::getApplication();
 
 global $pageId;
 global $language;
+global $pageLayout;
 
 $pageId = $this->item->id;
 $language = $this->item->language;
@@ -54,17 +56,8 @@ if (!$this->item->text) {
   $this->item->text = SpPageBuilderAddonHelper::__($this->item->text);
   $doc->addScriptdeclaration('var initialState=' . $this->item->text . ';');
 }
-
-$conf   = JFactory::getConfig();
-$editor   = $conf->get('editor');
-if ($editor == 'jce') {
-	require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
-	wfimport('admin.models.editor');
-	$model = new WFModelEditor();
-	echo $model->buildEditor();
-}
-
 ?>
+
 
 <div class="sp-pagebuilder-admin">
 
@@ -88,7 +81,7 @@ if ($editor == 'jce') {
 
     <?php if($this->item->id) { ?>
       <div class="sp-pagebuilder-btn-group">
-        <a id="btn-page-frontend-editor" target="_blank" href="<?php echo JURI::root(true); ?>/index.php?option=com_sppagebuilder&amp;view=form&amp;id=<?php echo $this->item->id; ?>&amp;layout=edit" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> <?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?></a>
+        <a id="btn-page-frontend-editor" target="_blank" href="javascript:;" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> <?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?> <small>(PRO)</small></a>
       </div>
 
       <div class="sp-pagebuilder-btn-group">
@@ -130,6 +123,7 @@ if ($editor == 'jce') {
     </div>
   </div>
 </div>
+
 
 <div class="sp-pagebuilder-modal-alt">
   <div id="page-options" class="sp-pagebuilder-modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;">
@@ -195,5 +189,5 @@ if ($editor == 'jce') {
     <?php echo JHtml::_('form.token'); ?>
   </form>
 </div>
-<div class="sp-pagebuilder-notifications"></div>
+
 <script type="text/javascript" src="<?php echo JURI::base(true) . '/components/com_sppagebuilder/assets/js/engine.js'; ?>"></script>

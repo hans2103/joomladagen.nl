@@ -48,9 +48,13 @@ class WFEditorPlugin extends JObject {
 
         // get name and caller from plugin name
         if (strpos($plugin, '.') !== false) {
-            list ($plugin, $caller) = explode('.', $plugin);
+            $parts = explode('.', $plugin);
+            $plugin = $parts[0];
+            $caller = $parts[1];
             // store caller
-            $this->set('caller', $caller);
+            if ($caller !== $plugin) {
+                $this->set('caller', $caller);
+            }
         }
 
         // set plugin name
@@ -68,7 +72,7 @@ class WFEditorPlugin extends JObject {
         }
 
         if (!array_key_exists('view_path', $config)) {
-            $config['view_path'] = WF_EDITOR_PLUGINS . '/' . $plugin;
+            $config['view_path'] = WF_EDITOR_PLUGIN;
         }
 
         if (!array_key_exists('layout', $config)) {
@@ -236,12 +240,6 @@ class WFEditorPlugin extends JObject {
         $document->addScript(array('plugin.min.js'));
         $document->addStyleSheet(array('plugin.min.css'), 'libraries');
 
-        // legacy stylesheet if jcepro is not available TODO: remove by 2.6.5
-        if (!WF_EDITOR_PRO) {
-          $document->addStyleSheet(array('legacy.min.css'), 'libraries');
-          $document->addScript(array('legacy.min.js'));
-        }
-
         // add custom plugin.css if exists
         if (is_file(JPATH_SITE . '/media/jce/css/plugin.css')) {
             $document->addStyleSheet(array('media/jce/css/plugin.css'), 'joomla');
@@ -265,7 +263,12 @@ class WFEditorPlugin extends JObject {
      * @return 	array
      */
     public function getDefaults($defaults = array()) {
-        $name = $this->getName();
+        $name   = $this->getName();
+        $caller = $this->get('caller'); 
+
+        if ($caller) {
+            $name = $caller;
+        }
 
         // get manifest path
         $manifest = WF_EDITOR_PLUGIN . '/' . $name . '.xml';
@@ -420,12 +423,11 @@ class WFEditorPlugin extends JObject {
             // no root key set, treat as shared param
         } else {
             // get fallback param from editor key
-            $fallback = $wf->getParam('editor.' . $key, $fallback, $allowempty);
+            $fallback = $wf->getParam('editor.' . $key, $fallback, $default, $type, $allowempty);
 
             if ($caller) {
                 // get fallback from plugin (with editor parameter as fallback)
                 $fallback = $wf->getParam($name . '.' . $key, $fallback, $default, $type, $allowempty);
-                // set name to caller
                 $name = $caller;
             }
 

@@ -93,22 +93,22 @@ class ObSocialSubmitControllerCPanel extends JControllerAdmin {
 //		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 	}
 
-	public function redirect(){
-		$mainframe = JFactory::getApplication();
+	public function redirect() {
+		$mainframe    = JFactory::getApplication();
 		$redirect_url = 'index.php?option=com_obsocialsubmit';
-		if(isset($_SESSION['connect_id'])){
-			$id = $_SESSION['connect_id'];
+		if ( isset( $_SESSION['connect_id'] ) ) {
+			$id         = $_SESSION['connect_id'];
 			$var_string = '';
-			if(isset($_GET)){
-				foreach($_GET as $key=>$value){
-					if($key!='option' && $key!='task'){
-						$_SESSION["sn_return_" . $key ] = $value;
+			if ( isset( $_GET ) ) {
+				foreach ( $_GET as $key => $value ) {
+					if ( $key != 'option' && $key != 'task' ) {
+						$_SESSION["sn_return_" . $key] = $value;
 					}
 				}
 			}
 			$redirect_url = 'index.php?option=com_obsocialsubmit&view=connection&layout=edit&id=' . $id;
 		}
-		unset($_SESSION['connect_id']);
+		unset( $_SESSION['connect_id'] );
 		$mainframe->redirect( $redirect_url );
 	}
 }

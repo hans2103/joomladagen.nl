@@ -29,7 +29,7 @@ $listDirn = $this->escape( $this->state->get( 'list.direction' ) );
 $canOrder = $user->authorise( 'core.edit.state', 'com_obsocialsubmit' );
 $saveOrder = $listOrder == 'i.ordering';
 $config = JFactory::getConfig();
-$offset = $config->get( 'offset' );
+$offset = $config->get('offset');
 ?>
 <form action="<?php echo JRoute::_( 'index.php?option=com_obsocialsubmit&view=logs' ); ?>" method="post" name="adminForm" id="adminForm">
 	<div id="foobla">

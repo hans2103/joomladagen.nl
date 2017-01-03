@@ -21,9 +21,9 @@ foreach ($this->fieldsets as $name => $fieldset) :
 			$tab_navs[] ='<li><a href="#'.$name.'" data-toggle="tab">'.JText::_($label).'</a></li>';
 		}
 		$tab_index++;
-//        if (isset($fieldset->description) && trim($fieldset->description)) {
-//                echo '<p class="tip">'.$this->escape(JText::_($fieldset->description)).'</p>';
-//        }
+		if (isset($fieldset->description) && trim($fieldset->description)) {
+			echo '<p class="tip">'.$this->escape(JText::_($fieldset->description)).'</p>';
+		}
 ?>
 		<div class="tab-pane<?php echo $active;?>" id="<?php echo $name;?>">
 		<?php foreach ($this->form->getFieldset($name) as $field) : ?>

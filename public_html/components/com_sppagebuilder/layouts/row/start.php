@@ -63,20 +63,31 @@ if (isset($options->background_image) && $options->background_image) {
 }
 
 if($style) {
-	$doc->addStyledeclaration('#sp-page-builder #' . $row_id . '{'. $style .'}');
+	$doc->addStyledeclaration('.sp-page-builder .page-content #' . $row_id . '{'. $style .'}');
 }
 
 // Overlay
 if (isset($options->overlay) && $options->overlay) {
-	$doc->addStyledeclaration('#sp-page-builder #' . $row_id . ' > .sppb-row-overlay {background-color: '. $options->overlay .'}');
+	$doc->addStyledeclaration('.sp-page-builder .page-content #' . $row_id . ' > .sppb-row-overlay {background-color: '. $options->overlay .'}');
 }
 
 // Video
 $video_params = '';
 if (isset($options->background_video) && $options->background_video) {
-	if (isset($options->background_image) && $options->background_image) $video_params .= ' data-vide-image="' . JURI::base(true) . '/' . $options->background_image . '"';
-	if (isset($options->background_video_mp4) && $options->background_video_mp4) $video_params .= ' data-vide-mp4="' . JURI::base(true) . '/' . $options->background_video_mp4 . '"';
-	if (isset($options->background_video_ogv) && $options->background_video_ogv) $video_params .= ' data-vide-ogv="' . JURI::base(true) . '/' . $options->background_video_ogv . '"';
+	if (isset($options->background_image) && $options->background_image){
+		$video_params .= ' data-vide-image="' . JURI::base(true) . '/' . $options->background_image . '"';
+	}
+	if (isset($options->background_video_mp4) && $options->background_video_mp4) {
+		$mp4_parsed = parse_url($options->background_video_mp4);
+		$mp4_url = (isset($mp4_parsed['host']) && $mp4_parsed['host']) ? $options->background_video_mp4 : JURI::base(true) . '/' . $options->background_video_mp4;
+
+		$video_params .= ' data-vide-mp4="' . $mp4_url . '"';}
+	if (isset($options->background_video_ogv) && $options->background_video_ogv) {
+		$ogv_parsed = parse_url($options->background_video_ogv);
+		$ogv_url = (isset($ogv_parsed['host']) && $ogv_parsed['host']) ? $options->background_video_ogv : JURI::base(true) . '/' . $options->background_video_ogv;
+
+		$video_params .= ' data-vide-ogv="' . $ogv_url . '"';
+	}
 	$video_params .= ' data-vide-bg';
 }
 
@@ -161,7 +172,7 @@ if ( (isset($options->title) && $options->title) || (isset($options->subtitle) &
 			}
 		}
 
-		$doc->addStyledeclaration('#sp-page-builder #' . $row_id . ' .sppb-section-title .sppb-title-heading {'. $title_style .'}');
+		$doc->addStyledeclaration('.sp-page-builder .page-content #' . $row_id . ' .sppb-section-title .sppb-title-heading {'. $title_style .'}');
 
 	}
 
@@ -171,7 +182,7 @@ if ( (isset($options->title) && $options->title) || (isset($options->subtitle) &
 		if(isset($options->subtitle_fontsize)) {
 			if($options->subtitle_fontsize != '') {
 				$subsubtitle_fontsize = 'font-size:' . (int) $options->subtitle_fontsize . 'px;';
-				$doc->addStyledeclaration('#sp-page-builder #' . $row_id . ' .sppb-section-title .sppb-title-subheading {'. $subsubtitle_fontsize .'}');
+				$doc->addStyledeclaration('.sp-page-builder .page-content #' . $row_id . ' .sppb-section-title .sppb-title-subheading {'. $subsubtitle_fontsize .'}');
 			}
 		}
 	}

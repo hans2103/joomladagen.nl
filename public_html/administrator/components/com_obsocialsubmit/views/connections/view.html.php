@@ -88,8 +88,11 @@ class ObSocialSubmitViewConnections extends JViewLegacy {
 				. '<i class="icon-new icon-white" title="' . JText::_( 'JTOOLBAR_NEW' ) . '"></i> ' . JText::_( 'JTOOLBAR_NEW' ) . '</button>';
 			$bar->appendButton( 'Custom', $newbutton, 'batch' );
 		}
+		JToolbarHelper::editList( 'connection.edit' );
 
+		JToolbarHelper::custom( 'connections.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true );
 		JToolbarHelper::publish( 'connections.publish', 'JTOOLBAR_PUBLISH', true );
 		JToolbarHelper::unpublish( 'connections.unpublish', 'JTOOLBAR_UNPUBLISH', true );
+		JToolbarHelper::trash( 'connections.delete', 'JTOOLBAR_DELETE' );
 	}
 }

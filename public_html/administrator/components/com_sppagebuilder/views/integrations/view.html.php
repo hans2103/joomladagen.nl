@@ -42,10 +42,10 @@ class SppagebuilderViewIntegrations extends JViewLegacy {
 			$vName == 'categories');
 
 		JHtmlSidebar::addEntry(
-				'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
-				'index.php?option=com_sppagebuilder&view=integrations',
-				$vName == 'integrations'
-			);
+			'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
+			'index.php?option=com_sppagebuilder&view=integrations',
+			$vName == 'integrations'
+		);
 
 		JHtmlSidebar::addEntry(
 			'<i class="fa fa-picture-o"></i> ' . JText::_('COM_SPPAGEBUILDER_MEDIA'),
@@ -55,7 +55,7 @@ class SppagebuilderViewIntegrations extends JViewLegacy {
 	}
 
 	protected function addToolBar() {
-		JToolBarHelper::title( JText::_('COM_SPPAGEBUILDER') . ' - ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'));
+		JToolBarHelper::title( JText::_('COM_SPPAGEBUILDER') . ' - ' . JText::_('COM_SPPAGEBUILEDR_INTEGRATIONS'));
 	}
 
 }

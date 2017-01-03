@@ -65,6 +65,27 @@ class ObSocialSubmitControllerAdapters extends JControllerAdmin
 		$this->setRedirect(JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list, false));
 	}
 
+	public function duplicate()
+	{
+		// Check for request forgeries
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$pks = JRequest::getVar('cid',array(),'post','array');
+// 		$pks = $this->input->post->get('cid', array(), 'array');
+		JArrayHelper::toInteger($pks);
+
+		try {
+			if (empty($pks)) {
+				throw new Exception(JText::_($this->text_prefix.'_ERROR_NO_ADAPTER_SELECTED'));
+			}
+			$model = $this->getModel();
+			$model->duplicate($pks);
+			$this->setMessage(JText::plural($this->text_prefix.'_N_ADAPTERS_DUPLICATED', count($pks)));
+		} catch (Exception $e) {
+			JError::raiseWarning(500, $e->getMessage());
+		}
+
+		$this->setRedirect('index.php?option=com_obsocialsubmit&view=adapters');
+	}
 
 	/**
 	 * Method to get a model object, loading it if required.

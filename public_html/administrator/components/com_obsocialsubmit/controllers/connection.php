@@ -1,9 +1,9 @@
 <?php
 /**
- * @package 	obSocialSubmit
- * @author 		foobla.com.
- * @copyright	Copyright (C) 2007-2014 foobla.com. All rights reserved.
- * @license		GNU/GPL
+ * @package        obSocialSubmit
+ * @author         foobla.com.
+ * @copyright      Copyright (C) 2007-2014 foobla.com. All rights reserved.
+ * @license        GNU/GPL
  */
 
 defined( '_JEXEC' ) or die;
@@ -40,6 +40,36 @@ class ObSocialSubmitControllerConnection extends JControllerForm {
 		if ( $redirect_url && ( $task == 'save' ) ) {
 			$this->setRedirect( JRoute::_( $redirect_url, false ) );
 		}
+	}
+
+	public function add() {
+		$app = JFactory::getApplication();
+
+		// Get the result of the parent method. If an error, just return it.
+		$result = parent::add();
+		if ( $result instanceof Exception ) {
+			return $result;
+		}
+
+		// Look for the Extension ID.
+//		$addon = $app->input->get('addon', '', 'cmd');
+		$addon = filter_input( INPUT_GET, 'addon' );
+		if ( empty( $addon ) ) {
+			$this->setRedirect( JRoute::_( 'index.php?option=' . $this->option . '&view=select&type=connection', false ) );
+
+			return;
+		}
+
+		$app->setUserState( 'com_obsocialsubmit.add.connection.addon', $addon );
+		$app->setUserState( 'com_obsocialsubmit.add.connection.params', null );
+
+		// Parameters could be coming in for a new item, so let's set them.
+		$params = $app->input->get( 'params', array(), 'array' );
+		$app->setUserState( 'com_obsocialsubmit.add.connection.params', $params );
+		$model        = $this->getModel( 'Connection', '', array() );
+		$new_id       = $model->add_temp( $addon );
+		$redirect_url = 'index.php?option=' . $this->option . '&task=connection.edit&id=' . $new_id;
+		$this->setRedirect( JRoute::_( $redirect_url, false ) );
 	}
 
 	/**

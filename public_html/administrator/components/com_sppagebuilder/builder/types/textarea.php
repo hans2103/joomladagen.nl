@@ -40,14 +40,9 @@ class SpTypeTextarea{
 			$depend_data = " data-depends='". json_encode($array) ."'";
 		}
 
-		$attribs = '';
-		if(isset($attr['css'])) {
-			$attribs .= ' style="' . $attr['css'] . '"';
-		}
-
 		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
-		$output	.= '<textarea class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" placeholder="'.$attr['placeholder'].'"'. $attribs .'>'.$attr['std'].'</textarea>';
+		$output	.= '<textarea class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" placeholder="'.$attr['placeholder'].'">'.$attr['std'].'</textarea>';
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{

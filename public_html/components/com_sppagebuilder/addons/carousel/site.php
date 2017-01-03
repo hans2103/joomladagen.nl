@@ -53,7 +53,6 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 					$button_class .= (isset($value->button_block) && $value->button_block) ? ' ' . $value->button_block : '';
 					$button_icon = (isset($value->button_icon) && $value->button_icon) ? $value->button_icon : '';
 					$button_icon_position = (isset($value->button_icon_position) && $value->button_icon_position) ? $value->button_icon_position: 'left';
-					$button_target = (isset($value->button_target) && $value->button_target) ? $value->button_target : '_self';
 
 					if($button_icon_position == 'left') {
 						$value->button_text = ($button_icon) ? '<i class="fa ' . $button_icon . '"></i> ' . $value->button_text : $value->button_text;
@@ -61,7 +60,7 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 						$value->button_text = ($button_icon) ? $value->button_text . ' <i class="fa ' . $button_icon . '"></i>' : $value->button_text;
 					}
 
-					$output  .= '<a href="' . $value->button_url . '" target="' . $button_target . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
+					$output  .= '<a href="' . $value->button_url . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
 				}
 			}
 

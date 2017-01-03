@@ -33,7 +33,7 @@ class SppagebuilderAddonImage extends SppagebuilderAddons{
 			$output .= '<div class="sppb-addon-content">';
 			$output .= '<div class="sppb-addon-single-image-container">';
 
-			if($image_overlay && $open_lightbox) {
+			if($image_overlay) {
 				$output .= '<div class="sppb-addon-image-overlay">';
 				$output .= '</div>';
 			}

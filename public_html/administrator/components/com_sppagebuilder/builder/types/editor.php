@@ -40,16 +40,7 @@ class SpTypeEditor
 		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$apps = JFactory::getApplication();
-
-		$conf   = JFactory::getConfig();
-		$name   = $conf->get('editor');
-
-		if ($name !== 'jce') {
-			$name = 'tinymce';
-		}
-		$editor = JEditor::getInstance($name);
-		$output	.= $editor->display( $key, htmlspecialchars($attr['std'], ENT_COMPAT, 'UTF-8'), '100%', 300, 100, 70,false);
+		$output .= '<textarea class="sp-pagebuilder-form-control sp-pagebuilder-editor sp-pagebuilder-addon-input" name="'. $key .'">'.$attr['std'].'</textarea>';
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{

@@ -8,8 +8,7 @@
 //no direct accees
 defined ('_JEXEC') or die ('restricted aceess');
 
-$html = '</div>';
-$html .= '</div>';
-$html .= '</div>';
+$html = '</div>';//end column
+$html .= '</div>';//end column
 
 echo $html;

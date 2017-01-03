@@ -61,7 +61,7 @@ if ( ! class_exists( 'OBSSExAddonTwitter' ) ) {
 
 			$img_path = $this->isUploadImage( $input );
 			if ( $img_path ) {
-				$maxlen = 118;
+				$maxlen = 116;
 			}                                # $maxlen + len(image link) ~ 140
 			if ( $debug ) {
 				echo '<pre>' . print_r( $input, true ) . '</pre>';

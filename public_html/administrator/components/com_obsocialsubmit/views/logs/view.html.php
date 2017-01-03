@@ -81,6 +81,10 @@ class ObSocialSubmitViewLogs extends JViewLegacy {
 		JToolbarHelper::publish( 'logs.statuson', 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_SUCCESS_STATUS', true );
 		JToolbarHelper::unpublish( 'logs.statusoff', 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_FAILSE_STATUS', true );
 		JToolbarHelper::trash( 'logs.delete', 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_DELETE_LBL' );
+		$delbutton = '<a href="index.php?option=com_obsocialsubmit&task=logs.delete_all&view=logs" class="btn btn-warning">'
+			. '<span class="icon-trash" title="' . JText::_( 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_DELETEALL_LBL' ) . '"></span>'
+			. JText::_( 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_DELETEALL_LBL' ) . '</a>';
+		$bar->appendButton( 'Custom', $delbutton );
 
 		// Cancel
 		$title  = JText::_( 'COM_OBSOCIALSUBMIT_LOGS_BUTTON_PROCESSLOG_LBL' );

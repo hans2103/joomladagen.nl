@@ -70,8 +70,6 @@ class SpPgaeBuilderBase {
 				}
 			}
 		}
-
-		self::loadPluginsAddons();
 	}
 
 	public static function loadSingleAddon( $name = '' ) {
@@ -82,69 +80,11 @@ class SpPgaeBuilderBase {
 		$tmpl_addon_path = $template_path . '/sppagebuilder/addons/'. $name .'/admin.php';
 		$com_addon_path = JPATH_ROOT . '/components/com_sppagebuilder/addons/'. $name .'/admin.php';
 
-		$plugins = self::getPluginsAddons();
-
 		if(file_exists( $tmpl_addon_path )) {
 			require_once $tmpl_addon_path;
 		} else if( file_exists( $com_addon_path )) {
 			require_once $com_addon_path;
-		} else {
-			// Load from plugin
-			if(isset($plugins[$name]) && $plugins[$name]) {
-				require_once $plugins[$name];
-			}
 		}
-	}
-
-	// Load addons from plugins
-	private static function loadPluginsAddons() {
-		$path = JPATH_PLUGINS . '/sppagebuilder';
-		if(!JFolder::exists($path)) return;
-
-		$plugins = JFolder::folders($path);
-		if(!count($plugins)) return;
-
-		foreach ($plugins as $plugin) {
-			if(JPluginHelper::isEnabled('sppagebuilder', $plugin)) {
-				$addons_path = $path . '/' . $plugin . '/addons';
-				if(JFolder::exists($addons_path)) {
-					$addons = JFolder::folders($addons_path);
-					foreach ($addons as $addon) {
-						$admin_file = $addons_path . '/' . $addon . '/admin.php';
-						if(JFile::exists($admin_file)) {
-							require_once $admin_file;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Get list of plugin addons
-	private static function getPluginsAddons() {
-		$path = JPATH_PLUGINS . '/sppagebuilder';
-		if(!JFolder::exists($path)) return;
-
-		$plugins = JFolder::folders($path);
-		if(!count($plugins)) return;
-
-		$elements = array();
-		foreach ($plugins as $plugin) {
-			if(JPluginHelper::isEnabled('sppagebuilder', $plugin)) {
-				$addons_path = $path . '/' . $plugin . '/addons';
-				if(JFolder::exists($addons_path)) {
-					$addons = JFolder::folders($addons_path);
-					foreach ($addons as $addon) {
-						$admin_file = $addons_path . '/' . $addon . '/admin.php';
-						if(JFile::exists($admin_file)) {
-							$elements[$addon] = $admin_file;
-						}
-					}
-				}
-			}
-		}
-
-		return $elements;
 	}
 
 	public static function addonOptions(){
@@ -314,15 +254,6 @@ class SpPgaeBuilderBase {
 					'desc'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_HIDDEN_XS_DESC'),
 					'std'=>'0',
 					)
-				),
-				'access' => array(
-					'acl' => array(
-						'type' => 'accesslevel',
-						'title' => JText::_('COM_SPPAGEBUILDER_ACCESS'),
-						'desc' => JText::_('COM_SPPAGEBUILDER_ACCESS_DESC'),
-						'placeholder' => '',
-						'std' 			=> ''
-					)
 				)
 			);
 
@@ -393,17 +324,11 @@ class SpPgaeBuilderBase {
         $app = JFactory::getApplication();
         $template = $app->getTemplate();
         $template_path = JPATH_ROOT . '/templates/' . $template;
-        $plugins = self::getPluginsAddons();
 
         if ( file_exists( $template_path . '/sppagebuilder/addons/' . $addon_name . '/site.php' ) ) {
             return $template_path . '/sppagebuilder/addons/' . $addon_name;
         } elseif ( file_exists( JPATH_ROOT . '/components/com_sppagebuilder/addons/'. $addon_name . '/site.php' ) ) {
             return JPATH_ROOT . '/components/com_sppagebuilder/addons/'. $addon_name;
-        } else {
-            // Load from plugin
-            if(isset($plugins[$addon_name]) && $plugins[$addon_name]) {
-                return $plugins[$addon_name];
-            }
         }
     }
 

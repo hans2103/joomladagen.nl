@@ -22,31 +22,6 @@ class com_sppagebuilderInstallerScript {
     $status->modules = array();
     $manifest = $parent->getParent()->manifest;
 
-    // Uninstall Plugins
-    $plugins = $manifest->xpath('plugins/plugin');
-    foreach ($plugins as $plugin) {
-      $name = (string)$plugin->attributes()->name;
-      $group = (string)$plugin->attributes()->group;
-
-      $db = JFactory::getDbo();
-      $query = $db->getQuery(true);
-      $query->select($db->quoteName(array('extension_id')));
-      $query->from($db->quoteName('#__extensions'));
-      $query->where($db->quoteName('type') . ' = '. $db->quote('plugin'));
-      $query->where($db->quoteName('element') . ' = '. $db->quote($name));
-      $query->where($db->quoteName('folder') . ' = '. $db->quote($group));
-      $db->setQuery($query);
-      $extensions = $db->loadColumn();
-
-      if (count($extensions)) {
-        foreach ($extensions as $id) {
-          $installer = new JInstaller;
-          $result = $installer->uninstall('plugin', $id);
-        }
-        $status->plugins[] = array('name' => $name, 'result' => $result);
-      }
-    }
-
     // Uninstal Modules
     $modules = $manifest->xpath('modules/module');
     foreach ($modules as $module)
@@ -100,33 +75,6 @@ class com_sppagebuilderInstallerScript {
     $status->modules = array();
     $src = $parent->getParent()->getPath('source');
     $manifest = $parent->getParent()->manifest;
-
-    // Install Plugins
-    $plugins = $manifest->xpath('plugins/plugin');
-    foreach ($plugins as $plugin) {
-      $name = (string)$plugin->attributes()->name;
-      $group = (string)$plugin->attributes()->group;
-      $path = $src . '/plugins/' . $group . '/' . $name;
-
-      $installer = new JInstaller;
-      $result = $installer->install($path);
-
-      if ($result) {
-        $db = JFactory::getDbo();
-        $query = $db->getQuery(true);
-        $fields = array( $db->quoteName('enabled') . ' = 1' );
-
-        $conditions = array(
-          $db->quoteName('type') . ' = ' . $db->quote('plugin'),
-          $db->quoteName('element') . ' = ' . $db->quote($name),
-          $db->quoteName('folder') . ' = ' . $db->quote($group)
-        );
-
-        $query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
-        $db->setQuery($query);
-        $db->execute();
-      }
-    }
 
     // Install Modules
     $modules = $manifest->xpath('modules/module');

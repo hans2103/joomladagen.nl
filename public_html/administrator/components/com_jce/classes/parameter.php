@@ -346,8 +346,16 @@ class WFParameter {
         return $results;
     }
 
-    private function isEmpty($value) {
-        return (is_string($value) && $value == "") || (is_array($value) && empty($value));
+    private static function isEmpty($value) {
+        if (is_string($value)) {
+            return $value === "";
+        }
+
+        if (is_array($value)) {
+            return empty($value);
+        }
+        
+        return false;
     }
 
     /**
@@ -381,10 +389,8 @@ class WFParameter {
 
         if ($found) {
             $result = $node;
-            if ($allowempty === false) {
-                if (self::isEmpty($result)) {
-                    $result = $default;
-                }
+            if ($allowempty === false && self::isEmpty($result)) {
+                $result = $default;
             }
         }
         // convert to float if numeric
@@ -440,7 +446,14 @@ class WFParameter {
                 continue;
             }
 
-            $results[] = $this->getParam($param, $name, $group, $parent);
+            $result = $this->getParam($param, $name, $group, $parent);
+            
+            if (!isset($result['element'])) {
+            	$result['element'] = '';
+            	$result['label'] = '<em>Element not defined for type &quot;' . (string) $param->attributes()->type . '&quot;</em>';
+            }
+            
+            $results[] = $result;
 
             // get sub-parameters
             $parameters = (string) $param->attributes()->parameters;

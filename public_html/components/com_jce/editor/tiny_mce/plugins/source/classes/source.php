@@ -12,6 +12,15 @@
 require_once (WF_EDITOR_LIBRARIES . '/classes/plugin.php');
 
 final class WFSourcePlugin extends WFEditorPlugin {
+
+    public function __construct($config = array()) {
+    	// Call parent
+        parent::__construct();
+
+        $language = JFactory::getLanguage();
+        $language->load('com_jce_pro', JPATH_SITE);
+    }
+
     public function display() {
         $document = WFDocument::getInstance();
 
@@ -22,12 +31,19 @@ final class WFSourcePlugin extends WFEditorPlugin {
         $document->setTitle(WFText::_('WF_' . strtoupper($this->getName() . '_TITLE')));
 
         $theme  = $this->getParam('source.theme', 'codemirror');
-        
-        $document->addScript(array('tiny_mce_popup'), 'tiny_mce');
+
+        $document->addScript(array('jquery.min'), 'jquery');
+        $document->addScript(array('plugin.min.js'));
+
         $document->addScript(array('editor', 'format'), 'plugins');
         $document->addStyleSheet(array('editor'), 'plugins');
-        
-        $document->addScript(array('codemirror-compressed'), 'jce.tiny_mce.plugins.source.js.codemirror');
+        $document->addStyleSheet(array('plugin.min.css'), 'libraries');
+
+
+        $document->addScript(array('codemirror.min'), 'jce.tiny_mce.plugins.source.js.codemirror');
         $document->addStyleSheet(array('codemirror', 'theme/' . $theme), 'jce.tiny_mce.plugins.source.css.codemirror');
+        
+        // keep as ltr for source code
+        $document->setDirection('ltr');
     }
 }

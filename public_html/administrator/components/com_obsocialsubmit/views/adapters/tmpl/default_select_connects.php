@@ -26,7 +26,41 @@ $class_modal = $isJ25 ? '' : 'modal ' . $class . ' fade';
 			<h2><?php echo JText::_( 'COM_OBSOCIALSUBMIT_CONNECTION_TYPE_CHOOSE' ) ?></h2>
 		</div>
 		<div class="modal-body">
-			<?php echo JText::_("COM_OBSOCIALSUBMIT_THIS_FEATURE_ONLY_AVAILABLE_ON_MI_EDITION"); ?>
+			<ul id="new-modules-list" class="list list-striped">
+
+				<?php
+				/*Return url*/
+				$redirectUrl = JFactory::getURI();
+				$redirectUrl = $redirectUrl->toString();
+
+				$session = JFactory::getSession();
+				$session->set( 'return', $redirectUrl );
+
+				foreach ( $this->conections as $conection ) : ?>
+					<?php
+					// Prepare variables for the link.
+					$link       = 'index.php?option=com_obsocialsubmit&task=connection.add&addon=' . $conection->element;
+					$name       = $this->escape( $conection->name );
+					$desc       = JHTML::_( 'string.truncate', ( $this->escape( $conection->desc ) ), 200 );
+					$short_desc = JHTML::_( 'string.truncate', ( $this->escape( $conection->desc ) ), 90 );
+					?>
+					<?php if ( $document->direction != "rtl" ) : ?>
+						<li>
+							<a href="<?php echo JRoute::_( $link ); ?>">
+								<strong><?php echo $name; ?></strong>
+							</a>
+							<small class="hasPopover" data-placement="right" title="<?php echo $name; ?>" data-content="<?php echo $desc; ?>"><?php echo $short_desc; ?></small>
+						</li>
+					<?php else : ?>
+						<li>
+							<small rel="popover" data-placement="left" title="<?php echo $name; ?>" data-content="<?php echo $desc; ?>"><?php echo $short_desc; ?></small>
+							<a href="<?php echo JRoute::_( $link ); ?>">
+								<strong><?php echo $name; ?></strong>
+							</a>
+						</li>
+					<?php endif ?>
+				<?php endforeach; ?>
+			</ul>
 		</div>
 	</div>
 	<?php if ($isJ25): ?>

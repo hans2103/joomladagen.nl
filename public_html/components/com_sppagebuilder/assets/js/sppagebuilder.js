@@ -1916,15 +1916,3 @@ jQuery(function($) {
         return false;
     });
 });
-
-// Magnetic Popup
-jQuery(function($) {
-  $(document).on('click', '.sppb-magnific-popup', function(event) {
-    event.preventDefault();
-    var $this = $(this);
-    $this.magnificPopup({
-      type: $this.data('popup_type'),
-      mainClass: $this.data('mainclass')
-    }).magnificPopup('open');
-  });
-});

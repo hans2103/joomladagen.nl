@@ -206,8 +206,8 @@ Joomla.orderTable = function() {
 												<?php echo $this->escape($item->title); ?>
 											<?php endif; ?>
 
-											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-default sp-pagebuilder-btn-xs sp-pagebuilder-btn-preview-page" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=page&amp;id=<?php echo $item->id; ?>" style="color: #fff; margin: 5px;"><?php echo JText::_('COM_SPPAGEBUILDER_PREVIEW'); ?></a>
-											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-xs sp-pagebuilder-btn-frontend-editor" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=form&amp;id=<?php echo $item->id; ?>&amp;layout=edit" style="color: #fff; margin: 5px 0;"><?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?></a>
+											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-default sp-pagebuilder-btn-xs sp-pagebuilder-btn-preview-page" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=page&amp;id=<?php echo $item->id; ?>" style="color: #fff; margin: 5px;">Preview</a>
+											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-xs sp-pagebuilder-btn-frontend-editor" target="_blank" href="javascript:;" style="color: #fff; margin: 5px 0;">Frontend Editor <small style="font-size: 8px; color: rgba(255, 255, 255, .8);">(PRO)</small></a>
 
 											<?php
 											if(isset($item->created_by) && $item->created_by) {
@@ -228,7 +228,6 @@ Joomla.orderTable = function() {
 													<?php echo JText::_('JCATEGORY') . ": " . $this->escape($item->category_title); ?>
 												</div>
 											<?php endif; ?>
-
 										</td>
 										<td class="small hidden-phone">
 											<?php echo $this->escape($item->access_title); ?>

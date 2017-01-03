@@ -25,10 +25,6 @@ class plgSystemObSocialSubmit extends JPlugin {
 	public $_externs = array();
 	public $_adapter = null;
 
-  public function __construct() {
-        //nothing
-  }
-
 	function plgSystemObSocialSubmit( &$subject ) {
 		parent::__construct( $subject );
 	}
@@ -76,23 +72,23 @@ class plgSystemObSocialSubmit extends JPlugin {
 		$sql = "SELECT * FROM `#__obsocialsubmit_instances` WHERE `published`=1 AND `addon` = 'feed'";
 		$db->setQuery( $sql );
 		$feed_streams = $db->loadObjectList();
-		if ( count( $feed_streams ) > 0 ) {
-			foreach ( $feed_streams as $feed_str ) {
-				if ( $feed_str->cids == '' ) {
+		if(count($feed_streams)>0){
+			foreach($feed_streams as $feed_str){
+				if($feed_str->cids == ''){
 					continue;
 				}
-				$feed_cids = explode( ",", $feed_str->cids );
+				$feed_cids = explode(",",$feed_str->cids);
 
-				$feed_adapter = $this->getAdapter( $feed_str->id );
+				$feed_adapter = $this->getAdapter($feed_str->id);
 				if ( method_exists( $feed_adapter, 'onCronJob' ) ) {
 					$post_feed_obj = call_user_func( array( $feed_adapter, 'onCronJob' ) );
-					foreach ( $feed_cids as $f_cid ) {
+					foreach($feed_cids as $f_cid){
 						$connection = $this->getConnection( $f_cid );
 						if ( ! $connection ) {
 							continue;
 						}
 						if ( method_exists( $connection, 'postMessage' ) ) {
-							foreach ( $post_feed_obj as $feed_obj ) {
+							foreach($post_feed_obj as $feed_obj) {
 								call_user_func( array( $connection, 'postMessage' ), $feed_obj );
 							}
 						}
@@ -125,7 +121,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 			echo '<hr>';
 			#TODO: get apdater
 			if ( key_exists( $log->aid, $adas ) ) {
-				$adapter = $adas[ $log->aid ];
+				$adapter = $adas[$log->aid];
 			} else {
 				$adapter = $this->getAdapter( $log->aid );
 				if ( ! $adapter ) {
@@ -133,7 +129,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 					echo 'not adapter';
 					continue;
 				}
-				$adas[ $log->aid ] = $adapter;
+				$adas[$log->aid] = $adapter;
 			}
 
 			#TODO: get post object
@@ -145,8 +141,8 @@ class plgSystemObSocialSubmit extends JPlugin {
 			}
 
 			$post_obj = null;
-			if ( key_exists( $log->aid . '' . $log->iid, $post_objs ) && $post_objs[ $log->aid . '' . $log->iid ] ) {
-				$post_obj = $post_objs[ $log->aid . '' . $log->iid ];
+			if ( key_exists( $log->aid . '' . $log->iid, $post_objs ) && $post_objs[$log->aid . '' . $log->iid] ) {
+				$post_obj = $post_objs[$log->aid . '' . $log->iid];
 			} else {
 				if ( method_exists( $adapter, 'getPostObjecByItemId' ) ) {
 					$post_obj = call_user_func( array( $adapter, 'getPostObjecByItemId' ), $log->iid );
@@ -155,13 +151,13 @@ class plgSystemObSocialSubmit extends JPlugin {
 				}
 
 				if ( $post_obj ) {
-					$post_objs[ $log->aid . '' . $log->iid ] = $post_obj;
+					$post_objs[$log->aid . '' . $log->iid] = $post_obj;
 				}
 			}
 
 			#TODO: get connextion
 			if ( key_exists( $log->cid, $cons ) ) {
-				$connection = $cons[ $log->cid ];
+				$connection = $cons[$log->cid];
 			} else {
 				$connection = $this->getConnection( $log->cid );
 				if ( ! $connection ) {
@@ -169,7 +165,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 					echo 'connection not exists';
 					continue;
 				}
-				$cons[ $log->cid ] = $connection;
+				$cons[$log->cid] = $connection;
 			}
 
 			if ( ! method_exists( $connection, 'postMessage' ) ) {
@@ -429,7 +425,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 
 		$sql = "SELECT * FROM `#__obsocialsubmit_instances` "
 
-		       . "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
+			. "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
 
 		$db->setQuery( $sql );
 
@@ -442,7 +438,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 
 			$sql = "SELECT * FROM `#__obsocialsubmit_instances` "
 
-			       . "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
+				. "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
 
 			$db->setQuery( $sql );
 
@@ -458,7 +454,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 
 			$sql = "SELECT * FROM `#__obsocialsubmit_instances` "
 
-			       . "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
+				. "WHERE `addon_type`='intern' and `addon`='$addon' and `published`=1";
 
 			$db->setQuery( $sql );
 
@@ -527,11 +523,11 @@ class plgSystemObSocialSubmit extends JPlugin {
 							$message = array( $message );
 						}
 						for ( $i = 0; $i < count( $message ); $i ++ ) {
-							$message[ $i ]->cids = $adapter_data->cids;
-							if ( ! isset( $message[ $i ]->aid ) && ! $message[ $i ]->aid ) {
-								$message[ $i ]->aid = $adapter_data->id;
+							$message[$i]->cids = $adapter_data->cids;
+							if ( ! isset( $message[$i]->aid ) && ! $message[$i]->aid ) {
+								$message[$i]->aid = $adapter_data->id;
 							}
-							$messages[] = $message[ $i ];
+							$messages[] = $message[$i];
 						}
 					}
 				}
@@ -571,7 +567,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 		$keys    = array_keys( $externs );
 
 		foreach ( $keys as $key ) {
-			$extern = $externs[ $key ];
+			$extern = $externs[$key];
 			if ( ! is_object( $extern ) ) {
 				continue;
 			}
@@ -608,8 +604,8 @@ class plgSystemObSocialSubmit extends JPlugin {
 				#END Check log;
 
 				#XXX Post messate
-				$aid    = isset( $pobj->aid ) ? $pobj->aid : null;
-				$iid    = isset( $pobj->iid ) ? $pobj->iid : null;
+				$aid = isset( $pobj->aid ) ? $pobj->aid : null;
+				$iid = isset( $pobj->iid ) ? $pobj->iid : null;
 
 				if ( $aid && $iid && $key ) {
 					$sql = "SELECT `cid` FROM `#__obsocialsubmit_logs` WHERE `aid`=" . $aid . " AND `iid`=" . $iid . " AND `cid`=" . $key . " AND `status`=1";
@@ -695,8 +691,8 @@ class plgSystemObSocialSubmit extends JPlugin {
 			}
 
 			foreach ( $externs as $extern ) {
-				$exobj                         = $this->loadExterAddon( $extern );
-				$this->_externs[ $extern->id ] = $exobj;
+				$exobj                       = $this->loadExterAddon( $extern );
+				$this->_externs[$extern->id] = $exobj;
 			}
 		}
 
@@ -770,8 +766,8 @@ class plgSystemObSocialSubmit extends JPlugin {
 	 * Save log after post message to social network
 	 *
 	 * @param object $message
-	 * @param int $cid
-	 * @param bool $result
+	 * @param int    $cid
+	 * @param bool   $result
 	 */
 
 	function changeLog( $message, $cid, $result = true ) {
@@ -786,7 +782,7 @@ class plgSystemObSocialSubmit extends JPlugin {
 
 		# load log
 		$sql = "SELECT * FROM `#__obsocialsubmit_logs` "
-		       . " WHERE `aid`=" . $message->aid . " AND `iid`=" . $message->iid . " AND `cid`=" . $cid;
+			. " WHERE `aid`=" . $message->aid . " AND `iid`=" . $message->iid . " AND `cid`=" . $cid;
 		$db->setQuery( $sql );
 		$logObj = $db->loadObject();
 		$date   = JFactory::getDate();
@@ -999,11 +995,11 @@ class plgSystemObSocialSubmit extends JPlugin {
 		if ( $rows ) {
 			foreach ( $rows as $row ) {
 				echo "\n" . '<tr><td>' . $row->aid . '</td>'
-				     . '<td>' . $row->cid . '</td>'
-				     . '<td>' . $row->iid . '</td>'
-				     . '<td>' . $row->publish_up . '</td>'
-				     . '<td>' . $row->status . '</td>'
-				     . '<td><a href="index.php?obsstask=obssdebug&obssfunc=remove_logs&cid=' . $row->cid . '&aid=' . $row->aid . '&iid=' . $row->iid . '">Remove</a></td></tr>';
+					. '<td>' . $row->cid . '</td>'
+					. '<td>' . $row->iid . '</td>'
+					. '<td>' . $row->publish_up . '</td>'
+					. '<td>' . $row->status . '</td>'
+					. '<td><a href="index.php?obsstask=obssdebug&obssfunc=remove_logs&cid=' . $row->cid . '&aid=' . $row->aid . '&iid=' . $row->iid . '">Remove</a></td></tr>';
 			}
 		} else {
 			if ( $db->getErrorNum() ) {

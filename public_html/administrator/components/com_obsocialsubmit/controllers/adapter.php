@@ -17,6 +17,42 @@ jimport( 'joomla.application.component.controllerform' );
  * @since       1.6
  */
 class ObSocialSubmitControllerAdapter extends JControllerForm {
+	/**
+	 * Override parent add method.
+	 *
+	 * @return  mixed  True if the record can be added, a JError object if not.
+	 *
+	 * @since   1.6
+	 */
+	public function add() {
+		$app = JFactory::getApplication();
+
+		// Get the result of the parent method. If an error, just return it.
+		$result = parent::add();
+		if ( $result instanceof Exception ) {
+			return $result;
+		}
+
+		// Look for the Extension ID.
+		$addon = $app->input->get( 'addon', '', 'cmd' );
+		if ( empty( $addon ) ) {
+			$this->setRedirect( JRoute::_( 'index.php?option=' . $this->option . '&view=select&type=adapter', false ) );
+
+// 			$this->setRedirect(JRoute::_('index.php?option='.$this->option.'&view='.$this->view_item.'&layout=edit', false));
+			return; # JError::raiseWarning(500, JText::_('COM_OBSOCIALSUBMIT_ERROR_INVALID_EXTENSION'));
+		}
+
+		$app->setUserState( 'com_obsocialsubmit.add.adapter.addon', $addon );
+		$app->setUserState( 'com_obsocialsubmit.add.adapter.params', null );
+
+		// Parameters could be coming in for a new item, so let's set them.
+		$params = $app->input->get( 'params', array(), 'array' );
+		$app->setUserState( 'com_obsocialsubmit.add.adapter.params', $params );
+		$model        = $this->getModel( 'Adapter', '', array() );
+		$new_id       = $model->add_temp( $addon );
+		$redirect_url = 'index.php?option=' . $this->option . '&task=adapter.edit&id=' . $new_id;
+		$this->setRedirect( JRoute::_( $redirect_url, false ) );
+	}
 
 	/**
 	 * Override parent cancel method to reset the add module state.

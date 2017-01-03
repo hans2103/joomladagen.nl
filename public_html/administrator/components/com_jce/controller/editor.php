@@ -52,16 +52,20 @@ class WFControllerEditor extends WFControllerBase {
 
                 case 'plugin':
                     if (strpos($plugin, '.') !== false) {
-                      list($plugin, $caller) = explode('.', $plugin);
+                        $parts = explode('.', $plugin);
+                        $plugin = $parts[0];
                     }
 
-                    $file = basename(JRequest::getCmd('file', $plugin));
                     $path = WF_EDITOR_PLUGINS . '/' . $plugin;
 
-                    if (is_dir($path) && file_exists($path . '/' . $file . '.php')) {
-                        include_once($path . '/' . $file . '.php');
+                    if (strpos($plugin, 'editor-') !== false) {
+                        $path = JPATH_PLUGINS . '/jce/' . $plugin;
+                    }
+
+                    if (is_dir($path) && file_exists($path . '/' . $plugin . '.php')) {
+                        include_once($path . '/' . $plugin . '.php');
                     } else {
-                        throw new InvalidArgumentException('File ' . $file . ' not found!');
+                        throw new InvalidArgumentException('File "' . $plugin . '" not found!');
                     }
 
                     break;

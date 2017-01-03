@@ -55,9 +55,7 @@ class SppagebuilderAddonFeature extends SppagebuilderAddons {
 		} else {
 			if($feature_image) {
 				$media  .= '<span class="sppb-img-container">';
-				if( ($title_url && $url_appear == 'icon') || ($title_url && $url_appear == 'both' ) ) $media .= '<a href="'. $title_url .'">';
 				$media  .= '<img class="sppb-img-responsive" src="' . $feature_image . '" alt="'.$title.'">';
-				if(($title_url && $url_appear == 'icon') || ($title_url && $url_appear == 'both' )) $media .= '</a>';
 				$media  .= '</span>';
 			}
 		}

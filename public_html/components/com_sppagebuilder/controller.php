@@ -23,11 +23,7 @@ class SppagebuilderController extends JControllerLegacy{
 
 		if ($vName == 'page') {
 				$viewStatus = true;
-		} else if ($vName == 'form') {
-				$viewStatus = true;
 		} else if ($vName == 'ajax') {
-				$viewStatus = true;
-		} else if ($vName == 'media') {
 				$viewStatus = true;
 		}
 

@@ -14,6 +14,6 @@ if(!class_exists('SppagebuilderHelper')) {
 <div class="sp-pagebuilder-brand">
 	<a href="index.php?option=com_sppagebuilder">
 		<img src="<?php echo JURI::root(true) . '/administrator/components/com_sppagebuilder/assets/img/logo.svg'; ?>" alt="SP Page Builder">
-		<span>PRO <?php echo SppagebuilderHelper::getVersion(); ?></span>
+		<span><?php echo SppagebuilderHelper::getVersion(); ?></span>
 	</a>
 </div>

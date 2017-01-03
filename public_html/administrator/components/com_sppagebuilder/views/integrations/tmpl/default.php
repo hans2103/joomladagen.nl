@@ -10,12 +10,7 @@ defined ('_JEXEC') or die ('restricted aceess');
 JHtml::_('jquery.framework');
 $doc = JFactory::getDocument();
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/font-awesome.min.css' );
-$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/pbfont.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/sppagebuilder.css' );
-$doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/installer.js' );
-
-require_once JPATH_ADMINISTRATOR . '/components/com_sppagebuilder/helpers/integrations.php';
-$integrations = SppagebuilderHelperIntegrations::integrations_list();
 
 $app		= JFactory::getApplication();
 $user		= JFactory::getUser();
@@ -39,21 +34,9 @@ $userId		= $user->get('id');
 			<div class="sp-pagebuilder-integrations clearfix">
 				<ul class="sp-pagebuilder-integrations-list clearfix">
 					<?php
-					foreach ($integrations as $key => $item) {
+					$list = json_decode(file_get_contents('https://www.joomshaper.com/updates/pagebuilder/integrations.json'));
+					foreach ($list as $key => $item) {
 						$class = "available";
-
-						if(count($this->items)) {
-							foreach ($this->items as $this->item) {
-								if($this->item->component == $key) {
-									if($this->item->state == 0) {
-										$class = "installed";
-									} else if ($this->item->state == 1) {
-										$class = "enabled";
-									}
-								}
-							}
-						}
-
 						?>
 							<li class="<?php echo $class; ?>" data-integration="<?php echo $key; ?>">
 								<div>
@@ -62,10 +45,7 @@ $userId		= $user->get('id');
 										<span>
 											<i class="fa fa-check-circle"></i><?php echo $item->title; ?>
 											<div class="sp-pagebuilder-btns">
-												<a class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-sm sp-pagebuilder-btn-install" href="#"><i></i>Install</a>
-												<a class="sp-pagebuilder-btn sp-pagebuilder-btn-primary sp-pagebuilder-btn-sm sp-pagebuilder-btn-enable" href="#"><i></i>Enable</a>
-												<a class="sp-pagebuilder-btn sp-pagebuilder-btn-default sp-pagebuilder-btn-sm sp-pagebuilder-btn-disable" href="#"><i></i>Disable</a>
-												<a class="sp-pagebuilder-btn sp-pagebuilder-btn-danger sp-pagebuilder-btn-sm sp-pagebuilder-btn-uninstall" href="#"><i></i>Uninstall</a>
+												<a href="https://www.joomshaper.com/page-builder" target="_blank" class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-sm sp-pagebuilder-btn-install">Buy Pro</a>
 											</div>
 										</span>
 									</div>

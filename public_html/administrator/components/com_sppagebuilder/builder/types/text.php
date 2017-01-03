@@ -42,13 +42,16 @@ class SpTypeText{
 
 		// Clean html
 		$attr['std'] = strip_tags($attr['std'], '<strong><b><i>');
+
 		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 		$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" type="text" name="'. $key .'" value="'.$attr['std'].'" placeholder="'.$attr['placeholder'].'" autocomplete="off" />';
 
-		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) ) {
+		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
+		{
 			$output .= '<p class="sp-pagebuilder-help-block">' . $attr['desc'] . '</p>';
 		}
+
 		$output .= '</div>';
 
 		return $output;

@@ -35,6 +35,12 @@ if ( $action === 'setting' ) {
 		foreach ($form_fields as &$form_field) {
 			$form_field['visibility'] = true;
 		}
+
+		usort($form_fields, function($a){
+			if (isset($a['pro']) && $a['pro']) {
+				return 1;
+			}
+		});
 	}
 	else
 	{
@@ -114,25 +120,16 @@ if ($action === 'pre-page-list') {
 		$folders = JFolder::folders( $sppb_pages_dir_path );
 		if ( count( $folders ) ) {
 			foreach ( $folders as $key => $folder ) {
-				$file_path = $sppb_pages_dir_path . '/' . $folder .'/page.json';
-				if( JFile::exists($file_path) ){
-					$page = array();
-					$page['name'] 	= $folder;
-					$page['img'] = false;
-					if(file_exists(JPATH_COMPONENT_ADMINISTRATOR . '/builder/templates/' . $folder . '/preview.png')) {
-						$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/builder/templates/' . $folder . '/preview.png';
-					} else {
-						$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/assets/img/template-preview.png';
-					}
-
-					// Check frontend editing
-					if ($input->get('editarea', '', 'STRING') == 'frontend') {
-						$page['data'] 	= $file_path;
-					}else{
-						$page['data'] 	= file_get_contents($file_path);
-					}
-					array_push($templates, $page);
+				$page = array();
+				$page['name'] 	= $folder;
+				$page['img'] = false;
+				if(file_exists(JPATH_COMPONENT_ADMINISTRATOR . '/builder/templates/' . $folder . '/preview.png')) {
+					$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/builder/templates/' . $folder . '/preview.png';
+				} else {
+					$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/assets/img/template-preview.png';
 				}
+
+				array_push($templates, $page);
 			}
 		}
 	}
@@ -151,29 +148,19 @@ if ($action === 'pre-page-list') {
 
 // Load page from uploaded page
 if ($action === 'upload-page') {
-	if ( isset($_FILES['page']) && $_FILES['page']['error'] === 0) {
+	if ( isset($_FILES['page']) && $_FILES['page']['error'] === 0 && $_FILES['page']['type'] === 'application/json') {
+		$content = file_get_contents($_FILES['page']['tmp_name']);
+		if (is_array(json_decode($content))) {
 
-		$file_name = $_FILES['page']['name'];
-		$file_extension = substr( $file_name, -5 );
-		$file_extension_lower = strtolower($file_extension);
-
-		if ($file_extension_lower === '.json')
-		{
-			$content = file_get_contents($_FILES['page']['tmp_name']);
-			if (is_array(json_decode($content))) {
-
+			// Check frontend editing
+			if ($input->get('editarea', '', 'STRING') == 'frontend') {
 				require_once JPATH_COMPONENT_ADMINISTRATOR . '/builder/classes/addon.php';
 				$content = SpPageBuilderAddonHelper::__($content);
-
-				// Check frontend editing
-				if ($input->get('editarea', '', 'STRING') == 'frontend') {
-					$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
-				}
-
-				echo json_encode( array('status' => true, 'data' => $content) ); die;
+				$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
 			}
-		}
 
+			echo json_encode( array('status' => true, 'data' => $content) ); die;
+		}
 	}
 
 	echo json_encode(array('status'=> false, 'data'=>'Something worng there.')); die;
