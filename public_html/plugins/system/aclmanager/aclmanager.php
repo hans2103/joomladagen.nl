@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -13,6 +14,18 @@ jimport('joomla.filesystem.file');
 
 class plgSystemAclmanager extends JPlugin
 {
+	/**
+	 * @var    String  base update url, to decide whether to process the event or not
+	 * @since  2.5.0
+	 */
+	private $baseUrl = 'https://www.aclmanager.net/update';
+
+	/**
+	 * @var    String  your extension identifier, to retrieve its params
+	 * @since  2.5.0
+	 */
+	private $extension = 'com_aclmanager';
+
 	function onAfterRoute() {
 		$app 						= JFactory::getApplication();
 		$user 						= JFactory::getUser();
@@ -167,5 +180,42 @@ class plgSystemAclmanager extends JPlugin
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Handle adding Download ID to package download request
+	 *
+	 * @param   string  $url        url from which package is going to be downloaded
+	 * @param   array   $headers    headers to be sent along the download request (key => value format)
+	 *
+	 * @return  boolean true        Always true, regardless of success
+	 *
+	 * @since   2.5.0
+	 */
+	public function onInstallerBeforePackageDownload(&$url, &$headers)
+	{
+		// are we trying to update our extension?
+		if (strpos($url, $this->baseUrl) !== 0)
+		{
+			return true;
+		}
+
+		// Get the Download ID from component params
+		JLoader::import('joomla.application.component.helper');
+		$downloadId = JComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
+
+		// Set Download ID first
+		if (empty($downloadId))
+		{
+			JFactory::getApplication()->enqueueMessage('To enable ACL Manager updates you need to enter the <strong>Download ID</strong> from an active ACL Manager subscription in the <a href="index.php?option=com_config&view=component&component=com_aclmanager">ACL Manager options</a>. You can find your Download ID in the <a href="https://www.aclmanager.net/members/subscriptions">member area of the ACL Manager website</a>.', 'error');
+		}
+		// Append the Download ID
+		else
+		{
+			$separator = strpos($url, '?') !== false ? '&' : '?';
+			$url .= $separator . 'dlid=' . $downloadId;
+		}
+
+		return true;
 	}
 }

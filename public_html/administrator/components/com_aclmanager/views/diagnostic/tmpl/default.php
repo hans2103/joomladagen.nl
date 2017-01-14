@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -60,7 +61,8 @@ defined('_JEXEC') or die;
 										<span class="type icon-16-<?php echo $asset->type; ?>"></span>
 									</div>
 									<div class="title">
-										<?php echo $asset->title; ?> <br/><small>(<?php echo $asset->name; ?>)</small>
+										<?php echo $asset->title; ?> <br/>
+                                        <small><?php echo $asset->name; ?></small>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -182,7 +184,8 @@ defined('_JEXEC') or die;
 										<span class="type icon-16-<?php echo $asset->type; ?>"></span>
 									</div>
 									<div class="title">
-										<?php echo $asset->title; ?> <br/><small>(<?php echo $asset->name; ?>)</small>
+										<?php echo $asset->title; ?> <br/>
+                                        <small><?php echo $asset->name; ?></small>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -307,7 +310,8 @@ defined('_JEXEC') or die;
 										<span class="type icon-16-<?php echo $asset->type; ?>"></span>
 									</div>
 									<div class="title">
-										<?php echo $asset->title; ?> <br/><small>(<?php echo $asset->name; ?>)</small>
+										<?php echo $asset->title; ?> <br/>
+                                        <small><?php echo $asset->name; ?></small>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -491,5 +495,5 @@ defined('_JEXEC') or die;
 	<!-- End sidebar -->
 </div>
 <div class="copyright">
-	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="http://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
+	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="https://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
 </div>

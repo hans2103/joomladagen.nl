@@ -3,7 +3,7 @@
  * @package     Perfect_Sitemap
  * @subpackage  plg_perfectsitemap
  *
- * @copyright   Copyright (C) 2016 Perfect Web Team. All rights reserved.
+ * @copyright   Copyright (C) 2017 Perfect Web Team. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -81,44 +81,68 @@ class PlgSystemPerfectSitemap_Content extends JPlugin
 	{
 		$sitemap_items = null;
 
-		if (isset($item->query['option']) && isset($item->query['view']) && $item->params->get('addarticletohtmlsitemap', 1))
+		if (isset($item->query['option']) && isset($item->query['view']) && $this->checkDisplayFormat($item))
 		{
-			if ($item->query['option'] == 'com_content' && $item->query['view'] == 'category')
-			{
-				// Save new items
-				$sitemap_items = array();
+            if ($item->query['option'] == 'com_content' && $item->query['view'] == 'category') {
+                // Save new items
+                $sitemap_items = array();
 
-				// Get database connection
-				$db    = JFactory::getDbo();
-				$query = $db->getQuery(true);
+                // Get database connection
+                $db = JFactory::getDbo();
+                $query = $db->getQuery(true);
 
-				// Build query
-				$query->select($db->quoteName(array('id', 'title', 'alias', 'catid', 'language')));
-				$query->from($db->quoteName('#__content'));
-				$query->where($db->quoteName('access') . ' = ' . $db->quote('1'));
-				$query->where($db->quoteName('catid') . ' = ' . $db->quote($item->query['id']));
-				$query->where($db->quoteName('language') . ' = ' . $db->quote($item->language));
-				$query->where($db->quoteName('state') . ' = 1');
+                // Build query
+                $query->select($db->quoteName(array('id', 'title', 'alias', 'catid', 'language', 'modified')));
+                $query->from($db->quoteName('#__content'));
+                $query->where($db->quoteName('access') . ' = ' . $db->quote('1'));
+                $query->where($db->quoteName('catid') . ' = ' . $db->quote($item->query['id']));
+                $query->where($db->quoteName('language') . ' = ' . $db->quote($item->language));
+                $query->where($db->quoteName('state') . ' = 1');
 
-				// Send query
-				$db->setQuery($query);
+                // Send query
+                $db->setQuery($query);
 
-				// Get results
-				$articles = $db->loadObjectList();
+                // Get results
+                $articles = $db->loadObjectList();
 
-				// Add article to sitemap_items
-				foreach ($articles as $article)
-				{
-					$tmpitem        = new stdClass;
-					$tmpitem->title = $article->title;
-					$tmpitem->link  = URLHelper::getURL('index.php?option=com_content&view=article&id=' . $article->id . ':' . $article->alias . '&catid=' . $article->catid . '&Itemid=' . $item->id);
-					$tmpitem->level = $item->level + 1;
+                // Add article to sitemap_items
+                foreach ($articles as $article) {
+                    $tmpitem = new stdClass;
+                    $tmpitem->title = $article->title;
+                    $tmpitem->link = URLHelper::getURL('index.php?option=com_content&view=article&id=' . $article->id . ':' . $article->alias . '&catid=' . $article->catid . '&Itemid=' . $item->id);
+                    $tmpitem->level = $item->level + 1;
+                    $tmpitem->modified = JHtml::_("date", $article->modified, "Y-m-d");
 
-					$sitemap_items[] = $tmpitem;
-				}
-			}
+                    $sitemap_items[] = $tmpitem;
+                }
+            }
 		}
 
 		return $sitemap_items;
 	}
+
+    /**
+     * Check the display format against the parameters
+     *
+     * @param  array $item  Sitemap item
+     *
+     * @return bool
+     *
+     * @since  1.4.5
+     */
+	private function checkDisplayFormat($item)
+    {
+        $displayFormat = $this->app->input->getCmd('format', 'html');
+
+        if ($displayFormat == "html" && $item->params->get('addarticletohtmlsitemap', 1))
+        {
+            return true;
+        }
+        elseif ($displayFormat == "xml" && $item->params->get('addarticletoxmlsitemap', 1))
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

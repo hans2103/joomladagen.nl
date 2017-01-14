@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -31,15 +32,6 @@ class AclmanagerHelper
 				JText::_('COM_ACLMANAGER_SUBMENU_DIAGNOSTIC'),
 				'index.php?option=com_aclmanager&view=diagnostic',
 				$vName == 'diagnostic'
-			);
-		}
-
-		// Update
-		if(JFactory::getUser()->authorise('core.admin', 'com_aclmanager')){
-			JSubMenuHelper::addEntry(
-				JText::_('COM_ACLMANAGER_SUBMENU_UPDATE'),
-				'index.php?option=com_aclmanager&view=liveupdate',
-				$vName == 'liveupdate'
 			);
 		}
 	}
@@ -369,6 +361,15 @@ class AclmanagerHelper
 				}
 				$asset->type	= $types[1];
 				$asset->icon	= 'module';
+			} elseif (stripos($asset->name, "menu")) {
+				// Module type
+				if ((JFactory::getUser()->authorise('core.manage', $asset->name)) && (!$print)) {
+					$asset->url =  '<a href="'.JRoute::_('index.php?option='.$asset->component.'&task=menu.edit&id='.$asset->targetid).'">'.$asset->title.' '.$asset->status.'</a>';
+				} else {
+					$asset->url =  '<span class="title">'.JText::_($asset->title).' '.$asset->status.'</span>';
+				}
+				$asset->type	= $types[1];
+				$asset->icon	= 'menu';
 			} else {
 				// Third Party
 				if ((JFactory::getUser()->authorise('core.manage', $asset->component)) && (!$print)) {

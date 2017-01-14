@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -83,8 +84,23 @@ $hidden = false;
 		<?php endif; ?>
 		<!-- Actions -->
 		<?php foreach ($this->actions as $action) : ?>
-			<?php if(AclmanagerHelper::displayAction($action[0],$asset->level)):?>
-				<?php if(strpos($asset->rules,'"'.$action[0].'"') === false):?>
+            <?php if(($asset->type == 'menu') && ($asset->level == 2) && ($action[2] == 'coremanage')) :?>
+				<?php $assetcheck = AclmanagerHelper::assetAction($asset,$action[0],$id,0);?>
+                <td class="rule <?php echo($assetcheck->class);?>" data-assetid="<?php echo($asset->id);?>" data-action="<?php echo($action[2]);?>" data-parentid="<?php echo($asset->parent);?>" data-groupid="<?php echo($id);?>" data-su="<?php echo($assetcheck->su);?>">
+                    <input type="hidden" id="jformrules_<?php echo($asset->id);?>_<?php echo($action[2]);?>_<?php echo($id);?>" name="jform[rules][<?php echo($asset->id);?>][<?php echo($action[0]);?>][<?php echo($id);?>]" data-assetcheck="<?php echo($assetcheck->check);?>"  value="<?php echo($assetcheck->value);?>" />
+					<?php if($asset->config):?>
+                        <a class="<?php echo($assetcheck->icon);?>">
+							<?php if($layout == 'print'):?>
+                                <img src="components/com_aclmanager/assets/images/<?php echo($assetcheck->image);?>.png"/>
+							<?php endif;?>
+                        </a>
+					<?php else:?>
+                        <img src="components/com_aclmanager/assets/images/<?php echo($assetcheck->image);?>.png"/>
+					<?php endif;?>
+                </td>
+			<?php elseif(AclmanagerHelper::displayAction($action[0],$asset->level)):?>
+				<?php if(($action[2] == 'coreoptions') && ($asset->level == 2) && ($asset->type == 'menu')):?>
+                <?php elseif(strpos($asset->rules,'"'.$action[0].'"') === false):?>
 					<td class="norule">&nbsp;</td>
 				<?php else:?>
 				<?php $assetcheck = AclmanagerHelper::assetAction($asset,$action[0],$id,0);?>

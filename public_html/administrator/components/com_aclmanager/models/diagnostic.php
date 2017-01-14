@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -103,6 +104,17 @@ class AclmanagerModelDiagnostic extends JModelList
 				}
 			}
 
+			// Get menus
+			$query	= $db->getQuery(true);
+			$query->select(
+				$this->getState(
+					'list.select',
+					'a.id AS id, a.asset_id AS asset_id')
+			);
+			$query->from('#__menu_types AS a');
+			$db->setQuery($query);
+			$menus = $db->loadObjectList('asset_id');
+
 			foreach ($assets as $asset)
 			{
 				if(!strpos($asset->name,'.')) {
@@ -117,6 +129,9 @@ class AclmanagerModelDiagnostic extends JModelList
 				} elseif (strpos($asset->name, '.module.')) {
 					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
 					$asset->type = 'module';
+				} elseif (strpos($asset->name, '.menu.')) {
+					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
+					$asset->type = 'menu';
 				} else {
 					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
 					$asset->type = 'thirdparty';
@@ -170,6 +185,15 @@ class AclmanagerModelDiagnostic extends JModelList
 							$issuecount++;
 						}
 					}
+				// Menu
+				} elseif ($asset->type == 'menu') {
+					if(!isset($menus[$asset->id]->id)) {
+						$asset->correct_parent = '';
+						$asset->correct_level = '';
+						$asset->correct_rules = '';
+						$issues[] = $asset;
+						$issuecount++;
+					}
 				}
 
 				// Break if too many issues
@@ -205,6 +229,7 @@ class AclmanagerModelDiagnostic extends JModelList
 			$category_asset = '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
 			$article_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 			$module_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
+			$menu_asset	= '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 			$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory');
 			$issues = array();
 			$issuecount = 0;
@@ -257,6 +282,9 @@ class AclmanagerModelDiagnostic extends JModelList
 				} elseif (strpos($asset->name, '.module.')) {
 					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
 					$asset->type = 'module';
+				} elseif (strpos($asset->name, '.menu.')) {
+					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
+					$asset->type = 'menu';
 				} else {
 					$asset->component = substr($asset->name, 0, strpos($asset->name, '.'));
 					$asset->type = 'thirdparty';
@@ -360,6 +388,14 @@ class AclmanagerModelDiagnostic extends JModelList
 					if (($asset->rules == '') || ($asset->rules == '{}')) {
 						$asset->correct_rules = $module_asset;
 					}
+				// Menu
+				} elseif ($asset->type == 'menu') {
+					$asset->correct_parent = $assets_name[$asset->component]->id;
+					$asset->correct_level = 2;
+					if (($asset->rules == '') || ($asset->rules == '{}')) {
+						$asset->correct_rules = $menu_asset;
+					}
+				// Anything else
 				} else {
 					$asset->correct_parent = $asset->parent;
 					$asset->correct_level = $asset->level;
@@ -410,6 +446,7 @@ class AclmanagerModelDiagnostic extends JModelList
 		$category_asset 		= '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
 		$article_asset 			= '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 		$module_asset		 	= '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
+		$menu_asset		 	    = '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 		$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory');
 
 		$assets_name = $this->getListQuery();
@@ -714,6 +751,62 @@ class AclmanagerModelDiagnostic extends JModelList
 			}
 		}
 
+		if (version_compare(JVERSION, '3.6', 'ge'))
+		{
+			// Get missing menus
+			$menu_assets = array();
+			foreach ($assets as $asset)
+			{
+				if (strpos($asset->name, '.menu.'))
+				{
+					$menu_assets[] = $asset->name;
+				}
+			}
+
+			// Get menus
+			$query = $db->getQuery(true);
+			$query->select(
+				$this->getState(
+					'list.select',
+					'a.id AS menuid, a.title AS title')
+			);
+			$query->from('#__menu_types AS a');
+			$db->setQuery($query);
+			$menus = $db->loadObjectList();
+
+			// Loop menus
+			foreach ($menus as $menu)
+			{
+				$menu->title          = $menu->title;
+				$menu->name           = 'com_menus.menu.' . $menu->menuid;
+				$menu->correct_parent = $assets_name['com_menus']->id;
+				$menu->correct_level  = 2;
+				$menu->level          = '';
+				$menu->parent         = '';
+				$menu->rules          = '';
+				$menu->correct_rules  = $menu_asset;
+				$menu->id             = '';
+				$menu->type           = 'menu';
+				if (!in_array('com_menus.menu.' . $menu->menuid, $menu_assets))
+				{
+					$issues[] = $menu;
+					$issuecount++;
+				}
+
+				// Break if too many issues
+				if ($issuecount == $diagnosticlimit)
+				{
+					break;
+				}
+
+				// Don't check all issues on home view
+				if (($view == 'home') && $issues)
+				{
+					break;
+				}
+			}
+		}
+
 		return $issues;
 	}
 
@@ -971,6 +1064,13 @@ class AclmanagerModelDiagnostic extends JModelList
 						$query = $this->_db->getQuery(true);
 						$query->update('#__modules');
 						$query->where('id = ' . $db->quote($asset->moduleid));
+						$query->set('asset_id = ' . (int) ($asset_id));
+						$this->_db->setQuery($query);
+						$this->_db->query();
+					} elseif($asset->type == 'menu') {
+						$query = $this->_db->getQuery(true);
+						$query->update('#__menu_types');
+						$query->where('id = ' . $db->quote($asset->menuid));
 						$query->set('asset_id = ' . (int) ($asset_id));
 						$this->_db->setQuery($query);
 						$this->_db->query();

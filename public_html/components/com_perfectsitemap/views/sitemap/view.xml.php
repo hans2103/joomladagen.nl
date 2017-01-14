@@ -3,7 +3,7 @@
  * @package     Perfect_Sitemap
  * @subpackage  com_perfectsitemap
  *
- * @copyright   Copyright (C) 2016 Perfect Web Team. All rights reserved.
+ * @copyright   Copyright (C) 2017 Perfect Web Team. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -16,13 +16,17 @@ defined('_JEXEC') or die;
  */
 class PerfectSitemapViewSitemap extends JViewLegacy
 {
+    /**
+     * Sitemap items
+     *
+     * @var  array
+     */
 	protected $items;
 
 	public function display($tpl = 'xml')
 	{
 		// Get some data from the models
-		$items        = $this->get('Items');
-		$this->items  = $items;
+		$this->items = $this->get('Items');
 
 		return parent::display($tpl);
 	}

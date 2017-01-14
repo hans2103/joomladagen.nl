@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2013 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -168,5 +169,37 @@ class AclmanagerModelHome extends JModelList
 		);
 
 		return $output;
+	}
+
+	/**
+	 * Get Extension info.
+	 */
+	public function getExtensionInfo()
+	{
+		$q = $this->_db->getQuery(true);
+
+		// Select manifest cache
+		$q
+			->select('a.manifest_cache')
+			->from($this->_db->qn('#__extensions', 'a'));
+
+		$q
+			->where('a.element = ' . $this->_db->quote('pkg_aclmanager'));
+
+		// Join over the update info.
+		$q
+			->select('updates.version AS newversion')
+			->join('LEFT', '#__updates AS ' . $this->_db->quoteName('updates') . ' ON updates.extension_id = a.extension_id');
+
+		// Collect the data needed
+		$extensioninfo          = $this->_db->setQuery($q)->loadObject();
+		$manifest               = json_decode($extensioninfo->manifest_cache);
+		$extensioninfo->version = $manifest->version;
+		$extensioninfo->date    = $manifest->creationDate;
+
+		// Unset manifest cache
+		unset($extensioninfo->manifest_cache);
+
+		return $extensioninfo;
 	}
 }

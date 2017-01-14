@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -21,6 +22,7 @@ class AclmanagerViewHome extends JViewLegacy
 
 	public function display($tpl = null)
 	{
+		$this->extensioninfo = $this->get('ExtensionInfo');
 		$diagnostic 			= JModelLegacy::getInstance('diagnostic', 'AclmanagerModel');
 		$this->params 			= JComponentHelper::getParams('com_aclmanager');
 		$this->orphanassets 	= '';
@@ -51,8 +53,6 @@ class AclmanagerViewHome extends JViewLegacy
 			}
 		}
 		JHtml::script('administrator/components/com_aclmanager/assets/js/datatables.min.js');
-
-		$this->assign('updateInfo', LiveUpdate::getUpdateInformation(0));
 
 		// Load the submenu
 		AclmanagerHelper::addSubmenu('home');

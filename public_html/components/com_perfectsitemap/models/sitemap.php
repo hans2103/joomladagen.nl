@@ -3,7 +3,7 @@
  * @package     Perfect_Sitemap
  * @subpackage  com_perfectsitemap
  *
- * @copyright   Copyright (C) 2016 Perfect Web Team. All rights reserved.
+ * @copyright   Copyright (C) 2017 Perfect Web Team. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -26,8 +26,8 @@ class PerfectSitemapModelSitemap extends JModelItem
 	public function getItems()
 	{
 		$app           = JFactory::getApplication();
-		$lang          = JFactory::getLanguage();
 		$sitemap_items = array();
+		$skipped_items = array();
 
 		// Get menu items
 		$menuitems = $app->getMenu()->getMenu();
@@ -35,17 +35,17 @@ class PerfectSitemapModelSitemap extends JModelItem
 		// Filter menu items and add articles
 		foreach ($menuitems as $menuitem)
 		{
-			// Filter items and create link
-			$aFilter = array('separator', 'heading', 'url', 'alias');
+		    // Filter menu items
+		    if ($this->filter($menuitem))
+            {
+                $skipped_items[] = $menuitem->id;
+                continue;
+            }
 
-			if (in_array($menuitem->type, $aFilter))
+			// Filter menu items we don't want to show for the HTML sitemap and items where the parent is skipped
+			if ($menuitem->params->get('addtohtmlsitemap', 1) == false || in_array($menuitem->parent_id, $skipped_items))
 			{
-				continue;
-			}
-
-			// Skip item if the language is not the current language
-			if ($menuitem->language != $lang->getTag() and $menuitem->language != '*')
-			{
+				$skipped_items[] = $menuitem->id;
 				continue;
 			}
 
@@ -65,7 +65,7 @@ class PerfectSitemapModelSitemap extends JModelItem
 			}
 		}
 
-		// filters items we don't want to show. we don't show when explicitly set
+		// Filters items from the plugin event we don't want to show. We don't show when explicitly set
 		$sitemap_items = array_filter($sitemap_items, function ($item) use ($app) {
 			if ($app->input->getCmd('format', 'html') === 'html')
 			{
@@ -77,4 +77,22 @@ class PerfectSitemapModelSitemap extends JModelItem
 
 		return $sitemap_items;
 	}
+
+    /**
+     * Filter a menu item on content type, language and access
+     *
+     * @param $menuitem
+     * @return bool
+     */
+	protected function filter($menuitem)
+    {
+        $aFilter                = array('separator', 'heading', 'url', 'alias');
+        $lang                   = JFactory::getLanguage();
+        $authorizedAccessLevels = JFactory::getUser()->getAuthorisedViewLevels();
+
+        return (in_array($menuitem->type, $aFilter)
+            || ($menuitem->language != $lang->getTag() and $menuitem->language != '*')
+            || !in_array($menuitem->access, $authorizedAccessLevels)
+        );
+    }
 }

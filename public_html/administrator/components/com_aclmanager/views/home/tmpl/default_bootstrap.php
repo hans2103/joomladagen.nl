@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -36,7 +37,7 @@ defined('_JEXEC') or die;
 				jQuery(document).ready(function($) {
 					$('#groups').dataTable( {
 						"bServerSide": true,
-						"iDisplayLength": 15,
+						"pagingType": "simple",
 						"bSort": false,
 						"sDom": 'frtlip',
 						"bInfo": false,
@@ -84,7 +85,7 @@ defined('_JEXEC') or die;
 				jQuery(document).ready(function($) {
 					$('#users').dataTable( {
 						"bServerSide": true,
-						"iDisplayLength": 15,
+						"pagingType": "simple",
 						"sDom": 'frtlip',
 						"bInfo": false,
 						"aaSorting": [[ 0, "asc" ]],
@@ -108,16 +109,21 @@ defined('_JEXEC') or die;
 	<!-- Start Sidebar -->
 	<div class="span4">
 		<div class="well aclmanager">
-			<a href="http://www.aclmanager.net"><img class="aclmanagerlogo" src="components/com_aclmanager/assets/images/aclmanager.png"/></a>
-			<dl>
+			<a href="https://www.aclmanager.net"><img class="aclmanagerlogo" src="components/com_aclmanager/assets/images/aclmanager.png"/></a>
+			<?php if ($this->extensioninfo->newversion): ?>
+            <div class="alert alert-error alert-joomlaupdate" style="margin-bottom: 0;">
+				<?php echo JText::sprintf('COM_ACLMANAGER_UPDATE_FOUND', '<span class="label label-important">' . $this->extensioninfo->newversion . '</span>'); ?>
+            </div>
+			<?php endif; ?>
+            <dl>
 				<dt><?php echo JText::_('COM_ACLMANAGER_UPDATE_RELEASE'); ?></dt>
-				<dd><?php echo $this->updateInfo->extInfo->version; ?></dd>
+				<dd><?php echo $this->extensioninfo->version; ?></dd>
 				<dt><?php echo JText::_('COM_ACLMANAGER_UPDATE_RELEASE_DATE'); ?></dt>
-				<dd><?php echo $this->updateInfo->extInfo->date; ?></dd>
+				<dd><?php echo $this->extensioninfo->date; ?></dd>
 				<dt><?php echo JText::_('COM_ACLMANAGER_HOME_SUPPORT'); ?></dt>
-				<dd><a target="_blank" href="http://www.aclmanager.net/support">www.aclmanager.net/support</a></dd>
+				<dd><a target="_blank" href="https://www.aclmanager.net/support">www.aclmanager.net/support</a></dd>
 				<dt><?php echo JText::_('Review'); ?></dt>
-				<dd><?php echo JText::sprintf('COM_ACLMANAGER_HOME_REVIEW', 'http://extensions.joomla.org/extensions/access-a-security/site-access/backend-a-full-access-control/17951'); ?></dd>
+				<dd><?php echo JText::sprintf('COM_ACLMANAGER_HOME_REVIEW', 'https://extensions.joomla.org/extension/acl-manager'); ?></dd>
 			</dl>
 		</div>
 
@@ -145,5 +151,5 @@ defined('_JEXEC') or die;
 	<!-- End Sibebar -->
 </div>
 <div class="copyright">
-	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="http://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
+	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="https://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
 </div>

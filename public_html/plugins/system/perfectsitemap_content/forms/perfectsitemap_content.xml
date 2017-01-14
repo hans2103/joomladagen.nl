@@ -13,6 +13,17 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field
+					name="addarticletoxmlsitemap"
+					type="radio"
+					class="btn-group btn-group-yesno"
+					label="PLG_SYSTEM_PERFECTSITEMAP_CONTENT_ADDARTICLETOXMLSITEMAP_LABEL"
+					description="PLG_SYSTEM_PERFECTSITEMAP_CONTENT_ADDARTICLETOXMLSITEMAP_DESC"
+					default="1"
+			>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 		</fieldset>
 	</fields>
 </form>

@@ -1,7 +1,8 @@
 /*
 @package	ACL Manager for Joomla
-@copyright 	Copyright (c) 2011-2016 Sander Potjer
+@copyright 	Copyright (c) 2011-2017 Sander Potjer
 @license 	GNU General Public License version 3 or later
+@link		https://www.aclmanager.net
 */
 
 /* ACL Manager */
@@ -14,8 +15,7 @@ div.copyright {
     text-align: center;
 }
 
-.icon-48-aclmanager,
-.icon-48-liveupdate {
+.icon-48-aclmanager {
 	background-image:url('../images/icon-48-aclmanager.png');
 }
 
@@ -216,6 +216,10 @@ span.icon-16-groups {
 
 span.icon-16-module {
     background-image: url('../images/icon-16-module.png');
+}
+
+span.icon-16-menu {
+	background-image: url('../images/icon-16-menu.png');
 }
 
 span.icon-16-aclmanager {
@@ -603,6 +607,10 @@ a.new-button {
 	text-decoration: none;
 	padding: 2px 5px;
 	margin: 0 0 0 5px;
+}
+
+.dataTables_paginate a.disabled {
+	color: inherit;
 }
 
 .dataTables_paginate a:hover,
