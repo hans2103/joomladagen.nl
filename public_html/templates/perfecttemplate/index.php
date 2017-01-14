@@ -30,7 +30,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 </head>
 
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
-<?php echo PWTTemplateHelper::getAnalytics(2,'GTM-NQZ8SP')['script']; ?>
+<?php echo PWTTemplateHelper::getAnalytics(2, 'GTM-NQZ8SP')['script']; ?>
 
 <header class="header" role="banner">
     <div class="header__wrapper">
@@ -87,7 +87,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 
 	<?php if (PWTTemplateHelper::isHome() == false) : ?>
 
-        <?php echo PWTTemplateHelper::renderHelixTitle(); ?>
+		<?php echo PWTTemplateHelper::renderHelixTitle(); ?>
 
         <div class="main__wrapper">
             <div class="main__content">
@@ -95,16 +95,25 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
                     <jdoc:include type="message"/>
 				<?php endif; ?>
                 <jdoc:include type="component"/>
+
+				<?php if ($this->countModules('block-content-below')) : ?>
+                    <div class="block block--content--below">
+                        <div class="block__wrapper block__wrapper--reset">
+                            <jdoc:include type="modules" name="block-content-below" style="tpl"/>
+                        </div>
+                    </div>
+				<?php endif; ?>
+
             </div>
         </div>
 	<?php endif; ?>
 
 	<?php if ($this->countModules('block-sponsors')) : ?>
-      <div class="block block--sponsors">
-          <div class="block__wrapper">
-              <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
-          </div>
-      </div>
+        <div class="block block--sponsors">
+            <div class="block__wrapper">
+                <jdoc:include type="modules" name="block-sponsors" style="tpl"/>
+            </div>
+        </div>
 	<?php endif; ?>
 
 </main>
