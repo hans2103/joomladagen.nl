@@ -1,6 +1,7 @@
 .header {
 	background-color: $black;
 	color: $white;
+	padding: 5px;
 
 	@include e('wrapper') {
 		@include outer-container;

@@ -1,9 +1,15 @@
 .logo {
-	@include font($font-size--h2, $medium, $line-height);
 	@include anchor($white, $white);
+	@include font($font-size--h3, $medium, $line-height);
+
+	@include media ($delta) {
+		@include font($font-size--h2, $medium, $line-height);
+	}
+
 	@include m('brand') {
 		font-weight: $bold;
 	}
+
 	@include icon-before(joomladagen_logo, true) {
 
 	}

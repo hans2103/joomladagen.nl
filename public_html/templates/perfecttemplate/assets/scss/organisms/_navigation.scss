@@ -110,6 +110,14 @@
 		display: block;
 		color: tint($jd-blue, 90%);
 		padding: 8px 16px;
+
+		@include media($charlie) {
+			padding: 8px 6px;
+		}
+
+		@include media($delta) {
+			padding: 8px 16px;
+		}
 		line-height: 24px;
 		text-decoration: none;
 		height: 40px;
