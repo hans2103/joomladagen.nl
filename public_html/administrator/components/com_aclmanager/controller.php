@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -32,9 +33,9 @@ class AclmanagerController extends JControllerLegacy
 		$doc = JFactory::getDocument();
 		$layout	= JFactory::getApplication()->input->get('layout',null);
 		if ($layout =='print') {
-			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/print.css?v=247');
+			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/print.css?v=2.5.0');
 		} else {
-			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/aclmanager.css?v=247');
+			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/aclmanager.css?v=2.5.0');
 		}
 	}
 
@@ -51,14 +52,6 @@ class AclmanagerController extends JControllerLegacy
 
 		// Get needed language files
 		AclmanagerHelper::getLanguages();
-
-		// Check for updates
-		if($view == 'home') {
-			$updateInfo = LiveUpdate::getUpdateInformation();
-			if($updateInfo->hasUpdates == 1) {
-				JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_ACLMANAGER_UPDATE_FOUND', $updateInfo->version), 'warning');
-			}
-		}
 
 		// Check for User Group ID.
 		if (($view == 'group') && (!$id)) {

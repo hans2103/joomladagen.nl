@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<extension version="3.0" type="plugin" group="obss_extern" method="upgrade">
+	<name>obSS - Extern - Facebook Pages</name>
+	<author>Phong Lo</author>
+	<creationDate>Dec 2012</creationDate>
+	<copyright>Copyright (C) 2007-2015 foobla.com. All rights reserved.</copyright>
+	<authorEmail>contact@foobla.com</authorEmail>
+	<authorUrl>http://foobla.com</authorUrl>
+	<version>4.2.4</version>
+	<license>GNU/GPL, see LICENSE</license>
+	<description>PLG_OBSS_EXTERN_FACEBOOKPAGES_XML_MANIFEST_DESC</description>
+	<type>extern</type>
+    <updateservers>
+        <server type="extension" priority="1" name="Facebook Pages add-on for obSocialSubmit Updates">http://foobla.com/updates/plg_obss_extern_facebookpages.xml</server>
+    </updateservers>
+	<files>
+		<filename plugin="facebookpages">facebookpages.php</filename>
+		<filename plugin="facebookpages">facebookpages.xml</filename>
+		<filename plugin="facebookpages">CHANGELOG</filename>
+		<filename plugin="facebookpages">facebookpages.png</filename>
+		<filename plugin="facebookpages">index.html</filename>
+		<filename plugin="facebookpages">LICENSE</filename>
+		<filename plugin="facebookpages">README</filename>
+		<folder>elements</folder>
+		<folder>helpers</folder>
+		<folder>language</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_obss_extern_facebookpages.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="setting" addfieldpath="/plugins/obss_extern/facebookpages/elements/">
+				<field name="fbpages" 
+					type="fbpages" 
+					label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_FBPAGES_LABEL" 
+					description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_FBPAGES_DESC" 
+					default="" />
+
+				<field name="base64_access_token_manager_pages" 
+					type="hidden" 
+					default=""/>
+
+				<field name="debug" 
+					type="radio" 
+					class="btn-group" 
+					label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DEBUG_LABEL" 
+					description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DEBUG_DESC" 
+					default="0">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+
+				<field type="text" 
+					name="desc_len" 
+					value="200" 
+					label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DESC_LEN_LABEL" 
+					description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DESC_LEN_DESC"/>
+
+				<field name="post_type" 
+						type="list" 
+						label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_LABEL" 
+						description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_DESC"
+						default="default" >
+					<option value="default">PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_OPT_DEFAULT</option>
+					<option value="msg_only">PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_OPT_MESSAGE_ONLY</option>
+					<option value="share_link">PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_OPT_SHARE_LINK</option>
+					<option value="upload_photo">PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_OPT_UPLOAD_PHOTO</option>
+					<option value="upload_photo2">PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_POST_TYPE_OPT_UPLOAD_PHOTO2</option>
+				</field>
+
+				<field type="text" 
+					name="default_img" 
+					value="" 
+					label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DEFAULT_IMG_LABEL" 
+					description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_DEFAULT_IMG_DESC"/>
+
+                <field type="text"
+                       name="pages_limit"
+                       default="25"
+                       label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_LMIT_LABEL"
+                       description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_LIMIT_DESC"/>
+			</fieldset>
+			<fieldset name="user_app_setting">
+				<field name="app_appid" 
+					type="text" 
+					label="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_APP_APPID_LABEL" 
+					description="PLG_OBSS_EXTERN_FACEBOOKPAGES_SETTING_APP_APPID_DESC" 
+					default="" />
+
+				<field name="app_appsecret"
+					type="text" 
+					label="PLG_OBSS_EXTENR_FACEBOOKPAGES_SETTING_APP_APPSECRET_LABEL"
+					description="PLG_OBSS_EXTENR_FACEBOOKPAGES_SETTING_APP_APPSECRET_DESC"
+					default=""/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

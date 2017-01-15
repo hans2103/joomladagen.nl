@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -65,7 +66,7 @@ $user =	JFactory::getUser($this->state->get('filter.user_id'));
 			jQuery(document).ready(function($) {
 				$('#groups').dataTable( {
 					"bServerSide": true,
-					"iDisplayLength": 30,
+					"pagingType": "simple",
 					"bSort": false,
 					"sDom": 'frtlip',
 					"bInfo": false,

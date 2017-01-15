@@ -3,6 +3,10 @@
 	<?php foreach ($this->items as $item) : ?>
 		<url>
 			<loc><?php echo $item->link; ?></loc>
+
+			<?php if (!empty($item->modified)) : ?>
+				<lastmod><?php echo $item->modified; ?></lastmod>
+			<?php endif; ?>
 		</url>
 	<?php endforeach; ?>
 </urlset>

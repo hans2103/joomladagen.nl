@@ -10,7 +10,7 @@
 	<author>Niels van der Veer - Perfect Web Team</author>
 	<authorEmail>info@perfectwebteam.nl</authorEmail>
 	<authorUrl>www.perfectwebteam.nl</authorUrl>
-	<version>1.4.4</version>
+	<version>1.4.5</version>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<description>Perfect Sitemap component and plugin</description>
 	<scriptfile>script.php</scriptfile>

@@ -1,10 +1,10 @@
 <?php
 /**
- * @package	 Perfect Sitemap
+ * @package     Perfect Sitemap
  * @subpackage  com_perfectsitemap
  *
- * @copyright   Copyright (C) 2016 Perfect Web Team. All rights reserved.
- * @license	 GNU General Public License version 2 or later; see LICENSE.txt
+ * @copyright   Copyright (C) 2017 Perfect Web Team. All rights reserved.
+ * @license	    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 defined('_JEXEC') or die;

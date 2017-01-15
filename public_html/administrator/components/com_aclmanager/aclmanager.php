@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright	Copyright (c) 2011-2017 Sander Potjer
  * @license		GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -18,17 +19,6 @@ if($view != 'notauthorised') {
 
 if(($view == 'diagnostic') && (!JFactory::getUser()->authorise('aclmanager.diagnostic', 'com_aclmanager'))) {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-}
-
-// Akeeba Live Update
-require_once JPATH_COMPONENT_ADMINISTRATOR.'/liveupdate/liveupdate.php';
-if($view == 'liveupdate') {
-	if(JFactory::getUser()->authorise('core.admin', 'com_aclmanager')) {
-		LiveUpdate::handleRequest();
-		return;
-	} else {
-		return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
-	}
 }
 
 // Load language and fall back language

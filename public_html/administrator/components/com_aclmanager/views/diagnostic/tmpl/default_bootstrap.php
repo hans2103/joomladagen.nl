@@ -1,8 +1,9 @@
 <?php
 /**
  * @package		ACL Manager for Joomla
- * @copyright 	Copyright (c) 2011-2016 Sander Potjer
+ * @copyright 	Copyright (c) 2011-2017 Sander Potjer
  * @license 	GNU General Public License version 3 or later
+ * @link        https://www.aclmanager.net
  */
 
 // No direct access.
@@ -20,11 +21,6 @@ defined('_JEXEC') or die;
 					<?php if(JFactory::getUser()->authorise('aclmanager.diagnostic', 'com_aclmanager')):?>
 					<li class="active">
 						<a href="index.php?option=com_aclmanager&amp;view=diagnostic"><?php echo JText::_('COM_ACLMANAGER_SUBMENU_DIAGNOSTIC'); ?></a>
-					</li>
-					<?php endif;?>
-					<?php if(JFactory::getUser()->authorise('core.admin', 'com_aclmanager')):?>
-					<li>
-						<a href="index.php?option=com_aclmanager&amp;view=liveupdate"><?php echo JText::_('COM_ACLMANAGER_SUBMENU_UPDATE'); ?></a>
 					</li>
 					<?php endif;?>
 				</ul>
@@ -100,6 +96,7 @@ defined('_JEXEC') or die;
 									</div>
 									<div class="title">
 										<?php echo $asset->title; ?>
+                                        <div class="small"><?php echo $asset->name; ?></div>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -211,6 +208,7 @@ defined('_JEXEC') or die;
 									</div>
 									<div class="title">
 										<?php echo $asset->title; ?>
+                                        <div class="small"><?php echo $asset->name; ?></div>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -325,6 +323,7 @@ defined('_JEXEC') or die;
 									</div>
 									<div class="title">
 										<?php echo $asset->title; ?>
+                                        <div class="small"><?php echo $asset->name; ?></div>
 									</div>
 								</td>
 								<!-- Current level -->
@@ -459,5 +458,5 @@ defined('_JEXEC') or die;
 	</div>
 </div>
 <div class="copyright">
-	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="http://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
+	<p><?php echo JText::_('COM_ACLMANAGER_COPYRIGHT'); ?> &copy; 2011 - <?php echo date('Y');?>. <?php echo JText::_('COM_ACLMANAGER_DEVELOPED_BY');?>. <a href="https://www.aclmanager.net" target="_blank">www.aclmanager.net</a></p>
 </div>
