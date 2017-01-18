@@ -26,7 +26,7 @@ module.exports = {
         options: {
             interrupt: true,
             atBegin: true,
-            livereload: 232323
+            livereload: true
         }
     },
 

@@ -1,4 +1,12 @@
 .conference {
+
+	.btn-toolbar {
+		> div {
+			display: inline-block;
+			margin-bottom: $base-spacing;
+		}
+	}
+
 	.spreker {
 		.row-fluid {
 			@include outer-container(100%);

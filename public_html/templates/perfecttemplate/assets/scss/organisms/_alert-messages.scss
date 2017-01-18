@@ -1,0 +1,29 @@
+.alert {
+	padding: $base-spacing;
+	border: 1px solid transparent;
+	border-radius: $base-border-radius;
+
+	&-success {
+		background-color: tint($alert-success, 80%);
+		border-color: $alert-success;
+	}
+
+	&-warning {
+		background-color: tint($alert-warning, 80%);
+		border-color: $alert-warning;
+	}
+
+	&-info {
+		background-color: tint($alert-info, 80%);
+		border-color: $alert-info;
+	}
+
+	&-error {
+		background-color: tint($alert-error, 80%);
+		border-color: $alert-error;
+	}
+
+	.close {
+		@include visually-hidden;
+	}
+}
