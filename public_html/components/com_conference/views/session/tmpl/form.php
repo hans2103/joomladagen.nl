@@ -51,7 +51,7 @@ if($itemId != 0) {
 			<input type="hidden" name="<?php echo JFactory::getSession()->getFormToken();?>" value="1" />
 			<input type="hidden" name="conference_speaker_id" value="<?php echo(ConferenceHelperSpeaker::speakerid(JFactory::getUser()->id)); ?>" />
 			<input type="hidden" name="enabled" value="<?php echo($this->item->enabled); ?>" />
-		
+
 			<!-- Start row -->
 			<div class="row-fluid">
 				<!-- Start left -->
@@ -71,7 +71,7 @@ if($itemId != 0) {
 						<div class="controls">
 							<?php echo ConferenceHelperSelect::levels($this->item->conference_level_id); ?>
 							<span class="help-block"><a href="<?php echo JRoute::_('index.php?option=com_conference&view=levels')?>"><?php echo JText::_('COM_CONFERENCE_FIELD_LEVEL_DESC'); ?></a></span>
-							
+
 						</div>
 					</div>
 					<?php if(ConferenceHelperParams::getParam('language',0)): ?>
