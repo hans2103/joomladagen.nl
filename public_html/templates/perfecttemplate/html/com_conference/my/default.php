@@ -120,9 +120,6 @@ else
                                     class="center"><?php echo JText::_('COM_CONFERENCE_FIELD_STATUS') ?></th>
 							<?php endif; ?>
                             <th width="12%" class="center"><?php echo JText::_('COM_CONFERENCE_FIELD_LEVEL') ?></th>
-                            <th width="17%"
-                                class="center"><?php echo JText::_('COM_CONFERENCE_FIELD_DESCRIPTION') ?></th>
-                            <th width="10%" class="center"><?php echo JText::_('COM_CONFERENCE_FIELD_SLIDES') ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -156,20 +153,6 @@ else
 						<span class="label <?php echo $session->level_label ?>">
 							<?php echo $session->level ?>
 						</span>
-                                </td>
-                                <td class="center">
-									<?php if ($session->description): ?>
-                                        <span class="badge badge-success"><span class="icon-checkmark"></span></span>
-									<?php else: ?>
-                                        <span class="badge badge-important"><span class="icon-delete"></span></span>
-									<?php endif; ?>
-                                </td>
-                                <td class="center">
-									<?php if ($session->slides): ?>
-                                        <span class="badge badge-success"><span class="icon-checkmark"></span></span>
-									<?php else: ?>
-                                        <span class="badge badge-important"><span class="icon-delete"></span></span>
-									<?php endif; ?>
                                 </td>
                             </tr>
 						<?php endforeach; ?>
