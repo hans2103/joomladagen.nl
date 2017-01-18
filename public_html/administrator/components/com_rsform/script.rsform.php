@@ -1,7 +1,7 @@
 <?php
 /**
 * @package RSForm! Pro
-* @copyright (C) 2007-2014 www.rsjoomla.com
+* @copyright (C) 2007-2017 www.rsjoomla.com
 * @license GPL, http://www.gnu.org/licenses/gpl-2.0.html
 */
 
@@ -992,20 +992,17 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v1.52.5</h2>
+		<h2>Changelog v1.52.6</h2>
 		<ul class="version-history">
-			<li><span class="version-upgraded">Upg</span> {if} scripting now allows you to compare multiple values.</li>
-			<li><span class="version-upgraded">Upg</span> {global:formid} placeholder is now available.</li>
-			<li><span class="version-upgraded">Upg</span> Multiple Validation Rules - 'Extra Characters' fields now display the Validation Rule to properly identify them.</li>
-			<li><span class="version-fixed">Fix</span> Sequential Ticket option was not working correctly.</li>
-			<li><span class="version-fixed">Fix</span> 'Email Address' Validation Rule no longer trims values before validation.</li>
-			<li><span class="version-fixed">Fix</span> Calculation was not updating the correct Total value field in some cases.</li>
-			<li><span class="version-fixed">Fix</span> Date and Time Picker was throwing a Javascript error when using a particular Date Modifier setting.</li>
-			<li><span class="version-fixed">Fix</span> In some particular cases, assets were being loaded after the page has been rendered.</li>
-			<li><span class="version-fixed">Fix</span> uikit FontAwesome was not loaded on Chrome / Safari browsers.</li>
-			<li><span class="version-fixed">Fix</span> When duplicating a form, Upload fields 'Attach to' property did not carry over Additional Emails.</li>
-			<li><span class="version-fixed">Fix</span> When duplicating a form, Calendar and Date Time Picker fields 'Date Modifier' property did not carry over.</li>
-			<li><span class="version-fixed">Fix</span> Workaround for Google Chrome 55 not displaying the interface correctly due to a browser bug.</li>
+			<li><span class="version-fixed">Fix</span> In some cases, the PDF output would not load the stylesheets from the 'Submissions - Directory' menu item.</li>
+			<li><span class="version-fixed">Fix</span> New lines were not shown properly in 'Manage Submissions'.</li>
+			<li><span class="version-fixed">Fix</span> 'Free Text' HTML is now escaped when editing a form to avoid messing up the backend layout.</li>
+			<li><span class="version-fixed">Fix</span> 'Free Text' fields with PHP Code were not highlighted.</li>
+			<li><span class="version-fixed">Fix</span> 'Support Ticket' fields with 'Sequential' type could cause the form to stop submitting.</li>
+			<li><span class="version-fixed">Fix</span> 'Diagnose server upload settings' removed from the 'File Upload' field as it created confusion rather than solving it.</li>
+			<li><span class="version-fixed">Fix</span> Missing semicolon in JS output from 'Calendar' field could create issues when using Javascript compression plugins.</li>
+			<li><span class="version-fixed">Fix</span> Conditions would show a PHP Notice when a Payment field was improperly setup, rendering the page unresponsive.</li>
+			<li><span class="version-fixed">Fix</span> {if} scripting would throw a PHP Notice when using the '-&gt;' operator.</li>
 			
 		</ul>
 		<a class="com-rsform-button" href="index.php?option=com_rsform">Start using RSForm! Pro</a>

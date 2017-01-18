@@ -35,6 +35,7 @@ class OBSSInAddonContent extends OBSSInAddon {
 		$view      = JRequest::getVar( 'view' );
 		$layout    = JRequest::getVar( 'layout' );
 		$mainframe = JFactory::getApplication();
+
 		if ( $option == 'com_content' &&
 		     ( ( $mainframe->isAdmin() && ( ( $task == 'add' || $task == 'edit' ) ) || ( $view == 'article' && $layout == 'edit' ) )
 		       || ( $mainframe->isSite() && ( $view == 'form' && $layout == 'edit' ) ) )
@@ -42,6 +43,7 @@ class OBSSInAddonContent extends OBSSInAddon {
 			$id      = JRequest::getVar( 'id' );
 			$configs = $this->getConfig();
 			$posted  = false;
+
 			if ( $id ) {
 				$sql = "SELECT `catid` FROM `#__content` WHERE `id`=" . $id;
 				$db  = JFactory::getDbo();
