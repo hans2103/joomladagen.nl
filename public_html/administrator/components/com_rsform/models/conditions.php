@@ -74,7 +74,14 @@ class RSFormModelConditions extends JModelLegacy
 				// paypal ?
 				if ($result->ComponentTypeId == 22)
 				{
-					$v[0] = $v[1];
+					if (isset($v[1]))
+					{
+						$v[0] = $v[1];
+					}
+					else
+					{
+						$v[1] = $v[0];
+					}
 				}
 				else
 				{

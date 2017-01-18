@@ -115,6 +115,8 @@ class RSFormViewSubmissions extends JViewLegacy
 		
 			$formTitle = $this->get('formTitle');
 			JToolBarHelper::title('RSForm! Pro <small>['.$formTitle.']</small>','rsform');
+			
+			$this->form = RSFormProHelper::getForm($formId);
 		
 			$this->headers = $this->get('headers');
 			$this->unescapedFields = $this->get('unescapedFields');
@@ -123,6 +125,7 @@ class RSFormViewSubmissions extends JViewLegacy
 			$this->pagination = $this->get('pagination');
 			$this->sortColumn = $this->get('sortColumn');
 			$this->sortOrder = $this->get('sortOrder');
+			$this->specialFields = $this->get('specialFields');
 		
 			$this->filter = $this->get('filter');
 			$this->formId = $formId;

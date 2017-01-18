@@ -2820,6 +2820,8 @@ class RSFormProHelper
 				$mail->addReplyTo(trim($replyto[$i]), isset($replytoname[$i]) ? trim($replytoname[$i]) : '');
 			}
 
+			$mail->UseSendmailOptions = false;
+
 			return $mail->Send();
 		} catch (Exception $e) {
 			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
@@ -3338,6 +3340,7 @@ class RSFormProHelper
 				->select($db->qn('ThankYouMessagePopUp'))
 				->select($db->qn('Thankyou'))
 				->select($db->qn('ShowContinue'))
+				->select($db->qn('TextareaNewLines'))
 				->select($db->qn('Published'))
 				->select($db->qn('FormTitle'))
 				->select($db->qn('MetaTitle'))
@@ -3356,6 +3359,7 @@ class RSFormProHelper
 				->select($db->qn('CSSAdditionalAttributes'))
 				->select($db->qn('AjaxValidation'))
 				->select($db->qn('ScrollToError'))
+				->select($db->qn('MultipleSeparator'))
 				->select($db->qn('ThemeParams'))
 				->from($db->qn('#__rsform_forms'))
 				->where($db->qn('FormId').'='.$db->q($formId));

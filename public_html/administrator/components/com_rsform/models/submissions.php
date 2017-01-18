@@ -199,6 +199,51 @@ class RSFormModelSubmissions extends JModelLegacy
 		}
 	}
 	
+	public function getSpecialFields() {
+		static $called;
+	
+		if (is_null($called)) {
+			$fields = array();
+			$formId = $this->getFormId();
+			
+			$this->_db->setQuery("SELECT c.ComponentTypeId, p.ComponentId, p.PropertyName, p.PropertyValue FROM #__rsform_components c LEFT JOIN #__rsform_properties p ON (c.ComponentId=p.ComponentId) WHERE c.FormId='".$formId."' AND c.Published='1' AND p.PropertyName IN ('NAME', 'WYSIWYG')");
+			$components = $this->_db->loadObjectList();
+			$fields['uploadFields']		= array();		
+			$fields['multipleFields']	= array();		
+			$fields['textareaFields']	= array();		
+
+			foreach ($components as $component)
+			{
+				// Upload fields
+				if ($component->ComponentTypeId == RSFORM_FIELD_FILEUPLOAD)
+				{
+					$fields['uploadFields'][] = $component->PropertyValue;
+				}
+				// Multiple fields
+				elseif (in_array($component->ComponentTypeId, array(RSFORM_FIELD_SELECTLIST, RSFORM_FIELD_CHECKBOXGROUP)))
+				{
+					$fields['multipleFields'][] = $component->PropertyValue;
+				}
+				// Textarea fields
+				elseif ($component->ComponentTypeId == RSFORM_FIELD_TEXTAREA)
+				{
+					if ($component->PropertyName == 'WYSIWYG' && $component->PropertyValue == 'NO')
+						$fields['textareaFields'][] = $component->ComponentId;
+				}
+			}
+			
+			if (!empty($fields['textareaFields']))
+			{
+				$this->_db->setQuery("SELECT p.PropertyValue FROM #__rsform_components c LEFT JOIN #__rsform_properties p ON (c.ComponentId=p.ComponentId) WHERE c.ComponentId IN (".implode(',', $fields['textareaFields']).")");
+				$fields['textareaFields'] = $this->_db->loadColumn();
+			}
+			
+			$called = $fields;
+		}
+		
+		return $called;
+	}
+	
 	public function getDateTo()
 	{
 		$app = JFactory::getApplication();
@@ -229,35 +274,18 @@ class RSFormModelSubmissions extends JModelLegacy
 			if (empty($form))
 				return $this->_data;
 			
-			$this->_db->setQuery("SELECT c.ComponentTypeId, p.ComponentId, p.PropertyName, p.PropertyValue FROM #__rsform_components c LEFT JOIN #__rsform_properties p ON (c.ComponentId=p.ComponentId) WHERE c.FormId='".$formId."' AND c.Published='1' AND p.PropertyName IN ('NAME', 'WYSIWYG')");
-			$components = $this->_db->loadObjectList();			
 			$uploadFields 	= array();
 			$multipleFields = array();
 			$textareaFields = array();
-			
-			foreach ($components as $component)
-			{
-				// Upload fields
-				if ($component->ComponentTypeId == RSFORM_FIELD_FILEUPLOAD)
-				{
-					$uploadFields[] = $component->PropertyValue;
-				}
-				// Multiple fields
-				elseif (in_array($component->ComponentTypeId, array(RSFORM_FIELD_SELECTLIST, RSFORM_FIELD_CHECKBOXGROUP)))
-				{
-					$multipleFields[] = $component->PropertyValue;
-				}
-				// Textarea fields
-				elseif ($component->ComponentTypeId == RSFORM_FIELD_TEXTAREA)
-				{
-					if ($component->PropertyName == 'WYSIWYG' && $component->PropertyValue == 'NO')
-						$textareaFields[] = $component->ComponentId;
-				}
+			$fieldTypes = $this->getSpecialFields();
+			if (isset($fieldTypes['uploadFields'])) {
+				$uploadFields = $fieldTypes['uploadFields'];	
 			}
-			if (!empty($textareaFields))
-			{
-				$this->_db->setQuery("SELECT p.PropertyValue FROM #__rsform_components c LEFT JOIN #__rsform_properties p ON (c.ComponentId=p.ComponentId) WHERE c.ComponentId IN (".implode(',', $textareaFields).")");
-				$textareaFields = $this->_db->loadColumn();
+			if (isset($fieldTypes['multipleFields'])) {
+				$multipleFields = $fieldTypes['multipleFields'];	
+			}
+			if (isset($fieldTypes['textareaFields'])) {
+				$textareaFields = $fieldTypes['textareaFields'];	
 			}
 			
 			$this->_db->setQuery("SET SQL_BIG_SELECTS=1");
@@ -304,7 +332,6 @@ class RSFormModelSubmissions extends JModelLegacy
 						{
 							if ($must_escape)
 								$result->FieldValue = RSFormProHelper::htmlEscape($result->FieldValue);
-							$result->FieldValue = nl2br($result->FieldValue);
 						}
 						// PayPal status
 						elseif ($result->FieldName == '_STATUS')
@@ -794,7 +821,7 @@ class RSFormModelSubmissions extends JModelLegacy
 			$name = '_STATUS';
 			$value = $submission->values['_STATUS'];
 			
-			$new_field[0] = JText::_('RSFP_PAYPAL_STATUS');
+			$new_field[0] = JText::_('RSFP_PAYMENT_STATUS');
 			
 			if ($isPDF)
 			{

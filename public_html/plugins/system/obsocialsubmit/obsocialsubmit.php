@@ -7,7 +7,6 @@
  * @license          GNU/GPL
  */
 
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 defined( 'DS' ) or define( 'DS', DIRECTORY_SEPARATOR );
 
@@ -25,14 +24,9 @@ class plgSystemObSocialSubmit extends JPlugin {
 	public $_externs = array();
 	public $_adapter = null;
 
-	public function __construct()
+	public function __construct(&$subject)
 	{
-
-	}
-
-	public function plgSystemObSocialSubmit()
-	{
-		self::__construct();
+		parent::__construct( $subject );
 	}
 
 //	function plgSystemObSocialSubmit( &$subject ) {
