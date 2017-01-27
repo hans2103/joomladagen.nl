@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -15,8 +15,6 @@ class WFCleanupPluginConfig {
 
     public static function getConfig(&$settings) {
         $wf = WFEditor::getInstance();
-        wfimport('admin.models.editor');
-        $model = new WFModelEditor();
         
         // Encoding
         $settings['entity_encoding'] = $wf->getParam('editor.entity_encoding');
@@ -51,7 +49,7 @@ class WFCleanupPluginConfig {
         $settings['invalid_elements'] = explode(',', preg_replace('#\s+#', '', $wf->getParam('editor.invalid_elements', '', '')));
 
         // Add elements to invalid list (removed by plugin)
-        $model->addKeys($settings['invalid_elements'], self::$invalid_elements);
+        $settings['invalid_elements'] = array_unique(array_merge($settings['invalid_elements'], self::$invalid_elements));
 
         // process extended_valid_elements
         if ($settings['extended_valid_elements']) {

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @package       JCE
+ * @copyright     Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
+ * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
@@ -18,17 +18,19 @@ if (!defined('_WF_EXT')) {
 wfimport('editor.libraries.classes.manager');
 wfimport('editor.libraries.classes.extensions.popups');
 
-class WFFileManagerPlugin extends WFMediaManager {
+class WFFileManagerPlugin extends WFMediaManager
+{
     /*
      * @var string
      */
 
-    var $_filetypes = 'acrobat=pdf;office=doc,docx,ppt,pptx,xls,xlsx;image=gif,jpeg,jpg,png;archive=zip,tar,gz;video=swf,mov,wmv,avi,flv,mp4,ogv,ogg,webm,mpeg,mpg;audio=wav,mp3,ogg,webm,aiff;openoffice=odt,odg,odp,ods,odf';
+    public $_filetypes = 'acrobat=pdf;office=doc,docx,ppt,pptx,xls,xlsx;image=gif,jpeg,jpg,png;archive=zip,tar,gz;video=swf,mov,wmv,avi,flv,mp4,ogv,ogg,webm,mpeg,mpg;audio=wav,mp3,ogg,webm,aiff;openoffice=odt,odg,odp,ods,odf';
 
-    public function __construct() {
+    public function __construct()
+    {
         $config = array(
-          'can_edit_images' => 1,
-          'show_view_mode' => 1
+            'can_edit_images' => 1,
+            'show_view_mode' => 1,
         );
 
         parent::__construct($config);
@@ -43,11 +45,14 @@ class WFFileManagerPlugin extends WFMediaManager {
     /**
      * Display the plugin
      */
-    public function display() {
-        if (JRequest::getCmd('dialog', 'plugin') === "editor") {
-            return parent::display();    
+    public function display()
+    {
+        $layout = JRequest::getCmd('layout', 'plugin');
+
+        if ($layout === "editor") {
+            return parent::display();
         }
-        
+
         parent::display();
 
         $document = WFDocument::getInstance();
@@ -60,7 +65,7 @@ class WFFileManagerPlugin extends WFMediaManager {
         // Load Popups instance
         $popups = WFPopupsExtension::getInstance(array(
             'text' => false,
-            'default'   => $this->getParam('filemanager.popups.default', '')
+            'default' => $this->getParam('filemanager.popups.default', ''),
         ));
 
         $popups->addTemplate('popup');
@@ -72,11 +77,12 @@ class WFFileManagerPlugin extends WFMediaManager {
         $document->addScriptDeclaration('FileManager.settings=' . json_encode($this->getSettings()) . ';');
     }
 
-    protected function getIconMap() {
+    protected function getIconMap()
+    {
         jimport('joomla.filesystem.folder');
 
-        $path       = $this->getParam('filemanager.icon_path', 'media/jce/icons');
-        $format     = $this->getParam('filemanager.icon_format', '{$name}.png');
+        $path = $this->getParam('filemanager.icon_path', 'media/jce/icons');
+        $format = $this->getParam('filemanager.icon_format', '{$name}.png');
         $extensions = $this->getParam('extensions', $this->get('_filetypes'));
 
         if (strpos($path, 'http') !== false) {
@@ -133,14 +139,15 @@ class WFFileManagerPlugin extends WFMediaManager {
         return $map;
     }
 
-    public function onUpload($file, $relative = '') {
+    public function onUpload($file, $relative = '')
+    {
         $browser = $this->getBrowser();
 
         // inline upload
         if (JRequest::getInt('inline', 0) === 1) {
             $result = array(
                 'file' => $relative,
-                'name' => basename($file)
+                'name' => basename($file),
             );
 
             $result['method'] = $this->getParam('filemanager.method', "link");
@@ -150,8 +157,8 @@ class WFFileManagerPlugin extends WFMediaManager {
 
                 // add embedded flag
                 if ($google == 'embed') {
-                    $result['width']   = $this->getParam('filemanager.embed_width', '100%');
-                    $result['height']  = $this->getParam('filemanager.embed_height', '100%');
+                    $result['width'] = $this->getParam('filemanager.embed_width', '100%');
+                    $result['height'] = $this->getParam('filemanager.embed_height', '100%');
 
                     return $result;
                 }
@@ -163,11 +170,11 @@ class WFFileManagerPlugin extends WFMediaManager {
             // add icon first
             if ($defaults['option_icon_check']) {
                 jimport('joomla.filesystem.file');
-                $ext    = JFile::getExt(basename($file));
-                $map    = $this->getIconMap();
+                $ext = JFile::getExt(basename($file));
+                $map = $this->getIconMap();
 
-                $icon   = str_replace('{$name}', $map[$ext], $this->getParam('filemanager.icon_format', '{$name}.png'));
-                $icon   = $this->getParam('filemanager.icon_path', 'media/jce/icons') . '/' . $icon;
+                $icon = str_replace('{$name}', $map[$ext], $this->getParam('filemanager.icon_format', '{$name}.png'));
+                $icon = $this->getParam('filemanager.icon_path', 'media/jce/icons') . '/' . $icon;
 
                 $features[] = array('node' => 'img', 'attribs' => array('src' => $icon, 'alt' => basename($icon), 'class' => 'wf_file_icon'));
             }
@@ -224,7 +231,8 @@ class WFFileManagerPlugin extends WFMediaManager {
         return $browser->getResult();
     }
 
-    public function getFileDetails($file) {
+    public function getFileDetails($file)
+    {
         $browser = $this->getBrowser();
 
         $data = array('size' => '', 'date' => '', 'url' => '');
@@ -247,24 +255,23 @@ class WFFileManagerPlugin extends WFMediaManager {
     public function getSettings($settings = array())
     {
         $settings = array(
-            'icon_map'          => $this->getIconMap(),
-            'icon_path'         => $this->getParam('filemanager.icon_path', 'media/jce/icons'),
-            'icon_format'       => $this->getParam('filemanager.icon_format', '{$name}.png'),
-            'date_format'       => $this->getParam('filemanager.date_format', '%d/%m/%Y, %H:%M'),
-            'method'            => $this->getParam('filemanager.method', 'link'),
-            'width'             => $this->getParam('filemanager.embed_width', ''),
-            'height'            => $this->getParam('filemanager.embed_height', ''),
-            'target'            => $this->getParam('filemanager.target', ''),
-            'text_alert'        => $this->getParam('filemanager.text_alert', 1),
-            'replace_text'      => $this->getParam('filemanager.replace_text', 1),
-            'can_edit_images'   => 1,
+            'icon_map' => $this->getIconMap(),
+            'icon_path' => $this->getParam('filemanager.icon_path', 'media/jce/icons'),
+            'icon_format' => $this->getParam('filemanager.icon_format', '{$name}.png'),
+            'date_format' => $this->getParam('filemanager.date_format', '%d/%m/%Y, %H:%M'),
+            'method' => $this->getParam('filemanager.method', 'link'),
+            'width' => $this->getParam('filemanager.embed_width', ''),
+            'height' => $this->getParam('filemanager.embed_height', ''),
+            'target' => $this->getParam('filemanager.target', ''),
+            'text_alert' => $this->getParam('filemanager.text_alert', 1),
+            'replace_text' => $this->getParam('filemanager.replace_text', 1),
+            'can_edit_images' => 1,
 
             'option_icon_check' => $this->getParam('filemanager.option_icon_check', 0),
             'option_size_check' => $this->getParam('filemanager.option_size_check', 0),
-            'option_date_check' => $this->getParam('filemanager.option_date_check', 0)
+            'option_date_check' => $this->getParam('filemanager.option_date_check', 0),
         );
 
         return parent::getSettings($settings);
     }
 }
-?>

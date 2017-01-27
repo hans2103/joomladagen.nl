@@ -1,0 +1,53 @@
+$Id$
+/* 4.2.2 - 2015-07-16 */
+- Remove scopes read_stream because Facebook removed them from their API
+
+/* 4.2.1 - 2015-05-08 */
+- Remove 2 scopes publish_stream, offline_access because Facebook removed them from their API
+
+/* 4.2 - 2015-01-13 */
++ Added publish_actions scope when get authentication.
+
+/* 4.1.1 - 2014-08-04 */
+- Remove feature connect with foobla app
+
+/* 4.1 - 2014-06-18 */
+~ Fixed some minor issues
+
+/* 4.0 - 2014-06-10 */
++ Connect with Foobla App feature.
+
+/* 3.0 -2012-12-22 */
+~ Compatible with Joomla 3
+
+/* 1.8.2 -2011-11-07 */
+~ remove html tag before post to Facebook
+
+/* 1.8 - 2011-09-12 */
+~ Compatible both SI & MI edition.
+
+/* 1.6.9 */
+~ fixed problem about not inform result of posting.
+
+/* 1.6.7 */
+~ Fixed some bug
+
+/* 1.6.6 */
+~ fixed some bug
+
+/* 1.6.5 - 2011-05-20 */
++ Add able share video on wall of facebook
+
+/* 1.6.4 - 2011-04-28 */
+- add "work mode" option in cofiguration page.
+
+/* 1.6.3 */
+- Remove feature publish data to Facebook Pages
++ Using Facebook JSDK for request permission
+
+/* 1.6.2 */
+~ Fixed some error when publish data to Facebook.
++ Allow Facebook addon can publish more data to Facebook ex(image, description, link....).
+
+/* 1.6.1 */
++ Add list of FaceBook Page to select FaceBook Page you want update status.

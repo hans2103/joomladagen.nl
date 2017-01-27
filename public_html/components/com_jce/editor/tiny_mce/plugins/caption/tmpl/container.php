@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -34,7 +34,7 @@ defined('_JEXEC') or die('RESTRICTED');
           </select>
       </div>
 
-        <label for="text_bgcolor" class="hastip uk-form-label uk-width-1-5"
+        <label for="bgcolor" class="hastip uk-form-label uk-width-1-5"
                title="<?php echo WFText::_('WF_CAPTION_BGCOLOR_DESC'); ?>">
             <?php echo WFText::_('WF_LABEL_BACKGROUND'); ?>
         </label>
@@ -43,58 +43,85 @@ defined('_JEXEC') or die('RESTRICTED');
         </div>
 </div>
 
-    <div class="uk-grid uk-grid-small">
-        <label for="margin" class="hastip uk-form-label uk-width-1-5"
-               title="<?php echo WFText::_('WF_CAPTION_PADDING_DESC'); ?>">
-            <?php echo WFText::_('WF_CAPTION_PADDING'); ?>
-        </label>
-        <div class="uk-form-controls uk-width-4-5">
-            <label for="padding_top">
-                <?php echo WFText::_('WF_OPTION_TOP'); ?>
+    <div class="uk-hidden-mini uk-grid uk-grid-small">
+            <label class="hastip uk-form-label uk-width-1-5" title="<?php echo WFText::_('WF_CAPTION_PADDING_DESC'); ?>">
+                <?php echo WFText::_('WF_CAPTION_PADDING'); ?>
             </label>
-            <input type="text" id="padding_top" value=""/>
-            <label for="padding_right">
-                <?php echo WFText::_('WF_OPTION_RIGHT'); ?>
-            </label>
-            <input type="text" id="padding_right" value=""/>
-            <label for="padding_bottom">
-                <?php echo WFText::_('WF_OPTION_BOTTOM'); ?>
-            </label>
-            <input type="text" id="padding_bottom" value=""/>
-            <label for="padding_left">
-                <?php echo WFText::_('WF_OPTION_LEFT'); ?>
-            </label>
-            <input type="text" id="padding_left" value=""/>
+            <div class="uk-form-controls uk-width-4-5 uk-grid uk-grid-small uk-form-equalize">
 
-            <input type="checkbox" id="padding_check" class="uk-equalize-checkbox" />
-        </div>
-    </div>
-    <div class="uk-grid uk-grid-small">
-        <label for="margin" class="hastip uk-form-label uk-width-1-5"
-               title="<?php echo WFText::_('WF_CAPTION_MARGIN_DESC'); ?>">
-            <?php echo WFText::_('WF_LABEL_MARGIN'); ?>
-        </label>
-        <div class="uk-form-controls uk-width-4-5">
-            <label for="margin_top">
-                <?php echo WFText::_('WF_OPTION_TOP'); ?>
-            </label>
-            <input type="text" id="margin_top" value=""/>
-            <label for="margin_right">
-                <?php echo WFText::_('WF_OPTION_RIGHT'); ?>
-            </label>
-            <input type="text" id="margin_right" value=""/>
-            <label for="margin_bottom">
-                <?php echo WFText::_('WF_OPTION_BOTTOM'); ?>
-            </label>
-            <input type="text" id="margin_bottom" value=""/>
-            <label for="margin_left">
-                <?php echo WFText::_('WF_OPTION_LEFT'); ?>
-            </label>
-            <input type="text" id="margin_left" value=""/>
+              <label for="padding_top" class="uk-form-label">
+                  <?php echo WFText::_('WF_OPTION_TOP'); ?>
+              </label>
+              <div class="uk-form-controls">
+                  <input type="text" id="padding_top" value="" />
+              </div>
 
-            <input type="checkbox" id="margin_check" class="uk-equalize-checkbox" >
+                    <label for="padding_right" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_RIGHT'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="padding_right" value="" />
+                    </div>
+
+                    <label for="padding_bottom" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_BOTTOM'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="padding_bottom" value="" />
+                    </div>
+
+                    <label for="padding_left" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_LEFT'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="padding_left" value="" />
+                    </div>
+                    <label class="uk-form-label">
+                        <input type="checkbox" class="uk-equalize-checkbox" />
+                        <?php echo WFText::_('WF_LABEL_EQUAL'); ?>
+                    </label>
+            </div>
         </div>
-    </div>
+
+<div class="uk-hidden-mini uk-grid uk-grid-small">
+            <label class="hastip uk-form-label uk-width-1-5" title="<?php echo WFText::_('WF_CAPTION_MARGIN_DESC'); ?>">
+                <?php echo WFText::_('WF_CAPTION_MARGIN'); ?>
+            </label>
+            <div class="uk-form-controls uk-width-4-5 uk-grid uk-grid-small uk-form-equalize">
+
+              <label for="margin_top" class="uk-form-label">
+                  <?php echo WFText::_('WF_OPTION_TOP'); ?>
+              </label>
+              <div class="uk-form-controls">
+                  <input type="text" id="margin_top" value="" />
+              </div>
+
+                    <label for="margin_right" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_RIGHT'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="margin_right" value="" />
+                    </div>
+
+                    <label for="margin_bottom" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_BOTTOM'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="margin_bottom" value="" />
+                    </div>
+
+                    <label for="margin_left" class="uk-form-label">
+                        <?php echo WFText::_('WF_OPTION_LEFT'); ?>
+                    </label>
+                    <div class="uk-form-controls">
+                        <input type="text" id="margin_left" value="" />
+                    </div>
+                    <label class="uk-form-label">
+                        <input type="checkbox" class="uk-equalize-checkbox" />
+                        <?php echo WFText::_('WF_LABEL_EQUAL'); ?>
+                    </label>
+            </div>
+        </div>
 
     <div class="uk-grid uk-grid-small">
         <label for="border" class="hastip uk-form-label uk-width-1-5" title="<?php echo WFText::_('WF_LABEL_BORDER_DESC'); ?>">

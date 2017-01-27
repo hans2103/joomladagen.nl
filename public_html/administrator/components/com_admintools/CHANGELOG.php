@@ -1,4 +1,17 @@
 <?php die() ?>
+Admin Tools 4.1.0
+================================================================================
++ Warning (with documentation link) when you have too many blacklisted IPs
++ gh-109 Include the whole request in the file log while using the WAF Blacklist feature
++ gh-111 Suggest turning on Enable IP Workarounds when we see local network IPs being automatically blocked
++ gh-112 Prevent backend account creation from the frontend of the site
++ gh-114 Email when Global Configuration and / or component Options changes take place
++ gh-117 Prevent the plugin from being disabled through the Plugins Manager
++ gh-118 Block requests using PHP Wrappers
+# [MEDIUM] gh-120 Fixed creating scan diffs while running the scanner from CLI
+# [LOW] Fixed ordering in Scan results page
+# [LOW] gh-124 Do not enable link migration if we don't have a list of old domains
+
 Admin Tools 4.0.2
 ================================================================================
 + Added warning if database updates are stuck due to table corruption

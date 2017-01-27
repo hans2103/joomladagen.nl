@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -446,20 +446,16 @@ class WFDocument extends JObject {
     }
 
     public function getQueryString($query = array()) {
-        // get layout
-        $layout = JRequest::getWord('layout');
+        // get plugin
+        $plugin = JRequest::getWord('plugin');
 
-        // set layout and item, eg: &layout=plugin&plugin=link
-        $query['layout']  = $layout;
-        $query[$layout]   = JRequest::getWord($layout);
-
-        if ($layout === "plugin") {
+        if ($plugin) {
             $query['plugin'] = $this->get('name');
         }
 
-        // set dialog
-        if (JRequest::getWord('dialog')) {
-            $query['dialog'] = JRequest::getWord('dialog');
+        // set layout
+        if (JRequest::getWord('layout')) {
+            $query['layout'] = JRequest::getWord('layout');
         }
 
         // set standalone mode (for File Browser etc)
@@ -467,11 +463,12 @@ class WFDocument extends JObject {
             $query['standalone'] = 1;
         }
 
-        // get component id
-        $component_id = JRequest::getInt('component_id');
+        // get context hash
+        $context = JRequest::getInt('context');
+
         // set component id
-        if ($component_id) {
-            $query['component_id'] = $component_id;
+        if ($context) {
+            $query['context'] = $context;
         }
 
         // get token

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package    JCE
- * @copyright    Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright    Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
@@ -334,14 +334,14 @@ class WFImageImagick
      * @param type $resolution
      * @return \WFImageGD
      */
-    public function resample($resolution = 72)
+    public function resample($resolution)
     {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded.');
         }
 
-        return $this->handle->setResolution($resolution, $resolution);
+        return $this->handle->setImageResolution((float) $resolution, (float) $resolution);
     }
 
     /**

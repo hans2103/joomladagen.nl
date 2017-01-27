@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
@@ -44,6 +44,7 @@ class WFElementRadio extends WFElement {
         }
 
         $attribs = array();
+        $html = '';
 
         // pattern data attribute for editable select input box
         if ((string) $node->attributes()->parent) {
@@ -58,8 +59,6 @@ class WFElementRadio extends WFElement {
             $attribs[] =  'data-parent="' . implode(';', $items) . '"';
         }
 
-        $html = '';
-
         foreach($options as $option) {
           $k  	= $option->value;
           $id 	= $control_name . $name . $k;
@@ -67,7 +66,7 @@ class WFElementRadio extends WFElement {
 
           $selected = ((string) $k == (string) $value) ? 'checked="checked"' : '';
 
-          $html .= '<label for="' . $control_name . $name . '" id="' . $control_name . $name . '-lbl" class="radio">';
+          $html .= '<label for="' . $control_name . $name . '" id="' . $control_name . $name . '-lbl" class="radio"' . implode(' ', $attribs) .'>';
           $html .= '  <input type="radio" name="' . $control_name . '[' . $name . ']' . '" id="' . $id . '" value="' . $k . '" ' . $selected . '/>';
           $html .= $text;
           $html .= '</label>';

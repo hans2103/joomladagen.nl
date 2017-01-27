@@ -2,7 +2,7 @@
 
 /**
  * @package    JCE
- * @copyright    Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright    Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -50,10 +50,10 @@ defined('_JEXEC') or die('RESTRICTED');
         </select>
     </div>
 
-    <label class="uk-form-label uk-width-2-10" for="border">
+    <label class="uk-form-label uk-width-2-10" for="table_border">
         <?php echo WFText::_('WF_TABLE_BORDER'); ?></label>
     <div class="uk-form-controls uk-width-3-10">
-        <input id="border" type="number" value="" />
+        <input id="table_border" type="number" value="" />
     </div>
 </div>
 <div class="uk-grid">

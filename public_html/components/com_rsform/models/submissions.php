@@ -335,6 +335,7 @@ class RSFormModelSubmissions extends JModelLegacy
 					// PDF links
 					'{detailspdf}'			 => '<a href="'.$pdf_link.'">',
 					'{detailspdf_link}'		 => $pdf_link,
+					'{global:formid}'		 => $submission['FormId'],
 					// Payment Status
 					'{_STATUS:value}'		 => isset($submission['SubmissionValues']['_STATUS']) ? JText::_('RSFP_PAYPAL_STATUS_'.$submission['SubmissionValues']['_STATUS']['Value']) : ''
 				);
@@ -421,7 +422,8 @@ class RSFormModelSubmissions extends JModelLegacy
 				'{global:confirmed}'	 => $submission->confirmed ? JText::_('RSFP_YES') : JText::_('RSFP_NO'),
 				// PDF
 				'{detailspdf}'			 => '<a href="'.$pdf_link.'">',
-				'{detailspdf_link}'		 => $pdf_link
+				'{detailspdf_link}'		 => $pdf_link,
+				'{global:formid}'		 => $submission->FormId
 			);
 			
 			$replace = array_merge($replace, $replace2, array_keys($replacements));

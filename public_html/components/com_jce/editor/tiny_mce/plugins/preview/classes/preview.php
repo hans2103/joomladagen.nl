@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -51,32 +51,31 @@ class WFPreviewPlugin extends WFEditorPlugin {
 
         wfimport('admin.helpers.extension');
 
-        // Get variables
-        $component_id = JRequest::getInt('component_id');
         // get post data
         $data = JRequest::getVar('data', '', 'POST', 'STRING', JREQUEST_ALLOWRAW);
 
         // cleanup data
         $data = preg_replace(array('#<!DOCTYPE([^>]+)>#i', '#<(head|title|meta)([^>]*)>([\w\W]+)<\/1>#i', '#<\/?(html|body)([^>]*)>#i'), '', rawurldecode($data));
 
-        $component = WFExtensionHelper::getComponent($component_id);
+        $extension_id   = JRequest::getInt('extension_id');
+        $extension      = WFExtensionHelper::getComponent($extension_id);
 
         // create params registry object
         $params = new JRegistry();
 
         // create empty params string
-        if (!isset($component->params)) {
-            $component->params = '';
+        if (!isset($extension->params)) {
+            $extension->params = '';
         }
 
         // process attribs (com_content etc.)
-        if ($component->attribs) {
-            $params->loadString($component->attribs);
+        if ($extension->attribs) {
+            $params->loadString($extension->attribs);
         } else {
             if (class_exists('JParameter')) {
-                $params = new JParameter($component->params);
+                $params = new JParameter($extension->params);
             } else {
-                $params->loadString($component->params);
+                $params->loadString($extension->params);
             }
         }
 

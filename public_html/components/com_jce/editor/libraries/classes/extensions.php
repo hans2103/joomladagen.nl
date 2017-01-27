@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -112,7 +112,7 @@ class WFExtension extends JObject {
                     continue;
                 }
 
-                $language->load('plg_jce_' . $p->folder . '_' . $p->extension, JPATH_SITE);
+                $language->load('plg_jce_' . $p->name, JPATH_ADMINISTRATOR);
 
                 // add to array
                 $extensions[$p->extension] = $p;
@@ -201,9 +201,14 @@ class WFExtension extends JObject {
                 if ($name) {
                     $root = $path . '/' . basename($path) . '.php';
 
+                    // store name in item object
+                    $item->name = $name;
+
                     // legacy - clean defined path for Windows!!
                     if (dirname($path) === WFUtility::cleanPath(WF_EDITOR_EXTENSIONS)) {
                         $root = $path . '/' . $name . '.php';
+                        // redefine path
+                        $item->path = $path . '/' . $name;
                     }
 
                     if (file_exists($root)) {
@@ -211,11 +216,11 @@ class WFExtension extends JObject {
                         require_once($root);
 
                         // Return array of extension names
-                        $result[$type][] = $name;
+                        $result[$type][] = $item;
 
                         // if we only want a named extension
                         if ($extension && $extension == $name) {
-                            return $name;
+                            return $item;
                         }
                     }
                 }

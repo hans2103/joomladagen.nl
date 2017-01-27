@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -48,12 +48,13 @@ class WFFileSystem extends WFExtension {
 
         if (!is_object($instance)) {
             $fs = parent::loadExtensions('filesystem', $type);
-
+            
+            // get the first filesystem extension only
             if (is_array($fs)) {
                 $fs = array_shift($fs);
             }
 
-            $classname = 'WF' . ucfirst($fs) . 'FileSystem';
+            $classname = 'WF' . ucfirst($fs->name) . 'FileSystem';
 
             if (class_exists($classname)) {
                 $instance = new $classname($config);

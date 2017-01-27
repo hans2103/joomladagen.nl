@@ -26,7 +26,7 @@ SpAddonsConfig::addonConfig(
 
 				// Title
 				'title'=>array(
-					'type'=>'text',
+					'type'=>'textarea',
 					'title'=>JText::_('COM_SPPAGEBUILDER_ADDON_TITLE'),
 					'desc'=>JText::_('COM_SPPAGEBUILDER_ADDON_TITLE_DESC'),
 					'std'=>  ''

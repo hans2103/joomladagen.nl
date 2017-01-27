@@ -992,17 +992,9 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v1.52.6</h2>
+		<h2>Changelog v1.52.7</h2>
 		<ul class="version-history">
-			<li><span class="version-fixed">Fix</span> In some cases, the PDF output would not load the stylesheets from the 'Submissions - Directory' menu item.</li>
-			<li><span class="version-fixed">Fix</span> New lines were not shown properly in 'Manage Submissions'.</li>
-			<li><span class="version-fixed">Fix</span> 'Free Text' HTML is now escaped when editing a form to avoid messing up the backend layout.</li>
-			<li><span class="version-fixed">Fix</span> 'Free Text' fields with PHP Code were not highlighted.</li>
-			<li><span class="version-fixed">Fix</span> 'Support Ticket' fields with 'Sequential' type could cause the form to stop submitting.</li>
-			<li><span class="version-fixed">Fix</span> 'Diagnose server upload settings' removed from the 'File Upload' field as it created confusion rather than solving it.</li>
-			<li><span class="version-fixed">Fix</span> Missing semicolon in JS output from 'Calendar' field could create issues when using Javascript compression plugins.</li>
-			<li><span class="version-fixed">Fix</span> Conditions would show a PHP Notice when a Payment field was improperly setup, rendering the page unresponsive.</li>
-			<li><span class="version-fixed">Fix</span> {if} scripting would throw a PHP Notice when using the '-&gt;' operator.</li>
+			<li><span class="version-fixed">Fix</span> {if} scripting did not work with the '-&gt;' and '&lt;-' operators on the submissions view.</li>
 			
 		</ul>
 		<a class="com-rsform-button" href="index.php?option=com_rsform">Start using RSForm! Pro</a>

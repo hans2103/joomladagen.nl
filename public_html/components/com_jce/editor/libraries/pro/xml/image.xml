@@ -54,6 +54,14 @@
             <option value="0">WF_OPTION_NO</option>
         </param>
 
+        <!--param name="upload_resample" type="list" default="0" class="editable" label="WF_PARAM_UPLOAD_RESAMPLE" description="WF_PARAM_UPLOAD_RESAMPLE_DESC">
+            <option value="">WF_OPTION_AUTO</option>
+            <option value="72">72</option>
+            <option value="100">100</option>
+            <option value="150">150</option>
+            <option value="300">300</option>
+        </param-->
+
         <param type="spacer" label="WF_MANAGER_WATERMARK" />
 
         <param name="upload_watermark_state" type="radio" default="0" label="WF_MANAGER_WATERMARK_UPLOAD_STATE" description="WF_MANAGER_WATERMARK_UPLOAD_STATE_DESC">

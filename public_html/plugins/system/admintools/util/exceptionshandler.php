@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AdminTools
- * @copyright Copyright (c)2010-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2017 Nicholas K. Dionysopoulos
  * @license   GNU General Public License version 3, or later
  */
 
@@ -224,8 +224,30 @@ class AtsystemUtilExceptionshandler
 
 		// === SANITY CHECK - END ===
 
+		// Is this a private network IP and IP workaround is off? If so let's raise the flag so we can notify the user
+		// I'll use the Container so I can easily set the flag and then save back to the database
+		$params = \FOF30\Container\Container::getInstance('com_admintools')->params;
 
-		// DO I have any kind of log? Let's get some extra info
+		// Run the check only if IP workarounds are off AND the flag is set to 0 (ie not detected)
+		// There's no need to run this check if the user decided to ignore the warning (value: -1) or we already detected something (value: 1)
+		if (!$this->cparams->getValue('ipworkarounds', -1) && ($params->get('detected_exceptions_from_private_network', 0) === 0))
+		{
+			$privateNetwork = array(
+				'10.0.0.0-10.255.255.255',
+				'172.16.0.0-172.31.255.255',
+				'192.168.0.0-192.168.255.255'
+			);
+
+			if (AtsystemUtilFilter::IPinList($privateNetwork))
+			{
+				// This IP belongs to a private network, let's raise the flag and then notify the user
+				$params->set('detected_exceptions_from_private_network', 1);
+				$params->save();
+			}
+		}
+
+
+		// Do I have any kind of log? Let's get some extra info
 		if (
 			($this->cparams->getValue('logbreaches', 0) && !in_array($reason, $reasons_nolog)) ||
 			($this->cparams->getValue('emailbreaches', '') && !in_array($reason, $reasons_noemail))

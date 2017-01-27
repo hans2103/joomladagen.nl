@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -40,7 +40,7 @@ class WFTablePluginConfig {
 
         $settings['table_classes'] = $wf->getParam('table.classes', "", "");
 
-        $settings['table_buttons'] = $wf->getParam('table.show_buttons', 0);
+        $settings['table_buttons'] = $wf->getParam('table.show_buttons', 1, 1);
     }
 
 }

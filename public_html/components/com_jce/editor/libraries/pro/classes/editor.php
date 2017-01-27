@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -10,6 +10,11 @@
  * other free or open source software licenses.
  */
 defined('_JEXEC') or die('RESTRICTED');
+
+jimport('joomla.filesystem.folder');
+jimport('joomla.filesystem.file');
+
+require_once (__DIR__ . '/image/image.php');
 
 class WFImageEditor extends JObject {
 
@@ -35,8 +40,6 @@ class WFImageEditor extends JObject {
     }
 
     public function watermark($src, $settings) {
-        require_once (__DIR__ . '/image/image.php');
-
         $ext = strtolower(JFile::getExt($src));
 
         if (!empty($settings['image'])) {
@@ -65,11 +68,6 @@ class WFImageEditor extends JObject {
     }
 
     public function resize($src, $dest = null, $width, $height, $quality, $sx = null, $sy = null, $sw = null, $sh = null) {
-        jimport('joomla.filesystem.folder');
-        jimport('joomla.filesystem.file');
-
-        require_once (__DIR__ . '/image/image.php');
-
         $ext    = strtolower(JFile::getExt($src));
         $data   = @JFile::read($src);
 
@@ -129,11 +127,6 @@ class WFImageEditor extends JObject {
     }
 
     public function rotate($file, $direction) {
-        jimport('joomla.filesystem.folder');
-        jimport('joomla.filesystem.file');
-
-        require_once (__DIR__ . '/image/image.php');
-
         $ext = strtolower(JFile::getExt($file));
         $src = @JFile::read($file);
 
@@ -173,25 +166,22 @@ class WFImageEditor extends JObject {
         return $file;
     }
 
-    public function resample($src, $resolution) {
-        require_once (__DIR__ . '/image/image.php');
+    public function resample($file, $resolution = 72) {
+        $ext = strtolower(JFile::getExt($file));
+        $options = $this->getOptions();
 
-        $image = new WFImage(null, $this->get('prefer_imagick', true));
-        $ext = strtolower(JFile::getExt($src));
+        $image = new WFImage($file, $options);
 
-        if ($image::getLib() === "Imagick") {
-            $image->loadFile($src);
-
-            if ($image->resample($resolution)) {
-                if ($this->get('ftp', 0)) {
-                    @JFile::write($src, $image->toString($ext));
-                } else {
-                    @$image->toFile($src);
-                }
+        if ($image->resample($resolution)) {
+            if ($this->get('ftp', 0)) {
+                @JFile::write($file, $image->toString($ext));
+            } else {
+                @$image->toFile($file);
             }
         }
 
         unset($image);
-    }
 
+        return $file;
+    }
 }

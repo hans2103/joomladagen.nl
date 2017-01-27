@@ -12,6 +12,7 @@ defined ('_JEXEC') or die ('restricted aceess');
 class SppagebuilderAddonButton extends SppagebuilderAddons {
 
 	public function render() {
+		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : 'sppb-text-left';
 		$class 	 = (isset($this->addon->settings->class) && $this->addon->settings->class) ? ' ' . $this->addon->settings->class : '';
 		$class .= (isset($this->addon->settings->type) && $this->addon->settings->type) ? ' sppb-btn-' . $this->addon->settings->type : '';
 		$class .= (isset($this->addon->settings->size) && $this->addon->settings->size) ? ' sppb-btn-' . $this->addon->settings->size : '';
@@ -31,7 +32,9 @@ class SppagebuilderAddonButton extends SppagebuilderAddons {
 			$text = ($icon) ? $text . ' <i class="fa ' . $icon . '"></i>' : $text;
 		}
 
-		$output  = '<a' . $attribs . ' class="sppb-btn ' . $class . '">' . $text . '</a>';
+		$output  = '<div class="'. $alignment .'">';
+		$output  .= '<a' . $attribs . ' class="sppb-btn ' . $class . '">' . $text . '</a>';
+		$output  .= '</div>';
 
 		return $output;
 	}

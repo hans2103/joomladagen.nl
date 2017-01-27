@@ -2,7 +2,7 @@
 
 /**
  * @package   	JCE
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
  * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
@@ -76,19 +76,60 @@ class WFImageGD {
         }
     }
 
+    private static function convertIniValue($value) {
+        $suffix = '';
+
+        preg_match('#([0-9]+)\s?([a-z]+)#i', $value, $matches);
+
+        // get unit
+        if (isset($matches[2])) {
+            $suffix = $matches[2];
+        }
+        // get value
+        if (isset($matches[1])) {
+            $value = (int) $matches[1];
+        }
+
+        // Convert to bytes
+        switch (strtolower($suffix)) {
+            case 'g':
+            case 'gb':
+                $value *= 1073741824;
+                break;
+            case 'm':
+            case 'mb':
+                $value *= 1048576;
+                break;
+            case 'k':
+            case 'kb':
+                $value *= 1024;
+                break;
+        }
+
+        return (int) $value;
+    }
+
     private static function checkMem($image) {
         $channels = ($image->mime == 'image/png') ? 4 : 3;
 
         if (function_exists('memory_get_usage')) {
-            // calculate memory limit as 20% of available memory
-            $limit = round(max(intval(ini_get('memory_limit')), intval(get_cfg_var('memory_limit'))) * 1048576);
+            // try ini_get
+            $limit = ini_get('memory_limit');
 
-            // assume default of 32MB
-            if (!$limit) {
+            // try get_cfg_var
+            if (empty($limit)) {
+                $limit = get_cfg_var('memory_limit');
+            }
+
+            // can't get from ini, assume low value of 32M
+            if (empty($limit)) {
                 $limit = 32 * 1048576;
+            } else {
+                $limit = self::convertIniValue($limit);
             }
 
             $used = memory_get_usage(true);
+
             return $image->width * $image->height * $channels * 1.7 < $limit - $used;
         }
 
@@ -141,11 +182,7 @@ class WFImageGD {
      */
     public function isLoaded() {
         // Make sure the resource handle is valid.
-        if (!is_resource($this->handle) || (get_resource_type($this->handle) != 'gd')) {
-            return false;
-        }
-
-        return true;
+        return is_resource($this->handle) && get_resource_type($this->handle) === "gd";
     }
 
     /**
@@ -434,8 +471,43 @@ class WFImageGD {
      * Set image resolution (not available in PHP GD)
      * @param type $resolution
      * @return WFImageGD
+     * https://gist.github.com/chemicaloliver/3164297
      */
-    public function resample($resolution = 72) {
+    public function resample($resolution) {        
+        // Make sure the resource handle is valid.
+        if (!$this->isLoaded()) {
+            throw new LogicException('No valid image was loaded');
+        }
+
+        // only resample jpeg images
+        if ($this->getType() !== IMAGETYPE_JPEG) {
+            return $this;
+        }
+
+        // empty string
+        $string = "";
+
+        $width  = $this->getWidth();
+        $height = $this->getHeight();
+
+		// Use truecolour image to avoid any issues with colours changing
+		$handle = imagecreatetruecolor($width, $height);
+
+		// Resample the image
+		imagecopyresampled($handle, $this->handle, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
+
+		// Get GD image resource as JPEG string
+		ob_start();
+			imagejpeg($handle, "");
+			$string = ob_get_contents();
+		ob_end_clean();
+
+        if ($string) {
+            // change the JPEG header to resolution
+		    $string = substr_replace($string, pack("Cnn", 0x01, $resolution, $resolution), 13, 5);
+            $this->handle = imagecreatefromstring($string);
+        }
+
         return $this;
     }
 
@@ -699,7 +771,7 @@ class WFImageGD {
                 break;
 
             case IMAGETYPE_JPEG:
-                $result = imagejpeg($this->handle, $path, (array_key_exists('quality', $options)) ? $options['quality'] : 100);
+                $result = imagejpeg($this->handle, $path, (array_key_exists('quality', $options)) ? $options['quality'] : 75);
                 break;
         }
 

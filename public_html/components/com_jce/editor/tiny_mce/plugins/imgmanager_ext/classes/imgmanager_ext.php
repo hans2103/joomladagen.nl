@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2016 Ryan Demmer. All rights reserved.
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright     Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
+ * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
@@ -15,8 +15,8 @@ if (!defined('_WF_EXT')) {
     define('_WF_EXT', 1);
 }
 
-require_once WF_EDITOR_LIBRARIES.'/classes/manager.php';
-require_once WF_EDITOR_LIBRARIES.'/classes/extensions/popups.php';
+require_once WF_EDITOR_LIBRARIES . '/classes/manager.php';
+require_once WF_EDITOR_LIBRARIES . '/classes/extensions/popups.php';
 
 class WFImageManagerExtPlugin extends WFMediaManager
 {
@@ -25,10 +25,10 @@ class WFImageManagerExtPlugin extends WFMediaManager
     public function __construct($config = array())
     {
         $config = array(
-        'can_edit_images' => 1,
-        'show_view_mode' => 1,
-        'colorpicker' => true,
-      );
+            'can_edit_images' => 1,
+            'show_view_mode' => 1,
+            'colorpicker' => true,
+        );
 
         parent::__construct($config);
 
@@ -51,8 +51,10 @@ class WFImageManagerExtPlugin extends WFMediaManager
      */
     public function display()
     {
-        if (JRequest::getCmd('dialog', 'plugin') === "editor") {
-            return parent::display();    
+        $layout = JRequest::getCmd('layout', 'plugin');
+
+        if ($layout === "editor") {
+            return parent::display();
         }
 
         if ($this->getParam('imgmanager_ext.insert_multiple', 1)) {
@@ -72,7 +74,7 @@ class WFImageManagerExtPlugin extends WFMediaManager
 
         // create new tabs instance
         $tabs = WFTabs::getInstance(array(
-          'base_path' => WF_EDITOR_PLUGINS.'/imgmanager',
+            'base_path' => WF_EDITOR_PLUGINS . '/imgmanager',
         ));
 
         // Add tabs
@@ -88,7 +90,7 @@ class WFImageManagerExtPlugin extends WFMediaManager
         $document->addScript(array('imgmanager', 'thumbnail'), 'plugins');
         $document->addStyleSheet(array('imgmanager'), 'plugins');
 
-        $document->addScriptDeclaration('ImageManagerDialog.settings='.json_encode($this->getSettings()).';');
+        $document->addScriptDeclaration('ImageManagerDialog.settings=' . json_encode($this->getSettings()) . ';');
 
         // Load Popups instance
         $popups = WFPopupsExtension::getInstance(array(
@@ -98,23 +100,23 @@ class WFImageManagerExtPlugin extends WFMediaManager
             'text' => false,
             // default popup option
             'default' => $this->getParam('imgmanager_ext.popups.default', ''),
-            )
+        )
         );
 
         $popups->addTemplate('popup');
         $popups->display();
 
         if ($this->getParam('tabs_responsive', 1)) {
-          $tabs->addTemplatePath(WF_EDITOR_PLUGINS.'/imgmanager_ext/tmpl');
+            $tabs->addTemplatePath(WF_EDITOR_PLUGINS . '/imgmanager_ext/tmpl');
 
-          // Add tabs
-          $tabs->addTab('responsive', 1, array('plugin' => $this));
+            // Add tabs
+            $tabs->addTab('responsive', 1, array('plugin' => $this));
         }
     }
 
     public function onUpload($file, $relative = '')
     {
-        parent::onUpload($file, $relative = '');
+        parent::onUpload($file, $relative);
 
         $browser = $this->getFileBrowser();
         $editor = $this->getImageEditor();
@@ -278,10 +280,10 @@ class WFImageManagerExtPlugin extends WFMediaManager
     /**
      * Manipulate file and folder list.
      *
-     * @param	file/folder array reference
-     * @param	mode variable list/images
+     * @param    file/folder array reference
+     * @param    mode variable list/images
      *
-     * @since	1.5
+     * @since    1.5
      */
     public function processListItems(&$result)
     {
@@ -379,13 +381,13 @@ class WFImageManagerExtPlugin extends WFMediaManager
     private function getThumbName($file)
     {
         $ext = WFUtility::getExtension($file);
-        $string = $this->getParam($this->getName().'.thumbnail_prefix', 'thumb_$', '', 'string', false);
+        $string = $this->getParam($this->getName() . '.thumbnail_prefix', 'thumb_$', '', 'string', false);
 
         if (strpos($string, '$') !== false) {
-            return str_replace('$', basename($file, '.'.$ext), $string).'.'.$ext;
+            return str_replace('$', basename($file, '.' . $ext), $string) . '.' . $ext;
         }
 
-        return $string.basename($file);
+        return $string . basename($file);
     }
 
     private function getThumbDir($file, $create)
@@ -393,7 +395,7 @@ class WFImageManagerExtPlugin extends WFMediaManager
         $browser = $this->getFileBrowser();
         $filesystem = $browser->getFileSystem();
 
-        $dir = WFUtility::makePath(dirname($file), $this->getParam($this->getName().'.thumbnail_folder', 'thumbnails'));
+        $dir = WFUtility::makePath(dirname($file), $this->getParam($this->getName() . '.thumbnail_folder', 'thumbnails'));
 
         if ($create && !$filesystem->exists($dir)) {
             $filesystem->createFolder(dirname($dir), basename($dir));
@@ -443,8 +445,8 @@ class WFImageManagerExtPlugin extends WFMediaManager
         $thumb = WFUtility::makePath($this->getThumbDir($file, true), $this->getThumbName($file));
 
         if ($this->get('can_edit_images')) {
-            $path   = WFUtility::makePath($browser->getBaseDir(), $file);
-            $thumb  = WFUtility::makePath($browser->getBaseDir(), $thumb);
+            $path = WFUtility::makePath($browser->getBaseDir(), $file);
+            $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
 
             if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
                 $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_CREATE_ERROR'), 'error');
@@ -497,7 +499,7 @@ class WFImageManagerExtPlugin extends WFMediaManager
             'thumbnail_width' => $params->get('thumbnail_width', 120),
             'thumbnail_height' => $params->get('thumbnail_height', 90),
             'thumbnail_quality' => $params->get('thumbnail_quality', 80),
-            'can_edit_images' => 1
+            'can_edit_images' => 1,
         );
 
         return parent::getSettings($settings);
