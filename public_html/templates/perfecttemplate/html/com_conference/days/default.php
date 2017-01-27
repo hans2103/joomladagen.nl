@@ -12,6 +12,9 @@ $this->loadHelper('params');
 $this->loadHelper('format');
 $this->loadHelper('message');
 $this->loadHelper('schedule');
+
+
+JFactory::getApplication()->enqueueMessage(JText::_('COM_CONFERENCE_DAYS_NOTICE_TEXT'), 'info');
 ?>
 
 <div class="conference schedule">
@@ -20,7 +23,7 @@ $this->loadHelper('schedule');
         <h1><?php echo JText::_('COM_CONFERENCE_DAYS_TITLE') ?></h1>
     </div>
 	<?php endif; ?>
-
+    
     <ul class="accordion-tabs-minimal">
 		<?php if (!empty($this->items)) foreach ($this->items as $i => $item): ?>
             <li class="tab-header-and-content tab-header-and-content--<?php echo $item->slug ?>">

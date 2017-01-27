@@ -2,6 +2,7 @@
 	padding: $base-spacing;
 	border: 1px solid transparent;
 	border-radius: $base-border-radius;
+	margin-bottom: $base-spacing;
 
 	&-success {
 		background-color: tint($alert-success, 80%);
