@@ -226,26 +226,14 @@ class AtsystemUtilExceptionshandler
 
 		// Is this a private network IP and IP workaround is off? If so let's raise the flag so we can notify the user
 		// I'll use the Container so I can easily set the flag and then save back to the database
-		$params = \FOF30\Container\Container::getInstance('com_admintools')->params;
-
-		// Run the check only if IP workarounds are off AND the flag is set to 0 (ie not detected)
-		// There's no need to run this check if the user decided to ignore the warning (value: -1) or we already detected something (value: 1)
-		if (!$this->cparams->getValue('ipworkarounds', -1) && ($params->get('detected_exceptions_from_private_network', 0) === 0))
+		try
 		{
-			$privateNetwork = array(
-				'10.0.0.0-10.255.255.255',
-				'172.16.0.0-172.31.255.255',
-				'192.168.0.0-192.168.255.255'
-			);
-
-			if (AtsystemUtilFilter::IPinList($privateNetwork))
-			{
-				// This IP belongs to a private network, let's raise the flag and then notify the user
-				$params->set('detected_exceptions_from_private_network', 1);
-				$params->save();
-			}
+			$this->flagPrivateNetworkIPs();
 		}
-
+		catch (Exception $e)
+		{
+			// Ignore any failures, they are not show stoppers
+		}
 
 		// Do I have any kind of log? Let's get some extra info
 		if (
@@ -913,5 +901,51 @@ SPAMASSASSINSUCKS;
 			$best->subject,
 			$best->template
 		);
+	}
+
+	/**
+	 * Flag security exceptions coming from private network IPs so we can notify the user
+	 *
+	 * @return  void
+	 *
+	 * @since   4.1.1
+	 */
+	private function flagPrivateNetworkIPs()
+	{
+		// Make sure FOF 3 can be loaded, or fail gracefuly
+		if (!defined('FOF30_INCLUDED') && !@include_once(JPATH_LIBRARIES . '/fof30/include.php'))
+		{
+			return;
+		}
+
+		// Double check we can load the container class
+		if (!class_exists('\FOF30\Container\Container'))
+		{
+			return;
+		}
+
+		$params = \FOF30\Container\Container::getInstance('com_admintools')->params;
+
+		// Run the check only if IP workarounds are off AND the flag is set to 0 (ie not detected)
+		// There's no need to run this check if the user decided to ignore the warning (value: -1) or we already detected something (value: 1)
+		if (($this->cparams->getValue('ipworkarounds', -1) == -1) || ($params->get('detected_exceptions_from_private_network', 0) != 0))
+		{
+			return;
+		}
+
+		$privateNetwork = array(
+			'10.0.0.0-10.255.255.255',
+			'172.16.0.0-172.31.255.255',
+			'192.168.0.0-192.168.255.255'
+		);
+
+		if (!AtsystemUtilFilter::IPinList($privateNetwork))
+		{
+			return;
+		}
+
+		// This IP belongs to a private network, let's raise the flag and then notify the user
+		$params->set('detected_exceptions_from_private_network', 1);
+		$params->save();
 	}
 }

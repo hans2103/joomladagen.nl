@@ -1,4 +1,8 @@
 <?php die() ?>
+Admin Tools 4.1.1
+================================================================================
+! PHP fatal error if the blocked IP was from a private network and you didn't have any plugin loading FOF 3 already installed
+
 Admin Tools 4.1.0
 ================================================================================
 + Warning (with documentation link) when you have too many blacklisted IPs
