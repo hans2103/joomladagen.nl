@@ -1,4 +1,26 @@
 .block {
+
+	@include e('countdown') {
+		@include m('container') {
+			@include outer-container;
+			position: relative;
+		}
+
+		@include m('content') {
+			z-index: 1;
+			width: 175px;
+			@include position(absolute, 60px null null 5%);
+
+			.path-home & {
+				@include position(absolute, 20px null null 45%);
+
+				@include media($beta) {
+					@include position(absolute, 100px null null 30%);
+				}
+			}
+		}
+	}
+
 	@include e('paralax') {
 		position: relative;
 		height: auto;
@@ -17,14 +39,35 @@
 			content: ' ';
 		}
 
-		@include m('first') {
+		@include m('logo') {
 			position: relative;
 			padding-top: 75px;
+
+			color: $white;
+
+			@include media ($charlie) {
+				@include span-columns(5 of 12);
+				@include shift(1 of 12);
+			}
 		}
 
-		@include e('figure') {
+		@include m('logo-figure') {
 			@include position(absolute, -75px null null null);
 			@include size(100px);
+		}
+
+		@include m('shop') {
+			background-color: $white;
+			padding: $base-spacing;
+			.module__title {
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			@include media ($charlie) {
+				@include span-columns(4 of 12);
+				@include shift(1 of 12);
+			}
 		}
 	}
 
@@ -45,35 +88,6 @@
 		@include m('home') {
 			background-image: url("../images/headers/header_afbeelding_jd17nl-dark.jpg");
 			background-position: 50% 0;
-
-			> div {
-				.module {
-
-					&:first-child {
-						color: $white;
-					}
-
-					&:last-child {
-						background-color: $white;
-						padding: $base-spacing;
-						.module__title {
-							overflow: hidden;
-							text-overflow: ellipsis;
-						}
-					}
-
-					@include media ($charlie) {
-						&:first-child {
-							@include span-columns(5 of 12);
-							@include shift(1 of 12);
-						}
-						&:last-child {
-							@include span-columns(4 of 12);
-							@include shift(1 of 12);
-						}
-					}
-				}
-			}
 		}
 	}
 
