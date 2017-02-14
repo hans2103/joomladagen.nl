@@ -1,19 +1,24 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_AccessLevel extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_AccessLevel extends \RegularLabs\Library\Field
 {
 	public $type = 'AccessLevel';
 
@@ -30,16 +35,14 @@ class JFormFieldRL_AccessLevel extends RLFormField
 
 		if ($show_all)
 		{
-			$option          = new stdClass;
+			$option          = (object) [];
 			$option->value   = -1;
 			$option->text    = '- ' . JText::_('JALL') . ' -';
 			$option->disable = '';
 			array_unshift($options, $option);
 		}
 
-		require_once dirname(__DIR__) . '/helpers/html.php';
-
-		return RLHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $this->selectList($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	protected function getAccessLevels($use_names = false)

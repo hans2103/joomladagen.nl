@@ -1,19 +1,27 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Geo extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Form as RL_Form;
+use RegularLabs\Library\RegEx as RL_RegEx;
+
+class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 {
 	public $type = 'Geo';
 
@@ -29,7 +37,7 @@ class JFormFieldRL_Geo extends RLFormField
 		$group     = $this->get('group', 'countries');
 		$use_names = $this->get('use_names');
 
-		$options = array();
+		$options = [];
 		foreach ($this->{$group} as $key => $val)
 		{
 			if (!$val)
@@ -44,19 +52,17 @@ class JFormFieldRL_Geo extends RLFormField
 				continue;
 			}
 
-			$val       = RLText::prepareSelectItem($val);
+			$val       = RL_Form::prepareSelectItem($val);
 			$options[] = JHtml::_('select.option', $use_names ? $val : $key, $val);
 		}
 
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple');
 
-		require_once dirname(__DIR__) . '/helpers/html.php';
-
-		return RLHtml::selectlistsimple($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
-	public $continents = array(
+	public $continents = [
 		'AF' => 'Africa',
 		'AS' => 'Asia',
 		'EU' => 'Europe',
@@ -64,7 +70,7 @@ class JFormFieldRL_Geo extends RLFormField
 		'SA' => 'South America',
 		'OC' => 'Oceania',
 		'AN' => 'Antarctica',
-	);
+	];
 
 	public $countries = array(
 		'AF' => "Afghanistan",

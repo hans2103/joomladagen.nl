@@ -1,25 +1,31 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
-require_once dirname(__DIR__) . '/helpers/groupfield.php';
 
-class JFormFieldRL_Form2Content extends RLFormGroupField
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_Form2Content extends \RegularLabs\Library\FieldGroup
 {
 	public $type          = 'Form2Content';
 	public $default_group = 'Projects';
 
 	protected function getInput()
 	{
-		if ($error = $this->missingFilesOrTables(array('projects' => 'project'), '', 'f2c'))
+		if ($error = $this->missingFilesOrTables(['projects' => 'project'], '', 'f2c'))
 		{
 			return $error;
 		}

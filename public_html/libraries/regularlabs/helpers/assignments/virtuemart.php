@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -17,8 +19,8 @@ class RLAssignmentsVirtueMart extends RLAssignment
 {
 	public function init()
 	{
-		$virtuemart_product_id  = JFactory::getApplication()->input->get('virtuemart_product_id', array(), 'array');
-		$virtuemart_category_id = JFactory::getApplication()->input->get('virtuemart_category_id', array(), 'array');
+		$virtuemart_product_id  = JFactory::getApplication()->input->get('virtuemart_product_id', [], 'array');
+		$virtuemart_category_id = JFactory::getApplication()->input->get('virtuemart_category_id', [], 'array');
 
 		$this->request->item_id     = isset($virtuemart_product_id['0']) ? $virtuemart_product_id['0'] : null;
 		$this->request->category_id = isset($virtuemart_category_id['0']) ? $virtuemart_category_id['0'] : null;
@@ -43,7 +45,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 		// Because VM sucks, we have to get the view again
 		$this->request->view = JFactory::getApplication()->input->getString('view');
 
-		$pass = (($this->params->inc_categories && in_array($this->request->view, array('categories', 'category')))
+		$pass = (($this->params->inc_categories && in_array($this->request->view, ['categories', 'category']))
 			|| ($this->params->inc_items && $this->request->view == 'productdetails')
 		);
 
@@ -52,7 +54,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 			return $this->pass(false);
 		}
 
-		$cats = array();
+		$cats = [];
 		if ($this->request->view == 'productdetails' && $this->request->item_id)
 		{
 			$query = $this->db->getQuery(true)

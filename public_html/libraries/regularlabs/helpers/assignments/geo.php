@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -27,7 +29,7 @@ class RLAssignmentsGeo extends RLAssignment
 			return $this->pass(false);
 		}
 
-		return $this->passSimple(array($this->geo->continent, $this->geo->continentCode));
+		return $this->passSimple([$this->geo->continent, $this->geo->continentCode]);
 	}
 
 	/**
@@ -42,7 +44,7 @@ class RLAssignmentsGeo extends RLAssignment
 			return $this->pass(false);
 		}
 
-		return $this->passSimple(array($this->geo->country, $this->geo->countryCode));
+		return $this->passSimple([$this->geo->country, $this->geo->countryCode]);
 	}
 
 	/**
@@ -100,7 +102,7 @@ class RLAssignmentsGeo extends RLAssignment
 
 		if (JDEBUG)
 		{
-			JLog::addLogger(array('text_file' => 'regularlabs_geoip.log.php'), JLog::ALL, array('regularlabs_geoip'));
+			JLog::addLogger(['text_file' => 'regularlabs_geoip.log.php'], JLog::ALL, ['regularlabs_geoip']);
 			JLog::add(json_encode($this->geo), JLog::DEBUG, 'regularlabs_geoip');
 		}
 

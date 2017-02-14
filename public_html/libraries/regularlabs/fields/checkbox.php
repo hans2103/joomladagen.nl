@@ -1,19 +1,26 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Checkbox extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+
+class JFormFieldRL_Checkbox extends \RegularLabs\Library\Field
 {
 	public $type = 'Checkbox';
 
@@ -21,7 +28,7 @@ class JFormFieldRL_Checkbox extends RLFormField
 	{
 		$this->params = $this->element->attributes();
 
-		RLFunctions::stylesheet('regularlabs/style.min.css');
+		RL_Document::stylesheet('regularlabs/style.min.css');
 
 		$showcheckall = $this->get('showcheckall', 0);
 
@@ -35,7 +42,7 @@ class JFormFieldRL_Checkbox extends RLFormField
 			}
 		}
 
-		$options = array();
+		$options = [];
 		foreach ($this->element->children() as $option)
 		{
 			if ($option->getName() != 'option')
@@ -75,7 +82,7 @@ class JFormFieldRL_Checkbox extends RLFormField
 
 		if ($showcheckall)
 		{
-			$checkers = array();
+			$checkers = [];
 			if ($showcheckall)
 			{
 				$checkers[] = '<input id="rl_checkall_' . $this->id . '" type="checkbox" onclick=" RegularLabsScripts.checkAll( this, \'rl_' . $this->id . '\' );"> ' . JText::_('JALL');
@@ -91,7 +98,7 @@ class JFormFieldRL_Checkbox extends RLFormField
 		}
 		$options .= '<input type="hidden" id="' . $this->id . 'x" name="' . $this->name . '' . '[]" value="x" checked="checked">';
 
-		$html   = array();
+		$html   = [];
 		$html[] = '<fieldset id="' . $this->id . '" class="checkbox">';
 		$html[] = $options;
 		$html[] = '</fieldset>';

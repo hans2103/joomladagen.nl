@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -14,7 +14,16 @@ defined('_JEXEC') or die;
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
 require_once JPATH_LIBRARIES . '/joomla/form/fields/list.php';
+
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 class JFormFieldRL_FileList extends JFormFieldList
 {
@@ -30,7 +39,7 @@ class JFormFieldRL_FileList extends JFormFieldList
 
 	protected function getOptions()
 	{
-		$options = array();
+		$options = [];
 
 		$path = $this->get('folder');
 
@@ -42,12 +51,14 @@ class JFormFieldRL_FileList extends JFormFieldList
 		// Prepend some default options based on field attributes.
 		if (!$this->get('hidenone', 0))
 		{
-			$options[] = JHtml::_('select.option', '-1', JText::alt('JOPTION_DO_NOT_USE', preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)));
+			$options[] = JHtml::_('select.option', '-1', JText::alt('JOPTION_DO_NOT_USE',
+				RL_RegEx::replace('[^a-z0-9_\-]', '_', $this->fieldname)));
 		}
 
 		if (!$this->get('hidedefault', 0))
 		{
-			$options[] = JHtml::_('select.option', '', JText::alt('JOPTION_USE_DEFAULT', preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)));
+			$options[] = JHtml::_('select.option', '', JText::alt('JOPTION_USE_DEFAULT',
+				RL_RegEx::replace('[^a-z0-9_\-]', '_', $this->fieldname)));
 		}
 
 		// Get a list of files in the search path with the given filter.
@@ -61,7 +72,7 @@ class JFormFieldRL_FileList extends JFormFieldList
 				// Check to see if the file is in the exclude mask.
 				if ($this->get('exclude'))
 				{
-					if (preg_match(chr(1) . $this->get('exclude') . chr(1), $file))
+					if (RL_RegEx::match(chr(1) . $this->get('exclude') . chr(1), $file))
 					{
 						continue;
 					}

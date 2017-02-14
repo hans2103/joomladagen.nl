@@ -1,15 +1,19 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.7PRO
+ * @version         7.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Language as RL_Language;
+use RegularLabs\Library\Parameters as RL_Parameters;
 
 $user = JFactory::getUser();
 if ($user->get('guest')
@@ -23,9 +27,7 @@ if ($user->get('guest')
 	JError::raiseError(403, JText::_("ALERTNOTAUTH"));
 }
 
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-$parameters = RLParameters::getInstance();
-$params     = $parameters->getPluginParams('sourcerer');
+$params = RL_Parameters::getInstance()->getPluginParams('sourcerer');
 
 if (JFactory::getApplication()->isSite())
 {
@@ -42,26 +44,25 @@ class PlgButtonSourcererPopup
 {
 	var $params = null;
 
-	function __construct(&$params)
+	public function __construct(&$params)
 	{
 		$this->params = $params;
 	}
 
-	function render()
+	public function render()
 	{
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
 
 		jimport('joomla.filesystem.file');
 
 		// Load plugin language
-		RLFunctions::loadLanguage('plg_system_regularlabs');
-		RLFunctions::loadLanguage('plg_editors-xtd_sourcerer');
-		RLFunctions::loadLanguage('plg_system_sourcerer');
+		RL_Language::load('plg_system_regularlabs');
+		RL_Language::load('plg_editors-xtd_sourcerer');
+		RL_Language::load('plg_system_sourcerer');
 
 		JHtml::_('script', 'system/core.js', false, true);
-		RLFunctions::script('regularlabs/script.min.js');
-		RLFunctions::stylesheet('regularlabs/popup.min.css');
-		RLFunctions::stylesheet('regularlabs/style.min.css');
+		RL_Document::script('regularlabs/script.min.js');
+		RL_Document::style('regularlabs/popup.min.css');
+		RL_Document::style('regularlabs/style.min.css');
 
 		JFactory::getDocument()->addStyleSheet('//code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css');
 		JFactory::getDocument()->addScript('//code.jquery.com/ui/1.9.2/jquery-ui.js');
@@ -76,17 +77,17 @@ class PlgButtonSourcererPopup
 			var sourcerer_default_addsourcetags = " . (int) $this->params->addsourcetags . ";
 			var sourcerer_root = '" . JUri::root(true) . "';
 		";
-		JFactory::getDocument()->addScriptDeclaration($script);
+		RL_Document::scriptDeclaration($script);
 
-		RLFunctions::script('sourcerer/script.min.js', '6.3.7.p');
-		RLFunctions::stylesheet('sourcerer/popup.min.css', '6.3.7.p');
+		RL_Document::script('sourcerer/script.min.js', '7.0.2.p');
+		RL_Document::style('sourcerer/popup.min.css', '7.0.2.p');
 
 		$this->params->code = '';
 		if ($this->params->use_example_code == 1 || (JFactory::getApplication()->isAdmin() && $this->params->use_example_code == 2))
 		{
 			$this->params->code = $this->params->example_code;
 		}
-		$this->params->code = str_replace('<br>', "\n", $this->params->code);
+		$this->params->code = str_replace(['<br>', '<br />'], "\n", $this->params->code);
 
 		echo $this->getHTML();
 	}
@@ -158,7 +159,12 @@ class PlgButtonSourcererPopup
 				</div>
 
 				<div class="well well-small src_editor">
-					<?php echo $editor->display('source', $this->params->code, '100%', '100%', 10, 10, 0, null, null, null, array('syntax' => 'php', 'linenumbers' => 1, 'tabmode' => 'shift')); ?>
+					<?php echo $editor->display(
+						'source',
+						$this->params->code,
+						'100%', '100%', 10, 10, 0, null, null, null,
+						['syntax' => 'php', 'linenumbers' => 1, 'tabmode' => 'shift']
+					); ?>
 				</div>
 
 				<script type="text/javascript">

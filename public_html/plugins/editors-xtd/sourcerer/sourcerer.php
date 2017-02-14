@@ -1,70 +1,27 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.7PRO
+ * @version         7.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
 /**
  * Button Plugin that places a Sourcerer code block into the text
  */
-class PlgButtonSourcerer extends JPlugin
+class PlgButtonSourcerer
+	extends \RegularLabs\Library\EditorButton
 {
-	/**
-	 * Display the button
-	 *
-	 * @return array A two element array of ( imageName, textToInsert )
-	 */
-	function onDisplay($name)
-	{
-		jimport('joomla.filesystem.file');
-
-		// return if system plugin is not installed
-		if (!JFile::exists(JPATH_PLUGINS . '/system/' . $this->_name . '/' . $this->_name . '.php'))
-		{
-			return;
-		}
-
-		// return if Regular Labs Library plugin is not installed
-		if (!$this->isFrameworkInstalled())
-		{
-			return;
-		}
-
-		// load the admin language file
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-		RLFunctions::loadLanguage('plg_' . $this->_type . '_' . $this->_name);
-
-		// Load plugin parameters
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-		$parameters = RLParameters::getInstance();
-		$params     = $parameters->getPluginParams($this->_name);
-
-		// Include the Helper
-		require_once JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/helper.php';
-		$class  = get_class($this) . 'Helper';
-		$helper = new $class($params);
-
-		return $helper->render($name);
-	}
-
-	/**
-	 * Check if the Regular Labs Library is installed
-	 *
-	 * @return bool
-	 */
-	private function isFrameworkInstalled()
-	{
-		jimport('joomla.filesystem.file');
-
-		return
-			JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
-			&& JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml');
-	}
 }

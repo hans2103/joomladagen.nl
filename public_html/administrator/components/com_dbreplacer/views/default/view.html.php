@@ -1,15 +1,18 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Parameters as RL_Parameters;
 
 // Import VIEW object class
 jimport('joomla.application.component.view');
@@ -22,7 +25,7 @@ class DBReplacerViewDefault extends JViewLegacy
 	/**
 	 * Custom Constructor
 	 */
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		/** set up global variable for sorting etc
 		 * $context is used in VIEW abd in MODEL
@@ -39,16 +42,12 @@ class DBReplacerViewDefault extends JViewLegacy
 	 * reference variables
 	 */
 
-	function display($tpl = null)
+	public function display($tpl = null)
 	{
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
+		$this->config = RL_Parameters::getInstance()->getComponentParams('com_dbreplacer');
 
-		$this->parameters = RLParameters::getInstance();
-		$this->config     = $this->parameters->getComponentParams('com_dbreplacer');
-
-		RLFunctions::stylesheet('regularlabs/style.min.css');
-		RLFunctions::stylesheet('dbreplacer/style.min.css', '5.1.3.p');
+		RL_Document::style('regularlabs/style.min.css');
+		RL_Document::style('dbreplacer/style.min.css', '6.0.0.p');
 
 		// Set document title
 		JFactory::getDocument()->setTitle(JText::_('DB_REPLACER'));
@@ -70,7 +69,7 @@ class DBReplacerViewDefault extends JViewLegacy
 		parent::display($tpl);
 	}
 
-	function renderTables()
+	private function renderTables()
 	{
 		$db = JFactory::getDbo();
 
@@ -87,7 +86,7 @@ class DBReplacerViewDefault extends JViewLegacy
 
 		if (!empty($ignore))
 		{
-			$ignores = array();
+			$ignores = [];
 			foreach ($ignore as $table)
 			{
 				if (trim($table) != '')
@@ -103,7 +102,7 @@ class DBReplacerViewDefault extends JViewLegacy
 			}
 		}
 
-		$options = array();
+		$options = [];
 		$prefix  = 0;
 		$first   = 1;
 		foreach ($tables as $table)

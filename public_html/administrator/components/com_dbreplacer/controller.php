@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -19,7 +19,7 @@ class DBReplacerController extends JControllerLegacy
 	/**
 	 * Custom Constructor
 	 */
-	public function __construct($default = array())
+	public function __construct($default = [])
 	{
 		parent::__construct($default);
 	}
@@ -28,7 +28,7 @@ class DBReplacerController extends JControllerLegacy
 	 * Replace Method
 	 * Set Redirection to the main administrator index
 	 */
-	function replace()
+	public function replace()
 	{
 		$this->doReplace();
 		$this->display();
@@ -38,11 +38,11 @@ class DBReplacerController extends JControllerLegacy
 	 * Replace Method
 	 * Set Redirection to the main administrator index
 	 */
-	function doReplace()
+	private function doReplace()
 	{
-		$params          = new stdClass;
+		$params          = (object) [];
 		$params->table   = JFactory::getApplication()->input->get('table');
-		$params->columns = JFactory::getApplication()->input->get('columns', array(0), 'array');
+		$params->columns = JFactory::getApplication()->input->get('columns', [0], 'array');
 		$params->search  = JFactory::getApplication()->input->get('search', '', 'RAW');
 
 		if (!$params->table || $params->search == '' || !is_array($params->columns) || empty($params->columns))
@@ -71,7 +71,7 @@ class DBReplacerController extends JControllerLegacy
 	 * Display Method
 	 * Call the method and display the requested view
 	 */
-	function display($cachable = false, $urlparams = false)
+	public function display($cachable = false, $urlparams = false)
 	{
 		$viewName   = JFactory::getApplication()->input->get('view', 'default');
 		$viewLayout = JFactory::getApplication()->input->get('layout', 'default');
@@ -102,7 +102,7 @@ class DBReplacerController extends JControllerLegacy
 	 * Import Method
 	 * Call the method and display the import view
 	 */
-	function import()
+	public function import()
 	{
 		JFactory::getApplication()->input->set('layout', 'import');
 		$this->display();

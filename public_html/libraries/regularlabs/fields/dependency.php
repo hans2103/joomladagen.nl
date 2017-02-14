@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,10 +13,17 @@ defined('_JEXEC') or die;
 
 jimport('joomla.form.formfield');
 
-require_once dirname(__DIR__) . '/helpers/functions.php';
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Dependency extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\RegEx as RL_RegEx;
+
+class JFormFieldRL_Dependency extends \RegularLabs\Library\Field
 {
 	public $type = 'Dependency';
 
@@ -30,7 +37,7 @@ class JFormFieldRL_Dependency extends RLFormField
 		$this->params = $this->element->attributes();
 
 		JHtml::_('jquery.framework');
-		RLFunctions::script('regularlabs/script.min.js');
+		RL_Document::script('regularlabs/script.min.js');
 
 		if ($file = $this->get('file'))
 		{
@@ -44,7 +51,7 @@ class JFormFieldRL_Dependency extends RLFormField
 		$path      = ($this->get('path') == 'site') ? '' : '/administrator';
 		$label     = $this->get('label');
 		$file      = $this->get('alias', $label);
-		$file      = preg_replace('#[^a-z-]#', '', strtolower($file));
+		$file      = RL_RegEx::replace('[^a-z-]', '', strtolower($file));
 		$extension = $this->get('extension');
 
 		switch ($extension)
@@ -85,7 +92,7 @@ class RLFieldDependency
 		}
 		$file = str_replace('//', '/', $file);
 
-		$file_alt = preg_replace('#(com|mod)_([a-z-_]+\.)#', '\2', $file);
+		$file_alt = RL_RegEx::replace('(com|mod)_([a-z-_]+\.)', '\2', $file);
 
 		if (!JFile::exists($file) && !JFile::exists($file_alt))
 		{

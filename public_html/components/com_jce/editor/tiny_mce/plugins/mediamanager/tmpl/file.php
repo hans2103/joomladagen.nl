@@ -55,7 +55,7 @@ defined('_JEXEC') or die('RESTRICTED');
                 <div class="uk-form-controls">
                     <input type="text" id="height" value="" />
                 </div>
-                <label class="uk-form-label uk-margin-left">
+                <label class="uk-form-label">
                     <input class="uk-constrain-checkbox" type="checkbox" checked />
                     <?php echo WFText::_('WF_LABEL_PROPORTIONAL'); ?>
                 </label>

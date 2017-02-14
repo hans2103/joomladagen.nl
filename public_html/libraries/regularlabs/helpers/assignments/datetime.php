@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -16,7 +18,7 @@ require_once dirname(__DIR__) . '/assignment.php';
 class RLAssignmentsDateTime extends RLAssignment
 {
 	var $timezone = null;
-	var $dates    = array();
+	var $dates    = [];
 
 	public function passDate()
 	{
@@ -97,12 +99,14 @@ class RLAssignmentsDateTime extends RLAssignment
 	public function passMonths()
 	{
 		$month = $this->date->format('m', true); // 01 (for January) through 12 (for December)
+
 		return $this->passSimple((int) $month);
 	}
 
 	public function passDays()
 	{
 		$day = $this->date->format('N', true); // 1 (for Monday) though 7 (for Sunday )
+
 		return $this->passSimple($day);
 	}
 
@@ -147,7 +151,7 @@ class RLAssignmentsDateTime extends RLAssignment
 		$date_year = $d->format('Y', true); // Four digit representation for the year
 
 		// Specify the season names
-		$season_names = array('winter', 'spring', 'summer', 'fall');
+		$season_names = ['winter', 'spring', 'summer', 'fall'];
 
 		// Declare season date ranges
 		switch (strtolower($hemisphere))

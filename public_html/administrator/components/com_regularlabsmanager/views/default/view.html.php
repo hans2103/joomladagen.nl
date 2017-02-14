@@ -1,15 +1,17 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Parameters as RL_Parameters;
 
 jimport('joomla.application.component.view');
 
@@ -59,9 +61,7 @@ class RegularLabsManagerViewDefault extends JViewLegacy
 			return $this->config;
 		}
 
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-		$parameters   = RLParameters::getInstance();
-		$this->config = $parameters->getComponentParams('regularlabsmanager');
+		$this->config = RL_Parameters::getInstance()->getComponentParams('regularlabsmanager');
 
 		return $this->config;
 	}
@@ -95,9 +95,9 @@ class RegularLabsManagerViewDefault extends JViewLegacy
 		$result    = new JObject;
 		$assetName = 'com_regularlabsmanager';
 
-		$actions = array(
+		$actions = [
 			'core.admin', 'core.manage',
-		);
+		];
 
 		foreach ($actions as $action)
 		{
@@ -117,7 +117,7 @@ class RegularLabsManagerToolbarHelper extends JToolbarHelper
 		$html = '
 			</div>
 			<div class="btn-wrapper">
-				<span class="refresh btn btn-small" onclick="rlem_function(\'refresh\');" rel="tooltip" title="' . JText::_('RLEM_REFRESH_DESC') . '">
+				<span class="refresh btn btn-small btn-success" onclick="rlem_function(\'refresh\');" rel="tooltip" title="' . JText::_('RLEM_REFRESH_DESC') . '">
 					<span class="icon-refresh"></span>
 				</span>
 			</div>

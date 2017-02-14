@@ -40,7 +40,7 @@ defined('_JEXEC') or die('RESTRICTED');
 		</div>
 
 		<label>
-            <input class="uk-constrain-checkbox" type="checkbox" checked />
+            <input class="uk-constrain-checkbox uk-margin-left-remove" type="checkbox" checked />
             <?php echo WFText::_('WF_LABEL_PROPORTIONAL');?>
         </label>
 	</div>

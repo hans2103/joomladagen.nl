@@ -1,20 +1,26 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
-require_once dirname(__DIR__) . '/helpers/text.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_CustomFieldValue extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\StringHelper as RL_String;
+
+class JFormFieldRL_CustomFieldValue extends \RegularLabs\Library\Field
 {
 	public $type = 'CustomFieldValue';
 
@@ -30,7 +36,7 @@ class JFormFieldRL_CustomFieldValue extends RLFormField
 		$label       = $this->get('label') ? $this->get('label') : '';
 		$size        = $this->get('size') ? 'style="width:' . $this->get('size') . 'px"' : '';
 		$class       = 'class="' . ($this->get('class') ? $this->get('class') : 'text_area') . '"';
-		$this->value = htmlspecialchars(RLText::html_entity_decoder($this->value), ENT_QUOTES);
+		$this->value = htmlspecialchars(RL_String::html_entity_decoder($this->value), ENT_QUOTES);
 
 		return
 			'</div></div></div>'

@@ -16,7 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.4.2
  */
-class URLHelper
+class PerfectSitemapUrlHelper
 {
 	/**
 	 * Static method to route a url to a SEF Url. It also decides if the url should  me with https or not
@@ -29,8 +29,6 @@ class URLHelper
 	 */
 	public static function getURL($url)
 	{
-		$isSSL = (JFactory::getConfig()->get('force_ssl') == 2);
-
-		return JRoute::_($url, true, ($isSSL ?: -1));
+		return substr(JUri::base(), 0, -1) . JRoute::_($url, true);
 	}
 }

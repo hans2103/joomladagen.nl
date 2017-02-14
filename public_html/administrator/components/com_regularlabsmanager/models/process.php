@@ -1,15 +1,17 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Language as RL_Language;
 
 jimport('joomla.application.component.modelitem');
 
@@ -23,12 +25,12 @@ class RegularLabsManagerModelProcess extends JModelItem
 	 */
 	public function getItems()
 	{
-		$ids  = JFactory::getApplication()->input->get('ids', array(), 'array');
-		$urls = JFactory::getApplication()->input->get('urls', array(), 'array');
+		$ids  = JFactory::getApplication()->input->get('ids', [], 'array');
+		$urls = JFactory::getApplication()->input->get('urls', [], 'array');
 
 		if (empty($ids) || empty($urls))
 		{
-			return array();
+			return [];
 		}
 
 		$model       = JModelLegacy::getInstance('Default', 'RegularLabsManagerModel');
@@ -51,7 +53,7 @@ class RegularLabsManagerModelProcess extends JModelItem
 	/**
 	 * Download and install
 	 */
-	function install($id, $url)
+	public function install($id, $url)
 	{
 		if (!is_string($url))
 		{
@@ -67,8 +69,7 @@ class RegularLabsManagerModelProcess extends JModelItem
 
 		$target = JFactory::getConfig()->get('tmp_path') . '/' . $target;
 
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-		RLFunctions::loadLanguage('com_installer', JPATH_ADMINISTRATOR);
+		RL_Language::load('com_installer', JPATH_ADMINISTRATOR);
 		jimport('joomla.installer.installer');
 		jimport('joomla.installer.helper');
 
@@ -77,6 +78,11 @@ class RegularLabsManagerModelProcess extends JModelItem
 
 		// Unpack the package
 		$package = JInstallerHelper::unpack($target);
+
+		if (!isset($package['extractdir']))
+		{
+			return;
+		}
 
 		// Cleanup the install files
 		if (!is_file($package['packagefile']))
@@ -103,13 +109,13 @@ class RegularLabsManagerModelProcess extends JModelItem
 	/**
 	 * Download and install
 	 */
-	function uninstall($id)
+	public function uninstall($id)
 	{
 		$model = JModelLegacy::getInstance('Default', 'RegularLabsManagerModel');
-		$item  = $model->getItems(array($id));
+		$item  = $model->getItems([$id]);
 		$item  = $item[$id];
 
-		$ids = array();
+		$ids = [];
 		foreach ($item->types as $type)
 		{
 			if ($type->id)

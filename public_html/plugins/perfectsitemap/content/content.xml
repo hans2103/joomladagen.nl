@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="perfectsitemap" method="upgrade">
+	<name>plg_perfectsitemap_content</name>
+	<author>Perfect Web Team</author>
+	<creationDate>April 2016</creationDate>
+	<copyright>Copyright (C) 2017 Perfect Web Team. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<authorEmail>info@perfectwebteam.nl</authorEmail>
+	<authorUrl>www.perfectwebteam.nl</authorUrl>
+	<version>2.0.3</version>
+	<description>PLG_PERFECTSITEMAP_CONTENT_XML_DESCRIPTION</description>
+	<files>
+		<folder>forms</folder>
+		<filename plugin="content">content.php</filename>
+		<filename>content.xml</filename>
+	</files>
+	<languages folder="language">
+		<language tag="nl-NL">nl-NL/nl-NL.plg_perfectsitemap_content.ini</language>
+		<language tag="nl-NL">nl-NL/nl-NL.plg_perfectsitemap_content.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_perfectsitemap_content.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_perfectsitemap_content.sys.ini</language>
+	</languages>
+	<config>
+	</config>
+</extension>

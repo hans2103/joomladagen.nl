@@ -15,8 +15,8 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="show_update_notification" type="radio" class="btn-group" default="1" label="RL_SHOW_UPDATE_NOTIFICATION"
-			   description="RL_SHOW_UPDATE_NOTIFICATION_DESC">
+		<field name="show_update_notification" type="radio" class="btn-group" default="1"
+			   label="RL_SHOW_UPDATE_NOTIFICATION" description="RL_SHOW_UPDATE_NOTIFICATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>

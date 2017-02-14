@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -16,12 +16,6 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_regularlabsmanager'))
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
-
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-
-RLFunctions::loadLanguage('com_regularlabsmanager');
-RLFunctions::loadLanguage('com_modules', JPATH_ADMINISTRATOR);
-RLFunctions::loadLanguage('plg_system_regularlabs');
 
 $helper = new RegularLabsManagerHelper;
 
@@ -36,6 +30,13 @@ if (version_compare(PHP_VERSION, '5.3', '<'))
 
 	return false;
 }
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Language as RL_Language;
+
+RL_Language::load('plg_system_regularlabs', JPATH_ADMINISTRATOR);
+RL_Language::load('com_modules', JPATH_ADMINISTRATOR);
 
 $helper->uninstallNoNumberExtensionManager();
 
@@ -61,8 +62,7 @@ class RegularLabsManagerHelper
 			return false;
 		}
 
-		$regularlabs = JPluginHelper::getPlugin('system', 'regularlabs');
-		if (!isset($regularlabs->name))
+		if (!JPluginHelper::isEnabled('system', 'regularlabs'))
 		{
 			$this->throwError(
 				JText::_($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_ENABLED')
@@ -85,8 +85,8 @@ class RegularLabsManagerHelper
 		jimport('joomla.filesystem.file');
 
 		if (
-			!JFile::exists(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
-			|| !JFile::exists(JPATH_LIBRARIES . '/regularlabs/regularlabs.xml')
+			!is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			|| !is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
 		)
 		{
 			$this->throwError(

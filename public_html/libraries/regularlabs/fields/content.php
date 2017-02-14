@@ -1,19 +1,24 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/groupfield.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Content extends RLFormGroupField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_Content extends \RegularLabs\Library\FieldGroup
 {
 	public $type = 'Content';
 
@@ -34,15 +39,15 @@ class JFormFieldRL_Content extends RLFormGroupField
 		}
 
 		// assemble items to the array
-		$options = array();
+		$options = [];
 		if ($this->get('show_ignore'))
 		{
 			if (in_array('-1', $this->value))
 			{
-				$this->value = array('-1');
+				$this->value = ['-1'];
 			}
-			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -', 'value', 'text', 0);
-			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
+			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -');
+			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 		}
 
 		$query->clear('select')
@@ -52,7 +57,7 @@ class JFormFieldRL_Content extends RLFormGroupField
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
-		$options = array_merge($options, $this->getOptionsByList($list, array('language'), -1));
+		$options = array_merge($options, $this->getOptionsByList($list, ['language'], -1));
 
 		return $options;
 	}
@@ -78,6 +83,6 @@ class JFormFieldRL_Content extends RLFormGroupField
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
-		return $this->getOptionsByList($list, array('language', 'cat', 'id'));
+		return $this->getOptionsByList($list, ['language', 'cat', 'id']);
 	}
 }

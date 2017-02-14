@@ -1,15 +1,17 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 /**
  * DB Replacer Default Model
@@ -41,7 +43,7 @@ class DBReplacerModelDefault extends JModelLegacy
 		$s     = str_replace('||space||', ' ', $params->search);
 		$r     = str_replace('||space||', ' ', $params->replace);
 
-		$likes = array();
+		$likes = [];
 		if ($s != '')
 		{
 			if ($s == 'NULL')
@@ -59,9 +61,9 @@ class DBReplacerModelDefault extends JModelLegacy
 
 				if (!$params->regex)
 				{
-					$dbs = preg_quote($dbs);
+					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match
-					$dbs = preg_replace('#\s*\n\s*#s', '\s*', $dbs);
+					$dbs = RL_RegEx::replace('\s*\n\s*', '\s*', $dbs);
 				}
 
 				// escape slashes
@@ -69,7 +71,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				// escape single quotes
 				$dbs = str_replace('\'', '\\\'', $dbs);
 				// remove the lazy character: doesn't work in mysql
-				$dbs = str_replace(array('*?', '+?'), array('*', '+'), $dbs);
+				$dbs = str_replace(['*?', '+?'], ['*', '+'], $dbs);
 				// change \s to [:space:]
 				$dbs = str_replace('\s', '[[:space:]]', $dbs);
 
@@ -85,7 +87,7 @@ class DBReplacerModelDefault extends JModelLegacy
 		}
 		if (!empty($likes))
 		{
-			$where = array();
+			$where = [];
 			foreach ($params->columns as $column)
 			{
 				foreach ($likes as $like)
@@ -109,11 +111,11 @@ class DBReplacerModelDefault extends JModelLegacy
 			}
 		}
 
-		$query = 'SHOW COLUMNS FROM `' . trim(preg_replace('#^__#', $this->_db->getPrefix(), $params->table)) . '`';
+		$query = 'SHOW COLUMNS FROM `' . trim(RL_RegEx::replace('^__', $this->_db->getPrefix(), $params->table)) . '`';
 		$this->_db->setQuery($query);
 		$all_columns = $this->_db->loadObjectList();
 
-		$index_columns = array();
+		$index_columns = [];
 
 		foreach ($all_columns as $column)
 		{
@@ -141,7 +143,7 @@ class DBReplacerModelDefault extends JModelLegacy
 		$select_columns = array_merge($index_columns, $params->columns);
 
 		$query = 'SELECT `' . implode('`,`', $select_columns) . '`'
-			. ' FROM `' . trim(preg_replace('#^__#', $this->_db->getPrefix(), $params->table)) . '`'
+			. ' FROM `' . trim(RL_RegEx::replace('^__', $this->_db->getPrefix(), $params->table)) . '`'
 			. $where
 			. ' LIMIT ' . (int) $params->max;
 		$this->_db->setQuery($query);
@@ -151,8 +153,8 @@ class DBReplacerModelDefault extends JModelLegacy
 		$count = 0;
 		foreach ($rows as $row)
 		{
-			$set   = array();
-			$where = array();
+			$set   = [];
+			$where = [];
 
 			foreach ($row as $key => $val)
 			{
@@ -184,27 +186,28 @@ class DBReplacerModelDefault extends JModelLegacy
 				$dbs = $s;
 				if (!$params->regex)
 				{
-					$dbs = preg_quote($dbs, '#');
+					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match
-					$dbs = preg_replace('#\s*\n\s*#s', '\s*', $dbs);
+					$dbs = RL_RegEx::replace('\s*\n\s*', '\s*', $dbs);
 					$dbs = str_replace('\[[:space:]]', '\s*', $dbs);
 				}
-				$dbs = '#' . $dbs . '#s';
+
+				$options = 's';
 				if (!$params->case)
 				{
-					$dbs .= 'i';
+					$options .= 'i';
 				}
 				if ($params->regex && $params->utf8)
 				{
-					$dbs .= 'u';
+					$options .= 'u';
 				}
 
-				if (!@preg_match($dbs, $val))
+				if (!@RL_RegEx::match($dbs, $val, $matches, $options))
 				{
 					continue;
 				}
 
-				$set[] = $this->_db->quoteName(trim($key)) . ' = ' . $this->_db->quote(preg_replace($dbs, $r, $val));
+				$set[] = $this->_db->quoteName(trim($key)) . ' = ' . $this->_db->quote(RL_RegEx::replace($dbs, $r, $val, $options));
 			}
 
 			if (empty($set) || empty($where))
@@ -218,7 +221,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				$where .= ' AND (' . $params->where . ')';
 			}
 
-			$query = 'UPDATE `' . trim(preg_replace('#^__#', $this->_db->getPrefix(), $params->table)) . '`'
+			$query = 'UPDATE `' . trim(RL_RegEx::replace('^__', $this->_db->getPrefix(), $params->table)) . '`'
 				. ' SET ' . implode(', ', $set)
 				. $where
 				. ' LIMIT 1';

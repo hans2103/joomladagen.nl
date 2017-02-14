@@ -1,17 +1,25 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/functions.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 /**
  * To use this, make a start xml param tag with the param and value set
@@ -33,6 +41,11 @@ class JFormFieldRL_Toggler extends JFormField
 
 	protected function getInput()
 	{
+		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		{
+			return null;
+		}
+
 		$field = new RLFieldToggler;
 
 		return $field->getInput($this->element->attributes());
@@ -60,20 +73,20 @@ class RLFieldToggler
 		$div    = $this->get('div', 0);
 
 		JHtml::_('jquery.framework');
-		RLFunctions::script('regularlabs/script.min.js');
-		RLFunctions::script('regularlabs/toggler.min.js');
+		RL_Document::script('regularlabs/script.min.js');
+		RL_Document::script('regularlabs/toggler.min.js');
 
-		$param = preg_replace('#^\s*(.*?)\s*$#', '\1', $param);
-		$param = preg_replace('#\s*\|\s*#', '|', $param);
+		$param = RL_RegEx::replace('^\s*(.*?)\s*$', '\1', $param);
+		$param = RL_RegEx::replace('\s*\|\s*', '|', $param);
 
-		$html = array();
+		$html = [];
 		if ($param != '')
 		{
-			$param      = preg_replace('#[^a-z0-9-\.\|\@]#', '_', $param);
+			$param      = RL_RegEx::replace('[^a-z0-9-\.\|\@]', '_', $param);
 			$param      = str_replace('@', '_', $param);
 			$set_groups = explode('|', $param);
 			$set_values = explode('|', $value);
-			$ids        = array();
+			$ids        = [];
 			foreach ($set_groups as $i => $group)
 			{
 				$count = $i;

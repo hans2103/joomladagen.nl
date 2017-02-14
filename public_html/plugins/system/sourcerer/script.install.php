@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         6.3.7PRO
+ * @version         7.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -22,5 +22,22 @@ class PlgSystemSourcererInstallerScript extends PlgSystemSourcererInstallerScrip
 	public function uninstall($adapter)
 	{
 		$this->uninstallPlugin($this->extname, 'editors-xtd');
+	}
+
+	public function onAfterInstall($route)
+	{
+		if ($route = 'update')
+		{
+			$this->deleteOldFiles();
+		}
+	}
+
+	private function deleteOldFiles()
+	{
+		$this->delete(
+			[
+				JPATH_SITE . '/plugins/system/snippets/helper.php',
+			]
+		);
 	}
 }

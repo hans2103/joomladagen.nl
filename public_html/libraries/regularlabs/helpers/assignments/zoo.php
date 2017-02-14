@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -109,7 +111,7 @@ class RLAssignmentsZoo extends RLAssignment
 	{
 		if ($this->article && isset($this->article->catid))
 		{
-			return array($this->article->catid);
+			return [$this->article->catid];
 		}
 
 		$menuparams = $this->getMenuItemParams($this->request->Itemid);
@@ -119,18 +121,18 @@ class RLAssignmentsZoo extends RLAssignment
 			case 'frontpage':
 				if ($this->request->id)
 				{
-					return array($this->request->id);
+					return [$this->request->id];
 				}
 
 				if (!isset($menuparams->application))
 				{
-					return array();
+					return [];
 				}
 
-				return array('app' . $menuparams->application);
+				return ['app' . $menuparams->application];
 
 			case 'category':
-				$cats = array();
+				$cats = [];
 
 				if ($this->request->id)
 				{
@@ -143,7 +145,7 @@ class RLAssignmentsZoo extends RLAssignment
 
 				if (empty($cats['0']))
 				{
-					return array();
+					return [];
 				}
 
 				$query = $this->db->getQuery(true)
@@ -165,7 +167,7 @@ class RLAssignmentsZoo extends RLAssignment
 
 				if (!$id)
 				{
-					return array();
+					return [];
 				}
 
 				$query = $this->db->getQuery(true)
@@ -219,7 +221,7 @@ class RLAssignmentsZoo extends RLAssignment
 		return $this->pass($pass);
 	}
 
-	public function getItem($fields = array())
+	public function getItem($fields = [])
 	{
 		$query = $this->db->getQuery(true)
 			->select($fields)
@@ -232,7 +234,7 @@ class RLAssignmentsZoo extends RLAssignment
 
 	private function getCatParentIds($id = 0)
 	{
-		$parent_ids = array();
+		$parent_ids = [];
 
 		if (!$id)
 		{

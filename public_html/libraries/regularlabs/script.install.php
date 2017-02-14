@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -21,12 +21,14 @@ if (!class_exists('RegularLabsInstallerScript'))
 		public $alias          = 'regularlabs';
 		public $extension_type = 'library';
 
-		public function onBeforeInstall()
+		public function onBeforeInstall($route)
 		{
 			if (!$this->isNewer())
 			{
 				return false;
 			}
+
+			return true;
 		}
 	}
 }
