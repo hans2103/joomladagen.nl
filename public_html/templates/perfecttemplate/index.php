@@ -50,7 +50,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 <?php
 
 $date      = JFactory::getDate();
-$edate     = new DateTime('2017-02-21');
+$edate     = new DateTime('2017-03-01');
 $remain    = $edate->diff($date);
 $imgTitle  = '';
 $imgNumber = '';
