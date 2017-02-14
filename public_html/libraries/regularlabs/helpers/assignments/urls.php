@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -54,7 +56,7 @@ class RLAssignmentsURLs extends RLAssignment
 
 				if ($regex)
 				{
-					$url_part = str_replace(array('#', '&amp;'), array('\#', '(&amp;|&)'), $s);
+					$url_part = str_replace(['#', '&amp;'], ['\#', '(&amp;|&)'], $s);
 					$s        = '#' . $url_part . '#si';
 					if (@preg_match($s . 'u', $url) || @preg_match($s, $url))
 					{

@@ -13,14 +13,14 @@ defined('_JEXEC') or die('RESTRICTED');
 <form onsubmit="return false;">
     <div id="editor" class="offleft uk-position-cover uk-grid uk-grid-small">
         <div class="uk-width-7-10 uk-width-xlarge-8-10">
-          <div id="editor-image" class="uk-placeholder"><!-- Edited image goes here --></div>
+          <div id="editor-image" class="uk-placeholder uk-position-cover"><!-- Edited image goes here --></div>
         </div>
         <div class="uk-width-3-10 uk-width-xlarge-2-10">
-          <div id="editor-tools">
+          <div id="editor-tools" class="uk-position-cover">
               <div id="tabs">
                   <ul>
-                      <li><a href="#transform_tab"><?php echo WFText::_('WF_IMAGE_EDITOR_TRANSFORM', 'Transform'); ?></a></li>
-                      <li><a href="#effects_tab"><?php echo WFText::_('WF_IMAGE_EDITOR_EFFECTS', 'Effects'); ?></a></li>
+                      <li><a href="#transform_tab"><?php echo WFText::_('WF_MANAGER_EDITOR_TRANSFORM', 'Transform'); ?></a></li>
+                      <li><a href="#effects_tab"><?php echo WFText::_('WF_MANAGER_EDITOR_EFFECTS', 'Effects'); ?></a></li>
                   </ul>
                   <div id="transform_tab">
                       <?php

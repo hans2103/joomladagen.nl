@@ -1,19 +1,28 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Header extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\RegEx as RL_RegEx;
+use RegularLabs\Library\StringHelper as RL_String;
+
+class JFormFieldRL_Header extends \RegularLabs\Library\Field
 {
 	public $type = 'Header';
 
@@ -26,7 +35,7 @@ class JFormFieldRL_Header extends RLFormField
 	{
 		$this->params = $this->element->attributes();
 
-		RLFunctions::stylesheet('regularlabs/style.min.css');
+		RL_Document::stylesheet('regularlabs/style.min.css');
 
 		$title       = $this->get('label');
 		$description = $this->get('description');
@@ -42,7 +51,7 @@ class JFormFieldRL_Header extends RLFormField
 			$v4 = $this->get('var4');
 			$v5 = $this->get('var5');
 
-			$description = RLText::html_entity_decoder(trim(JText::sprintf($description, $v1, $v2, $v3, $v4, $v5)));
+			$description = RL_String::html_entity_decoder(trim(JText::sprintf($description, $v1, $v2, $v3, $v4, $v5)));
 		}
 
 		if ($title)
@@ -102,15 +111,16 @@ class JFormFieldRL_Header extends RLFormField
 				$title .= $version;
 			}
 		}
-		$html = array();
+		$html = [];
 
 		if ($title)
 		{
 			if ($url)
 			{
-				$title = '<a href="' . $url . '" target="_blank" title="' . preg_replace('#<[^>]*>#', '', $title) . '">' . $title . '</a>';
+				$title = '<a href="' . $url . '" target="_blank" title="'
+					. RL_RegEx::replace('<[^>]*>', '', $title) . '">' . $title . '</a>';
 			}
-			$html[] = '<h4>' . RLText::html_entity_decoder($title) . '</h4>';
+			$html[] = '<h4>' . RL_String::html_entity_decoder($title) . '</h4>';
 		}
 		if ($description)
 		{

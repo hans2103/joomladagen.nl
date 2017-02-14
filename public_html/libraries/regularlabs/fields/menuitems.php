@@ -1,19 +1,27 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_MenuItems extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Language as RL_Language;
+use RegularLabs\Library\RegEx as RL_RegEx;
+
+class JFormFieldRL_MenuItems extends \RegularLabs\Library\Field
 {
 	public $type = 'MenuItems';
 
@@ -24,13 +32,11 @@ class JFormFieldRL_MenuItems extends RLFormField
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple', 0);
 
-		RLFunctions::loadLanguage('com_menus', JPATH_ADMINISTRATOR);
+		RL_Language::load('com_menus', JPATH_ADMINISTRATOR);
 
 		$options = $this->getMenuItems();
 
-		require_once dirname(__DIR__) . '/helpers/html.php';
-
-		return RLHtml::selectlist($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $this->selectList($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 
 	/**
@@ -81,7 +87,7 @@ class JFormFieldRL_MenuItems extends RLFormField
 		}
 
 		// Create a reverse lookup and aggregate the links.
-		$rlu = array();
+		$rlu = [];
 		foreach ($menuTypes as &$type)
 		{
 			$type->value      = 'type.' . $type->menutype;
@@ -91,7 +97,7 @@ class JFormFieldRL_MenuItems extends RLFormField
 			$type->labelclass = 'nav-header';
 
 			$rlu[$type->menutype] = &$type;
-			$type->links          = array();
+			$type->links          = [];
 		}
 
 		// Loop through the list of menu links.
@@ -99,7 +105,9 @@ class JFormFieldRL_MenuItems extends RLFormField
 		{
 			if (isset($rlu[$link->menutype]))
 			{
-				if (preg_replace('#[^a-z0-9]#', '', strtolower($link->text)) !== preg_replace('#[^a-z0-9]#', '', $link->alias))
+				$check1 = RL_RegEx::replace('[^a-z0-9]', '', strtolower($link->text));
+				$check2 = RL_RegEx::replace('[^a-z0-9]', '', $link->alias);
+				if ($check1 !== $check2)
 				{
 					$link->text .= ' <small>[' . $link->alias . ']</small>';
 				}
@@ -111,7 +119,7 @@ class JFormFieldRL_MenuItems extends RLFormField
 
 				if ($link->type == 'alias')
 				{
-					$link->text .= ' <small>(' . JText::_('COM_MENUS_TYPE_ALIAS') . ')</small>';
+					$link->text    .= ' <small>(' . JText::_('COM_MENUS_TYPE_ALIAS') . ')</small>';
 					$link->disable = 1;
 				}
 

@@ -42,38 +42,31 @@ class PerfectSitemapModelSitemap extends JModelItem
                 continue;
             }
 
-			// Filter menu items we don't want to show for the HTML sitemap and items where the parent is skipped
-			if ($menuitem->params->get('addtohtmlsitemap', 1) == false || in_array($menuitem->parent_id, $skipped_items))
+			// Filter menu items we don't want to show for the display format and items where the parent is skipped
+            $format = $app->input->getCmd('format', 'html');
+
+			if ($menuitem->params->get('addto' . $format . 'sitemap', 1) == false || in_array($menuitem->parent_id, $skipped_items))
 			{
 				$skipped_items[] = $menuitem->id;
 				continue;
 			}
 
-			// Add item to sitemap_items
-			$menuitem->link             = URLHelper::getURL('index.php?Itemid=' . $menuitem->id); //JRoute::_('index.php?Itemid=' . $menuitem->id, true, -1);
+			// Convert menu item to a PerfectSitmapItem
+			$menuitem->link             = 'index.php?Itemid=' . $menuitem->id;
 			$menuitem->addtohtmlsitemap = $menuitem->params->get('addtohtmlsitemap', 1);
 			$menuitem->addtoxmlsitemap  = $menuitem->params->get('addtoxmlsitemap', 1);
-			$sitemap_items[]            = $menuitem;
 
-			// Trigger plugin
-			$dispatcher = JEventDispatcher::getInstance();
-			$results    = $dispatcher->trigger('onPerfectSitemapBuildSitemap', array($menuitem));
+			// Add item to sitemap
+			$sitemap_items[] = new PerfectSitemapItem($menuitem->title, $menuitem->link, $menuitem->level);
+
+			// Trigger plugin event
+			$results    = JEventDispatcher::getInstance()->trigger('onPerfectSitemapBuildSitemap', array($menuitem, $format));
 
 			foreach ($results as $result)
 			{
 				$sitemap_items = array_merge($sitemap_items, $result);
 			}
 		}
-
-		// Filters items from the plugin event we don't want to show. We don't show when explicitly set
-		$sitemap_items = array_filter($sitemap_items, function ($item) use ($app) {
-			if ($app->input->getCmd('format', 'html') === 'html')
-			{
-				return !isset($item->addtohtmlsitemap) || $item->addtohtmlsitemap != 0;
-			}
-
-			return !isset($item->addtoxmlsitemap) || $item->addtoxmlsitemap != 0;
-		});
 
 		return $sitemap_items;
 	}

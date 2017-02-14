@@ -1,19 +1,24 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Tags extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_Tags extends \RegularLabs\Library\Field
 {
 	public $type = 'Tags';
 
@@ -25,22 +30,20 @@ class JFormFieldRL_Tags extends RLFormField
 		$use_names = $this->get('use_names');
 
 		// assemble items to the array
-		$options = array();
+		$options = [];
 		if ($this->get('show_ignore'))
 		{
 			if (in_array('-1', $this->value))
 			{
-				$this->value = array('-1');
+				$this->value = ['-1'];
 			}
-			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -', 'value', 'text', 0);
-			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
+			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -');
+			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 		}
 
 		$options = array_merge($options, $this->getTags($use_names));
 
-		require_once dirname(__DIR__) . '/helpers/html.php';
-
-		return RLHtml::selectlist($options, $this->name, $this->value, $this->id, $size, 1);
+		return $this->selectList($options, $this->name, $this->value, $this->id, $size, true);
 	}
 
 	protected function getTags($use_names)

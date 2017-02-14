@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -43,7 +45,7 @@ class RLAssignmentsHomePage extends RLAssignment
 			{
 				if ((isset($this->request->{$k}) && $this->request->{$k} != $v)
 					|| (
-						(!isset($this->request->{$k}) || in_array($v, array('virtuemart', 'mijoshop')))
+						(!isset($this->request->{$k}) || in_array($v, ['virtuemart', 'mijoshop']))
 						&& JFactory::getApplication()->input->get($k) != $v
 					)
 				)
@@ -85,7 +87,7 @@ class RLAssignmentsHomePage extends RLAssignment
 			{
 				$langs = array_keys(JLanguageHelper::getLanguages('sef'));
 				$path  = RLString::substr(
-					$uri->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path')),
+					$uri->toString(['scheme', 'user', 'pass', 'host', 'port', 'path']),
 					RLString::strlen($uri->base())
 				);
 				$path  = preg_replace('#^index\.php/?#', '', $path);
@@ -103,14 +105,14 @@ class RLAssignmentsHomePage extends RLAssignment
 			}
 		}
 
-		$query = $uri->toString(array('query'));
+		$query = $uri->toString(['query']);
 		if (strpos($query, 'option=') === false && strpos($query, 'Itemid=') === false)
 		{
-			$url = $uri->toString(array('host', 'path'));
+			$url = $uri->toString(['host', 'path']);
 		}
 		else
 		{
-			$url = $uri->toString(array('host', 'path', 'query'));
+			$url = $uri->toString(['host', 'path', 'query']);
 		}
 
 		// remove the www.

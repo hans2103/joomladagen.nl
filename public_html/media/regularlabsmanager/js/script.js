@@ -1,10 +1,10 @@
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -78,10 +78,10 @@
 			});
 
 			if (rlem_has_pro_installed && rlem_show_key_invalid) {
-				$('#nnkey_text_empty').hide();
-				$('#nnkey_text_invalid').show();
-				$('#nnkey .well').addClass('well-danger');
-				$('#nnkey').show();
+				$('#rl_key_text_empty').hide();
+				$('#rl_key_text_invalid').show();
+				$('#rl_key .well').addClass('well-danger');
+				$('#rl_key').show();
 			}
 
 			RegularLabsManager.hide('progress');

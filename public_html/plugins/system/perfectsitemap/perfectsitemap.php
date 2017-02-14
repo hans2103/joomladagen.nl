@@ -16,11 +16,34 @@ defined('_JEXEC') or die;
  */
 class PlgSystemPerfectSitemap extends JPlugin
 {
-	// Autoload language
+	/**
+	 * Automatic load plugin language files
+	 *
+	 * @var bool
+	 */
 	protected $autoloadLanguage = true;
 
-	// JFactory::getApplication()
+	/**
+	 * Joomla Application instance
+	 *
+	 * @var  JApplicationSite
+	 */
 	public $app;
+
+	/**
+	 * Load perfectistemap plugin group and register helpers and classes
+	 *
+	 * @return  void
+	 *
+	 * @since  2.0.0
+	 */
+	public function onAfterInitialise()
+	{
+		JPluginHelper::importPlugin("perfectsitemap");
+
+		JLoader::register('PerfectSitemapUrlHelper', JPATH_ROOT . '/components/com_perfectsitemap/helpers/urlhelper.php');
+		JLoader::register('PerfectSitemapItem', JPATH_ROOT . '/components/com_perfectsitemap/helpers/perfectsitemapitem.php');
+	}
 
 	/**
 	 * Add sitemap parameter to the menu edit form
@@ -42,10 +65,8 @@ class PlgSystemPerfectSitemap extends JPlugin
 			return false;
 		}
 
-		$name = $form->getName();
-
 		// Make sure we are on the edit menu item page
-		if (!in_array($name, array('com_menus.item')))
+		if (!in_array($form->getName(), array('com_menus.item')))
 		{
 			return true;
 		}

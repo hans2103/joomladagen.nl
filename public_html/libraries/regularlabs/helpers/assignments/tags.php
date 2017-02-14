@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -17,7 +19,7 @@ class RLAssignmentsTags extends RLAssignment
 {
 	public function passTags()
 	{
-		if (in_array($this->request->option, array('com_content', 'com_flexicontent')))
+		if (in_array($this->request->option, ['com_content', 'com_flexicontent']))
 		{
 			return $this->passTagsContent();
 		}
@@ -35,8 +37,8 @@ class RLAssignmentsTags extends RLAssignment
 
 	private function passTagsContent()
 	{
-		$is_item     = in_array($this->request->view, array('', 'article', 'item'));
-		$is_category = in_array($this->request->view, array('category'));
+		$is_item     = in_array($this->request->view, ['', 'article', 'item']);
+		$is_category = in_array($this->request->view, ['category']);
 
 		switch (true)
 		{
@@ -111,7 +113,7 @@ class RLAssignmentsTags extends RLAssignment
 	{
 		$parentids = $this->getParentIds($id, 'tags');
 		// Remove the root tag
-		$parentids = array_diff($parentids, array('1'));
+		$parentids = array_diff($parentids, ['1']);
 
 		return $parentids;
 	}

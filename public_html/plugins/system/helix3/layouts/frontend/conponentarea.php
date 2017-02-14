@@ -7,6 +7,10 @@
  */
 defined('_JEXEC') or die('Restricted Access');
 
+//Helix3
+helix3::addLess('frontend-edit', 'frontend-edit');
+helix3::addJS('frontend-edit.js');
+
 $data = $displayData;
 
 $output ='';
@@ -23,4 +27,3 @@ $output .= '</div>';
 
 
 echo $output;
-

@@ -1,13 +1,15 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
+/* @DEPRECATED */
 
 defined('_JEXEC') or die;
 
@@ -29,7 +31,7 @@ class RLAssignmentsFlexiContent extends RLAssignment
 
 		$pass = (
 			($this->params->inc_tags && $this->request->view == 'tags')
-			|| ($this->params->inc_items && in_array($this->request->view, array('item', 'items')))
+			|| ($this->params->inc_items && in_array($this->request->view, ['item', 'items']))
 		);
 
 		if (!$pass)
@@ -46,7 +48,7 @@ class RLAssignmentsFlexiContent extends RLAssignment
 				->where('t.published = 1');
 			$this->db->setQuery($query);
 			$tag  = $this->db->loadResult();
-			$tags = array($tag);
+			$tags = [$tag];
 		}
 		else
 		{
@@ -70,7 +72,7 @@ class RLAssignmentsFlexiContent extends RLAssignment
 			return $this->pass(false);
 		}
 
-		$pass = in_array($this->request->view, array('item', 'items'));
+		$pass = in_array($this->request->view, ['item', 'items']);
 
 		if (!$pass)
 		{
@@ -87,10 +89,5 @@ class RLAssignmentsFlexiContent extends RLAssignment
 		$types = $this->makeArray($type);
 
 		return $this->passSimple($types);
-	}
-
-	private function getCatParentIds($id = 0)
-	{
-		return $this->getParentIds($id, 'categories', 'parent_id');
 	}
 }

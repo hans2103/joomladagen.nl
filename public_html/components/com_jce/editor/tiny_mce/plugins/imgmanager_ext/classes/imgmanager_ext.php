@@ -61,11 +61,9 @@ class WFImageManagerExtPlugin extends WFMediaManager
             $this->addFileBrowserButton('file', 'insert_multiple', array('action' => 'selectMultiple', 'title' => WFText::_('WF_BUTTON_INSERT_MULTIPLE'), 'multiple' => true, 'single' => false, 'icon' => 'th-large'));
         }
 
-        if ($this->get('can_edit_images')) {
-            if ($this->getParam('editor.thumbnail_editor', 1)) {
-                $this->addFileBrowserButton('file', 'thumb_create', array('action' => 'createThumbnail', 'title' => WFText::_('WF_BUTTON_CREATE_THUMBNAIL'), 'trigger' => true, 'icon' => 'clone'));
-                $this->addFileBrowserButton('file', 'thumb_delete', array('action' => 'deleteThumbnail', 'title' => WFText::_('WF_BUTTON_DELETE_THUMBNAIL'), 'trigger' => true, 'icon' => 'clone trash'));
-            }
+        if ($this->get('can_edit_images') && $this->getParam('imgmanager_ext.thumbnail_editor', 1)) {
+            $this->addFileBrowserButton('file', 'thumb_create', array('action' => 'createThumbnail', 'title' => WFText::_('WF_BUTTON_CREATE_THUMBNAIL'), 'trigger' => true, 'icon' => 'clone'));
+            $this->addFileBrowserButton('file', 'thumb_delete', array('action' => 'deleteThumbnail', 'title' => WFText::_('WF_BUTTON_DELETE_THUMBNAIL'), 'trigger' => true, 'icon' => 'clone trash'));
         }
 
         parent::display();
@@ -280,10 +278,9 @@ class WFImageManagerExtPlugin extends WFMediaManager
     /**
      * Manipulate file and folder list.
      *
-     * @param    file/folder array reference
-     * @param    mode variable list/images
-     *
-     * @since    1.5
+     * @param  Array file/folder array reference
+     * @return void
+     * @since  1.5
      */
     public function processListItems(&$result)
     {
@@ -431,11 +428,6 @@ class WFImageManagerExtPlugin extends WFMediaManager
      */
     public function createThumbnail($file, $width = null, $height = null, $quality = 100, $sx = null, $sy = null, $sw = null, $sh = null)
     {
-        // check for permission when thumbnailing using editor
-        if (!$upload && $this->checkAccess('thumbnail_editor', 1) === false) {
-            JError::raiseError(403, 'Access to this resource is restricted');
-        }
-
         // check path
         self::validateImagePath($file);
 
@@ -444,13 +436,11 @@ class WFImageManagerExtPlugin extends WFMediaManager
 
         $thumb = WFUtility::makePath($this->getThumbDir($file, true), $this->getThumbName($file));
 
-        if ($this->get('can_edit_images')) {
-            $path = WFUtility::makePath($browser->getBaseDir(), $file);
-            $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
+        $path = WFUtility::makePath($browser->getBaseDir(), $file);
+        $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
 
-            if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
-                $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_CREATE_ERROR'), 'error');
-            }
+        if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
+            $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_CREATE_ERROR'), 'error');
         }
 
         return $browser->getResult();

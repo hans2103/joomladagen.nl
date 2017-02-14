@@ -1,19 +1,24 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Languages extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_Languages extends \RegularLabs\Library\Field
 {
 	public $type = 'Languages';
 
@@ -27,7 +32,7 @@ class JFormFieldRL_Languages extends RLFormField
 
 		jimport('joomla.language.helper');
 		$langs   = JLanguageHelper::createLanguageList($this->value, constant('JPATH_' . strtoupper($client)), true);
-		$options = array();
+		$options = [];
 
 		foreach ($langs as $lang)
 		{
@@ -36,14 +41,12 @@ class JFormFieldRL_Languages extends RLFormField
 				continue;
 			}
 
-			$option        = new stdClass;
+			$option        = (object) [];
 			$option->value = $lang['value'];
 			$option->text  = $lang['text'] . ' [' . $lang['value'] . ']';
 			$options[]     = $option;
 		}
 
-		require_once dirname(__DIR__) . '/helpers/html.php';
-
-		return RLHtml::selectlistsimple($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, $multiple);
 	}
 }

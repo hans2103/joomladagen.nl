@@ -1,25 +1,26 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\StringHelper as RL_String;
+use RegularLabs\Library\Version as RL_Version;
 
 JHtml::_('bootstrap.framework');
 JHtml::_('behavior.modal');
 JHtml::_('behavior.tooltip');
 JHtml::_('bootstrap.popover');
 
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/text.php';
-
-$ids = array();
+$ids = [];
 foreach ($this->items as $item)
 {
 	$ids[] = $item->id;
@@ -29,8 +30,8 @@ $config            = JComponentHelper::getParams('com_regularlabsmanager');
 $check_data        = $config->get('check_data', 1);
 $hide_notinstalled = $config->get('hide_notinstalled', 0);
 
-RLFunctions::script('regularlabs/script.min.js');
-RLFunctions::stylesheet('regularlabs/style.min.css');
+RL_Document::script('regularlabs/script.min.js');
+RL_Document::style('regularlabs/style.min.css');
 
 $key    = trim($config->get('key'));
 $js_key = $key ? strtolower(substr($key, 0, 8) . md5(substr($key, 8))) : '';
@@ -45,29 +46,29 @@ $script = "
 	var RLEM_TOKEN = '" . JSession::getFormToken() . "';
 	var RLEM_KEY = '" . $js_key . "';
 ";
-JFactory::getDocument()->addScriptDeclaration($script);
+RL_Document::scriptDeclaration($script);
 
-RLFunctions::script('regularlabsmanager/script.min.js', '6.1.2');
-RLFunctions::stylesheet('regularlabsmanager/style.min.css', '6.1.2');
+RL_Document::script('regularlabsmanager/script.min.js', '7.0.0');
+RL_Document::style('regularlabsmanager/style.min.css', '7.0.0');
 
 $script = "
 	jQuery(document).ready(function() {
 		RegularLabsManager.refreshData(" . ($check_data ? 1 : 0) . ");
 	});
 ";
-JFactory::getDocument()->addScriptDeclaration($script);
+RL_Document::scriptDeclaration($script);
 
 $loading = '<div class="progress progress-striped active" style="min-width: 60px;"><div class="bar" style="width: 100%;"></div></div>';
 ?>
-	<div id="nnkey" <?php echo ($key || !$config->get('show_key_field', 1)) ? ' style="display:none;"' : '' ?>>
-		<form action="<?php echo JRoute::_('index.php?option=com_regularlabsmanager'); ?>" method="post" name="adminForm" id="adminForm" class="form-horizontal">
+	<div id="rl_key" <?php echo ($key || !$config->get('show_key_field', 1)) ? ' style="display:none;"' : '' ?>>
+		<form action="<?php echo JRoute::_('index.php?option=com_regularlabsmanager'); ?>" method="post" class="form-horizontal">
 			<div class="well">
 				<h4><?php echo JText::_('RLEM_DOWNLOAD_KEY'); ?></h4>
 
-				<p id="nnkey_text_empty"><?php echo RLText::html_entity_decoder(JText::sprintf('RLEM_DOWNLOAD_KEY_DESC', '<a href="https://www.regularlabs.com/purchase" target="_blank">', '</a>', '<a href="https://www.regularlabs.com/downloads" target="_blank">', '</a>')); ?></p>
+				<p id="rl_key_text_empty"><?php echo RL_String::html_entity_decoder(JText::sprintf('RLEM_DOWNLOAD_KEY_DESC', '<a href="https://www.regularlabs.com/purchase" target="_blank">', '</a>', '<a href="https://www.regularlabs.com/downloads" target="_blank">', '</a>')); ?></p>
 
-				<p id="nnkey_text_invalid"
-				   style="display:none;"><?php echo RLText::html_entity_decoder(JText::sprintf('RLEM_DOWNLOAD_KEY_INVALID', '<a href="https://www.regularlabs.com/downloads" target="_blank">', '</a>')); ?></p>
+				<p id="rl_key_text_invalid"
+				   style="display:none;"><?php echo RL_String::html_entity_decoder(JText::sprintf('RLEM_DOWNLOAD_KEY_INVALID', '<a href="https://www.regularlabs.com/downloads" target="_blank">', '</a>')); ?></p>
 
 				<div>
 					<?php
@@ -109,6 +110,10 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 						<th width="5%"><!-- spacer --></th>
 
 						<th><!-- pro --></th>
+
+						<th width="5%"><!-- spacer --></th>
+
+						<th><!-- reinstall --></th>
 
 						<th width="5%"><!-- spacer --></th>
 
@@ -216,7 +221,7 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 										$missing = '';
 										if ($item->installed && !empty($item->missing))
 										{
-											$missing = array();
+											$missing = [];
 											foreach ($item->missing as $m)
 											{
 												$missing[] = JText::_('RL_' . strtoupper($m));
@@ -341,7 +346,11 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 										</a>
 									</span>
 								</span>
+							</td>
 
+							<td class="nowrap hidden-phone"><!-- spacer --></td>
+
+							<td class="center nowrap hidden-phone">
 								<span class="reinstall btn btn-small btn-default data hide" onclick="rlem_function('reinstall', '<?php echo $item->id; ?>');">
 									<?php echo JText::_('RLEM_TITLE_REINSTALL'); ?>
 								</span>
@@ -362,16 +371,16 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 					<?php endforeach; ?>
 				</tbody>
 			</table>
-			<input type="hidden" name="task" value="">
-			<input type="hidden" name="boxchecked" value="0">
+			<input type="hidden" name="task" id="task" value="browse" />
+			<input type="hidden" name="boxchecked" id="boxchecked" value="0" />
 		</form>
 	</div>
 <?php
 // Copyright
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/versions.php';
-echo RLVersions::getFooter('REGULAR_LABS_EXTENSION_MANAGER', $config->get('show_copyright', 1));
+
+echo RL_Version::getFooter('REGULAR_LABS_EXTENSION_MANAGER', $config->get('show_copyright', 1));
 
 function makeSafe($str)
 {
-	return str_replace(array('"', '<', '>'), array('&quot;', '&lt;', '&gt;'), $str);
+	return str_replace(['"', '<', '>'], ['&quot;', '&lt;', '&gt;'], $str);
 }

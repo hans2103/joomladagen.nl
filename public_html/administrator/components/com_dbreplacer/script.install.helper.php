@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -32,7 +32,7 @@ class Com_DBReplacerInstallerScriptHelper
 
 	public function preflight($route, JAdapterInstance $adapter)
 	{
-		if (!in_array($route, array('install', 'update')))
+		if (!in_array($route, ['install', 'update']))
 		{
 			return;
 		}
@@ -44,7 +44,7 @@ class Com_DBReplacerInstallerScriptHelper
 			$this->install_type = 'update';
 		}
 
-		if ($this->onBeforeInstall() === false)
+		if ($this->onBeforeInstall($route) === false)
 		{
 			return false;
 		}
@@ -57,7 +57,7 @@ class Com_DBReplacerInstallerScriptHelper
 
 		JFactory::getLanguage()->load($this->getPrefix() . '_' . $this->extname, $this->getMainFolder());
 
-		if (!in_array($route, array('install', 'update')))
+		if (!in_array($route, ['install', 'update']))
 		{
 			return;
 		}
@@ -66,7 +66,7 @@ class Com_DBReplacerInstallerScriptHelper
 		$this->updateUpdateSites();
 		$this->removeAdminCache();
 
-		if ($this->onAfterInstall() === false)
+		if ($this->onAfterInstall($route) === false)
 		{
 			return false;
 		}
@@ -108,7 +108,7 @@ class Com_DBReplacerInstallerScriptHelper
 		switch ($this->extension_type)
 		{
 			case 'plugin' :
-				return JPATH_SITE . '/plugins/' . $this->plugin_folder . '/' . $this->extname;
+				return JPATH_PLUGINS . '/' . $this->plugin_folder . '/' . $this->extname;
 
 			case 'component' :
 				return JPATH_ADMINISTRATOR . '/components/com_' . $this->extname;
@@ -150,12 +150,12 @@ class Com_DBReplacerInstallerScriptHelper
 			return;
 		}
 
-		$folders = array();
+		$folders = [];
 
 		switch ($type)
 		{
 			case 'plugin';
-				$folders[] = JPATH_SITE . '/plugins/' . $folder . '/' . $extname;
+				$folders[] = JPATH_PLUGINS . '/' . $folder . '/' . $extname;
 				break;
 
 			case 'component':
@@ -198,12 +198,12 @@ class Com_DBReplacerInstallerScriptHelper
 			return;
 		}
 
-		$ignore_ids = JFactory::getApplication()->getUserState('rl_ignore_uninstall_ids', array());
+		$ignore_ids = JFactory::getApplication()->getUserState('rl_ignore_uninstall_ids', []);
 
 		if (JFactory::getApplication()->input->get('option') == 'com_installer' && JFactory::getApplication()->input->get('task') == 'remove')
 		{
 			// Don't attempt to uninstall extensions that are already selected to get uninstalled by them selves
-			$ignore_ids = array_merge($ignore_ids, JFactory::getApplication()->input->get('cid', array(), 'array'));
+			$ignore_ids = array_merge($ignore_ids, JFactory::getApplication()->input->get('cid', [], 'array'));
 			JFactory::getApplication()->input->set('cid', array_merge($ignore_ids, $ids));
 		}
 
@@ -234,7 +234,7 @@ class Com_DBReplacerInstallerScriptHelper
 		}
 	}
 
-	public function foldersExist($folders = array())
+	public function foldersExist($folders = [])
 	{
 		foreach ($folders as $folder)
 		{
@@ -339,7 +339,7 @@ class Com_DBReplacerInstallerScriptHelper
 		// add module to the modules_menu table
 		$query->clear()
 			->insert('#__modules_menu')
-			->columns(array($this->db->quoteName('moduleid'), $this->db->quoteName('menuid')))
+			->columns([$this->db->quoteName('moduleid'), $this->db->quoteName('menuid')])
 			->values((int) $id . ', 0');
 		$this->db->setQuery($query);
 		$this->db->execute();
@@ -504,15 +504,15 @@ class Com_DBReplacerInstallerScriptHelper
 		}
 
 		$contents = str_replace(
-			array('FREEFREE', 'FREEPRO', 'PROFREE', 'PROPRO'),
-			array('FREE', 'PRO', 'FREE', 'PRO'),
+			['FREEFREE', 'FREEPRO', 'PROFREE', 'PROPRO'],
+			['FREE', 'PRO', 'FREE', 'PRO'],
 			$contents
 		);
 
 		JFile::write($file, $contents);
 	}
 
-	public function onBeforeInstall()
+	public function onBeforeInstall($route)
 	{
 		if (!$this->canInstall())
 		{
@@ -520,20 +520,23 @@ class Com_DBReplacerInstallerScriptHelper
 		}
 	}
 
-	public function onAfterInstall()
+	public function onAfterInstall($route)
 	{
 	}
 
-	public function deleteFolders($folders = array())
+	public function delete($files = [])
 	{
-		foreach ($folders as $folder)
+		foreach ($files as $file)
 		{
-			if (!is_dir($folder))
+			if (is_dir($file))
 			{
-				continue;
+				JFolder::delete($file);
 			}
 
-			JFolder::delete($folder);
+			if (is_file($file))
+			{
+				JFile::delete($file);
+			}
 		}
 	}
 
@@ -715,8 +718,8 @@ class Com_DBReplacerInstallerScriptHelper
 
 	private function removeAdminCache()
 	{
-		$this->deleteFolders(array(JPATH_ADMINISTRATOR . '/cache/regularlabs'));
-		$this->deleteFolders(array(JPATH_ADMINISTRATOR . '/cache/nonumber'));
+		$this->delete([JPATH_ADMINISTRATOR . '/cache/regularlabs']);
+		$this->delete([JPATH_ADMINISTRATOR . '/cache/nonumber']);
 	}
 
 	private function removeGlobalLanguageFiles()
@@ -764,7 +767,7 @@ class Com_DBReplacerInstallerScriptHelper
 			$installed_languages
 		);
 
-		$delete_languages = array();
+		$delete_languages = [];
 
 		foreach ($languages as $language)
 		{
@@ -777,6 +780,6 @@ class Com_DBReplacerInstallerScriptHelper
 		}
 
 		// Remove folders
-		$this->deleteFolders($delete_languages);
+		$this->delete($delete_languages);
 	}
 }

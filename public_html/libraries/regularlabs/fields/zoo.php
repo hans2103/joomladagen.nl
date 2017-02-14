@@ -1,25 +1,32 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/groupfield.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Zoo extends RLFormGroupField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Form as RL_Form;
+
+class JFormFieldRL_Zoo extends \RegularLabs\Library\FieldGroup
 {
 	public $type = 'Zoo';
 
 	protected function getInput()
 	{
-		if ($error = $this->missingFilesOrTables(array('applications' => 'application', 'categories' => 'category', 'items' => 'item')))
+		if ($error = $this->missingFilesOrTables(['applications' => 'application', 'categories' => 'category', 'items' => 'item']))
 		{
 			return $error;
 		}
@@ -41,15 +48,15 @@ class JFormFieldRL_Zoo extends RLFormGroupField
 			return -1;
 		}
 
-		$options = array();
+		$options = [];
 		if ($this->get('show_ignore'))
 		{
 			if (in_array('-1', $this->value))
 			{
-				$this->value = array('-1');
+				$this->value = ['-1'];
 			}
-			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -', 'value', 'text', 0);
-			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
+			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -');
+			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 		}
 
 		$query->clear()
@@ -72,12 +79,12 @@ class JFormFieldRL_Zoo extends RLFormGroupField
 
 			if ($i)
 			{
-				$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', 1);
+				$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 			}
 
 			// establish the hierarchy of the menu
 			// TODO: use node model
-			$children = array();
+			$children = [];
 
 			if ($items)
 			{
@@ -85,22 +92,22 @@ class JFormFieldRL_Zoo extends RLFormGroupField
 				foreach ($items as $v)
 				{
 					$pt   = $v->parent_id;
-					$list = @$children[$pt] ? $children[$pt] : array();
+					$list = @$children[$pt] ? $children[$pt] : [];
 					array_push($list, $v);
 					$children[$pt] = $list;
 				}
 			}
 
 			// second pass - get an indent list of the items
-			$list = JHtml::_('menu.treerecurse', 0, '', array(), $children, 9999, 0, 0);
+			$list = JHtml::_('menu.treerecurse', 0, '', [], $children, 9999, 0, 0);
 
 			// assemble items to the array
-			$options[] = JHtml::_('select.option', 'app' . $app->id, '[' . $app->name . ']', 'value', 'text', 0);
+			$options[] = JHtml::_('select.option', 'app' . $app->id, '[' . $app->name . ']');
 			foreach ($list as $item)
 			{
 				$item->treename = '  ' . str_replace('&#160;&#160;- ', '  ', $item->treename);
-				$item->treename = RLText::prepareSelectItem($item->treename, $item->published);
-				$option         = JHtml::_('select.option', $item->id, $item->treename, 'value', 'text', 0);
+				$item->treename = RL_Form::prepareSelectItem($item->treename, $item->published);
+				$option         = JHtml::_('select.option', $item->id, $item->treename);
 				$option->level  = 1;
 				$options[]      = $option;
 			}
@@ -131,6 +138,6 @@ class JFormFieldRL_Zoo extends RLFormGroupField
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
-		return $this->getOptionsByList($list, array('cat', 'id'));
+		return $this->getOptionsByList($list, ['cat', 'id']);
 	}
 }

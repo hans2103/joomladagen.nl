@@ -1,72 +1,51 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
+/* @DEPRECATED */
+
 defined('_JEXEC') or die;
+
+if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+}
+
+use RegularLabs\Library\Cache as RL_Cache;
 
 class RLCache
 {
-	static $cache = array();
+	static $cache = [];
 
-	static public function has($hash)
+	public static function has($hash)
 	{
-		return isset(self::$cache[$hash]);
+		return RL_Cache::has($hash);
 	}
 
-	static public function get($hash)
+	public static function get($hash)
 	{
-		if (!isset(self::$cache[$hash]))
-		{
-			return false;
-		}
-
-		return is_object(self::$cache[$hash]) ? clone self::$cache[$hash] : self::$cache[$hash];
+		return RL_Cache::get($hash);
 	}
 
-	static public function set($hash, $data)
+	public static function set($hash, $data)
 	{
-		self::$cache[$hash] = $data;
-
-		return $data;
+		return RL_Cache::set($hash, $data);
 	}
 
-	static public function read($hash)
+	public static function read($hash)
 	{
-		if (isset(self::$cache[$hash]))
-		{
-			return self::$cache[$hash];
-		}
-
-		$cache = JFactory::getCache('regularlabs', 'output');
-
-		return $cache->get($hash);
+		return RL_Cache::read($hash);
 	}
 
-	static public function write($hash, $data, $ttl = 0)
+	public static function write($hash, $data, $ttl = 0)
 	{
-		self::$cache[$hash] = $data;
-
-		$cache = JFactory::getCache('regularlabs', 'output');
-
-		if ($ttl)
-		{
-			// convert ttl to minutes
-			$cache->setLifeTime($ttl * 60);
-		}
-
-		$cache->setCaching(true);
-
-		$cache->store($data, $hash);
-
-		self::set($hash, $data);
-
-		return $data;
+		return RL_Cache::write($hash, $data, $ttl);
 	}
 }

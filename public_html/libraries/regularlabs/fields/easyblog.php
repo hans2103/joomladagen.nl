@@ -1,25 +1,30 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/groupfield.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_EasyBlog extends RLFormGroupField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_EasyBlog extends \RegularLabs\Library\FieldGroup
 {
 	public $type = 'EasyBlog';
 
 	protected function getInput()
 	{
-		if ($error = $this->missingFilesOrTables(array('categories' => 'category', 'items' => 'post', 'tags' => 'tag')))
+		if ($error = $this->missingFilesOrTables(['categories' => 'category', 'items' => 'post', 'tags' => 'tag']))
 		{
 			return $error;
 		}
@@ -61,7 +66,7 @@ class JFormFieldRL_EasyBlog extends RLFormGroupField
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
-		return $this->getOptionsByList($list, array('cat', 'id'));
+		return $this->getOptionsByList($list, ['cat', 'id']);
 	}
 
 	function getTags()

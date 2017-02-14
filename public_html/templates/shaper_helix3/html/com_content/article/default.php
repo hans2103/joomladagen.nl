@@ -36,10 +36,8 @@ if(isset($article_attribs->spfeatured_image) && $article_attribs->spfeatured_ima
 
 //opengraph
 $document = JFactory::getDocument();
-$document->setTitle($this->item->title);
 $document->addCustomTag('<meta property="og:url" content="'.JURI::current().'" />');
 $document->addCustomTag('<meta property="og:type" content="article" />');
-$document->setDescription( JHtml::_('string.truncate', $this->item->introtext, 155, false, false ) );
 $document->addCustomTag('<meta property="og:title" content="'. $this->item->title .'" />');
 $document->addCustomTag('<meta property="og:description" content="'. JHtml::_('string.truncate', $this->item->introtext, 155, false, false ) .'" />');
 if ($article_image) {

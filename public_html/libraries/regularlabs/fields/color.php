@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -13,7 +13,15 @@ defined('_JEXEC') or die;
 
 jimport('joomla.form.formfield');
 
-require_once dirname(__DIR__) . '/helpers/functions.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
+
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 class JFormFieldRL_Color extends JFormField
 {
@@ -21,6 +29,11 @@ class JFormFieldRL_Color extends JFormField
 
 	protected function getInput()
 	{
+		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		{
+			return null;
+		}
+
 		$field = new RLFieldColor;
 
 		return $field->getInput($this->name, $this->id, $this->value, $this->element->attributes());
@@ -39,10 +52,10 @@ class RLFieldColor
 		$class    = trim('rl_color minicolors ' . $this->get('class'));
 		$disabled = $this->get('disabled') ? ' disabled="disabled"' : '';
 
-		RLFunctions::script('regularlabs/color.min.js');
-		RLFunctions::stylesheet('regularlabs/color.min.css');
+		RL_Document::script('regularlabs/color.min.js');
+		RL_Document::stylesheet('regularlabs/color.min.css');
 
-		$this->value = strtolower(strtoupper(preg_replace('#[^a-z0-9]#si', '', $this->value)));
+		$this->value = strtolower(RL_RegEx::replace('[^a-z0-9]', '', $this->value));
 
 		return '<input type="text" name="' . $this->name . '" id="' . $this->id . '" class="' . $class . '" value="' . $this->value . '"' . $disabled . '>';
 	}

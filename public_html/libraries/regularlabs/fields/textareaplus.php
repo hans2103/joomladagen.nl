@@ -1,19 +1,27 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_TextAreaPlus extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\StringHelper as RL_String;
+
+class JFormFieldRL_TextAreaPlus extends \RegularLabs\Library\Field
 {
 	public $type = 'TextAreaPlus';
 
@@ -21,9 +29,10 @@ class JFormFieldRL_TextAreaPlus extends RLFormField
 	{
 		$this->params = $this->element->attributes();
 
-		$resize = $this->get('resize', 0);
+		$resize                = $this->get('resize', 0);
+		$show_insert_date_name = $this->get('show_insert_date_name', 0);
 
-		$label = RLText::html_entity_decoder(JText::_($this->get('label')));
+		$label = RL_String::html_entity_decoder(JText::_($this->get('label')));
 
 		$html = '<label id="' . $this->id . '-lbl" for="' . $this->id . '"';
 		if ($this->description)
@@ -37,12 +46,26 @@ class JFormFieldRL_TextAreaPlus extends RLFormField
 
 		$html .= $label;
 
+		if ($show_insert_date_name)
+		{
+			JHtml::_('jquery.framework');
+
+			RL_Document::script('regularlabs/script.min.js');
+
+			$date_name = JDate::getInstance()->format('[Y-m-d]') . '[' . JFactory::getUser()->username . '] : ';
+			$onclick   = "RegularLabsScripts.prependTextarea('" . $this->id . "', '" . addslashes($date_name) . "', '---');";
+
+			$html .= '<br><span role="button" class="btn btn-mini rl_insert_date" onclick="' . $onclick . '">'
+				. JText::_('RL_INSERT_DATE_NAME')
+				. '</span>';
+		}
+
 		if ($resize)
 		{
 			JHtml::_('jquery.framework');
 
-			RLFunctions::script('regularlabs/script.min.js');
-			RLFunctions::stylesheet('regularlabs/style.min.css');
+			RL_Document::script('regularlabs/script.min.js');
+			RL_Document::stylesheet('regularlabs/style.min.css');
 
 			$html .= '<br><span role="button" class="rl_resize_textarea rl_maximize"'
 				. ' data-id="' . $this->id . '"  data-min="' . $this->get('height', 80) . '" data-max="' . $resize . '">'

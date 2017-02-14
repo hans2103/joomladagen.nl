@@ -1,15 +1,17 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Parameters as RL_Parameters;
 
 jimport('joomla.application.component.view');
 
@@ -58,9 +60,8 @@ class RegularLabsManagerViewProcess extends JViewLegacy
 	{
 		if (!isset($this->config))
 		{
-			require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-			$parameters   = RLParameters::getInstance();
-			$this->config = $parameters->getComponentParams('regularlabsmanager');
+
+			$this->config = RL_Parameters::getInstance()->getComponentParams('regularlabsmanager');
 		}
 
 		return $this->config;

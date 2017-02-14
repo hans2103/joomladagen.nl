@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -19,17 +19,17 @@ class Com_DBReplacerInstallerScript extends Com_DBReplacerInstallerScriptHelper
 	public $alias          = 'dbreplacer';
 	public $extension_type = 'component';
 
-	public function onAfterInstall()
+	public function onAfterInstall($route)
 	{
 		$this->deleteOldFiles();
 	}
 
 	private function deleteOldFiles()
 	{
-		$this->deleteFolders(
-			array(
+		$this->delete(
+			[
 				JPATH_SITE . '/components/com_dbreplacer',
-			)
+			]
 		);
 	}
 }

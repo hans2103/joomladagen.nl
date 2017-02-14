@@ -1,19 +1,24 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         16.11.15265
+ * @version         17.2.6639
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
-require_once dirname(__DIR__) . '/helpers/field.php';
+if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+{
+	return;
+}
 
-class JFormFieldRL_Templates extends RLFormField
+require_once JPATH_LIBRARIES . '/regularlabs/autoload.php';
+
+class JFormFieldRL_Templates extends \RegularLabs\Library\Field
 {
 	public $type = 'Templates';
 
@@ -24,7 +29,7 @@ class JFormFieldRL_Templates extends RLFormField
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple');
 
-		$options = array();
+		$options = [];
 
 		$templates = $this->getTemplates();
 
@@ -49,12 +54,12 @@ class JFormFieldRL_Templates extends RLFormField
 		$value = str_replace('::', '--', $value);
 		$value = (array) json_decode($value, true);
 
-		return RLHtml::selectlist($options, $this->name, $value, $this->id, $size, $multiple);
+		return $this->selectList($options, $this->name, $value, $this->id, $size, $multiple);
 	}
 
 	protected function getTemplates()
 	{
-		$groups = array();
+		$groups = [];
 		$lang   = JFactory::getLanguage();
 
 		// Get the database object and a new query object.
@@ -86,7 +91,7 @@ class JFormFieldRL_Templates extends RLFormField
 				// Initialize the group if necessary.
 				if (!isset($groups[$template]))
 				{
-					$groups[$template]   = array();
+					$groups[$template]   = [];
 					$groups[$template][] = JHtml::_('select.option', $template, $name);
 				}
 

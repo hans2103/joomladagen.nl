@@ -1,15 +1,18 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Language as RL_Language;
+use RegularLabs\Library\RegEx as RL_RegEx;
 
 jimport('joomla.application.component.modellist');
 
@@ -21,16 +24,16 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Get the extensions data
 	 */
-	public function getItems($ids = array())
+	public function getItems($ids = [])
 	{
 		$rows = $this->getItemsByXML();
 
 		if (empty($rows))
 		{
-			return array();
+			return [];
 		}
 
-		$items = array();
+		$items = [];
 
 		foreach ($rows as $row)
 		{
@@ -41,7 +44,9 @@ class RegularLabsManagerModelDefault extends JModelList
 			}
 
 			$item->name = $row['name'];
-			$item->id   = isset($row['id']) ? $row['id'] : preg_replace('#[^a-z\-]#', '', str_replace('?', '-', strtolower($item->name)));
+			$item->id   = isset($row['id'])
+				? $row['id']
+				: RL_RegEx::replace('[^a-z\-]', '', str_replace('?', '-', strtolower($item->name)));
 
 			if (!empty($ids) && !in_array($item->id, $ids))
 			{
@@ -50,9 +55,9 @@ class RegularLabsManagerModelDefault extends JModelList
 
 			$item->alias   = isset($row['alias']) ? $row['alias'] : $item->id;
 			$item->element = isset($row['element']) ? $row['element'] : $item->alias;
-			$item->types   = array();
+			$item->types   = [];
 
-			$types = array();
+			$types = [];
 
 			if (isset($row['type']))
 			{
@@ -74,7 +79,7 @@ class RegularLabsManagerModelDefault extends JModelList
 		return $items;
 	}
 
-	function storeKey()
+	public function storeKey()
 	{
 		$key = JFactory::getApplication()->input->get('key');
 
@@ -83,7 +88,7 @@ class RegularLabsManagerModelDefault extends JModelList
 
 		if (is_null($data))
 		{
-			$data = array();
+			$data = [];
 		}
 
 		$data['params']['key'] = $key;
@@ -140,7 +145,7 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Return an object list with items from the xml file
 	 */
-	function getItemsByXML()
+	private function getItemsByXML()
 	{
 		// Get a storage key.
 		$store = $this->getStoreId();
@@ -151,7 +156,7 @@ class RegularLabsManagerModelDefault extends JModelList
 			//return $this->cache[$store];
 		}
 
-		$items = array();
+		$items = [];
 
 		jimport('joomla.filesystem.file');
 		if (!JFile::exists(JPATH_COMPONENT . '/extensions.xml'))
@@ -179,7 +184,7 @@ class RegularLabsManagerModelDefault extends JModelList
 				continue;
 			}
 
-			$item = array();
+			$item = [];
 			foreach ($field['attributes'] as $val => $key)
 			{
 				$item[strtolower($val)] = $key;
@@ -196,9 +201,9 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Return an empty extension item object
 	 */
-	function initItem()
+	private function initItem()
 	{
-		$item            = new stdClass;
+		$item            = (object) [];
 		$item->id        = 0;
 		$item->name      = '';
 		$item->alias     = '';
@@ -207,8 +212,8 @@ class RegularLabsManagerModelDefault extends JModelList
 		$item->version   = '';
 		$item->pro       = 0;
 		$item->haspro    = 1;
-		$item->types     = array();
-		$item->missing   = array();
+		$item->types     = [];
+		$item->missing   = [];
 
 		return $item;
 	}
@@ -216,9 +221,9 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Return an empty type object
 	 */
-	function initType()
+	private function initType()
 	{
-		$item       = new stdClass;
+		$item       = (object) [];
 		$item->id   = 0;
 		$item->type = '';
 		$item->link = '';
@@ -229,18 +234,18 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Return an empty extension item
 	 */
-	function checkInstalled(&$item, $types = array())
+	private function checkInstalled(&$item, $types = [])
 	{
 		jimport('joomla.filesystem.file');
 
 		$file = '';
-		$xml  = '';
 
 		foreach ($types as $type)
 		{
 			$el       = $this->initType();
 			$el->type = $type;
 			list($xml, $client_id) = $this->getXML($type, $item->element);
+
 			if (!$xml)
 			{
 				switch ($item->element)
@@ -255,58 +260,63 @@ class RegularLabsManagerModelDefault extends JModelList
 			}
 
 			$el->client_id = $client_id;
-			$el->link      = $this->getURL($type, $item->element, $item->name, $client_id);
+			$el->link      = $this->getURL($type, $item->element, $client_id);
+
 			if (!$xml)
 			{
-				$item->missing[] = $type;
+				$item->missing[]    = $type;
+				$item->types[$type] = $el;
+				continue;
 			}
-			else
+
+			$el->id = $this->getID($type, $item->element);
+
+			if (!$file)
 			{
-				$el->id = $this->getID($type, $item->element);
-				if (!$file)
-				{
-					$file = $xml;
-				}
+				$file = $xml;
 			}
+
 			$item->types[$type] = $el;
 		}
 
 		if (!$file)
 		{
-			$item->missing = array();
+			$item->missing = [];
+
+			return;
 		}
-		else
+
+		$xml = JApplicationHelper::parseXMLInstallFile($file);
+		if (empty($xml) || !isset($xml['version']))
 		{
-			$xml = JApplicationHelper::parseXMLInstallFile($file);
-			if ($xml && isset($xml['version']))
-			{
-				// Fix wrong version numbers
-				$xml['version'] = str_replace(
-					array('4.4.0PROFREE', '4.4.0PROPRO', 'FREEFREE', 'FREEPRO', 'PROFREE', 'PROPRO'),
-					array('1.0.1FREE', '1.0.1PRO', 'FREE', 'PRO', 'FREE', 'PRO'),
-					$xml['version']
-				);
+			return;
+		}
 
-				$item->installed = 1;
-				$item->version   = str_replace(array('FREE', 'PRO'), '', $xml['version']);
+		// Fix wrong version numbers
+		$xml['version'] = str_replace(
+			['4.4.0PROFREE', '4.4.0PROPRO', 'FREEFREE', 'FREEPRO', 'PROFREE', 'PROPRO'],
+			['1.0.1FREE', '1.0.1PRO', 'FREE', 'PRO', 'FREE', 'PRO'],
+			$xml['version']
+		);
 
-				if (stripos($xml['version'], 'PRO') !== false)
-				{
-					$item->pro = 1;
-				}
+		$item->installed = 1;
+		$item->version   = str_replace(['FREE', 'PRO'], '', $xml['version']);
 
-				if (!$item->version)
-				{
-					$item->version = '0.0.0';
-				}
-			}
+		if (stripos($xml['version'], 'PRO') !== false)
+		{
+			$item->pro = 1;
+		}
+
+		if (!$item->version)
+		{
+			$item->version = '0.0.0';
 		}
 	}
 
 	/**
 	 * Get the extension url
 	 */
-	function getXML($type, $element)
+	private function getXML($type, $element)
 	{
 		$client_id = 1;
 		$xml       = '';
@@ -374,13 +384,13 @@ class RegularLabsManagerModelDefault extends JModelList
 				break;
 		}
 
-		return array($xml, $client_id);
+		return [$xml, $client_id];
 	}
 
 	/**
 	 * Get the extension url
 	 */
-	function getURL($type, $element, $name, $client_id = 1)
+	private function getURL($type, $element, $client_id = 1)
 	{
 		list($type, $folder) = explode('_', $type . '_');
 
@@ -388,18 +398,31 @@ class RegularLabsManagerModelDefault extends JModelList
 		switch ($type)
 		{
 			case 'com';
-				RLFunctions::loadLanguage('com_' . $element . '.sys', '', true);
+				RL_Language::load('com_' . $element . '.sys', '', true);
 				$link = 'option=com_' . $element;
 				break;
+
 			case 'mod';
-				RLFunctions::loadLanguage('mod_' . $element . '.sys', '', true);
-				$link = 'option=com_modules&filter_client_id=' . $client_id . '&filter_module=mod_' . $element . '&filter_search=';
+				RL_Language::load('mod_' . $element . '.sys', '', true);
+				$link = 'option=com_modules&filter_client_id=' . $client_id
+					. '&filter_module=mod_' . $element . '&filter_search=';
 				break;
+
 			case 'plg';
-				RLFunctions::loadLanguage('plg_'. $folder . '_' . $element . '.sys', '', true);
+				$db    = JFactory::getDbo();
+				$query = $db->getQuery(true)
+					->select('name')
+					->from('#__extensions')
+					->where('type =' . $db->quote('plugin'))
+					->where('folder =' . $db->quote($folder))
+					->where('element =' . $db->quote($element));
+
+				$name = $db->setQuery($query)->loadResult();
+
+				RL_Language::load('plg_' . $folder . '_' . $element . '.sys', '', true);
 				$name = JText::_($name);
-				$name = preg_replace('#^(.*?)\?.*$#', '\1', $name);
-				$link = 'option=com_plugins&filter_folder=' . $folder . '&filter_search=' . $name;
+				$name = RL_RegEx::replace('^(.*?)\?.*$', '\1', $name);
+				$link = 'option=com_plugins&filter_folder=&filter_search=' . $name;
 				break;
 		}
 
@@ -409,7 +432,7 @@ class RegularLabsManagerModelDefault extends JModelList
 	/**
 	 * Get the extension id
 	 */
-	function getID($type, $element)
+	private function getID($type, $element)
 	{
 		$db = JFactory::getDbo();
 

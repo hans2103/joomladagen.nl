@@ -5,9 +5,9 @@
     <author>JoomShaper.com</author>
     <authorEmail>support@joomshaper.com</authorEmail>
     <authorUrl>http://www.joomshaper.com</authorUrl>
-    <copyright>Copyright (C) 2010 - 2016 JoomShaper.com. All rights reserved.</copyright>
+    <copyright>Copyright (C) 2010 - 2017 JoomShaper.com. All rights reserved.</copyright>
     <license>http://www.gnu.org/licenses/gpl-2.0.html GPLv2 or later</license>
-    <version>1.8</version>
+    <version>1.9</version>
     <description>Shaper Helix3 - Starter Template of Helix3 framework</description>
 
     <updateservers>
@@ -210,6 +210,7 @@
                 <field name="youtube" type="text" label="HELIX_SOCIAL_ICON_YOUTUBE" description="HELIX_SOCIAL_ICON_YOUTUBE_DESC" class="child social_icons social_icons_1" />
                 <field name="flickr" type="text" label="HELIX_SOCIAL_ICON_FLICKR" description="HELIX_SOCIAL_ICON_FLICKR_DESC" class="child social_icons social_icons_1" />
                 <field name="skype" type="text" label="HELIX_SOCIAL_ICON_SKYPE" description="HELIX_SOCIAL_ICON_SKYPE_DESC" class="child social_icons social_icons_1" />
+                <field name="whatsapp" type="text" label="HELIX_SOCIAL_ICON_WHATSAPP" description="HELIX_SOCIAL_ICON_WHATSAPP_DESC" class="child social_icons social_icons_1" />
                 <field name="vk" type="text" label="HELIX_SOCIAL_ICON_VK" description="HELIX_SOCIAL_ICON_VK_DESC" class="child social_icons social_icons_1" />
                 <field name="custom" type="text" label="HELIX_SOCIAL_ICON_CUSTOM" description="HELIX_SOCIAL_ICON_CUSTOM_DESC" class="child social_icons social_icons_1" />
 
@@ -500,22 +501,6 @@
                 </field>
             </fieldset>
             <!--End Blog Tab-->
-
-            <!--Start Update Tab-->
-            <fieldset name="licenseupdate">
-                <field name="joomshaper_email" type="email" label="HELIX3_JOOMSHAPER_EMAIL" description="HELIX3_JOOMSHAPER_EMAIL_DESC" />
-                <field name="joomshaper_license_key" type="text" label="HELIX3_JOOMSHAPER_LICENSE_KEY" description="HELIX3_JOOMSHAPER_LICENSE_KEY_DESC" />
-            </fieldset>
-            <!--End Update Tab-->
-
-            <!--Start Update Tab-->
-            <fieldset name="documentation">
-                <field name="template_doc" type="button" url="https://www.joomshaper.com/documentation/helix3/docs" target="_blank" text="HELIX_CLICK_TO_VIEW" label="HELIX3_TEMPLATE_DOCUMENTATION" description="HELIX3_TEMPLATE_DOCUMENTATION_DESC" class="btn-primary" />
-
-                <field name="helix_doc" type="button" url="https://www.joomshaper.com/documentation/helix3/docs" target="_blank" text="HELIX_CLICK_TO_VIEW" label="HELIX3_DOCUMENTATION" description="HELIX3_DOCUMENTATION_DESC" class="btn-primary" />
-
-            </fieldset>
-            <!--End Update Tab-->
 
         </fields>
     </config>

@@ -2,12 +2,12 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_sourcerer</name>
 	<description>PLG_SYSTEM_SOURCERER_DESC</description>
-	<version>6.3.7PRO</version>
-	<creationDate>November 2016</creationDate>
+	<version>7.0.2PRO</version>
+	<creationDate>February 2017</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
-	<copyright>Copyright © 2016 Regular Labs - All Rights Reserved</copyright>
+	<copyright>Copyright © 2017 Regular Labs - All Rights Reserved</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 
 	<scriptfile>script.install.php</scriptfile>
@@ -20,9 +20,10 @@
 
 	<files>
 		<filename plugin="sourcerer">sourcerer.php</filename>
-		<filename>helper.php</filename>
 		<filename>script.install.helper.php</filename>
 		<folder>language</folder>
+		<folder>src</folder>
+		<folder>vendor</folder>
 	</files>
 
 	<media folder="media" destination="sourcerer">
@@ -66,11 +67,16 @@
 					<option value="1">JYES</option>
 				</field>
 				<field name="remove_from_search" type="radio" class="btn-group" default="0"
-					label="SRC_REMOVE_FROM_SEARCH" description="SRC_REMOVE_FROM_SEARCH_DESC">
+					   label="SRC_REMOVE_FROM_SEARCH" description="SRC_REMOVE_FROM_SEARCH_DESC">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
 				<field name="include_path" type="text" default="/" label="SRC_INCLUDE_PATH" description="SRC_INCLUDE_PATH_DESC" />
+				<field name="place_comments" type="radio" class="btn-group" default="1"
+					   label="RL_PLACE_HTML_COMMENTS" description="RL_PLACE_HTML_COMMENTS_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
 			</fieldset>
 
 			<fieldset name="SRC_SECURITY_SETTINGS_DEFAULT">

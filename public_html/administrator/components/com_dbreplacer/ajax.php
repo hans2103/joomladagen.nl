@@ -1,11 +1,11 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -16,31 +16,33 @@ if (JFactory::getApplication()->isSite())
 	die();
 }
 
+use RegularLabs\Library\Language as RL_Language;
+use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\RegEx as RL_RegEx;
+
 $class = new DBReplacer;
 echo $class->render();
 die;
 
 class DBReplacer
 {
-	function render()
+	public function render()
 	{
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-		$parameters   = RLParameters::getInstance();
-		$this->config = $parameters->getComponentParams('com_dbreplacer');
+		$this->config = RL_Parameters::getInstance()->getComponentParams('com_dbreplacer');
 
 		$field  = JFactory::getApplication()->input->get('field', 'table');
 		$params = JFactory::getApplication()->input->getBase64('params');
 
 		$params = str_replace(
-			array('[-CHAR-LT-]', '[-CHAR-GT-]'),
-			array('<', '>'),
+			['[-CHAR-LT-]', '[-CHAR-GT-]'],
+			['<', '>'],
 			urldecode(base64_decode($params))
 		);
 
 		$params = json_decode($params);
 		if (is_null($params))
 		{
-			$params = new stdClass;
+			$params = (object) [];
 		}
 
 		$db = JFactory::getDbo();
@@ -62,12 +64,12 @@ class DBReplacer
 		}
 	}
 
-	function renderColumns()
+	private function renderColumns()
 	{
 		$table    = $this->params->table;
 		$selected = $this->implodeParams($this->params->columns);
 
-		$options = array();
+		$options = [];
 		if ($table)
 		{
 			$cols = $this->getColumns();
@@ -83,9 +85,9 @@ class DBReplacer
 		return $html;
 	}
 
-	function getColumns()
+	private function getColumns()
 	{
-		if (preg_match('#[^a-z0-9-_\#]#i', $this->params->table))
+		if (RL_RegEx::match('[^a-z0-9-_\#]', $this->params->table))
 		{
 			die('Invalid data found in URL!');
 		}
@@ -99,11 +101,11 @@ class DBReplacer
 		return $columns;
 	}
 
-	function renderRows()
+	private function renderRows()
 	{
 		// Load plugin language
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-		RLFunctions::loadLanguage('com_dbreplacer');
+
+		RL_Language::load('com_dbreplacer');
 
 		$max = (int) $this->config->max_rows;
 
@@ -128,7 +130,7 @@ class DBReplacer
 			return $this->getMessage(JText::_('DBR_ROW_COUNT_NONE'));
 		}
 
-		$html = array();
+		$html = [];
 
 		if (count($rows) > $max - 1)
 		{
@@ -186,7 +188,7 @@ class DBReplacer
 		return implode('', $html);
 	}
 
-	function getCellData($row, $col)
+	private function getCellData($row, $col)
 	{
 		$columns = $this->implodeParams($this->params->columns);
 
@@ -204,11 +206,11 @@ class DBReplacer
 				}
 				$val = '<span class="null">' . $val . '</span>';
 
-				return array($val, $class);
+				return [$val, $class];
 			}
 			else
 			{
-				$val = preg_replace('#^((.*?\n){4}).*?$#si', '\1...', $val);
+				$val = RL_RegEx::replace('^((.*?\n){4}).*?$', '\1...', $val);
 				if (strlen($val) > 300)
 				{
 					$val = substr($val, 0, 300) . '...';
@@ -216,12 +218,11 @@ class DBReplacer
 				$val = htmlentities($val, ENT_COMPAT, 'utf-8');
 			}
 
-			return array($val, $class);
+			return [$val, $class];
 		}
 
 		$search  = str_replace('||space||', ' ', $this->params->search);
 		$replace = str_replace('||space||', ' ', $this->params->replace);
-
 
 		if ($search == 'NULL')
 		{
@@ -237,16 +238,16 @@ class DBReplacer
 				}
 				$val = '<span class="search_string"><span class="null">' . $val . '</span></span><span class="replace_string">' . $replace . '</span>';
 
-				return array($val, $class);
+				return [$val, $class];
 			}
-			$val = preg_replace('#^((.*?\n){4}).*?$#si', '\1...', $val);
+			$val = RL_RegEx::replace('^((.*?\n){4}).*?$', '\1...', $val);
 			if (strlen($val) > 300)
 			{
 				$val = substr($val, 0, 300) . '...';
 			}
 			$val = htmlentities($val, ENT_COMPAT, 'utf-8');
 
-			return array($val, $class);
+			return [$val, $class];
 		}
 
 		if ($search == '*')
@@ -254,20 +255,20 @@ class DBReplacer
 			$class = 'search_string';
 			if (strlen($val) > 50)
 			{
-				$val = '*';
+				$val   = '*';
 				$class .= ' no-strikethrough';
 			}
 
 			$val = '<span class="' . $class . '"><span class="null">' . $val . '</span></span><span class="replace_string">' . $replace . '</span>';
 
-			return array($val, $class);
+			return [$val, $class];
 		}
 
 		if ($val === null)
 		{
 			$val = '<span class="null">NULL</span>';
 
-			return array($val, $class);
+			return [$val, $class];
 		}
 
 		$s1 = '|' . md5('<SEARCH TAG>') . '|';
@@ -275,34 +276,35 @@ class DBReplacer
 		$r1 = '|' . md5('<REPLACE TAG>') . '|';
 		$r2 = '|' . md5('</REPLACE TAG>') . '|';
 
-		$match = 0;
+		$match   = 0;
+		$options = '';
 		if ($search != '')
 		{
 			$s = $search;
 			if (!$this->params->regex)
 			{
-				$s = preg_quote($s, '#');
+				$s = RL_RegEx::quote($s);
 				// replace multiple whitespace (with at least one enter) with regex whitespace match
-				$s = preg_replace('#\s*\n\s*#s', '\s*', $s);
+				$s = RL_RegEx::replace('\s*\n\s*', '\s*', $s);
 			}
-			$s = '#' . $s . '#s';
+			$options = 's';
 			if (!$this->params->case)
 			{
-				$s .= 'i';
+				$options .= 'i';
 			}
 			if ($this->params->regex && $this->params->utf8)
 			{
-				$s .= 'u';
+				$options .= 'u';
 			}
 
-			$match = @preg_match($s, $val, $m);
+			$match = @RL_RegEx::match($s, $val, $m, $options);
 		}
 
 		if ($match)
 		{
 			$class = 'has_search';
 
-			$val = preg_replace($s, $s1 . '\0' . $s2 . $r1 . $replace . $r2, $val);
+			$val = RL_RegEx::replace($s, $s1 . '\0' . $s2 . $r1 . $replace . $r2, $val, $options);
 			$val = htmlentities($val, ENT_COMPAT, 'utf-8');
 			$val = str_replace(' ', '&nbsp;', $val);
 			$val = str_replace($s1, '<span class="search_string">', str_replace($s2, '</span>', $val));
@@ -310,7 +312,7 @@ class DBReplacer
 		}
 		else
 		{
-			$val = preg_replace('#^((.*?\n){4}).*?$#si', '\1...', $val);
+			$val = RL_RegEx::replace('^((.*?\n){4}).*?$', '\1...', $val);
 			if (strlen($val) > 300)
 			{
 				$val = substr($val, 0, 300) . '...';
@@ -323,12 +325,12 @@ class DBReplacer
 			$val = '<span class="null">' . $val . '</span>';
 		}
 
-		return array($val, $class);
+		return [$val, $class];
 	}
 
-	function getRows($cols, $max = 100)
+	private function getRows($cols, $max = 100)
 	{
-		if (preg_match('#[^a-z0-9-_\#]#i', $this->params->table))
+		if (RL_RegEx::match('[^a-z0-9-_\#]', $this->params->table))
 		{
 			die('Invalid data found in URL!');
 		}
@@ -363,7 +365,7 @@ class DBReplacer
 		return $db->loadObjectList();
 	}
 
-	function getWhereClause($cols = array())
+	private function getWhereClause($cols = [])
 	{
 		$columns = $this->params->columns;
 
@@ -379,7 +381,7 @@ class DBReplacer
 			return false;
 		}
 
-		$likes = array();
+		$likes = [];
 
 		switch ($s)
 		{
@@ -397,9 +399,9 @@ class DBReplacer
 
 				if (!$this->params->regex)
 				{
-					$dbs = preg_quote($dbs);
+					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match
-					$dbs = preg_replace('#\s*\n\s*#s', '\s*', $dbs);
+					$dbs = RL_RegEx::replace('\s*\n\s*', '\s*', $dbs);
 				}
 
 				// escape slashes
@@ -407,7 +409,7 @@ class DBReplacer
 				// escape single quotes
 				$dbs = str_replace('\'', '\\\'', $dbs);
 				// remove the lazy character: doesn't work in mysql
-				$dbs = str_replace(array('*?', '+?'), array('*', '+'), $dbs);
+				$dbs = str_replace(['*?', '+?'], ['*', '+'], $dbs);
 				// change \s to [:space:]
 				$dbs = str_replace('\s', '[[:space:]]', $dbs);
 
@@ -419,7 +421,7 @@ class DBReplacer
 
 		$db      = JFactory::getDbo();
 		$columns = $this->implodeParams($columns);
-		$where   = array();
+		$where   = [];
 
 		foreach ($columns as $column)
 		{
@@ -432,7 +434,7 @@ class DBReplacer
 		return $where;
 	}
 
-	function getCustomWhereClause($cols = array())
+	private function getCustomWhereClause($cols = [])
 	{
 		if (empty($this->params->where))
 		{
@@ -451,32 +453,31 @@ class DBReplacer
 			return $custom_where;
 		}
 
-		array_walk($cols, function (&$col)
+		$cols = RL_RegEx::quote($cols);
+
+		$regex = '(^| )' . $cols . '( +(?:=|\!|IS |IN |LIKE ))';
+		RL_RegEx::matchAll($regex, $custom_where, $matches);
+
+		if (empty($matches))
 		{
-			$col = preg_quote($col, '#');
-		});
+			return $custom_where;
+		}
 
-		$regex = '#(^| )(' . implode('|', $cols) . ')( +(?:=|\!|IS |IN |LIKE ))#s';
-		preg_match_all($regex, $custom_where, $matches, PREG_SET_ORDER);
+		$db = JFactory::getDbo();
 
-		if (!empty($matches))
+		foreach ($matches as $match)
 		{
-			$db = JFactory::getDbo();
-
-			foreach ($matches as $match)
-			{
-				$custom_where = str_replace(
-					$match['0'],
-					$match['1'] . $db->quoteName($match['2']) . $match['3'],
-					$custom_where
-				);
-			}
+			$custom_where = str_replace(
+				$match['0'],
+				$match['1'] . $db->quoteName($match['2']) . $match['3'],
+				$custom_where
+			);
 		}
 
 		return $custom_where;
 	}
 
-	function implodeParams($params)
+	private function implodeParams($params)
 	{
 		if (is_array($params))
 		{
@@ -484,7 +485,7 @@ class DBReplacer
 		}
 
 		$params = explode(',', $params);
-		$p      = array();
+		$p      = [];
 
 		foreach ($params as $param)
 		{

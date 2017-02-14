@@ -1,27 +1,30 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         5.1.3PRO
+ * @version         6.0.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
 JHtml::_('jquery.framework');
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/text.php';
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\License as RL_License;
+use RegularLabs\Library\StringHelper as RL_String;
+use RegularLabs\Library\Version as RL_Version;
 
 /* SCRIPTS */
 $alert = "RLDBReplacer.protectSpaces();form.task.value = 'replace';form.submit();";
 if ($this->config->show_alert)
 {
-	$alert = "if ( confirm( '" . str_replace(array('<br>', "\n", "'"), array('\n', '\n', "\\'"), JText::_('DBR_ARE_YOU_REALLY_SURE')) . "' ) ) {" . $alert . "}";
+	$alert = "if ( confirm( '" . str_replace(['<br>', "\n", "'"], ['\n', '\n', "\\'"], JText::_('DBR_ARE_YOU_REALLY_SURE')) . "' ) ) {" . $alert . "}";
 }
-$alert  = "if ( confirm( '" . str_replace(array('<br>', "\n", "'"), array('\n', '\n', "\\'"), JText::_('RL_ARE_YOU_SURE')) . "' ) ) {" . $alert . "}";
+$alert  = "if ( confirm( '" . str_replace(['<br>', "\n", "'"], ['\n', '\n', "\\'"], JText::_('RL_ARE_YOU_SURE')) . "' ) ) {" . $alert . "}";
 $script = "
 	function submitform( task )
 	{
@@ -36,16 +39,16 @@ $script = "
 	var DBR_root = '" . JUri::root() . "';
 	var DBR_INVALID_QUERY = '" . addslashes(JText::_('DBR_INVALID_QUERY')) . "';
 ";
-JFactory::getDocument()->addScriptDeclaration($script);
-RLFunctions::script('dbreplacer/script.min.js', '5.1.3.p');
-RLFunctions::script('regularlabs/script.min.js');
-RLFunctions::script('regularlabs/toggler.min.js');
+RL_Document::scriptDeclaration($script);
+RL_Document::script('dbreplacer/script.min.js', '6.0.0.p');
+RL_Document::script('regularlabs/script.min.js');
+RL_Document::script('regularlabs/toggler.min.js');
 
 // Version check
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/versions.php';
+
 if ($this->config->show_update_notification)
 {
-	echo RLVersions::render('DB_REPLACER');
+	echo RL_Version::getMessage('DB_REPLACER');
 }
 
 $s = JRequest::getVar('search', '', 'default', 'none', 2);
@@ -61,7 +64,7 @@ $r = str_replace('||space||', ' ', $r);
 			<div class="span3">
 				<div class="col dbr_select dbr_tables">
 					<fieldset class="adminform">
-						<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_TABLES')); ?></legend>
+						<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_TABLES')); ?></legend>
 						<div id="dbr_tables"><?php echo $this->tables; ?></div>
 					</fieldset>
 				</div>
@@ -69,10 +72,10 @@ $r = str_replace('||space||', ' ', $r);
 			<div class="span3">
 				<div class="col dbr_select dbr_columns">
 					<fieldset class="adminform">
-						<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_COLUMNS')); ?></legend>
+						<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_COLUMNS')); ?></legend>
 						<div id="dbr_columns">
 							<input type="hidden" name="columns"
-							       value="<?php echo implode(',', JFactory::getApplication()->input->get('columns', array(0), 'array')); ?>"
+							       value="<?php echo implode(',', JFactory::getApplication()->input->get('columns', [0], 'array')); ?>"
 							       class="dbr_element">
 						</div>
 					</fieldset>
@@ -81,7 +84,7 @@ $r = str_replace('||space||', ' ', $r);
 			<div class="span6">
 				<div class="col dbr_select dbr_where">
 					<fieldset class="adminform">
-						<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_WHERE')); ?></legend>
+						<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_WHERE')); ?></legend>
 						<?php echo JText::_('DBR_WHERE_DESC'); ?><br>
 						<textarea name="where" class="dbr_element" cols="30"
 						          rows="3"><?php echo JFactory::getApplication()->input->get('where', '', 'RAW'); ?></textarea>
@@ -92,7 +95,7 @@ $r = str_replace('||space||', ' ', $r);
 
 				<div class="col dbr_select dbr_search">
 					<fieldset class="adminform">
-						<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_SEARCH')); ?></legend>
+						<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_SEARCH')); ?></legend>
 						<div style="clear:both;margin-bottom: 5px;">
 							* = <?php echo JText::_('DBR_ALL'); ?> &nbsp; &nbsp;
 							NULL = <?php echo JText::_('DBR_NULL'); ?>
@@ -132,7 +135,7 @@ $r = str_replace('||space||', ' ', $r);
 
 				<div class="col dbr_select dbr_replace">
 					<fieldset class="adminform">
-						<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_REPLACE')); ?></legend>
+						<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_REPLACE')); ?></legend>
 						<textarea name="replace" class="dbr_element" cols="30" rows="3"><?php echo $r; ?></textarea>
 
 						<div class="btn-group" id="dbr_submit">
@@ -148,7 +151,7 @@ $r = str_replace('||space||', ' ', $r);
 
 			<div class="col dbr_select">
 				<fieldset class="adminform">
-					<legend><?php echo RLText::html_entity_decoder(JText::_('DBR_PREVIEW')); ?></legend>
+					<legend><?php echo RL_String::html_entity_decoder(JText::_('DBR_PREVIEW')); ?></legend>
 					<div id="dbr_rows"></div>
 				</fieldset>
 			</div>
@@ -159,4 +162,4 @@ $r = str_replace('||space||', ' ', $r);
 <?php
 
 // Copyright
-echo RLVersions::getFooter('DB_REPLACER', $this->config->show_copyright);
+echo RL_Version::getFooter('DB_REPLACER', $this->config->show_copyright);

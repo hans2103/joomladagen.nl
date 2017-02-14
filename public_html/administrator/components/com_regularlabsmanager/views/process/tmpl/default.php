@@ -1,25 +1,26 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         6.1.2
+ * @version         7.0.0
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
+use RegularLabs\Library\Document as RL_Document;
+
 JHtml::_('bootstrap.framework');
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
 
 $task = JFactory::getApplication()->input->get('task');
 
 $config = JComponentHelper::getParams('com_regularlabsmanager');
 
-RLFunctions::script('regularlabs/script.min.js');
-RLFunctions::stylesheet('regularlabs/style.min.css');
+RL_Document::script('regularlabs/script.min.js');
+RL_Document::style('regularlabs/style.min.css');
 
 $script = "
 	/* Regular Labs Extension Manager variable */
@@ -27,10 +28,10 @@ $script = "
 	var RLEM_TOKEN = '" . JSession::getFormToken() . "';
 	var RLEM_REFRESH_ON_CLOSE = " . (JFactory::getApplication()->input->get('refresh_on_close') ? 'true' : 'false') . ";
 ";
-JFactory::getDocument()->addScriptDeclaration($script);
+RL_Document::scriptDeclaration($script);
 
-RLFunctions::script('regularlabsmanager/process.min.js', '6.1.2');
-RLFunctions::stylesheet('regularlabsmanager/process.min.css', '6.1.2');
+RL_Document::script('regularlabsmanager/process.min.js', '7.0.0');
+RL_Document::style('regularlabsmanager/process.min.css', '7.0.0');
 ?>
 
 <div id="rlem">
