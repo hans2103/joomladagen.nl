@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -122,7 +122,12 @@ class PluginTag
 
 		self::unprotectSpecialChars($value, $keep_escaped);
 
-		if (is_numeric($value) && in_array($match['key'], $known_boolean_keys))
+		if (is_numeric($value)
+			&& (
+				in_array($match['key'], $known_boolean_keys)
+				|| in_array(strtolower($match['key']), $known_boolean_keys)
+			)
+		)
 		{
 			$value = $value ? 'true' : 'false';
 		}
@@ -503,7 +508,6 @@ class PluginTag
 		// If the grouped name is found, then grab all content till ending html tag is found. Otherwise grab nothing.
 		return '(?(<' . $group . '>)'
 			. '(?:.*?</(?P=' . $group . ')>)?'
-			. '|'
 			. ')';
 	}
 
@@ -511,26 +515,64 @@ class PluginTag
 	 * Return the Regular Expressions string to match:
 	 * Opening html tags
 	 *
-	 * @param array $elements
+	 * @param array $block_elements
+	 * @param array $inline_elements
 	 *
 	 * @return string
 	 */
-	public static function getRegexSurroundingTagPre($elements = ['p', 'span'])
+	public static function getRegexSurroundingTagsPre($block_elements = [], $inline_elements = ['span'])
 	{
-		return '(?:<(?:' . implode('|', $elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*){0,3}';
+		$block_elements = !empty($block_elements) ? $block_elements : Html::getBlockElements();
+
+		return '(?:<(?:' . implode('|', $block_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*)?'
+			. '(?:<(?:' . implode('|', $inline_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*){0,3}';
 	}
 
 	/**
 	 * Return the Regular Expressions string to match:
 	 * Closing html tags
 	 *
+	 * @param array $block_elements
+	 * @param array $inline_elements
+	 *
+	 * @return string
+	 */
+	public static function getRegexSurroundingTagsPost($block_elements = [], $inline_elements = ['span'])
+	{
+		$block_elements = !empty($block_elements) ? $block_elements : Html::getBlockElements();
+
+		return '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $inline_elements) . ')>){0,3}'
+			. '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $block_elements) . ')>)?';
+	}
+
+	/**
+	 * Return the Regular Expressions string to match:
+	 * Leading html tag
+	 *
 	 * @param array $elements
 	 *
 	 * @return string
 	 */
-	public static function getRegexSurroundingTagPost($elements = ['p', 'span'])
+	public static function getRegexSurroundingTagPre($elements = [])
 	{
-		return '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $elements) . ')>){0,3}';
+		$elements = !empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
+
+		return '(?:<(?:' . implode('|', $elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*)?';
+	}
+
+	/**
+	 * Return the Regular Expressions string to match:
+	 * Trailing html tag
+	 *
+	 * @param array $elements
+	 *
+	 * @return string
+	 */
+	public static function getRegexSurroundingTagPost($elements = [])
+	{
+		$elements = !empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
+
+		return '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $elements) . ')>)?';
 	}
 
 	/**

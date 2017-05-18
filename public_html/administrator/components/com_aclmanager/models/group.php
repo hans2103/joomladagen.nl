@@ -38,7 +38,7 @@ class AclmanagerModelGroup extends JModelList
 					$rule[$s]= (array_filter($action,'strlen'));
 				}
 
-				$currentrules = JAccess::getAssetRules($id);
+				$currentrules = JAccess::getAssetRules($id, false, false);
 				$newrules = json_decode($currentrules,true);
 
 				foreach($newrules as $i=>$newrule) {
@@ -72,7 +72,6 @@ class AclmanagerModelGroup extends JModelList
 			// Unset form data
 			unset($data['rules']);
 		}
-
 	}
 
 	/**
@@ -152,7 +151,7 @@ class AclmanagerModelGroup extends JModelList
 					$rule[$s]= (array_filter($action,'strlen'));
 				}
 
-				$currentrules = JAccess::getAssetRules($id);
+				$currentrules = JAccess::getAssetRules($id, false, false);
 				$newrules = json_decode($currentrules,true);
 
 				foreach($newrules as $i=>$newrule) {

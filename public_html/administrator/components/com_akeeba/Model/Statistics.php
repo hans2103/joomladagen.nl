@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -14,9 +14,9 @@ use Akeeba\Engine\Factory;
 use Akeeba\Engine\Platform;
 use Exception;
 use FOF30\Container\Container;
+use FOF30\Date\Date;
 use FOF30\Model\DataModel\Exception\RecordNotLoaded;
 use FOF30\Model\Model;
-use JDate;
 use JFactory;
 use JFile;
 use JLoader;
@@ -638,7 +638,7 @@ ENDBODY;
 	{
 		$db = $this->container->db;
 
-		$now = new JDate();
+		$now = new Date();
 		$nowToSql = $now->toSql();
 
 		$query = $db->getQuery(true)

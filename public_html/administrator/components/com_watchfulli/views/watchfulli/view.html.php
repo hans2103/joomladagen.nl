@@ -1,10 +1,10 @@
 <?php
 /**
- * @version     backend/views/watchfulli/view.html.php 2014-10-21 12:13:00 UTC zanardi
+ * @version     backend/views/watchfulli/view.html.php 2016-11-04 12:13:00 UTC Ch
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  */
 
@@ -56,7 +56,7 @@ class watchfulliViewWatchfulli extends WatchfulliView
 
     protected function addToolBar()
     {
-        JHTML::stylesheet('icon_jmon.css', 'administrator/components/com_watchfulli/');
+        JHTML::stylesheet('administrator/components/com_watchfulli/icon_jmon.css');
         JToolBarHelper::title(JText::_('Watchfulli'), 'icon_jmon');
         JToolBarHelper::preferences('com_watchfulli', $height = '300', $width = '600');
     }

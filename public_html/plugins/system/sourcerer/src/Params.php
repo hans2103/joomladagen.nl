@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -91,8 +91,8 @@ class Params
 		$tag_start = RL_RegEx::quote($tag_start);
 		$tag_end   = RL_RegEx::quote($tag_end);
 
-		$pre        = RL_PluginTag::getRegexSurroundingTagPre();
-		$post       = RL_PluginTag::getRegexSurroundingTagPost();
+		$pre  = RL_PluginTag::getRegexSurroundingTagPre();
+		$post = RL_PluginTag::getRegexSurroundingTagPost();
 
 		$spaces = RL_PluginTag::getRegexSpaces('*');
 

@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
+ * other free or open source software licenses
  */
 defined('_JEXEC') or die('RESTRICTED');
 // set as an extension parent
@@ -18,9 +17,10 @@ wfimport('editor.libraries.classes.plugin');
 wfimport('editor.libraries.classes.extensions');
 wfimport('editor.libraries.classes.extensions.aggregator');
 
-class WFIframePlugin extends WFEditorPlugin {
-    public function display() {
-
+class WFIframePlugin extends WFEditorPlugin
+{
+    public function display()
+    {
         $this->set('colorpicker', true);
 
         $language = JFactory::getLanguage();
@@ -32,13 +32,13 @@ class WFIframePlugin extends WFEditorPlugin {
 
         // create new tabs instance
         $tabs = WFTabs::getInstance(array(
-            'base_path' => WF_EDITOR_PLUGIN
+            'base_path' => WF_EDITOR_PLUGIN,
         ));
 
         $document->addScript(array('iframe'), 'plugins');
         $document->addStyleSheet(array('iframe'), 'plugins');
 
-        $document->addScriptDeclaration('IframeDialog.settings=' . json_encode($this->getSettings()) . ';');
+        $document->addScriptDeclaration('IframeDialog.settings='.json_encode($this->getSettings()).';');
 
         // Add tabs
         $tabs->addTab('file');
@@ -66,11 +66,11 @@ class WFIframePlugin extends WFEditorPlugin {
         }
     }
 
-    public function getAggregatorOptions() {
+    public function getAggregatorOptions()
+    {
         $names = array();
 
         foreach ($this->aggregators as $aggregator) {
-
             foreach ($aggregator->getAggregators() as $item) {
                 $names[] = WFText::_($item->getTitle());
             }
@@ -79,16 +79,16 @@ class WFIframePlugin extends WFEditorPlugin {
         return $names;
     }
 
-    public function getAggregatorTemplate() {
+    public function getAggregatorTemplate()
+    {
         $tpl = '';
 
         foreach ($this->aggregators as $aggregator) {
-
-            foreach($aggregator->getAggregators() as $item) {
+            foreach ($aggregator->getAggregators() as $item) {
                 $data = $aggregator->loadTemplate($item->getName());
 
                 if (!empty($data)) {
-                    $tpl .= '<div class="aggregator_option ' . $item->getName() . '" id="' . $item->getName() . '_options"><h4>' . WFText::_($item->getTitle()) . '</h4>';
+                    $tpl .= '<div class="aggregator_option '.$item->getName().'" id="'.$item->getName().'_options"><h4>'.WFText::_($item->getTitle()).'</h4>';
                     $tpl .= $data;
                     $tpl .= '</div>';
                 }
@@ -98,15 +98,15 @@ class WFIframePlugin extends WFEditorPlugin {
         return $tpl;
     }
 
-    public function getSettings($settings = array()) {
+    public function getSettings($settings = array())
+    {
         $profile = $this->getProfile();
 
         $settings = array(
             'defaults' => $this->getDefaults(),
-            'file_browser' => $this->getParam('file_browser', 1) && in_array('browser', explode(',', $profile->plugins))
+            'file_browser' => $this->getParam('file_browser', 1) && in_array('browser', explode(',', $profile->plugins)),
         );
 
         return parent::getSettings($settings);
     }
-
 }

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright     Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
+ * other free or open source software licenses
  */
 defined('_JEXEC') or die('RESTRICTED');
 ?>
@@ -67,7 +67,7 @@ defined('_JEXEC') or die('RESTRICTED');
         <label class="uk-form-label uk-width-1-5 hastip"
                    title="<?php echo WFText::_('WF_FILEMANAGER_LAYOUT_DESC'); ?>"><?php echo WFText::_('WF_FILEMANAGER_LAYOUT'); ?></label>
         <div class="uk-width-4-5 uk-grid uk-grid-small" id="layout">
-          
+
           <div class="uk-form-controls uk-width-1-6" id="layout_icon" data-type="icon">
             <div class="uk-panel uk-panel-box">
               <label class="uk-form-label uk-width-1-1">
@@ -89,7 +89,7 @@ defined('_JEXEC') or die('RESTRICTED');
           <div class="uk-form-controls uk-width-2-6" id="layout_size" data-type="size">
             <div class="uk-panel uk-panel-box">
               <label class="uk-form-label uk-width-2-5">
-                <input type="checkbox" />
+                <input type="checkbox" id="layout_size_check" />
                 <?php echo WFText::_('WF_FILEMANAGER_LAYOUT_SIZE'); ?>
               </label>
               <div class="uk-form-icon uk-form-icon-flip uk-width-3-5">
@@ -102,7 +102,7 @@ defined('_JEXEC') or die('RESTRICTED');
           <div class="uk-form-controls uk-width-2-6" id="layout_date" data-type="date">
             <div class="uk-panel uk-panel-box">
               <label class="uk-form-label uk-width-2-5">
-                <input type="checkbox" />
+                <input type="checkbox" id="layout_date_check" />
                 <?php echo WFText::_('WF_FILEMANAGER_LAYOUT_DATE'); ?>
               </label>
               <div class="uk-form-icon uk-form-icon-flip uk-width-3-5">
@@ -151,7 +151,7 @@ defined('_JEXEC') or die('RESTRICTED');
 
                 <label class="uk-form-label">
                     <input class="uk-constrain-checkbox" type="checkbox" checked />
-                    <?php echo WFText::_('WF_LABEL_PROPORTIONAL');?>
+                    <?php echo WFText::_('WF_LABEL_PROPORTIONAL'); ?>
                 </label>
             </div>
   </div>
@@ -231,7 +231,7 @@ defined('_JEXEC') or die('RESTRICTED');
                     </div>
                     <label class="uk-form-label">
                         <input type="checkbox" class="uk-equalize-checkbox" checked />
-                        <?php echo WFText::_('WF_LABEL_EQUAL');?>
+                        <?php echo WFText::_('WF_LABEL_EQUAL'); ?>
                     </label>
             </div>
   </div>

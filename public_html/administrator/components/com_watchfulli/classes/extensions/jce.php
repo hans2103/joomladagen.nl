@@ -4,7 +4,7 @@
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  */
 defined('_JEXEC') or die;
@@ -81,6 +81,11 @@ class WatchfulliExtensionsJce
 
         JRequest::setVar('id', $id);
         $result = json_decode($WFModelUpdates->download());
+
+        if(!empty($result->error))
+        {
+            return $result->error;
+        }
 
         if (!$result->file)
         {

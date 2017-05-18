@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library\Condition;
 defined('_JEXEC') or die;
 
 use JFactory;
+use JFile;
 use JModelLegacy;
 use RegularLabs\Library\RegEx;
 
@@ -23,12 +24,9 @@ use RegularLabs\Library\RegEx;
  */
 class Php
 	extends \RegularLabs\Library\Condition
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	public function pass()
 	{
-		$article = $this->article;
-
 		if (!is_array($this->selection))
 		{
 			$this->selection = [$this->selection];
@@ -48,54 +46,8 @@ class Php
 				break;
 			}
 
-			if (!$article && strpos($php, '$article') !== false)
-			{
-				$article = null;
-				if ($this->request->option == 'com_content' && $this->request->view == 'article')
-				{
-					$article = $this->getArticleById($this->request->id);
-				}
-			}
-			if (!isset($Itemid))
-			{
-				$Itemid = JFactory::getApplication()->input->getInt('Itemid', 0);
-			}
-			if (!isset($mainframe))
-			{
-				$mainframe = JFactory::getApplication();
-			}
-			if (!isset($app))
-			{
-				$app = JFactory::getApplication();
-			}
-			if (!isset($document))
-			{
-				$document = JFactory::getDocument();
-			}
-			if (!isset($doc))
-			{
-				$doc = JFactory::getDocument();
-			}
-			if (!isset($database))
-			{
-				$database = JFactory::getDbo();
-			}
-			if (!isset($db))
-			{
-				$db = JFactory::getDbo();
-			}
-			if (!isset($user))
-			{
-				$user = JFactory::getUser();
-			}
-			$php .= ';return true;';
-
-			$temp_PHP_func = create_function('&$article, &$Itemid, &$mainframe, &$app, &$document, &$doc, &$database, &$db, &$user', $php);
-
-			// evaluate the script
 			ob_start();
-			$pass = (bool) $temp_PHP_func($article, $Itemid, $mainframe, $app, $document, $doc, $database, $db, $user);
-			unset($temp_PHP_func);
+			$pass = (bool) $this->execute($php);
 			ob_end_clean();
 
 			if ($pass)
@@ -127,5 +79,86 @@ class Php
 		}
 
 		return $model->getItem($this->request->id);
+	}
+
+	private function execute($string = '')
+	{
+		$function_name = 'rl_' . md5($string);
+
+		if (function_exists($function_name))
+		{
+			return $function_name();
+		}
+
+		$contents = $this->generateFileContents($function_name, $string);
+
+		$folder    = JFactory::getConfig()->get('tmp_path', JPATH_ROOT . '/tmp');
+		$temp_file = $folder . '/' . $function_name;
+
+		JFile::write($temp_file, $contents);
+
+		include_once $temp_file;
+
+		JFile::delete($temp_file);
+
+		if (!function_exists($function_name))
+		{
+			// Something went wrong!
+			return true;
+		}
+
+		$article = $this->article;
+
+		if (!$article && strpos($string, '$article') !== false)
+		{
+			$article = null;
+			if ($this->request->option == 'com_content' && $this->request->view == 'article')
+			{
+				$article = $this->getArticleById($this->request->id);
+			}
+		}
+
+		return $function_name($article);
+	}
+
+	private function generateFileContents($function_name = 'rl_function', $string = '')
+	{
+		$init_variables = $this->getVarInits();
+
+		$contents = [
+			'<?php',
+			'defined(\'_JEXEC\') or die;',
+			'function ' . $function_name . '($article){',
+			implode("\n", $init_variables),
+			$string,
+			';return true;',
+			';}',
+		];
+
+		$contents = implode("\n", $contents);
+
+		// Remove Zero Width spaces / (non-)joiners
+		$contents = str_replace(
+			[
+				"\xE2\x80\x8B",
+				"\xE2\x80\x8C",
+				"\xE2\x80\x8D",
+			],
+			'',
+			$contents
+		);
+
+		return $contents;
+	}
+
+	private function getVarInits()
+	{
+		return [
+			'$app = $mainframe = JFactory::getApplication();',
+			'$document = $doc = JFactory::getDocument();',
+			'$database = $db = JFactory::getDbo();',
+			'$user = JFactory::getUser();',
+			'$Itemid = $app->input->getInt(\'Itemid\');',
+		];
 	}
 }

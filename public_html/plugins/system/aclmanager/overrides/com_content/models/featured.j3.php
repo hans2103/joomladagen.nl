@@ -9,16 +9,19 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+use Joomla\Utilities\ArrayHelper;
+
 /**
  * Extend Joomla core class
  */
 class ContentModelFeatured extends ContentModelFeaturedCore
 {
-	protected function getListQuery($resolveFKs = true)
+	protected function getListQuery()
 	{
 		// Create a new query object.
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
+		$user = JFactory::getUser();
 
 		// Select the required fields from the table.
 		$query->select(
@@ -54,10 +57,25 @@ class ContentModelFeatured extends ContentModelFeaturedCore
 		$query->select('ua.name AS author_name')
 			->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 
+		// Join on voting table
+		if (JPluginHelper::isEnabled('content', 'vote'))
+		{
+			$query->select('COALESCE(NULLIF(ROUND(v.rating_sum  / v.rating_count, 0), 0), 0) AS rating, 
+							COALESCE(NULLIF(v.rating_count, 0), 0) as rating_count')
+				->join('LEFT', '#__content_rating AS v ON a.id = v.content_id');
+		}
+
 		// Filter by access level.
 		if ($access = $this->getState('filter.access'))
 		{
 			$query->where('a.access = ' . (int) $access);
+		}
+
+		// Filter by access level on categories.
+		if (!$user->authorise('core.admin'))
+		{
+			$groups = implode(',', $user->getAuthorisedViewLevels());
+			$query->where('c.access IN (' . $groups . ')');
 		}
 
 		// Filter by published state
@@ -88,8 +106,7 @@ class ContentModelFeatured extends ContentModelFeaturedCore
 		}
 		elseif (is_array($categoryId))
 		{
-			JArrayHelper::toInteger($categoryId);
-			$categoryId = implode(',', $categoryId);
+			$categoryId = implode(',', ArrayHelper::toInteger($categoryId));
 			$query->where('a.catid IN (' . $categoryId . ')');
 		}
 
@@ -101,6 +118,7 @@ class ContentModelFeatured extends ContentModelFeaturedCore
 
 		// Filter by author
 		$authorId = $this->getState('filter.author_id');
+
 		if (is_numeric($authorId))
 		{
 			$type = $this->getState('filter.author_id.include', true) ? '= ' : '<>';
@@ -115,6 +133,11 @@ class ContentModelFeatured extends ContentModelFeaturedCore
 			if (stripos($search, 'id:') === 0)
 			{
 				$query->where('a.id = ' . (int) substr($search, 3));
+			}
+			elseif (stripos($search, 'author:') === 0)
+			{
+				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
+				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			}
 			else
 			{
@@ -136,14 +159,24 @@ class ContentModelFeatured extends ContentModelFeaturedCore
 		{
 			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int) $tagId)
 				->join(
-					'LEFT', $db->quoteName('#__contentitem_tag_map', 'tagmap')
+					'LEFT',
+					$db->quoteName('#__contentitem_tag_map', 'tagmap')
 					. ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' . $db->quoteName('a.id')
 					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_content.article')
 				);
 		}
 
 		// Add the list ordering clause.
-		$query->order($db->escape($this->getState('list.ordering', 'a.title')) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
+		$orderCol  = $this->state->get('list.fullordering', 'a.title');
+		$orderDirn = '';
+
+		if (empty($orderCol))
+		{
+			$orderCol  = $this->state->get('list.ordering', 'a.title');
+			$orderDirn = $this->state->get('list.direction', 'ASC');
+		}
+
+		$query->order($db->escape($orderCol) . ' ' . $db->escape($orderDirn));
 
 		return $query;
 	}

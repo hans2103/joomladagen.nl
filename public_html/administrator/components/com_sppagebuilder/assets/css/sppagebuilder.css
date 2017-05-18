@@ -5034,6 +5034,7 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
 .com_sppagebuilder.view-pages .subhead .row-fluid [class*="span"] {
   min-height: 10px;
 }
+
 .com_sppagebuilder.view- .subhead .btn,
 .com_sppagebuilder.view-pages .subhead .btn {
   display: inline-block;
@@ -5047,9 +5048,9 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
   white-space: nowrap;
   border: 0;
   text-shadow: none;
-  padding: 8px 15px;
+  padding: 8px 15px!important;
   font-size: 14px;
-  line-height: 1.42857143;
+  line-height: 1.42857143!important;
   border-radius: 3px;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -5059,6 +5060,21 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
   -o-transition: color 300ms, background-color 300ms;
   transition: color 300ms, background-color 300ms;
 }
+
+.com_sppagebuilder.view- .subhead #toolbar,
+.com_sppagebuilder.view-pages .subhead #toolbar {
+  margin-top: 0!important;
+}
+
+.com_sppagebuilder.view- .subhead #toolbar [class^="icon-"],
+.com_sppagebuilder.view-pages .subhead #toolbar [class^="icon-"]{
+  background: none!important;
+  border-radius: 0!important;
+  border: 0!important;
+  width: auto!important;
+  margin:0!important;
+}
+
 .com_sppagebuilder.view- .subhead .btn:focus,
 .com_sppagebuilder.view-pages .subhead .btn:focus,
 .com_sppagebuilder.view- .subhead .btn:active:focus,

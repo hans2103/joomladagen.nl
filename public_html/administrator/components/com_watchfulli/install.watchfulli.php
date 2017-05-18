@@ -5,7 +5,7 @@
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  */
 defined('_JEXEC') or defined('JPATH_PLATFORM') or die;
@@ -21,16 +21,16 @@ class com_watchfulliInstallerScript
 
     /**
      * Joomla Version info class
-     * 
+     *
      * @var JVersion
      */
     public $version;
 
     /**
      * Used to determine if this is an update
-     * 
+     *
      * Primarily for backwards compatibility with Joomla! 1.5
-     * 
+     *
      * @var bool
      */
     public $is_update;
@@ -45,9 +45,10 @@ class com_watchfulliInstallerScript
     }
 
     /**
-     * 
-     * @param   string  $type
-     * @param   object  $parent
+     *
+     * @param   string $type
+     * @param   object $parent
+     *
      * @return  boolean
      */
     public function preflight($type, $parent)
@@ -55,29 +56,34 @@ class com_watchfulliInstallerScript
         if (defined('PHP_VERSION'))
         {
             $php_version = PHP_VERSION;
-        } elseif (function_exists('phpversion'))
+        }
+        elseif (function_exists('phpversion'))
         {
             $php_version = phpversion();
-        } else
+        }
+        else
         {
             $php_version = '5.0.0'; // all bets are off!
         }
 
         $language = JFactory::getLanguage();
         $language->load('com_watchfulli');
-        if ( ! version_compare($php_version, '5.2.4', '>='))
+        if (!version_compare($php_version, '5.2.4', '>='))
         {
             $message = JText::sprintf('COM_WATCHFULLI_INSTALL_PHP_TOO_OLD', '5.2.4');
             $this->addtoLog($message);
+
             return false;
         }
+
         return true;
     }
 
     /**
-     * 
-     * @param   string  $type
-     * @param   object  $parent
+     *
+     * @param   string $type
+     * @param   object $parent
+     *
      * @return  boolean
      */
     public function postflight($type, $parent)
@@ -106,32 +112,32 @@ class com_watchfulliInstallerScript
         {
             $sitename = JFactory::getConfig()->get('sitename');
             $style = "";
-        } else
+        }
+        else
         {
             $sitename = JFactory::getConfig()->getValue('config.sitename');
             $style = "background-color: #1D6CB0;color: white;border-radius: 4px;text-align: center;padding: 4px 12px;font-size: 13px;line-height: 18px;";
         }
 
         $message = JText::_('COM_WATCHFULLI_INSTALL_MESSAGE')
-                . JText::_('COM_WATCHFULLI_INSTALL_BEFORE_FORM')
-                . '<form action="https://app.watchful.li/index.php" method="post" target="_blank">'
-                . '<input type="hidden" name="name" value="' . $sitename . '">'
-                . '<input type="hidden" name="access_url" value="' . JURI::root() . '">'
-                . '<input type="hidden" name="secret_word"value="' . $key . '">'
-                . '<input type="hidden" name="word_akeeba" value="' . $this->getAkeebaSecretKey() . '">'
-                . '<input type="hidden" name="option" value="com_jmonitoring">'
-                . '<input type="hidden" name="task" value="save">'
-                . '<input type="hidden" name="controller" value="editsite">'
-                . '<input type="hidden" name="view" value="editsite">'
-                . '<input type="hidden" name="source" value="client">'
-                . '<p><input style="' . $style . '" type="submit" value="' . JText::_('COM_WATCHFULLI_ADDSITE') . '" class="btn btn-primary"></p>'
-                . '</form>'
-                . JText::_('COM_WATCHFULLI_INSTALL_BEFORE_KEY')
-                . '<p><input readonly="readonly" type="text" style="width:250px;" size="55" value="' . $key . '" /></p>'
-                . JText::_('COM_WATCHFULLI_INSTALL_AFTER_KEY')
-        ;
+            . JText::_('COM_WATCHFULLI_INSTALL_BEFORE_FORM')
+            . '<form action="https://app.watchful.li/index.php" method="post" target="_blank">'
+            . '<input type="hidden" name="name" value="' . $sitename . '">'
+            . '<input type="hidden" name="access_url" value="' . JURI::root() . '">'
+            . '<input type="hidden" name="secret_word"value="' . $key . '">'
+            . '<input type="hidden" name="word_akeeba" value="' . $this->getAkeebaSecretKey() . '">'
+            . '<input type="hidden" name="option" value="com_jmonitoring">'
+            . '<input type="hidden" name="task" value="save">'
+            . '<input type="hidden" name="controller" value="editsite">'
+            . '<input type="hidden" name="view" value="editsite">'
+            . '<input type="hidden" name="source" value="client">'
+            . '<p><input style="' . $style . '" type="submit" value="' . JText::_('COM_WATCHFULLI_ADDSITE') . '" class="btn btn-primary"></p>'
+            . '</form>'
+            . JText::_('COM_WATCHFULLI_INSTALL_BEFORE_KEY')
+            . '<p><input readonly="readonly" type="text" style="width:250px;" size="55" value="' . $key . '" /></p>'
+            . JText::_('COM_WATCHFULLI_INSTALL_AFTER_KEY');
 
-        if ( ! $hasfopen)
+        if (!$hasfopen)
         {
             $message .= JText::_('COM_WATCHFULLI_INSTALL_NO_FOPEN');
         }
@@ -139,25 +145,29 @@ class com_watchfulliInstallerScript
         if (version_compare($version->getShortVersion(), '3.0.0', '>='))
         {
             $mainframe->enqueueMessage($message);
-        } else
+        }
+        else
         {
             echo $message;
         }
+
+        // Add Watchful IPs in Admintools & RSFirewall config
+        $this->whiteListWatchful();
     }
 
     /**
      * Get Akeeba Secret Key for remote backup
-     * 
+     *
      * @return string
      */
     private function getAkeebaSecretKey()
     {
         $key = '';
-        if ( ! file_exists(JPATH_ADMINISTRATOR . '/components/com_akeeba/version.php'))
+        if (!file_exists(JPATH_ADMINISTRATOR . '/components/com_akeeba/version.php'))
             return $key;
 
         $params = JComponentHelper::getParams('com_akeeba');
-        if ( ! $params->get('frontend_enable'))
+        if (!$params->get('frontend_enable'))
             return $key;
 
         return $params->get('frontend_secret_word');
@@ -165,7 +175,7 @@ class com_watchfulliInstallerScript
 
     /**
      * Delete previously existing update records
-     * 
+     *
      * @return bool
      */
     private function cleanUpdateRecord()
@@ -173,12 +183,13 @@ class com_watchfulliInstallerScript
         $query = "DELETE FROM #__updates WHERE element = 'com_watchfulli'";
         $db = JFactory::getDbo();
         $db->setQuery($query);
+
         return $db->query();
     }
 
     /**
      * Delete previously existing update sites if there are more than ones
-     * 
+     *
      * @return bool
      */
     private function cleanUpdateSites()
@@ -191,15 +202,18 @@ class com_watchfulliInstallerScript
         {
             $query = "DELETE FROM #__update_sites WHERE name = 'Watchfully Slave Update'";
             $db->setQuery($query);
+
             return $db->query();
         }
+
         return true;
     }
 
     /**
      * Fetches the secret key or creates one if empty
-     * 
+     *
      * @param string $type "install" or "update"
+     *
      * @return string
      */
     private function getWatchfulSecretKey($type = 'install')
@@ -216,48 +230,51 @@ class com_watchfulliInstallerScript
         if ($type === 'install')
         {
             $this->saveSecret($new_secret_key);
+
             return $new_secret_key;
         }
 
         if (empty($current_secret_key) || $current_secret_key == $old_generated_key)
         {
             // this is an update - we must update the key on the master too
-            if ( ! $this->updateMaster($old_generated_key, $new_secret_key))
-            {  
+            if (!$this->updateMaster($old_generated_key, $new_secret_key))
+            {
                 // If the connection to the watchful API fails, we alert the customer that the client is broken
                 $mainframe->enqueueMessage(JText::_('COM_WATCHFULLI_INSTALL_SECRETKEY_UPDATE_MASTER_FAILED'), 'alert');
             }
             $this->saveSecret($new_secret_key);
+
             return $new_secret_key;
         }
-        
+
         return $current_secret_key;
     }
 
     /**
-     * This method calls the Watchful server the save a new key without the user 
-     * needing to manually edit the site on Watchful dashboard. This only 
-     * happens when user updates an existing Watchful client and the site is 
+     * This method calls the Watchful server the save a new key without the user
+     * needing to manually edit the site on Watchful dashboard. This only
+     * happens when user updates an existing Watchful client and the site is
      * still using the old, relatively less secure key.
-     * 
-     * We don't like to make "home calls" but the JED insisted that it was not 
-     * enough to generate new keys on new installs and give existing clients the 
-     * ability to refresh. 
-     * 
-     * With this "home call" we generate and save a new secret key for you and 
+     *
+     * We don't like to make "home calls" but the JED insisted that it was not
+     * enough to generate new keys on new installs and give existing clients the
+     * ability to refresh.
+     *
+     * With this "home call" we generate and save a new secret key for you and
      * you won't have to do anything.
-     * 
+     *
      * @param string $old_generated_key the old, less secure key
-     * @param string $new_secret_key the new, more secure key
+     * @param string $new_secret_key    the new, more secure key
+     *
      * @return boolean
      */
     private function updateMaster($old_generated_key, $new_secret_key)
     {
-        $api_endpoint = 'https://app.watchful.li/api/v1/sites/changekey'.
-                '?key='.$old_generated_key .
-                '&url='.urlencode(JURI::root()).
-                '&newkey='.$new_secret_key;
-        
+        $api_endpoint = 'https://app.watchful.li/api/v1/sites/changekey' .
+            '?key=' . $old_generated_key .
+            '&url=' . urlencode(JURI::root()) .
+            '&newkey=' . $new_secret_key;
+
         $ch = curl_init($api_endpoint);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Watchfulli/1.0 (+http://www.watchful.li)');
@@ -268,25 +285,28 @@ class com_watchfulliInstallerScript
         $result->data = curl_exec($ch);
         $result->info = curl_getinfo($ch);
         $result->error = curl_error($ch);
-        curl_close($ch);        
-        
-        if ( ! is_object($result))
+        curl_close($ch);
+
+        if (!is_object($result))
         {
             $this->addtoLog('[updateMaster] Response is not an object');
+
             return false;
         }
-        
+
         $data = json_decode($result->data);
         if (json_last_error != 0)
         {
             $this->addtoLog('[updateMaster] Response is not a JSON string');
+
             return false;
         }
-        
+
         if (empty($data->msg))
         {
             $this->addtoLog('[updateMaster] Response msg is empty');
-            return false;            
+
+            return false;
         }
 
         return true;
@@ -305,11 +325,12 @@ class com_watchfulliInstallerScript
     }
 
     /**
-     * Save the secret as component parameter, selecting different method 
+     * Save the secret as component parameter, selecting different method
      * according to Joomla version
-     * 
-     * @todo probably we should use Joomla framework commands instead of manual 
+     *
+     * @todo probably we should use Joomla framework commands instead of manual
      *       saves
+     *
      * @param string $secret
      */
     private function saveSecret($secret)
@@ -318,7 +339,8 @@ class com_watchfulliInstallerScript
         if (version_compare($version->getShortVersion(), '2.0.0', '>='))
         {
             $this->saveJsonSecret($secret);
-        } else
+        }
+        else
         {
             $this->saveIniSecret($secret);
         }
@@ -326,21 +348,22 @@ class com_watchfulliInstallerScript
 
     /**
      * Save the secret as component parameter in JSON format (>= J2.5)
-     * 
-     * @todo probably we should use Joomla framework commands instead of manual 
+     *
+     * @todo probably we should use Joomla framework commands instead of manual
      *       saves
+     *
      * @param string $secret
-     */    
+     */
     private function saveJsonSecret($secret)
     {
         $db = JFactory::getDbo();
         try
         {
             $params = $db->setQuery($db->getQuery(true)
-                                    ->select('params')
-                                    ->from('#__extensions')
-                                    ->where($db->quoteName('element') . ' = ' . $db->quote('com_watchfulli'))
-                    )->loadResult();
+                ->select('params')
+                ->from('#__extensions')
+                ->where($db->quoteName('element') . ' = ' . $db->quote('com_watchfulli'))
+            )->loadResult();
             if (empty($params))
             {
                 $params = '{}';
@@ -352,25 +375,29 @@ class com_watchfulliInstallerScript
             }
             $json->secret_key = $secret;
             $db->setQuery($db->getQuery(true)
-                            ->update('#__extensions')
-                            ->set($db->quoteName('params') . ' = ' . $db->quote(json_encode($json)))
-                            ->where($db->quoteName('element') . ' = ' . $db->quote('com_watchfulli'))
+                ->update('#__extensions')
+                ->set($db->quoteName('params') . ' = ' . $db->quote(json_encode($json)))
+                ->where($db->quoteName('element') . ' = ' . $db->quote('com_watchfulli'))
             )->query();
-        } catch (Exception $e)
+        }
+        catch (Exception $e)
         {
             JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+
             return false;
         }
+
         return true;
     }
 
     /**
      * Save the secret as component parameter in INI format (J1.5)
-     * 
-     * @todo probably we should use Joomla framework commands instead of manual 
+     *
+     * @todo probably we should use Joomla framework commands instead of manual
      *       saves
+     *
      * @param string $secret
-     */        
+     */
     private function saveIniSecret($secret)
     {
         $db = JFactory::getDbo();
@@ -379,7 +406,8 @@ class com_watchfulliInstallerScript
         if (empty($params))
         {
             $ini = 'secret_key=' . $secret;
-        } else
+        }
+        else
         {
             $arr = parse_ini_string($params);
             if (false === $arr)
@@ -399,6 +427,7 @@ class com_watchfulliInstallerScript
         }
         $db->setQuery('update #__components set params = ' . $db->quote($ini) . ' where `option` = ' . $db->quote('com_watchfulli'));
         $db->query();
+
         return true;
     }
 
@@ -408,9 +437,54 @@ class com_watchfulliInstallerScript
         {
             $this->version = new JVersion;
         }
+
         return $this->version;
     }
 
+    /**
+     * Auto-Whitelist Watchful IPs after install/update
+     *
+     * @see admin/controller.php whitelist
+     * @return bool
+     */
+    private function whiteListWatchful()
+    {
+        if (!defined('WATCHFULLI_PATH'))
+        {
+            define('WATCHFULLI_PATH', JPATH_ADMINISTRATOR . '/components/com_watchfulli/');
+        }
+
+        require_once WATCHFULLI_PATH . '/classes/watchfulli.php';
+        require_once WATCHFULLI_PATH . '/classes/connection.php';
+        require_once WATCHFULLI_PATH . '/classes/whitelistip.php';
+
+        $response = WatchfulliConnection::getCurl(array(
+            'url'             => 'https://app.watchful.li/ip-v4.txt',
+            'timeout'         => 300,
+            "follow_location" => false
+        ));
+
+        if (empty($response->data))
+        {
+            return false;
+        }
+
+        $watchfuIps = explode("\n", $response->data);
+
+        // Remove mask (Watchful will ever use /32)
+        $watchfuIps = preg_replace("/\/32/", '', $watchfuIps);
+
+        try
+        {
+            $whiteList = new WatchfulliWhitelistIp(json_encode($watchfuIps), 'add', false);
+        }
+        catch (\Exception $e)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 $version = new JVersion;

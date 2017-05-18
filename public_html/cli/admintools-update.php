@@ -115,7 +115,19 @@ ENDBLOCK;
 			echo "\n";
 		}
 
+		// Work around some misconfigured servers which print out notices
+		if (function_exists('error_reporting'))
+		{
+			$oldLevel = error_reporting(0);
+		}
+
 		$container = \FOF30\Container\Container::getInstance('com_admintools');
+
+		if (function_exists('error_reporting'))
+		{
+			error_reporting($oldLevel);
+		}
+
 		/** @var \Akeeba\AdminTools\Site\Model\Updates $updateModel */
 		$updateModel = $container->factory->model('Updates')->tmpInstance();
 

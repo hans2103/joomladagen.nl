@@ -1,7 +1,7 @@
 <?php
 /**
- * @package   AdminTools
- * @copyright Copyright (c)2010-2016 Nicholas K. Dionysopoulos
+ * @package   AkeebaBackup
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -65,6 +65,7 @@ if (version_compare(JVERSION, '2.5', 'lt'))
 
 use Akeeba\Engine\Factory;
 use Akeeba\Engine\Platform;
+use FOF30\Date\Date;
 
 // Deactivate self
 $db    = JFactory::getDbo();
@@ -338,8 +339,8 @@ class plgQuickiconAkeebabackup extends JPlugin
 				$maxperiod = $this->params->get('maxbackupperiod', 24);
 				JLoader::import('joomla.utilities.date');
 				$lastBackupRaw    = $record->backupstart;
-				$lastBackupObject = new JDate($lastBackupRaw);
-				$lastBackup       = $lastBackupObject->toUnix(false);
+				$lastBackupObject = new Date($lastBackupRaw);
+				$lastBackup       = $lastBackupObject->toUnix();
 				$maxBackup        = time() - $maxperiod * 3600;
 				if ( !$warning)
 				{

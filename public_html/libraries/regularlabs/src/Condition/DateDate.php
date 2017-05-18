@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,6 @@ use RegularLabs\Library\Date as RL_Date;
  */
 class DateDate
 	extends Date
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	public function pass()
 	{

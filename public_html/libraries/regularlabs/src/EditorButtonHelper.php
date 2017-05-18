@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,6 +13,7 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
+use JHtml;
 use JObject;
 use JText;
 
@@ -31,6 +32,8 @@ class EditorButtonHelper
 		$this->params = $params;
 
 		Language::load('plg_editors-xtd_' . $name);
+
+		JHtml::_('jquery.framework');
 
 		Document::script('regularlabs/script.min.js');
 		Document::style('regularlabs/style.min.css');

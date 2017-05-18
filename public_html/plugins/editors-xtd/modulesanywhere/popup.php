@@ -1,15 +1,20 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         6.0.6PRO
+ * @version         7.3.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
- * @copyright       Copyright © 2016 Regular Labs All Rights Reserved
+ * @copyright       Copyright © 2017 Regular Labs All Rights Reserved
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
+use RegularLabs\Library\Document as RL_Document;
+use RegularLabs\Library\Language as RL_Language;
+use RegularLabs\Library\Parameters as RL_Parameters;
+use RegularLabs\Library\StringHelper as RL_String;
 
 $user = JFactory::getUser();
 if ($user->get('guest')
@@ -23,11 +28,7 @@ if ($user->get('guest')
 	JError::raiseError(403, JText::_("ALERTNOTAUTH"));
 }
 
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/string.php';
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/text.php';
-require_once JPATH_LIBRARIES . '/regularlabs/helpers/parameters.php';
-$parameters = RLParameters::getInstance();
-$params     = $parameters->getPluginParams('modulesanywhere');
+$params = RL_Parameters::getInstance()->getPluginParams('modulesanywhere');
 
 if (JFactory::getApplication()->isSite())
 {
@@ -42,20 +43,19 @@ $class->render($params);
 
 class PlgButtonModulesAnywherePopup
 {
-	function render(&$params)
+	public function render(&$params)
 	{
-		require_once JPATH_LIBRARIES . '/regularlabs/helpers/functions.php';
 
 		$app = JFactory::getApplication();
 
 		// load the admin language file
-		RLFunctions::loadLanguage('plg_system_regularlabs');
-		RLFunctions::loadLanguage('plg_editors-xtd_modulesanywhere');
-		RLFunctions::loadLanguage('plg_system_modulesanywhere');
-		RLFunctions::loadLanguage('com_modules', JPATH_ADMINISTRATOR);
+		RL_Language::load('plg_system_regularlabs');
+		RL_Language::load('plg_editors-xtd_modulesanywhere');
+		RL_Language::load('plg_system_modulesanywhere');
+		RL_Language::load('com_modules', JPATH_ADMINISTRATOR);
 
-		RLFunctions::stylesheet('regularlabs/popup.min.css');
-		RLFunctions::stylesheet('regularlabs/style.min.css');
+		RL_Document::style('regularlabs/popup.min.css');
+		RL_Document::style('regularlabs/style.min.css');
 
 		// Initialize some variables
 		$db     = JFactory::getDbo();
@@ -68,7 +68,7 @@ class PlgButtonModulesAnywherePopup
 		$filter_position  = $app->getUserStateFromRequest($option . 'filter_position', 'filter_position', '', 'string');
 		$filter_type      = $app->getUserStateFromRequest($option . 'filter_type', 'filter_type', '', 'string');
 		$filter_search    = $app->getUserStateFromRequest($option . 'filter_search', 'filter_search', '', 'string');
-		$filter_search    = RLString::strtolower($filter_search);
+		$filter_search    = RL_String::strtolower($filter_search);
 
 		$limit      = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'int');
 		$limitstart = $app->getUserStateFromRequest('modulesanywhere_limitstart', 'limitstart', 0, 'int');
@@ -173,8 +173,8 @@ class PlgButtonModulesAnywherePopup
 		{
 			$extension = $type->value;
 			$source    = JPATH_SITE . '/modules/' . $extension;
-			RLFunctions::loadLanguage($extension . '.sys', JPATH_SITE)
-			|| RLFunctions::loadLanguage($extension . '.sys', $source);
+			RL_Language::load($extension . '.sys', JPATH_SITE)
+			|| RL_Language::load($extension . '.sys', $source);
 			$types[$i]->text = JText::_($type->text);
 		}
 		JArrayHelper::sortObjects($types, 'text', 1, true, JFactory::getLanguage()->getLocale());
@@ -182,7 +182,7 @@ class PlgButtonModulesAnywherePopup
 		$lists['type'] = JHtml::_('select.genericlist', $types, 'filter_type', 'class="inputbox" size="1" onchange="this.form.submit()"', 'value', 'text', $filter_type);
 
 		// state filter
-		$states         = array();
+		$states         = [];
 		$states[]       = JHtml::_('select.option', '', JText::_('JOPTION_SELECT_PUBLISHED'));
 		$states[]       = JHtml::_('select.option', '1', JText::_('JPUBLISHED'));
 		$states[]       = JHtml::_('select.option', '0', JText::_('JUNPUBLISHED'));
@@ -241,12 +241,12 @@ class PlgButtonModulesAnywherePopup
 		<div class="container-fluid container-main">
 			<form action="" method="post" name="adminForm" id="adminForm">
 				<div class="alert alert-info">
-					<?php echo RLText::html_entity_decoder(JText::_('MA_CLICK_ON_ONE_OF_THE_MODULES_LINKS')); ?>
+					<?php echo RL_String::html_entity_decoder(JText::_('MA_CLICK_ON_ONE_OF_THE_MODULES_LINKS')); ?>
 				</div>
 
 				<div class="row-fluid form-vertical">
-					<?php if ($params->override_style && (count(explode(',', $params->styles)) > 1 || $params->styles != $params->style)) : ?>
-						<div class="span4 well">
+					<div class="span12 well">
+						<?php if ($params->override_style && (count(explode(',', $params->styles)) > 1 || $params->styles != $params->style)) : ?>
 							<div class="control-group">
 								<label id="style-lbl" for="style"
 								       class="control-label"><?php echo JText::_('MA_MODULE_STYLE'); ?></label>
@@ -268,9 +268,7 @@ class PlgButtonModulesAnywherePopup
 									</select>
 								</div>
 							</div>
-						</div>
-					<?php endif; ?>
-					<div class="span4 well">
+						<?php endif; ?>
 						<div class="control-group">
 							<label id="showtitle-lbl" for="showtitle-field" class="control-label" rel="tooltip"
 							       title="<?php echo JText::_('COM_MODULES_FIELD_SHOWTITLE_DESC'); ?>">
@@ -289,84 +287,6 @@ class PlgButtonModulesAnywherePopup
 							</div>
 						</div>
 					</div>
-					<div class="span4 well">
-						<div class="control-group">
-							<label id="enable_div-lbl" for="enable_div-field" class="control-label" rel="tooltip"
-							       title="<?php echo JText::_('MA_EMBED_IN_A_DIV_DESC'); ?>">
-								<?php echo JText::_('MA_EMBED_IN_A_DIV'); ?>
-							</label>
-
-							<div class="controls">
-								<fieldset id="enable_div" class="radio btn-group">
-									<input type="radio" id="enable_div0" name="enable_div"
-									       value="0" <?php echo !$params->div_enable ? 'checked="checked"' : ''; ?>
-									       onclick="toggleDivs();" onchange="toggleDivs();">
-									<label for="enable_div0"><?php echo JText::_('JNO'); ?></label>
-									<input type="radio" id="enable_div1" name="enable_div"
-									       value="1" <?php echo $params->div_enable ? 'checked="checked"' : ''; ?>
-									       onclick="toggleDivs();" onchange="toggleDivs();">
-									<label for="enable_div1"><?php echo JText::_('JYES'); ?></label>
-								</fieldset>
-							</div>
-						</div>
-						<div rel="enable_div" class="toggle_div" style="display:none;">
-							<div class="control-group">
-								<label id="div_width-lbl" for="div_width" class="control-label" rel="tooltip"
-								       title="<?php echo JText::_('MA_WIDTH_DESC'); ?>">
-									<?php echo JText::_('RL_WIDTH'); ?>
-								</label>
-
-								<div class="controls">
-									<input type="text" class="text_area" name="div_width" id="div_width"
-									       value="<?php echo $params->div_width; ?>" size="4"
-									       style="width:50px;text-align: right;">
-								</div>
-							</div>
-							<div class="control-group">
-								<label id="div_height-lbl" for="div_height" class="control-label" rel="tooltip"
-								       title="<?php echo JText::_('MA_HEIGHT_DESC'); ?>">
-									<?php echo JText::_('RL_HEIGHT'); ?>
-								</label>
-
-								<div class="controls">
-									<input type="text" class="text_area" name="div_height" id="div_height"
-									       value="<?php echo $params->div_height; ?>" size="4"
-									       style="width:50px;text-align: right;">
-								</div>
-							</div>
-							<div class="control-group">
-								<label id="div_float-lbl" for="div_float" class="control-label" rel="tooltip"
-								       title="<?php echo JText::_('MA_ALIGNMENT_DESC'); ?>">
-									<?php echo JText::_('MA_ALIGNMENT'); ?>
-								</label>
-
-								<div class="controls">
-									<fieldset id="div_float" class="radio btn-group">
-										<input type="radio" id="div_float0" name="div_float"
-										       value="0" <?php echo !$params->div_float ? 'checked="checked"' : ''; ?>>
-										<label for="div_float0"><?php echo JText::_('JNONE'); ?></label>
-										<input type="radio" id="div_float1" name="div_float"
-										       value="left" <?php echo $params->div_float == 'left' ? 'checked="checked"' : ''; ?>>
-										<label for="div_float1"><?php echo JText::_('JGLOBAL_LEFT'); ?></label>
-										<input type="radio" id="div_float2" name="div_float"
-										       value="right" <?php echo $params->div_float == 'right' ? 'checked="checked"' : ''; ?>>
-										<label for="div_float2"><?php echo JText::_('JGLOBAL_RIGHT'); ?></label>
-									</fieldset>
-								</div>
-							</div>
-							<div class="control-group">
-								<label id="text_area-lbl" for="text_area" class="control-label" rel="tooltip"
-								       title="<?php echo JText::_('MA_DIV_CLASSNAME_DESC'); ?>">
-									<?php echo JText::_('MA_DIV_CLASSNAME'); ?>
-								</label>
-
-								<div class="controls">
-									<input type="text" class="text_area" name="div_class" id="div_class"
-									       value="<?php echo $params->div_class; ?>">
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 
 				<div id="filter-bar" class="btn-toolbar">
@@ -379,10 +299,10 @@ class PlgButtonModulesAnywherePopup
 						       title="<?php echo JText::_('COM_MODULES_MODULES_FILTER_SEARCH_DESC'); ?>">
 					</div>
 					<div class="btn-group pull-left hidden-phone">
-						<button class="btn" type="submit" rel="tooltip"
+						<button class="btn btn-default" type="submit" rel="tooltip"
 						        title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
 							<span class="icon-search"></span></button>
-						<button class="btn" type="button" rel="tooltip"
+						<button class="btn btn-default" type="button" rel="tooltip"
 						        title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"
 						        onclick="document.id('filter_search').value='';this.form.submit();">
 							<span class="icon-remove"></span></button>
@@ -436,7 +356,7 @@ class PlgButtonModulesAnywherePopup
 							<tr class="<?php echo "row$k"; ?>">
 								<td class="center">
 									<?php
-									echo '<button class="btn" rel="tooltip" title="<strong>' . JText::_('MA_USE_ID_IN_TAG') . '</strong><br>'
+									echo '<button class="btn btn-default" rel="tooltip" title="<strong>' . JText::_('MA_USE_ID_IN_TAG') . '</strong><br>'
 										. $tag_start . $tag . ' ' . $row->id . $tag_end
 										. '" onclick="modulesanywhere_jInsertEditorText( \'' . $row->id . '\' );return false;">'
 										. $row->id
@@ -448,7 +368,7 @@ class PlgButtonModulesAnywherePopup
 								</td>
 								<td>
 									<?php
-									echo '<button class="btn" rel="tooltip" title="<strong>' . JText::_('MA_USE_TITLE_IN_TAG') . '</strong><br>'
+									echo '<button class="btn btn-default" rel="tooltip" title="<strong>' . JText::_('MA_USE_TITLE_IN_TAG') . '</strong><br>'
 										. $tag_start . $tag . ' ' . htmlspecialchars($row->title) . $tag_end
 										. '" onclick="modulesanywhere_jInsertEditorText( \'' . addslashes(htmlspecialchars($row->title)) . '\' );return false;">'
 										. htmlspecialchars($row->title)
@@ -462,7 +382,7 @@ class PlgButtonModulesAnywherePopup
 								<td>
 									<?php if ($row->position) : ?>
 										<?php
-										echo '<button class="btn" rel="tooltip" title="<strong>' . JText::_('MA_USE_MODULE_POSITION_TAG') . '</strong><br>'
+										echo '<button class="btn btn-default" rel="tooltip" title="<strong>' . JText::_('MA_USE_MODULE_POSITION_TAG') . '</strong><br>'
 											. $tag_start . $postag . ' ' . $row->position . $tag_end
 											. '" onclick="modulesanywhere_jInsertEditorText( \'' . $row->position . '\', 1 );return false;">'
 											. $row->position
@@ -525,60 +445,10 @@ class PlgButtonModulesAnywherePopup
 						str = t_start + '<?php echo $tag; ?> ' + attribs + t_end;
 					}
 
-					if ($('input[name="enable_div"]:checked').val() == 1) {
-						var params = [];
-						if ($('input[name="div_width"]').val()) {
-							params.push('width="' + $('input[name="div_width"]').val() + '"');
-						}
-						if ($('input[name="div_height"]').val()) {
-							params.push('height="' + $('input[name="div_height"]').val() + '"');
-						}
-						if ($('input[name="div_float"]:checked').val() != 0) {
-							params.push('float="' + $('input[name="div_float"]:checked').val()) + '"';
-						}
-						if ($('input[name="div_class"]').val()) {
-							params.push('class="' + $('input[name="div_class"]').val() + '"');
-						}
-						str = t_start + ('div ' + params.join(' ') ).trim() + t_end
-							+ str.trim()
-							+ t_start + '/div' + t_end;
-					}
-
 					window.parent.jInsertEditorText(str, '<?php echo JFactory::getApplication()->input->getString('name', 'text'); ?>');
 					window.parent.SqueezeBox.close();
 				})(jQuery);
 			}
-
-			function initDivs() {
-				(function($) {
-					$('div.toggle_div').each(function(i, el) {
-						$('input[name="' + $(el).attr('rel') + '"]').each(function(i, el) {
-							$(el).click(function() {
-								toggleDivs();
-							});
-						});
-					});
-					toggleDivs();
-				})(jQuery);
-			}
-
-			function toggleDivs() {
-				(function($) {
-					$('div.toggle_div').each(function(i, el) {
-						el = $(el);
-						if ($('input[name="' + el.attr('rel') + '"]:checked').val() == 1) {
-							el.slideDown();
-						}
-						else {
-							el.slideUp();
-						}
-					});
-				})(jQuery);
-			}
-
-			jQuery(document).ready(function() {
-				initDivs();
-			});
 		</script>
 		<?php
 	}

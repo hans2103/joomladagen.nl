@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -149,7 +149,7 @@ class RLText
 		return RL_Html::getBody($html);
 	}
 
-	public static function getContentContainingSearches($string, $start_searches = [], $end_searches = [], $start_offset = 200, $end_offset = null)
+	public static function getContentContainingSearches($string, $start_searches = [], $end_searches = [], $start_offset = 1000, $end_offset = null)
 	{
 		return RL_Html::getContentContainingSearches($string, $start_searches, $end_searches, $start_offset, $end_offset);
 	}

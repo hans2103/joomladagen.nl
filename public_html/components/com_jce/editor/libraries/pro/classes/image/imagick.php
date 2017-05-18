@@ -1,8 +1,7 @@
 <?php
 /**
- * @package    JCE
- * @copyright    Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright    Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -13,23 +12,22 @@
  */
 defined('_JEXEC') or die;
 
-require_once(dirname(__FILE__) . '/imagick/filter.php');
+require_once dirname(__FILE__) . '/imagick/filter.php';
 
 /**
  * Class to manipulate an image.
  */
 class WFImageImagick
 {
-
     /**
-     * @var    resource  The image resource handle.
-     * @since  11.3
+     * @var resource The image resource handle
+     *
      */
     protected $handle;
 
     /**
-     * @var    string  The source image path.
-     * @since  11.3
+     * @var string The source image path
+     *
      */
     protected $path = null;
 
@@ -38,10 +36,9 @@ class WFImageImagick
     /**
      * Class constructor.
      *
-     * @param   mixed $source Either a file path for a source image or a GD resource handler for an image.
+     * @param mixed $source Either a file path for a source image or a GD resource handler for an image
      *
-     * @since   11.3
-     * @throws  RuntimeException
+     * @throws RuntimeException
      */
     public function __construct($source = null)
     {
@@ -62,15 +59,15 @@ class WFImageImagick
     /**
      * Method to apply a filter to the image by type.  Two examples are: grayscale and sketchy.
      *
-     * @param   string $type The name of the image filter to apply.
-     * @param   array $options An array of options for the filter.
+     * @param string $type    The name of the image filter to apply
+     * @param array  $options An array of options for the filter
      *
-     * @return  JImage
+     * @return WFImage
      *
-     * @since   11.3
-     * @see     JImageFilter
-     * @throws  LogicException
-     * @throws  RuntimeException
+     * @see     WFImageFilter
+     *
+     * @throws LogicException
+     * @throws RuntimeException
      */
     public function filter($type, array $options = array())
     {
@@ -84,10 +81,9 @@ class WFImageImagick
     /**
      * Method to get the height of the image in pixels.
      *
-     * @return  integer
+     * @return int
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function getHeight()
     {
@@ -102,10 +98,9 @@ class WFImageImagick
     /**
      * Method to get the width of the image in pixels.
      *
-     * @return  integer
+     * @return int
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function getWidth()
     {
@@ -118,11 +113,10 @@ class WFImageImagick
     }
 
     /**
-     * Method to return the path
+     * Method to return the path.
      *
-     * @return    string
+     * @return string
      *
-     * @since    11.3
      */
     public function getPath()
     {
@@ -132,7 +126,7 @@ class WFImageImagick
     /**
      * Method to determine whether or not an image has been loaded into the object.
      *
-     * @return  bool
+     * @return bool
      *
      * @since   11.3
      */
@@ -149,13 +143,10 @@ class WFImageImagick
     /**
      * Method to load a file into the JImage object as the resource.
      *
-     * @param   string $path The filesystem path to load as an image.
+     * @param string $path The filesystem path to load as an image
      *
-     * @return  void
-     *
-     * @since   11.3
-     * @throws  InvalidArgumentException
-     * @throws  RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function loadFile($path)
     {
@@ -176,13 +167,10 @@ class WFImageImagick
     /**
      * Method to load a file into the JImage object as the resource.
      *
-     * @param   string $path The filesystem path to load as an image.
+     * @param string $path The filesystem path to load as an image
      *
-     * @return  void
-     *
-     * @since   11.3
-     * @throws  InvalidArgumentException
-     * @throws  RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function loadString($string)
     {
@@ -199,8 +187,8 @@ class WFImageImagick
     private function watermarkText($options)
     {
         if (is_file($options->font_style)) {
-            $watermark = new ImagickDraw;
-            $watermark->setFontSize((int)$options->font_size);
+            $watermark = new ImagickDraw();
+            $watermark->setFontSize((int) $options->font_size);
 
             $options->font_color = '#' . preg_replace('#[^a-z0-9]+#i', '', $options->font_color);
 
@@ -247,10 +235,10 @@ class WFImageImagick
             }
 
             $watermark->setFillColor($options->font_color);
-            $watermark->setFillOpacity((float)$options->opacity);
+            $watermark->setFillOpacity((float) $options->opacity);
             $watermark->setFont($options->font_style);
 
-            $this->handle->annotateImage($watermark, (int)$options->margin, (int)$options->margin, 0, $options->text);
+            $this->handle->annotateImage($watermark, (int) $options->margin, (int) $options->margin, 0, $options->text);
         }
     }
 
@@ -319,9 +307,9 @@ class WFImageImagick
             }
 
             if ($watermark->getImageFormat() == 'PNG') {
-                $watermark->evaluateImage(Imagick::EVALUATE_MULTIPLY, (float)$options->opacity, Imagick::CHANNEL_ALPHA);
+                $watermark->evaluateImage(Imagick::EVALUATE_MULTIPLY, (float) $options->opacity, Imagick::CHANNEL_ALPHA);
             } else {
-                $watermark->setImageOpacity((float)$options->opacity);
+                $watermark->setImageOpacity((float) $options->opacity);
             }
             $this->handle->compositeImage($watermark, imagick::COMPOSITE_OVER, $x, $y);
         }
@@ -330,9 +318,11 @@ class WFImageImagick
     }
 
     /**
-     * Set image resolution
+     * Set image resolution.
+     *
      * @param type $resolution
-     * @return \WFImageGD
+     *
+     * @return \WFImageImagick
      */
     public function resample($resolution)
     {
@@ -347,16 +337,15 @@ class WFImageImagick
     /**
      * Method to resize the current image.
      *
-     * @param   mixed $width The width of the resized image in pixels or a percentage.
-     * @param   mixed $height The height of the resized image in pixels or a percentage.
-     * @param   bool $createNew If true the current image will be cloned, resized and returned; else
-     * the current image will be resized and returned.
-     * @param   integer $scaleMethod Which method to use for scaling
+     * @param mixed $width       The width of the resized image in pixels or a percentage
+     * @param mixed $height      The height of the resized image in pixels or a percentage
+     * @param bool  $createNew   If true the current image will be cloned, resized and returned; else
+     *                           the current image will be resized and returned
+     * @param int   $scaleMethod Which method to use for scaling
      *
-     * @return  JImage
+     * @return WFImage
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function resize($width, $height, $createNew = false)
     {
@@ -376,17 +365,16 @@ class WFImageImagick
     /**
      * Method to crop the current image.
      *
-     * @param   mixed $width The width of the image section to crop in pixels or a percentage.
-     * @param   mixed $height The height of the image section to crop in pixels or a percentage.
-     * @param   integer $left The number of pixels from the left to start cropping.
-     * @param   integer $top The number of pixels from the top to start cropping.
-     * @param   bool $createNew If true the current image will be cloned, cropped and returned; else
-     *                               the current image will be cropped and returned.
+     * @param mixed $width     The width of the image section to crop in pixels or a percentage
+     * @param mixed $height    The height of the image section to crop in pixels or a percentage
+     * @param int   $left      The number of pixels from the left to start cropping
+     * @param int   $top       The number of pixels from the top to start cropping
+     * @param bool  $createNew If true the current image will be cloned, cropped and returned; else
+     *                         the current image will be cropped and returned
      *
-     * @return  JImage
+     * @return WFImage
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function crop($width, $height, $left, $top, $createNew = false)
     {
@@ -408,15 +396,14 @@ class WFImageImagick
     /**
      * Method to rotate the current image.
      *
-     * @param   mixed $angle The angle of rotation for the image
-     * @param   integer $background The background color to use when areas are added due to rotation
-     * @param   bool $createNew If true the current image will be cloned, rotated and returned; else
-     * the current image will be rotated and returned.
+     * @param mixed $angle      The angle of rotation for the image
+     * @param int   $background The background color to use when areas are added due to rotation
+     * @param bool  $createNew  If true the current image will be cloned, rotated and returned; else
+     *                          the current image will be rotated and returned
      *
-     * @return  JImage
+     * @return WFImage
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function rotate($angle, $createNew = false)
     {
@@ -435,15 +422,14 @@ class WFImageImagick
     /**
      * Method to rotate the current image.
      *
-     * @param   mixed $angle The angle of rotation for the image
-     * @param   integer $background The background color to use when areas are added due to rotation
-     * @param   bool $createNew If true the current image will be cloned, rotated and returned; else
-     * the current image will be rotated and returned.
+     * @param mixed $angle      The angle of rotation for the image
+     * @param int   $background The background color to use when areas are added due to rotation
+     * @param bool  $createNew  If true the current image will be cloned, rotated and returned; else
+     *                          the current image will be rotated and returned
      *
-     * @return  JImage
+     * @return WFImage
      *
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function flip($mode, $createNew = false)
     {
@@ -456,7 +442,7 @@ class WFImageImagick
             $this->handle = $this->handle->clone();
         }
 
-        switch ((int)$mode) {
+        switch ((int) $mode) {
 
             case IMAGE_FLIP_HORIZONTAL:
                 $this->handle->flopImage();
@@ -473,18 +459,47 @@ class WFImageImagick
         }
     }
 
+    private function removeExif()
+    {
+        $rotate = 0;
+        $orientation = $this->handle->getImageOrientation();
+
+        // Fix Orientation
+        switch ($orientation) {
+            case imagick::ORIENTATION_BOTTOMRIGHT:
+                $rotate = 180;
+                break;
+            case imagick::ORIENTATION_RIGHTTOP:
+                $rotate = 90;
+                break;
+            case imagick::ORIENTATION_LEFTBOTTOM:
+                $rotate = 270;
+                break;
+        }
+
+        if ($rotate) {
+            $this->handle->rotateImage(new ImagickPixel(), $rotate);
+        }
+
+        // get iptcc
+        //$iptcc = $img->getImageProfile('iptcc');
+
+        $this->handle->stripImage();
+
+        // add back iptcc
+        /*if (!empty($iptcc)) {
+            $img->profileImage($iptcc);
+        }*/
+    }
+
     /**
      * Method to write the current image out to a file.
      *
-     * @param   string $path The filesystem path to save the image.
-     * @param   integer $type The image type to save the file as.
-     * @param   array $options The image type options to use in saving the file.
+     * @param string $path    The filesystem path to save the image
+     * @param int    $type    The image type to save the file as
+     * @param array  $options The image type options to use in saving the file
      *
-     * @return  void
-     *
-     * @see     http://www.php.net/manual/image.constants.php
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function toFile($path, $type = 'jpeg', array $options = array())
     {
@@ -493,11 +508,17 @@ class WFImageImagick
             throw new LogicException('No valid image was loaded.');
         }
 
+        // resample
+        if (!empty($options['resampleImage'])) {
+            $this->handle->setImageResolution(72, 72);
+        }
+
+        // set format
         $this->handle->setImageFormat($type);
 
         // remove exif data
         if (!empty($options['removeExif'])) {
-            $this->handle->stripImage();
+            $this->removeExif();
         }
 
         switch ($type) {
@@ -531,15 +552,11 @@ class WFImageImagick
     /**
      * Method to write the current image out to a file.
      *
-     * @param   string $path The filesystem path to save the image.
-     * @param   integer $type The image type to save the file as.
-     * @param   array $options The image type options to use in saving the file.
+     * @param string $path    The filesystem path to save the image
+     * @param int    $type    The image type to save the file as
+     * @param array  $options The image type options to use in saving the file
      *
-     * @return  void
-     *
-     * @see     http://www.php.net/manual/image.constants.php
-     * @since   11.3
-     * @throws  LogicException
+     * @throws LogicException
      */
     public function toString($type = 'jpeg', array $options = array())
     {
@@ -548,11 +565,17 @@ class WFImageImagick
             throw new LogicException('No valid image was loaded');
         }
 
+        // resample
+        if (!empty($options['resampleImage'])) {
+            $this->handle->setImageResolution(72, 72);
+        }
+
+        // set format
         $this->handle->setImageFormat($type);
 
         // remove exif data
         if (!empty($options['removeExif'])) {
-            $this->handle->stripImage();
+            $this->removeExif();
         }
 
         switch ($type) {
@@ -577,7 +600,7 @@ class WFImageImagick
                 $this->handle->setImageCompressionQuality((array_key_exists('quality', $options)) ? $options['quality'] : 100);
         }
 
-        print $this->handle->getImageBlob();
+        echo $this->handle->getImageBlob();
 
         $this->destroy();
     }
@@ -585,12 +608,11 @@ class WFImageImagick
     /**
      * Method to get an image filter instance of a specified type.
      *
-     * @param   string $type The image filter type to get.
+     * @param string $type The image filter type to get
      *
-     * @return  JImageFilter
+     * @return WFImageImagickFilter
      *
-     * @since   11.3
-     * @throws  RuntimeException
+     * @throws RuntimeException
      */
     protected function getFilterInstance($type)
     {
@@ -598,7 +620,7 @@ class WFImageImagick
         $type = strtolower(preg_replace('#[^A-Z0-9_]#i', '', $type));
 
         // load the filter
-        require_once(dirname(__FILE__) . '/imagick/filters/' . $type . '.php');
+        require_once dirname(__FILE__) . '/imagick/filters/' . $type . '.php';
 
         // Verify that the filter type exists.
         $className = 'WFImageImagickFilter' . ucfirst($type);
@@ -633,5 +655,4 @@ class WFImageImagick
         $this->handle->clear();
         $this->handle->destroy();
     }
-
 }

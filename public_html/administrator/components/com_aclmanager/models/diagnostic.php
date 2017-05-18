@@ -104,16 +104,19 @@ class AclmanagerModelDiagnostic extends JModelList
 				}
 			}
 
-			// Get menus
-			$query	= $db->getQuery(true);
-			$query->select(
-				$this->getState(
-					'list.select',
-					'a.id AS id, a.asset_id AS asset_id')
-			);
-			$query->from('#__menu_types AS a');
-			$db->setQuery($query);
-			$menus = $db->loadObjectList('asset_id');
+			if (version_compare(JVERSION, '3.6', 'ge'))
+			{
+				// Get menus
+				$query = $db->getQuery(true);
+				$query->select(
+					$this->getState(
+						'list.select',
+						'a.id AS id, a.asset_id AS asset_id')
+				);
+				$query->from('#__menu_types AS a');
+				$db->setQuery($query);
+				$menus = $db->loadObjectList('asset_id');
+			}
 
 			foreach ($assets as $asset)
 			{
@@ -228,9 +231,9 @@ class AclmanagerModelDiagnostic extends JModelList
 			$component_asset = '{"core.admin":[],"core.manage":[]}';
 			$category_asset = '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
 			$article_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-			$module_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
+			$module_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[],"module.edit.frontend":[]}';
 			$menu_asset	= '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-			$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory');
+			$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory','com_fields');
 			$issues = array();
 			$issuecount = 0;
 
@@ -333,11 +336,11 @@ class AclmanagerModelDiagnostic extends JModelList
 						} elseif($catinfo->parent_id !=0) {
 							$asset->correct_parent = $categories_id[$catinfo->parent_id]->asset_id;
 						}
-						$asset->correct_level = ($catinfo->level + 1);
+						$asset->correct_level = (int) $catinfo->level + 1;
 						// Prevent parent_id = 0
 						if($asset->correct_parent == 0) {
 							$asset->correct_parent = $assets_name[$asset->component]->id;
-							$asset->correct_level = $assets_name[$asset->component]->level + 1;
+							$asset->correct_level = (int) $assets_name[$asset->component]->level + 1;
 							if($view == 'diagnostic') {
 								$object_url = JRoute::_('index.php?option=com_categories&task=category.edit&id='.$asset->object[2].'&extension='.$asset->component, false);
 								JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_ACLMANAGER_DIAGNOSTIC_ISSUE_DETECTED_CATEGORY', $object_url, $asset->title), 'error');
@@ -367,7 +370,7 @@ class AclmanagerModelDiagnostic extends JModelList
 						}
 
 						$asset->correct_parent = $catinfo->asset_id;
-						$asset->correct_level = ($catinfo->level + 2);
+						$asset->correct_level = (int) $catinfo->level + 2;
 					}
 					if (($asset->rules == '') || ($asset->rules == '{}') || ($asset->rules == $category_asset)) {
 						$asset->correct_rules = $article_asset;
@@ -375,7 +378,7 @@ class AclmanagerModelDiagnostic extends JModelList
 					// Prevent parent_id = 0
 					if($asset->correct_parent == 0) {
 						$asset->correct_parent = $assets_name[$asset->component]->id;
-						$asset->correct_level = $assets_name[$asset->component]->level + 1;
+						$asset->correct_level = (int) $assets_name[$asset->component]->level + 1;
 						if($view == 'diagnostic') {
 							$object_url = JRoute::_('index.php?option=com_content&task=article.edit&id='.$asset->object[2], false);
 							JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_ACLMANAGER_DIAGNOSTIC_ISSUE_DETECTED_ARTICLE', $object_url, $asset->title), 'error');
@@ -398,7 +401,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				// Anything else
 				} else {
 					$asset->correct_parent = $asset->parent;
-					$asset->correct_level = $asset->level;
+					$asset->correct_level = (int) $asset->level;
 					if ($asset->rules == '') {
 						$asset->correct_rules = $default_asset;
 					}
@@ -445,9 +448,9 @@ class AclmanagerModelDiagnostic extends JModelList
 		$component_asset 		= '{"core.admin":[],"core.manage":[]}';
 		$category_asset 		= '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
 		$article_asset 			= '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-		$module_asset		 	= '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
+		$module_asset		 	= '{"core.delete":[],"core.edit":[],"core.edit.state":[],"module.edit.frontend":[]}';
 		$menu_asset		 	    = '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-		$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory');
+		$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory','com_fields');
 
 		$assets_name = $this->getListQuery();
 		$db->setQuery($assets_name);
@@ -571,7 +574,7 @@ class AclmanagerModelDiagnostic extends JModelList
 		foreach($categories as $category) {
 			$category->title = $category->title;
 			$category->name = $category->extension.'.category.'.$category->catid;
-			$category->correct_level = $category->level+1;
+			$category->correct_level = (int) $category->level + 1;
 			$category->level = '';
 			$category->correct_parent = 1;
 			if ($category->parent_id == 1) {
@@ -637,7 +640,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				$catinfo = $categories_id[$article->catid];
 			}
 			$article->correct_parent = $catinfo->asset_id;
-			$article->correct_level = ($catinfo->level + 2);
+			$article->correct_level = (int) $catinfo->level + 2;
 			$article->level = '';
 			$article->parent = '';
 			$article->rules = '';
@@ -1032,7 +1035,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				$query->set('parent_id = ' . (int) ($asset->correct_parent));
 				$query->set('level = ' . (int) ($asset->correct_level));
 				$query->set('lft = ' . (int) $rightId);
-				$query->set('rgt = ' . (int) ($rightId+1));
+				$query->set('rgt = ' . (int) ($rightId + 1));
 				$query->set('name = ' . $db->quote($asset->name));
 				$query->set('title = ' . $db->quote($asset->title));
 				$query->set('rules = ' . $db->quote($asset->correct_rules));

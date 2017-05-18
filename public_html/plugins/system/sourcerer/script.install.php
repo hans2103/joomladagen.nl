@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,22 +22,5 @@ class PlgSystemSourcererInstallerScript extends PlgSystemSourcererInstallerScrip
 	public function uninstall($adapter)
 	{
 		$this->uninstallPlugin($this->extname, 'editors-xtd');
-	}
-
-	public function onAfterInstall($route)
-	{
-		if ($route = 'update')
-		{
-			$this->deleteOldFiles();
-		}
-	}
-
-	private function deleteOldFiles()
-	{
-		$this->delete(
-			[
-				JPATH_SITE . '/plugins/system/snippets/helper.php',
-			]
-		);
 	}
 }

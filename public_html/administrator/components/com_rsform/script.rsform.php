@@ -992,10 +992,10 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v1.52.7</h2>
+		<h2>Changelog v1.52.9</h2>
 		<ul class="version-history">
-			<li><span class="version-fixed">Fix</span> {if} scripting did not work with the '-&gt;' and '&lt;-' operators on the submissions view.</li>
-			
+			<li><span class="version-fixed">Fix</span> Form Title will now show up in listings according to the language the form was last edited in.</li>
+			<li><span class="version-fixed">Fix</span> When changing the language of Directory Emails, they were incorrectly transferred to the Additional Emails area.</li>
 		</ul>
 		<a class="com-rsform-button" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="com-rsform-button" href="http://www.rsjoomla.com/support/documentation/view-knowledgebase/21-rsform-pro-user-guide.html" target="_blank">Read the RSForm! Pro User Guide</a>

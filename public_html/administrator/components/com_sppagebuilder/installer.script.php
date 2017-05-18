@@ -128,5 +128,50 @@ class com_sppagebuilderInstallerScript {
         }
       }
     }
+
+    if ($type == 'uninstall') {
+			return true;
+		} ?>
+
+    <style type="text/css">
+    .sppb-installation-wrap{
+      padding: 20px 0 40px;
+      overflow: hidden;
+    }
+    .sppb-installation-wrap .sppb-installation-left {
+    	float: left;
+    	width: 250px;
+    	margin-right: 15px;
+    }
+    .sppb-installation-wrap .sppb-installation-footer{
+      margin-top: 30px;
+    }
+
+    .sppb-installation-wrap .sppb-installation-footer a{
+      margin-right: 10px;
+    }
+    </style>
+    <div class="sppb-installation-wrap row-fluid">
+    	<div class="span4 sppb-installation-left span2">
+    		<img src="../media/com_sppagebuilder/images/logo-pagebuilder.jpg" alt="SP Page Builder" />
+    	</div> <!-- /.sppb-installation-left -->
+    	<div class="sppb-installation-right span8">
+        <div class="sppb-installation-texts">
+          <h2>SP Page Builder Lite</h2>
+          <p>Trusted by 250,000+ people worldwide, SP Page Builder is an extremely powerful drag &amp; drop design system.<br/>
+          Whether you're a beginner or a professional, you must love taking control over your website design.</p>
+          <p>With SP Page Builder, you can build a unique, stunning and functional site without coding a single line.<br/>
+          Using the tool, anyone can build a professional quality site in minutes.</p>
+        </div>
+        <div class="sppb-installation-footer">
+          <div class="pagebuilder-links">
+            <a class="btn btn-success" href="index.php?option=com_sppagebuilder">Get Started</a>
+        		<a class="btn btn-info" href="index.php?option=com_sppagebuilder&task=page.add" target="_blank">Create a New Page</a>
+            <a class="btn btn-warning" href="https://www.joomshaper.com/documentation/joomla-extensions/sp-page-builder-2-x" target="_blank">Documentation</a>
+    			</div>
+    	 </div>
+     </div> <!-- /.sppb-installation-right -->
+    </div> <!-- /.sppb-installation-wrap -->
+  <?php
   }
 }

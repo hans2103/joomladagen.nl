@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com

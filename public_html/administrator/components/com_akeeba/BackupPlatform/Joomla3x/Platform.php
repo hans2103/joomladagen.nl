@@ -3,7 +3,7 @@
  * Akeeba Engine
  * The modular PHP5 site backup engine
  *
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU GPL version 3 or, at your option, any later version
  * @package   akeebaengine
  *
@@ -14,21 +14,17 @@ namespace Akeeba\Engine\Platform;
 // Protection against direct access
 defined('AKEEBAENGINE') or die();
 
-use Akeeba\Engine\Finalization\TestExtract;
-use FOF30\Container\Container;
-use Psr\Log\LogLevel;
 use Akeeba\Engine\Factory;
+use Akeeba\Engine\Finalization\TestExtract;
 use Akeeba\Engine\Platform;
 use Akeeba\Engine\Platform\Base as BasePlatform;
+use FOF30\Container\Container;
+use FOF30\Date\Date;
+use Psr\Log\LogLevel;
 
 if ( !defined('DS'))
 {
 	define('DS', DIRECTORY_SEPARATOR); // Still required by Joomla! :(
-}
-
-if (!class_exists('JDate'))
-{
-	jimport('joomla.utilities.date');
 }
 
 /**
@@ -337,14 +333,20 @@ class Joomla3x extends BasePlatform
 	public function get_timestamp_database($date = 'now')
 	{
 		\JLoader::import('joomla.utilities.date');
-		$jdate = new \JDate($date);
+		$date = new Date($date);
 
-		if (method_exists($jdate, 'toSql'))
+		if (method_exists($date, 'toSql'))
 		{
-			return $jdate->toSql();
+			return $date->toSql();
 		}
 
-		return $jdate->toMySQL();
+		if (method_exists($date, 'toMySQL'))
+		{
+			return $date->toMySQL();
+		}
+
+
+		return '0000-00-00 00:00:00';
 	}
 
 	/**
@@ -365,7 +367,7 @@ class Joomla3x extends BasePlatform
 		$user = \JFactory::getUser();
 		$tz   = $user->getParam('timezone', $tzDefault);
 
-		$dateNow = new \JDate('now', $tz);
+		$dateNow = new Date('now', $tz);
 
 		return $dateNow->format($format, true);
 	}
@@ -619,7 +621,7 @@ class Joomla3x extends BasePlatform
 		if ( !defined('AKEEBA_DATE'))
 		{
 			\JLoader::import('joomla.utilities.date');
-			$date = new \JDate();
+			$date = new Date();
 			define("AKEEBA_DATE", $date->format('Y-m-d'));
 		}
 	}
@@ -656,7 +658,7 @@ class Joomla3x extends BasePlatform
 		// If the release is older than 3 months, issue a warning
 		if (defined('AKEEBA_DATE'))
 		{
-			$releaseDate = new \JDate(AKEEBA_DATE);
+			$releaseDate = new Date(AKEEBA_DATE);
 
 			if (time() - $releaseDate->toUnix() > 7776000)
 			{

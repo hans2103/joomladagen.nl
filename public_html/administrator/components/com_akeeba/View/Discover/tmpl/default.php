@@ -1,12 +1,33 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die();
+
+/** @var \Akeeba\Backup\Admin\View\Discover\Html $this */
+
+$js = <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
+var akeeba_browser_callback = null;
+
+akeeba.System.documentReady(function(){
+	akeeba.Configuration.URLs['browser'] = 'index.php?option=com_akeeba&view=Browser&processfolder=1&tmpl=component&folder=';
+	akeeba.System.addEventListener(document.getElementById('browserbutton'), 'click', function(el){
+		var directory = document.getElementById('directory');
+		akeeba.Configuration.onBrowser( directory.value, directory );
+    });
+})
+
+JS;
+
+$this->getContainer()->template->addJSInline($js);
+
 ?>
 
 <?php echo $this->loadAnyTemplate('admin:com_akeeba/CommonTemplates/FolderBrowser'); ?>
@@ -47,15 +68,3 @@ defined('_JEXEC') or die();
 		</button>
 	</div>
 </form>
-
-<script type="text/javascript" language="javascript">
-	// Callback routine to close the browser dialog
-	var akeeba_browser_callback = null;
-	akeeba.jQuery(document).ready(function($){
-		akeeba.Configuration.URLs['browser'] = 'index.php?option=com_akeeba&view=Browser&processfolder=1&tmpl=component&folder=';
-        $('#browserbutton').click(function(el){
-			var $directory = $('#directory');
-			akeeba.Configuration.onBrowser( $directory.val(), $directory );
-        });
-	});
-</script>

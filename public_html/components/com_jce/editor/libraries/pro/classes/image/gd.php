@@ -1,9 +1,8 @@
 <?php
 
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -15,40 +14,42 @@
 defined('_JEXEC') or die;
 
 // load filter class
-require_once(__DIR__ . '/gd/filter.php');
+require_once __DIR__.'/gd/filter.php';
 
 /**
  * Class to manipulate an image.
  */
-class WFImageGD {
-
+class WFImageGD
+{
     /**
-     * @var    resource  The image resource handle.
+     * @var resource The image resource handle
      */
     protected $handle;
 
     /**
-     * @var    string  The source image path.
+     * @var string The source image path
      */
     protected $path = null;
 
     /**
-     * @var    array  Whether or not different image formats are supported.
+     * @var array Whether or not different image formats are supported
      */
     protected static $formats = array();
 
     /**
-     * @var    string  File type, eg: jpg, gif, png
+     * @var string File type, eg: jpg, gif, png
      */
     protected static $type;
 
     /**
      * Class constructor.
      *
-     * @param   mixed  $source  Either a file path for a source image or a GD resource handler for an image.
-     * @throws  RuntimeException
+     * @param mixed $source Either a file path for a source image or a GD resource handler for an image
+     *
+     * @throws RuntimeException
      */
-    public function __construct($source = null) {
+    public function __construct($source = null)
+    {
         // Verify that GD support for PHP is available.
         if (!extension_loaded('gd')) {
             throw new RuntimeException('The GD extension for PHP is not available.');
@@ -76,7 +77,8 @@ class WFImageGD {
         }
     }
 
-    private static function convertIniValue($value) {
+    private static function convertIniValue($value)
+    {
         $suffix = '';
 
         preg_match('#([0-9]+)\s?([a-z]+)#i', $value, $matches);
@@ -109,7 +111,8 @@ class WFImageGD {
         return (int) $value;
     }
 
-    private static function checkMem($image) {
+    private static function checkMem($image)
+    {
         $channels = ($image->mime == 'image/png') ? 4 : 3;
 
         if (function_exists('memory_get_usage')) {
@@ -139,10 +142,12 @@ class WFImageGD {
     /**
      * Method to get the height of the image in pixels.
      *
-     * @return  integer
-     * @throws  LogicException
+     * @return int
+     *
+     * @throws LogicException
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -154,10 +159,12 @@ class WFImageGD {
     /**
      * Method to get the width of the image in pixels.
      *
-     * @return  integer
-     * @throws  LogicException
+     * @return int
+     *
+     * @throws LogicException
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -167,49 +174,53 @@ class WFImageGD {
     }
 
     /**
-     * Method to return the path
+     * Method to return the path.
      *
-     * @return	string
+     * @return string
      */
-    public function getPath() {
+    public function getPath()
+    {
         return $this->path;
     }
 
     /**
      * Method to determine whether or not an image has been loaded into the object.
      *
-     * @return  bool
+     * @return bool
      */
-    public function isLoaded() {
+    public function isLoaded()
+    {
         // Make sure the resource handle is valid.
-        return is_resource($this->handle) && get_resource_type($this->handle) === "gd";
+        return is_resource($this->handle) && get_resource_type($this->handle) === 'gd';
     }
 
     /**
      * Method to determine whether or not the image has transparency.
      *
-     * @return  bool
-     * @throws  LogicException
+     * @return bool
+     *
+     * @throws LogicException
      */
-    public function isTransparent() {
+    public function isTransparent()
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
         }
 
-        return (imagecolortransparent($this->handle) >= 0);
+        return imagecolortransparent($this->handle) >= 0;
     }
 
     /**
      * Method to load a file into the JImage object as the resource.
      *
-     * @param   string  $path  The filesystem path to load as an image.
+     * @param string $path The filesystem path to load as an image
      *
-     * @return  void
-     * @throws  InvalidArgumentException
-     * @throws  RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    public function loadFile($path) {
+    public function loadFile($path)
+    {
         // Make sure the file exists.
         if (!file_exists($path)) {
             throw new InvalidArgumentException('The image file does not exist.');
@@ -266,7 +277,7 @@ class WFImageGD {
                 break;
 
             default:
-                throw new InvalidArgumentException('Attempting to load an image of unsupported type: ' . $properties->mime);
+                throw new InvalidArgumentException('Attempting to load an image of unsupported type: '.$properties->mime);
                 break;
         }
 
@@ -280,13 +291,13 @@ class WFImageGD {
     /**
      * Method to load a file into the JImage object as the resource.
      *
-     * @param   string  $path  The filesystem path to load as an image.
+     * @param string $path The filesystem path to load as an image
      *
-     * @return  void
-     * @throws  InvalidArgumentException
-     * @throws  RuntimeException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    public function loadString($string) {
+    public function loadString($string)
+    {
         $handle = imagecreatefromstring($string);
 
         if (is_resource($handle) && get_resource_type($handle) == 'gd') {
@@ -297,7 +308,8 @@ class WFImageGD {
         }
     }
 
-    private function getWatermarkPosition($options, $mw, $mh) {
+    private function getWatermarkPosition($options, $mw, $mh)
+    {
         $width = $this->getWidth();
         $height = $this->getHeight();
 
@@ -357,7 +369,8 @@ class WFImageGD {
         return array('x' => $x, 'y' => $y);
     }
 
-    private function watermarkText($options) {
+    private function watermarkText($options)
+    {
         $font = $options->font_style;
 
         if (is_file($font)) {
@@ -375,7 +388,7 @@ class WFImageGD {
 
             $options->font_color = preg_replace('#[^\w]+#', '', $options->font_color);
 
-            $color = imagecolorallocatealpha($this->handle, hexdec(substr($options->font_color, 0, 2)), hexdec(substr($options->font_color, 2, 2)), hexdec(substr($options->font_color, 4, 2)), 127 * ( 100 - (int) $options->opacity ) / 100);
+            $color = imagecolorallocatealpha($this->handle, hexdec(substr($options->font_color, 0, 2)), hexdec(substr($options->font_color, 2, 2)), hexdec(substr($options->font_color, 4, 2)), 127 * (100 - (int) $options->opacity) / 100);
 
             imagettftext($this->handle, (int) $options->font_size, $options->angle, $position['x'], $position['y'], $color, $font, $options->text);
         }
@@ -387,9 +400,10 @@ class WFImageGD {
      * A fix to get a function like imagecopymerge WITH ALPHA SUPPORT
      * Main script by aiden.mail@freemail.hu
      * Transformed to imagecopymerge_alpha() by rodrigo.polo@gmail.com
-     * http://www.php.net/manual/en/function.imagecopymerge.php#88456
+     * http://www.php.net/manual/en/function.imagecopymerge.php#88456.
      */
-    private static function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct) {
+    private static function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
+    {
         if (!isset($pct)) {
             return false;
         }
@@ -401,27 +415,28 @@ class WFImageGD {
         imagealphablending($src_im, false);
         // Find the most opaque pixel in the image (the one with the smallest alpha value)
         $minalpha = 127;
-        for ($x = 0; $x < $w; $x++)
-            for ($y = 0; $y < $h; $y++) {
-                $alpha = ( imagecolorat($src_im, $x, $y) >> 24 ) & 0xFF;
+        for ($x = 0; $x < $w; ++$x) {
+            for ($y = 0; $y < $h; ++$y) {
+                $alpha = (imagecolorat($src_im, $x, $y) >> 24) & 0xFF;
                 if ($alpha < $minalpha) {
                     $minalpha = $alpha;
                 }
             }
+        }
         //loop through image pixels and modify alpha for each
-        for ($x = 0; $x < $w; $x++) {
-            for ($y = 0; $y < $h; $y++) {
+        for ($x = 0; $x < $w; ++$x) {
+            for ($y = 0; $y < $h; ++$y) {
                 //get current alpha value (represents the TANSPARENCY!)
                 $colorxy = imagecolorat($src_im, $x, $y);
-                $alpha = ( $colorxy >> 24 ) & 0xFF;
+                $alpha = ($colorxy >> 24) & 0xFF;
                 //calculate new alpha
                 if ($minalpha !== 127) {
-                    $alpha = 127 + 127 * $pct * ( $alpha - 127 ) / ( 127 - $minalpha );
+                    $alpha = 127 + 127 * $pct * ($alpha - 127) / (127 - $minalpha);
                 } else {
                     $alpha += 127 * $pct;
                 }
                 //get the color index with new alpha
-                $alphacolorxy = imagecolorallocatealpha($src_im, ( $colorxy >> 16 ) & 0xFF, ( $colorxy >> 8 ) & 0xFF, $colorxy & 0xFF, $alpha);
+                $alphacolorxy = imagecolorallocatealpha($src_im, ($colorxy >> 16) & 0xFF, ($colorxy >> 8) & 0xFF, $colorxy & 0xFF, $alpha);
                 //set pixel with the new color + opacity
                 if (!imagesetpixel($src_im, $x, $y, $alphacolorxy)) {
                     return false;
@@ -432,7 +447,8 @@ class WFImageGD {
         imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
     }
 
-    public function watermark($options) {
+    public function watermark($options)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -443,11 +459,10 @@ class WFImageGD {
         if ($options->type == 'text' && isset($options->text)) {
             $this->watermarkText($options);
         } elseif (isset($options->image)) {
-            $mark = new WFImageGD($options->image);
+            $mark = new self($options->image);
         }
 
         if ($mark && is_resource($mark->handle) && get_resource_type($mark->handle) == 'gd') {
-
             $mw = imagesx($mark->handle);
             $mh = imagesy($mark->handle);
 
@@ -468,12 +483,15 @@ class WFImageGD {
     }
 
     /**
-     * Set image resolution (not available in PHP GD)
+     * Set image resolution (not available in PHP GD).
+     *
      * @param type $resolution
+     *
      * @return WFImageGD
      * https://gist.github.com/chemicaloliver/3164297
      */
-    public function resample($resolution) {        
+    public function resample($resolution)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -485,26 +503,26 @@ class WFImageGD {
         }
 
         // empty string
-        $string = "";
+        $string = '';
 
-        $width  = $this->getWidth();
+        $width = $this->getWidth();
         $height = $this->getHeight();
 
-		// Use truecolour image to avoid any issues with colours changing
-		$handle = imagecreatetruecolor($width, $height);
+        // Use truecolour image to avoid any issues with colours changing
+        $handle = imagecreatetruecolor($width, $height);
 
-		// Resample the image
-		imagecopyresampled($handle, $this->handle, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
+        // Resample the image
+        imagecopyresampled($handle, $this->handle, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
 
-		// Get GD image resource as JPEG string
-		ob_start();
-			imagejpeg($handle, "");
-			$string = ob_get_contents();
-		ob_end_clean();
+        // Get GD image resource as JPEG string
+        ob_start();
+        imagejpeg($handle, '');
+        $string = ob_get_contents();
+        ob_end_clean();
 
         if ($string) {
             // change the JPEG header to resolution
-		    $string = substr_replace($string, pack("Cnn", 0x01, $resolution, $resolution), 13, 5);
+            $string = substr_replace($string, pack('Cnn', 0x01, $resolution, $resolution), 13, 5);
             $this->handle = imagecreatefromstring($string);
         }
 
@@ -514,16 +532,18 @@ class WFImageGD {
     /**
      * Method to resize the current image.
      *
-     * @param   mixed    $width        The width of the resized image in pixels or a percentage.
-     * @param   mixed    $height       The height of the resized image in pixels or a percentage.
-     * @param   bool     $createNew    If true the current image will be cloned, resized and returned; else
-     * the current image will be resized and returned.
-     * @param   integer  $scaleMethod  Which method to use for scaling
+     * @param mixed $width       The width of the resized image in pixels or a percentage
+     * @param mixed $height      The height of the resized image in pixels or a percentage
+     * @param bool  $createNew   If true the current image will be cloned, resized and returned; else
+     *                           the current image will be resized and returned
+     * @param int   $scaleMethod Which method to use for scaling
      *
-     * @return  WFImageGD
-     * @throws  LogicException
+     * @return WFImageGD
+     *
+     * @throws LogicException
      */
-    public function resize($width, $height, $createNew = false) {
+    public function resize($width, $height, $createNew = false)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -538,8 +558,8 @@ class WFImageGD {
 
         if ($this->isTransparent() && $this->getType() === IMAGETYPE_GIF) {
             // Get the transparent color values for the current image.
-            $rgba   = imagecolorsforindex($this->handle, imagecolortransparent($this->handle));
-            $color  = imagecolorallocate($this->handle, $rgba['red'], $rgba['green'], $rgba['blue']);
+            $rgba = imagecolorsforindex($this->handle, imagecolortransparent($this->handle));
+            $color = imagecolorallocate($this->handle, $rgba['red'], $rgba['green'], $rgba['blue']);
 
             // Set the transparent color values for the new image.
             imagefill($handle, 0, 0, $color);
@@ -552,13 +572,14 @@ class WFImageGD {
 
         // If we are resizing to a new image, create a new JImage object.
         if ($createNew) {
-            $new = new WFImageGD($handle);
+            $new = new self($handle);
 
             return $new;
         }
         // Swap out the current handle for the new image handle.
         else {
             $this->handle = $handle;
+
             return $this;
         }
     }
@@ -566,17 +587,19 @@ class WFImageGD {
     /**
      * Method to crop the current image.
      *
-     * @param   mixed    $width      The width of the image section to crop in pixels or a percentage.
-     * @param   mixed    $height     The height of the image section to crop in pixels or a percentage.
-     * @param   integer  $left       The number of pixels from the left to start cropping.
-     * @param   integer  $top        The number of pixels from the top to start cropping.
-     * @param   bool     $createNew  If true the current image will be cloned, cropped and returned; else
-     *                               the current image will be cropped and returned.
+     * @param mixed $width     The width of the image section to crop in pixels or a percentage
+     * @param mixed $height    The height of the image section to crop in pixels or a percentage
+     * @param int   $left      The number of pixels from the left to start cropping
+     * @param int   $top       The number of pixels from the top to start cropping
+     * @param bool  $createNew If true the current image will be cloned, cropped and returned; else
+     *                         the current image will be cropped and returned
      *
-     * @return  WFImageGD
-     * @throws  LogicException
+     * @return WFImageGD
+     *
+     * @throws LogicException
      */
-    public function crop($width, $height, $left, $top, $createNew = false) {
+    public function crop($width, $height, $left, $top, $createNew = false)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -591,8 +614,8 @@ class WFImageGD {
 
         if ($this->isTransparent() && $this->getType() === IMAGETYPE_GIF) {
             // Get the transparent color values for the current image.
-            $rgba   = imagecolorsforindex($this->handle, imagecolortransparent($this->handle));
-            $color  = imagecolorallocate($this->handle, $rgba['red'], $rgba['green'], $rgba['blue']);
+            $rgba = imagecolorsforindex($this->handle, imagecolortransparent($this->handle));
+            $color = imagecolorallocate($this->handle, $rgba['red'], $rgba['green'], $rgba['blue']);
 
             // Set the transparent color values for the new image.
             imagefill($handle, 0, 0, $color);
@@ -605,7 +628,7 @@ class WFImageGD {
 
         // If we are cropping to a new image, create a new JImage object.
         if ($createNew) {
-            $new = new WFImageGD($handle);
+            $new = new self($handle);
 
             return $new;
         }
@@ -620,15 +643,17 @@ class WFImageGD {
     /**
      * Method to rotate the current image.
      *
-     * @param   mixed    $angle       The angle of rotation for the image
-     * @param   integer  $background  The background color to use when areas are added due to rotation
-     * @param   bool     $createNew   If true the current image will be cloned, rotated and returned; else
-     * the current image will be rotated and returned.
+     * @param mixed $angle      The angle of rotation for the image
+     * @param int   $background The background color to use when areas are added due to rotation
+     * @param bool  $createNew  If true the current image will be cloned, rotated and returned; else
+     *                          the current image will be rotated and returned
      *
-     * @return  WFImageGD
-     * @throws  LogicException
+     * @return WFImageGD
+     *
+     * @throws LogicException
      */
-    public function rotate($angle, $background = -1, $createNew = false) {
+    public function rotate($angle, $background = -1, $createNew = false)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -649,7 +674,7 @@ class WFImageGD {
 
         // If we are resizing to a new image, create a new JImage object.
         if ($createNew) {
-            $new = new WFImageGD($handle);
+            $new = new self($handle);
 
             return $new;
         }
@@ -661,7 +686,8 @@ class WFImageGD {
         }
     }
 
-    public function flip($mode, $createNew = false) {
+    public function flip($mode, $createNew = false)
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -674,19 +700,19 @@ class WFImageGD {
         imagealphablending($handle, false);
         imagesavealpha($handle, true);
 
-        $width  = $this->getWidth();
+        $width = $this->getWidth();
         $height = $this->getHeight();
 
         switch ((int) $mode) {
 
             case IMAGE_FLIP_VERTICAL:
-                for ($y = 0; $y < $height; $y++) {
+                for ($y = 0; $y < $height; ++$y) {
                     imagecopy($handle, $this->handle, 0, $y, 0, $height - $y - 1, $width, 1);
                 }
                 break;
 
             case IMAGE_FLIP_HORIZONTAL:
-                for ($x = 0; $x < $width; $x++) {
+                for ($x = 0; $x < $width; ++$x) {
                     imagecopy($handle, $this->handle, $x, 0, $width - $x - 1, 0, 1, $height);
                 }
                 break;
@@ -694,7 +720,8 @@ class WFImageGD {
 
         // If we are flipping to a new image, create a new JImage object.
         if ($createNew) {
-            $new = new WFImageGD($handle);
+            $new = new self($handle);
+
             return $new;
         }
         // Swap out the current handle for the new image handle.
@@ -708,15 +735,18 @@ class WFImageGD {
     /**
      * Method to apply a filter to the image by type.  Two examples are: grayscale and sketchy.
      *
-     * @param   string  $type     The name of the image filter to apply.
-     * @param   array   $options  An array of options for the filter.
+     * @param string $type    The name of the image filter to apply
+     * @param array  $options An array of options for the filter
      *
-     * @return  WFImage
+     * @return WFImage
+     *
      * @see     WFImageFilter
-     * @throws  LogicException
-     * @throws  RuntimeException
+     *
+     * @throws LogicException
+     * @throws RuntimeException
      */
-    public function filter($type, array $options = array()) {
+    public function filter($type, array $options = array())
+    {
         // Get the image filter instance.
         $filter = $this->getFilterInstance($type);
 
@@ -729,16 +759,16 @@ class WFImageGD {
     /**
      * Method to write the current image out to a file.
      *
-     * @param   string   $path     The filesystem path to save the image.
-     * @param   integer  $type     The image type to save the file as.
-     * @param   array    $options  The image type options to use in saving the file.
+     * @param string $path    The filesystem path to save the image
+     * @param int    $type    The image type to save the file as
+     * @param array  $options The image type options to use in saving the file
      *
-     * @return  bool
+     * @return bool
      *
-     * @see     http://www.php.net/manual/image.constants.php
-     * @throws  LogicException
+     * @throws LogicException
      */
-    public function toFile($path, $type = IMAGETYPE_JPEG, array $options = array()) {
+    public function toFile($path, $type = IMAGETYPE_JPEG, array $options = array())
+    {
         // Make sure the resource handle is valid.
         if (!$this->isLoaded()) {
             throw new LogicException('No valid image was loaded');
@@ -757,7 +787,7 @@ class WFImageGD {
 
             case IMAGETYPE_PNG:
 
-                $quality    = (array_key_exists('quality', $options)) ? $options['quality'] : 0;
+                $quality = (array_key_exists('quality', $options)) ? $options['quality'] : 0;
 
                 // get as value from 0-9
                 if ($quality) {
@@ -767,7 +797,7 @@ class WFImageGD {
                     $quality = min(floor($quality / 10), 9);
                 }
 
-                $result     = imagepng($this->handle, $path, $quality);
+                $result = imagepng($this->handle, $path, $quality);
                 break;
 
             case IMAGETYPE_JPEG:
@@ -783,39 +813,39 @@ class WFImageGD {
     /**
      * Method to write the current image out to a file.
      *
-     * @param   string   $path     The filesystem path to save the image.
-     * @param   integer  $type     The image type to save the file as.
-     * @param   array    $options  The image type options to use in saving the file.
+     * @param string $path    The filesystem path to save the image
+     * @param int    $type    The image type to save the file as
+     * @param array  $options The image type options to use in saving the file
      *
-     * @return  void
-     *
-     * @see     http://www.php.net/manual/image.constants.php
-     * @throws  LogicException
+     * @throws LogicException
      */
-    public function toString($type = IMAGETYPE_JPEG, array $options = array()) {
+    public function toString($type = IMAGETYPE_JPEG, array $options = array())
+    {
         return $this->toFile(null, $type, $options);
     }
 
     /**
      * Method to get an image filter instance of a specified type.
      *
-     * @param   string  $type  The image filter type to get.
+     * @param string $type The image filter type to get
      *
-     * @return  WFImageFilter
-     * @throws  RuntimeException
+     * @return WFImageFilter
+     *
+     * @throws RuntimeException
      */
-    protected function getFilterInstance($type) {
+    protected function getFilterInstance($type)
+    {
         // Sanitize the filter type.
         $type = strtolower(preg_replace('#[^A-Z0-9_]#i', '', $type));
 
         // load the filter
-        require_once(dirname(__FILE__) . '/gd/filters/' . $type . '.php');
+        require_once dirname(__FILE__).'/gd/filters/'.$type.'.php';
 
         // Verify that the filter type exists.
-        $className = 'WFImageGDFilter' . ucfirst($type);
+        $className = 'WFImageGDFilter'.ucfirst($type);
 
         if (!class_exists($className)) {
-            throw new RuntimeException('The ' . ucfirst($type) . ' image filter is not available.');
+            throw new RuntimeException('The '.ucfirst($type).' image filter is not available.');
         }
 
         // Instantiate the filter object.
@@ -823,21 +853,24 @@ class WFImageGD {
 
         // Verify that the filter type is valid.
         if (!($instance instanceof WFImageGDFilter)) {
-            throw new RuntimeException('The ' . ucfirst($type) . ' image filter is not valid.');
+            throw new RuntimeException('The '.ucfirst($type).' image filter is not valid.');
         }
 
         return $instance;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function setType($type) {
+    public function setType($type)
+    {
         $this->type = $type;
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         imagedestroy($this->handle);
     }
 }

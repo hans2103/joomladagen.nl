@@ -1,39 +1,38 @@
 <?php
 
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
+ * other free or open source software licenses
  */
 defined('_JEXEC') or die('RESTRICTED');
 // Load class dependencies
 wfimport('editor.libraries.classes.plugin');
 
-class WFCaptionPlugin extends WFEditorPlugin {
-
+class WFCaptionPlugin extends WFEditorPlugin
+{
     /**
-     * Constructor activating the default information of the class
-     *
-     * @access	protected
+     * Constructor activating the default information of the class.
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function display() {
+    public function display()
+    {
         parent::display();
 
         $document = WFDocument::getInstance();
         $settings = $this->getSettings();
 
-        $document->addScriptDeclaration('CaptionDialog.settings=' . json_encode($settings) . ';');
+        $document->addScriptDeclaration('CaptionDialog.settings='.json_encode($settings).';');
 
         $tabs = WFTabs::getInstance(array(
-                    'base_path' => WF_EDITOR_PLUGIN
+                    'base_path' => WF_EDITOR_PLUGIN,
                 ));
 
         // Add tabs
@@ -46,12 +45,12 @@ class WFCaptionPlugin extends WFEditorPlugin {
         $document->addScript(array('caption'), 'plugins');
     }
 
-    public function getSettings($settings = array()) {
+    public function getSettings($settings = array())
+    {
         $settings = array(
-            'defaults' => $this->getDefaults()
+            'defaults' => $this->getDefaults(),
         );
 
         return parent::getSettings($settings);
     }
-
 }

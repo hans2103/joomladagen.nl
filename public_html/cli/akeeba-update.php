@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaBackup
- *  @copyright Copyright (c)2010-2016 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  *  @license GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -169,7 +169,19 @@ ENDBLOCK;
 		// Assign the correct platform
 		Platform::addPlatform('joomla3x', JPATH_COMPONENT_ADMINISTRATOR . '/BackupPlatform/Joomla3x');
 
-        $container = \FOF30\Container\Container::getInstance('com_akeeba');
+	    // Work around some misconfigured servers which print out notices
+	    if (function_exists('error_reporting'))
+	    {
+		    $oldLevel = error_reporting(0);
+	    }
+
+	    $container = \FOF30\Container\Container::getInstance('com_akeeba');
+
+	    if (function_exists('error_reporting'))
+	    {
+		    error_reporting($oldLevel);
+	    }
+
         /** @var \Akeeba\Backup\Site\Model\Updates $updateModel */
         $updateModel = $container->factory->model('Updates')->tmpInstance();
 

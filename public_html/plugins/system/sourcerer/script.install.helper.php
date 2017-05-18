@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,6 +23,7 @@ class PlgSystemSourcererInstallerScriptHelper
 	public $install_type    = 'install';
 	public $show_message    = true;
 	public $db              = null;
+	public $softbreak       = null;
 
 	public function __construct(&$params)
 	{

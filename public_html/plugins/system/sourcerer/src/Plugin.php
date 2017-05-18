@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -84,6 +84,11 @@ class Plugin extends JPlugin
 
 	private function run()
 	{
+		if (!$this->passChecks())
+		{
+			return null;
+		}
+
 		if (!$this->getHelper())
 		{
 			return false;
@@ -121,11 +126,6 @@ class Plugin extends JPlugin
 		$this->_init = true;
 
 		if (!$this->passChecks())
-		{
-			return null;
-		}
-
-		if (!$this->extraChecks())
 		{
 			return null;
 		}
@@ -173,24 +173,44 @@ class Plugin extends JPlugin
 			return false;
 		}
 
+		if (!$this->extraChecks())
+		{
+			return false;
+		}
+
 		return true;
 	}
 
 	public function passPageTypes()
 	{
-		if (!in_array('*', $this->_page_types))
+		if (empty($this->_page_types))
 		{
 			return true;
+		}
+
+		if (in_array('*', $this->_page_types))
+		{
+			return true;
+		}
+
+		if (empty(JFactory::$document))
+		{
+			return true;
+		}
+
+		if (RL_Document::isFeed())
+		{
+			return in_array('feed', $this->_page_types);
+		}
+
+		if (RL_Document::isPDF())
+		{
+			return in_array('pdf', $this->_page_types);
 		}
 
 		$page_type = JFactory::getDocument()->getType();
 
-		if (!in_array($page_type, $this->_page_types))
-		{
-			return true;
-		}
-
-		if (in_array('feed', $this->_page_types) && RL_Document::isFeed())
+		if (in_array($page_type, $this->_page_types))
 		{
 			return true;
 		}
@@ -241,6 +261,17 @@ class Plugin extends JPlugin
 		if (
 			!is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
 			|| !is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+		)
+		{
+			$this->throwError($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_INSTALLED');
+
+			return false;
+		}
+
+		// Check if some newer methods exist to see if framework is installed correctly and uptodate enough
+		if (!method_exists('RegularLabs\Library\Document', 'isPDF')
+			|| !method_exists('RegularLabs\Library\Document', 'isFeed')
+			|| !method_exists('RegularLabs\Library\Document', 'isAdmin')
 		)
 		{
 			$this->throwError($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_INSTALLED');

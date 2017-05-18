@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,6 @@ namespace RegularLabs\Sourcerer;
 
 defined('_JEXEC') or die;
 
-use JFactory;
 use JFile;
 use JText;
 use RegularLabs\Library\ArrayHelper as RL_Array;
@@ -26,8 +25,6 @@ use RegularLabs\Library\RegEx as RL_RegEx;
 class Replace
 {
 	static $current_area = null;
-
-	/* <<< [PRO] <<< */
 
 	public static function replace(&$string, $area = 'article', $article = '', $remove = false)
 	{
@@ -69,8 +66,6 @@ class Replace
 		{
 			return;
 		}
-
-		$params = Params::get();
 
 		list($start_tags, $end_tags) = Params::getTags();
 
@@ -155,21 +150,21 @@ class Replace
 			$tags = RL_Html::cleanSurroundingTags([
 				'start_pre'  => $match['start_pre'],
 				'start_post' => $match['start_post'],
-			]);
+			], ['div', 'p', 'span']);
 
 			$match = array_merge($match, $tags);
 
 			$tags = RL_Html::cleanSurroundingTags([
 				'end_pre'  => $match['end_pre'],
 				'end_post' => $match['end_post'],
-			]);
+			], ['div', 'p', 'span']);
 
 			$match = array_merge($match, $tags);
 
 			$tags = RL_Html::cleanSurroundingTags([
 				'start_pre' => $match['start_pre'],
 				'end_post'  => $match['end_post'],
-			]);
+			], ['div', 'p', 'span']);
 
 			$match = array_merge($match, $tags);
 		}
@@ -210,8 +205,6 @@ class Replace
 
 	private static function replaceTagsByType(&$string, $area = 'article', $type = 'all', $article = '')
 	{
-		$params = Params::get();
-
 		if (!is_string($string) || $string == '')
 		{
 			return;
@@ -273,8 +266,8 @@ class Replace
 
 		self::cleanTags($string);
 
-		$a = Params::getArea(self::$current_area);
-		$forbidden_tags_array = explode(',', $a->forbidden_tags);
+		$area = Params::getArea(self::$current_area);
+		$forbidden_tags_array = explode(',', $area->forbidden_tags);
 		RL_Array::clean($forbidden_tags_array);
 		// remove the comment tag syntax from the array - they cannot be disabled
 		$forbidden_tags_array = array_diff($forbidden_tags_array, ['!--']);
@@ -337,160 +330,110 @@ class Replace
 	 * Replace the PHP tags with the evaluated PHP scripts
 	 * Or replace by a comment tag the PHP tags if not permitted
 	 */
-	private static function replaceTagsPHP(&$src_str, $src_enabled = 1, $src_security_pass = 1, $article = '')
+	private static function replaceTagsPHP(&$string, $enabled = 1, $security_pass = 1, $article = '')
 	{
-		if (!is_string($src_str) || $src_str == '')
+		if (!is_string($string) || $string == '')
 		{
 			return;
 		}
 
-		if ((strpos($src_str, '<?') === false) && (strpos($src_str, '[[?') === false))
+		if ((strpos($string, '<?') === false) && (strpos($string, '[[?') === false))
 		{
 			return;
 		}
-
-		global $src_vars;
 
 		// Match ( read {} as <> ):
 		// {?php ... ?}
 		// {? ... ?}
-		$src_string_array       = self::stringToSplitArray($src_str, '-start-' . '\?(?:php)?[\s<](.*?)\?' . '-end-');
-		$src_string_array_count = count($src_string_array);
+		$string_array       = self::stringToSplitArray($string, '-start-' . '\?(?:php)?[\s<](.*?)\?' . '-end-');
+		$string_array_count = count($string_array);
 
-		if ($src_string_array_count < 1)
+		if ($string_array_count < 1)
 		{
-			$src_str = implode('', $src_string_array);
+			$string = implode('', $string_array);
 
 			return;
 		}
 
-		if (!$src_enabled)
+		if (!$enabled)
 		{
 			// replace source block content with HTML comment
-			$src_string_array      = [];
-			$src_string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP'), JText::_('SRC_PHP')));
+			$string_array      = [];
+			$string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_NOT_ALLOWED', JText::_('SRC_PHP'), JText::_('SRC_PHP')));
 
-			$src_str = implode('', $src_string_array);
+			$string = implode('', $string_array);
 
 			return;
 		}
-		if (!$src_security_pass)
+		if (!$security_pass)
 		{
 			// replace source block content with HTML comment
-			$src_string_array      = [];
-			$src_string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_SECURITY', JText::_('SRC_PHP')));
+			$string_array      = [];
+			$string_array['0'] = Protect::getMessageCommentTag(JText::sprintf('SRC_CODE_REMOVED_SECURITY', JText::_('SRC_PHP')));
 
-			$src_str = implode('', $src_string_array);
+			$string = implode('', $string_array);
 
 			return;
 		}
 
 		// if source block content has more than 1 php block, combine them
-		if ($src_string_array_count > 3)
+		if ($string_array_count > 3)
 		{
-			for ($i = 2; $i < $src_string_array_count - 1; $i++)
+			for ($i = 2; $i < $string_array_count - 1; $i++)
 			{
 				if (fmod($i, 2) == 0)
 				{
-					$src_string_array['1'] .= "<!-- SRC_SEMICOLON --> ?>" . $src_string_array[$i] . "<?php ";
-					unset($src_string_array[$i]);
+					$string_array['1'] .= "<!-- SRC_SEMICOLON --> ?>" . $string_array[$i] . "<?php ";
+					unset($string_array[$i]);
 					continue;
 				}
 
-				$src_string_array['1'] .= $src_string_array[$i];
-				unset($src_string_array[$i]);
+				$string_array['1'] .= $string_array[$i];
+				unset($string_array[$i]);
 			}
 		}
 
-		// fixes problem with _REQUEST being stripped if there is an error in the code
-		$src_backup_REQUEST = $_REQUEST;
-		$src_backup_vars    = array_keys(get_defined_vars());
+		$semicolon = '<!-- SRC_SEMICOLON -->';
+		$script    = trim($string_array['1']) . $semicolon;
+		$script    = RL_RegEx::replace('(;\s*)?' . RL_RegEx::quote($semicolon), ';', $script);
 
-		$semicolon  = '<!-- SRC_SEMICOLON -->';
-		$src_script = trim($src_string_array['1']) . $semicolon;
-		$src_script = RL_RegEx::replace('(;\s*)?' . RL_RegEx::quote($semicolon), ';', $src_script);
+		$area = Params::getArea(self::$current_area);
 
-		$a = Params::getArea(self::$current_area);
+		$forbidden_php_array = explode(',', $area->forbidden_php);
+		RL_Array::clean($forbidden_php_array);
 
-		$src_forbidden_php_array = explode(',', $a->forbidden_php);
-		RL_Array::clean($src_forbidden_php_array);
+		$forbidden_php_regex = '[^a-z_](' . implode('|', $forbidden_php_array) . ')(\s*\(|\s+[\'"])';
 
-		$src_forbidden_php_regex = '[^a-z_](' . implode('|', $src_forbidden_php_array) . ')(\s*\(|\s+[\'"])';
+		RL_RegEx::matchAll($forbidden_php_regex, ' ' . $script, $functions);
 
-		RL_RegEx::matchAll($src_forbidden_php_regex, ' ' . $src_script, $src_functions);
-
-		if (!empty($src_functions))
+		if (!empty($functions))
 		{
-			$src_functionsArray = [];
-			foreach ($src_functions as $src_function)
+			$functionsArray = [];
+			foreach ($functions as $function)
 			{
-				$src_functionsArray[] = $src_function['1'] . ')';
+				$functionsArray[] = $function['1'] . ')';
 			}
 
-			$src_comment = JText::_('SRC_PHP_CODE_REMOVED_FORBIDDEN') . ': ( ' . implode(', ', $src_functionsArray) . ' )';
+			$comment = JText::_('SRC_PHP_CODE_REMOVED_FORBIDDEN') . ': ( ' . implode(', ', $functionsArray) . ' )';
 
-			$src_string_array['1'] = RL_Document::isHtml()
-				? Protect::getMessageCommentTag($src_comment)
-				: $src_string_array['1'] = '';
+			$string_array['1'] = RL_Document::isHtml()
+				? Protect::getMessageCommentTag($comment)
+				: $string_array['1'] = '';
 
-			$src_str = implode('', $src_string_array);
+			$string = implode('', $string_array);
 
 			return;
 		}
 
-		if (!isset($Itemid))
-		{
-			$Itemid = JFactory::getApplication()->input->getInt('Itemid');
-		}
-		if (!isset($mainframe) || !isset($app))
-		{
-			$mainframe = $app = JFactory::getApplication();
-		}
-		if (!isset($document) || !isset($doc))
-		{
-			$document = $doc = JFactory::getDocument();
-		}
-		if (!isset($database) || !isset($db))
-		{
-			$database = $db = JFactory::getDbo();
-		}
-		if (!isset($user))
-		{
-			$user = JFactory::getUser();
-		}
+		global $src_variables;
 
-		$src_script = '
-			if (is_array($src_vars)) {
-				foreach ($src_vars as $src_key => $src_value) {
-					${$src_key} = $src_value;
-				}
-			}
-			' . $src_script . ';
-			return get_defined_vars();
-			';
+		$src_variables['article'] = $article;
 
-		$temp_PHP_func = create_function('&$src_vars, &$article, &$Itemid, &$mainframe, &$app, &$document, &$doc, &$database, &$db, &$user', $src_script);
+		$output = Code::run($script, $src_variables);
 
-		// evaluate the script
-		// but without using the the evil eval
-		ob_start();
-		$src_new_vars = $temp_PHP_func($src_vars, $article, $Itemid, $mainframe, $app, $document, $doc, $database, $db, $user);
-		unset($temp_PHP_func);
-		$src_string_array['1'] = ob_get_contents();
-		ob_end_clean();
+		$string_array['1'] = $output;
 
-		$src_diff_vars = array_diff(array_keys($src_new_vars), $src_backup_vars);
-		foreach ($src_diff_vars as $src_diff_key)
-		{
-			if (!in_array($src_diff_key, ['src_vars', 'article', 'Itemid', 'mainframe', 'app', 'document', 'doc', 'database', 'db', 'user'])
-				&& substr($src_diff_key, 0, 4) != 'src_'
-			)
-			{
-				$src_vars[$src_diff_key] = $src_new_vars[$src_diff_key];
-			}
-		}
-
-		$src_str = implode('', $src_string_array);
+		$string = implode('', $string_array);
 	}
 
 	/**

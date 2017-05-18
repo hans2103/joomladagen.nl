@@ -20,17 +20,12 @@ class ComposerStaticInitf9099d81d2e2cf4863a68cf73354cfc1
 			),
 	);
 
-	public static $classMap = array(
-		'RegularLabs\\Library\\Text' => __DIR__ . '/../..' . '/src/Text.php',
-	);
-
 	public static function getInitializer(ClassLoader $loader)
 	{
 		return \Closure::bind(function () use ($loader)
 		{
 			$loader->prefixLengthsPsr4 = ComposerStaticInitf9099d81d2e2cf4863a68cf73354cfc1::$prefixLengthsPsr4;
 			$loader->prefixDirsPsr4    = ComposerStaticInitf9099d81d2e2cf4863a68cf73354cfc1::$prefixDirsPsr4;
-			$loader->classMap          = ComposerStaticInitf9099d81d2e2cf4863a68cf73354cfc1::$classMap;
 		}, null, ClassLoader::class);
 	}
 }

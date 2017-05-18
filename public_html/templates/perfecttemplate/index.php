@@ -67,8 +67,10 @@ if ($remain->days >= 0 && $remain->days <= 5)
 	$imgNumber = $remain->days;
 }
 
-if (isset($imgTitle) && !empty($imgTitle))
-{ ?>
+//if (isset($imgTitle) && !empty($imgTitle))
+if(false)
+{
+?>
     <div class="block__countdown">
         <div class="block__countdown--container">
             <div class="block__countdown--content">

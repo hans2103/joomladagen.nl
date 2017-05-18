@@ -1,12 +1,32 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die();
+
+/** @var \Akeeba\Backup\Admin\View\S3Import\Html $this */
+
+// Work around Safari which ignores autocomplete=off (FOR CRYING OUT LOUD!)
+$s3AccessEscaped = addslashes($this->s3access);
+$s3SecretEscaped = addslashes($this->s3secret);
+$js = <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
+akeeba.System.documentReady(function() {
+	setTimeout(function(){
+		document.getElementById('s3access').value = '$s3AccessEscaped';
+		document.getElementById('s3secret').value = '$s3SecretEscaped';
+	}, 500);
+});
+
+JS;
+
+$this->getContainer()->template->addJSInline($js);
 
 ?>
 <form action="index.php" method="post" name="adminForm" id="adminForm">
@@ -104,13 +124,3 @@ defined('_JEXEC') or die();
 		</fieldset>
 	</div>
 </form>
-
-<script type="text/javascript">
-akeeba.jQuery(document).ready(function($){
-	// Work around Safari which ignores autocomplete=off (FOR CRYING OUT LOUD!)
-	setTimeout(function(){
-		$('#s3access').val('<?php echo addslashes($this->s3access); ?>');
-		$('#s3secret').val('<?php echo addslashes($this->s3secret); ?>');
-	}, 500);
-});
-</script>

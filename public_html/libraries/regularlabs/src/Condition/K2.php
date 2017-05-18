@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,15 +22,10 @@ defined('RL_K2_VERSION') or define('RL_K2_VERSION', JFile::exists(JPATH_ADMINIST
  * Class K2
  * @package RegularLabs\Library\Condition
  */
-class K2
-	extends \RegularLabs\Library\ConditionContent
-	implements \RegularLabs\Library\Api\ConditionInterface
+abstract class K2
+	extends \RegularLabs\Library\Condition
 {
-	public function pass()
-	{
-		// See specific conditions
-		return false;
-	}
+	use \RegularLabs\Library\ConditionContent;
 
 	public function getItem($fields = [])
 	{

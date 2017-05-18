@@ -1,7 +1,7 @@
 <extension type="component" version="2.5.0" method="upgrade">
     <name>WATCHFULLI</name>
-    <version>1.11.0</version>
-    <creationDate>20160831</creationDate>
+    <version>1.12.1</version>
+    <creationDate>2017-03-21</creationDate>
     <description>COM_WATCHFULLI_XML_DESCRIPTION</description>
     <license>GNU/GPL v3 or later</license>
     <author>watchful.li</author>

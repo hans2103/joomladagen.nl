@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -118,12 +118,9 @@ CSS;
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
 // due to missing trailing semicolon and/or newline in their code.
-(function($){
-	$(document).ready(function(){
-		document.forms.adminForm.submit();
-	})
-})(akeeba.jQuery)
-
+akeeba.System.documentReady(function(){
+	document.forms.adminForm.submit();
+});
 
 JS;
 		$this->addJavascriptInline($script);

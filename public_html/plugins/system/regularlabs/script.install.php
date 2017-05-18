@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -26,20 +26,12 @@ if (!class_exists('PlgSystemRegularLabsInstallerScript'))
 		{
 			if (!$this->isNewer())
 			{
+				$this->softbreak = true;
+
 				return false;
 			}
 
 			return true;
-		}
-
-		public function onAfterInstall($route)
-		{
-			if ($route != 'update')
-			{
-				return;
-			}
-
-			$this->deleteOldFiles();
 		}
 
 		public function uninstall($adapter)
@@ -52,15 +44,6 @@ if (!class_exists('PlgSystemRegularLabsInstallerScript'))
 			$this->delete(
 				[
 					JPATH_LIBRARIES . '/regularlabs',
-				]
-			);
-		}
-
-		private function deleteOldFiles()
-		{
-			$this->delete(
-				[
-					JPATH_PLUGINS . '/system/regularlabs/helpers',
 				]
 			);
 		}

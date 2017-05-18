@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -837,7 +837,7 @@ HTML;
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
-					->delete($db->qn('#__update_sites_extensions'))
+					->delete($db->qn('#__update_sites'))
 					->where($db->qn('location') . ' = ' . $db->q('http://cdn.akeebabackup.com/updates/fof.xml'));
 		try
 		{

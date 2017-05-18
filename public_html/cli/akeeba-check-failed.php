@@ -1,7 +1,7 @@
 <?php
 /**
  *  @package AkeebaBackup
- *  @copyright Copyright (c)2010-2016 Nicholas K. Dionysopoulos
+ *  @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  *  @license GNU General Public License version 3, or later
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -43,8 +43,6 @@ class AkeebaBackupCheckfailed extends AkeebaCliBase
 {
 	public function execute()
 	{
-		$db = JFactory::getDbo();
-
 		// Load the language files
 		$paths	 = array(JPATH_ADMINISTRATOR, JPATH_ROOT);
 		$jlang	 = JFactory::getLanguage();
@@ -123,10 +121,22 @@ ENDBLOCK;
 
         define('AKEEBA_BACKUP_ORIGIN', 'cli');
 
+        // Work around some misconfigured servers which print out notices
+		if (function_exists('error_reporting'))
+		{
+			$oldLevel = error_reporting(0);
+		}
+
 		$container = \FOF30\Container\Container::getInstance('com_akeeba', [
 			'input' => $this->input
 		]);
-        /** @var \Akeeba\Backup\Site\Model\Statistics $model */
+
+		if (function_exists('error_reporting'))
+		{
+			error_reporting($oldLevel);
+		}
+
+		/** @var \Akeeba\Backup\Site\Model\Statistics $model */
 		$model = $container->factory->model('Statistics')->tmpInstance();
         $result = $model->notifyFailed();
 

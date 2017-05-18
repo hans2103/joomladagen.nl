@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -25,11 +25,11 @@ class JFormFieldRL_Content extends \RegularLabs\Library\FieldGroup
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(c.id)')
-			->from('#__categories AS c')
-			->where('c.extension = ' . $this->db->quote('com_content'))
-			->where('c.parent_id > 0')
-			->where('c.published > -1');
+			->select('COUNT(*)')
+			->from('#__categories')
+			->where('extension = ' . $this->db->quote('com_content'))
+			->where('parent_id > 0')
+			->where('published > -1');
 		$this->db->setQuery($query);
 		$total = $this->db->loadResult();
 
@@ -51,8 +51,8 @@ class JFormFieldRL_Content extends \RegularLabs\Library\FieldGroup
 		}
 
 		$query->clear('select')
-			->select('c.id, c.title as name, c.level, c.published, c.language')
-			->order('c.lft');
+			->select('id, title as name, level, published, language')
+			->order('lft');
 
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
@@ -65,7 +65,7 @@ class JFormFieldRL_Content extends \RegularLabs\Library\FieldGroup
 	function getItems()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(i.id)')
+			->select('COUNT(*)')
 			->from('#__content AS i')
 			->where('i.access > -1');
 		$this->db->setQuery($query);

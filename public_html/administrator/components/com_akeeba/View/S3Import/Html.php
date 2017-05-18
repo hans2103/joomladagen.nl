@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -84,11 +84,9 @@ class Html extends BaseView
 
 ;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
 // due to missing trailing semicolon and/or newline in their code.
-(function($){
-	$(document).ready(function(){
-		window.location='index.php?option=com_akeeba&view=S3Import&layout=downloading&task=dltoserver&step=$step';
-	})
-})(akeeba.jQuery)
+akeeba.System.documentReady(function(){
+	window.location='index.php?option=com_akeeba&view=S3Import&layout=downloading&task=dltoserver&step=$step';
+});
 
 JS;
 		$this->addJavascriptInline($script);

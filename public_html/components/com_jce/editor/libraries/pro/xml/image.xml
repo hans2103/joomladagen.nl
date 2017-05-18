@@ -44,12 +44,17 @@
         <param name="resize_presets" type="text" size="80" default="320x240,640x480,800x600,1024x768" label="WF_MANAGER_RESIZE_PRESETS" description="WF_MANAGER_RESIZE_PRESETS_DESC"/>
         <param name="crop_presets" type="text" size="80" default="4:3,16:9,20:30,320x240,240x320,640x480,480x640,800x600,1024x768" label="WF_MANAGER_CROP_PRESETS" description="WF_MANAGER_CROP_PRESETS_DESC"/>
 
-        <param name="prefer_imagick" type="radio" default="1" label="WF_MANAGER_IMAGE_IMAGICK" description="WF_MANAGER_IMAGE_IMAGICK_DESC">
+        <param name="upload_remove_exif" type="radio" default="0" label="WF_PARAM_UPLOAD_REMOVE_EXIF" description="WF_PARAM_UPLOAD_REMOVE_EXIF_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>
 
-        <param name="upload_remove_exif" type="radio" default="0" label="WF_PARAM_UPLOAD_REMOVE_EXIF" description="WF_PARAM_UPLOAD_REMOVE_EXIF_DESC">
+        <param name="prefer_imagick" type="list" default="1" label="WF_MANAGER_IMAGE_IMAGICK" description="WF_MANAGER_IMAGE_IMAGICK_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+
+        <param name="resample_image" type="radio" default="1" label="WF_MANAGER_IMAGE_RESAMPLE" description="WF_MANAGER_IMAGE_RESAMPLE_DESC" parent="prefer_imagick[1]">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>

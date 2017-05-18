@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -40,7 +40,7 @@ class JFormFieldRL_K2 extends \RegularLabs\Library\FieldGroup
 		$state_field = RL_K2_VERSION == 3 ? 'state' : 'published';
 
 		$query = $this->db->getQuery(true)
-			->select('COUNT(c.id)')
+			->select('COUNT(*)')
 			->from('#__k2_categories AS c')
 			->where('c.' . $state_field . ' > -1');
 		$this->db->setQuery($query);
@@ -88,7 +88,7 @@ class JFormFieldRL_K2 extends \RegularLabs\Library\FieldGroup
 		$state_field = RL_K2_VERSION == 3 ? 'state' : 'published';
 
 		$query = $this->db->getQuery(true)
-			->select('COUNT(i.id)')
+			->select('COUNT(*)')
 			->from('#__k2_items AS i')
 			->where('i.' . $state_field . ' > -1');
 		$this->db->setQuery($query);

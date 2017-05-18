@@ -5,6 +5,4 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir   = dirname($vendorDir);
 
-return array(
-	'RegularLabs\\Library\\Text' => $baseDir . '/src/Text.php',
-);
+return array();

@@ -4,7 +4,7 @@
  * @package     Watchful Client
  * @author      Watchful
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  */
 
@@ -32,6 +32,13 @@ defined('WATCHFULLI_PATH') or die;
     <?php echo JText::_('COM_WATCHFULLI_SECRET_KEY'); ?>:
     <input readonly="readonly" type="text" style="width:250px;" size="55" value="<?php echo $this->secret_key ?>" />
 </p>
+
+<div>
+    <p><?php echo JText::_('COM_WATCHFULLI_WHITELIST_WATCHIP_INTRO'); ?></p>
+    <a href="<?php echo JRoute::_('index.php?option=com_watchfulli&task=whitelist'); ?>" class="btn">
+        <?php echo JText::_('COM_WATCHFULLI_WHITELIST_WATCHIP_BTN'); ?>
+    </a>
+</div>
 <?php if($this->debug_mode && file_exists($this->log_file)): ?>
     <hr/>
     <h3>Debug info</h3>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.0
+ * @version         7.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -48,8 +48,8 @@ $script = "
 ";
 RL_Document::scriptDeclaration($script);
 
-RL_Document::script('regularlabsmanager/script.min.js', '7.0.0');
-RL_Document::style('regularlabsmanager/style.min.css', '7.0.0');
+RL_Document::script('regularlabsmanager/script.min.js', '7.0.3');
+RL_Document::style('regularlabsmanager/style.min.css', '7.0.3');
 
 $script = "
 	jQuery(document).ready(function() {
@@ -79,7 +79,7 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 					echo $field->__get('input');
 					?>
 				</div>
-				<input type="hidden" name="task" value="">
+				<input type="hidden" name="task" value="storekey">
 				<?php echo JHtml::_('form.token'); ?>
 			</div>
 		</form>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -585,29 +585,47 @@ class Protect
 	 */
 	public static function unprotect(&$string)
 	{
-		self::unprotectByRegex(
+		self::unprotectByDelimiters(
 			$string,
-			RegEx::quote(self::$protect_tags_start) . '(.*?)' . RegEx::quote(self::$protect_tags_end)
+			[self::$protect_tags_start, self::$protect_tags_end]
 		);
 
-		self::unprotectByRegex(
+		self::unprotectByDelimiters(
 			$string,
-			RegEx::quote(self::$protect_start) . '(.*?)' . RegEx::quote(self::$protect_end)
+			[self::$protect_start, self::$protect_end]
 		);
 	}
 
 	/**
 	 * @param string $string
-	 * @param string $regex
+	 * @param array  $delimiters
 	 */
-	private static function unprotectByRegex(&$string, $regex)
+	private static function unprotectByDelimiters(&$string, $delimiters)
 	{
-		while (RegEx::matchAll($regex, $string, $matches))
+		if (!StringHelper::contains($string, $delimiters))
 		{
-			foreach ($matches as $match)
+			return;
+		}
+
+		$regex = RegEx::preparePattern(RegEx::quote($delimiters), 's', $string);
+
+		$parts = preg_split($regex, $string);
+
+		foreach ($parts as $i => &$part)
+		{
+			if ($i % 2 == 0)
 			{
-				$string = str_replace($match['0'], base64_decode($match['1']), $string);
+				continue;
 			}
+
+			$part = base64_decode($part);
+		}
+
+		$string = implode('', $parts);
+
+		if (!StringHelper::contains($string, $delimiters))
+		{
+			self::unprotectByDelimiters($string, $delimiters);
 		}
 	}
 
@@ -910,6 +928,52 @@ class Protect
 		}
 
 		return [$start, $end];
+	}
+
+	/**
+	 * Wraps a style or javascript declaration with comment tags
+	 *
+	 * @param string $content
+	 * @param string $name
+	 * @param string $type
+	 * @param bool   $minify
+	 */
+	public static function wrapDeclaration($content = '', $name = '', $type = 'styles', $minify = true)
+	{
+		if (empty($name))
+		{
+			return $content;
+		}
+
+		list($start, $end) = self::getInlineCommentTags($name, $type);
+
+		$spacer = $minify ? ' ' : "\n";
+
+		return $start . $spacer . $content . $spacer . $end;
+	}
+
+	/**
+	 * Wraps a javascript declaration with comment tags
+	 *
+	 * @param string $content
+	 * @param string $name
+	 * @param bool   $minify
+	 */
+	public static function wrapScriptDeclaration($content = '', $name = '', $minify = true)
+	{
+		return self::wrapDeclaration($content, $name, 'scripts', $minify);
+	}
+
+	/**
+	 * Wraps a stylesheet declaration with comment tags
+	 *
+	 * @param string $content
+	 * @param string $name
+	 * @param bool   $minify
+	 */
+	public static function wrapStyleDeclaration($content = '', $name = '', $minify = true)
+	{
+		return self::wrapDeclaration($content, $name, 'styles', $minify);
 	}
 
 	/**

@@ -1,13 +1,12 @@
 <?php
 
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses.
+ * other free or open source software licenses
  */
 defined('_JEXEC') or die('RESTRICTED');
 
@@ -21,19 +20,22 @@ wfimport('editor.libraries.classes.extensions.popups');
 
 /**
  * MediaManager Class.
+ *
  * @author $Author: Ryan Demmer
  */
-class WFMediaManagerPlugin extends WFMediaManager {
+class WFMediaManagerPlugin extends WFMediaManager
+{
     /*
      * @var string
      */
 
-    var $_filetypes = 'windowsmedia=avi,wmv,wm,asf,asx,wmx,wvx;quicktime=mov,qt,mpg,mpeg,m4a;flash=swf;shockwave=dcr;real=rm,ra,ram;divx=divx;video=mp4,ogv,ogg,webm,flv,f4v;audio=mp3,ogg,wav;silverlight=xap';
+    public $_filetypes = 'windowsmedia=avi,wmv,wm,asf,asx,wmx,wvx;quicktime=mov,qt,mpg,mpeg,m4a;flash=swf;shockwave=dcr;real=rm,ra,ram;divx=divx;video=mp4,ogv,ogg,webm,flv,f4v;audio=mp3,ogg,wav;silverlight=xap';
 
     /**
-     * Display the plugin
+     * Display the plugin.
      */
-    public function display() {
+    public function display()
+    {
         parent::display();
 
         $document = WFDocument::getInstance();
@@ -41,7 +43,7 @@ class WFMediaManagerPlugin extends WFMediaManager {
         $document->addScript(array('mediamanager'), 'plugins');
         $document->addStyleSheet(array('mediamanager'), 'plugins');
 
-        $document->addScriptDeclaration('MediaManagerDialog.settings=' . json_encode($this->getSettings()) . ';');
+        $document->addScriptDeclaration('MediaManagerDialog.settings='.json_encode($this->getSettings()).';');
 
         $tabs = WFTabs::getInstance(array('base_path' => WF_EDITOR_PLUGIN));
 
@@ -54,7 +56,7 @@ class WFMediaManagerPlugin extends WFMediaManager {
         $popups = WFPopupsExtension::getInstance(array(
                     // map src value to popup link href
                     'map' => array('href' => 'src'),
-                    'default' => $this->getParam('mediamanager.popups.default', '')
+                    'default' => $this->getParam('mediamanager.popups.default', ''),
         ));
 
         $popups->display();
@@ -64,13 +66,14 @@ class WFMediaManagerPlugin extends WFMediaManager {
     }
 
     /**
-     * Get a list of media extensions
+     * Get a list of media extensions.
      *
-     * @access public
-     * @param boolean	Map the extensions to media type
-     * @return string	Extension list or type map
+     * @param bool	Map the extensions to media type
+     *
+     * @return string Extension list or type map
      */
-    protected function getMediaTypes($map = false) {
+    protected function getMediaTypes($map = false)
+    {
         $extensions = $this->getParam('extensions', $this->get('_filetypes'));
 
         if ($map) {
@@ -80,7 +83,8 @@ class WFMediaManagerPlugin extends WFMediaManager {
         }
     }
 
-    protected function setMediaOption($name, $value) {
+    protected function setMediaOption($name, $value)
+    {
         $options = $this->get('_media_options');
 
         $options[$name] = $value;
@@ -88,7 +92,8 @@ class WFMediaManagerPlugin extends WFMediaManager {
         $this->set('_media_options', $options);
     }
 
-    public function getMediaOptions() {
+    public function getMediaOptions()
+    {
         $list = $this->getParam('extensions', $this->get('_filetypes'));
 
         $options = '';
@@ -101,22 +106,24 @@ class WFMediaManagerPlugin extends WFMediaManager {
                     continue;
                 }
 
-                $options .= '<option value="' . $kv[0] . '">' . WFText::_('WF_MEDIAMANAGER_' . strtoupper($kv[0]) . '_TITLE') . '</option>' . "\n";
+                $options .= '<option value="'.$kv[0].'">'.WFText::_('WF_MEDIAMANAGER_'.strtoupper($kv[0]).'_TITLE').'</option>'."\n";
             }
 
             foreach ($this->get('_media_options') as $k => $v) {
-                $options .= '<option value="' . $k . '">' . WFText::_($v, ucfirst($k)) . '</option>' . "\n";
+                $options .= '<option value="'.$k.'">'.WFText::_($v, ucfirst($k)).'</option>'."\n";
             }
         }
 
         return $options;
     }
 
-    protected function getViewable() {
+    protected function getViewable()
+    {
         return $this->get('filetypes');
     }
 
-    protected function loadAggregators() {
+    protected function loadAggregators()
+    {
         $extension = WFAggregatorExtension::getInstance(array('format' => 'video'));
         $extension->display();
 
@@ -127,16 +134,16 @@ class WFMediaManagerPlugin extends WFMediaManager {
     }
 
     /**
-     *
      * @return
      */
-    public function getAggregatorTemplate() {
+    public function getAggregatorTemplate()
+    {
         $tpl = '';
 
         $extension = WFAggregatorExtension::getInstance();
 
         foreach ($extension->getAggregators() as $aggregator) {
-            $tpl .= '<div class="media_option ' . $aggregator->getName() . '" id="' . $aggregator->getName() . '_options" style="display:none;"><h4>' . WFText::_($aggregator->getTitle()) . '</h4>';
+            $tpl .= '<div class="media_option '.$aggregator->getName().'" id="'.$aggregator->getName().'_options" style="display:none;"><h4>'.WFText::_($aggregator->getTitle()).'</h4>';
             $tpl .= $extension->loadTemplate($aggregator->getName());
             $tpl .= '</div>';
         }
@@ -144,11 +151,12 @@ class WFMediaManagerPlugin extends WFMediaManager {
         return $tpl;
     }
 
-    public function getSettings($settings = array()) {
+    public function getSettings($settings = array())
+    {
         $settings = array(
             // Plugin parameters
-            'media_types'   => $this->get('filetypes', $this->get('_filetypes')),
-            'defaults'      => $this->getDefaults()
+            'media_types' => $this->get('filetypes', $this->get('_filetypes')),
+            'defaults' => $this->getDefaults(),
         );
 
         return parent::getSettings($settings);

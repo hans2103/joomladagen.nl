@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-class RSFormModelSubmissions extends JModelLegacy
+class RsformModelSubmissions extends JModelLegacy
 {
 	var $_form = null;
 	var $_data = array();
@@ -25,7 +25,7 @@ class RSFormModelSubmissions extends JModelLegacy
 		parent::__construct();
 		
 		$app 			= JFactory::getApplication();
-		$this->_db 		= JFactory::getDBO();
+		$this->_db 		= JFactory::getDbo();
 		$this->params 	= $app->getParams('com_rsform');
 		$this->formId 	= (int) $this->params->get('formId');
 		

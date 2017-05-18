@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -17,8 +17,7 @@ defined('_JEXEC') or die;
  * Class ConditionContent
  * @package RegularLabs\Library
  */
-class ConditionContent
-	extends Condition
+trait ConditionContent
 {
 	public function passContentId()
 	{
@@ -68,6 +67,8 @@ class ConditionContent
 
 			return true;
 		}
+
+		return false;
 	}
 
 	public function passMetaKeyword($field = 'metakey', $keywords = '')
@@ -112,6 +113,8 @@ class ConditionContent
 
 			return true;
 		}
+
+		return false;
 	}
 
 	public function passAuthor($field = 'created_by', $author = '')
@@ -143,8 +146,5 @@ class ConditionContent
 		return in_array($author, $this->params->authors);
 	}
 
-	public function getItem($fields = [])
-	{
-		return [];
-	}
+	abstract public function getItem($fields = []);
 }

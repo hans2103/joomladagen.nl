@@ -9,7 +9,7 @@ defined('_JEXEC') or die('Restricted access');
 
 jimport('joomla.application.component.model');
 
-class RSFormModelConditions extends JModelLegacy
+class RsformModelConditions extends JModelLegacy
 {
 	var $_data 	= null;
 	var $_total = 0;
@@ -19,7 +19,7 @@ class RSFormModelConditions extends JModelLegacy
 	function __construct()
 	{
 		parent::__construct();
-		$this->_db = JFactory::getDBO();
+		$this->_db = JFactory::getDbo();
 	}
 	
 	function getFormId()

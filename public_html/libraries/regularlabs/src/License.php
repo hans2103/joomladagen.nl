@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -45,7 +45,7 @@ class License
 		}
 
 		return
-			'<div class="alert rl_licence">'
+			'<div class="alert alert-default rl_licence">'
 			. JText::sprintf('RL_IS_FREE_VERSION', $name)
 			. '<br>'
 			. JText::_('RL_FOR_MORE_GO_PRO')

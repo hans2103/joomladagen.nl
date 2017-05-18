@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library;
 defined('_JEXEC') or die;
 
 use Exception;
+use JHtml;
 use JText;
 use ReflectionClass;
 
@@ -75,6 +76,8 @@ class EditorButtonPopup
 
 	private function loadLibraryScriptsStyles()
 	{
+		JHtml::_('jquery.framework');
+
 		Document::script('regularlabs/script.min.js');
 		Document::style('regularlabs/popup.min.css');
 		Document::style('regularlabs/style.min.css');

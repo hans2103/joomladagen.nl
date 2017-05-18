@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -221,9 +221,7 @@ class Conditions
 
 				$className = '\\RegularLabs\\Library\\Condition\\' . $condition->class_name;
 
-				$class = new $className($condition, $article);
-
-				$pass = $class->pass();
+				$pass = (new $className($condition, $article))->pass();
 
 				break;
 		}
@@ -457,7 +455,7 @@ class Conditions
 				break;
 
 			case 'Tag':
-				$bool_params = ['match_all', 'inc_children'];
+				$bool_params = ['inc_children'];
 				break;
 
 			case 'Content.Category':
@@ -501,6 +499,17 @@ class Conditions
 			case 'Zoo.Item':
 				$bool_params = ['authors'];
 				break;
+		}
+
+		if (in_array($type, self::getMatchAllTypes()))
+		{
+			$bool_params[] = 'match_all';
+
+			if (count($object->selection) == 1 && strpos($object->selection['0'], '+') !== false)
+			{
+				$object->selection = ArrayHelper::toArray($object->selection['0'], '+');
+				$params->match_all = true;
+			}
 		}
 
 		if (empty($bool_params) && empty($array_params) && empty($includes))
@@ -704,6 +713,14 @@ class Conditions
 	{
 		return [
 			'Php',
+		];
+	}
+
+	public static function getMatchAllTypes()
+	{
+		return [
+			'User.Grouplevel',
+			'Tag',
 		];
 	}
 

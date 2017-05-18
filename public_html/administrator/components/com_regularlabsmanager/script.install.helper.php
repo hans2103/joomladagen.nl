@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.0
+ * @version         7.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,6 +23,7 @@ class Com_RegularLabsManagerInstallerScriptHelper
 	public $install_type    = 'install';
 	public $show_message    = true;
 	public $db              = null;
+	public $softbreak       = null;
 
 	public function __construct(&$params)
 	{

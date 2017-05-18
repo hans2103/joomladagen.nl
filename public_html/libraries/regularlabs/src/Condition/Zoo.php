@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,15 +19,10 @@ use JFactory;
  * Class Zoo
  * @package RegularLabs\Library\Condition
  */
-class Zoo
-	extends \RegularLabs\Library\ConditionContent
-	implements \RegularLabs\Library\Api\ConditionInterface
+abstract class Zoo
+	extends \RegularLabs\Library\Condition
 {
-	public function pass()
-	{
-		// See specific conditions
-		return false;
-	}
+	use \RegularLabs\Library\ConditionContent;
 
 	public function initRequest(&$request)
 	{

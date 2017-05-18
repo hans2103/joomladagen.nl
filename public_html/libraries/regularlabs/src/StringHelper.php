@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -176,5 +176,63 @@ class StringHelper
 		}
 
 		return $new_array;
+	}
+
+	/**
+	 * Check whether string is a UTF-8 encoded string
+	 *
+	 * @param string $string
+	 *
+	 * @return bool
+	 */
+	public static function detectUTF8($string = '')
+	{
+		// Try to check the string via the mb_check_encoding function
+		if (function_exists('mb_check_encoding'))
+		{
+			return mb_check_encoding($string, 'UTF-8');
+		}
+
+		// Otherwise: Try to check the string via the iconv function
+		if (function_exists('iconv'))
+		{
+			$converted = iconv('UTF-8', 'UTF-8//IGNORE', $string);
+
+			return (md5($converted) == md5($string));
+		}
+
+		// As last fallback, check if the preg_match finds anything using the unicode flag
+		return preg_match('#.#u', $string);
+	}
+
+	/**
+	 * Converts a string to a UTF-8 encoded string
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public static function convertToUtf8(&$string = '')
+	{
+		if (self::detectUTF8($string))
+		{
+			// Already UTF-8, so skip
+			return $string;
+		}
+
+		if (!function_exists('iconv'))
+		{
+			// Still need to find a stable fallback
+			return $string;
+		}
+
+		$utf8_string = @iconv('UTF8', 'UTF-8//IGNORE', $string);
+
+		if (empty($utf8_string))
+		{
+			return $string;
+		}
+
+		return $utf8_string;
 	}
 }

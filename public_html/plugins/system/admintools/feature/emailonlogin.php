@@ -121,7 +121,7 @@ class AtsystemFeatureEmailonlogin extends AtsystemFeatureAbstract
 		);
 
 		// Let's get the most suitable email template
-		$template = $this->exceptionsHandler->getEmailTemplate('adminloginsuccess');
+		$template = $this->exceptionsHandler->getEmailTemplate('adminloginsuccess', true);
 
 		// Got no template, the user didn't published any email template, or the template doesn't want us to
 		// send a notification email. Anyway, let's stop here.
@@ -154,12 +154,23 @@ class AtsystemFeatureEmailonlogin extends AtsystemFeatureAbstract
 
 			foreach ($recipients as $recipient)
 			{
+				if (empty($recipient))
+				{
+					continue;
+				}
+
 				// This line is required because SpamAssassin is BROKEN
 				$mailer->Priority = 3;
 
 				$mailer->isHtml(true);
 				$mailer->setSender(array($mailfrom, $fromname));
-				$mailer->addRecipient($recipient);
+
+				if ($mailer->addRecipient($recipient) === false)
+				{
+					// Failed to add a recipient?
+					continue;
+				}
+
 				$mailer->setSubject($subject);
 				$mailer->setBody($body);
 				$mailer->Send();
@@ -167,7 +178,7 @@ class AtsystemFeatureEmailonlogin extends AtsystemFeatureAbstract
 		}
 		catch (\Exception $e)
 		{
-			// Joomla 3.5 is written by incompetent bonobos
+			// Joomla! 3.5 and later throw an exception when crap happens instead of suppressing it and returning false
 		}
 	}
 } 

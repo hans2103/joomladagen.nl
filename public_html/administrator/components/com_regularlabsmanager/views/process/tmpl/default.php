@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.0
+ * @version         7.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -30,8 +30,8 @@ $script = "
 ";
 RL_Document::scriptDeclaration($script);
 
-RL_Document::script('regularlabsmanager/process.min.js', '7.0.0');
-RL_Document::style('regularlabsmanager/process.min.css', '7.0.0');
+RL_Document::script('regularlabsmanager/process.min.js', '7.0.3');
+RL_Document::style('regularlabsmanager/process.min.css', '7.0.3');
 ?>
 
 <div id="rlem">

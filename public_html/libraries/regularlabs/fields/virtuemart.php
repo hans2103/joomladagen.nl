@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -36,7 +36,7 @@ class JFormFieldRL_VirtueMart extends \RegularLabs\Library\FieldGroup
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(c.virtuemart_category_id)')
+			->select('COUNT(*)')
 			->from('#__virtuemart_categories AS c')
 			->where('c.published > -1');
 		$this->db->setQuery($query);
@@ -64,7 +64,7 @@ class JFormFieldRL_VirtueMart extends \RegularLabs\Library\FieldGroup
 	function getProducts()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(p.virtuemart_product_id)')
+			->select('COUNT(*)')
 			->from('#__virtuemart_products AS p')
 			->where('p.published > -1');
 		$this->db->setQuery($query);

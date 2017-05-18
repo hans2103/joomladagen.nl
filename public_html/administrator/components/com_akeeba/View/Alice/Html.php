@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -54,18 +54,6 @@ class Html extends BaseView
 		// Get a list of log names
 		$this->logs = $logModel->getLogList();
 		$this->log  = $this->input->getCmd('log', null);
-
-		if ($this->log)
-		{
-			$js = <<<JS
-akeeba.jQuery(document).ready(function($){
-    $('#log').change();
-    $('#analyze-log').click();
-});
-JS;
-
-			$this->addJavascriptInline($js);
-		}
 
 		JHtml::_('formbehavior.chosen');
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,16 +20,9 @@ use MijoShop as MijoShopClass;
  * Class Mijoshop
  * @package RegularLabs\Library\Condition
  */
-class Mijoshop
+abstract class Mijoshop
 	extends \RegularLabs\Library\Condition
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
-	public function pass()
-	{
-		// See specific conditions
-		return false;
-	}
-
 	public function initRequest(&$request)
 	{
 		$input = JFactory::getApplication()->input;

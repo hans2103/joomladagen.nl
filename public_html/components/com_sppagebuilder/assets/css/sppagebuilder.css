@@ -3136,6 +3136,10 @@ textarea.sppb-form-control {
   .sppb-hidden-sm {
     display: none !important;
   }
+  .sppb-equalize-columns .sppb-row >div,
+  .sppb-equalize-columns .sppb-row{
+    display: block;
+  }
 }
 @media (min-width: 992px) and (max-width: 1199px) {
   .sppb-hidden-md {
@@ -3197,7 +3201,20 @@ textarea.sppb-form-control {
 
 /*Equalize columns*/
 .sppb-equalize-columns .sppb-row {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
   display: flex;
   flex-flow: row wrap;
   -webkit-flex-flow: row wrap;
+}
+
+.sppb-equalize-columns .sppb-row >div{
+  flex: 1;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
 }

@@ -1,8 +1,7 @@
 <?php
 /**
- * @package   	JCE
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved.
- * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved.
+ * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright   Copyright (C) 2005 - 2012 Open Source Matters, Inc. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -13,17 +12,18 @@
  */
 defined('_JEXEC') or die;
 
-define ( 'IMAGE_FLIP_HORIZONTAL', 1 );
-define ( 'IMAGE_FLIP_VERTICAL', 2 );
-define ( 'IMAGE_FLIP_BOTH', 3 );
+define('IMAGE_FLIP_HORIZONTAL', 1);
+define('IMAGE_FLIP_VERTICAL', 2);
+define('IMAGE_FLIP_BOTH', 3);
 
 // http://www.php.net/manual/en/function.exif-imagetype.php#80383
 if (!function_exists('exif_imagetype')) {
-
-    function exif_imagetype($filename) {
-        if (( list($width, $height, $type, $attr) = getimagesize($filename) ) !== false) {
+    function exif_imagetype($filename)
+    {
+        if ((list($width, $height, $type, $attr) = getimagesize($filename)) !== false) {
             return $type;
         }
+
         return false;
     }
 }
@@ -31,64 +31,83 @@ if (!function_exists('exif_imagetype')) {
 /**
  * Class to manipulate an image.
  */
-class WFImage {
+class WFImage
+{
     /**
      * @const  integer
+     *
      * @since  2.1
      */
-
     const SCALE_FILL = 1;
 
     /**
      * @const  integer
+     *
      * @since  2.1
      */
     const SCALE_INSIDE = 2;
 
     /**
      * @const  integer
+     *
      * @since  2.1
      */
     const SCALE_OUTSIDE = 3;
 
     /**
-     * @var    string  The source image path.
+     * @var string The source image path
+     *
      * @since  2.1
      */
     protected $path = null;
 
     /**
-     * @var    string  The image library object
+     * @var string The image library object
+     *
      * @since  2.1
      */
     protected static $lib = null;
 
     /**
-     * @var    boolean  Use IMagick if available
+     * @var bool Use IMagick if available
+     *
      * @since  2.1
      */
     protected static $preferImagick = true;
 
     /**
-     * @var    boolean  REmove EXIF data from JPEG and PNG images
+     * @var bool REmove EXIF data from JPEG and PNG images
+     *
      * @since  2.1
      */
     protected static $removeExif = false;
 
     /**
+     * @var integer Resample the image to 72dpi
+     *
+     * @since  2.1
+     */
+    protected static $resampleImage = true;
+
+    /**
      * Class constructor.
      *
-     * @param   mixed  $source  A file path for a source image.
+     * @param mixed $source A file path for a source image
      *
      * @since   2.1
      */
-    public function __construct($source = null, $options = array()) {
+    public function __construct($source = null, $options = array())
+    {
         if (isset($options['preferImagick'])) {
             self::$preferImagick = (bool) $options['preferImagick'];
         }
 
         if (isset($options['removeExif'])) {
             self::$removeExif = (bool) $options['removeExif'];
+        }
+
+        if (isset($options['resampleImage'])) {
+            self::$resampleImage = (bool) $options['resampleImage'];
         }
 
         // create image library instance
@@ -100,16 +119,18 @@ class WFImage {
     }
 
     /**
-     * Get the available Graphics Library
+     * Get the available Graphics Library.
+     *
      * @return object Graphics Library Instance
+     *
      * @throws RuntimeException
      */
-    public static function getLib($lib = null) {
-
+    public static function getLib($lib = null)
+    {
         if (!isset(self::$lib)) {
             if (extension_loaded('imagick')) {
                 $lib = 'Imagick';
-            } else if (extension_loaded('gd')) {
+            } elseif (extension_loaded('gd')) {
                 $lib = 'GD';
             } else {
                 throw new RuntimeException('No supported Image library available.');
@@ -119,13 +140,13 @@ class WFImage {
                 $lib = 'GD';
             }
 
-            require_once(dirname(__FILE__) . '/' . strtolower($lib) . '.php');
-            $class = 'WFImage' . $lib;
+            require_once dirname(__FILE__).'/'.strtolower($lib).'.php';
+            $class = 'WFImage'.$lib;
 
             if (class_exists($class)) {
                 self::$lib = new $class();
             } else {
-                throw new RuntimeException('Class ' . $class . ' not found');
+                throw new RuntimeException('Class '.$class.' not found');
             }
         }
 
@@ -137,15 +158,17 @@ class WFImage {
      * result object has values for image width, height, type, attributes, mime type, bits,
      * and channels.
      *
-     * @param   string  $path  The filesystem path to the image for which to get properties.
+     * @param string $path The filesystem path to the image for which to get properties
      *
-     * @return  object
+     * @return object
      *
      * @since   2.1
-     * @throws  InvalidArgumentException
-     * @throws  RuntimeException
+     *
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
-    public static function getImageFileProperties($path) {
+    public static function getImageFileProperties($path)
+    {
         // Make sure the file exists.
         if (!file_exists($path)) {
             throw new InvalidArgumentException('The image file does not exist.');
@@ -159,13 +182,13 @@ class WFImage {
 
         // Build the response object.
         $properties = (object) array(
-            'width'     => $info[0],
-            'height'    => $info[1],
-            'type'      => $info[2],
-            'attributes'=> $info[3],
-            'bits'      => isset($info['bits']) ? $info['bits'] : null,
-            'channels'  => isset($info['channels']) ? $info['channels'] : null,
-            'mime'      => $info['mime']
+            'width' => $info[0],
+            'height' => $info[1],
+            'type' => $info[2],
+            'attributes' => $info[3],
+            'bits' => isset($info['bits']) ? $info['bits'] : null,
+            'channels' => isset($info['channels']) ? $info['channels'] : null,
+            'mime' => $info['mime'],
         );
 
         return $properties;
@@ -174,61 +197,63 @@ class WFImage {
     /**
      * Method to apply a filter to the image by type.
      *
-     * @param   string  $type     The name of the image filter to apply.
-     * @param   array   $options  An array of options for the filter.
+     * @param string $type    The name of the image filter to apply
+     * @param array  $options An array of options for the filter
      *
      * @since   2.1
      */
-    public function filter($type, array $options = array()) {
+    public function filter($type, array $options = array())
+    {
         return self::getLib()->filter($type, $options);
     }
 
     /**
      * Method to get the height of the image in pixels.
      *
-     * @return  integer
+     * @return int
      *
      * @since   2.1
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         return self::getLib()->getHeight();
     }
 
     /**
      * Method to get the width of the image in pixels.
      *
-     * @return  integer
+     * @return int
      *
      * @since   2.1
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         return self::getLib()->getWidth();
     }
 
     /**
      * Method to load a file into the Graphics Libary object as the resource.
      *
-     * @param   string  $path  The filesystem path to load as an image.
-     *
-     * @return  void
+     * @param string $path The filesystem path to load as an image
      *
      * @since   2.1
      */
-    public function loadFile($path) {
+    public function loadFile($path)
+    {
         self::getLib()->loadFile($path);
     }
 
     /**
      * Method to load a string into the Graphics Library object as the resource.
      *
-     * @param   string  $string  The image string.
-     *
-     * @return  void
+     * @param string $string The image string
      *
      * @since   2.1
-     * @throws  InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
-    public function loadString($string) {
+    public function loadString($string)
+    {
         if (strlen($string) < 128) {
             throw new InvalidArgumentException('String does not contain image data.');
         }
@@ -236,13 +261,15 @@ class WFImage {
         self::getLib()->loadString($string);
     }
 
-    public function resample($resolution = 72) {
+    public function resample($resolution = 72)
+    {
         return self::getLib()->resample($resolution);
     }
 
-    public function watermark($options = array()) {
+    public function watermark($options = array())
+    {
         if (empty($options)) {
-           throw new InvalidArgumentException('No watermark options set');
+            throw new InvalidArgumentException('No watermark options set');
         }
 
         if (array_key_exists($options, 'text') === false || array_key_exists($options, 'image') === false) {
@@ -250,16 +277,16 @@ class WFImage {
         }
 
         $options = (object) array(
-                    'type'          =>  $options['type'],
-                    'text'          =>  $options['text'],
-                    'image'         =>  $options['image'],
-                    'font_style'    =>  isset($options['font_style']) ? $options['font_style'] : 'sans-serif',
-                    'font_size'     =>  isset($options['font_size']) ? $options['font_size'] : '36',
-                    'font_color'    =>  isset($options['font_color']) ? $options['font_color'] : '#FFFFFF',
-                    'opacity'       =>  isset($options['opacity']) ? $options['opacity'] : 50,
-                    'position'      =>  isset($options['position']) ? $options['position'] : 'center',
-                    'margin'        =>  isset($options['margin']) ? (int) $options['margin'] : 10,
-                    'angle'         =>  isset($options['angle']) ? (int) $options['angle'] : 0
+                    'type' => $options['type'],
+                    'text' => $options['text'],
+                    'image' => $options['image'],
+                    'font_style' => isset($options['font_style']) ? $options['font_style'] : 'sans-serif',
+                    'font_size' => isset($options['font_size']) ? $options['font_size'] : '36',
+                    'font_color' => isset($options['font_color']) ? $options['font_color'] : '#FFFFFF',
+                    'opacity' => isset($options['opacity']) ? $options['opacity'] : 50,
+                    'position' => isset($options['position']) ? $options['position'] : 'center',
+                    'margin' => isset($options['margin']) ? (int) $options['margin'] : 10,
+                    'angle' => isset($options['angle']) ? (int) $options['angle'] : 0,
                 );
 
         return self::getLib()->watermark($options);
@@ -268,17 +295,18 @@ class WFImage {
     /**
      * Method to resize the current image.
      *
-     * @param   mixed    $width        The width of the resized image in pixels or a percentage.
-     * @param   mixed    $height       The height of the resized image in pixels or a percentage.
-     * @param   bool     $createNew    If true the current image will be cloned, resized and returned; else
-     * the current image will be resized and returned.
-     * @param   integer  $scaleMethod  Which method to use for scaling
+     * @param mixed $width       The width of the resized image in pixels or a percentage
+     * @param mixed $height      The height of the resized image in pixels or a percentage
+     * @param bool  $createNew   If true the current image will be cloned, resized and returned; else
+     *                           the current image will be resized and returned
+     * @param int   $scaleMethod Which method to use for scaling
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function resize($width, $height, $createNew = false, $scaleMethod = WFImage::SCALE_INSIDE) {
+    public function resize($width, $height, $createNew = false, $scaleMethod = self::SCALE_INSIDE)
+    {
         // Sanitize width.
         $width = $this->sanitizeWidth($width, $height);
 
@@ -294,18 +322,19 @@ class WFImage {
     /**
      * Method to crop the current image.
      *
-     * @param   mixed    $width      The width of the image section to crop in pixels or a percentage.
-     * @param   mixed    $height     The height of the image section to crop in pixels or a percentage.
-     * @param   integer  $left       The number of pixels from the left to start cropping.
-     * @param   integer  $top        The number of pixels from the top to start cropping.
-     * @param   bool     $createNew  If true the current image will be cloned, cropped and returned; else
-     *                               the current image will be cropped and returned.
+     * @param mixed $width     The width of the image section to crop in pixels or a percentage
+     * @param mixed $height    The height of the image section to crop in pixels or a percentage
+     * @param int   $left      The number of pixels from the left to start cropping
+     * @param int   $top       The number of pixels from the top to start cropping
+     * @param bool  $createNew If true the current image will be cloned, cropped and returned; else
+     *                         the current image will be cropped and returned
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function crop($width, $height, $left, $top, $createNew = false) {
+    public function crop($width, $height, $left, $top, $createNew = false)
+    {
         // Sanitize width.
         $width = $this->sanitizeWidth($width, $height);
 
@@ -324,16 +353,17 @@ class WFImage {
     /**
      * Method to rotate the current image.
      *
-     * @param   mixed    $angle       The angle of rotation for the image
-     * @param   integer  $background  The background color to use when areas are added due to rotation
-     * @param   bool     $createNew   If true the current image will be cloned, rotated and returned; else
-     * the current image will be rotated and returned.
+     * @param mixed $angle      The angle of rotation for the image
+     * @param int   $background The background color to use when areas are added due to rotation
+     * @param bool  $createNew  If true the current image will be cloned, rotated and returned; else
+     *                          the current image will be rotated and returned
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function rotate($angle, $background = -1, $createNew = false) {
+    public function rotate($angle, $background = -1, $createNew = false)
+    {
         // Sanitize input
         $angle = floatval($angle);
 
@@ -343,21 +373,22 @@ class WFImage {
     /**
      * Method to rotate the current image.
      *
-     * @param   mixed    $angle       The angle of rotation for the image
-     * @param   integer  $background  The background color to use when areas are added due to rotation
-     * @param   bool     $createNew   If true the current image will be cloned, rotated and returned; else
-     * the current image will be rotated and returned.
+     * @param mixed $angle      The angle of rotation for the image
+     * @param int   $background The background color to use when areas are added due to rotation
+     * @param bool  $createNew  If true the current image will be cloned, rotated and returned; else
+     *                          the current image will be rotated and returned
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function flip($direction, $createNew = false) {
+    public function flip($direction, $createNew = false)
+    {
         if (empty($direction)) {
-           throw new InvalidArgumentException('No flip direction set');
+            throw new InvalidArgumentException('No flip direction set');
         }
 
-        switch($direction) {
+        switch ($direction) {
             case 'horizontal':
                 $direction = IMAGE_FLIP_HORIZONTAL;
                 break;
@@ -375,18 +406,22 @@ class WFImage {
     /**
      * Method to write the current image out to a file.
      *
-     * @param   string   $path     The filesystem path to save the image.
-     * @param   integer  $type     The image type to save the file as.
-     * @param   array    $options  The image type options to use in saving the file.
+     * @param string $path    The filesystem path to save the image
+     * @param int    $type    The image type to save the file as
+     * @param array  $options The image type options to use in saving the file
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function toFile($path, $type = 'jpeg', array $options = array()) {
+    public function toFile($path, $type = 'jpeg', array $options = array())
+    {
 
         // remove exif data before saving?
         $options['removeExif'] = self::$removeExif;
+
+        // resample on saving?
+        $options['resampleImage'] = self::$resampleImage;
 
         return self::getLib()->toFile($path, $type, $options);
     }
@@ -394,18 +429,22 @@ class WFImage {
     /**
      * Method to write the current image out to a string.
      *
-     * @param   integer  $type     The image type to save the file as.
-     * @param   array    $options  The image type options to use in saving the file.
+     * @param int   $type    The image type to save the file as
+     * @param array $options The image type options to use in saving the file
      *
-     * @return  boolean
+     * @return bool
      *
      * @since   2.1
      */
-    public function toString($type = 'jpeg', array $options = array()) {
+    public function toString($type = 'jpeg', array $options = array())
+    {
         ob_start();
 
         // remove exif data before saving?
         $options['removeExif'] = self::$removeExif;
+
+        // resample on saving?
+        $options['resampleImage'] = self::$resampleImage;
 
         self::getLib()->toString($type, $options);
 
@@ -415,31 +454,33 @@ class WFImage {
     /**
      * Method to get the new dimensions for a resized image.
      *
-     * @param   integer  $width        The width of the resized image in pixels.
-     * @param   integer  $height       The height of the resized image in pixels.
-     * @param   integer  $scaleMethod  The method to use for scaling
+     * @param int $width       The width of the resized image in pixels
+     * @param int $height      The height of the resized image in pixels
+     * @param int $scaleMethod The method to use for scaling
      *
-     * @return  object
+     * @return object
      *
      * @since   11.3
-     * @throws  InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
-    protected function prepareDimensions($width, $height, $scaleMethod) {
+    protected function prepareDimensions($width, $height, $scaleMethod)
+    {
         // Instantiate variables.
-        $dimensions = new stdClass;
+        $dimensions = new stdClass();
 
         switch ($scaleMethod) {
-            case WFImage::SCALE_FILL:
+            case self::SCALE_FILL:
                 $dimensions->width = intval(round($width));
                 $dimensions->height = intval(round($height));
                 break;
 
-            case WFImage::SCALE_INSIDE:
-            case WFImage::SCALE_OUTSIDE:
+            case self::SCALE_INSIDE:
+            case self::SCALE_OUTSIDE:
                 $rx = $this->getWidth() / $width;
                 $ry = $this->getHeight() / $height;
 
-                if ($scaleMethod == WFImage::SCALE_INSIDE) {
+                if ($scaleMethod == self::SCALE_INSIDE) {
                     $ratio = ($rx > $ry) ? $rx : $ry;
                 } else {
                     $ratio = ($rx < $ry) ? $rx : $ry;
@@ -460,14 +501,15 @@ class WFImage {
     /**
      * Method to sanitize a height value.
      *
-     * @param   mixed  $height  The input height value to sanitize.
-     * @param   mixed  $width   The input width value for reference.
+     * @param mixed $height The input height value to sanitize
+     * @param mixed $width  The input width value for reference
      *
-     * @return  integer
+     * @return int
      *
      * @since   11.3
      */
-    protected function sanitizeHeight($height, $width) {
+    protected function sanitizeHeight($height, $width)
+    {
         // If no height was given we will assume it is a square and use the width.
         $height = ($height === null) ? $width : $height;
 
@@ -486,27 +528,29 @@ class WFImage {
     /**
      * Method to sanitize an offset value like left or top.
      *
-     * @param   mixed  $offset  An offset value.
+     * @param mixed $offset An offset value
      *
-     * @return  integer
+     * @return int
      *
      * @since   11.3
      */
-    protected function sanitizeOffset($offset) {
+    protected function sanitizeOffset($offset)
+    {
         return intval(round(floatval($offset)));
     }
 
     /**
      * Method to sanitize a width value.
      *
-     * @param   mixed  $width   The input width value to sanitize.
-     * @param   mixed  $height  The input height value for reference.
+     * @param mixed $width  The input width value to sanitize
+     * @param mixed $height The input height value for reference
      *
-     * @return  integer
+     * @return int
      *
      * @since   11.3
      */
-    protected function sanitizeWidth($width, $height) {
+    protected function sanitizeWidth($width, $height)
+    {
         // If no width was given we will assume it is a square and use the height.
         $width = ($width === null) ? $height : $width;
 
@@ -522,7 +566,8 @@ class WFImage {
         return $width;
     }
 
-    public static function getImageType($string) {
+    public static function getImageType($string)
+    {
         switch ($string) {
             case 'jpeg':
             case 'jpg':
@@ -538,15 +583,18 @@ class WFImage {
         }
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         self::getLib()->destroy();
     }
 
-    public function getType() {
+    public function getType()
+    {
         self::getLib()->getType();
     }
 
-    public function setType($type) {
+    public function setType($type)
+    {
         // convert extension to image type constant
         $type = self::getImageType($type);
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.0PRO
+ * @version         6.0.1PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -132,13 +132,16 @@ class DBReplacer
 
 		$html = [];
 
-		if (count($rows) > $max - 1)
+		if ($this->params->search)
 		{
-			$html[] = $this->getMessage(JText::sprintf('DBR_MAXIMUM_ROW_COUNT_REACHED', $max), 'warning');
-		}
-		else
-		{
-			$html[] = $this->getMessage(JText::sprintf('DBR_ROW_COUNT', count($rows)));
+			if (count($rows) > $max - 1)
+			{
+				$html[] = $this->getMessage(JText::sprintf('DBR_MAXIMUM_ROW_COUNT_REACHED', $max), 'warning');
+			}
+			else
+			{
+				$html[] = $this->getMessage(JText::sprintf('DBR_ROW_COUNT', count($rows)));
+			}
 		}
 
 		$html[] = '<p><a class="btn btn-default" onclick="RLDBReplacer.toggleInactiveColumns();">' . JText::_('DBR_TOGGLE_INACTIVE_COLUMNS') . '</a></p>';
@@ -391,7 +394,7 @@ class DBReplacer
 				break;
 
 			case '*':
-				$likes[] = ' != \'-something it would never be!!!-\'';
+				//$likes[] = ' != \'-something it would never be!!!-\'';
 				break;
 
 			default:

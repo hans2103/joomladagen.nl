@@ -1,11 +1,30 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 defined('_JEXEC') or die();
+
+$urlIncludeFolders = addslashes(JUri::base() . 'index.php?option=com_akeeba&view=IncludeFolders&task=ajax');
+$urlBrowser = addslashes(JUri::base() . 'index.php?option=com_akeeba&view=Browser&processfolder=1&tmpl=component&folder=');
+$this->json = addcslashes($this->json, "'\\");
+$js = <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
+akeeba.System.documentReady(function(){
+	akeeba.System.params.AjaxURL                       = '$urlIncludeFolders';
+	akeeba.Configuration.URLs['browser']               = '$urlBrowser';
+	akeeba.Configuration.enablePopoverFor(document.querySelectorAll('[rel="popover"]'));
+	var data = JSON.parse('{$this->json}');
+	akeeba.Extradirs.render(data);
+});
+
+JS;
+
+$this->getContainer()->template->addJSInline($js);
 
 if(!class_exists('AkeebaHelperEscape')) JLoader::import('helpers.escape', JPATH_COMPONENT_ADMINISTRATOR);
 ?>
@@ -19,9 +38,9 @@ if(!class_exists('AkeebaHelperEscape')) JLoader::import('helpers.escape', JPATH_
 			<thead>
 				<tr>
 					<!-- Delete -->
-					<td width="20px">&nbsp;</td>
-					<!-- Edit -->
 					<td width="50px">&nbsp;</td>
+					<!-- Edit -->
+					<td width="100px">&nbsp;</td>
 					<!-- Directory path -->
 					<td>
 						<span rel="popover" data-original-title="<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_DIRECTORY'); ?>"
@@ -43,14 +62,3 @@ if(!class_exists('AkeebaHelperEscape')) JLoader::import('helpers.escape', JPATH_
 		</table>
 	</div>
 </fieldset>
-
-<script type="text/javascript" language="javascript">
-
-akeeba.jQuery(document).ready(function($){
-	akeeba.System.params.AjaxURL                       = '<?php echo addslashes(JUri::base() . 'index.php?option=com_akeeba&view=IncludeFolders&task=ajax'); ?>';
-	akeeba.Configuration.URLs['browser']               = '<?php echo addslashes(JUri::base() . 'index.php?option=com_akeeba&view=Browser&processfolder=1&tmpl=component&folder='); ?>';
-	akeeba.Configuration.enablePopoverFor(akeeba.jQuery('[rel="popover"]'));
-	var data = JSON.parse('<?php echo addcslashes($this->json, "'\\"); ?>');
-	akeeba.Extradirs.render(data);
-});
-</script>

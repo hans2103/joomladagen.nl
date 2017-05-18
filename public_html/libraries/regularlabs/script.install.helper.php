@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -23,6 +23,7 @@ class RegularLabsInstallerScriptHelper
 	public $install_type    = 'install';
 	public $show_message    = true;
 	public $db              = null;
+	public $softbreak       = null;
 
 	public function __construct(&$params)
 	{

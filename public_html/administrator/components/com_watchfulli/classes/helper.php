@@ -3,7 +3,7 @@
 /**
  * @version     backend/classes/integrity.php 2016-03-08 14:15:00 UTC Ch
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  */
 defined('_JEXEC') or die('Restricted access');

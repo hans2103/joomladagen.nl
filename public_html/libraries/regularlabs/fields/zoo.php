@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -37,7 +37,7 @@ class JFormFieldRL_Zoo extends \RegularLabs\Library\FieldGroup
 	function getCategories()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(c.id)')
+			->select('COUNT(*)')
 			->from('#__zoo_category AS c')
 			->where('c.published > -1');
 		$this->db->setQuery($query);
@@ -119,7 +119,7 @@ class JFormFieldRL_Zoo extends \RegularLabs\Library\FieldGroup
 	function getItems()
 	{
 		$query = $this->db->getQuery(true)
-			->select('COUNT(i.id)')
+			->select('COUNT(*)')
 			->from('#__zoo_item AS i')
 			->where('i.state > -1');
 		$this->db->setQuery($query);

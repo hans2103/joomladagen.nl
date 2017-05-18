@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,16 +19,9 @@ use JFactory;
  * Class Virtuemart
  * @package RegularLabs\Library\Condition
  */
-class Virtuemart
+abstract class Virtuemart
 	extends \RegularLabs\Library\Condition
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
-	public function pass()
-	{
-		// See specific conditions
-		return false;
-	}
-
 	public function initRequest(&$request)
 	{
 		$virtuemart_product_id  = JFactory::getApplication()->input->get('virtuemart_product_id', [], 'array');

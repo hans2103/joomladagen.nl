@@ -157,6 +157,16 @@ SpAddonsConfig::addonConfig(
 					'depends'=>array('type'=>'custom'),
 				),
 
+				'button_padding'=>array(
+					'type'=>'padding',
+					'title'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_PADDING'),
+					'desc'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_PADDING_DESC'),
+					'std' => '',
+					'depends'=> array(
+						array('type', '=', 'custom'),
+					),
+				),
+
 				'size'=>array(
 					'type'=>'select',
 					'title'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_BUTTON_SIZE'),

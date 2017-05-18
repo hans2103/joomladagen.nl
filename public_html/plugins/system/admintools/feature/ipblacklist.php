@@ -11,6 +11,9 @@ class AtsystemFeatureIpblacklist extends AtsystemFeatureAbstract
 {
 	protected $loadOrder = 20;
 
+	/** @var  string  Extra info to log when blocking an IP */
+	private $extraInfo = null;
+
 	/**
 	 * Is this feature enabled?
 	 *
@@ -27,31 +30,7 @@ class AtsystemFeatureIpblacklist extends AtsystemFeatureAbstract
 	 */
 	public function onAfterInitialise()
 	{
-		// Let's get a list of blocked IP ranges
-		$db = $this->db;
-		$sql = $db->getQuery(true)
-			->select($db->qn('ip'))
-			->from($db->qn('#__admintools_ipblock'));
-		$db->setQuery($sql);
-
-		try
-		{
-			$ipTable = $db->loadColumn();
-		}
-		catch (Exception $e)
-		{
-			// Do nothing if the query fails
-			$ipTable = null;
-		}
-
-		if (empty($ipTable))
-		{
-			return;
-		}
-
-		$inList = AtsystemUtilFilter::IPinList($ipTable);
-
-		if ($inList !== true)
+		if (!$this->isIPBlocked())
 		{
 			return;
 		}
@@ -124,5 +103,47 @@ class AtsystemFeatureIpblacklist extends AtsystemFeatureAbstract
 
 		// Using Joomla!'s error page
 		throw new Exception($message, 403);
+	}
+
+	/**
+	 * Is the IP blocked by a permanent IP blacklist rule?
+	 *
+	 * @param   string  $ip  The IP address to check. Skip or pass empty string / null to use the current visitor's IP.
+	 *
+	 * @return  bool
+	 */
+	public function isIPBlocked($ip = null)
+	{
+		if (empty($ip))
+		{
+			// Get the visitor's IP address
+			$ip = AtsystemUtilFilter::getIp();
+		}
+
+		// Let's get a list of blocked IP ranges
+		$db = $this->db;
+		$sql = $db->getQuery(true)
+		          ->select($db->qn('ip'))
+		          ->from($db->qn('#__admintools_ipblock'));
+		$db->setQuery($sql);
+
+		try
+		{
+			$ipTable = $db->loadColumn();
+		}
+		catch (Exception $e)
+		{
+			// Do nothing if the query fails
+			$ipTable = null;
+		}
+
+		if (empty($ipTable))
+		{
+			return false;
+		}
+
+		$inList = AtsystemUtilFilter::IPinList($ipTable, $ip);
+
+		return ($inList === true);
 	}
 }

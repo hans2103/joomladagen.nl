@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,7 +20,8 @@ use JFactory;
  * Class Condition
  * @package RegularLabs\Library
  */
-class Condition
+abstract class Condition
+	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	public $request      = null;
 	public $date         = null;
@@ -63,7 +64,7 @@ class Condition
 			'option' => JFactory::getApplication()->input->get('option'),
 			'view'   => JFactory::getApplication()->input->get('view'),
 			'task'   => JFactory::getApplication()->input->get('task'),
-			'layout' => JFactory::getApplication()->input->get('layout', '', 'string'),
+			'layout' => JFactory::getApplication()->input->getString('layout'),
 			'Itemid' => JFactory::getApplication()->input->getInt('Itemid', 0),
 			'id'     => (int) $id['0'],
 		];

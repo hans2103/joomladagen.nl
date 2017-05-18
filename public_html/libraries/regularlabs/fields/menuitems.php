@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -103,31 +103,33 @@ class JFormFieldRL_MenuItems extends \RegularLabs\Library\Field
 		// Loop through the list of menu links.
 		foreach ($links as &$link)
 		{
-			if (isset($rlu[$link->menutype]))
+			if (!isset($rlu[$link->menutype]))
 			{
-				$check1 = RL_RegEx::replace('[^a-z0-9]', '', strtolower($link->text));
-				$check2 = RL_RegEx::replace('[^a-z0-9]', '', $link->alias);
-				if ($check1 !== $check2)
-				{
-					$link->text .= ' <small>[' . $link->alias . ']</small>';
-				}
-
-				if ($link->language && $link->language != '*')
-				{
-					$link->text .= ' <small>(' . $link->language . ')</small>';
-				}
-
-				if ($link->type == 'alias')
-				{
-					$link->text    .= ' <small>(' . JText::_('COM_MENUS_TYPE_ALIAS') . ')</small>';
-					$link->disable = 1;
-				}
-
-				$rlu[$link->menutype]->links[] = &$link;
-
-				// Cleanup garbage.
-				unset($link->menutype);
+				continue;
 			}
+
+			$check1 = RL_RegEx::replace('[^a-z0-9]', '', strtolower($link->text));
+			$check2 = RL_RegEx::replace('[^a-z0-9]', '', $link->alias);
+			if ($check1 !== $check2)
+			{
+				$link->text .= ' <small>[' . $link->alias . ']</small>';
+			}
+
+			if ($link->language && $link->language != '*')
+			{
+				$link->text .= ' <small>(' . $link->language . ')</small>';
+			}
+
+			if ($link->type == 'alias')
+			{
+				$link->text    .= ' <small>(' . JText::_('COM_MENUS_TYPE_ALIAS') . ')</small>';
+				$link->disable = 1;
+			}
+
+			$rlu[$link->menutype]->links[] = &$link;
+
+			// Cleanup garbage.
+			unset($link->menutype);
 		}
 
 		return $menuTypes;

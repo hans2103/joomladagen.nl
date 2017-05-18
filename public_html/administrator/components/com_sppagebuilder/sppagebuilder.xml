@@ -7,8 +7,7 @@
 	<authorUrl>http://www.joomshaper.com</authorUrl>
 	<copyright>Copyright @ 2010 - 2016 JoomShaper. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later</license>
-	<version>2.3.5</version>
-	<description>Most powerful drag and drop page builder for Joomla 3.6 or later.</description>
+	<version>2.4.5</version>
 	<scriptfile>installer.script.php</scriptfile>
 
 	<updateservers>
@@ -44,6 +43,10 @@
 		<folder>views</folder>
 		<folder>layouts</folder>
 	</files>
+
+	<media destination="com_sppagebuilder" folder="media">
+		<folder>images</folder>
+	</media>
 
 	<languages folder="language/site">
 		<language tag="en-GB">en-GB/en-GB.com_sppagebuilder.ini</language>

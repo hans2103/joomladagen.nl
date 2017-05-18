@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,7 +28,7 @@ class ArrayHelper
 	 *
 	 * @return array
 	 */
-	public static function toArray($data, $separator = ',', $unique = false)
+	public static function toArray($data, $separator = ',', $unique = false, $trim = true)
 	{
 		if (is_array($data))
 		{
@@ -46,6 +46,11 @@ class ArrayHelper
 		}
 
 		$array = explode($separator, $data);
+
+		if ($trim)
+		{
+			$array = self::trim($array);
+		}
 
 		if ($unique)
 		{
@@ -65,11 +70,27 @@ class ArrayHelper
 	public static function clean($array)
 	{
 		// trim all values
-		$array = array_map('trim', $array);
+		self::trim($array);
+
 		// remove duplicates
 		$array = array_unique($array);
 		// remove empty (or false) values
 		$array = array_filter($array);
+
+		return $array;
+	}
+
+	/**
+	 * Clean array by trimming values
+	 *
+	 * @param array $array
+	 *
+	 * @return array
+	 */
+	public static function trim($array)
+	{
+		// trim all values
+		$array = array_map('trim', $array);
 
 		return $array;
 	}

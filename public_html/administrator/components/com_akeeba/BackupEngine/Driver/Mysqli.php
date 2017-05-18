@@ -2,7 +2,7 @@
 /**
  * Akeeba Engine
  * The modular PHP5 site backup engine
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU GPL version 3 or, at your option, any later version
  * @package   akeebaengine
  */
@@ -21,6 +21,8 @@ use Akeeba\Engine\Driver\Query\Mysqli as QueryMysqli;
  */
 class Mysqli extends Mysql
 {
+	protected $port;
+	protected $socket;
 	/**
 	 * The name of the database driver.
 	 *
@@ -51,47 +53,21 @@ class Mysqli extends Mysql
 		$socket = null;
 
 		// Figure out if a port is included in the host name
-		if (empty($port))
-		{
-			// Unlike mysql_connect(), mysqli_connect() takes the port and socket
-			// as separate arguments. Therefore, we have to extract them from the
-			// host string.
-			$port = null;
-			$targetSlot = substr(strstr($host, ":"), 1);
-			if (!empty($targetSlot))
-			{
-				// Get the port number or socket name
-				if (is_numeric($targetSlot))
-				{
-					$port = $targetSlot;
-				}
-				else
-				{
-					$socket = $targetSlot;
-				}
+		$this->fixHostnamePortSocket($host, $port, $socket);
 
-				// Extract the host name only
-				$host = substr($host, 0, strlen($host) - (strlen($targetSlot) + 1));
-				// This will take care of the following notation: ":3306"
-				if ($host == '')
-				{
-					$host = 'localhost';
-				}
-			}
-		}
+		// Set the information
+		$this->host           = $host;
+		$this->user           = $user;
+		$this->password       = $password;
+		$this->port           = $port;
+		$this->socket         = $socket;
+		$this->_database      = $database;
+		$this->selectDatabase = $select;
 
 		// finalize initialization
 		parent::__construct($options);
 
 		// Open the connection
-		$this->host = $host;
-		$this->user = $user;
-		$this->password = $password;
-		$this->port = $port;
-		$this->socket = $socket;
-		$this->_database = $database;
-		$this->selectDatabase = $select;
-
 		if (!is_object($this->connection))
 		{
 			$this->open();
@@ -474,5 +450,91 @@ class Mysqli extends Mysql
 		{
 			return version_compare($client_version, '5.5.3', '>=');
 		}
+	}
+
+	/**
+	 * Tries to parse all the weird hostname definitions and normalize them into something that the MySQLi connector
+	 * will understand. Please note that there are some differences to the old MySQL driver:
+	 *
+	 * * Port and socket MUST be provided separately from the hostname. Hostnames in the form of 127.0.0.1:8336 are no
+	 *   longer acceptable.
+	 *
+	 * * The hostname "localhost" has special meaning. It means "use named pipes / sockets". Anything else uses TCP/IP.
+	 *   This is the ONLY way to specify a. TCP/IP or b. named pipes / sockets connection.
+	 *
+	 * * You CANNOT use a numeric TCP/IP port with hostname localhost. The driver will barf because the input makes no
+	 *   sense.
+	 *
+	 * * Likewise you CANNOT use a socket / named pipe path with hostname other than localhost. Named pipes and sockets
+	 *   can only be used with the local machine, therefore the hostname MUST be localhost.
+	 *
+	 * * You cannot give a TCP/IP port number in the socket parameter or a named pipe / socket path to the port
+	 *   parameter. This leads to an error.
+	 *
+	 * * You cannot use an empty string, 0 or any other non-null value when you want to omit either of the port or
+	 *   socket parameters.
+	 *
+	 * * Persistent connections must be prefixed with the string literal 'p:'. Therefore you cannot have a hostname
+	 *   called 'p' (not to mention that'd be daft). You can also not specify something like 'p:1234' to make a
+	 *   persistent connection to a port. This wasn't even supported by the old MySQL driver. As a result we don't even
+	 *   try to catch that degenerate case.
+	 *
+	 * This method will try to apply all of the aforementioned rules with one additional disambiguation rule:
+	 *
+	 * A port / socket set in the hostname overrides a port specified separately. A port specified separately overrides
+	 * a socket specified separately.
+	 *
+	 * @param   string  $host    The hostname. Can contain legacy hostname:port or hostname:sc=ocket definitions.
+	 * @param   int     $port    The port. Alternatively it can contain the path to the socket.
+	 * @param   string  $socket  The path to the socket. You could abuse it to enter the port number. DON'T!
+	 *
+	 * @return  void  All parameters are passed by reference.
+	 */
+	protected function fixHostnamePortSocket(&$host, &$port, &$socket)
+	{
+		// Is this a persistent connection? Persistent connections are indicated by the literal "p:" in front of the hostname
+		$isPersistent = (substr($host, 0, 2) == 'p:');
+		$host         = $isPersistent ? substr($host, 2) : $host;
+
+		// Explicit port, i.e. a port or socket given in the hostname after a colon
+		$explicitPort = null;
+
+		if (strpos($host, ':') !== false)
+		{
+			list ($host, $explicitPort) = explode(':', $host, 2);
+		}
+
+		// Clean up the host. If it's empty (e.g. `:3306` or `:/tmp/foobar` notation) assume localhost
+		$host = trim($host);
+		$host = empty($host) ? 'localhost' : $host;
+
+		// The following block implements the logic: explicitPort OVERRIDES port OVERRIDES socket.
+		$port = empty($port) ? $socket : $port;
+		$port = !empty($explicitPort) ? $explicitPort : $port;
+
+		// Normalize empty values to NULL. Otherwise PHP 7 will barf.
+		$socket = null;
+		$port   = empty($port) ? null : $port;
+
+		// There is a port or socket defined. We have to find out if it's a port or socket and if we need to change the
+		// hostname as a direct result.
+		if (!empty($port))
+		{
+			// A non-numeric port is given, so it must be a socket. Sockets only work with 'localhost'. So...
+			if (!is_numeric($port))
+			{
+				$host = 'localhost';
+				$socket = $port;
+				$port   = null;
+			}
+			// A numeric port was given. This is acceptable, as long as the hostname is NOT localhost. So...
+			elseif ($host == 'localhost')
+			{
+				$host = '127.0.0.1';
+			}
+		}
+
+		// Finally, if it's a persistent connection we have to prefix the hostname with 'p:'
+		$host = $isPersistent ? "p:$host" : $host;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -127,6 +127,20 @@ class Document
 	}
 
 	/**
+	 * Checks if current page is a pdf
+	 *
+	 * @return bool
+	 */
+	public static function isPDF()
+	{
+		return (
+			JFactory::getDocument()->getType() == 'pdf'
+			|| JFactory::getApplication()->input->getWord('format') == 'pdf'
+			|| JFactory::getApplication()->input->getWord('cAction') == 'pdf'
+		);
+	}
+
+	/**
 	 * Checks if current page is a https (ssl) page
 	 *
 	 * @return bool
@@ -183,7 +197,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.2.6639';
+			$version = '17.5.13702';
 		}
 
 		if (!$file = File::getMediaFile('js', $file))
@@ -209,7 +223,7 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.2.6639';
+			$version = '17.5.13702';
 		}
 
 		if (!$file = File::getMediaFile('css', $file))
@@ -237,7 +251,7 @@ class Document
 	}
 
 	/**
-	 *  Adds a javascript declaration to the page
+	 * Adds a javascript declaration to the page
 	 *
 	 * @param string $content
 	 * @param string $name
@@ -253,17 +267,14 @@ class Document
 
 		if (!empty($name))
 		{
-			list($start, $end) = Protect::getInlineCommentTags($name, 'scripts');
-
-			$spacer  = $minify ? ' ' : "\n";
-			$content = $start . $spacer . $content . $spacer . $end;
+			$content = Protect::wrapScriptDeclaration($content, $name, $minify);
 		}
 
 		JFactory::getDocument()->addScriptDeclaration($content, $type);
 	}
 
 	/**
-	 *  Adds a stylesheet declaration to the page
+	 * Adds a stylesheet declaration to the page
 	 *
 	 * @param string $content
 	 * @param string $name
@@ -279,10 +290,7 @@ class Document
 
 		if (!empty($name))
 		{
-			list($start, $end) = Protect::getInlineCommentTags($name, 'styles');
-
-			$spacer  = $minify ? ' ' : "\n";
-			$content = $start . $spacer . $content . $spacer . $end;
+			$content = Protect::wrapStyleDeclaration($content, $name, $minify);
 		}
 
 		JFactory::getDocument()->addStyleDeclaration($content, $type);

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -14,8 +14,8 @@ use Akeeba\Engine\Factory;
 use Akeeba\Engine\Platform;
 use Akeeba\Engine\Util\PushMessages;
 use Exception;
+use FOF30\Date\Date;
 use FOF30\Model\Model;
-use JDate;
 use JLoader;
 use JText;
 use Psr\Log\LogLevel;
@@ -110,7 +110,21 @@ class Backup extends Model
 		if (empty($description))
 		{
 			JLoader::import('joomla.utilities.date');
-			$dateNow     = new JDate();
+			$dateNow  = new Date();
+			$timezone = \JFactory::getConfig()->get('offset', 'UTC');
+
+			if (!$this->getContainer()->platform->isCli())
+			{
+				$user     = \JFactory::getUser();
+
+				if (!$user->guest)
+				{
+					$timezone = $user->getParam('timezone', $timezone);
+				}
+			}
+
+			$tz       = new \DateTimeZone($timezone);
+			$dateNow->setTimezone($tz);
 			$description =
 				JText::_('COM_AKEEBA_BACKUP_DEFAULT_DESCRIPTION') . ' ' .
 				$dateNow->format(JText::_('DATE_FORMAT_LC2'), true);

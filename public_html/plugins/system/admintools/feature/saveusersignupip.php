@@ -5,6 +5,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+use FOF30\Date\Date;
+
 defined('_JEXEC') or die;
 
 class AtsystemFeatureSaveusersignupip extends AtsystemFeatureAbstract
@@ -76,7 +78,7 @@ class AtsystemFeatureSaveusersignupip extends AtsystemFeatureAbstract
 
 		// Get current date and time in database format
 		JLoader::import('joomla.utilities.date');
-		$now = new JDate();
+		$now = new Date();
 		$now = $now->toSql();
 
 		// Load the component's administrator translation files

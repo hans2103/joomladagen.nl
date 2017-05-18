@@ -5,6 +5,8 @@
  * @license   GNU General Public License version 3, or later
  */
 
+use FOF30\Date\Date;
+
 defined('_JEXEC') or die;
 
 class AtsystemFeatureAwayschedule extends AtsystemFeatureAbstract
@@ -39,9 +41,9 @@ class AtsystemFeatureAwayschedule extends AtsystemFeatureAbstract
 	{
 		$timezone = JFactory::getConfig()->get('offset', 'UTC');
 		
-		$now  = new JDate('now', $timezone);
-		$from = new JDate($this->cparams->getValue('awayschedule_from'), $timezone);
-		$to   = new JDate($this->cparams->getValue('awayschedule_to'), $timezone);
+		$now  = new Date('now', $timezone);
+		$from = new Date($this->cparams->getValue('awayschedule_from'), $timezone);
+		$to   = new Date($this->cparams->getValue('awayschedule_to'), $timezone);
 
 		// Wait, FROM is later than TO? This means that the user set an interval like this: 17:30 - 11:00
 		// Let's move the FROM constrain one day back

@@ -37,7 +37,7 @@ JToolbarHelper::title(JText::_('COM_ADMINTOOLS') . ' &ndash; <small>' . $subtitl
 					<?php echo JText::_('COM_ADMINTOOLS_LBL_SCANALERT_SCANDATE'); ?>
 				</td>
 				<td>
-					<?php echo $this->scanDate->format(JText::_('DATE_FORMAT_LC2'), true) ?>
+					<?php echo $this->scanDate->format(JText::_('DATE_FORMAT_LC2') . ' T', true) ?>
 				</td>
 			</tr>
 			<tr>

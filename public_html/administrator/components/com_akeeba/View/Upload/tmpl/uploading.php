@@ -1,12 +1,29 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 // Protect from unauthorized access
 defined('_JEXEC') or die();
+
+$js = <<< JS
+
+;// This comment is intentionally put here to prevent badly written plugins from causing a Javascript error
+// due to missing trailing semicolon and/or newline in their code.
+function postMyForm()
+{
+	document.forms.akeebaform.submit();
+}
+
+akeeba.System.documentReady(function(){
+	window.setTimeout('postMyForm();', 1000);
+});
+
+JS;
+
+$this->getContainer()->template->addJSInline($js);
 
 ?>
 <form action="index.php" method="get" name="akeebaform">
@@ -28,11 +45,3 @@ defined('_JEXEC') or die();
 	<?php echo \JText::sprintf('COM_AKEEBA_TRANSFER_MSG_UPLOADINGFRAG', $this->part+1, $this->parts); ?>
 </p>
 <?php endif; ?>
-
-<script type="text/javascript" language="javascript">
-	window.setTimeout('postMyForm();', 1000);
-	function postMyForm()
-	{
-		document.forms.akeebaform.submit();
-	}
-</script>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,16 +13,20 @@ namespace RegularLabs\Library\Condition;
 
 defined('_JEXEC') or die;
 
+use JFactory;
+
 /**
  * Class K2Pagetype
  * @package RegularLabs\Library\Condition
  */
 class K2Pagetype
 	extends K2
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	public function pass()
 	{
+		// K2 messes with the task in the request, so we have to reset the task
+		$this->request->task = JFactory::getApplication()->input->get('task');
+
 		return $this->passByPageType('com_k2', $this->selection, $this->include_type, false, true);
 	}
 }

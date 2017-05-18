@@ -107,7 +107,7 @@ defined('_JEXEC') or die;
 
 		<div class="alert alert-info" style="margin-top: 10px">
 			<?php
-			$date = new JDate('now', JFactory::getConfig()->get('offset', 'UTC'));
+			$date = new \FOF30\Date\Date('now', JFactory::getConfig()->get('offset', 'UTC'));
 			echo JText::sprintf('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_TIMEZONE', $date->format('H:i', true));
 			?>
 		</div>

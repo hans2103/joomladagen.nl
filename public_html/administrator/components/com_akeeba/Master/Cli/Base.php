@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -13,6 +13,12 @@ defined('_JEXEC') or die;
  * $minphp = '5.4.0'; // Minimum PHP version required for your script
  * $curdir = __DIR__; // Path to your script file
  */
+
+// Work around some misconfigured servers which print out notices
+if (function_exists('error_reporting'))
+{
+	$oldLevel = error_reporting(0);
+}
 
 // Minimum PHP version check
 if (!isset($minphp))
@@ -137,6 +143,12 @@ if (!isset($curdir))
 	}
 }
 
+// Restore the error reporting before importing Joomla core code
+if (function_exists('error_reporting'))
+{
+	error_reporting($oldLevel);
+}
+
 if (file_exists($curdir . '/defines.php'))
 {
 	include_once $curdir . '/defines.php';
@@ -199,7 +211,7 @@ class AkeebaCliBase
 	/**
 	 * The application configuration object.
 	 *
-	 * @var    JRegistry
+	 * @var    \Joomla\Registry\Registry
 	 */
 	protected $config;
 
@@ -285,6 +297,28 @@ class AkeebaCliBase
 		if (class_exists('JFilterInput'))
 		{
 			$this->filter = JFilterInput::getInstance();
+		}
+
+		/**
+		 * Joomla! 3.7.0 broke backwards compatibility in the session package.
+		 *
+		 * Now JSession objects expect to be initialized by the application with an input object and a dispatcher
+		 * object. Unlike previous Joomla! versions this is NOT taken care of automatically. This means that by using
+		 * JFactory::getSession() -the canonical API to get a session object- in a custom application will result in the
+		 * returned object having an uninitialized handler which will throw PHP Fatal Errors left and right as soon as
+		 * you try to use the session. This API is used by JFactory::getUser() itself, the canonical API to get a user
+		 * object, so you can't avoid using it. Therefore Joomla! has broken backwards compatibility with ITS OWN CORE
+		 * AND FUNDAMENTAL APIs. But, hey, let's just blame 3PDs on Twitter for believing that Joomla! actually does
+		 * what it claims it does which is a. a beta freeze and b. semantic versioning. Yeah, yeah, stupid 3PD, why did
+		 * you believe Joomla's lies?
+		 */
+		if (version_compare(JVERSION, '3.7.0', 'ge'))
+		{
+			// Instantiate the session object.
+			$dispatcher = new JEventDispatcher();
+			$session = JFactory::getSession();
+			$session->initialise($this->input, $dispatcher);
+			$session->start();
 		}
 
 		// Work around Joomla! 3.4.7's JSession bug
@@ -680,7 +714,14 @@ class AkeebaCliBase
 			return self::$cliOptions[$key];
 		}
 
-		return $this->filterVariable(self::$cliOptions[$key][0], $type);
+		$value = null;
+
+		if (!empty(self::$cliOptions[$key]))
+		{
+			$value = self::$cliOptions[$key][0];
+		}
+
+		return $this->filterVariable($value, $type);
 	}
 
 	protected function filterVariable($var, $type = 'cmd')

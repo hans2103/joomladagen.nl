@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,16 +29,22 @@ fieldset.rl_plaintext {
 	color: @grayLight;
 }
 
+.well {
+	.well {
+		border-color:     darken(@wellBackground, 7%);
+	}
+}
+
 div.rl_well {
 	padding-bottom: 0;
 	h4 {
 		margin-top: 6px;
 	}
-}
 
-.rl_well.alert-success,
-.rl_well.alert-error {
-	color: @grayDark;
+	&.alert-success,
+	&.alert-error {
+		color: @grayDark;
+	}
 }
 
 .well-striped:nth-child(even) {

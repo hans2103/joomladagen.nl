@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -334,10 +334,47 @@ class Form
 	 */
 	private static function handlePreparedStyles($string)
 	{
-		return RegEx::replace(
-			'>((?:\s*-\s*)*)\[\[\:(.*?)\:\]\]',
+		// No placeholders found
+		if (strpos($string, '[[:') === false)
+		{
+			return $string;
+		}
+
+		// Doing following replacement in 3 steps to prevent the Regular Expressions engine from exploding
+
+		// Replace style tags right after the html tags
+		$string = RegEx::replace(
+			'>\s*\[\[\:(.*?)\:\]\]',
+			' style="\2">',
+			$string
+		);
+
+		// No more placeholders found
+		if (strpos($string, '[[:') === false)
+		{
+			return $string;
+		}
+
+		// Replace style tags prepended with a minus and any amount of whitespace: '- '
+		$string = RegEx::replace(
+			'>((?:-\s*)+)\[\[\:(.*?)\:\]\]',
 			' style="\2">\1',
 			$string
 		);
+
+		// No more placeholders found
+		if (strpos($string, '[[:') === false)
+		{
+			return $string;
+		}
+
+		// Replace style tags prepended with whitespace, a minus and any amount of whitespace: ' - '
+		$string = RegEx::replace(
+			'>((?:\s+-\s*)+)\[\[\:(.*?)\:\]\]',
+			' style="\2">\1',
+			$string
+		);
+
+		return $string;
 	}
 }

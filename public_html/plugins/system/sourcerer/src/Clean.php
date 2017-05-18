@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -67,7 +67,7 @@ class Clean
 		$tag_end   = RL_RegEx::quote($tag_end);
 
 		$inside_tag = RL_PluginTag::getRegexInsideTag();
-		$spaces     = RL_PluginTag::getRegexSpaces('*');
+		$spaces     = RL_PluginTag::getRegexSpaces();
 
 		// Remove start tag to end tag
 		$string = RL_RegEx::replace(
@@ -78,7 +78,7 @@ class Clean
 
 		// Remove start tag with optional php stuff after it
 		$string = RL_RegEx::replace(
-			$tag_start . RL_RegEx::quote($params->tag) . $spaces . '(' . $inside_tag . ')' . $tag_end
+			$tag_start . RL_RegEx::quote($params->tag) . '(' . $spaces . $inside_tag . ')?' . $tag_end
 			. '(\s*<\?php(.*?)\?>)?',
 			'',
 			$string

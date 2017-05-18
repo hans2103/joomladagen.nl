@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -30,5 +30,5 @@ class PlgSystemSourcerer extends Plugin
 	public $_lang_prefix = 'SRC';
 
 	public $_can_disable_by_url = false;
-	public $_page_types         = ['html', 'feed', 'pdf', 'ajax', 'raw', 'json'];
+	public $_page_types         = ['html', 'feed', 'pdf', 'ajax', 'xml', 'raw', 'json'];
 }

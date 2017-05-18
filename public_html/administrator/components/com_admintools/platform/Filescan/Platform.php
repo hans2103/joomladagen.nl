@@ -12,6 +12,7 @@ defined('AKEEBAENGINE') or die();
 
 use Akeeba\Engine\Util\Comconfig;
 use Akeeba\Engine\Util\ParseIni;
+use FOF30\Date\Date;
 use Psr\Log\LogLevel;
 use Akeeba\Engine\Factory;
 use Akeeba\Engine\Platform;
@@ -347,8 +348,8 @@ class Filescan extends BasePlatform
 	public function get_timestamp_database($date = 'now')
 	{
 		\JLoader::import('joomla.utilities.date');
-		$jdate = new \JDate($date);
-		return $jdate->toSql();
+		$date = new Date($date);
+		return $date->toSql();
 	}
 
 	/**
@@ -368,7 +369,7 @@ class Filescan extends BasePlatform
 		$user = \JFactory::getUser();
 		$tz   = $user->getParam('timezone', $tzDefault);
 
-		$dateNow = new \JDate('now', $tz);
+		$dateNow = new Date('now', $tz);
 
 		return $dateNow->format($format, true);
 	}
@@ -575,7 +576,7 @@ class Filescan extends BasePlatform
 		if ( !defined('AKEEBA_DATE'))
 		{
 			\JLoader::import('joomla.utilities.date');
-			$date = new \JDate();
+			$date = new Date();
 			define("AKEEBA_DATE", $date->format('Y-m-d'));
 		}
 	}
@@ -610,7 +611,7 @@ class Filescan extends BasePlatform
 		// If the release is older than 3 months, issue a warning
 		if (defined('AKEEBA_DATE'))
 		{
-			$releaseDate = new \JDate(AKEEBA_DATE);
+			$releaseDate = new Date(AKEEBA_DATE);
 
 			if (time() - $releaseDate->toUnix() > 7776000)
 			{

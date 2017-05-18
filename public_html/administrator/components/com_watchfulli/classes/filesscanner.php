@@ -1,8 +1,8 @@
 <?php
 /**
- * @version     backend/classes/filesscanner.php 2016-02-12 14:37:00 UTC Ch
+ * @version     backend/classes/filesscanner.php 2016-11-07 14:37:00 UTC Ch
  * @authorUrl   https://watchful.li
- * @copyright   Copyright (c) 2012-2016 watchful.li
+ * @copyright   Copyright (c) 2012-2017 watchful.li
  * @license     GNU/GPL v3 or later
  * @copyright   Copyright (c) 2012-2015 watchful.li
  * @license     GNU/GPL v3 or later
@@ -103,6 +103,12 @@ class WatchfulliFilesScanner extends WatchfulliAuditProcess
         $result->lastFileChecked = $files[$current];
         $result->end = $current;
 
+        if ($current == count($files))
+        {
+            $this->cache->clean();
+            $this->cache->gc();
+        }
+
         return $result;
     }
 
@@ -168,7 +174,7 @@ class WatchfulliFilesScanner extends WatchfulliAuditProcess
         //  see PHP bug https://bugs.php.net/bug.php?id=29606
         if (empty($contents))
         {
-            $contents = JFile::read($file);
+            $contents = file_get_contents($file);
         }
 
         foreach ($signatures as $signature)
@@ -177,14 +183,26 @@ class WatchfulliFilesScanner extends WatchfulliAuditProcess
             {
                 if (preg_match_all('#(\{|\(|\s|\/\*.*\*\/|@|^)' . $signature->signature . '#i', $contents, $matches))
                 {
-                    return array('path' => $pathFromRoot, 'match' => substr($matches[0], 0, 25), 'reason' => $signature->reason, 'signature_id' => $signature->id, 'hash' => md5_file($file));
+                    return array(
+                        'path'         => $pathFromRoot,
+                        'match'        => substr($matches[0][0], 0, 50),
+                        'reason'       => $signature->reason,
+                        'signature_id' => $signature->id,
+                        'hash'         => md5_file($file)
+                    );
                 }
             }
             elseif ($signature->type == 'filename')
             {
                 if (preg_match('#' . $signature->signature . '#i', basename($file), $match))
                 {
-                    return array('path' => $pathFromRoot, 'match' => $match[0], 'reason' => $signature->reason, 'signature_id' => $signature->id, 'hash' => md5_file($file));
+                    return array(
+                        'path'         => $pathFromRoot,
+                        'match'        => $match[0],
+                        'reason'       => $signature->reason,
+                        'signature_id' => $signature->id,
+                        'hash'         => md5_file($file)
+                    );
                 }
             }
         }

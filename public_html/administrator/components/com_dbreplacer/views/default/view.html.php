@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.0PRO
+ * @version         6.0.1PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -47,7 +47,7 @@ class DBReplacerViewDefault extends JViewLegacy
 		$this->config = RL_Parameters::getInstance()->getComponentParams('com_dbreplacer');
 
 		RL_Document::style('regularlabs/style.min.css');
-		RL_Document::style('dbreplacer/style.min.css', '6.0.0.p');
+		RL_Document::style('dbreplacer/style.min.css', '6.0.1.p');
 
 		// Set document title
 		JFactory::getDocument()->setTitle(JText::_('DB_REPLACER'));

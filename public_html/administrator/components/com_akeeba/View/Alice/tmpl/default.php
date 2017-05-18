@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -26,7 +26,7 @@ defined('_JEXEC') or die;
 				<?php echo \JText::_('COM_AKEEBA_LOG_CHOOSE_FILE_TITLE'); ?>
 			</label>
 			<?php echo \JHtml::_('select.genericlist', $this->logs, 'log', [
-				'onchange' => "akeeba.jQuery(this).val() ? akeeba.jQuery('#analyze-log').show() : akeeba.jQuery('#analyze-log').hide()",
+				'onchange' => "this.options[this.selectedIndex].value ? document.getElementById('analyze-log').style.display = 'inline-block' : document.getElementById('analyze-log').style.display = 'none'",
 			], 'value', 'text', $this->log); ?>
 
 			<button class="btn btn-primary" id="analyze-log" style="display:none">
@@ -72,7 +72,7 @@ defined('_JEXEC') or die;
 			</div>
 			<div id="output-plain" style="display:none; margin-bottom: 20px;">
 				<h4><?php echo \JText::_('COM_AKEEBA_ALICE_ANALYZE_RAW_OUTPUT'); ?></h4>
-				<textarea style="width:50%; margin:auto; display:block; height: 100px;" readonly="readonly"></textarea>
+				<textarea style="width:50%; margin:auto; display:block; height: 100px;" readonly="readonly" onclick="this.focus();this.select();"></textarea>
 			</div>
 			<div id="stepper-complete" style="display: none">
 			</div>

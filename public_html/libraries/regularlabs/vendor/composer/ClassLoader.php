@@ -55,6 +55,7 @@ class ClassLoader
 	private $classMap              = array();
 	private $classMapAuthoritative = false;
 	private $missingClasses        = array();
+	private $apcuPrefix;
 
 	public function getPrefixes()
 	{
@@ -302,6 +303,26 @@ class ClassLoader
 	}
 
 	/**
+	 * APCu prefix to use to cache found/not-found classes, if the extension is enabled.
+	 *
+	 * @param string|null $apcuPrefix
+	 */
+	public function setApcuPrefix($apcuPrefix)
+	{
+		$this->apcuPrefix = function_exists('apcu_fetch') && ini_get('apc.enabled') ? $apcuPrefix : null;
+	}
+
+	/**
+	 * The APCu prefix in use, or null if APCu caching is not enabled.
+	 *
+	 * @return string|null
+	 */
+	public function getApcuPrefix()
+	{
+		return $this->apcuPrefix;
+	}
+
+	/**
 	 * Registers this instance as an autoloader.
 	 *
 	 * @param bool $prepend Whether to prepend the autoloader or not
@@ -345,12 +366,6 @@ class ClassLoader
 	 */
 	public function findFile($class)
 	{
-		// work around for PHP 5.3.0 - 5.3.2 https://bugs.php.net/50731
-		if ('\\' == $class[0])
-		{
-			$class = substr($class, 1);
-		}
-
 		// class map lookup
 		if (isset($this->classMap[$class]))
 		{
@@ -360,6 +375,14 @@ class ClassLoader
 		{
 			return false;
 		}
+		if (null !== $this->apcuPrefix)
+		{
+			$file = apcu_fetch($this->apcuPrefix . $class, $hit);
+			if ($hit)
+			{
+				return $file;
+			}
+		}
 
 		$file = $this->findFileWithExtension($class, '.php');
 
@@ -367,6 +390,11 @@ class ClassLoader
 		if (false === $file && defined('HHVM_VERSION'))
 		{
 			$file = $this->findFileWithExtension($class, '.hh');
+		}
+
+		if (null !== $this->apcuPrefix)
+		{
+			apcu_add($this->apcuPrefix . $class, $file);
 		}
 
 		if (false === $file)

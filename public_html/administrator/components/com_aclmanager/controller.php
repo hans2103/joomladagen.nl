@@ -33,9 +33,9 @@ class AclmanagerController extends JControllerLegacy
 		$doc = JFactory::getDocument();
 		$layout	= JFactory::getApplication()->input->get('layout',null);
 		if ($layout =='print') {
-			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/print.css?v=2.5.0');
+			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/print.css?v=2.5.1');
 		} else {
-			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/aclmanager.css?v=2.5.0');
+			$doc->addStyleSheet(JURI::root(true).'/administrator/components/com_aclmanager/assets/css/aclmanager.css?v=2.5.1');
 		}
 	}
 

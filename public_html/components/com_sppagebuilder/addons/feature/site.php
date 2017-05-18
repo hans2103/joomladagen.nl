@@ -132,7 +132,7 @@ class SppagebuilderAddonFeature extends SppagebuilderAddons {
 				$style = 'display:inline-block;text-align:center;';
 				$style .= ($icon_margin_top) ? 'margin-top:' . (int) $icon_margin_top . 'px;' : '';
 				$style .= ($icon_margin_bottom) ? 'margin-bottom:' . (int) $icon_margin_bottom . 'px;' : '';
-				$style .= ($icon_padding) ? 'padding:' . (int) $icon_padding  . 'px;' : '';
+				$style .= ($icon_padding) ? 'padding:' . $icon_padding . ';' : '';
 				$style .= ($icon_color) ? 'color:' . $icon_color  . ';' : '';
 				$style .= ($icon_background) ? 'background-color:' . $icon_background  . ';' : '';
 				$style .= ($icon_border_color) ? 'border-style:solid;border-color:' . $icon_border_color  . ';' : '';

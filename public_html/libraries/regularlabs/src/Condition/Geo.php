@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,17 +20,10 @@ use JLog;
  * Class Geo
  * @package RegularLabs\Library\Condition
  */
-class Geo
+abstract class Geo
 	extends \RegularLabs\Library\Condition
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	var $geo = null;
-
-	public function pass()
-	{
-		// See specific conditions
-		return false;
-	}
 
 	public function getGeo($ip = '')
 	{

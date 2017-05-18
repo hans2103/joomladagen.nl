@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.0
+ * @version         7.0.3
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -108,13 +108,15 @@ var RLEM_INSTALL    = 0;
 				url += '&action=uninstall';
 			}
 			RegularLabsScripts.loadajax(url,
-				'RegularLabsManagerProcess.processResult( data.trim(), ' + step + ' )',
-				'RegularLabsManagerProcess.processResult( data.trim(), ' + step + ' )',
+				'RegularLabsManagerProcess.processResult( data, ' + step + ' )',
+				'RegularLabsManagerProcess.processResult( data, ' + step + ' )',
 				RLEM_TOKEN + '=1'
 			);
 		},
 
 		processResult: function(data, step) {
+			data = !data || typeof( data ) != "string" ? '' : data.trim();
+
 			var id = RLEM_IDS[step];
 
 			this.hide('status', $('tr#row_' + id));
@@ -123,9 +125,9 @@ var RLEM_INSTALL    = 0;
 				this.enqueueMessages('error', id, data);
 				this.show('failed_' + id);
 			} else {
+				this.enqueueMessages('warning', id, data);
 				this.show('success_' + id);
 			}
-			this.enqueueMessages('warning', id, data);
 			this.processNextStep(++step);
 		},
 

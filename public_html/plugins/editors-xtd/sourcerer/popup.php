@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.0.2PRO
+ * @version         7.1.6PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -79,8 +79,8 @@ class PlgButtonSourcererPopup
 		";
 		RL_Document::scriptDeclaration($script);
 
-		RL_Document::script('sourcerer/script.min.js', '7.0.2.p');
-		RL_Document::style('sourcerer/popup.min.css', '7.0.2.p');
+		RL_Document::script('sourcerer/script.min.js', '7.1.6.p');
+		RL_Document::style('sourcerer/popup.min.css', '7.1.6.p');
 
 		$this->params->code = '';
 		if ($this->params->use_example_code == 1 || (JFactory::getApplication()->isAdmin() && $this->params->use_example_code == 2))

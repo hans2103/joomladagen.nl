@@ -25,6 +25,7 @@ if($appearance == 'outline') {
   $custom_style .= (isset($options->button_background_color) && $options->button_background_color) ? ' background-color: ' . $options->button_background_color . ';': '';
 }
 $custom_style .= (isset($options->button_color) && $options->button_color) ? ' color: ' . $options->button_color . ';': '';
+$custom_style .= (isset($options->button_padding) && $options->button_padding) ? ' padding: ' . $options->button_padding . ';': '';
 
 $hover_style  = ($appearance == 'outline') ? ((isset($options->button_background_color_hover) && $options->button_background_color_hover) ? ' border-color: ' . $options->button_background_color_hover . ';': '') : '';
 $hover_style .= (isset($options->button_background_color_hover) && $options->button_background_color_hover) ? ' background-color: ' . $options->button_background_color_hover . ';': '';

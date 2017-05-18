@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,6 @@ use JFactory;
  */
 class UserGrouplevel
 	extends User
-	implements \RegularLabs\Library\Api\ConditionInterface
 {
 	public function pass()
 	{
@@ -36,14 +35,26 @@ class UserGrouplevel
 			$groups = $user->getAuthorisedGroups();
 		}
 
-		if ($this->params->inc_children)
+		if (!$this->params->match_all && $this->params->inc_children)
 		{
 			$this->setUserGroupChildrenIds();
 		}
 
 		$this->selection = $this->convertUsergroupNamesToIds($this->selection);
 
+		if ($this->params->match_all)
+		{
+			return $this->passMatchAll($groups);
+		}
+
 		return $this->passSimple($groups);
+	}
+
+	private function passMatchAll($groups)
+	{
+		$pass = !array_diff($this->selection, $groups) && !array_diff($groups, $this->selection);
+
+		return $this->_($pass);
 	}
 
 	private function convertUsergroupNamesToIds($selection)

@@ -30,8 +30,17 @@ class AtsystemFeatureSecretword extends AtsystemFeatureAbstract
 
 	public function onAfterInitialise()
 	{
+		$input  = $this->input;
+		$option = $input->getCmd('option', '');
+
 		if ($this->isAdminAccessAttempt())
 		{
+			// com_ajax must be allowed even when we are not logged in since it _may_ be used by login plugins.
+			if ($option == 'com_ajax')
+			{
+				return;
+			}
+
 			$this->checkSecretWord();
 
 			return;
@@ -42,8 +51,6 @@ class AtsystemFeatureSecretword extends AtsystemFeatureAbstract
 
 		if (!empty($password))
 		{
-			$input  = $this->input;
-			$option = $input->getCmd('option', '');
 			$task   = $input->getCmd('task', '');
 			$uid    = $input->getInt('uid', 0);
 

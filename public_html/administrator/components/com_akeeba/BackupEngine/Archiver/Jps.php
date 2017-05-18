@@ -3,7 +3,7 @@
  * Akeeba Engine
  * The modular PHP5 site backup engine
  *
- * @copyright Copyright (c)2006-2016 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU GPL version 3 or, at your option, any later version
  * @package   akeebaengine
  *
@@ -18,12 +18,13 @@ use Akeeba\Engine\Base\Exceptions\ErrorException;
 use Akeeba\Engine\Base\Exceptions\WarningException;
 use Akeeba\Engine\Factory;
 use Akeeba\Engine\Util\Encrypt;
+use Akeeba\Engine\Util\RandomValue;
 use Psr\Log\LogLevel;
 
 if (!defined('_JPS_MAJOR'))
 {
-	define('_JPS_MAJOR', 1);
-	define('_JPS_MINOR', 10);
+	define('_JPS_MAJOR', 2);
+	define('_JPS_MINOR', 0);
 }
 
 /**
@@ -62,6 +63,9 @@ class Jps extends BaseArchiver
 
 	/** @var Encrypt The encryption object used in this class */
 	private $encryptionObject = null;
+
+	/** @var array Static Salt for PBKDF2 */
+	private $staticSalt = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
 	/**
 	 * Also remove the encryption object reference
@@ -104,6 +108,21 @@ class Jps extends BaseArchiver
 			if (empty($this->password))
 			{
 				$this->setWarning('You are using an empty password. This is not secure at all!');
+			}
+
+			// Set up the key expansion based on preferences
+			$pbkdf2UseStaticSalt = $config->get('engine.archiver.jps.pbkdf2usestaticsalt', 1);
+			$this->encryptionObject
+				->setPbkdf2Algorithm('sha1')
+				->setPbkdf2Iterations($pbkdf2UseStaticSalt ? 128000 : 2500)
+				->setPbkdf2UseStaticSalt($pbkdf2UseStaticSalt);
+
+			// If a static salt is to be used let's create one
+			if ($pbkdf2UseStaticSalt)
+			{
+				$rand             = new RandomValue();
+				$this->staticSalt = $rand->generate(64);
+				$this->encryptionObject->setPbkdf2StaticSalt($this->staticSalt);
 			}
 
 			// Should we enable split archive feature?
@@ -182,6 +201,21 @@ class Jps extends BaseArchiver
 	}
 
 	/**
+	 * Attempt to use mbstring for getting parts of strings
+	 *
+	 * @param   string    $string
+	 * @param   int       $start
+	 * @param   int|null  $length
+	 *
+	 * @return  string
+	 */
+	public function subString($string, $start, $length = null)
+	{
+		return function_exists('mb_substr') ? mb_substr($string, $start, $length, '8bit') :
+			substr($string, $start, $length);
+	}
+
+	/**
 	 * Outputs a Standard Header at the top of the file
 	 *
 	 * @return  void
@@ -200,12 +234,21 @@ class Jps extends BaseArchiver
 			throw new ErrorException('Could not open ' . $this->_dataFileName . ' for writing. Check permissions and open_basedir restrictions.');
 		}
 
+		// === HEADER ===
 		$this->fwrite($this->fp, $this->archiveSignature); // ID string (JPS)
 		$this->fwrite($this->fp, pack('C', _JPS_MAJOR)); // Major version
 		$this->fwrite($this->fp, pack('C', _JPS_MINOR)); // Minor version
 		$this->fwrite($this->fp, pack('C', $this->useSplitArchive ? 1 : 0)); // Is it a split archive?
-		$this->fwrite($this->fp, pack('v', 0)); // Extra header length (0 bytes)
 
+		// === EXTRA HEADERS (JPS v2.0) ===
+
+		// Extra headers length (76 bytes for key expansion header)
+		$this->fwrite($this->fp, pack('v', 76));
+
+		// Password expansion header (28 bytes)
+		$this->writeKeyExpansionArchiveExtraHeader();
+
+		// Change the permissions of the file
 		if (function_exists('chmod'))
 		{
 			@chmod($this->_dataFileName, 0755);
@@ -247,7 +290,20 @@ class Jps extends BaseArchiver
 			define('_JPS_MINOR', 9); // JPS Format minor version number
 		}
 
+		// Set up the key expansion
 		$this->encryptionObject = Factory::getEncryption();
+
+		$config         = Factory::getConfiguration();
+		$pbkdf2UseStaticSalt = $config->get('engine.archiver.jps.pbkdf2usestaticsalt', 1);
+		$this->encryptionObject
+			->setPbkdf2Algorithm('sha1')
+			->setPbkdf2Iterations($pbkdf2UseStaticSalt ? 128000 : 2500)
+			->setPbkdf2UseStaticSalt($pbkdf2UseStaticSalt);
+
+		if ($pbkdf2UseStaticSalt)
+		{
+			$this->encryptionObject->setPbkdf2StaticSalt($this->staticSalt);
+		}
 
 		parent::__bootstrap_code();
 	}
@@ -325,9 +381,9 @@ class Jps extends BaseArchiver
 	/**
 	 * Writes an encrypted block to the archive
 	 *
-	 * @param string $data Raw binary data to encrypt and write
+	 * @param   string  $data  Raw binary data to encrypt and write
 	 *
-	 * @return bool True on success
+	 * @return  bool  True on success
 	 */
 	protected function _writeEncryptedBlock($data)
 	{
@@ -335,7 +391,7 @@ class Jps extends BaseArchiver
 		$data          = $this->encryptionObject->AESEncryptCBC($data, $this->password);
 		$encryptedSize = akstrlen($data);
 
-		// Initialize the value with soething suitable for single part archives
+		// Initialize the value with something suitable for single part archives
 		$free_space    = $encryptedSize + 8;
 
 		// Do we have enough space to store the 8 byte header?
@@ -409,9 +465,9 @@ class Jps extends BaseArchiver
 	/**
 	 * Creates a new archive part
 	 *
-	 * @param bool $finalPart Set to true if it is the final part (therefore has the .jps extension)
+	 * @param   bool  $finalPart  Set to true if it is the final part (therefore has the .jps extension)
 	 *
-	 * @return bool True on success
+	 * @return  bool  True on success
 	 */
 	protected function createNewPartFile($finalPart = false)
 	{
@@ -780,5 +836,53 @@ class Jps extends BaseArchiver
 		@fclose($zdatafp);
 
 		return $mustResume;
+	}
+
+	/**
+	 * Write the header for key expansion into the archive
+	 *
+	 * @return  void
+	 *
+	 * @since   5.3.0
+	 */
+	protected function writeKeyExpansionArchiveExtraHeader()
+	{
+		$expansionParams = $this->encryptionObject->getKeyDerivationParameters();
+
+		switch ($expansionParams['algorithm'])
+		{
+			default:
+			case 'sha1':
+				$algo = 0;
+				break;
+
+			case 'sha256':
+				$algo = 1;
+				break;
+
+			case 'sha512':
+				$algo = 2;
+				break;
+		}
+
+		$hasStaticSalt = $expansionParams['useStaticSalt'];
+		$staticSalt = $expansionParams['staticSalt'];
+
+		if (!$hasStaticSalt)
+		{
+			$staticSalt = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+			$staticSalt .= "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+			$staticSalt .= "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+			$staticSalt .= "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+		}
+
+		// -- Header
+		$this->fwrite($this->fp, "JH\x00\x01");
+		// -- Field length (with header)
+		$this->fwrite($this->fp, pack('v', 12 + $this->stringLength($staticSalt)));
+		// -- Algorithm, iterations, has static salt
+		$this->fwrite($this->fp, pack('CVC', $algo, $expansionParams['iterations'], $hasStaticSalt));
+		// -- Static salt
+		$this->fwrite($this->fp, $staticSalt);
 	}
 }

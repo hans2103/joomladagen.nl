@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.2.6639
+ * @version         17.5.13702
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -33,7 +33,7 @@ class RegEx
 	 */
 	public static function replace($pattern, $replacement, $string, $options = null, $limit = -1, &$count = null)
 	{
-		if (empty($pattern) || empty($string))
+		if ($pattern == '' || $string == '')
 		{
 			return $string;
 		}
@@ -71,7 +71,7 @@ class RegEx
 	 */
 	public static function match($pattern, $string, &$matches = null, $options = null, $flags = 0)
 	{
-		if (empty($pattern) || empty($string))
+		if ($pattern == '' || $string == '')
 		{
 			return false;
 		}
@@ -94,7 +94,7 @@ class RegEx
 	 */
 	public static function matchAll($pattern, $string, &$matches = null, $options = null, $flags = PREG_SET_ORDER)
 	{
-		if (empty($pattern) || empty($string))
+		if ($pattern == '' || $string == '')
 		{
 			$matches = [];
 
@@ -183,7 +183,7 @@ class RegEx
 	}
 
 	/**
-	 * make the string a valid regular expression pattern
+	 * Make a string a valid regular expression pattern
 	 *
 	 * @param string $pattern
 	 * @param string $options
@@ -191,16 +191,11 @@ class RegEx
 	 *
 	 * @return string
 	 */
-	private static function preparePattern($pattern, $options = null, $string = '')
+	public static function preparePattern($pattern, $options = null, $string = '')
 	{
 		if (is_array($pattern))
 		{
-			array_walk($pattern, function (&$subpattern, $key, $string)
-			{
-				$subpattern = self::preparePattern($subpattern, $options = null, $string);
-			}, $string);
-
-			return $pattern;
+			return self::preparePatternArray($pattern, $options, $string);
 		}
 
 		if (substr($pattern, 0, 1) != '#')
@@ -215,10 +210,30 @@ class RegEx
 			$pattern .= $options;
 		}
 
-		if (!empty($string) && @preg_match($pattern . 'u', $string))
+		if (StringHelper::detectUTF8($string))
 		{
-			$pattern .= 'u';
+			// use utf-8
+			return $pattern . 'u';
 		}
+
+		return $pattern;
+	}
+
+	/**
+	 * Make an array of strings valid regular expression patterns
+	 *
+	 * @param array  $pattern
+	 * @param string $options
+	 * @param string $string
+	 *
+	 * @return array
+	 */
+	private static function preparePatternArray($pattern, $options = null, $string = '')
+	{
+		array_walk($pattern, function (&$subpattern, $key, $string)
+		{
+			$subpattern = self::preparePattern($subpattern, $options = null, $string);
+		}, $string);
 
 		return $pattern;
 	}
