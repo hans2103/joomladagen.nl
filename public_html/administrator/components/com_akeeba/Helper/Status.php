@@ -177,9 +177,9 @@ class Status
 	{
 		$db    = Container::getInstance('com_akeeba')->db;
 		$query = $db->getQuery(true)
-					->select('MAX(' . $db->qn('id') . ')')
-					->from($db->qn('#__ak_stats'))
-					->where($db->qn('origin') . ' != ' . $db->q('restorepoint'));
+			->select('MAX(' . $db->qn('id') . ')')
+			->from($db->qn('#__ak_stats'))
+			->where($db->qn('origin') . ' != ' . $db->q('restorepoint'));
 		$db->setQuery($query);
 		$id = $db->loadResult();
 
@@ -237,11 +237,12 @@ class Status
 
 		if (array_key_exists($record['type'], $backup_types['scripts']))
 		{
-			$type = Platform::getInstance()->translate($backup_types['scripts'][ $record['type'] ]['text']);
+			$type = Platform::getInstance()->translate($backup_types['scripts'][$record['type']]['text']);
 		}
 
+		$container = Container::getInstance('com_akeeba');
 		$startTime = new Date($record['backupstart'], 'UTC');
-		$tz = new \DateTimeZone(\JFactory::getUser()->getParam('timezone', \JFactory::getConfig()->get('offset', 'UTC')));
+		$tz        = new \DateTimeZone($container->platform->getUser()->getParam('timezone', $container->platform->getConfig()->get('offset', 'UTC')));
 		$startTime->setTimezone($tz);
 
 		$html = '<table class="table table-striped">';

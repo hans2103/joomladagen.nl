@@ -56,8 +56,17 @@ class Statistics extends Model
 
 		$platform     = $this->container->platform;
 		$defaultLimit = $platform->getConfig()->get('list_limit', 10);
-		$limit        = $platform->getUserStateFromRequest('global.list.limit', 'limit', $this->input, $defaultLimit);
-		$limitstart   = $platform->getUserStateFromRequest('com_akeeba.stats.limitstart', 'limitstart', $this->input, 0);
+
+		if ($platform->isCli())
+		{
+			$limit      = $this->input->getInt('limit', $defaultLimit);
+			$limitstart = $this->input->getInt('limitstart', 0);
+		}
+		else
+		{
+			$limit      = $platform->getUserStateFromRequest('global.list.limit', 'limit', $this->input, $defaultLimit);
+			$limitstart = $platform->getUserStateFromRequest('com_akeeba.stats.limitstart', 'limitstart', $this->input, 0);
+		}
 
 		if ($platform->isFrontend())
 		{
@@ -327,7 +336,7 @@ This email is sent to you by your own site, [SITENAME]
 ENDBODY;
 		}
 
-		$jconfig = JFactory::getConfig();
+		$jconfig = $this->container->platform->getConfig();
 
 		$mailfrom = $jconfig->get('mailfrom');
 		$fromname = $jconfig->get('fromname');

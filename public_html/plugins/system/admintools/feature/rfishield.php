@@ -19,7 +19,7 @@ class AtsystemFeatureRfishield extends AtsystemFeatureAbstract
 	public function isEnabled()
 	{
 		// Only allow in front-end
-		if (!$this->helper->isFrontend())
+		if (!$this->container->platform->isFrontend())
 		{
 			return false;
 		}

@@ -26,6 +26,8 @@ class AtsystemFeatureAutoipfiltering extends AtsystemFeatureAbstract
 		@ob_end_clean();
 		header("HTTP/1.0 403 Forbidden");
 
+		$ip = AtsystemUtilFilter::getIp();
+
 		$spammerMessage = $this->cparams->getValue('spammermessage', '');
 		$spammerMessage = str_replace('[IP]', $ip, $spammerMessage);
 

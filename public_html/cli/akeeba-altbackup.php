@@ -274,7 +274,8 @@ ERROR:
 Backup failed.
 
 ENDTEXT;
-				$inLoop = false;
+
+				$this->close(100);
 			}
 			elseif (strpos($result, '301 More work required') !== false)
 			{
@@ -322,7 +323,7 @@ such messages, please make sure that your backup is working properly by trying
 to restore it on a local server.
 
 ENDTEXT;
-				$inLoop = false;
+				$this->close(0);
 			}
 			elseif (strpos($result, '500 ERROR -- ') !== false)
 			{
@@ -337,7 +338,7 @@ $result
 Backup failed.
 
 ENDTEXT;
-				$inLoop = false;
+				$this->close(2);
 			}
 			elseif (strpos($result, '403 ') !== false)
 			{
@@ -353,7 +354,7 @@ ERROR:
 Backup failed.
 
 ENDTEXT;
-				$inLoop = false;
+				$this->close(103);
 			}
 			else
 			{
@@ -369,7 +370,7 @@ $result
 If you do not see "200 OK" at the end of this output, the backup has failed.
 
 ENDTEXT;
-				$inLoop = false;
+				$this->close(1);
 			}
 		}
 	}

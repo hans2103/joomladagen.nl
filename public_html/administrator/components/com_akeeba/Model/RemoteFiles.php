@@ -120,7 +120,6 @@ class RemoteFiles extends Model
 		$remote_filename     = $remoteFilenameParts[1];
 
 		// Get a reference to the session object
-		$session = $this->container->session;
 		$config  = Factory::getConfiguration();
 
 		// Start timing ourselves
@@ -150,9 +149,9 @@ class RemoteFiles extends Model
 			if ($part == -1)
 			{
 				// Total size to download
-				$session->set('dl_totalsize', $stat['total_size'], 'akeeba');
+				$this->container->platform->setSessionVar('dl_totalsize', $stat['total_size'], 'akeeba');
 				// Currently downloaded size
-				$session->set('dl_donesize', 0, 'akeeba');
+				$this->container->platform->setSessionVar('dl_donesize', 0, 'akeeba');
 				// Init
 				$part = 0;
 			}
@@ -228,9 +227,9 @@ class RemoteFiles extends Model
 			if ($result)
 			{
 				$filesize = (int)@filesize($temp_file);
-				$total    = $session->get('dl_donesize', 0, 'akeeba');
+				$total    = $this->container->platform->getSessionVar('dl_donesize', 0, 'akeeba');
 				$total += $filesize;
-				$session->set('dl_donesize', $total, 'akeeba');
+				$this->container->platform->setSessionVar('dl_donesize', $total, 'akeeba');
 			}
 
 			// Successful download, or have to move to the next part.

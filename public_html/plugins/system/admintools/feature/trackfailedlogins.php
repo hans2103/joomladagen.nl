@@ -97,7 +97,7 @@ class AtsystemFeatureTrackfailedlogins extends AtsystemFeatureAbstract
 			return;
 		}
 
-		$user = JFactory::getUser($userid);
+		$user = $this->container->platform->getUser($userid);
 
 		// Username doesn't match, the user is blocked or is not active? Let's stop here
 		if ($user->username != $username || $user->block || !(empty($user->activation)))
@@ -153,7 +153,7 @@ class AtsystemFeatureTrackfailedlogins extends AtsystemFeatureAbstract
 		$subject = $template[0];
 		$body = $template[1];
 
-		$config = JFactory::getConfig();
+		$config = $this->container->platform->getConfig();
 
 		try
 		{
@@ -186,7 +186,7 @@ class AtsystemFeatureTrackfailedlogins extends AtsystemFeatureAbstract
 				// Send mail to all users with users creating permissions and receiving system emails
 				foreach ($rows as $row)
 				{
-					$usercreator = JFactory::getUser($row->id);
+					$usercreator = $this->container->platform->getUser($row->id);
 
 					if ($usercreator->authorise('core.create', 'com_users') && !empty($usercreator->email))
 					{

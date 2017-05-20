@@ -380,7 +380,7 @@ class HtaccessMaker extends ServerConfigMaker
 		$redirCode     = $serverCaps->customCodes ? '[R=301,L]' : '[R,L]';
 
 		$date = new Date();
-		$tz   = new DateTimeZone(JFactory::getUser()->getParam('timezone', JFactory::getConfig()->get('offset', 'UTC')));
+		$tz   = new DateTimeZone($this->container->platform->getUser()->getParam('timezone', $this->container->platform->getConfig()->get('offset', 'UTC')));
 		$date->setTimezone($tz);
 		$d        = $date->format('Y-m-d H:i:s T', true);
 		$version  = ADMINTOOLS_VERSION;

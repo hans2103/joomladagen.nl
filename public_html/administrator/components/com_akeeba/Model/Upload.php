@@ -46,7 +46,7 @@ class Upload extends Model
 		$local_filename = substr($local_filename, 0, -strlen($extension)) . $new_extension;
 
 		// Load the Configuration object
-		$savedFactory = $this->container->session->get('upload_factory', null, 'akeeba');
+		$savedFactory = $this->container->platform->getSessionVar('upload_factory', null, 'akeeba');
 
 		if ($savedFactory && ($frag > 0))
 		{
@@ -74,14 +74,14 @@ class Upload extends Model
 		elseif (abs($result) == 1)
 		{
 			$frag++;
-			$this->container->session->set('upload_factory', Factory::serialize(), 'akeeba');
+			$this->container->platform->setSessionVar('upload_factory', Factory::serialize(), 'akeeba');
 		}
 		elseif ($result === false)
 		{
 			$warning = $engine->getWarning();
 			$error   = $engine->getError();
 
-			$this->container->session->set('upload_factory', null, 'akeeba');
+			$this->container->platform->setSessionVar('upload_factory', null, 'akeeba');
 			$part = -1;
 			$frag = -1;
 

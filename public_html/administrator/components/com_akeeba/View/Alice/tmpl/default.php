@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 	<form name="adminForm" id="adminForm" action="index.php" method="post" class="form-inline">
 		<input name="option" value="com_akeeba" type="hidden"/>
 		<input name="view" value="Alice" type="hidden"/>
-		<input type="hidden" name="<?php echo \JFactory::getSession()->getFormToken(); ?>" value="1"/>
+		<input type="hidden" name="<?php echo $this->container->platform->getToken(true); ?>" value="1"/>
 
 		<?php if($this->autorun): ?>
 			<div class="alert">

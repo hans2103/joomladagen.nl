@@ -18,7 +18,7 @@ class AtsystemFeatureSecretword extends AtsystemFeatureAbstract
 	 */
 	public function isEnabled()
 	{
-		if (!$this->helper->isBackend())
+		if (!$this->container->platform->isBackend())
 		{
 			return false;
 		}
@@ -58,7 +58,7 @@ class AtsystemFeatureSecretword extends AtsystemFeatureAbstract
 
 			if (!empty($uid))
 			{
-				$myUID = JFactory::getUser()->id;
+				$myUID = $this->container->platform->getUser()->id;
 				$loggingMeOut = ($myUID == $uid);
 			}
 

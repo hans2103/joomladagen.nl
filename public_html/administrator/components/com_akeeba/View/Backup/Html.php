@@ -290,7 +290,7 @@ class Html extends BaseView
 	private function getDefaultDescription()
 	{
 		$tzDefault           = $this->container->platform->getConfig()->get('offset');
-		$user                = JFactory::getUser();
+		$user                = $this->container->platform->getUser();
 		$tz                  = $user->getParam('timezone', $tzDefault);
 		$dateNow             = new Date('now', $tz);
 		$default_description = JText::_('COM_AKEEBA_BACKUP_DEFAULT_DESCRIPTION') . ' ' .

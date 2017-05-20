@@ -56,11 +56,10 @@ class Html extends BaseView
 		$this->setLayout('downloading');
 		$model = $this->getModel();
 
-		$session = $this->container->session;
-		$total   = $session->get('s3import.totalsize', 0, 'com_akeeba');
-		$done    = $session->get('s3import.donesize', 0, 'com_akeeba');
-		$part    = $session->get('s3import.part', 0, 'com_akeeba') + 1;
-		$parts   = $session->get('s3import.totalparts', 0, 'com_akeeba');
+		$total   = $this->container->platform->getSessionVar('s3import.totalsize', 0, 'com_akeeba');
+		$done    = $this->container->platform->getSessionVar('s3import.donesize', 0, 'com_akeeba');
+		$part    = $this->container->platform->getSessionVar('s3import.part', 0, 'com_akeeba') + 1;
+		$parts   = $this->container->platform->getSessionVar('s3import.totalparts', 0, 'com_akeeba');
 
 		$percent = 0;
 

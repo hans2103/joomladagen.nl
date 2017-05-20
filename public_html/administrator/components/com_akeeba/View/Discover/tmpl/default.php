@@ -45,7 +45,7 @@ $this->getContainer()->template->addJSInline($js);
 	<input type="hidden" name="option" value="com_akeeba" />
 	<input type="hidden" name="view" value="Discover" />
 	<input type="hidden" name="task" value="discover" />
-	<input type="hidden" name="<?php echo \JFactory::getSession()->getFormToken(); ?>" value="1" />
+	<input type="hidden" name="<?php echo $this->container->platform->getToken(true); ?>" value="1" />
 
 	<div class="control-group">
 		<label class="control-label">

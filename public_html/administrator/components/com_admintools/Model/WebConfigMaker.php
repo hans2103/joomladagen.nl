@@ -367,7 +367,7 @@ class WebConfigMaker extends ServerConfigMaker
 		JLoader::import('joomla.utilities.date');
 		
 		$date    = new Date();
-		$tz   = new DateTimeZone(JFactory::getUser()->getParam('timezone', JFactory::getConfig()->get('offset', 'UTC')));
+		$tz   = new DateTimeZone($this->container->platform->getUser()->getParam('timezone', $this->container->platform->getConfig()->get('offset', 'UTC')));
 		$date->setTimezone($tz);
 		$d       = $date->format('Y-m-d H:i:s T', true);
 		$version = ADMINTOOLS_VERSION;
@@ -480,6 +480,7 @@ XML;
 				$newPattern = implode('|', $patternCache);
 				$conditions .= <<< XML
 <add input="{HTTP_USER_AGENT}" pattern="$newPattern" />
+
 XML;
 				$patternCache = array();
 			}
@@ -489,6 +490,7 @@ XML;
 				$newPattern = implode('|', $patternCache);
 				$conditions .= <<< XML
 						<add input="{HTTP_USER_AGENT}" pattern="$newPattern" />
+
 XML;
 			}
 
@@ -500,6 +502,7 @@ $conditions
 					</conditions>
 					<action type="CustomResponse" statusCode="403" statusReason="Forbidden: Access is denied." statusDescription="You do not have permission to view this directory or page using the credentials that you supplied." />
 				</rule>
+
 XML;
 		}
 

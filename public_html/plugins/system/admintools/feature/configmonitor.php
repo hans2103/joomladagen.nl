@@ -143,7 +143,7 @@ class AtsystemFeatureConfigmonitor extends AtsystemFeatureAbstract
 		}
 
 		// We have an ID. Try to get the component name from the #__extensions table.
-		$db = JFactory::getDbo();
+		$db = $this->container->db;
 		$query = $db->getQuery(true)
 			->select($db->qn('element'))
 			->from($db->qn('#__extensions'))
@@ -173,7 +173,7 @@ class AtsystemFeatureConfigmonitor extends AtsystemFeatureAbstract
 		$jlang->load('com_admintools', JPATH_ADMINISTRATOR, null, true);
 
 		// Get the site name
-		$config = JFactory::getConfig();
+		$config = $this->container->platform->getConfig();
 
 		$sitename = $config->get('sitename');
 
@@ -223,7 +223,7 @@ class AtsystemFeatureConfigmonitor extends AtsystemFeatureAbstract
 			'[COUNTRY]'   => $country,
 			'[CONTINENT]' => $continent,
 			'[UA]'		  => $_SERVER['HTTP_USER_AGENT'],
-			'[USER]'	  => JFactory::getUser()->username,
+			'[USER]'	  => $this->container->platform->getUser()->username,
 		);
 
 		// Let's get the most suitable email template
@@ -249,7 +249,7 @@ class AtsystemFeatureConfigmonitor extends AtsystemFeatureAbstract
 
 		try
 		{
-			$config = JFactory::getConfig();
+			$config = $this->container->platform->getConfig();
 			$mailer = JFactory::getMailer();
 
 			$mailfrom = $config->get('mailfrom');

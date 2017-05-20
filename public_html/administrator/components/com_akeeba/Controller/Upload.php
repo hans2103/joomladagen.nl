@@ -89,7 +89,7 @@ class Upload extends Controller
 			$view->error = 0;
 
 			// Also reset the saved post-processing engine
-			$this->container->session->set('postproc_engine', null, 'akeeba');
+			$this->container->platform->setSessionVar('postproc_engine', null, 'akeeba');
 		}
 		elseif ($result === false)
 		{
@@ -100,7 +100,7 @@ class Upload extends Controller
 			$view->setLayout('error');
 
 			// Also reset the saved post-processing engine
-			$this->container->session->set('postproc_engine', null, 'akeeba');
+			$this->container->platform->setSessionVar('postproc_engine', null, 'akeeba');
 		}
 
 		$this->display(false, false);
@@ -140,7 +140,7 @@ class Upload extends Controller
 		}
 
 		// Start by resetting the saved post-processing engine
-		$this->container->session->set('postproc_engine', null, 'akeeba');
+		$this->container->platform->setSessionVar('postproc_engine', null, 'akeeba');
 
 		// Initialise the view
 		/** @var UploadView $view */

@@ -24,7 +24,7 @@ class AtsystemFeatureEmailfailedadminlong extends AtsystemFeatureAbstract
 			return false;
 		}
 
-		if (!$this->helper->isBackend())
+		if (!$this->container->platform->isBackend())
 		{
 			return false;
 		}
@@ -43,11 +43,13 @@ class AtsystemFeatureEmailfailedadminlong extends AtsystemFeatureAbstract
 	 * Sends an email upon a failed administrator login
 	 *
 	 * @param JAuthenticationResponse $response
+	 *
+	 * @return  void
 	 */
 	public function onUserLoginFailure($response)
 	{
 		// Make sure we don't fire unless someone is still in the login page
-		$user = JFactory::getUser();
+		$user = $this->container->platform->getUser();
 
 		if (!$user->guest)
 		{
@@ -79,7 +81,7 @@ class AtsystemFeatureEmailfailedadminlong extends AtsystemFeatureAbstract
 		$username = JFactory::getApplication()->input->getString('username');
 
 		// Get the site name
-		$config = JFactory::getConfig();
+		$config = $this->container->platform->getConfig();
 
 		$sitename = $config->get('sitename');
 

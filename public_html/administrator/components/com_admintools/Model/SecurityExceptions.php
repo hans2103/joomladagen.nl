@@ -90,7 +90,7 @@ class SecurityExceptions extends DataModel
 
 		JLoader::import('joomla.utilities.date');
 
-		$userTZ = \JFactory::getUser()->getParam('timezone', \JFactory::getConfig()->get('offset', 'UTC'));
+		$userTZ = $this->container->platform->getUser()->getParam('timezone', $this->container->platform->getConfig()->get('offset', 'UTC'));
 		$fltDateFrom = $this->getState('datefrom', null, 'string');
 
 		if ($fltDateFrom)

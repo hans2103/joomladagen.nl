@@ -65,15 +65,15 @@ class AliceCoreDomainChecksRuntimeerrorsDbaddjsame extends AliceCoreDomainChecks
 		}
 
 		// Do I have to switch profile?
-		$session     = JFactory::getSession();
-		$cur_profile = $session->get('profile', null, 'akeeba');
+		$container   = \FOF30\Container\Container::getInstance('com_akeeba');
+		$cur_profile = $container->platform->getSessionVar('profile', null, 'akeeba');
 
 		if ($cur_profile != $profile)
 		{
-			$session->set('profile', $profile, 'akeeba');
+			$container->platform->setSessionVar('profile', $profile, 'akeeba');
 		}
 
-		$config  = JFactory::getConfig();
+		$config  = $container->platform->getConfig();
 		$filters = \Akeeba\Engine\Factory::getFilters();
 		$multidb = $filters->getFilterData('multidb');
 
@@ -105,7 +105,7 @@ class AliceCoreDomainChecksRuntimeerrorsDbaddjsame extends AliceCoreDomainChecks
 		// If needed set the old profile again
 		if ($cur_profile != $profile)
 		{
-			$session->set('profile', $cur_profile, 'akeeba');
+			$container->platform->setSessionVar('profile', $cur_profile, 'akeeba');
 		}
 
 		if ($error)

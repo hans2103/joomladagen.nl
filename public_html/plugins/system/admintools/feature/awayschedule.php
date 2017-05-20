@@ -20,7 +20,7 @@ class AtsystemFeatureAwayschedule extends AtsystemFeatureAbstract
 	 */
 	public function isEnabled()
 	{
-		if (!$this->helper->isBackend())
+		if (!$this->container->platform->isBackend())
 		{
 			return false;
 		}
@@ -39,7 +39,7 @@ class AtsystemFeatureAwayschedule extends AtsystemFeatureAbstract
 	 */
 	public function onAfterInitialise()
 	{
-		$timezone = JFactory::getConfig()->get('offset', 'UTC');
+		$timezone = $this->container->platform->getConfig()->get('offset', 'UTC');
 		
 		$now  = new Date('now', $timezone);
 		$from = new Date($this->cparams->getValue('awayschedule_from'), $timezone);

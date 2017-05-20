@@ -19,16 +19,22 @@ class AliceCoreDomainAbstract extends AliceAbstractPart
 {
 	/** @var int Domain priority */
 	public $priority = 20;
+
 	/** @var int Progress percentage */
 	protected $progress = 0;
+
 	/** @var null Handle to Akeeba Backup log to analyze */
 	protected $log = null;
+
 	/** @var string Name of the current step */
 	protected $stepName = '';
+
 	/** @var string Name of the checks to load */
 	protected $checksName = '';
+
 	/** @var array Stack of check to be performed */
 	private $checks = array();
+
 	/** @var int   Total number of checks to be performed */
 	private $totalChecks = 0;
 

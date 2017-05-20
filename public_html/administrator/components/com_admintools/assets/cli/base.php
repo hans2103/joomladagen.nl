@@ -90,6 +90,9 @@ ENDWARNING;
 // Required by the CMS
 define('DS', DIRECTORY_SEPARATOR);
 
+// Mark this as a CLI script. Used by the Platform class.
+define('AKEEBACLI', 1);
+
 // Load system defines
 if (!isset($curdir))
 {
@@ -260,34 +263,6 @@ class AdmintoolsCliBase
 		if (class_exists('JFilterInput'))
 		{
 			$this->filter = JFilterInput::getInstance();
-		}
-
-		/**
-		 * Joomla! 3.7.0 broke backwards compatibility in the session package.
-		 *
-		 * Now JSession objects expect to be initialized by the application with an input object and a dispatcher
-		 * object. Unlike previous Joomla! versions this is NOT taken care of automatically. This means that by using
-		 * JFactory::getSession() -the canonical API to get a session object- in a custom application will result in the
-		 * returned object having an uninitialized handler which will throw PHP Fatal Errors left and right as soon as
-		 * you try to use the session. This API is used by JFactory::getUser() itself, the canonical API to get a user
-		 * object, so you can't avoid using it. Therefore Joomla! has broken backwards compatibility with ITS OWN CORE
-		 * AND FUNDAMENTAL APIs. But, hey, let's just blame 3PDs on Twitter for believing that Joomla! actually does
-		 * what it claims it does which is a. a beta freeze and b. semantic versioning. Yeah, yeah, stupid 3PD, why did
-		 * you believe Joomla's lies?
-		 */
-		if (version_compare(JVERSION, '3.7.0', 'ge'))
-		{
-			// Instantiate the session object.
-			$dispatcher = new JEventDispatcher();
-			$session = JFactory::getSession();
-			$session->initialise($this->input, $dispatcher);
-			$session->start();
-		}
-
-		// Work around Joomla! 3.4.7's JSession bug
-		if (version_compare(JVERSION, '3.4.7', 'eq'))
-		{
-			JFactory::getSession()->restart();
 		}
 
 		// Parse the POSIX options

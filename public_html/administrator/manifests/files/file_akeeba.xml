@@ -6,9 +6,9 @@
     <authorUrl>https://www.akeebabackup.com</authorUrl>
     <copyright>Copyright (c)2006-2017 Akeeba Ltd / Nicholas K. Dionysopoulos</copyright>
     <license>GNU GPL v3 or later</license>
-    <version>5.3.4</version>
-    <creationDate>2017-04-30</creationDate>
-    <description>Akeeba Backup CLI scripts v.5.3.4</description>
+    <version>5.4.0</version>
+    <creationDate>2017-05-18</creationDate>
+    <description>Akeeba Backup CLI scripts v.5.4.0</description>
 
     <fileset>
         <files target="cli">
@@ -16,7 +16,6 @@
             <file>akeeba-altcheck-failed.php</file>
             <file>akeeba-backup.php</file>
             <file>akeeba-check-failed.php</file>
-            <file>akeeba-update.php</file>
         </files>
     </fileset>
 </extension>

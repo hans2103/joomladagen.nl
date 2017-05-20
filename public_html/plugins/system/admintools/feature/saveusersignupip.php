@@ -20,7 +20,7 @@ class AtsystemFeatureSaveusersignupip extends AtsystemFeatureAbstract
 	 */
 	public function isEnabled()
 	{
-		if (!$this->helper->isFrontend())
+		if (!$this->container->platform->isFrontend())
 		{
 			return false;
 		}
@@ -50,7 +50,7 @@ class AtsystemFeatureSaveusersignupip extends AtsystemFeatureAbstract
 		}
 
 		// Only trigger on front-end user creation.
-		if (!$this->helper->isFrontend())
+		if (!$this->container->platform->isFrontend())
 		{
 			$process = false;
 		}

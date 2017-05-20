@@ -462,8 +462,8 @@ class Mysqli extends Mysql
 	 * * The hostname "localhost" has special meaning. It means "use named pipes / sockets". Anything else uses TCP/IP.
 	 *   This is the ONLY way to specify a. TCP/IP or b. named pipes / sockets connection.
 	 *
-	 * * You CANNOT use a numeric TCP/IP port with hostname localhost. The driver will barf because the input makes no
-	 *   sense.
+	 * * You SHOULD NOT use a numeric TCP/IP port with hostname localhost. For some strange reason it's still allowed
+	 *   but the manual is self-contradicting over what this really does...
 	 *
 	 * * Likewise you CANNOT use a socket / named pipe path with hostname other than localhost. Named pipes and sockets
 	 *   can only be used with the local machine, therefore the hostname MUST be localhost.
@@ -496,42 +496,62 @@ class Mysqli extends Mysql
 		$isPersistent = (substr($host, 0, 2) == 'p:');
 		$host         = $isPersistent ? substr($host, 2) : $host;
 
-		// Explicit port, i.e. a port or socket given in the hostname after a colon
-		$explicitPort = null;
+		/*
+		 * Unlike mysql_connect(), mysqli_connect() takes the port and socket as separate arguments. Therefore, we
+		 * have to extract them from the host string.
+		 */
+		$port = !empty($port) ? $port : 3306;
 
-		if (strpos($host, ':') !== false)
+		$regex = '/^(?P<host>((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(:(?P<port>.+))?$/';
+
+		// It's an IPv4 address with or without port
+		if (preg_match($regex, $host, $matches))
 		{
-			list ($host, $explicitPort) = explode(':', $host, 2);
+			$host = $matches['host'];
+
+			if (!empty($matches['port']))
+			{
+				$port = $matches['port'];
+			}
 		}
-
-		// Clean up the host. If it's empty (e.g. `:3306` or `:/tmp/foobar` notation) assume localhost
-		$host = trim($host);
-		$host = empty($host) ? 'localhost' : $host;
-
-		// The following block implements the logic: explicitPort OVERRIDES port OVERRIDES socket.
-		$port = empty($port) ? $socket : $port;
-		$port = !empty($explicitPort) ? $explicitPort : $port;
-
-		// Normalize empty values to NULL. Otherwise PHP 7 will barf.
-		$socket = null;
-		$port   = empty($port) ? null : $port;
-
-		// There is a port or socket defined. We have to find out if it's a port or socket and if we need to change the
-		// hostname as a direct result.
-		if (!empty($port))
+		// Square-bracketed IPv6 address with or without port, e.g. [fe80:102::2%eth1]:3306
+		elseif (preg_match('/^(?P<host>\[.*\])(:(?P<port>.+))?$/', $host, $matches))
 		{
-			// A non-numeric port is given, so it must be a socket. Sockets only work with 'localhost'. So...
-			if (!is_numeric($port))
+			$host = $matches['host'];
+
+			if (!empty($matches['port']))
 			{
-				$host = 'localhost';
-				$socket = $port;
-				$port   = null;
+				$port = $matches['port'];
 			}
-			// A numeric port was given. This is acceptable, as long as the hostname is NOT localhost. So...
-			elseif ($host == 'localhost')
+		}
+		// Named host (e.g example.com or localhost) with or without port
+		elseif (preg_match('/^(?P<host>(\w+:\/{2,3})?[a-z0-9\.\-]+)(:(?P<port>[^:]+))?$/i', $host, $matches))
+		{
+			$host = $matches['host'];
+
+			if (!empty($matches['port']))
 			{
-				$host = '127.0.0.1';
+				$port = $matches['port'];
 			}
+		}
+		// Empty host, just port, e.g. ':3306'
+		elseif (preg_match('/^:(?P<port>[^:]+)$/', $host, $matches))
+		{
+			$host = 'localhost';
+			$port = $matches['port'];
+		}
+		// ... else we assume normal (naked) IPv6 address, so host and port stay as they are or default
+
+		// Get the port number or socket name
+		if (is_numeric($port))
+		{
+			$port = (int) $port;
+			$socket = '';
+		}
+		else
+		{
+			$socket = $port;
+			$port = '';
 		}
 
 		// Finally, if it's a persistent connection we have to prefix the hostname with 'p:'

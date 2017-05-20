@@ -57,7 +57,7 @@ class AtsystemFeatureSessioncleaner extends AtsystemFeatureAbstract
 
 		$options = array();
 
-		$conf = JFactory::getConfig();
+		$conf = $this->container->platform->getConfig();
 
 		$handler = $conf->get('session_handler', 'none');
 

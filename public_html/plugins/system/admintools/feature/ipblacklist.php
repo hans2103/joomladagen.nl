@@ -68,31 +68,31 @@ class AtsystemFeatureIpblacklist extends AtsystemFeatureAbstract
 		// Show the 403 message
 		if ($this->cparams->getValue('use403view', 0))
 		{
-			$session = JFactory::getSession();
-
 			// Using a view
-			if (!$session->get('block', false, 'com_admintools') || $this->helper->isBackend())
+			if (!$this->container->platform->getSessionVar('block', false, 'com_admintools') || $this->container->platform->isBackend())
 			{
 				// This is inside an if-block so that we don't end up in an infinite redirection loop
-				$session->set('block', true, 'com_admintools');
-				$session->set('message', $message, 'com_admintools');
-				$session->close();
+				$this->container->platform->setSessionVar('block', true, 'com_admintools');
+				$this->container->platform->setSessionVar('message', $message, 'com_admintools');
+
+				// Close the session (logs out the user)
+				JFactory::getSession()->close();
 
 				$base = JUri::base();
 
-				if ($this->helper->isBackend())
+				if ($this->container->platform->isBackend())
 				{
 					$base = rtrim($base);
 					$base = substr($base, 0, -13);
 				}
 
-				$this->app->redirect($base);
+				$this->container->platform->redirect($base);
 			}
 
 			return;
 		}
 
-		if ($this->helper->isBackend())
+		if ($this->container->platform->isBackend())
 		{
 			// You can't use Joomla!'s error page in the admin area. Improvise!
 			header('HTTP/1.1 403 Forbidden');

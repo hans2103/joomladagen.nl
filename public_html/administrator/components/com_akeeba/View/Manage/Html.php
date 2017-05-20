@@ -177,7 +177,7 @@ class Html extends BaseView
 		// Load core classes used in the view template
 		JLoader::import('joomla.utilities.date');
 
-		$user              = \JFactory::getUser();
+		$user              = $this->container->platform->getUser();
 		$this->permissions = array(
 			'configure' => $user->authorise('akeeba.configure', 'com_akeeba'),
 			'backup'    => $user->authorise('akeeba.backup', 'com_akeeba'),
@@ -234,8 +234,7 @@ JS;
 		JHtml::_('behavior.calendar');
 		JHtml::_('formbehavior.chosen', 'select');
 
-		JFactory::getDocument()
-		        ->addStyleSheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
+		$this->addCssFile('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css', '');
 
 		$hash = 'akeebamanage';
 
@@ -465,7 +464,7 @@ JS;
 			$duration = '';
 		}
 
-		$user   = JFactory::getUser();
+		$user   = $this->container->platform->getUser();
 		$userTZ = $user->getParam('timezone', 'UTC');
 		$tz     = new DateTimeZone($userTZ);
 		$startTime->setTimezone($tz);

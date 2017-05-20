@@ -65,7 +65,7 @@ echo '<div class="image__wrapper ' . $displayData['class'] . '">';
 echo '  <div class="image__placeholder image__placeholder--' . $displayData['ratio'] . $coverall . '"';
 if ($backgroundimage)
 {
-	echo '       style="background-image: url("' . $backgroundimage . '");"';
+	echo '       style="background-image: url(\'' . $backgroundimage . '\');"';
 }
 echo '  >';
 echo '  </div>';

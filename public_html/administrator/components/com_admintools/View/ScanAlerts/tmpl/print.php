@@ -13,7 +13,7 @@ JLoader::import('joomla.utilities.date');
 
 $scan_id  = $this->input->getInt('scan_id', 0);
 $date     = new Date($this->scan->backupstart);
-$timezone = \JFactory::getUser()->getParam('timezone', \JFactory::getConfig()->get('offset', 'GMT'));
+$timezone = $this->container->platform->getUser()->getParam('timezone', $this->container->platform->getConfig()->get('offset', 'GMT'));
 $tz       = new \DateTimeZone($timezone);
 $date->setTimezone($tz);
 

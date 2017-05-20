@@ -91,9 +91,8 @@ CSS;
 		$this->setLayout('dlprogress');
 
 		// Get progress bar stats
-		$session = $this->container->session;
-		$total   = $session->get('dl_totalsize', 0, 'akeeba');
-		$done    = $session->get('dl_donesize', 0, 'akeeba');
+		$total   = $this->container->platform->getSessionVar('dl_totalsize', 0, 'akeeba');
+		$done    = $this->container->platform->getSessionVar('dl_donesize', 0, 'akeeba');
 
 		$percent = 0;
 

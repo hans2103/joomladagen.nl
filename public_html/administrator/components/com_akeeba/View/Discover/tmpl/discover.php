@@ -19,7 +19,7 @@ $hasFiles = !empty($this->files);
 	<?php else: ?>
 	<input type="hidden" name="task" value="default" />
 	<?php endif; ?>
-	<input type="hidden" name="<?php echo \JFactory::getSession()->getFormToken(); ?>" value="1" />
+	<input type="hidden" name="<?php echo $this->container->platform->getToken(true); ?>" value="1" />
 	
 	<?php if($hasFiles): ?>
 	<div class="well form-inline">

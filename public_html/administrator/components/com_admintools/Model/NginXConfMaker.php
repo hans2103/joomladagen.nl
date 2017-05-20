@@ -384,7 +384,7 @@ class NginXConfMaker extends ServerConfigMaker
 		JLoader::import('joomla.utilities.date');
 
 		$date = new Date();
-		$tz   = new DateTimeZone(JFactory::getUser()->getParam('timezone', JFactory::getConfig()->get('offset', 'UTC')));
+		$tz   = new DateTimeZone($this->container->platform->getUser()->getParam('timezone', $this->container->platform->getConfig()->get('offset', 'UTC')));
 		$date->setTimezone($tz);
 		$d       = $date->format('Y-m-d H:i:s T', true);
 		$version = ADMINTOOLS_VERSION;
@@ -621,6 +621,7 @@ ENDCONF;
 ######################################################################
 ## Disable following symlinks
 ######################################################################
+
 ENDCONF;
 			switch ($config->symlinks)
 			{
@@ -675,6 +676,7 @@ location ~* \.(swf|vrml|avi|mkv|mpg|mpeg|mp4|m4v|mov|asf)$ {
 		access_log off; log_not_found off;
 		expires 1M;
 }
+
 ENDCONF;
 		}
 
