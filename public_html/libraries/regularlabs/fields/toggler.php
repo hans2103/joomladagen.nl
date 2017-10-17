@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -41,7 +41,7 @@ class JFormFieldRL_Toggler extends JFormField
 
 	protected function getInput()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			return null;
 		}
@@ -73,6 +73,7 @@ class RLFieldToggler
 		$div    = $this->get('div', 0);
 
 		JHtml::_('jquery.framework');
+
 		RL_Document::script('regularlabs/script.min.js');
 		RL_Document::script('regularlabs/toggler.min.js');
 
@@ -101,7 +102,7 @@ class RLFieldToggler
 				}
 			}
 
-			if (!$div)
+			if ( ! $div)
 			{
 				$html[] = '</div></div>';
 			}
@@ -117,7 +118,7 @@ class RLFieldToggler
 			}
 			$html[] = '">';
 
-			if (!$div)
+			if ( ! $div)
 			{
 				$html[] = '<div><div>';
 			}
@@ -132,7 +133,7 @@ class RLFieldToggler
 
 	private function get($val, $default = '')
 	{
-		if (!isset($this->params[$val]) || (string) $this->params[$val] == '')
+		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
 		{
 			return $default;
 		}

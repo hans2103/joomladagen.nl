@@ -1697,6 +1697,7 @@ select[multiple].sp-pagebuilder-input-group-sm > .sp-pagebuilder-input-group-btn
 #sp-page-builder .sp-pagebuilder-column {
   position: relative;
   z-index: 1;
+  width: 100%;
 }
 #sp-page-builder .sp-pagebuilder-column.sp-pagebuilder-column-movable:before {
   content: " ";
@@ -2319,6 +2320,13 @@ select[multiple].sp-pagebuilder-input-group-sm > .sp-pagebuilder-input-group-btn
 }
 .sp-pagebuilder-row-over {
   opacity: .5;
+}
+.sp-pagebuilder-grouped-item .sp-pagebuilder-admin-separtor{
+  margin: 20px -15px 35px;
+}
+.sp-pagebuilder-grouped-item .sp-pagebuilder-admin-separtor:before {
+    height: 1px;
+    margin-top: -0.5px;
 }
 /*Layout dropdown */
 .sp-pagebuilder-dropdown-row-layouts.dropdown-menu {
@@ -3604,7 +3612,7 @@ body.sp-pagebuilder-media-modal-open {
   border: 0;
   border: 1px solid #edf1f5;
   box-shadow: none;
-  height: 44px;
+  height: auto;
   padding: 10px;
   width: 100%;
 }
@@ -3844,3 +3852,28 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
   cursor: not-allowed;
 }
 
+.sp-pagebuilder-form-group .chzn-container-multi .chzn-choices li.search-field input[type="text"]{
+  padding: 6px;
+  height: 24px;
+}
+
+/* Top Action Buttons */
+.sp-modal-top-action-btns{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-success{
+  margin-right: 12px;
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-default{
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-default:hover{
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Updated on V2.5 */
+.sp-pagebuilder-modal .chzn-container-multi .chzn-choices, .com_sppagebuilder .chzn-container-multi .chzn-choices {
+    min-height: 44px;
+}

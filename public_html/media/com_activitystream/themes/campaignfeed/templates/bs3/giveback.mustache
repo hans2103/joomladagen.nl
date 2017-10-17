@@ -1,0 +1,18 @@
+<div class="feed-item-cover campaigns">
+	<div class="date col-xs-3 col-sm-1 col-lg-1">{{created_day}} </br> {{created_date_month}}</div>
+	<div class="feed-item col-xs-9 col-sm-11 col-lg-11">
+		<div class="feed-item-inner">
+			<span><i class="fa fa-image fa-lg"></i></span>
+			<span><img class="feed-item-image" src="{{actor.image.avatar}}"></span>
+			<span class="language en-GB"><a href='{{actor.url}}'>{{actor.name}}</a> added {{object.count}} give-away(s) to the campaign</span>
+			<div>
+				{{#object.url}}
+					{{#giveback_image}}
+						<img class="feed-item-image-upload" src="{{giveback_image}}" alt="Giveaways Image" height="150" width="150"/>
+					{{/giveback_image}}
+				{{/object.url}}
+			</div>
+			<hr />
+		</div>
+	</div>
+</div>

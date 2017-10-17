@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -34,7 +34,7 @@ abstract class Akeebasubs
 
 		$slug = JFactory::getApplication()->input->getString('slug', '');
 
-		if (!$slug)
+		if ( ! $slug)
 		{
 			return;
 		}

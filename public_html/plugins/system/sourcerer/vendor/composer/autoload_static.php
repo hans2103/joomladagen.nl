@@ -6,24 +6,23 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit6024c49d7f8dc6c39d72867fde1149f5
 {
-	public static $prefixLengthsPsr4 = array(
+	public static $prefixLengthsPsr4 = [
 		'R' =>
-			array(
-				'RegularLabs\\Sourcerer\\' => 22,
-			),
-	);
+			[
+				'RegularLabs\\Plugin\\System\\Sourcerer\\' => 36,
+			],
+	];
 
-	public static $prefixDirsPsr4 = array(
-		'RegularLabs\\Sourcerer\\' =>
-			array(
+	public static $prefixDirsPsr4 = [
+		'RegularLabs\\Plugin\\System\\Sourcerer\\' =>
+			[
 				0 => __DIR__ . '/../..' . '/src',
-			),
-	);
+			],
+	];
 
 	public static function getInitializer(ClassLoader $loader)
 	{
-		return \Closure::bind(function () use ($loader)
-		{
+		return \Closure::bind(function () use ($loader) {
 			$loader->prefixLengthsPsr4 = ComposerStaticInit6024c49d7f8dc6c39d72867fde1149f5::$prefixLengthsPsr4;
 			$loader->prefixDirsPsr4    = ComposerStaticInit6024c49d7f8dc6c39d72867fde1149f5::$prefixDirsPsr4;
 		}, null, ClassLoader::class);

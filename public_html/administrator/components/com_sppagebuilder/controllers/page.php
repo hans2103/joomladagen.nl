@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderControllerPage extends JControllerForm {
 
@@ -76,7 +76,7 @@ class SppagebuilderControllerPage extends JControllerForm {
 		if (empty($recordId)) {
 			$authorised = $user->authorise('core.create', 'com_sppagebuilder') || (count($user->getAuthorisedCategories('com_sppagebuilder', 'core.create')));
 		} else {
-			$authorised = $user->authorise('core.edit', 'com_sppagebuilder') || ($user->authorise('core.edit.own',   'com_sppagebuilder.page.' . $recordId) && $data['created_by'] == $user->id);
+			$authorised = $user->authorise('core.edit', 'com_sppagebuilder') || $user->authorise('core.edit', 'com_sppagebuilder.page.' . $recordId) ||  ($user->authorise('core.edit.own',   'com_sppagebuilder.page.' . $recordId) && $data['created_by'] == $user->id);
 		}
 
 		if ($authorised !== true)

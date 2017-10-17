@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter" >
+		<field
+			name="search"
+			type="text"
+			label="COM_JTICKETING_FILTER_SEARCH_NAME"
+			description="COM_JTICKETING_FILTER_SEARCH_NAME"
+			hint="JSEARCH_FILTER"
+		/>
+		<field
+			name="events"
+			type="eventslist"
+			label="COM_JTICKETING_TITLE_LABEL"
+			description="COM_JTICKETING_TITLE_DESC"
+			onchange="this.form.submit();"
+			>
+		</field>
+		<field
+			name="status"
+			type="list"
+			label="COM_JTICKETING_FILTER_PAY_STATUS"
+			description="COM_JTICKETING_FILTER_PAY_STATUS_DESC"
+			onchange="this.form.submit();"
+			>
+			<option value="">SEL_PAY_STATUS</option>
+			<option value="P">JT_PSTATUS_PENDING</option>
+			<option value="C">JT_PSTATUS_COMPLETED</option>
+			<option value="D">JT_PSTATUS_DECLINED</option>
+			<option value="E">JT_PSTATUS_FAILED</option>
+			<option value="UR">JT_PSTATUS_UNDERREVIW</option>
+			<option value="RF">JT_PSTATUS_REFUNDED</option>
+			<option value="CRV">JT_PSTATUS_CANCEL_REVERSED</option>
+			<option value="RV">JT_PSTATUS_REVERSED</option>
+		</field>
+	</fields>
+
+	<fields name="list">
+		<field
+			name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			label="COM_JTICKETING_LIST_LIMIT"
+			description="COM_JTICKETING_LIST_LIMIT_DESC"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

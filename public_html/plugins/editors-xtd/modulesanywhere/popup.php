@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,9 +19,9 @@ use RegularLabs\Library\StringHelper as RL_String;
 $user = JFactory::getUser();
 if ($user->get('guest')
 	|| (
-		!$user->authorise('core.edit', 'com_content')
-		&& !$user->authorise('core.edit.own', 'com_content')
-		&& !$user->authorise('core.create', 'com_content')
+		! $user->authorise('core.edit', 'com_content')
+		&& ! $user->authorise('core.edit.own', 'com_content')
+		&& ! $user->authorise('core.create', 'com_content')
 	)
 )
 {
@@ -30,9 +30,9 @@ if ($user->get('guest')
 
 $params = RL_Parameters::getInstance()->getPluginParams('modulesanywhere');
 
-if (JFactory::getApplication()->isSite())
+if (RL_Document::isClient('site'))
 {
-	if (!$params->enable_frontend)
+	if ( ! $params->enable_frontend)
 	{
 		JError::raiseError(403, JText::_("ALERTNOTAUTH"));
 	}
@@ -220,7 +220,7 @@ class PlgButtonModulesAnywherePopup
 			</h1>
 		</div>
 
-		<?php if (JFactory::getApplication()->isAdmin() && JFactory::getUser()->authorise('core.admin', 1)) : ?>
+		<?php if (RL_Document::isClient('administrator') && JFactory::getUser()->authorise('core.admin', 1)) : ?>
 		<div class="subhead">
 			<div class="container-fluid">
 				<div class="btn-toolbar" id="toolbar">
@@ -254,7 +254,7 @@ class PlgButtonModulesAnywherePopup
 								<div class="controls">
 									<?php
 									$style = JFactory::getApplication()->input->get('style');
-									if (!$style)
+									if ( ! $style)
 									{
 										$style = $params->style;
 									}
@@ -374,7 +374,7 @@ class PlgButtonModulesAnywherePopup
 										. htmlspecialchars($row->title)
 										. '</button>';
 									?>
-									<?php if (!empty($row->note)) : ?>
+									<?php if ( ! empty($row->note)) : ?>
 										<p class="smallsub">
 											<?php echo JText::sprintf('JGLOBAL_LIST_NOTE', htmlspecialchars($row->note)); ?></p>
 									<?php endif; ?>

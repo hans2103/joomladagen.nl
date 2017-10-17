@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonImage_content extends SppagebuilderAddons{
 
@@ -62,7 +62,7 @@ class SppagebuilderAddonImage_content extends SppagebuilderAddons{
 
 			$output .= '<div class="sppb-col-sm-6'. $content_class .'">';
 			$output .= '<div class="sppb-content-holder">';
-			$output .= ($title) ? '<'.$heading_selector.' class="sppb-image-content-title">' . $title . '</'.$heading_selector.'>' : '';
+			$output .= ($title) ? '<'.$heading_selector.' class="sppb-image-content-title sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
 			$output .= ($text) ? '<p class="sppb-image-content-text">' . $text . '</p>' : '';
 
 			$output .= $button_output;

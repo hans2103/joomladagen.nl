@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -26,17 +26,33 @@ class JFormFieldRL_Users extends \RegularLabs\Library\Field
 	{
 		$this->params = $this->element->attributes();
 
-		if (!is_array($this->value))
+		if ( ! is_array($this->value))
 		{
 			$this->value = explode(',', $this->value);
 		}
 
-		$options = $this->getUsers();
-
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple');
 
-		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getUsers();
+
+		$name     = $input->getString('name', $this->type);
+		$id       = $input->get('id', strtolower($name));
+		$value    = json_decode($input->getString('value', '[]'));
+		$size     = $input->getInt('size');
+		$multiple = $input->getBool('multiple');
+
+		return $this->selectListSimple($options, $name, $value, $id, $size, $multiple);
 	}
 
 	function getUsers()
@@ -58,8 +74,9 @@ class JFormFieldRL_Users extends \RegularLabs\Library\Field
 		$this->db->setQuery($query);
 		$list = $this->db->loadObjectList();
 
-		$list = array_map(function($item){
-			if($item->disabled) {
+		$list = array_map(function ($item) {
+			if ($item->disabled)
+			{
 				$item->name .= ' (' . JText::_('JDISABLED') . ')';
 			}
 

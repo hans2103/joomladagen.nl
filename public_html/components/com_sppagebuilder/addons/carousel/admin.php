@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 SpAddonsConfig::addonConfig(
 	array(
@@ -34,6 +34,23 @@ SpAddonsConfig::addonConfig(
 						0=>JText::_('JNO'),
 					),
 					'std'=>1
+				),
+
+				'interval'=>array(
+					'type'=>'number',
+					'title'=>JText::_('COM_SPPAGEBUILDER_ADDON_CAROUSEL_INTERVAL'),
+					'desc'=>JText::_('COM_SPPAGEBUILDER_ADDON_CAROUSEL_INTERVAL_DESC'),
+					'std'=> 5,
+					'depends'=> array(
+						array('autoplay', '=', 1),
+					)
+				),
+
+				'speed'=>array(
+					'type'=>'number',
+					'title'=>JText::_('COM_SPPAGEBUILDER_ADDON_CAROUSEL_SPEED'),
+					'desc'=>JText::_('COM_SPPAGEBUILDER_ADDON_CAROUSEL_SPEED_DESC'),
+					'std'=> 600,
 				),
 
 				'controllers'=>array(

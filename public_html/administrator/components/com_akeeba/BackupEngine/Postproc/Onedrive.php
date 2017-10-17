@@ -21,19 +21,33 @@ use Psr\Log\LogLevel;
 class Onedrive extends Base
 {
 	/** @var int The retry count of this file (allow up to 2 retries after the first upload failure) */
-	private $tryCount = 0;
+	protected $tryCount = 0;
 
-	/** @var ConnectorOneDrive The DropBox API instance */
-	private $onedrive;
+	/** @var ConnectorOneDrive The OneDrive API instance */
+	protected $onedrive;
 
 	/** @var string The currently configured directory */
-	private $directory;
+	protected $directory;
 
 	/** @var bool Are we using chunk uploads? */
-	private $chunked = false;
+	protected $chunked = false;
 
-	/** @var int Chunk size (Mb) */
-	private $chunk_size = 10;
+	/** @var int Chunk size (MB) */
+	protected $chunk_size = 10;
+
+	/**
+	 * The name of the OAuth2 callback method in the parent window (the configuration page)
+	 *
+	 * @var   string
+	 */
+	protected $callbackMethod = 'akeeba_onedrive_oauth_callback';
+
+	/**
+	 * The key in Akeeba Engine's settings registry for this post-processing method
+	 *
+	 * @var   string
+	 */
+	protected $settingsKey = 'onedrive';
 
 	public function __construct()
 	{
@@ -53,7 +67,7 @@ class Onedrive extends Base
 	{
 		$callback = $params['callbackURI'] . '&method=oauthCallback';
 
-		$url = ConnectorOneDrive::helperUrl;
+		$url = $this->getOAuth2HelperUrl();
 		$url .= (strpos($url, '?') !== false) ? '&' : '?';
 		$url .= 'callback=' . urlencode($callback);
 
@@ -79,7 +93,7 @@ class Onedrive extends Base
 
 		return <<< HTML
 <script type="application/javascript">
-	window.opener.akeeba_onedrive_oauth_callback($serialisedData);
+	window.opener.{$this->callbackMethod}($serialisedData);
 </script>
 HTML;
 	}
@@ -130,7 +144,7 @@ HTML;
 		}
 
 		// Have I already made sure the remote directory exists?
-		$haveCheckedRemoteDirectory = $config->get('volatile.engine.postproc.onedrive.check_directory', 0);
+		$haveCheckedRemoteDirectory = $config->get('volatile.engine.postproc.' . $this->settingsKey . '.check_directory', 0);
 
 		if (!$haveCheckedRemoteDirectory)
 		{
@@ -145,7 +159,7 @@ HTML;
 				return false;
 			}
 
-			$config->set('volatile.engine.postproc.onedrive.check_directory', 1);
+			$config->set('volatile.engine.postproc.' . $this->settingsKey . '.check_directory', 1);
 		}
 
 		// Get the remote file's pathname
@@ -156,8 +170,8 @@ HTML;
 		{
 			Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - Using chunked upload, part size {$this->chunk_size}");
 
-			$offset = $config->get('volatile.engine.postproc.onedrive.offset', 0);
-			$upload_id = $config->get('volatile.engine.postproc.onedrive.upload_id', null);
+			$offset = $config->get('volatile.engine.postproc.' . $this->settingsKey . '.offset', 0);
+			$upload_id = $config->get('volatile.engine.postproc.' . $this->settingsKey . '.upload_id', null);
 
 			if (empty($upload_id))
 			{
@@ -179,7 +193,7 @@ HTML;
 				}
 
 				Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - New upload session $upload_id");
-				$config->set('volatile.engine.postproc.onedrive.upload_id', $upload_id);
+				$config->set('volatile.engine.postproc.' . $this->settingsKey . '.upload_id', $upload_id);
 			}
 
 			try
@@ -236,14 +250,14 @@ HTML;
 			{
 				Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - Chunked upload is now complete");
 
-				$config->set('volatile.engine.postproc.onedrive.offset', null);
-				$config->set('volatile.engine.postproc.onedrive.upload_id', null);
+				$config->set('volatile.engine.postproc.' . $this->settingsKey . '.offset', null);
+				$config->set('volatile.engine.postproc.' . $this->settingsKey . '.upload_id', null);
 
 				return true;
 			}
 
 			// Otherwise, continue uploading
-			$config->set('volatile.engine.postproc.onedrive.offset', $offset + $this->chunk_size);
+			$config->set('volatile.engine.postproc.' . $this->settingsKey . '.offset', $offset + $this->chunk_size);
 
 			return -1;
 		}
@@ -395,20 +409,20 @@ HTML;
 		// Retrieve engine configuration data
 		$config = Factory::getConfiguration();
 
-		$access_token = trim($config->get('engine.postproc.onedrive.access_token', ''));
-		$refresh_token = trim($config->get('engine.postproc.onedrive.refresh_token', ''));
+		$access_token = trim($config->get('engine.postproc.' . $this->settingsKey . '.access_token', ''));
+		$refresh_token = trim($config->get('engine.postproc.' . $this->settingsKey . '.refresh_token', ''));
 
-		$this->chunked = $config->get('engine.postproc.onedrive.chunk_upload', true);
-		$this->chunk_size = $config->get('engine.postproc.onedrive.chunk_upload_size', 10) * 1024 * 1024;
+		$this->chunked = $config->get('engine.postproc.' . $this->settingsKey . '.chunk_upload', true);
+		$this->chunk_size = $config->get('engine.postproc.' . $this->settingsKey . '.chunk_upload_size', 10) * 1024 * 1024;
 		$this->directory = $config->get('volatile.postproc.directory', null);
 
 		if (empty($this->directory))
 		{
-			$this->directory = $config->get('engine.postproc.onedrive.directory', '');
+			$this->directory = $config->get('engine.postproc.' . $this->settingsKey . '.directory', '');
 		}
 
 		// Sanity checks
-		if (empty($access_token) || empty($refresh_token))
+		if (empty($refresh_token))
 		{
 			$this->setError('You have not linked Akeeba Backup with your OneDrive account');
 
@@ -437,7 +451,7 @@ HTML;
 		$this->directory = Factory::getFilesystemTools()->replace_archive_name_variables($this->directory);
 		$config->set('volatile.postproc.directory', $this->directory);
 
-		$this->onedrive = new ConnectorOneDrive($access_token, $refresh_token);
+		$this->onedrive = $this->getConnectorInstance($access_token, $refresh_token);
 
 		// Validate the tokens
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - Validating the OneDrive tokens");
@@ -447,8 +461,8 @@ HTML;
 		if ($pingResult['needs_refresh'])
 		{
 			Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - OneDrive tokens were refreshed");
-			$config->set('engine.postproc.onedrive.access_token', $pingResult['access_token'], false);
-			$config->set('engine.postproc.onedrive.refresh_token', $pingResult['refresh_token'], false);
+			$config->set('engine.postproc.' . $this->settingsKey . '.access_token', $pingResult['access_token'], false);
+			$config->set('engine.postproc.' . $this->settingsKey . '.refresh_token', $pingResult['refresh_token'], false);
 
 			$profile_id = Platform::getInstance()->get_active_profile();
 			Platform::getInstance()->save_configuration($profile_id);
@@ -470,10 +484,33 @@ HTML;
 		$pingResult = $this->onedrive->ping(true);
 
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::' . __METHOD__ . " - OneDrive tokens were forcibly refreshed");
-		$config->set('engine.postproc.onedrive.access_token', $pingResult['access_token'], false);
-		$config->set('engine.postproc.onedrive.refresh_token', $pingResult['refresh_token'], false);
+		$config->set('engine.postproc.' . $this->settingsKey . '.access_token', $pingResult['access_token'], false);
+		$config->set('engine.postproc.' . $this->settingsKey . '.refresh_token', $pingResult['refresh_token'], false);
 
 		$profile_id = Platform::getInstance()->get_active_profile();
 		Platform::getInstance()->save_configuration($profile_id);
+	}
+
+	/**
+	 * Returns an OneDrive connector object instance
+	 *
+	 * @param   string  $access_token
+	 * @param   string  $refresh_token
+	 *
+	 * @return  ConnectorOneDrive
+	 */
+	protected function getConnectorInstance($access_token, $refresh_token)
+	{
+		return new ConnectorOneDrive($access_token, $refresh_token);
+	}
+
+	/**
+	 * Returns the URL to the OAuth2 helper script
+	 *
+	 * @return string
+	 */
+	protected function getOAuth2HelperUrl()
+	{
+		return ConnectorOneDrive::helperUrl;
 	}
 }

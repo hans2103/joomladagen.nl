@@ -41,8 +41,20 @@ use Akeeba\Engine\Platform;
  */
 class AkeebaBackupCLI extends AkeebaCliBase
 {
+	/**
+	 * When making HTTPS connections, should we verify the certificate validity and that the hostname matches the one
+	 * in the certificate? Turned on by default. You can disable with the --no-verify CLI option.
+	 *
+	 * @var  bool
+	 */
+	private $verifySSL = true;
+
 	public function execute()
 	{
+		// Has the user set the --no-verify option?
+		$noVerifyValue   = $this->input->get('no-verify', 999);
+		$this->verifySSL = $noVerifyValue != 999;
+
 		// Get the backup profile and description
 		$profile = $this->input->get('profile', 1, 'int');
 
@@ -398,7 +410,8 @@ ENDTEXT;
 				@curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
 				@curl_setopt($ch, CURLOPT_HEADER, false);
 				@curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifySSL);
+				@curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifySSL ? 2 : 0);
 				@curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 180);
 				@curl_setopt($ch, CURLOPT_TIMEOUT, 180);
 				$result = curl_exec($ch);

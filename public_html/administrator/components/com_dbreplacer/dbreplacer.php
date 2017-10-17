@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_dbreplacer'))
+if ( ! JFactory::getUser()->authorise('core.manage', 'com_dbreplacer'))
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
@@ -21,8 +21,8 @@ jimport('joomla.filesystem.file');
 
 // return if Regular Labs Library plugin is not installed
 if (
-	!is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
-	|| !is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+	! is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+	|| ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
 )
 {
 	$msg = JText::_('DBR_REGULAR_LABS_LIBRARY_NOT_INSTALLED')
@@ -33,7 +33,7 @@ if (
 }
 
 // give notice if Regular Labs Library plugin is not enabled
-if (!JPluginHelper::isEnabled('system', 'regularlabs'))
+if ( ! JPluginHelper::isEnabled('system', 'regularlabs'))
 {
 	$msg = JText::_('DBR_REGULAR_LABS_LIBRARY_NOT_ENABLED')
 		. ' ' . JText::sprintf('DBR_EXTENSION_CAN_NOT_FUNCTION', JText::_('COM_DBREPLACER'));

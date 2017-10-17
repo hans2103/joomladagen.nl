@@ -6,27 +6,21 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
-
+defined ('_JEXEC') or die ('restricted access');
 jimport( 'joomla.filesystem.file' );
 jimport('joomla.filesystem.folder');
-
 require_once __DIR__ . '/addons.php';
-
 class AddonParser {
     public static $loaded_addon = array();
     public static $css_content = '';
     public static $js_content = '';
     private static $sppagebuilderAddonTags = array();
-
     public static function addAddon($tag, $func)
     {
         if ( is_callable($func) )
                 self::$sppagebuilderAddonTags[$tag] = $func;
     }
-
     public static function spDoAddon($content) {
-
         if ( false === strpos( $content, '[' ) ) {
             return $content;
         }
@@ -35,7 +29,6 @@ class AddonParser {
         $pattern = self::getAddonRegex();
         return preg_replace_callback( "/$pattern/s", array('AddonParser','doAddonTag'), $content );
     }
-
     /**
      * Import/Include addon file
      *
@@ -44,11 +37,9 @@ class AddonParser {
      * @since 1.0.8
      */
     public static function getAddonPath( $addon_name = '') {
-        $app = JFactory::getApplication();
-        $template = $app->getTemplate();
+        $template = self::getTemplateName();
         $template_path = JPATH_ROOT . '/templates/' . $template;
         $plugins = self::getPluginsAddons();
-
         if ( file_exists( $template_path . '/sppagebuilder/addons/' . $addon_name . '/site.php' ) ) {
             return $template_path . '/sppagebuilder/addons/' . $addon_name;
         } elseif ( file_exists( JPATH_ROOT . '/components/com_sppagebuilder/addons/'. $addon_name . '/site.php' ) ) {
@@ -60,8 +51,6 @@ class AddonParser {
             }
         }
     }
-
-
     private static function getAddonRegex()
     {
         $tagnames = array_keys(self::$sppagebuilderAddonTags);
@@ -98,8 +87,6 @@ class AddonParser {
                 . ')'
                 . '(\\]?)';                          // 6: Optional second closing brocket for escaping shortcodes: [[tag]]
     }
-
-
     private static function doAddonTag ( $m )
     {
         // allow [[foo]] syntax for escaping a tag
@@ -116,8 +103,6 @@ class AddonParser {
                 return $m[1] . call_user_func( self::$sppagebuilderAddonTags[$tag], $attr, null,  $tag ) . $m[6];
         }
     }
-
-
     private static function addonParseAtts($text)
     {
         $atts = array();
@@ -141,27 +126,19 @@ class AddonParser {
         }
         return $atts;
     }
-
-
     public static function getAddons() {
-        $app = JFactory::getApplication();
-        $template = $app->getTemplate();
-
+        $template = self::getTemplateName();
         require_once JPATH_ROOT . '/components/com_sppagebuilder/addons/module/site.php';//include module manually
-
         $template_path = JPATH_ROOT . '/templates/' . $template;
         $tmpl_folders = array();
         if (file_exists($template_path . '/sppagebuilder/addons')) {
             $tmpl_folders = JFolder::folders( $template_path . '/sppagebuilder/addons');
         }
-
-
         $folders = JFolder::folders( JPATH_ROOT . '/components/com_sppagebuilder/addons');
         if($tmpl_folders){
             $merge_folders = array_merge( $folders, $tmpl_folders );
             $folders = array_unique( $merge_folders );
         }
-
         if (count($folders)) {
             foreach ($folders as $folder) {
                 $tmpl_file_path = $template_path . '/sppagebuilder/addons/'.$folder.'/site.php';
@@ -179,53 +156,38 @@ class AddonParser {
             }
         }
     }
-
-
     public static function viewAddons( $content, $fluid = 0 ){
-
         $layout_path = JPATH_ROOT . '/components/com_sppagebuilder/layouts';
-
         $doc = JFactory::getDocument();
-
         if (is_array($content)) {
             $output = '';
-
             foreach ($content as $row) {
                 $row->settings->dynamicId = $row->id;
-
                 // Row Visibility and ACL
                 if ( isset($row->visibility) && !$row->visibility ) {
                    continue;
                 }
-
                 if($fluid == 1) {
                   $row->settings->fullscreen = 1;
                 }
-
                 $row_layout = new JLayoutFile('row.start', $layout_path);
                 $output .= $row_layout->render(array('options' => $row->settings));
-
                 foreach ($row->columns as $column) {
-
                     $column->settings->cssClassName = $column->class_name;
                     $column->settings->cssClassName = str_replace('column-parent ', '', $column->settings->cssClassName);
                     $column->settings->cssClassName = str_replace('active-column-parent', '', $column->settings->cssClassName);
                     $column->settings->dynamicId    = $column->id;
-
                     // Column Visibility and ACL
                     if ( isset($column->visibility) && !$column->visibility ) {
                        continue;
                     }
-
                     $column_layout = new JLayoutFile('column.start', $layout_path);
                     $output .= $column_layout->render(array('options' => $column->settings));
-
                     foreach ($column->addons as $key => $addon) {
                         // Addon Visibility and ACL
                         if ( isset($addon->visibility) && !$addon->visibility ) {
                           continue;
                         }
-
                         // ACL
                         $access = true;
                         $authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
@@ -237,35 +199,34 @@ class AddonParser {
                                     $access = true;
                                 }
                             }
-
                             unset($addon->settings->acl);
                         }
-
                         if(!$access) {
                             continue;
                         }
-
                         // End ACL
-
                         if ( isset($addon->type) && $addon->type === 'inner_row' ) {
                             $output .= self::viewAddons(array($addon), 1);
                         } else {
-
                             $addon_name = $addon->name;
                             $class_name = 'SppagebuilderAddon' . ucfirst($addon_name);
                             $addon_path = AddonParser::getAddonPath( $addon_name );
-
                             if(file_exists($addon_path . '/site.php')) {
-
                                 $addon_layout = new JLayoutFile('addon.start', $layout_path);
-                                $output .= $addon_layout->render(array('addon'=>$addon)); // start addon
 
+                                //sbou start
+                                //plugin support for addonRender
+                                JPluginHelper::importPlugin( 'system' );
+                                // Get the dispatcher and load the content plugins.
+                                $dispatcher = JEventDispatcher::getInstance();
+                                $results = $dispatcher->trigger( 'onBeforeAddonRender', array( &$addon) );
+                                //sbou end
+
+                                $output .= $addon_layout->render(array('addon' => $addon )); // start addon
                                 require_once $addon_path . '/site.php';
-
                                 if ( class_exists( $class_name ) ) {
                                     $addon_obj  = new $class_name($addon);  // initialize addon class
                                     $output .= $addon_obj->render();
-
                                     // Scripts
                                     if ( method_exists( $class_name, 'scripts' ) ) {
                                       $scripts = $addon_obj->scripts();
@@ -275,12 +236,10 @@ class AddonParser {
                                         }
                                       }
                                     }
-
                                     // JS
                                     if (method_exists($class_name, 'js')) {
                                         $doc->addScriptDeclaration($addon_obj->js());
                                     }
-
                                     // Stylesheets
                                     if ( method_exists( $class_name, 'stylesheets' ) ) {
                                       $stylesheets = $addon_obj->stylesheets();
@@ -290,44 +249,34 @@ class AddonParser {
                                         }
                                       }
                                     }
-
                                     // css
                                     if (method_exists($class_name, 'css')) {
                                       $doc->addStyleDeclaration($addon_obj->css());
                                     }
-
                                 } else {
                                   $output .= AddonParser::spDoAddon(AddonParser::generateShortcode($addon));
                                 }
-
                                 $addon_layout = new JLayoutFile('addon.end', $layout_path);
                                 $output .= $addon_layout->render(); // end addon
                             }
                         }
                     }
-
                     $column_layout = new JLayoutFile('column.end', $layout_path);
                     $output .= $column_layout->render(array('options' => $column->settings));
                 }
-
                 $row_layout = new JLayoutFile('row.end', $layout_path);
                 $output .=  $row_layout->render(array('options' => $row->settings));
             }
-
             return htmlspecialchars_decode(AddonParser::spDoAddon($output));
         }else{
            return '<p>'.$content.'</p>';
         }
-
     }
-
     public static function generateShortcode($addon){
-
       if (!empty($addon->settings)) {
           $addon->settings->dynamicId = $addon->id;
           $ops = AddonParser::generateShortcodeOps($addon->settings);
       }
-
       $output = '[sp_'.$addon->name;
       if (isset($ops['default'])) {
         $output .= $ops['default'];
@@ -337,14 +286,11 @@ class AddonParser {
         $output .= $ops['repeat'];
       }
       $output .= '[/sp_'.$addon->name.']';
-
       return $output;
     }
-
     public static function generateShortcodeOps( $ops ) {
       $default = '';
       $repeat  = '';
-
       foreach ( $ops as $key => $val ) {
         if ( !is_array($val) ) {
           $default .= ' '.$key.'="'.htmlspecialchars($val).'"';
@@ -362,22 +308,16 @@ class AddonParser {
           $repeat .= $temp;
         }
       }
-
       if ( $default ) $result['default'] = $default;
       if ( $repeat ) $result['repeat'] = $repeat;
-
       return $result;
     }
-
-
     // Get list of plugin addons
     private static function getPluginsAddons() {
         $path = JPATH_PLUGINS . '/sppagebuilder';
         if(!JFolder::exists($path)) return;
-
         $plugins = JFolder::folders($path);
         if(!count($plugins)) return;
-
         $elements = array();
         foreach ($plugins as $plugin) {
             if(JPluginHelper::isEnabled('sppagebuilder', $plugin)) {
@@ -393,13 +333,19 @@ class AddonParser {
                 }
             }
         }
-
         return $elements;
     }
-
+    private static function getTemplateName() {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+      $query->select($db->quoteName(array('template')));
+      $query->from($db->quoteName('#__template_styles'));
+      $query->where($db->quoteName('client_id') . ' = 0');
+      $query->where($db->quoteName('home') . ' = 1');
+      $db->setQuery($query);
+      return $db->loadObject()->template;
+    }
 }
-
-
 function spAddonAtts( $pairs, $atts, $shortcode = '' ) {
     $atts = (array)$atts;
     $out = array();
@@ -409,8 +355,6 @@ function spAddonAtts( $pairs, $atts, $shortcode = '' ) {
         else
             $out[$name] = $default;
     }
-
     return $out;
 }
-
 AddonParser::getAddons();

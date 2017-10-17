@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,14 +24,16 @@ class Cache
 	static $group = 'regularlabs';
 	static $cache = [];
 
+	// Is the cached object in the cache memory?
 	public static function has($hash)
 	{
 		return isset(self::$cache[$hash]);
 	}
 
+	// Get the cached object from the cache memory
 	public static function get($hash)
 	{
-		if (!isset(self::$cache[$hash]))
+		if ( ! isset(self::$cache[$hash]))
 		{
 			return false;
 		}
@@ -39,6 +41,7 @@ class Cache
 		return is_object(self::$cache[$hash]) ? clone self::$cache[$hash] : self::$cache[$hash];
 	}
 
+	// Save the cached object to the cache memory
 	public static function set($hash, $data)
 	{
 		self::$cache[$hash] = $data;
@@ -46,6 +49,7 @@ class Cache
 		return $data;
 	}
 
+	// Get the cached object from the Joomla cache
 	public static function read($hash)
 	{
 		if (isset(self::$cache[$hash]))
@@ -58,19 +62,23 @@ class Cache
 		return $cache->get($hash);
 	}
 
-	public static function write($hash, $data, $ttl = 0)
+	// Save the cached object to the Joomla cache
+	public static function write($hash, $data, $time_to_life_in_minutes = 0, $force_caching = true)
 	{
 		self::$cache[$hash] = $data;
 
 		$cache = JFactory::getCache(self::$group, 'output');
 
-		if ($ttl)
+		if ($time_to_life_in_minutes)
 		{
 			// convert ttl to minutes
-			$cache->setLifeTime($ttl * 60);
+			$cache->setLifeTime($time_to_life_in_minutes * 60);
 		}
 
-		$cache->setCaching(true);
+		if ($force_caching)
+		{
+			$cache->setCaching(true);
+		}
 
 		$cache->store($data, $hash);
 

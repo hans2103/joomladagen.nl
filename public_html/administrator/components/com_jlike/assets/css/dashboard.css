@@ -1,0 +1,306 @@
+/*.tj-dashboard .navbar-inner {
+	-moz-box-shadow: 0 0 0 0;
+	-webkit-box-shadow: 0 0 0 0;
+	box-shadow: 0 0 0 0;
+}
+
+.tj-dashboard .navbar-inner{
+	background: hsl(0, 0%, 98%);
+}
+.tj-dashboard .statbox {
+	background: #EEEEEE;
+	padding: 9px;
+	position: relative;
+}
+
+.tj-dashboard .statbox .statbox-title {
+	top: 12px;
+	//color: #c7cbd5;
+	font-size: 14px;
+
+}
+
+/.tj-dashboard .statbox .statbox-value {
+	font-size: 20px;
+	font-weight: bold;
+}*/
+
+
+.tj-dashboard .no-margin-span
+{
+	margin-left: 2.5641025641026% !important;
+}
+
+.tj-dashboard .hr-margin
+{
+	margin:20px !important;
+}
+
+.tj-dashboard .navbar-inner {
+	-moz-box-shadow: 0 0 0 0;
+	-webkit-box-shadow: 0 0 0 0;
+	box-shadow: 0 0 0 0;
+}
+.tj-dashboard .parent-statbox-value
+{
+	//position: relative;
+	text-align:right;
+}
+.tj-dashboard .navbar-inner{
+	background: hsl(0, 0%, 98%);
+}
+.tj-dashboard .statbox {
+	border-radius:2px;
+	background: #EEEEEE;
+	//padding: 10px;
+	position: relative;
+	text-align:center;
+}
+
+.tj-dashboard .statbox .statbox-title {
+	top: 12px;
+	color: white;
+	display: block;
+	font-size: 13px;
+	margin-top: 4px;
+}
+
+.tj-dashboard .statbox .statbox-value {
+	font-size: 25px;
+	//font-weight: bold;
+	color: white;
+	//position: absolute;
+	top:30%;
+	right:0;
+}
+
+.tj-dashboard .statbox .statbox-overlay
+{
+	-webkit-border-radius:2px;
+	-moz-border-radius:2px;
+	border-radius:9px;
+	//width:84px;
+	padding:16px;
+	//text-align:center;
+	//margin-right:10px;
+	//float:left;
+	overflow:hidden
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-blue
+{
+	background:#36a9e1
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-lightBlue
+{
+	background:#67c2ef
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-green
+{
+	background:#7A92A3
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-darkGreen
+{
+	background:#4da74d
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-lightOrange
+{
+	background:#7A92A3
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-lightCyan
+{
+	background:rgb(46, 193, 204);
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-yellow
+{
+	background:#eae874
+}
+.tj-dashboard .statbox .statbox-overlay.statbox-red
+{
+	background:#d53f40
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-darkGreen
+{
+	background:#4da74d
+}
+
+.tj-dashboard .statbox .statbox-overlay.statbox-green
+{
+	background:#0b62a4;
+}
+/*
+.tj-dashboard [class^="icon-"], [class*=" icon-"]{
+	vertical-align:inherit;
+}
+
+.tj-dashboard .statbox-icons{
+	font-size:35px; color:white;
+	width:35px;
+}
+
+.tj-dashboard .collapse-icon {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-top: 8px solid #000;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+}
+
+
+.tj-dashboard .stat-block {
+	border: 1px solid #ccc;
+	background: white;
+	margin: 1em 0em;
+	border-top: none;
+}
+
+.tj-dashboard .stat-block-content {
+	margin: 1em;
+	min-height: .25em;
+}
+
+.tj-dashboard .stat-block-header {
+	margin-bottom: 0px;
+	border-right: none;
+	border-left: none;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+
+.tj-dashboard .stat-block-header div {
+	padding-top: 10px;
+}
+
+.tj-dashboard .stat-block-content {
+	margin: 5px;
+	min-height: 0px;
+}
+
+span.latestbutton{
+color:#0B55C4;
+cursor: pointer;
+}
+span.latestbutton:hover{
+text-decoration:underline;
+}
+*/
+
+
+.tj-dashboard [class^="icon-"], [class*=" icon-"]{
+	vertical-align:inherit;
+}
+
+.tj-dashboard .statbox-icons-j30{
+	font-size:25px;
+	color:white;
+	width:35px;
+	background:none;
+}
+
+.tj-dashboard .statbox-icons-j25{
+	font-size:25px;
+	color:white;
+}
+
+.tj-dashboard .collapse-icon {
+	display: inline-block;
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-top: 8px solid #000;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+}
+
+
+.tj-dashboard .stat-block {
+	border: 1px solid #ccc;
+	background: white;
+	margin: 1em 0em;
+	border-top: none;
+}
+
+.tj-dashboard .stat-block-content {
+	margin: 1em;
+	min-height: .25em;
+}
+
+.tj-dashboard .stat-block-header {
+	margin-bottom: 0px;
+	border-right: none;
+	border-left: none;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+
+.tj-dashboard .stat-block-header div {
+	padding-top: 10px;
+}
+
+.tj-dashboard .stat-block-content {
+	margin: 5px;
+	min-height: 0px;
+}
+
+.inline-block-class
+{
+	display:inline-block;
+}
+.media .pull-left
+{
+	margin-right:10px !important;
+}
+
+.tj-dashboard .text_right-class
+{
+	text-align:right;
+}
+
+.jlike-grath {
+position: relative;
+margin: 15px 0;
+padding: 39px 19px 14px;
+background-color: rgb(255, 255, 255);
+border: 1px solid rgb(221, 221, 221);
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+.jlike-grath:after {
+content: "Comments, Likes & Dislikes Graph";
+position: absolute;
+top: -1px;
+left: -1px;
+padding: 3px 7px;
+font-weight: bold;
+background-color: rgb(245, 245, 245);
+border: 1px solid rgb(221, 221, 221);
+color: rgb(157, 160, 164);
+-webkit-border-radius: 4px 0 4px 0;
+-moz-border-radius: 4px 0 4px 0;
+border-radius: 4px 0 4px 0;
+}
+
+.panel-heading {
+background-color: rgb(231, 232, 240);
+border-color: rgb(221, 221, 221);
+color: rgb(51, 51, 51);
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+padding: 10px 15px;
+}
+
+.jlike-info-buttons a {
+margin:3px;
+}

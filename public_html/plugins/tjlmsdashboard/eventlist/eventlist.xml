@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.1" type="plugin" group="tjlmsdashboard" method="upgrade">
+	<name>PLG_TJLMSDASHBOARD_EVENT_LIST</name>
+	<author>Techjoomla</author>
+	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.4</version>
+	<copyright>(C)techjoomla.com</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>contact@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<description>PLG_TJLMSDASHBOARD_EVENT_LIST_DESC</description>
+
+	<files>
+		<filename plugin="eventlist">eventlist.php</filename>
+		<filename>index.html</filename>
+		<folder>eventlist</folder>
+	</files>
+
+	<languages>
+		<language tag="en-GB">en-GB/en-GB.plg_tjlmsdashboard_eventlist.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_tjlmsdashboard_eventlist.sys.ini</language>
+	</languages>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="no_of_events" type="text"
+					default="5"
+					description="PLG_TJLMSDASHBOARD_EVENT_LIST_NO_OF_EVENTS_DESC"
+					label="PLG_TJLMSDASHBOARD_EVENT_LIST_NO_OF_EVENTS"
+				/>
+
+			</fieldset>
+		</fields>
+	</config>
+</extension>

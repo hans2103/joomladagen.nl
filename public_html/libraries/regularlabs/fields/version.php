@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -36,7 +36,7 @@ class JFormFieldRL_Version extends \RegularLabs\Library\Field
 		$extension = $this->get('extension');
 		$xml       = $this->get('xml');
 
-		if (!$xml && $this->form->getValue('element'))
+		if ( ! $xml && $this->form->getValue('element'))
 		{
 			if ($this->form->getValue('folder'))
 			{
@@ -46,19 +46,19 @@ class JFormFieldRL_Version extends \RegularLabs\Library\Field
 			{
 				$xml = 'administrator/modules/' . $this->form->getValue('element') . '/' . $this->form->getValue('element') . '.xml';
 			}
-			if (!JFile::exists(JPATH_SITE . '/' . $xml))
+			if ( ! JFile::exists(JPATH_SITE . '/' . $xml))
 			{
 				return '';
 			}
 		}
 
-		if (!strlen($extension) || !strlen($xml))
+		if ( ! strlen($extension) || ! strlen($xml))
 		{
 			return '';
 		}
 
 		$authorise = JFactory::getUser()->authorise('core.manage', 'com_installer');
-		if (!$authorise)
+		if ( ! $authorise)
 		{
 			return '';
 		}

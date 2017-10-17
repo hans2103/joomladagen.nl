@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -99,7 +99,7 @@ class JFormFieldRL_Modules extends \RegularLabs\Library\Field
 			$attribs = 'class="inputbox" onchange="' . $onchange . '"';
 
 			$html = '<table cellpadding="0" cellspacing="0"><tr><td style="padding: 0px;">' . "\n";
-			if (!$multiple)
+			if ( ! $multiple)
 			{
 				$val_name = $this->value;
 				if ($this->value)

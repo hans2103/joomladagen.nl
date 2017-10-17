@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -45,13 +45,13 @@ class DBReplacerController extends JControllerLegacy
 		$params->columns = JFactory::getApplication()->input->get('columns', [0], 'array');
 		$params->search  = JFactory::getApplication()->input->get('search', '', 'RAW');
 
-		if (!$params->table || $params->search == '' || !is_array($params->columns) || empty($params->columns))
+		if ( ! $params->table || $params->search == '' || ! is_array($params->columns) || empty($params->columns))
 		{
 			return;
 		}
 
 		// Get/Create the model
-		if (!$model = $this->getModel(JFactory::getApplication()->input->get('view', 'default')))
+		if ( ! $model = $this->getModel(JFactory::getApplication()->input->get('view', 'default')))
 		{
 			return;
 		}

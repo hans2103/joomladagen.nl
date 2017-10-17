@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -43,19 +43,19 @@ class JFormFieldRL_FileList extends JFormFieldList
 
 		$path = $this->get('folder');
 
-		if (!is_dir($path))
+		if ( ! is_dir($path))
 		{
 			$path = JPATH_ROOT . '/' . $path;
 		}
 
 		// Prepend some default options based on field attributes.
-		if (!$this->get('hidenone', 0))
+		if ( ! $this->get('hidenone', 0))
 		{
 			$options[] = JHtml::_('select.option', '-1', JText::alt('JOPTION_DO_NOT_USE',
 				RL_RegEx::replace('[^a-z0-9_\-]', '_', $this->fieldname)));
 		}
 
-		if (!$this->get('hidedefault', 0))
+		if ( ! $this->get('hidedefault', 0))
 		{
 			$options[] = JHtml::_('select.option', '', JText::alt('JOPTION_USE_DEFAULT',
 				RL_RegEx::replace('[^a-z0-9_\-]', '_', $this->fieldname)));
@@ -102,7 +102,7 @@ class JFormFieldRL_FileList extends JFormFieldList
 
 	private function get($val, $default = '')
 	{
-		if (!isset($this->params[$val]) || (string) $this->params[$val] == '')
+		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
 		{
 			return $default;
 		}

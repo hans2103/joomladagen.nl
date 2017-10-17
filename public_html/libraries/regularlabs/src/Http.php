@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -98,14 +98,14 @@ class Http
 		}
 
 		// only allow url calls from administrator
-		if (!JFactory::getApplication()->isAdmin())
+		if ( ! Document::isClient('administrator'))
 		{
 			die;
 		}
 
 		// only allow when logged in
 		$user = JFactory::getUser();
-		if (!$user->id)
+		if ( ! $user->id)
 		{
 			die;
 		}
@@ -116,7 +116,7 @@ class Http
 		}
 
 		// only allow url calls to regularlabs.com domain
-		if (!(RegEx::match('^https?://([^/]+\.)?regularlabs\.com/', $url)))
+		if ( ! (RegEx::match('^https?://([^/]+\.)?regularlabs\.com/', $url)))
 		{
 			die;
 		}

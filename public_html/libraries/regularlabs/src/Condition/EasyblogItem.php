@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ class EasyblogItem
 {
 	public function pass()
 	{
-		if (!$this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
+		if ( ! $this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
 		{
 			return $this->_(false);
 		}
@@ -30,19 +30,19 @@ class EasyblogItem
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentId'))
+		if ( ! $this->passItemByType($pass, 'ContentId'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Content Keywords
-		if (!$this->passItemByType($pass, 'ContentKeyword'))
+		if ( ! $this->passItemByType($pass, 'ContentKeyword'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Author
-		if (!$this->passItemByType($pass, 'Author'))
+		if ( ! $this->passItemByType($pass, 'Author'))
 		{
 			return $this->_(false);
 		}

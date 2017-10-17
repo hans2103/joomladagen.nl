@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 SpAddonsConfig::addonConfig(
 	array(
@@ -259,10 +259,9 @@ SpAddonsConfig::addonConfig(
 				),
 
 				'icon_padding'=>array(
-					'type'=>'number',
+					'type'=>'padding',
 					'title'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_PADDING'),
 					'desc'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_PADDING_DESC'),
-					'placeholder'=>'20',
 					'depends'=>array('feature_type'=>'icon')
 				),
 

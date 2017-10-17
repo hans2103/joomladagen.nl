@@ -82,6 +82,29 @@ class Container extends ContainerBase
 	protected static $instances = array();
 
 	/**
+	 * The container SHOULD NEVER be serialised. If this happens, it means that any of the installed version is doing
+	 * something REALLY BAD, so let's die and inform the user of what it's going on.
+	 */
+	public function __sleep()
+	{
+		// If the site is in debug mode we die and let the user figure it out
+		if (defined('JDEBUG') && JDEBUG)
+		{
+			$msg = <<< END
+Something on your site is broken and tries to save the plugin state in the cache. This is a major security issue and
+will cause your site to not work properly. Go to your site's backend, Global Configuration and set Caching to OFF as a
+temporary solution. Possible causes: older versions of JoomlaShine templates, JomSocial, BetterPreview and other third
+party Joomla! extensions. 
+END;
+
+			die($msg);
+		}
+
+		// Otherwise we serialise the Container
+		return array('values', 'factories', 'protected', 'frozen', 'raw', 'keys');
+	}
+
+	/**
 	 * Returns a container instance for a specific component. This method goes through fof.xml to read the default
 	 * configuration values for the container. You are advised to use this unless you have a specific reason for
 	 * instantiating a Container without going through the fof.xml file.
@@ -633,13 +656,6 @@ class Container extends ContainerBase
 		{
 			$this['session'] = function ()
 			{
-				\JLog::add(
-					__CLASS__ . ': The session property is deprecated. Use ->platform->getSessionVar/setSessionVar instead',
-					\JLog::WARNING,
-					'deprecated'
-				);
-
-
 				return \JFactory::getSession();
 			};
 		}

@@ -21,7 +21,6 @@
 
 	<fieldset name="publishing" label="JGLOBAL_FIELDSET_PUBLISHING">
 
-		<field name="boxed_layout" type="hidden" id="boxed_layout" default="0" />
 		<field name="catid" type="categoryedit" extension="com_sppagebuilder" label="COM_SPPAGEBUILDER_CATEGORY" description="COM_SPPAGEBUILDER_CATEGORY_DESC" addfieldpath="/administrator/components/com_categories/models/fields">
 			<option value="0">COM_SPPAGEBUILDER_SELECT_CATEGORY</option>
 		</field>
@@ -42,5 +41,13 @@
 		<field name="modified" type="hidden" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL" readonly="true" filter="unset" />
 		<field name="modified_on" type="hidden" label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_CONTENT_FIELD_MODIFIED_DESC" size="22" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" />
 		<field name="hits" type="hidden" label="JGLOBAL_HITS" description="COM_SPPAGEBUILDER_HITS_DESC" readonly="true" />
+	</fieldset>
+
+	<fieldset name="permissions" label="Permissions">
+		<field name="asset_id" type="hidden" filter="unset" />
+		<field name="rules" type="rules" label="JFIELD_RULES_LABEL"
+			translate_label="false" filter="rules"
+			component="com_sppagebuilder" section="page" validate="rules"
+		/>
 	</fieldset>
 </form>

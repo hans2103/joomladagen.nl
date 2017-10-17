@@ -1,12 +1,12 @@
 <?php
 /**
- * @package SP Page Builder
- * @author JoomShaper http://www.joomshaper.com
- * @copyright Copyright (c) 2010 - 2016 JoomShaper
- * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
+* @package SP Page Builder
+* @author JoomShaper http://www.joomshaper.com
+* @copyright Copyright (c) 2010 - 2016 JoomShaper
+* @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 JHtml::_('jquery.framework');
 jimport('joomla.application.component.helper');
@@ -18,18 +18,21 @@ $app = JFactory::getApplication();
 $params = JComponentHelper::getParams('com_sppagebuilder');
 
 if ($params->get('fontawesome',1)) {
-	$doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/font-awesome.min.css');
+	$doc->addStyleSheet(JUri::base(true) . '/components/com_sppagebuilder/assets/css/font-awesome.min.css');
 }
 if (!$params->get('disableanimatecss',0)) {
-	$doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/animate.min.css');
+	$doc->addStyleSheet(JUri::base(true) . '/components/com_sppagebuilder/assets/css/animate.min.css');
 }
 if (!$params->get('disablecss',0)) {
-	$doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/sppagebuilder.css');
+	$doc->addStyleSheet(JUri::base(true) . '/components/com_sppagebuilder/assets/css/sppagebuilder.css');
 }
-
 if ($params->get('addcontainer', 1)) {
 	$doc->addStyleSheet(JUri::base(true) . '/components/com_sppagebuilder/assets/css/sppagecontainer.css');
 }
+
+$doc->addScript(JUri::base(true) . '/components/com_sppagebuilder/assets/js/parallax.min.js');
+
+$doc->addScript(JUri::base(true) . '/components/com_sppagebuilder/assets/js/sppagebuilder.js');
 
 $menus = $app->getMenu();
 $menu = $menus->getActive();
@@ -43,7 +46,7 @@ if ($menu) {
 	$menuheading 		= $menu->params->get('page_heading');
 }
 
-$page = $this->data;
+$page = $this->item;
 
 require_once JPATH_COMPONENT_ADMINISTRATOR . '/builder/classes/addon.php';
 $page->text = SpPageBuilderAddonHelper::__($page->text);
@@ -53,29 +56,36 @@ $content = json_decode($page->text);
 if(isset($page->css) && $page->css) {
 	$doc->addStyledeclaration($page->css);
 }
-
 ?>
 
 <div id="sp-page-builder" class="sp-page-builder <?php echo $menuClassPrefix; ?> page-<?php echo $page->id; ?>">
-	<?php if($showPageHeading){ ?>
-	<div class="page-header">
-		<h1 itemprop="name">
-			<?php
-			if($menuheading)
-			{
-				echo $menuheading;
-			} else {
-				echo $page->title;
-			}
-			?>
-		</h1>
-	</div>
-	<?php } ?>
+
+	<?php
+	if($showPageHeading) {
+		?>
+		<div class="page-header">
+			<h1 itemprop="name">
+				<?php
+				if($menuheading) {
+					echo $menuheading;
+				} else {
+					echo $page->title;
+				}
+				?>
+			</h1>
+		</div>
+		<?php
+	}
+	?>
 
 	<div class="page-content">
 		<?php echo AddonParser::viewAddons( $content ); ?>
+		<?php
+		$canEdit = $user->authorise('core.edit', 'com_sppagebuilder') || $user->authorise('core.edit', 'com_sppagebuilder.page.' . $page->id) || ($user->authorise('core.edit.own', 'com_sppagebuilder') && ($this->item->created_by == $user->id));
+
+		if ($canEdit && $user->id) {
+			echo '<a class="sp-pagebuilder-page-edit" href="'. JURI::base(true) .'/index.php?option=com_sppagebuilder&view=form&layout=edit&id=' . $page->id . '&layout=edit"><i class="fa fa-edit"></i> ' . JText::_('COM_SPPAGEBUILDER_PAGE_EDIT') . '</a>';
+		}
+		?>
 	</div>
 </div>
-
-<?php
-$doc->addScript(JUri::base(true).'/components/com_sppagebuilder/assets/js/sppagebuilder.js');

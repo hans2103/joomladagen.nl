@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\Sourcerer;
+namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
@@ -21,7 +21,7 @@ class Security
 
 	public static function get()
 	{
-		if (!is_null(self::$security))
+		if ( ! is_null(self::$security))
 		{
 			return self::$security;
 		}
@@ -38,7 +38,7 @@ class Security
 
 	public static function set($article = null)
 	{
-		if (!isset($article->created_by))
+		if ( ! isset($article->created_by))
 		{
 			return;
 		}
@@ -71,13 +71,13 @@ class Security
 		// passed = creator is equal or higher than security group level
 		$security           = (object) [];
 		$pass               = array_intersect($security_level, $groups);
-		$security->pass     = (!empty($pass));
+		$security->pass     = ( ! empty($pass));
 		$pass               = array_intersect($security_css, $groups);
-		$security->pass_css = (!empty($pass));
+		$security->pass_css = ( ! empty($pass));
 		$pass               = array_intersect($security_js, $groups);
-		$security->pass_js  = (!empty($pass));
+		$security->pass_js  = ( ! empty($pass));
 		$pass               = array_intersect($security_php, $groups);
-		$security->pass_php = (!empty($pass));
+		$security->pass_php = ( ! empty($pass));
 
 		self::$security = $security;
 	}

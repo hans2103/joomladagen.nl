@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 1.5//DTD plugin 1.0//EN" "http://www.joomla.org/xml/dtd/1.5/plugin-install.dtd">
+<extension version="3.0" type="plugin" group="content" method="upgrade">
+<name>PLG_CONTENT_JLIKE_JTICKETING_NAME</name>
+<creationDate>26th Jul 2017</creationDate>
+<author>TechJoomla</author>
+<authorEmail>extensions@techjoomla.com</authorEmail>
+<authorUrl>http://www.techjoomla.com</authorUrl>
+<copyright>Copyright(C)2012-17 TechJoomla</copyright>
+<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+<version>2.0.4</version>
+<description>PLG_CONTENT_JLIKE_JTICKETING_NAME</description>
+<files>
+	<filename plugin="jlike_events">jlike_events.php</filename>
+</files>
+<languages folder="language">
+		<language tag="en-GB">en-GB.plg_content_jlike_events.ini</language>
+		<language tag="en-GB">en-GB.plg_content_jlike_events.sys.ini</language>
+</languages>
+<!-- Fields for Joomla 1.6.x and onwards -->
+<config name="params">
+	<fields name="params">
+		<fieldset name="basic" label="PLG_JLIKE_JTICKETING_PARAMETER">
+
+			<field name="allow_like" type="radio" default="1" label="PLG_JLIKE_JTICKETING_LIKE_FOR_EVENT" description="PLG_JLIKE_JTICKETING_LIKE_FOR_EVENT_DESC" class="btn-group">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="allow_dislike" type="radio" label="PLG_JLIKE_JTICKETING_DISLIKE_FOR_EVENT" description="PLG_JLIKE_JTICKETING_DISLIKE_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="allow_annotation" type="hidden" default="0" label="PLG_JLIKE_JTICKETING_NOTES_FOR_EVENT" description="PLG_JLIKE_JTICKETING_NOTES_FOR_EVENT_DESC" class="btn-group" />
+
+			<field name="allow_user_lables" type="hidden" default="0" label="PLG_JLIKE_JTICKETING_LIST_FOR_EVENT" description="PLG_JLIKE_JTICKETING_LIST_FOR_EVENT_DESC" class="btn-group" />
+
+			<!--field name="allow_annotation" type="radio" default="0" label="PLG_JLIKE_JTICKETING_NOTES_FOR_EVENT" description="PLG_JLIKE_JTICKETING_NOTES_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="allow_user_lables" type="radio" default="0" label="PLG_JLIKE_JTICKETING_LIST_FOR_EVENT" description="PLG_JLIKE_JTICKETING_LIST_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field-->
+
+			<field name="show_users" type="radio" default="1" label="PLG_JLIKE_JTICKETING_PWLTC_FOR_EVENT" description="PLG_JLIKE_JTICKETING_PWLTC_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="which_users_to_show" class="btn-group" type="radio" default="all" label="PLG_JLIKE_JTICKETING_PWLTC_FOR_EVENT_OPTION" description="PLG_JLIKE_JTICKETING_PWLTC_FOR_EVENT_OPTION_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="friends">PLG_JLIKE_JTICKETING_FRIENDS</option>
+				<option value="all">PLG_JLIKE_JTICKETING_ALL</option>
+			</field>
+			<field name="no_of_users_to_show" class="btn-group" type="text" default="5" label="PLG_JLIKE_JTICKETING_NO_OF_PWLTCUSERS" description="PLG_JLIKE_JTICKETING_NO_OF_PWLTCUSERS_DESC"/>
+
+			<field name="allow_activity_stream" class="btn-group" type= "radio" default="1" label="PLG_JLIKE_JTICKETING_ALLOW_ACTIVITY_STREAM" description="PLG_JLIKE_JTICKETING_ALLOW_ACTIVITY_STREAM_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<!--<field name="allow_comments" type="radio" label="PLG_JLIKE_JTICKETING_COMMENT_FOR_EVENT" description="PLG_JLIKE_JTICKETING_COMMENT_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="allow_recommend" type="radio" label="PLG_JLIKE_JTICKETING_RECOMMEND_FOR_EVENT" description="PLG_JLIKE_JTICKETING_RECOMMEND_FOR_EVENT_DESC" class="btn-group">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>-->
+
+		</fieldset>
+		<fieldset name="jlike_comments" label="PLG_JLIKE_JTICKETING_COMMENTS_SET" description="" addfieldpath="/administrator/components/com_jlike/elements" >
+			<field name="allow_comments" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_ALLOW_COMMETNTS" description="PLG_JLIKE_JTICKETING_ALLOW_COMMETNTS_DESC" >
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="no_of_commets_to_show" class="btn-group" type="text" default="5" label="PLG_JLIKE_JTICKETING_NO_OF_COMMENTS_SHOW" description="PLG_JLIKE_JTICKETING_NO_OF_COMMENTS_SHOW_DESC" />
+
+			<field name="allow_threaded_comment" class="btn-group" type="radio" default="" label="PLG_JLIKE_JTICKETING_ALLOW_THREDED" description="PLG_JLIKE_JTICKETING_ALLOW_THREDED_DESC" >
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>1
+			</field>
+			<field name="threaded_level" class="btn-group" type="text" default="3" label="PLG_JLIKE_JTICKETING_THREDED_LEVEL" description="PLG_JLIKE_JTICKETING_THREDED_LEVEL_DESC" />
+
+			<field name="limit_on_comment_lenght" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_LIMIT_ON_COMMENT_LENGTH" description="PLG_JLIKE_JTICKETING_LIMIT_ON_COMMENT_LENGTH_DESC" >
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="comment_length" class="btn-group" type="text" default="200" label="PLG_JLIKE_JTICKETING_COMMENT_LENGTH" description="PLG_JLIKE_JTICKETING_COMMENT_LENGTH_DESC" />
+
+			<field name="allow_activity_stream_comment" class="btn-group" type= "radio" default="1" label="PLG_JLIKE_JTICKETING_ALLOW_ACTIVITY_STREAM_COMMENT" description="PLG_JLIKE_JTICKETING_ALLOW_ACTIVITY_STREAM_COMMENT_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="js_notification" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_COMMENT_NOTIFICATION" description="PLG_JLIKE_JTICKETING_COMMENT_NOTIFICATION_DESC" >
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="js_notification_replies" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_COMMENT_NOTIFICATION_REPLY" description="PLG_JLIKE_JTICKETING_COMMENT_NOTIFICATION_REPLY_DESC" >
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="like_dislike_comments" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_ALLOW_LIKE_DISLIKE_COMMENT" description="PLG_JLIKE_JTICKETING_ALLOW_LIKE_DISLIKE_COMMENT_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="show_comment_dislike_button" class="btn-group" type="radio" default="0" label="PLG_JLIKE_JTICKETING_HIDE_DISLIKE_BUTTON" description="PLG_JLIKE_JTICKETING_HIDE_DISLIKE_BUTTON_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="js_notification_on_like" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_NOTIFICATION_ON_LIKE" description="PLG_JLIKE_JTICKETING_NOTIFICATION_ON_LIKE_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="js_notification_on_dislike" class="btn-group" type="radio" default="0" label="PLG_JLIKE_JTICKETING_NOTIFICATION_ON_DISLIKE" description="PLG_JLIKE_JTICKETING_NOTIFICATION_ON_DISLIKE_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+
+		<fieldset name="recommend_assignment" label="PLG_JLIKE_JTICKETING_RECOMMEND_ASSG_SET" description="" >
+			<field name="recommendation" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_RECOMMEND_FOR_EVENT" description="PLG_JLIKE_JTICKETING_RECOMMEND_FOR_EVENT_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="assignment" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_ASSIGNMENT_FOR_EVENT" description="PLG_JLIKE_JTICKETING_ASSIGNMENT_FOR_EVENT_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="which_users_in_list" class="btn-group" type="radio" default="all" label="PLG_JLIKE_JTICKETING_WHICH_USERS_TO_SHOW_IN_LIST" description="PLG_JLIKE_JTICKETING_WHICH_USERS_TO_SHOW_IN_LIST_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">PLG_JLIKE_JTICKETING_FRIENDS</option>
+				<option value="1">PLG_JLIKE_JTICKETING_ALL</option>
+			</field>
+			<!--Added by Deepali to Set goal config-->
+			<field name="set_goal" class="btn-group" type="radio" default="1" label="PLG_JLIKE_JTICKETING_SELFASSIGNMENT_FOR_EVENT" description="PLG_JLIKE_JTICKETING_SELFASSIGNMENT_FOR_EVENT_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<!--ends here-->
+		</fieldset>
+
+		<field name="jlike_enable_rating" class="btn-group" type="hidden" default="0" label="PLG_JLIKE_JTICKETING_ENABLE_RATING" description="PLG_JLIKE_JTICKETING_ENABLE_RATING_DESC" />
+
+		<field name="jlike_allowUserToRate" class="btn-group" type="hidden" default="registoredUser" label="PLG_JLIKE_JTICKETING_ALLOW_RATING" description="PLG_JLIKE_JTICKETING_ALLOW_RATING_DESC" />
+
+		<!--fieldset name="jlike_reviews" label="PLG_JLIKE_JTICKETING_REVIEWS_SET" description="" addfieldpath="" >
+			<field name="jlike_enable_rating" class="btn-group" type="radio" default="" label="PLG_JLIKE_JTICKETING_ENABLE_RATING" description="PLG_JLIKE_JTICKETING_ENABLE_RATING_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="jlike_allowUserToRate" class="btn-group" type="radio" default="registoredUser" label="PLG_JLIKE_JTICKETING_ALLOW_RATING" description="PLG_JLIKE_JTICKETING_ALLOW_RATING_DESC">
+					<option value="registoredUser">PLG_JLIKE_JTICKETING_REGISTORED_USER</option>
+					<option value="enrolledUser">PLG_JLIKE_JTICKETING_ENROLLED_COURCE_USER</option>
+
+			</field>
+		</fieldset-->
+
+	</fields>
+</config>
+</extension>

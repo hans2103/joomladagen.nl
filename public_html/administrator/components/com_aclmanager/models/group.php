@@ -38,20 +38,42 @@ class AclmanagerModelGroup extends JModelList
 					$rule[$s]= (array_filter($action,'strlen'));
 				}
 
-				$currentrules = JAccess::getAssetRules($id, false, false);
+				$query = $this->_db->getQuery(true);
+				$query->clear()
+					->select($db->qn('rules'))
+					->from($db->qn('#__assets'))
+					->where($db->qn('id') . ' = ' . $db->q($id));
+				$currentrules = $db->setQuery($query)->loadResult();
+
+				// Convert json to array
 				$newrules = json_decode($currentrules,true);
 
-				foreach($newrules as $i=>$newrule) {
-					unset($newrule[$group]);
-					if(array_key_exists($i, $rule)){
-						$newrules[$i] = $newrule + $rule[$i];
-					} else {
-						$newrules[$i] = $newrule;
+				// Filter out old permissions for group
+				foreach ($newrules as $action => $groups) {
+					if(isset($newrules[$action][$group])) {
+						unset($newrules[$action][$group]);
 					}
-					ksort($newrules[$i]);
 				}
 
-				$newrules = new JAccessRules($newrules);
+				// Combine old and new permissions
+				$newrules = array_replace_recursive($newrules, $rule);
+
+				// Remove empty actions
+				foreach ($newrules as $action=>$newrule) {
+					if(empty($newrule)) {
+						unset($newrules[$action]);
+					}
+				}
+
+				// Make sure all values are int
+				foreach ($newrules as $action => $groups) {
+					foreach($groups as $groupid => $value) {
+						$newrules[$action][$groupid] = (int) $value;
+					}
+				}
+
+				// Convert array to json
+				$newrules = json_encode((object) $newrules,true);
 
 				// Save new permissions if different
 				if($currentrules != $newrules) {
@@ -221,15 +243,14 @@ class AclmanagerModelGroup extends JModelList
 
 			foreach ($assets as $key=>$asset)
 			{
-				if(!$asset->rules) {$asset->rules = '{}';}
-				$rules			= json_decode($asset->rules,true);
-				$rules			= array_keys($rules);
 				$asset->checks	= array();
 				$asset->rule	= array();
 				$asset->third	= 0;
+				$asset->actions = array();
 				$assetRules		= new JAccessRules;
 				$assetRules 	= new $assetRules($asset->rules);
 
+				$assetname = explode('.', $asset->name);
 				if($asset->level == 1) {
 					$asset->component = $asset->name;
 				} else {
@@ -241,8 +262,48 @@ class AclmanagerModelGroup extends JModelList
 					unset($assets[$key]);
 				}
 
-				foreach ($rules as $rule)
-				{
+				// Get available actions
+				if($asset->level == 0) {
+					$asset->actions = JAccess::getActionsFromFile(
+						JPATH_ADMINISTRATOR . '/components/com_config/model/form/application.xml',
+						"/form/fieldset[@name='permissions']/field/"
+					);
+				} else {
+					$section = isset($assetname[1]) ? $assetname[1] : 'component';
+
+					$asset->actions = JAccess::getActionsFromFile(
+						JPATH_ADMINISTRATOR . '/components/' . $asset->component . '/access.xml',
+						"/access/section[@name='" . $section . "']/"
+					);
+
+					if (empty($asset->actions)) {
+						$asset->actions = JAccess::getActionsFromFile(
+							JPATH_ADMINISTRATOR . '/components/' . $asset->component . '/config.xml',
+							"/config/fieldset/field[@section='" . $section . "']/"
+						);
+					}
+				}
+
+				// If component & no actions, set default actions
+				if(empty($asset->actions) && $asset->level == 1) {
+					$asset->actions = JAccess::getActionsFromFile(
+						JPATH_ADMINISTRATOR . '/components/com_cache/config.xml',
+						"/config/fieldset/field[@section='component']/"
+					);
+				}
+
+				// Still no actions? Prevent errors
+				if(empty($asset->actions)) {
+					$asset->actions = array();
+				}
+
+				// Create rules array
+				$asset->simpleactions = array();
+				foreach ($asset->actions as $assetaction) {
+					$asset->simpleactions[] = $assetaction->name;
+				}
+
+				foreach ($asset->simpleactions as $rule) {
 					$asset->checks[$rule]	= JAccess::checkGroup($groupId, $rule, $asset->id);
 					$asset->rule[$rule]		= $assetRules->allow($rule, $groupId);
 
@@ -347,7 +408,8 @@ class AclmanagerModelGroup extends JModelList
 				'a.id AS id, a.name AS name, a.title AS title, a.level AS level, a.parent_id AS parent, a.rules AS rules')
 		);
 		$query->from('#__assets AS a');
-		$query->where('a.name not like \'com_admin\' AND a.name not like \'com_config\' AND a.name not like \'com_cpanel\' AND a.name not like \'com_login\' AND a.name not like \'com_mailto\' AND a.name not like \'com_massmail\' AND a.name not like \'com_wrapper\' AND a.name not like \'com_contenthistory\' AND a.name not like \'com_ajax\'');
+		$query->where('a.name not like \'com_admin\' AND a.name not like \'com_config\' AND a.name not like \'com_cpanel\' AND a.name not like \'com_login\' AND a.name not like \'com_mailto\' AND a.name not like \'com_massmail\' AND a.name not like \'com_wrapper\' AND a.name not like \'com_contenthistory\' AND a.name not like \'com_ajax\' AND a.name not like \'com_fields\'');
+		$query->where('(a.name not like \'#__ucm_content.%\')');
 
 		// Filter on the categories.
 		if ($this->getState('filter.category') == '0') {

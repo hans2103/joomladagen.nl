@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -48,11 +48,11 @@ class PluginTag
 	 * @param string $string
 	 * @param string $main_key
 	 * @param array  $known_boolean_keys
-	 * @param array  $keep_escaped
+	 * @param array  $keep_escaped_chars
 	 *
 	 * @return object
 	 */
-	public static function getAttributesFromString($string = '', $main_key = 'title', $known_boolean_keys = [], $keep_escaped = [','])
+	public static function getAttributesFromString($string = '', $main_key = 'title', $known_boolean_keys = [], $keep_escaped_chars = [','])
 	{
 		if (empty($string))
 		{
@@ -71,17 +71,17 @@ class PluginTag
 		$string = RegEx::replace('((?:^|")\s*)&nbsp;(\s*(?:[a-z]|$))', '\1 \2', $string);
 
 		// Only one value, so return simple key/value object
-		if (strpos($string, '|') == false && !RegEx::match('=\s*"', $string))
+		if (strpos($string, '|') == false && ! RegEx::match('=\s*"', $string))
 		{
-			self::unprotectSpecialChars($string, $keep_escaped);
+			self::unprotectSpecialChars($string, $keep_escaped_chars);
 
 			return (object) [$main_key => $string];
 		}
 
 		// No foo="bar" syntax found, so assume old syntax
-		if (!RegEx::match('=\s*"', $string))
+		if ( ! RegEx::match('=\s*"', $string))
 		{
-			self::unprotectSpecialChars($string, $keep_escaped);
+			self::unprotectSpecialChars($string, $keep_escaped_chars);
 
 			$attributes = self::getAttributesFromStringOld($string, [$main_key]);
 			self::convertOldSyntax($attributes, $known_boolean_keys);
@@ -90,9 +90,9 @@ class PluginTag
 		}
 
 		// Cannot find right syntax, so return simple key/value object
-		if (!RegEx::matchAll('(?:^|\s)(?P<key>[a-z0-9-_]+)\s*(?P<not>\!?)=\s*"(?P<value>.*?)"', $string, $matches))
+		if ( ! RegEx::matchAll('(?:^|\s)(?<key>[a-z0-9-_]+)\s*(?<not>\!?)=\s*"(?<value>.*?)"', $string, $matches))
 		{
-			self::unprotectSpecialChars($string, $keep_escaped);
+			self::unprotectSpecialChars($string, $keep_escaped_chars);
 
 			return (object) [$main_key => $string];
 		}
@@ -101,7 +101,7 @@ class PluginTag
 
 		foreach ($matches as $match)
 		{
-			$tag->{$match['key']} = self::getAttributeValueFromMatch($match, $known_boolean_keys, $keep_escaped);
+			$tag->{$match['key']} = self::getAttributeValueFromMatch($match, $known_boolean_keys, $keep_escaped_chars);
 		}
 
 		return $tag;
@@ -112,15 +112,15 @@ class PluginTag
 	 *
 	 * @param array $match
 	 * @param array $known_boolean_keys
-	 * @param array $keep_escaped
+	 * @param array $keep_escaped_chars
 	 *
 	 * @return bool|int|string
 	 */
-	private static function getAttributeValueFromMatch($match, $known_boolean_keys = [], $keep_escaped = [','])
+	private static function getAttributeValueFromMatch($match, $known_boolean_keys = [], $keep_escaped_chars = [','])
 	{
 		$value = $match['value'];
 
-		self::unprotectSpecialChars($value, $keep_escaped);
+		self::unprotectSpecialChars($value, $keep_escaped_chars);
 
 		if (is_numeric($value)
 			&& (
@@ -163,8 +163,7 @@ class PluginTag
 	public static function protectSpecialChars(&$string)
 	{
 		$unescaped_chars = array_keys(self::$protected_characters);
-		array_walk($unescaped_chars, function (&$char)
-		{
+		array_walk($unescaped_chars, function (&$char) {
 			$char = '\\' . $char;
 		});
 
@@ -175,7 +174,7 @@ class PluginTag
 			$string
 		);
 
-		if (!RegEx::matchAll(
+		if ( ! RegEx::matchAll(
 			'(<.*?>|{.*?}|\[.*?\])',
 			$string,
 			$tags,
@@ -204,22 +203,21 @@ class PluginTag
 	 * Replace protected characters in the string with the original special versions
 	 *
 	 * @param string $string
-	 * @param bool   $keep_escaped
+	 * @param array  $keep_escaped_chars
 	 */
-	public static function unprotectSpecialChars(&$string, $keep_escaped = false)
+	public static function unprotectSpecialChars(&$string, $keep_escaped_chars = [])
 	{
 		$unescaped_chars = array_keys(self::$protected_characters);
 
-		if (!empty($keep_escaped))
+		if ( ! empty($keep_escaped_chars))
 		{
-			array_walk($unescaped_chars, function (&$char, $key, $keep_escaped)
-			{
-				if (is_array($keep_escaped) && !in_array($char, $keep_escaped))
+			array_walk($unescaped_chars, function (&$char, $key, $keep_escaped_chars) {
+				if (is_array($keep_escaped_chars) && ! in_array($char, $keep_escaped_chars))
 				{
 					return;
 				}
 				$char = '\\' . $char;
-			}, $keep_escaped);
+			}, $keep_escaped_chars);
 		}
 
 		// replace special markup with unescaped characters
@@ -256,7 +254,7 @@ class PluginTag
 		// protect all html tags
 		RegEx::matchAll('</?[a-z][^>]*>', $string, $tags);
 
-		if (!empty($tags))
+		if ( ! empty($tags))
 		{
 			foreach ($tags as $tag)
 			{
@@ -292,7 +290,7 @@ class PluginTag
 			{
 				RegEx::matchAll(RegEx::quote($tag_start) . '(.*?)' . RegEx::quote($tag_end), $val, $tags);
 
-				if (!empty($tags))
+				if ( ! empty($tags))
 				{
 					foreach ($tags as $tag)
 					{
@@ -350,7 +348,7 @@ class PluginTag
 
 			foreach ($aliases as $alias)
 			{
-				if (!isset($attributes->{$alias}))
+				if ( ! isset($attributes->{$alias}))
 				{
 					continue;
 				}
@@ -393,7 +391,7 @@ class PluginTag
 			return true;
 		}
 
-		if (!isset($attributes->{$alias}))
+		if ( ! isset($attributes->{$alias}))
 		{
 			return false;
 		}
@@ -417,7 +415,7 @@ class PluginTag
 
 		foreach ($attributes->params as $i => $param)
 		{
-			if (!$param)
+			if ( ! $param)
 			{
 				continue;
 			}
@@ -482,9 +480,9 @@ class PluginTag
 		$html_tag_group = 'html_tag_' . $group_id;
 
 		$block_elements = Html::getBlockElements(['div']);
-		$block_element  = '(?P<' . $group . '>' . implode('|', $block_elements) . ')';
+		$block_element  = '(?<' . $group . '>' . implode('|', $block_elements) . ')';
 
-		$other_html = '[^<]*(<(?P<' . $html_tag_group . '>[a-z][a-z0-9_-]*)[\s>]([^<]*</(?P=' . $html_tag_group . ')>)?[^<]*)*';
+		$other_html = '[^<]*(<(?<' . $html_tag_group . '>[a-z][a-z0-9_-]*)[\s>]([^<]*</(?P=' . $html_tag_group . ')>)?[^<]*)*';
 
 		// Grab starting block element tag and any html after it (that is not the same block element starting/ending tag).
 		return '(?:'
@@ -517,15 +515,22 @@ class PluginTag
 	 *
 	 * @param array $block_elements
 	 * @param array $inline_elements
+	 * @param array $excluded_block_elements
 	 *
 	 * @return string
 	 */
-	public static function getRegexSurroundingTagsPre($block_elements = [], $inline_elements = ['span'])
+	public static function getRegexSurroundingTagsPre($block_elements = [], $inline_elements = ['span'], $excluded_block_elements = [])
 	{
-		$block_elements = !empty($block_elements) ? $block_elements : Html::getBlockElements();
+		$block_elements = ! empty($block_elements) ? $block_elements : Html::getBlockElements($excluded_block_elements);
 
-		return '(?:<(?:' . implode('|', $block_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*)?'
-			. '(?:<(?:' . implode('|', $inline_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*){0,3}';
+		$regex = '(?:<(?:' . implode('|', $block_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*)?';
+
+		if ( ! empty($inline_elements))
+		{
+			$regex .= '(?:<(?:' . implode('|', $inline_elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*){0,3}';
+		}
+
+		return $regex;
 	}
 
 	/**
@@ -534,15 +539,24 @@ class PluginTag
 	 *
 	 * @param array $block_elements
 	 * @param array $inline_elements
+	 * @param array $excluded_block_elements
 	 *
 	 * @return string
 	 */
-	public static function getRegexSurroundingTagsPost($block_elements = [], $inline_elements = ['span'])
+	public static function getRegexSurroundingTagsPost($block_elements = [], $inline_elements = ['span'], $excluded_block_elements = [])
 	{
-		$block_elements = !empty($block_elements) ? $block_elements : Html::getBlockElements();
+		$block_elements = ! empty($block_elements) ? $block_elements : Html::getBlockElements($excluded_block_elements);
 
-		return '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $inline_elements) . ')>){0,3}'
-			. '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $block_elements) . ')>)?';
+		$regex = '';
+
+		if ( ! empty($inline_elements))
+		{
+			$regex .= '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $inline_elements) . ')>){0,3}';
+		}
+
+		$regex .= '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $block_elements) . ')>)?';
+
+		return $regex;
 	}
 
 	/**
@@ -555,7 +569,7 @@ class PluginTag
 	 */
 	public static function getRegexSurroundingTagPre($elements = [])
 	{
-		$elements = !empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
+		$elements = ! empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
 
 		return '(?:<(?:' . implode('|', $elements) . ')(?: [^>]*)?>\s*(?:<br ?/?>\s*)*)?';
 	}
@@ -570,7 +584,7 @@ class PluginTag
 	 */
 	public static function getRegexSurroundingTagPost($elements = [])
 	{
-		$elements = !empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
+		$elements = ! empty($elements) ? $elements : array_merge(Html::getBlockElements(), ['span']);
 
 		return '(?:(?:\s*<br ?/?>)*\s*<\/(?:' . implode('|', $elements) . ')>)?';
 	}
@@ -595,7 +609,7 @@ class PluginTag
 		$attributes = '(?:\s+[a-z0-9-_]+' . $value . ')+';
 
 		$required_attributes = ArrayHelper::toArray($required_attributes);
-		if (!empty($required_attributes))
+		if ( ! empty($required_attributes))
 		{
 			$attributes = '(?:' . $attributes . ')?' . '(?:\s+' . implode('|', $required_attributes) . ')' . $value . '(?:' . $attributes . ')?';
 		}
@@ -605,7 +619,7 @@ class PluginTag
 			$attributes = '\s*(?:' . $attributes . ')?';
 		}
 
-		if (!$include_ending)
+		if ( ! $include_ending)
 		{
 			return '<' . $tags . $attributes . '\s*/?>';
 		}
@@ -632,9 +646,9 @@ class PluginTag
 		$start_div = ['pre' => '', 'tag' => '', 'post' => ''];
 		$end_div   = ['pre' => '', 'tag' => '', 'post' => ''];
 
-		if (!empty($start_tag)
+		if ( ! empty($start_tag)
 			&& RegEx::match(
-				'^(?P<pre>.*?)(?P<tag>' . $tag_start . 'div(?: .*?)?' . $tag_end . ')(?P<post>.*)$',
+				'^(?<pre>.*?)(?<tag>' . $tag_start . 'div(?: .*?)?' . $tag_end . ')(?<post>.*)$',
 				$start_tag,
 				$match
 			)
@@ -643,9 +657,9 @@ class PluginTag
 			$start_div = $match;
 		}
 
-		if (!empty($end_tag)
+		if ( ! empty($end_tag)
 			&& RegEx::match(
-				'^(?P<pre>.*?)(?P<tag>' . $tag_start . '/div' . $tag_end . ')(?P<post>.*)$',
+				'^(?<pre>.*?)(?<tag>' . $tag_start . '/div' . $tag_end . ')(?<post>.*)$',
 				$end_tag,
 				$match
 			)
@@ -696,14 +710,14 @@ class PluginTag
 			$style[] = 'float:' . $attribs->align;
 		}
 
-		if (!isset($attribs->align) && isset($attribs->float))
+		if ( ! isset($attribs->align) && isset($attribs->float))
 		{
 			$style[] = 'float:' . $attribs->float;
 		}
 
 		$attribs = isset($attribs->class) ? 'class="' . $attribs->class . '"' : '';
 
-		if (!empty($style))
+		if ( ! empty($style))
 		{
 			$attribs .= ' style="' . implode(';', $style) . ';"';
 		}

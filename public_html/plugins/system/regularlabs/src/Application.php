@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\LibraryPlugin;
+namespace RegularLabs\Plugin\System\RegularLabs;
 
 defined('_JEXEC') or die;
 
@@ -24,12 +24,12 @@ class Application
 		$document = JFactory::getDocument();
 		$app->loadDocument($document);
 
-		$params = array(
+		$params = [
 			'template'  => $app->get('theme'),
 			'file'      => $app->get('themeFile', 'index.php'),
 			'params'    => $app->get('themeParams'),
 			'directory' => self::getThemesDirectory(),
-		);
+		];
 
 		// Parse the document.
 		$document->parse($params);
@@ -40,7 +40,7 @@ class Application
 
 		$caching = false;
 
-		if ($app->isSite() && $app->get('caching') && $app->get('caching', 2) == 2 && !JFactory::getUser()->get('id'))
+		if ($app->isSite() && $app->get('caching') && $app->get('caching', 2) == 2 && ! JFactory::getUser()->get('id'))
 		{
 			$caching = true;
 		}

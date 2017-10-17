@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  */
 
 (function($) {
-	if (typeof( window['RegularLabsManager'] ) != "undefined") {
+	if (typeof RegularLabsManager !== 'undefined') {
 		return;
 	}
 
@@ -103,7 +103,7 @@
 
 			RegularLabsManager.show('pro_not_installed', tr);
 
-			if (!data || typeof(data['version']) == 'undefined' || !data['version']) {
+			if (!data || typeof data['version'] === 'undefined' || !data['version']) {
 				tr.find('span.current_version').text('');
 				RegularLabsManager.hide('installed', tr);
 				RegularLabsManager.show('not_installed', tr);
@@ -153,14 +153,14 @@
 			}
 
 			// Changelog
-			if (typeof(data['changelog']) !== 'undefined' && data['changelog'] != '') {
+			if (typeof data['changelog'] !== 'undefined' && data['changelog'] != '') {
 				changelog = data['changelog'].replace('font-size:1.2em;', '');
 				tr.find('.changelog a').attr('data-content', changelog);
 				RegularLabsManager.show('changelog', tr);
 			}
 
 			// Install buttons
-			if (typeof(data['version']) == 'undefined' || data['version'] == '') {
+			if (typeof data['version'] === 'undefined' || data['version'] == '') {
 				return;
 			}
 
@@ -344,28 +344,28 @@
 			}
 		},
 
-		openModal: function(task, ids, urls, refresh_on_close) {
+		openModal: function(task, ids, urls) {
 			var url_ids = [];
+
 			for (var i = 0; i < ids.length; i++) {
-				url_ids.push('ids[]=' + escape(ids[i]))
+				url_ids.push('ids[]=' + escape(ids[i]));
 			}
 
 			url_ids = url_ids.join('&');
 
 			var url_urls = [];
+
 			for (var j = 0; j < urls.length; j++) {
 				url = urls[j].replace('http://', '');
 				url_urls.push('urls[]=' + escape(url));
 			}
+
 			url_urls = url_urls.join('&');
 
-			var url = 'index.php?option=com_regularlabsmanager&view=process&tmpl=component&task=' + task + '&' + url_ids + '&' + url_urls;
+			var url    = 'index.php?option=com_regularlabsmanager&view=process&tmpl=component&task=' + task + '&' + url_ids + '&' + url_urls;
+			var height = 78 + (ids.length * 37);
 
-			if (refresh_on_close) {
-				url += '&refresh_on_close=1';
-			}
-
-			SqueezeBox.open(url, {handler: 'iframe', size: {x: 480, y: 110}, classWindow: 'rlem_modal'});
+			SqueezeBox.open(url, {handler: 'iframe', size: {x: 480, y: height}, classWindow: 'rlem_modal'});
 		},
 
 		show: function(classes, parent) {

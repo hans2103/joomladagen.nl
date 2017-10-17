@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -47,7 +47,7 @@ class DBReplacerViewDefault extends JViewLegacy
 		$this->config = RL_Parameters::getInstance()->getComponentParams('com_dbreplacer');
 
 		RL_Document::style('regularlabs/style.min.css');
-		RL_Document::style('dbreplacer/style.min.css', '6.0.1.p');
+		RL_Document::style('dbreplacer/style.min.css', '6.0.2.p');
 
 		// Set document title
 		JFactory::getDocument()->setTitle(JText::_('DB_REPLACER'));
@@ -84,7 +84,7 @@ class DBReplacerViewDefault extends JViewLegacy
 		$db->setQuery($query);
 		$tables = $db->loadColumn();
 
-		if (!empty($ignore))
+		if ( ! empty($ignore))
 		{
 			$ignores = [];
 			foreach ($ignore as $table)
@@ -96,7 +96,7 @@ class DBReplacerViewDefault extends JViewLegacy
 					$ignores = array_merge($ignores, $db->loadColumn());
 				}
 			}
-			if (!empty($ignores))
+			if ( ! empty($ignores))
 			{
 				$tables = array_diff($tables, $ignores);
 			}
@@ -110,9 +110,9 @@ class DBReplacerViewDefault extends JViewLegacy
 			$name = $table;
 			if (strpos($name, $db->getPrefix()) === 0)
 			{
-				if (!$prefix)
+				if ( ! $prefix)
 				{
-					if (!$first)
+					if ( ! $first)
 					{
 						$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 					}

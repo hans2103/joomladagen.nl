@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * @copyright     Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
@@ -53,4 +53,26 @@ defined('_JEXEC') or die('RESTRICTED');
               <input type="text" name="video_source[]" onclick="MediaManagerDialog.setSourceFocus(this);" />
             </div>
         </div>
+
+        <div class="uk-form-row">
+            <label for="video_attributes" class="uk-form-label uk-width-1-5"><?php echo WFText::_('WF_LABEL_ATTRIBUTES'); ?></label>
+            <div class="uk-width-4-5" id="video_attributes">
+                <div class="uk-form-row uk-repeatable">
+                    <div class="uk-form-controls uk-grid uk-grid-small uk-width-9-10">
+                            <label class="uk-form-label uk-width-1-10"><?php echo WFText::_('WF_LABEL_NAME'); ?></label>
+                            <div class="uk-form-controls uk-width-4-10">
+                                <input type="text" name="video_attributes_name[]" />
+                            </div>
+                            <label class="uk-form-label uk-width-1-10"><?php echo WFText::_('WF_LABEL_VALUE'); ?></label>
+                            <div class="uk-form-controls uk-width-4-10">
+                                <input type="text" name="video_attributes_value[]" />
+                            </div>
+                        </div>
+                        <div class="uk-form-controls uk-width-1-10 uk-margin-small-left">
+                            <button type="button" class="uk-button uk-button-link uk-repeatable-create"><i class="uk-icon-plus"></i></button>
+                            <button type="button" class="uk-button uk-button-link uk-repeatable-delete"><i class="uk-icon-trash"></i></button>
+                        </div>
+                </div>
+        </div>
+    </div>
 </div>

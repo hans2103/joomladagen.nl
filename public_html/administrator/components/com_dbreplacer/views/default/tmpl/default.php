@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -40,7 +40,7 @@ $script = "
 	var DBR_INVALID_QUERY = '" . addslashes(JText::_('DBR_INVALID_QUERY')) . "';
 ";
 RL_Document::scriptDeclaration($script);
-RL_Document::script('dbreplacer/script.min.js', '6.0.1.p');
+RL_Document::script('dbreplacer/script.min.js', '6.0.2.p');
 RL_Document::script('regularlabs/script.min.js');
 RL_Document::script('regularlabs/toggler.min.js');
 

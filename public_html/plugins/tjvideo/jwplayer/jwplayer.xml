@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="tjvideo" method="upgrade">
+	<name>Techjoomla- JWPlayer Video API</name>
+	<author>Techjoomla</author>
+	<creationDate>24th March 2017</creationDate>
+	<copyright>(C)techjoomla.com</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>contact@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<version>1.0</version>
+	<isapplication>true</isapplication>
+	<description>Techjoomla- JWPlayer Video API</description>
+
+	<files>
+		<file plugin="jwplayer">jwplayer.php</file>
+		<folder>jwplayer</folder>
+	</files>
+	<languages folder="language">
+			<language tag="en-GB">en-GB/en-GB.plg_tjvideo_jwplayer.ini</language>
+	</languages>
+
+	<!-- Fields for Joomla 1.6.x and onwards -->
+	<config name="params">
+		<fields name="params">
+			<fieldset name="basic" label="PLG_TJVIDEO_JWPLAYER_PARAMETER" >
+				<field name="plugin_name" type="text" default="JWPlayer" label="PLG_TJVIDEO_JWPLAYER_NAME" description="" />
+				<field name="appkey" type="text" default="Dd6CJjWgEeSFtSIAC0MJiQ" label="PLG_TJVIDEO_JWPLAYER_API_KEY" description="PLG_TJVIDEO_JWPLAYER_API_KEY" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

@@ -30,6 +30,6 @@
 <div class="phpversion-container">
     <div class="sppb-callout sppb-callout-danger" id="callout-progress-animation-css3">
       <h4>Your current PHP version <?php echo PHP_VERSION; ?> is too old for SP Page Builder</h4>
-      <p>We are strongly recommended to use PHP <strong><?php echo $required_min_php_version; ?></strong> or higher. Please contact with your host support.</p>
+      <p>We are strongly recommended to use PHP <strong><?php echo $required_min_php_version; ?></strong> or higher. Please contact your web hosting provider's support/server administrator for help.</p>
     </div>
 </div>

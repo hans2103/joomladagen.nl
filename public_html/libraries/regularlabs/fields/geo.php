@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -27,20 +27,48 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 
 	protected function getInput()
 	{
+
 		$this->params = $this->element->attributes();
 
-		if (!is_array($this->value))
+		if ( ! is_array($this->value))
 		{
 			$this->value = explode(',', $this->value);
 		}
 
+		$size      = (int) $this->get('size');
+		$multiple  = $this->get('multiple');
 		$group     = $this->get('group', 'countries');
-		$use_names = $this->get('use_names');
+		$use_names = $this->get('use_names', false);
 
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple', 'group', 'use_names')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getOptions(
+			$input->get('group', 'countries'),
+			$input->getInt('use_names', false)
+		);
+
+		$name  = $input->getString('name', $this->type);
+		$id    = $input->get('id', strtolower($name));
+		$value = json_decode($input->getString('value', '[]'));
+		$size  = $input->getInt('size');
+
+		return $this->selectListSimple($options, $name, $value, $id, $size, true);
+	}
+
+	function getOptions($group = 'countries', $use_names = '')
+	{
 		$options = [];
 		foreach ($this->{$group} as $key => $val)
 		{
-			if (!$val)
+			if ( ! $val)
 			{
 				$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 				continue;
@@ -56,10 +84,7 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 			$options[] = JHtml::_('select.option', $use_names ? $val : $key, $val);
 		}
 
-		$size     = (int) $this->get('size');
-		$multiple = $this->get('multiple');
-
-		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $options;
 	}
 
 	public $continents = [
@@ -72,7 +97,7 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 		'AN' => 'Antarctica',
 	];
 
-	public $countries = array(
+	public $countries = [
 		'AF' => "Afghanistan",
 		'AX' => "Aland Islands",
 		'AL' => "Albania",
@@ -317,9 +342,9 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 		'YE' => "Yemen",
 		'ZM' => "Zambia",
 		'ZW' => "Zimbabwe",
-	);
+	];
 
-	public $regions = array(
+	public $regions = [
 		'-AU'    => "Australia",
 		'AU-ACT' => "Australia: Australian Capital Territory",
 		'AU-NSW' => "Australia: New South Wales",
@@ -872,7 +897,7 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 		'MX-CHH' => "Mexico: Chihuahua",
 		'MX-COA' => "Mexico: Coahuila",
 		'MX-COL' => "Mexico: Colima",
-		'MX-DIF' => "Mexico: Distrito Federal",
+		'MX-DIF' => "Mexico: Distrito Federal (Mexico City)",
 		'MX-DUR' => "Mexico: Durango",
 		'MX-GUA' => "Mexico: Guanajuato",
 		'MX-GRO' => "Mexico: Guerrero",
@@ -1692,6 +1717,6 @@ class JFormFieldRL_Geo extends \RegularLabs\Library\Field
 		'VN-72' => "Vietnam: Đắk Nông",
 		'VN-39' => "Vietnam: Đồng Nai",
 		'VN-45' => "Vietnam: Đồng Tháp",
-	);
+	];
 
 }

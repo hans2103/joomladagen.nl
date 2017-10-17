@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" method="upgrade" type="plugin" group="system">
+  <name>JTicketing System Plugin</name>
+  <author>Techjoomla</author>
+	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.4</version>
+  <copyright>(c)Techjoomla</copyright>
+  <authorEmail>extensions@techjoomla.com</authorEmail>
+  <authorUrl>http://www.techjoomla.com</authorUrl>
+  <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+  <description>This system plugin is for  you send emails  and cron jobs without setting up a cron job in cpanel.</description>
+  <files>
+    <filename plugin="plug_sys_jticketing">plug_sys_jticketing.php</filename>
+  </files>
+  <languages folder="language/en-GB">
+    <language tag="en-GB">en-GB.plug_sys_jticketing.ini</language>
+  </languages>
+  <params>
+    <param name="crontime" type="text" default="60" label="CRON_INTERVAL_LBL" description="CRON_INTERVAL_DESC" />
+  </params>
+  <config name="params">
+    <fields name="params">
+      <fieldset name="basic">
+        <field name="crontime" type="text" default="60" label="CRON_INTERVAL_LBL" description="CRON_INTERVAL_DESC" />
+      </fieldset>
+    </fields>
+  </config>
+</extension>

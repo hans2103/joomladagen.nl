@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -57,22 +57,25 @@ abstract class Condition
 
 	private function getRequest()
 	{
-		$id = JFactory::getApplication()->input->get('id', [0], 'array');
+		$app   = JFactory::getApplication();
+		$input = $app->input;
+
+		$id = $input->get('id', [0], 'array');
 
 		$request = (object) [
 			'idname' => 'id',
-			'option' => JFactory::getApplication()->input->get('option'),
-			'view'   => JFactory::getApplication()->input->get('view'),
-			'task'   => JFactory::getApplication()->input->get('task'),
-			'layout' => JFactory::getApplication()->input->getString('layout'),
-			'Itemid' => JFactory::getApplication()->input->getInt('Itemid', 0),
+			'option' => $input->get('option'),
+			'view'   => $input->get('view'),
+			'task'   => $input->get('task'),
+			'layout' => $input->getString('layout'),
+			'Itemid' => $this->getItemId(),
 			'id'     => (int) $id['0'],
 		];
 
 		switch ($request->option)
 		{
 			case 'com_categories':
-				$extension       = JFactory::getApplication()->input->getCmd('extension');
+				$extension       = $input->getCmd('extension');
 				$request->option = $extension ? $extension : 'com_content';
 				$request->view   = 'category';
 				break;
@@ -87,24 +90,24 @@ abstract class Condition
 
 		$this->initRequest($request);
 
-		if (!$request->id)
+		if ( ! $request->id)
 		{
-			$cid         = JFactory::getApplication()->input->get('cid', [0], 'array');
+			$cid         = $input->get('cid', [0], 'array');
 			$request->id = (int) $cid['0'];
 		}
 
 		// if no id is found, check if menuitem exists to get view and id
-		if (JFactory::getApplication()->isSite()
-			&& (!$request->option || !$request->id)
+		if (Document::isClient('site')
+			&& ( ! $request->option || ! $request->id)
 		)
 		{
 			$menuItem = empty($request->Itemid)
-				? JFactory::getApplication()->getMenu('site')->getActive()
-				: JFactory::getApplication()->getMenu('site')->getItem($request->Itemid);
+				? $app->getMenu('site')->getActive()
+				: $app->getMenu('site')->getItem($request->Itemid);
 
 			if ($menuItem)
 			{
-				if (!$request->option)
+				if ( ! $request->option)
 				{
 					$request->option = (empty($menuItem->query['option'])) ? null : $menuItem->query['option'];
 				}
@@ -112,7 +115,7 @@ abstract class Condition
 				$request->view = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
 				$request->task = (empty($menuItem->query['task'])) ? null : $menuItem->query['task'];
 
-				if (!$request->id)
+				if ( ! $request->id)
 				{
 					$request->id = (empty($menuItem->query[$request->idname])) ? $menuItem->params->get($request->idname) : $menuItem->query[$request->idname];
 				}
@@ -205,7 +208,7 @@ abstract class Condition
 
 	public function passItemByType(&$pass, $type = '', $data = null)
 	{
-		$pass_type = !empty($data) ? $this->{'pass' . $type}($data) : $this->{'pass' . $type}();
+		$pass_type = ! empty($data) ? $this->{'pass' . $type}($data) : $this->{'pass' . $type}();
 
 		if ($pass_type == null)
 		{
@@ -267,7 +270,7 @@ abstract class Condition
 
 	public function getParentIds($id = 0, $table = 'menu', $parent = 'parent_id', $child = 'id')
 	{
-		if (!$id)
+		if ( ! $id)
 		{
 			return [];
 		}
@@ -291,7 +294,7 @@ abstract class Condition
 			$id = $this->db->loadResult();
 
 			// Break if no parent is found or parent already found before for some reason
-			if (!$id || in_array($id, $parent_ids))
+			if ( ! $id || in_array($id, $parent_ids))
 			{
 				break;
 			}
@@ -326,14 +329,14 @@ abstract class Condition
 			return $array;
 		}
 
-		if (!$trim)
+		if ( ! $trim)
 		{
 			return $array;
 		}
 
 		foreach ($array as $k => $v)
 		{
-			if (!is_string($v))
+			if ( ! is_string($v))
 			{
 				continue;
 			}
@@ -349,7 +352,7 @@ abstract class Condition
 
 	private function mixedDataToArray($array = '', $onlycommas = false)
 	{
-		if (!is_array($array))
+		if ( ! is_array($array))
 		{
 			$delimiter = ($onlycommas || strpos($array, '|') === false) ? ',' : '|';
 
@@ -372,5 +375,50 @@ abstract class Condition
 		}
 
 		return $array;
+	}
+
+	private function getItemId()
+	{
+		$app = JFactory::getApplication();
+
+		if ($id = $app->input->getInt('Itemid', 0))
+		{
+			return $id;
+		}
+
+		$menu = $this->getActiveMenu();
+
+		return isset($menu->id) ? $menu->id : 0;
+	}
+
+	private function getActiveMenu()
+	{
+		$menu = JFactory::getApplication()->getMenu()->getActive();
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		return $this->getMenuById($menu->id);
+	}
+
+	private function getMenuById($id = 0)
+	{
+		$menu = JFactory::getApplication()->getMenu()->getItem($id);
+
+		if (empty($menu->id))
+		{
+			return false;
+		}
+
+		if ($menu->type == 'alias')
+		{
+			$params = $menu->getParams();
+
+			return $this->getMenuById($params->get('aliasoptions'));
+		}
+
+		return $menu;
 	}
 }

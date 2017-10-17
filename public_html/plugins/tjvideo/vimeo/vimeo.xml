@@ -1,0 +1,28 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<extension version="3.0" type="plugin" group="tjvideo" method="upgrade">
+	<name>Techjoomla- Vimeo Video API</name>
+	<author>Techjoomla</author>
+	<creationDate>24th March 2017</creationDate>
+	<copyright>(C)techjoomla.com</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
+	<authorEmail>contact@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<version>1.0</version>
+	<description>Techjoomla- Vimeo Video API</description>
+
+	<files>
+		<file plugin="vimeo">vimeo.php</file>
+	</files>
+	<languages folder="language">
+			<language tag="en-GB">en-GB/en-GB.plg_tjvideo_vimeo.ini</language>
+	</languages>
+
+	<!-- Fields for Joomla 1.6.x and onwards -->
+	<config name="params">
+		<fields name="params">
+			<fieldset name="basic" label="PLG_TJVIDEO_VIMEO_PARAMETER" >
+				<field name="plugin_name" type="text" default="Vimeo" label="PLG_TJVIDEO_VIMEO_NAME" description="" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

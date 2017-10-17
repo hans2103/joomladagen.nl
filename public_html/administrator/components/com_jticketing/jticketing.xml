@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension method="upgrade" type="component" version="3.0">
+	<name>com_jticketing</name>
+	<author>Techjoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>http://techjoomla.com</authorUrl>
+	<copyright>Copyright (C) 2012-2016 Techjoomla. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.4</version>
+	<description>COM_JTICKETING_PRODUCT_DESC</description>
+	<!-- Site Main File Copy Section -->
+	<files folder="site">
+		<file>jticketing.php</file>
+		<file>index.html</file>
+		<file>controller.php</file>
+		<file>router.php</file>
+		<folder>assets</folder>
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>models</folder>
+		<folder>language</folder>
+		<folder>layouts</folder>
+		<folder>views</folder>
+		<folder>addtickes_types</folder>
+	</files>
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB/en-GB.com_jticketing.ini</language>
+	</languages>
+	<install>
+		<sql>
+			<file charset="utf8" driver="mysql">sql/install.sql</file>
+		</sql>
+	</install>
+	<!-- Media files -->
+	<media destination="com_jticketing" folder="media">
+		<folder>images</folder>
+		<folder>events</folder>
+		<folder>samplecsv</folder>
+		<folder>js</folder>
+		<folder>css</folder>
+		<folder>vendors</folder>
+	</media>
+	<administration>
+		<!-- Administration Menu Section -->
+		<menu img="components/com_jticketing/assets/images/jticketing16x16.png">com_jticketing</menu>
+		<submenu>
+			<menu link="option=com_categories&amp;view=categories&amp;extension=com_jticketing" img="components/com_jticketing/assets/assets/images/icon-16-events.png">COM_CATEGORIES</menu>
+
+			<menu link="option=com_jticketing&amp;view=catimpexp" img="components/com_jticketing/assets/assets/images/icon-16-events.png">COM_CATIMPORTEXPORT</menu>
+
+			<menu link="option=com_jticketing&amp;view=venues" img="components/com_jticketing/assets/images/payouts_16.png">COM_JTICKETING_VENUES</menu>
+			<menu link="option=com_jticketing&amp;view=events" img="components/com_jticketing/assets/images/payouts_16.png">COM_EVENTS</menu>
+			<menu link="option=com_jlike&amp;view=reminders&amp;extension=com_jticketing" img="components/com_jticketing/assets/assets/images/icon-16-reminders.png">COM_REMINDERS</menu>
+			<menu link="option=com_jticketing&amp;view=mypayouts" img="components/com_jticketing/assets/images/payouts_16.png">COM_PAY</menu>
+			<menu link="option=com_jticketing&amp;view=allticketsales" img="components/com_jticketing/assets/images/ticketsales_16.png">COM_SALE</menu>
+			<menu link="option=com_jticketing&amp;view=orders" img="components/com_jticketing/assets/images/orders_16.png">COM_ORDERS</menu>
+			<menu link="option=com_jticketing&amp;view=attendee_list" img="components/com_jticketing/assets/assets/images/icon-16-attendee_list.png">COM_ATTENDEE_LIST</menu>
+			<menu link="option=com_tjnotifications&amp;view=notifications&amp;extension=com_jticketing" img="components/com_jticketing/assets/images/email_template_16.png">COM_EMAIL_TEMPLATE</menu>
+			<menu link="option=com_jticketing&amp;view=email_config" img="components/com_jticketing/assets/images/email_config_16.png">COM_EMAIL_CONFIG</menu>
+			<menu link="option=com_jticketing&amp;view=coupons" img="components/com_jticketing/assets/images/coupon_16.png">COM_COUPON</menu>
+		</submenu>
+		<!-- Administration Main File Copy Section -->
+		<files folder="admin">
+			<file>access.xml</file>
+			<file>config.xml</file>
+			<file>config_default.php</file>
+			<file>default_email_template.php</file>
+			<file>email_template.php</file>
+			<file>jticketingTemplate.json</file>
+			<file>controller.php</file>
+			<file>index.html</file>
+			<file>jticketing.php</file>
+			<file>uninstall.sql</file>
+			<folder>assets</folder>
+			<folder>config</folder>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<folder>language</folder>
+		</files>
+		<languages folder="admin">
+			<language tag="en-GB">language/en-GB/en-GB.com_jticketing.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_jticketing.menu.ini</language>
+			<language tag="en-GB">language/en-GB/en-GB.com_jticketing.sys.ini</language>
+
+		</languages>
+	</administration>
+	<scriptfile>install.jticketing.php</scriptfile>
+
+	<!-- default component params values backend -->
+	<config>
+		<fields>
+			<fieldset>
+
+				<!--general_settings-->
+				<!-- ######################### J2.5 params ######################### -->
+				<field name="integration" default="2" />
+				<field name="gravatar" default="0" />
+				<field name="social_integration" default="joomla" />
+				<field name="collect_attendee_info_checkout" default="0" />
+				<field name="show_access_level" default="0" />
+				<field name="default_accesslevels" default="1" />
+				<field name="profile_import" default="0" />
+				<field name="allow_buy_guest" default="0" />
+				<field name="allow_buy_guestreg" default="0" />
+				<field name="guest_reg_id" default="0" />
+				<field name="show_js_toolbar" default="0" />
+				<field name="affect_js_native_seats" default="0" />
+				<field name="auto_fix_seats" default="0" />
+				<field name="gateways" default="bycheck" />
+				<field name="handle_transactions" default="0" />
+				<field name="siteadmin_comm_per" default="0" />
+				<field name="siteadmin_comm_flat" default="0" />
+				<field name="currency" default="USD" />
+				<field name="currency_symbol" default="$" />
+				<field name="currency_display_format" default="{AMOUNT} {CURRENCY_SYMBOL} " />
+				<field name="allow_taxation" default="0" />
+				<field name="enable_coupon" default="0" />
+				<field name="enable_bill_vat" default="0" />
+				<field name="jticketing_media_upload_path" default="media/com_jticketing/events" />
+
+				<!--Integrations Settings-->
+				<field name="integrate_with" default="none" />
+				<field name="streamAddEvent" default="0" />
+				<field name="streamBuyTicket" default="0" />
+				<field name="streamCheckinTicket" default="0" />
+				<field name="default_country" default="" />
+				<field name="default_country_mobile_code" default="" />
+				<field name="mail_to" default="event_buyer" />
+				<field name="eventowner_buy" default="1" />
+				<field name="email_options" default="ticket_email" />
+				<field name="reply_to" default="" />
+				<field name="pdf_attach_in_mail" default="1" />
+				<field name="load_bootstrap" default="0" />
+				<field name="show_ticket_type_description" default="0" />
+				<field name="image_resolution" default="600" />
+				<field name="pin_width" default="280" />
+				<field name="pin_padding" default="10" />
+				<field name="desc_length" default="100" />
+				<field name="qr_code_width" default="80" />
+				<field name="qr_code_height" default="80" />
+				<field name="article" default="0" />
+				<field name="tnc" default="0" />
+				<field name="social_sharing" default="1" />
+				<field name="social_shring_type" default="native" />
+				<field name="addthis_publishid" default="" />
+				<field name="order_prefix" default="JT" />
+				<field name="separator" default="-" />
+				<field name="random_orderid" default="0" />
+				<field name="padding_count" default="3" />
+				<field name="send_auto_reminders" default="0" />
+				<field name="smsgateways" default="plug_tjsms_clickatell" />
+				<field name="enb_batch" default="1" />
+				<field name="batch_size_reminders" default="30" />
+				<field name="pkey_for_reminder" default="abcd1234" />
+				<field name="pending_email_enb_batch" default="1" />
+				<field name="pending_email_batch_size" default="30" />
+				<field name="pkey_for_pending_email" default="abcd1234" />
+				<field name="enable_self_enrollment" default="0" />
+				<field name="accesslevels_for_enrollment" default="1" />
+				<field name="min_val_masspay" default="100" />
+				<field name="apiuser" default="" />
+				<field name="apipass" default="" />
+				<field name="apisign" default="" />
+				<field name="sandbox" default="0" />
+				<field name="apiv" default="87" />
+				<field name="private_key_cronjob" default="az197" />
+				<field name="attendancecron_key" default="abcd1234" />
+				<field name="company_name" default="" />
+				<field name="company_address" default="" />
+				<field name="company_vat_no" default="" />
+				<field name="downloadid" default="" />
+				<field name="enable_online_events" default="0" />
+				<field name="gmaps_default_zoom_level" default="10" />
+				<field name="event_filter" default="tj-filters-mod-pos" />
+				<field name="date_format_show" default="D, M d h:i A" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

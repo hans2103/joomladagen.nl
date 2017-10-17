@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.7.1" type="plugin" group="jevents" method="upgrade">
+	<name>Jticketing - JEvents plugin</name>
+	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.4</version>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<author>TechJoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>http://www.techjoomla.com</authorUrl>
+	<creationDate>10th Nov 2016</creationDate>
+	<copyright>Copyright(C)2016 TechJoomla</copyright>
+	<description>Displays Paid Event Fields on create event form of JEvent</description>
+	<files>
+		<filename plugin="addfields">addfields.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB/en-GB.plg_jevents_addfields.ini</language>
+	</languages>
+</extension>

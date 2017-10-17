@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="com_jlike_my_assignment" option="View">
+		<message>
+			<![CDATA[COM_JLIKE_TITLE_LIST_VIEW_MY_ASSIGNMENT_DESC]]>
+		</message>
+	</layout>
+</metadata>

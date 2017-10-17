@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -32,12 +32,12 @@ class RLFunctions
 {
 	public static function getContents($url, $timeout = 20)
 	{
-		return !class_exists('RegularLabs\Library\Http') ? '' : RL_Http::get($url, $timeout);
+		return ! class_exists('RegularLabs\Library\Http') ? '' : RL_Http::get($url, $timeout);
 	}
 
 	public static function getByUrl($url, $timeout = 20)
 	{
-		return !class_exists('RegularLabs\Library\Http') ? '' : RL_Http::getFromServer($url, $timeout);
+		return ! class_exists('RegularLabs\Library\Http') ? '' : RL_Http::getFromServer($url, $timeout);
 	}
 
 	public static function isFeed()
@@ -85,57 +85,57 @@ class RLFunctions
 
 	protected static function getFileByFolder($folder, $file)
 	{
-		return !class_exists('RegularLabs\Library\File') ? '' : RL_File::getMediaFile($folder, $file);
+		return ! class_exists('RegularLabs\Library\File') ? '' : RL_File::getMediaFile($folder, $file);
 	}
 
 	public static function getComponentBuffer()
 	{
-		return !class_exists('RegularLabs\Library\Document') ? '' : RL_Document::getBuffer();
+		return ! class_exists('RegularLabs\Library\Document') ? '' : RL_Document::getBuffer();
 	}
 
 	public static function getAliasAndElement(&$name)
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getAliasAndElement($name);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getAliasAndElement($name);
 	}
 
 	public static function getNameByAlias($alias)
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getNameByAlias($alias);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getNameByAlias($alias);
 	}
 
 	public static function getAliasByName($name)
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getAliasByName($name);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getAliasByName($name);
 	}
 
 	public static function getElementByAlias($alias)
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getElementByAlias($alias);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getElementByAlias($alias);
 	}
 
 	public static function getXMLValue($key, $alias, $type = 'component', $folder = 'system')
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXMLValue($key, $alias, $type, $folder);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXMLValue($key, $alias, $type, $folder);
 	}
 
 	public static function getXML($alias, $type = 'component', $folder = 'system')
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXML($alias, $type, $folder);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXML($alias, $type, $folder);
 	}
 
 	public static function getXMLFile($alias, $type = 'component', $folder = 'system')
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXMLFile($alias, $type, $folder);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getXMLFile($alias, $type, $folder);
 	}
 
 	public static function extensionInstalled($extension, $type = 'component', $folder = 'system')
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::isInstalled($extension, $type, $folder);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::isInstalled($extension, $type, $folder);
 	}
 
 	public static function getExtensionPath($extension = 'plg_system_regularlabs', $basePath = JPATH_ADMINISTRATOR, $check_folder = '')
 	{
-		return !class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getPath($extension, $basePath, $check_folder);
+		return ! class_exists('RegularLabs\Library\Extension') ? '' : RL_Extension::getPath($extension, $basePath, $check_folder);
 	}
 
 	public static function loadLanguage($extension = 'plg_system_regularlabs', $basePath = '', $reload = false)
@@ -145,6 +145,6 @@ class RLFunctions
 
 	public static function xmlToObject($url, $root = '')
 	{
-		return !class_exists('RegularLabs\Library\Xml') ? '' : RL_Xml::toObject($url, $root);
+		return ! class_exists('RegularLabs\Library\Xml') ? '' : RL_Xml::toObject($url, $root);
 	}
 }

@@ -1885,7 +1885,6 @@ jQuery(function($){
     });
 
 })(jQuery);
-
 //Ajax Contact Form
 jQuery(function($) {
     $(document).on('submit', '.sppb-ajaxt-contact-form', function(event) {
@@ -1898,6 +1897,57 @@ jQuery(function($) {
             'option' : 'com_sppagebuilder',
             'task' : 'ajax',
             'addon' : 'ajax_contact',
+            'g-recaptcha-response' : $self.find('#g-recaptcha-response').val(),
+            'data' : value
+        };
+
+        $.ajax({
+            type   : 'POST',
+            data   : request,
+            beforeSend: function(){
+                $self.find('.fa').addClass('fa-spinner fa-spin');
+            },
+            success: function (response) {
+              var results = $.parseJSON(response);
+
+              try {
+                  var data = $.parseJSON(results.data);
+                  var content = data.content;
+                  var type = 'json';
+              } catch (e) {
+                  var content = results.data;
+                  var type = 'strings';
+              }
+
+              if (type == 'json') {
+                if(data.status) {
+                  $self.trigger('reset');
+                }
+              } else {
+                $self.trigger('reset');
+              }
+
+              $self.find('.fa-spin').removeClass('fa-spinner fa-spin');
+              $self.next('.sppb-ajax-contact-status').html(content).fadeIn().delay(4000).fadeOut(500);
+            }
+        });
+
+        return false;
+    });
+});
+
+//Ajax Optin Form
+jQuery(function($) {
+    $(document).on('submit', '.sppb-optin-form', function(event) {
+
+        event.preventDefault();
+
+        var $self   = $(this);
+        var value   = $(this).serializeArray();
+        var request = {
+            'option' : 'com_sppagebuilder',
+            'task'   : 'ajax',
+            'addon'  : 'optin_form',
             'data'   : value
         };
 
@@ -1908,11 +1958,85 @@ jQuery(function($) {
                 $self.find('.fa').addClass('fa-spinner fa-spin');
             },
             success: function (response) {
-                $self.find('.fa-spin').removeClass('fa-spinner fa-spin');
-                $self.next('.sppb-ajax-contact-status').html($.parseJSON(response).data).fadeIn().delay(2000).fadeOut(500);;
+              var results = $.parseJSON(response);
+              var data = $.parseJSON(results.data);
+              var statusClass = 'sppb-alert sppb-alert-warning';
+              if(data.status) {
+                var statusClass = 'sppb-alert sppb-alert-success';
+                $self.trigger('reset');
+              }
+              $self.find('.fa-spin').removeClass('fa-spinner fa-spin');
+              $self.next('.sppb-optin-form-status').html('<p class="' + statusClass + '">' + data.content + '</p>').fadeIn().delay(4000).fadeOut(1000);
             }
         });
 
         return false;
     });
 });
+
+// Magnetic Popup
+jQuery(function($) {
+  $(document).on('click', '.sppb-magnific-popup', function(event) {
+    event.preventDefault();
+    var $this = $(this);
+    $this.magnificPopup({
+      type: $this.data('popup_type'),
+      mainClass: $this.data('mainclass')
+    }).magnificPopup('open');
+  });
+});
+
+// Flip Box
+jQuery(function ($) {
+    if ($('.sppb-addon-sppb-flibox.flipon-click, .threeD-flipbox.flipon-click').length > 0) {
+        $('.sppb-addon-sppb-flibox.flipon-click .sppb-flipbox-panel, .threeD-flipbox.flipon-click .threeD-content-wrap').on('click', function (event) {
+            $(this).toggleClass('flip');
+        });
+    }
+
+    if ($('.sppb-addon-sppb-flibox.flipon-hover, .threeD-flipbox.flipon-hover').length > 0) {
+        $('.sppb-addon-sppb-flibox.flipon-hover .sppb-flipbox-panel, .threeD-flipbox.flipon-hover .threeD-content-wrap').on({
+            mouseenter: function () {
+                $(this).addClass('flip');
+            },
+            mouseleave: function () {
+                $(this).removeClass('flip');
+            }
+        });
+    }
+
+});
+
+;(function ($) {
+  // Youtube Video background
+  window.sppbVideoBackgroundResize = function (row) {
+      row.find(".sppb-youtube-video-bg").removeClass('hidden');
+      var containerW = row.innerWidth(),
+          containerH = row.innerHeight()
+          iframeW = containerW,
+          iframeH = containerW * (9 / 16),
+          marginTop = -Math.round((iframeH - containerH) / 2),
+          marginLeft = -Math.round((iframeW - containerW) / 2);
+
+      if (containerW / containerH < 16 / 9) {
+        iframeW = containerH * (16 / 9);
+        iframeH = containerH;
+        marginLeft = -Math.round((iframeW - containerW) / 2);
+        marginTop = -Math.round((iframeH - containerH) / 2);
+      }
+
+      row.find(".sppb-youtube-video-bg iframe").css({
+          maxWidth: "1000%",
+          marginLeft: marginLeft,
+          marginTop: marginTop,
+          width: iframeW,
+          height: iframeH
+      });
+  }
+
+  $(window).on('load resize', function () {
+    $('.sppb-row-have-ext-bg').each(function() {
+      sppbVideoBackgroundResize($(this));
+    });
+  });
+})(jQuery);

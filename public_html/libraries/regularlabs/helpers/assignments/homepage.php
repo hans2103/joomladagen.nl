@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,12 +27,12 @@ class RLAssignmentsHomePage extends RLAssignment
 		if ($this->request->option)
 		{
 			// check if option is different to home menu
-			if (!$home || !isset($home->query['option']) || $home->query['option'] != $this->request->option)
+			if ( ! $home || ! isset($home->query['option']) || $home->query['option'] != $this->request->option)
 			{
 				return $this->pass(false);
 			}
 
-			if (!$this->request->option)
+			if ( ! $this->request->option)
 			{
 				// set the view/task/layout in the menu item to empty if not set
 				$home->query['view']   = isset($home->query['view']) ? $home->query['view'] : '';
@@ -45,7 +45,7 @@ class RLAssignmentsHomePage extends RLAssignment
 			{
 				if ((isset($this->request->{$k}) && $this->request->{$k} != $v)
 					|| (
-						(!isset($this->request->{$k}) || in_array($v, ['virtuemart', 'mijoshop']))
+						( ! isset($this->request->{$k}) || in_array($v, ['virtuemart', 'mijoshop']))
 						&& JFactory::getApplication()->input->get($k) != $v
 					)
 				)
@@ -58,7 +58,7 @@ class RLAssignmentsHomePage extends RLAssignment
 			foreach ($home->params->toObject() as $k => $v)
 			{
 				if (($v && isset($_POST[$k]) && $_POST[$k] != $v)
-					|| (!$v && isset($_POST[$k]) && $_POST[$k])
+					|| ( ! $v && isset($_POST[$k]) && $_POST[$k])
 				)
 				{
 					return $this->pass(false);
@@ -68,7 +68,7 @@ class RLAssignmentsHomePage extends RLAssignment
 
 		$pass = $this->checkPass($home);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			$pass = $this->checkPass($home, 1);
 		}

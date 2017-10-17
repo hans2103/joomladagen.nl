@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonTestimonialpro extends SppagebuilderAddons {
 
@@ -19,9 +19,10 @@ class SppagebuilderAddonTestimonialpro extends SppagebuilderAddons {
 		$autoplay = (isset($this->addon->settings->autoplay) && $this->addon->settings->autoplay) ? ' data-sppb-ride="sppb-carousel"' : '';
 		$arrows = (isset($this->addon->settings->arrows) && $this->addon->settings->arrows) ? $this->addon->settings->arrows : '';
 		$controls = (isset($this->addon->settings->controls) && $this->addon->settings->controls) ? $this->addon->settings->controls : 0;
+		$interval = (isset($this->addon->settings->interval) && $this->addon->settings->interval) ? ((int) $this->addon->settings->interval * 1000) : 5000;
 
 		//Output
-		$output  = '<div id="sppb-testimonial-pro-'. $this->addon->id .'" class="sppb-carousel sppb-testimonial-pro sppb-slide sppb-text-center' . $class . '"'. $autoplay .'>';
+		$output  = '<div id="sppb-testimonial-pro-'. $this->addon->id .'" data-interval="'.$interval.'" class="sppb-carousel sppb-testimonial-pro sppb-slide sppb-text-center' . $class . '"'. $autoplay .'>';
 
 		if($controls) {
 			$output .= '<ol class="sppb-carousel-indicators">';
@@ -55,5 +56,16 @@ class SppagebuilderAddonTestimonialpro extends SppagebuilderAddons {
 
 		return $output;
 
+	}
+
+	public function css() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$css = '';
+
+		$speed = (isset($this->addon->settings->speed) && $this->addon->settings->speed) ? $this->addon->settings->speed : 600;
+
+		$css .= $addon_id.' .sppb-carousel-inner > .sppb-item{-webkit-transition-duration: '.$speed.'ms; transition-duration: '.$speed.'ms;}';
+
+		return $css;
 	}
 }

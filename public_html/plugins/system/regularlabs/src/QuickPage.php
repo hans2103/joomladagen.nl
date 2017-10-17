@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\LibraryPlugin;
+namespace RegularLabs\Plugin\System\RegularLabs;
 
 defined('_JEXEC') or die;
 
@@ -23,7 +23,7 @@ class QuickPage
 {
 	public static function render()
 	{
-		if (!JFactory::getApplication()->input->getInt('rl_qp', 0))
+		if ( ! JFactory::getApplication()->input->getInt('rl_qp', 0))
 		{
 			return;
 		}
@@ -65,14 +65,14 @@ class QuickPage
 			$file = implode('/', explode('.', $folder)) . '/' . $file;
 		}
 
-		if (!$file || in_array($file, $allowed) === false)
+		if ( ! $file || in_array($file, $allowed) === false)
 		{
 			die;
 		}
 
 		jimport('joomla.filesystem.file');
 
-		if (JFactory::getApplication()->isSite())
+		if (RL_Document::isClient('site'))
 		{
 			JFactory::getApplication()->setTemplate('../administrator/templates/isis');
 		}

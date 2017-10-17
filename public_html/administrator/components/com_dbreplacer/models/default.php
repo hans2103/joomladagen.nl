@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -59,7 +59,7 @@ class DBReplacerModelDefault extends JModelLegacy
 			{
 				$dbs = $s;
 
-				if (!$params->regex)
+				if ( ! $params->regex)
 				{
 					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match
@@ -85,7 +85,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				}
 			}
 		}
-		if (!empty($likes))
+		if ( ! empty($likes))
 		{
 			$where = [];
 			foreach ($params->columns as $column)
@@ -163,7 +163,7 @@ class DBReplacerModelDefault extends JModelLegacy
 					$where[] = $this->_db->quoteName(trim($key)) . ' = ' . $this->_db->quote($val);
 				}
 
-				if (!in_array($key, $params->columns))
+				if ( ! in_array($key, $params->columns))
 				{
 					continue;
 				}
@@ -184,7 +184,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				}
 
 				$dbs = $s;
-				if (!$params->regex)
+				if ( ! $params->regex)
 				{
 					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match
@@ -193,7 +193,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				}
 
 				$options = 's';
-				if (!$params->case)
+				if ( ! $params->case)
 				{
 					$options .= 'i';
 				}
@@ -202,12 +202,21 @@ class DBReplacerModelDefault extends JModelLegacy
 					$options .= 'u';
 				}
 
-				if (!@RL_RegEx::match($dbs, $val, $matches, $options))
+				if ( ! @RL_RegEx::match($dbs, $val, $matches, $options))
 				{
 					continue;
 				}
 
 				$set[] = $this->_db->quoteName(trim($key)) . ' = ' . $this->_db->quote(RL_RegEx::replace($dbs, $r, $val, $options));
+			}
+
+			// No specific indexed columns found, so add search columns to where
+			if (empty($where))
+			{
+				foreach ($row as $key => $val)
+				{
+					$where[] = $this->_db->quoteName(trim($key)) . ' = ' . $this->_db->quote($val);
+				}
 			}
 
 			if (empty($set) || empty($where))
@@ -227,7 +236,7 @@ class DBReplacerModelDefault extends JModelLegacy
 				. ' LIMIT 1';
 			$this->_db->setQuery($query);
 
-			if (!$this->_db->execute())
+			if ( ! $this->_db->execute())
 			{
 				JFactory::getApplication()->enqueueMessage(JText::_('???'), 'error');
 				continue;
@@ -236,7 +245,7 @@ class DBReplacerModelDefault extends JModelLegacy
 			$count++;
 		}
 
-		if (!$count)
+		if ( ! $count)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('DBR_NO_ROWS_UPDATED'), 'notice');
 

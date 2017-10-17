@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -8,14 +8,23 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
+
+var RegularLabsMultiSelect = null;
+
 (function($) {
 	"use strict";
 
 	$(document).ready(function() {
 		$('.rl_multiselect').each(function() {
-			var controls  = $(this).find('div.rl_multiselect-controls');
-			var list      = $(this).find('ul.rl_multiselect-ul');
-			var menu      = $(this).find('div.rl_multiselect-menu-block').html();
+			RegularLabsMultiSelect.init($(this));
+		});
+	});
+
+	RegularLabsMultiSelect = {
+		init: function(element) {
+			var controls  = element.find('div.rl_multiselect-controls');
+			var list      = element.find('ul.rl_multiselect-ul');
+			var menu      = element.find('div.rl_multiselect-menu-block').html();
 			var maxheight = list.css('max-height');
 
 			list.find('li').each(function() {
@@ -62,7 +71,7 @@
 				var $text = $(this).val().toLowerCase();
 				list.find('li').each(function() {
 					var $li = $(this);
-					if ($li.text().toLowerCase().indexOf($text) == -1) {
+					if ($li.text().toLowerCase().indexOf($text) < 0) {
 						$li.hide();
 					} else {
 						$li.show();
@@ -144,45 +153,44 @@
 				controls.find('a.rl_multiselect-maximize').show();
 			});
 
-		});
-
-		// Take care of children check/uncheck all
-		$('div.rl_multiselect a.checkall').click(function() {
-			$(this).parent().parent().parent().parent().parent().parent().find('ul.rl_multiselect-sub input').prop('checked', true);
-		});
-		$('div.rl_multiselect a.uncheckall').click(function() {
-			$(this).parent().parent().parent().parent().parent().parent().find('ul.rl_multiselect-sub input').prop('checked', false);
-		});
-
-		// Take care of children toggle all
-		$('div.rl_multiselect a.expandall').click(function() {
-			var $parent = $(this).parent().parent().parent().parent().parent().parent().parent();
-			$parent.find('ul.rl_multiselect-sub').show();
-			$parent.find('ul.rl_multiselect-sub span.rl_multiselect-toggle').removeClass('icon-plus').addClass('icon-minus');
-		});
-		$('div.rl_multiselect a.collapseall').click(function() {
-			var $parent = $(this).parent().parent().parent().parent().parent().parent().parent();
-			$parent.find('li ul.rl_multiselect-sub').hide();
-			$parent.find('li span.rl_multiselect-toggle').removeClass('icon-minus').addClass('icon-plus');
-		});
-		$('div.rl_multiselect-item.hidechildren').click(function() {
-			var $parent = $(this).parent();
-
-			$(this).find('input').each(function() {
-				var $sub   = $parent.find('ul.rl_multiselect-sub').first();
-				var $input = $(this);
-				if ($input.prop('checked')) {
-					$parent.find('span.rl_multiselect-toggle, div.rl_multiselect-menu').css('visibility', 'hidden');
-					if (!$sub.parent().hasClass('hidelist')) {
-						$sub.wrap('<div style="display:none;" class="hidelist"></div>');
-					}
-				} else {
-					$parent.find('span.rl_multiselect-toggle, div.rl_multiselect-menu').css('visibility', 'visible');
-					if ($sub.parent().hasClass('hidelist')) {
-						$sub.unwrap();
-					}
-				}
+			// Take care of children check/uncheck all
+			element.find('a.checkall').click(function() {
+				$(this).parent().parent().parent().parent().parent().parent().find('ul.rl_multiselect-sub input').prop('checked', true);
 			});
-		});
-	});
+			element.find('a.uncheckall').click(function() {
+				$(this).parent().parent().parent().parent().parent().parent().find('ul.rl_multiselect-sub input').prop('checked', false);
+			});
+
+			// Take care of children toggle all
+			element.find('a.expandall').click(function() {
+				var $parent = $(this).parent().parent().parent().parent().parent().parent().parent();
+				$parent.find('ul.rl_multiselect-sub').show();
+				$parent.find('ul.rl_multiselect-sub span.rl_multiselect-toggle').removeClass('icon-plus').addClass('icon-minus');
+			});
+			element.find('a.collapseall').click(function() {
+				var $parent = $(this).parent().parent().parent().parent().parent().parent().parent();
+				$parent.find('li ul.rl_multiselect-sub').hide();
+				$parent.find('li span.rl_multiselect-toggle').removeClass('icon-minus').addClass('icon-plus');
+			});
+			element.find('div.rl_multiselect-item.hidechildren').click(function() {
+				var $parent = $(this).parent();
+
+				$(this).find('input').each(function() {
+					var $sub   = $parent.find('ul.rl_multiselect-sub').first();
+					var $input = $(this);
+					if ($input.prop('checked')) {
+						$parent.find('span.rl_multiselect-toggle, div.rl_multiselect-menu').css('visibility', 'hidden');
+						if (!$sub.parent().hasClass('hidelist')) {
+							$sub.wrap('<div style="display:none;" class="hidelist"></div>');
+						}
+					} else {
+						$parent.find('span.rl_multiselect-toggle, div.rl_multiselect-menu').css('visibility', 'visible');
+						if ($sub.parent().hasClass('hidelist')) {
+							$sub.unwrap();
+						}
+					}
+				});
+			});
+		}
+	};
 })(jQuery);

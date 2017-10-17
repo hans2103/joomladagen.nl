@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+		<field name="id" type="text" default="0" label="COM_JTICKETING_FORM_LBL_EVENT_ID" readonly="true" class="readonly" description="JGLOBAL_FIELD_ID_DESC" />
+		<field name="created_by" type="hidden" />
+		<field name="title" type="text" class="required" label="COM_JTICKETING_FORM_LBL_EVENT_TITLE" description="COM_JTICKETING_FORM_DESC_EVENT_TITLE" required="true" menu_published="0" filter="" maxlength="250"/>
+		<field name="alias" type="text" label="COM_JTICKETING_FORM_LBL_EVENT_ALIAS" description="COM_JTICKETING_FORM_DESC_EVENT_ALIAS" filter="alias" />
+		<field name="catid" type="category" extension="com_jticketing" class="chzn-done required" label="COM_JTICKETING_FORM_LBL_EVENT_CATEGORY" description="COM_JTICKETING_FORM_DESC_EVENT_CATEGORY" required="true" />
+		<field name="venue" type="venuelist" size="40" class="inputbox venueCheck chzn-done" default="0" label="COM_JTICKETING_FORM_LBL_VENUE" description="COM_JTICKETING_FORM_DESC_VENUE_NAME" required="true"/>
+		<field name="state" type="radio" default="1" label="COM_JTICKETING_FORM_LBL_EVENT_PUBLISHED" description="COM_JTICKETING_FORM_DESC_EVENT_PUBLISHED" class="btn-group">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="allow_view_attendee" type="radio"  default="1" label="COM_JTICKETING_FORM_LBL_EVENT_ALLOW_ATTENDEE_TO_VIEW" description="COM_JTICKETING_FORM_DESC_EVENT_ALLOW_ATTENDEE_TO_VIEW" class="btn-group">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="jt_params" default="" type="hidden" />
+		<field name="image" type="file" label="COM_JTICKETING_FORM_LBL_EVENT_AVATAR" description="COM_JTICKETING_FORM_DESC_EVENT_AVATAR" onchange="tjMediaFile.validateFile(this,0,0)" menu_published="0" upload_directory="media/com_jticketing"
+		accept="image/jpeg,image/png,image/jpg" />
+		<field name="short_description" type="textarea" label="COM_JTICKETING_FORM_LBL_EVENT_SUMMARY" description="COM_JTICKETING_FORM_DESC_EVENT_SUMMARY" menu_published="0" cols="100" rows="8" filter="safehtml" />
+		<field name="long_description" type="editor" label="COM_JTICKETING_FORM_LBL_EVENT_DESCRIPTION" description="COM_JTICKETING_FORM_DESC_EVENT_DESCRIPTION" menu_published="0" filter="safehtml" width="90%" height="80px"/>
+		<field name="access" type="accesslevel"  label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC" size="1" />
+		<field name="startdate" type="calendar" class="inputbox required" required="true" default="0000-00-00 00:00:00" label="COM_JTICKETING_FORM_LBL_EVENT_STARTDATE" description="COM_JTICKETING_FORM_DESC_EVENT_STARTDATE" filter="user_utc" />
+		<field name="enddate" type="calendar" class="inputbox required" required="true" default="0000-00-00 00:00:00" label="COM_JTICKETING_FORM_LBL_EVENT_ENDDATE" description="COM_JTICKETING_FORM_DESC_EVENT_ENDDATE" filter="user_utc" />
+		<field name="booking_start_date" type="calendar" class="inputbox" default="0000-00-00 00:00:00" label="COM_JTICKETING_FORM_LBL_EVENT_BOOKING_START_DATE" description="COM_JTICKETING_FORM_DESC_EVENT_BOOKING_START_DATE" filter="user_utc" />
+		<field name="booking_end_date" type="calendar" class="inputbox" default="0000-00-00 00:00:00" label="COM_JTICKETING_FORM_LBL_EVENT_BOOKING_END_DATE" description="COM_JTICKETING_FORM_DESC_EVENT_BOOKING_END_DATE" filter="user_utc" />
+		<field name="online_events" type="radio" onchange="toggleProvider()" label="COM_JTICKETING_ONLINE_EVENTS" description="COM_JTICKETING_ONLINE_EVENTS_DESC" class="input-group radio btn-group btn-group-yesno" size="1" default="0">
+			<option value="1">COM_JTICKETING_YES</option>
+			<option value="0">COM_JTICKETING_NO</option>
+		</field>
+		<field name="venuechoice" type="radio" label="" description="" class="btn-group venuechoice" size="1" default="existing" >
+			<option value="new">COM_JTICKETING_FORM_OPTION_CREAT_NEW_EVENT</option>
+			<option value="existing">COM_JTICKETING_FORM_OPTION_EXISTING_EVENT</option>
+		</field>
+		<field name="online_provider" default="plug_tjevents_adobeconnect" type="gatewayplgonlineevents" onchange="toggleProviderData(this)" label="COM_JTICKETING_ONLINE_EVENTS_PROVIDER" description="COM_JTICKETING_ONLINE_EVENTS_PROVIDER_DESC">
+		</field>
+		<field name="existing_event" type="list" size="40" class="inputbox existingEvent chzn-done" default="abcd" label="COM_JTICKETING_FORM_EXISTING_EVENT" description="COM_JTICKETING_FORM_DESC_EXISTING_EVENT" onchange="existingEventSelection()">
+			<option value="abcd">COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION</option>
+		</field>
+
+		<field name="location" type="textarea" label="COM_JTICKETING_FORM_LBL_EVENT_LOCATION" description="COM_JTICKETING_FORM_DESC_EVENT_LOCATION" />
+		<field name="latitude" type="hidden" />
+		<field name="longitude" type="hidden" />
+	</fieldset>
+
+	<field name= "tickettypes"
+		description= "Ticket types"
+		default='[{"title": "Free"}]'
+		type= "subform"
+		label= "ticket_types"
+		min= "1"
+		required= "true"
+		formsource= "components/com_jticketing/models/forms/tickettypes.xml"
+		multiple= "true"
+		buttons= "add,remove"
+		layout="JTsubformlayouts.layouts.subform.repeatable"
+		groupByFieldset="false"/>
+
+	<field name= "attendeefields"
+		description= "attendee field"
+		type= "subform"
+		label= "attendee field"
+		min= "1"
+		formsource= "components/com_jticketing/models/forms/attendeefields.xml"
+		multiple= "true"
+		buttons= "add,remove"
+		layout="JTsubformlayouts.layouts.subform.repeatable"
+		groupByFieldset="false"/>
+
+	<fieldset name="gallery" description= "Media Gallery" label= "ticket_types">
+		<field name="id" type="hidden"/>
+		<field name="gallary_file_type" type="list" default="0"
+			label="JSELECT" description="COM_JTICKETING_GALLERY_DESC" class="btn btn-group-yesno" >
+			<option value="0">COM_JTICKETING_GALLERY_FILE</option>
+			<option value="1">COM_JTICKETING_GALLERY_LINK</option>
+		</field>
+
+		<field name="gallery_file" type="file"
+			label="COM_JTICKETING_GALLERY_FILE"
+			description="COM_JTICKETING_GALLERY_FILE_DESC"
+			onchange="tjMediaFile.validateFile(this,1,0)"
+			menu_published="0"
+			accept="image/jpeg,image/png,image/jpg,video/mp4,video/webm">
+		</field>
+
+		<field 	name="gallery_link" type="text"
+				label="COM_JTICKETING_GALLERY_LINK"
+				description="COM_JTICKETING_GALLERY_LINK_DESC"
+				class="inputbox"
+				default=""
+				>
+		</field>
+	</fieldset>
+
+</form>

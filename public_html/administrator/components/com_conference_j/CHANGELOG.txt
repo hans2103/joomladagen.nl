@@ -1,0 +1,17 @@
+Changelog for Conference Schedule by Sander Potjer
+http://www.sanderpotjer.nl
+-------------------------------------------------------------------
+
+Legend:
+* -> Security Fix
+# -> Issue Fix
+$ -> Language fix or change
++ -> Addition
+^ -> Change
+- -> Removed
+! -> Note
+
+-------------------- 0.9.3 Release [4-sep-2013] ------------------
+^ -> Bring in line with latest FOF releases
+# -> Fix issue with router file
++ -> Responsive schedule grid

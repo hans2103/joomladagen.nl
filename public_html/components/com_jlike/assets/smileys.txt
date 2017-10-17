@@ -1,0 +1,16 @@
+:)=smile.jpg
+:-)=smile.jpg
+:(=sad.jpg
+:-(=sad.jpg
+;)=wink.jpg
+;-)=wink.jpg
+;(=cry.jpg
+B-)=cool.jpg
+B)=cool.jpg
+:D=grin.jpg
+:-D=grin.jpg
+:o=shocked.jpg
+:O=shocked.jpg
+:-o=shocked.jpg
+:-O=shocked.jpg
+:-3=love.png

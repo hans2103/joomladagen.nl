@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id: metadata.xml 8178 2007-07-23 05:39:47Z eddieajau $ -->
+
+<metadata>
+	<view title="Ticket Sales" >
+		<message><![CDATA[Ticket sales Report of All Events]]></message>
+		 <options var="task">
+			<default name="COM_JTICKETING_TITLE_ATTENDEE_LIST" msg="COM_JTICKETING_TITLE_ATTENDEE_LIST_DESC" />
+		  </options>
+	</view>
+	<state>
+	<name>Attendee List</name>
+	<description> Menu for Attendee List for  Events</description>
+	</state>
+</metadata>
+

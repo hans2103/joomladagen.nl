@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.form.formfield');
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -28,7 +28,7 @@ class JFormFieldRL_ColorPicker extends JFormField
 
 	protected function getInput()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			return null;
 		}
@@ -62,7 +62,7 @@ class RLFieldColorPicker
 		$class = ' class="' . trim('nncolorpicker chzn-done ' . $this->get('class')) . '"';
 
 		$color = strtolower($this->value);
-		if (!$color || in_array($color, ['none', 'transparent']))
+		if ( ! $color || in_array($color, ['none', 'transparent']))
 		{
 			$color = 'none';
 		}
@@ -95,7 +95,7 @@ class RLFieldColorPicker
 		}
 
 		$split = (int) $this->get('split');
-		if (!$split)
+		if ( ! $split)
 		{
 			$count = count($colors);
 			if ($count % 5 == 0)
@@ -128,7 +128,7 @@ class RLFieldColorPicker
 
 	private function get($val, $default = '')
 	{
-		if (!isset($this->params[$val]) || (string) $this->params[$val] == '')
+		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
 		{
 			return $default;
 		}

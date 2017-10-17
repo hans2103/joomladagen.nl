@@ -133,9 +133,6 @@ class WFMediaManagerPlugin extends WFMediaManager
         }
     }
 
-    /**
-     * @return
-     */
     public function getAggregatorTemplate()
     {
         $tpl = '';

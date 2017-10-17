@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -33,7 +33,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 	public function preflight($route, JAdapterInstance $adapter)
 	{
-		if (!in_array($route, ['install', 'update']))
+		if ( ! in_array($route, ['install', 'update']))
 		{
 			return;
 		}
@@ -58,9 +58,9 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 		JFactory::getLanguage()->load($this->getPrefix() . '_' . $this->extname, $this->getMainFolder());
 
-		if (!in_array($route, ['install', 'update']))
+		if ( ! in_array($route, ['install', 'update']))
 		{
-			return;
+			return true;
 		}
 
 		$this->fixExtensionNames();
@@ -84,17 +84,19 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 		JFactory::getCache()->clean('com_plugins');
 		JFactory::getCache()->clean('_system');
+
+		return true;
 	}
 
 	public function isInstalled()
 	{
-		if (!is_file($this->getInstalledXMLFile()))
+		if ( ! is_file($this->getInstalledXMLFile()))
 		{
 			return false;
 		}
 
 		$query = $this->db->getQuery(true)
-			->select('extension_id')
+			->select($this->db->quoteName('extension_id'))
 			->from('#__extensions')
 			->where($this->db->quoteName('type') . ' = ' . $this->db->quote($this->extension_type))
 			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName()));
@@ -170,13 +172,13 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 				break;
 		}
 
-		if (!$this->foldersExist($folders))
+		if ( ! $this->foldersExist($folders))
 		{
 			return;
 		}
 
 		$query = $this->db->getQuery(true)
-			->select('extension_id')
+			->select($this->db->quoteName('extension_id'))
 			->from('#__extensions')
 			->where($this->db->quoteName('element') . ' = ' . $this->db->quote($this->getElementName($type, $extname)))
 			->where($this->db->quoteName('type') . ' = ' . $this->db->quote($type));
@@ -291,21 +293,21 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 	{
 		// Get module id
 		$query = $this->db->getQuery(true)
-			->select('id')
+			->select($this->db->quoteName('id'))
 			->from('#__modules')
 			->where($this->db->quoteName('module') . ' = ' . $this->db->quote('mod_' . $this->extname))
 			->where($this->db->quoteName('client_id') . ' = ' . (int) $this->client_id);
 		$this->db->setQuery($query, 0, 1);
 		$id = $this->db->loadResult();
 
-		if (!$id)
+		if ( ! $id)
 		{
 			return;
 		}
 
 		// check if module is already in the modules_menu table (meaning is is already saved)
 		$query->clear()
-			->select('moduleid')
+			->select($this->db->quoteName('moduleid'))
 			->from('#__modules_menu')
 			->where($this->db->quoteName('moduleid') . ' = ' . (int) $id);
 		$this->db->setQuery($query, 0, 1);
@@ -318,7 +320,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 		// Get highest ordering number in position
 		$query->clear()
-			->select('ordering')
+			->select($this->db->quoteName('ordering'))
 			->from('#__modules')
 			->where($this->db->quoteName('position') . ' = ' . $this->db->quote($this->module_position))
 			->where($this->db->quoteName('client_id') . ' = ' . (int) $this->client_id)
@@ -407,14 +409,14 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 	{
 		$file = $file ?: $this->getCurrentXMLFile();
 
-		if (!is_file($file))
+		if ( ! is_file($file))
 		{
 			return '';
 		}
 
 		$xml = JApplicationHelper::parseXMLInstallFile($file);
 
-		if (!$xml || !isset($xml['version']))
+		if ( ! $xml || ! isset($xml['version']))
 		{
 			return '';
 		}
@@ -424,7 +426,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 	public function isNewer()
 	{
-		if (!$installed_version = $this->getVersion($this->getInstalledXMLFile()))
+		if ( ! $installed_version = $this->getVersion($this->getInstalledXMLFile()))
 		{
 			return true;
 		}
@@ -437,7 +439,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 	public function canInstall()
 	{
 		// The extension is not installed yet
-		if (!$installed_version = $this->getVersion($this->getInstalledXMLFile()))
+		if ( ! $installed_version = $this->getVersion($this->getInstalledXMLFile()))
 		{
 			return true;
 		}
@@ -487,7 +489,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 			return;
 		}
 
-		if (!is_string($file) || !is_file($file))
+		if ( ! is_string($file) || ! is_file($file))
 		{
 			return;
 		}
@@ -515,7 +517,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 	public function onBeforeInstall($route)
 	{
-		if (!$this->canInstall())
+		if ( ! $this->canInstall())
 		{
 			return false;
 		}
@@ -568,7 +570,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 	{
 		// Get module id
 		$query = $this->db->getQuery(true)
-			->select('id')
+			->select($this->db->quoteName('id'))
 			->from('#__modules')
 			->where($this->db->quoteName('module') . ' = ' . $this->db->quote('mod_' . $this->extname))
 			->where($this->db->quoteName('client_id') . ' = ' . (int) $this->client_id);
@@ -594,7 +596,7 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 
 		// Get asset id
 		$query = $this->db->getQuery(true)
-			->select('id')
+			->select($this->db->quoteName('id'))
 			->from('#__assets')
 			->where($this->db->quoteName('name') . ' = ' . $this->db->quote('com_modules.module.' . (int) $module_id))
 			->where($this->db->quoteName('title') . ' LIKE ' . $this->db->quote('NoNumber%'));
@@ -618,20 +620,22 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 	{
 		$this->removeOldUpdateSites();
 		$this->updateNamesInUpdateSites();
+		$this->updateHttptoHttpsInUpdateSites();
+		$this->removeDuplicateUpdateSite();
 		$this->updateDownloadKey();
 	}
 
 	private function removeOldUpdateSites()
 	{
 		$query = $this->db->getQuery(true)
-			->select('update_site_id')
+			->select($this->db->quoteName('update_site_id'))
 			->from('#__update_sites')
 			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('nonumber.nl%'))
 			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'));
 		$this->db->setQuery($query, 0, 1);
 		$id = $this->db->loadResult();
 
-		if (!$id)
+		if ( ! $id)
 		{
 			return;
 		}
@@ -666,55 +670,113 @@ class PlgEditorsXtdSourcererInstallerScriptHelper
 		$this->db->execute();
 	}
 
+	private function updateHttptoHttpsInUpdateSites()
+	{
+		$query = $this->db->getQuery(true)
+			->update('#__update_sites')
+			->set($this->db->quoteName('location') . ' = REPLACE('
+				. $this->db->quoteName('location') . ', '
+				. $this->db->quote('http://') . ', '
+				. $this->db->quote('https://')
+				. ')')
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('http://download.regularlabs.com%'));
+		$this->db->setQuery($query);
+		$this->db->execute();
+	}
+
+	private function removeDuplicateUpdateSite()
+	{
+		// First check to see if there is a pro entry
+
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('update_site_id'))
+			->from('#__update_sites')
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%'))
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'))
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%pro=1%'));
+		$this->db->setQuery($query, 0, 1);
+		$id = $this->db->loadResult();
+
+		// Otherwise just get the first match
+		if ( ! $id)
+		{
+			$query->clear()
+				->select($this->db->quoteName('update_site_id'))
+				->from('#__update_sites')
+				->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%'))
+				->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'));
+			$this->db->setQuery($query, 0, 1);
+			$id = $this->db->loadResult();
+
+			// Add pro=1 to the found update site
+			$query->clear()
+				->update('#__update_sites')
+				->set($this->db->quoteName('location')
+					. ' = replace(' . $this->db->quoteName('location') . ', ' . $this->db->quote('&type=') . ', ' . $this->db->quote('&pro=1&type=') . ')')
+				->where($this->db->quoteName('update_site_id') . ' = ' . (int) $id);
+			$this->db->setQuery($query);
+			$this->db->execute();
+		}
+
+		if ( ! $id)
+		{
+			return;
+		}
+
+		$query->clear()
+			->select($this->db->quoteName('update_site_id'))
+			->from('#__update_sites')
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%'))
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%e=' . $this->alias . '%'))
+			->where($this->db->quoteName('update_site_id') . ' != ' . $id);
+		$this->db->setQuery($query);
+		$ids = $this->db->loadColumn();
+
+		if (empty($ids))
+		{
+			return;
+		}
+
+		$query->clear()
+			->delete('#__update_sites')
+			->where($this->db->quoteName('update_site_id') . ' IN (' . implode(',', $ids) . ')');
+		$this->db->setQuery($query);
+		$this->db->execute();
+
+		$query->clear()
+			->delete('#__update_sites_extensions')
+			->where($this->db->quoteName('update_site_id') . ' IN (' . implode(',', $ids) . ')');
+		$this->db->setQuery($query);
+		$this->db->execute();
+	}
+
 	// Save the download key from the Regular Labs Extension Manager config to the update sites
 	private function updateDownloadKey()
 	{
 		$query = $this->db->getQuery(true)
-			->select('e.params')
-			->from('#__extensions as e')
-			->where(array(
-				'e.element = ' . $this->db->quote('com_regularlabsmanager'),
-				'e.element = ' . $this->db->quote('com_nonumbermanager'),
-			), 'OR');
+			->select($this->db->quoteName('params'))
+			->from('#__extensions')
+			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('com_regularlabsmanager'));
 		$this->db->setQuery($query);
 		$params = $this->db->loadResult();
 
-		if (!$params)
+		if ( ! $params)
 		{
 			return;
 		}
 
 		$params = json_decode($params);
 
-		if (!isset($params->key))
+		if ( ! isset($params->key))
 		{
 			return;
 		}
 
-		$query->clear()
-			->update('#__update_sites')
-			->set($this->db->quoteName('extra_query') . ' = ' . $this->db->quote(''))
-			->where(
-				'('
-				. $this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.nonumber.nl%')
-				. ' OR '
-				. $this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%')
-				. ')'
-			);
-		$this->db->setQuery($query);
-		$this->db->execute();
-
+		// Add the key on all regularlabs.com urls
 		$query->clear()
 			->update('#__update_sites')
 			->set($this->db->quoteName('extra_query') . ' = ' . $this->db->quote('k=' . $params->key))
-			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%&pro=1%'))
-			->where(
-				'('
-				. $this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.nonumber.nl%')
-				. ' OR '
-				. $this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%')
-				. ')'
-			);
+			->where($this->db->quoteName('location') . ' LIKE ' . $this->db->quote('%download.regularlabs.com%'));
 		$this->db->setQuery($query);
 		$this->db->execute();
 	}

@@ -178,11 +178,11 @@ class V4 extends Signature
 
 			if ($amazonIsBraindead && ($lowercaseHeaderName == 'content-length'))
 			{
-				// No, it doesn't look stupid. It is FUCKING STUPID. But somehow Amazon requires me to do it and only
-				// on some servers. Yeah, I had the same "WHAT THE ACTUAL FUCK?!" reaction myself, thank you very much.
-				// I wasted an entire day on this shit. And then you wonder why I write my own connector libraries
+				// No, it doesn't look daft. It is. But somehow Amazon requires me to do it and only on some servers.
+				// Yeah, I had the same "WHAT THE...?!" reaction myself, thank you very much.
+				// I wasted an entire day on this. And then you wonder why I write my own connector libraries
 				// instead of pulling something through Composer, huh? Because the official library doesn't deal with
-				// this stupid shit, that's why.
+				// this, that's why.
 				$v = "$v,$v";
 			}
 

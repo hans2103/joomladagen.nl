@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 jimport('joomla.application.component.modeladmin');
 
@@ -79,9 +79,7 @@ class SppagebuilderModelPage extends JModelAdmin {
             $data['title'] = $this->pageGenerateNewTitle( $data['title'] );
         }
 
-        if(isset($data['created_by']) && $data['created_by']) {
-          $data['created_by'] = $this->checkExistingUser($data['created_by']);
-        }
+        $data['created_by'] = $this->checkExistingUser($data['created_by']);
 
         parent::save($data);
         return true;
@@ -99,13 +97,6 @@ class SppagebuilderModelPage extends JModelAdmin {
       }
 
       return $user_id;
-    }
-
-    protected function prepareTable($table) {
-        $jform = JRequest::getVar('jform');
-        if (!isset($jform['boxed_layout'])) {
-            $table->boxed_layout = 0;
-        }
     }
 
     public static function pageGenerateNewTitle($title ) {

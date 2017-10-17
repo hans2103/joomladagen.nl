@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonTweet extends SppagebuilderAddons {
 
@@ -25,6 +25,7 @@ class SppagebuilderAddonTweet extends SppagebuilderAddons {
 		$accesstokensecret = (isset($this->addon->settings->accesstokensecret) && $this->addon->settings->accesstokensecret) ? $this->addon->settings->accesstokensecret : '';
 		$include_rts = (isset($this->addon->settings->include_rts) && $this->addon->settings->include_rts) ? $this->addon->settings->include_rts : '';
 		$ignore_replies = (isset($this->addon->settings->ignore_replies) && $this->addon->settings->ignore_replies) ? $this->addon->settings->ignore_replies : '';
+		$show_image = (isset($this->addon->settings->show_image)) ? $this->addon->settings->show_image : 1;
 		$show_username = (isset($this->addon->settings->show_username) && $this->addon->settings->show_username) ? $this->addon->settings->show_username : '';
 		$show_avatar = (isset($this->addon->settings->show_avatar) && $this->addon->settings->show_avatar) ? $this->addon->settings->show_avatar : '';
 		$count = (isset($this->addon->settings->count) && $this->addon->settings->count) ? $this->addon->settings->count : '';
@@ -35,29 +36,53 @@ class SppagebuilderAddonTweet extends SppagebuilderAddons {
 		if($accesstoken=='') 		return '<div class="sppb-alert sppb-alert-danger"><strong>Error</strong><br>Insert access token for twitter feed slider addon</div>';
 		if($accesstokensecret=='') 	return '<div class="sppb-alert sppb-alert-danger"><strong>Error</strong><br>Insert access token secrete key for twitter feed slider addon</div>';
 
-		//Output
-		require_once JPATH_COMPONENT . '/helpers/tweet/helper.php';
+		//include tweet helper
+		$tweet_helper = JPATH_ROOT . '/components/com_sppagebuilder/helpers/tweet/helper.php';
+		if (!file_exists($tweet_helper)) {
+			return '<p class="alert alert-danger">' . JText::_('COM_SPPAGEBUILDER_ADDON_TWEET_HELPER_FILE_MISSING') . '</p>';
+		} else {
+			require_once $tweet_helper;
+		}
 
 		//Get Tweets
-		$tweets = sppbAddonHelperTweet::getTweets( $username, $consumerkey, $consumersecret, $accesstoken, $accesstokensecret, $count, $include_rts, $ignore_replies );
+		$tweets = sppbAddonHelperTweet::getTweets( $username, $consumerkey, $consumersecret, $accesstoken, $accesstokensecret, $count, $ignore_replies, $include_rts );
 
+		if (isset($tweets->error) && $tweets->error) {
+			return '<p class="sppb-alert sppb-alert-warning">' . $tweets->error . '</p>';
+		}
+
+		//Output
 		if(count($tweets)>0) {
-
 			$output  = '<div class="sppb-addon sppb-addon-tweet sppb-text-center ' . $class . '">';
 			$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
-			$output  	.= ($show_avatar) ? '<a target="_blank" href="http://twitter.com/'. $tweets[0]->user->screen_name .'"><img class="sppb-img-circle sppb-tweet-avatar" src="'. $tweets[0]->user->profile_image_url .'" alt="'. $tweets[0]->user->name .'"></a>' : '';
-			$output  .= ($show_username) ? '<span class="sppb-tweet-username"><a target="_blank" href="http://twitter.com/'. $tweets[0]->user->screen_name .'">' . $tweets[0]->user->name . '</a></span>' : '';
+			$output .= ($show_avatar) ? '<a target="_blank" href="https://twitter.com/'. $tweets[0]->user->screen_name .'"><img class="sppb-img-circle sppb-tweet-avatar" src="'. $tweets[0]->user->profile_image_url_https .'" alt="'. $tweets[0]->user->name .'"></a>' : '';
+			$output .= ($show_username) ? '<span class="sppb-tweet-username"><a target="_blank" href="https://twitter.com/'. $tweets[0]->user->screen_name .'">' . $tweets[0]->user->name . '</a></span>' : '';
 			$output .= '<div id="sppb-carousel-'. $this->addon->id .'" class="sppb-carousel sppb-tweet-slider sppb-slide" ' . $autoplay . '>';
 			$output .= '<div class="sppb-carousel-inner">';
 
 			foreach ($tweets as $key => $tweet) {
 				$output   .= '<div class="sppb-item'. (($key == 0) ? ' class="active"': '' ) .'">';
 				$tweet->text = preg_replace("/((http)+(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\" target=\"_blank\">\\0</a>", $tweet->text );
-				$tweet->text = preg_replace("/[@]+([A-Za-z0-9-_]+)/", "<a href=\"http://twitter.com/\\1\" target=\"_blank\">\\0</a>", $tweet->text );
-				$tweet->text = preg_replace("/[#]+([A-Za-z0-9-_]+)/", "<a href=\"http://twitter.com/search?q=%23\\1\" target=\"_blank\">\\0</a>", $tweet->text );
+				$tweet->text = preg_replace("/[@]+([A-Za-z0-9-_]+)/", "<a href=\"https://twitter.com/\\1\" target=\"_blank\">\\0</a>", $tweet->text );
+				$tweet->text = preg_replace("/[#]+([A-Za-z0-9-_]+)/", "<a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">\\0</a>", $tweet->text );
 				$output  .= '<small class="sppb-tweet-created">' . sppbAddonHelperTweet::timeago( $tweet->created_at ) . '</small>';
+				if ((isset($tweet->entities) && $tweet->entities) && $show_image) {
+					if (isset($tweet->entities->media) && $tweet->entities->media) {
+						foreach ($tweet->entities->media as $media) {
+							if ($media->type == 'photo') {
+								$img_src = (isset($media->sizes->small) && $media->sizes->small) ? $media->media_url . ':thumb' : $media->media_url;
+								$output .= '<div class="sppb-item-image">';
+									$output .= ($media->url) ? '<a href="'. $media->url .'" target="_blank">' : '';
+										$output .= '<img class="sppb-tweet-image" src="' . $img_src . '" alt="' . preg_replace('/<\/?a[^>]*>/','', $tweet->text) . '">';
+									$output .= ($media->url) ? '</a>' : '';
+								$output .= '</div>';
+							}
+						}
+					}
+				}
 				$output  .= '<div class="sppb-tweet-text">' . $tweet->text . '</div>';
 				$output  .= '</div>';
+
 			}
 
 			$output	.= '</div>';

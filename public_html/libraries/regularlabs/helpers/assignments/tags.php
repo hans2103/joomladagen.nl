@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -26,7 +26,7 @@ class RLAssignmentsTags extends RLAssignment
 
 		if ($this->request->option != 'com_tags'
 			|| $this->request->view != 'tag'
-			|| !$this->request->id
+			|| ! $this->request->id
 		)
 		{
 			return $this->pass(false);
@@ -75,7 +75,7 @@ class RLAssignmentsTags extends RLAssignment
 
 		foreach ($tags as $tag)
 		{
-			if (!$this->passTag($tag->id) && !$this->passTag($tag->title))
+			if ( ! $this->passTag($tag->id) && ! $this->passTag($tag->title))
 			{
 				continue;
 			}
@@ -97,7 +97,7 @@ class RLAssignmentsTags extends RLAssignment
 			return ($this->params->inc_children != 2);
 		}
 
-		if (!$this->params->inc_children)
+		if ( ! $this->params->inc_children)
 		{
 			return false;
 		}

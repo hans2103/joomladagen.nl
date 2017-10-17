@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,11 +9,12 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\LibraryPlugin;
+namespace RegularLabs\Plugin\System\RegularLabs;
 
 defined('_JEXEC') or die;
 
 use JFactory;
+use RegularLabs\Library\Document as RL_Document;
 
 class DownloadKey
 {
@@ -21,7 +22,7 @@ class DownloadKey
 	{
 		// Save the download key from the Regular Labs Extension Manager config to the update sites
 		if (
-			JFactory::getApplication()->isSite()
+			RL_Document::isClient('site')
 			|| JFactory::getApplication()->input->get('option') != 'com_config'
 			|| JFactory::getApplication()->input->get('task') != 'config.save.component.apply'
 			|| JFactory::getApplication()->input->get('component') != 'com_regularlabsmanager'
@@ -32,7 +33,7 @@ class DownloadKey
 
 		$form = JFactory::getApplication()->input->post->get('jform', [], 'array');
 
-		if (!isset($form['key']))
+		if ( ! isset($form['key']))
 		{
 			return;
 		}
@@ -43,16 +44,8 @@ class DownloadKey
 
 		$query = $db->getQuery(true)
 			->update('#__update_sites')
-			->set($db->quoteName('extra_query') . ' = ' . $db->quote(''))
-			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
-		$db->setQuery($query);
-		$db->execute();
-
-		$query->clear()
-			->update('#__update_sites')
 			->set($db->quoteName('extra_query') . ' = ' . $db->quote('k=' . $key))
-			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'))
-			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%&pro=1%'));
+			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
 		$db->setQuery($query);
 		$db->execute();
 	}

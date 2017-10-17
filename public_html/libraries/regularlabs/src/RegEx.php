@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -33,7 +33,7 @@ class RegEx
 	 */
 	public static function replace($pattern, $replacement, $string, $options = null, $limit = -1, &$count = null)
 	{
-		if ($pattern == '' || $string == '')
+		if ( ! is_string($pattern) || $pattern == '' || ! is_string($string) || $string == '')
 		{
 			return $string;
 		}
@@ -71,7 +71,7 @@ class RegEx
 	 */
 	public static function match($pattern, $string, &$matches = null, $options = null, $flags = 0)
 	{
-		if ($pattern == '' || $string == '')
+		if ( ! is_string($pattern) || $pattern == '' || ! is_string($string) || $string == '')
 		{
 			return false;
 		}
@@ -94,7 +94,7 @@ class RegEx
 	 */
 	public static function matchAll($pattern, $string, &$matches = null, $options = null, $flags = PREG_SET_ORDER)
 	{
-		if ($pattern == '' || $string == '')
+		if ( ! is_string($pattern) || $pattern == '' || ! is_string($string) || $string == '')
 		{
 			$matches = [];
 
@@ -121,7 +121,7 @@ class RegEx
 		{
 			$array = self::quoteArray($data, $delimiter);
 
-			$name = $name ? '?P<' . $name . '>' : '';
+			$name = $name ? '?<' . $name . '>' : '';
 
 			return '(' . $name . implode('|', $array) . ')';
 		}
@@ -139,7 +139,7 @@ class RegEx
 	 */
 	public static function unquote($string, $delimiter = '#')
 	{
-		return strtr($string, array(
+		return strtr($string, [
 			'\\' . $delimiter => $delimiter,
 			'\\.'             => '.',
 			'\\\\'            => '\\',
@@ -161,7 +161,7 @@ class RegEx
 			'\\|'             => '|',
 			'\\:'             => ':',
 			'\\-'             => '-',
-		));
+		]);
 	}
 
 	/**
@@ -174,8 +174,7 @@ class RegEx
 	 */
 	public static function quoteArray($array = [], $delimiter = '#')
 	{
-		array_walk($array, function (&$part, $key, $delimiter)
-		{
+		array_walk($array, function (&$part, $key, $delimiter) {
 			$part = self::quote($part, $delimiter);
 		}, $delimiter);
 
@@ -203,7 +202,7 @@ class RegEx
 			$pattern = '#' . $pattern . '#';
 		}
 
-		$options = !is_null($options) ? $options : 'si';
+		$options = ! is_null($options) ? $options : 'si';
 
 		if (substr($pattern, -1, 1) == '#')
 		{
@@ -230,8 +229,7 @@ class RegEx
 	 */
 	private static function preparePatternArray($pattern, $options = null, $string = '')
 	{
-		array_walk($pattern, function (&$subpattern, $key, $string)
-		{
+		array_walk($pattern, function (&$subpattern, $key, $string) {
 			$subpattern = self::preparePattern($subpattern, $options = null, $string);
 		}, $string);
 

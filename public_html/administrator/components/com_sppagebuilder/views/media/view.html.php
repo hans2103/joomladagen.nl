@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 require_once JPATH_ROOT . '/administrator/components/com_sppagebuilder/helpers/language.php';
 
@@ -51,20 +51,17 @@ class SppagebuilderViewMedia extends JViewLegacy {
 			'index.php?option=com_sppagebuilder&view=pages',
 			$vName == 'pages'
 		);
-
 		JHtmlSidebar::addEntry(
 			'<i class="fa fa-folder-o"></i> ' . JText::_('COM_SPPAGEBUILDER_CATEGORIES'),
 			'index.php?option=com_categories&extension=com_sppagebuilder',
 			$vName == 'categories');
-
 		JHtmlSidebar::addEntry(
-			'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
-			'index.php?option=com_sppagebuilder&view=integrations',
-			$vName == 'integrations'
-		);
-
+				'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
+				'index.php?option=com_sppagebuilder&view=integrations',
+				$vName == 'integrations'
+			);
 		JHtmlSidebar::addEntry(
-			'<i class="fa fa-picture-o"></i> ' . JText::_('COM_SPPAGEBUILDER_MEDIA'),
+			'<i class="fa fa-picture-o"></i> ' . JText::_('COM_SPPAGEBUILDER_MEDIA'). '<span><i class="fa fa-chevron-down pull-right"></i></span>',
 			'index.php?option=com_sppagebuilder&view=media',
 			$vName == 'media'
 		);

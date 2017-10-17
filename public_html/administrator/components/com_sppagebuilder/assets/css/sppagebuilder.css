@@ -1493,6 +1493,11 @@ fieldset[disabled] .sp-pagebuilder-btn-link:focus {
   line-height: 1.5;
   border-radius: 2px;
 }
+.sp-pagebuilder-btn-sm.sp-pagebuilder-btn-save {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
 .sp-pagebuilder-btn-xs {
   padding: 1px 5px;
   font-size: 12px;
@@ -1756,6 +1761,25 @@ input[type="button"].sp-pagebuilder-btn-block {
   position: absolute;
   clip: rect(0, 0, 0, 0);
   pointer-events: none;
+}
+.sp-pagebuilder-btns-alt {
+  background: #a8a8a8;
+  padding: 5px;
+  border-radius: 3px;
+  margin: 15px 0;
+}
+.sp-pagebuilder-btns-alt .sp-pagebuilder-btn {
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: 0 !important;
+  border-radius: 3px !important;
+}
+.sp-pagebuilder-btns-alt .sp-pagebuilder-btn.active {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-radius: 3px !important;
 }
 .sp-pagebuilder-input-group {
   position: relative;
@@ -2352,9 +2376,7 @@ button.sp-pagebuilder-close {
 .pull-left {
   float: left !important;
 }
-.hide {
-  display: none !important;
-}
+
 .show {
   display: block !important;
 }
@@ -2654,9 +2676,16 @@ body.com_sppagebuilder .container-fluid.container-main {
 }
 .pagebuilder-com-content,
 .pagebuilder-com-k2,
-.pagebuilder-com-easyblog {
+.pagebuilder-com-easyblog,
+.pagebuilder-module {
   background: #edf0f5;
   padding: 0 20px 20px;
+}
+.com_modules.view-module #general .control-group .control-label {
+  display: none;
+}
+.com_modules.view-module #general .control-group .controls {
+  margin-left: 0;
 }
 /*Page Toolbar*/
 .sp-pagebuilder-page-tools {
@@ -2667,6 +2696,9 @@ body.com_sppagebuilder .container-fluid.container-main {
   -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
   z-index: 9999;
 }
+.sp-pagebuilder-page-tools #sp-pagebuilder-btn-save {
+  display: none;
+}
 .sp-pagebuilder-page-tools.fixed-sp-page-tools {
   top: 30px;
   left: 0;
@@ -2674,6 +2706,47 @@ body.com_sppagebuilder .container-fluid.container-main {
   margin-left: 0;
   margin-right: 0;
   position: fixed;
+  background: #1e7ed8;
+  color: #fff;
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools #sp-pagebuilder-btn-save {
+  display: inline-block;
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-page-tabs > li > a {
+  color: rgba(255, 255, 255, 0.8);
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-page-tabs > li > a .pbfont {
+  color: rgba(255, 255, 255, 0.8);
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-page-tabs > li > a:active {
+  color: #fff;
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active {
+  color: #fff;
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover .pbfont,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus .pbfont,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active .pbfont {
+  color: #fff;
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link .pbfont {
+  color: rgba(255, 255, 255, 0.8);
+}
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled],
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:hover,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:focus,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:active,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-undo,
+.sp-pagebuilder-page-tools.fixed-sp-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-redo {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
 }
 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs {
   list-style: none;
@@ -2770,7 +2843,8 @@ body.com_sppagebuilder .container-fluid.container-main {
 }
 .pagebuilder-com-content .sp-pagebuilder-page-tools,
 .pagebuilder-com-k2 .sp-pagebuilder-page-tools,
-.pagebuilder-com-easyblog .sp-pagebuilder-page-tools {
+.pagebuilder-module .sp-pagebuilder-page-tools,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools {
   background: #1e7ed8;
   color: #fff;
   margin: 0 -20px 15px;
@@ -2779,19 +2853,96 @@ body.com_sppagebuilder .container-fluid.container-main {
 }
 .pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a,
 .pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a,
-.pagebuilder-com-easyblog .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a {
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a {
+  color: rgba(255, 255, 255, 0.8);
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a .pbfont,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a .pbfont,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a .pbfont,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a .pbfont {
   color: rgba(255, 255, 255, 0.8);
 }
 .pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
 .pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
-.pagebuilder-com-easyblog .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:hover,
 .pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
 .pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
-.pagebuilder-com-easyblog .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:focus,
 .pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:active,
 .pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:active,
-.pagebuilder-com-easyblog .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:active {
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:active,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-page-tabs > li > a:active {
   color: #fff;
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link {
+  color: rgba(255, 255, 255, 0.8);
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active {
+  color: #fff;
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover .pbfont,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover .pbfont,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover .pbfont,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:hover .pbfont,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus .pbfont,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus .pbfont,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus .pbfont,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:focus .pbfont,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active .pbfont,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active .pbfont,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active .pbfont,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link:active .pbfont {
+  color: #fff;
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link .pbfont,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link .pbfont,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link .pbfont,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link .pbfont {
+  color: rgba(255, 255, 255, 0.8);
+}
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled],
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled],
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled],
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled],
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:hover,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:hover,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:hover,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:hover,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:focus,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:focus,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:focus,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:focus,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:active,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:active,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:active,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled]:active,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-undo,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-undo,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-undo,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-undo,
+.pagebuilder-com-content .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-redo,
+.pagebuilder-com-k2 .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-redo,
+.pagebuilder-module .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-redo,
+.fixed-sp-page-tools .sp-pagebuilder-page-tools .sp-pagebuilder-btn.sp-pagebuilder-btn-link[disabled] .pbfont-redo {
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
 }
 /*Checkbox*/
 .sp-pagebuilder-sp-checkbox {
@@ -2936,12 +3087,42 @@ body.com_sppagebuilder .container-fluid.container-main {
 /*Admin separator*/
 .sp-pagebuilder-admin-separtor {
   display: block;
-  font-size: 14px;
-  margin: 20px 0;
-  border-bottom: 2px solid #edf1f5;
+  margin: 20px -30px 35px;
   font-weight: 600;
   color: #000;
-  padding-bottom: 10px;
+  padding: 0 30px;
+  position: relative;
+}
+.sp-pagebuilder-admin-separtor:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #e6eaed;
+  margin-top: -1.5px;
+}
+.sp-pagebuilder-admin-separtor > span {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  background: #fff;
+  padding: 0px 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: #1e7ed8;
+  margin-left: -10px;
+  font-size: 12px;
+  line-height: 12px;
+}
+.sp-pagebuilder-grouped-item .sp-pagebuilder-admin-separtor{
+  margin: 20px -15px 35px;
+}
+.sp-pagebuilder-grouped-item .sp-pagebuilder-admin-separtor:before {
+    height: 1px;
+    margin-top: -0.5px;
 }
 /* Animation */
 .spinner {
@@ -3001,6 +3182,7 @@ body.com_sppagebuilder .container-fluid.container-main {
   background-color: #0072bc;
 }
 .sp-pagebuilder-section .dropdown-toggle.btn.btn-default {
+  min-width: auto;
   padding: 0;
   margin: 0;
   background: transparent !important;
@@ -3056,6 +3238,10 @@ body.com_sppagebuilder .container-fluid.container-main {
   line-height: 30px;
   margin: 5px 0 0 5px;
   text-transform: uppercase;
+}
+.sp-pagebuilder-section .sp-pagebuilder-section-inner .sp-pagebuilder-row-tools .sp-pagebuilder-row-title.sp-pagebuilder-inner-row-title{
+  margin: 0 5px;
+  line-height: 23px;
 }
 .sp-pagebuilder-section .sp-pagebuilder-section-inner .sp-pagebuilder-row-tools .sp-pagebuilder-drag-row {
   background: #cbcdd1;
@@ -3674,13 +3860,13 @@ body.com_sppagebuilder .container-fluid.container-main {
 }
 .sp-pagebuilder-addons-list ul > li > span > span {
   display: block;
-  color: #000;
 }
 .sp-pagebuilder-addons-list ul > li > span > span > img {
   width: 38px;
   height: 38px;
   display: inline-block;
   margin-bottom: 10px;
+  opacity: .3;
   transition: opacity 300ms;
   -webkit-transition: opacity 300ms;
 }
@@ -3692,21 +3878,6 @@ body.com_sppagebuilder .container-fluid.container-main {
 }
 .sp-pagebuilder-addons-list ul > li:hover > span > span > img {
   opacity: 1;
-}
-.sp-pagebuilder-addons-list ul > li.sp-pagebuilder-addon-pro > span span {
-  opacity: .5;
-}
-.sp-pagebuilder-addons-list ul > li.sp-pagebuilder-addon-pro > span span > img {
-  opacity: .3;
-}
-.sp-pagebuilder-addons-list ul > li.sp-pagebuilder-addon-pro > span span > span {
-  position: relative;
-}
-.sp-pagebuilder-addons-list ul > li.sp-pagebuilder-addon-pro > span span > span:after {
-  content: " (PRO)";
-  font-size: 10px;
-  font-weight: bold;
-  color: #F90;
 }
 .sp-pagebuilder-modal-content > div > div.sp-pagebuilder-modal-list-addons {
   padding: 0;
@@ -4714,7 +4885,7 @@ body.sp-pagebuilder-media-modal-open {
   border: 0;
   border: 1px solid #edf1f5;
   box-shadow: none;
-  height: 44px;
+  height: auto;
   padding: 10px;
   width: 100%;
 }
@@ -4961,13 +5132,15 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
 .com_sppagebuilder.view- .container-fluid.container-main,
 .com_sppagebuilder.view-pages .container-fluid.container-main,
 .com_sppagebuilder.view-media .container-fluid.container-main,
-.com_sppagebuilder.view-integrations .container-fluid.container-main {
+.com_sppagebuilder.view-integrations .container-fluid.container-main,
+.com_sppagebuilder.view-languages .container-fluid.container-main {
   padding: 0;
 }
 .com_sppagebuilder.view- .subhead-collapse,
 .com_sppagebuilder.view-pages .subhead-collapse,
 .com_sppagebuilder.view-media .subhead-collapse,
-.com_sppagebuilder.view-integrations .subhead-collapse {
+.com_sppagebuilder.view-integrations .subhead-collapse,
+.com_sppagebuilder.view-languages .subhead-collapse {
   margin-bottom: 0;
   z-index: 99;
 }
@@ -4996,6 +5169,16 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
 }
 .sp-pagebuilder-brand img {
   width: 150px;
+}
+
+@media (max-width: 1572px) {
+  .sp-pagebuilder-brand a > span {
+    top: -3px;
+    font-size: 11px;
+  }
+  .sp-pagebuilder-brand img {
+    width: 110px;
+  }
 }
 /* Joomla Toolbar */
 .com_sppagebuilder.view-,
@@ -5034,7 +5217,6 @@ ul.sp-pagebuilder-page-templates > li > a > div > img {
 .com_sppagebuilder.view-pages .subhead .row-fluid [class*="span"] {
   min-height: 10px;
 }
-
 .com_sppagebuilder.view- .subhead .btn,
 .com_sppagebuilder.view-pages .subhead .btn {
   display: inline-block;
@@ -5846,4 +6028,105 @@ fieldset[disabled] .com_sppagebuilder.view-pages .subhead .btn-danger.focus {
   background-image: none;
   background-color: #1e7ed8;
   border-radius: 3px;
+}
+
+.sp-pagebuilder-form-group .chzn-container-multi .chzn-choices li.search-field input[type="text"]{
+  padding: 6px;
+  height: 24px;
+}
+
+.sp-pagebuilder-form-group .toggle-editor.btn-toolbar{
+  display: none !important;
+}
+
+
+/* *** Updated on v2.4.5  *** */
+.com_sppagebuilder.view-pages .chzn-container-single .chzn-single div, .com_sppagebuilder.view- .chzn-container-single .chzn-single div{
+  border: none;
+}
+
+/* License and warnign message */
+.sp-pagebuilder-message-container .row-fluid{
+  display: flex;
+}
+.sp-pagebuilder-message-container .sp-pagebuilder-message-button{
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Languages */
+.sp-pagebuilder-languages .sp-pagebuilder-language-list .language-title{
+  margin-right: 10px;
+}
+.sp-pagebuilder-languages .sp-pagebuilder-language-list .sp-pagebuilder-lang-btns a{
+  display: none;
+  padding: 2px 8px;
+}
+
+.sp-pagebuilder-languages .sp-pagebuilder-language-list tr.available .sp-pagebuilder-lang-btns a.sp-pagebuilder-btn-install{
+  display: inline-block;
+}
+
+.sp-pagebuilder-languages .sp-pagebuilder-language-list tr.enabled .sp-pagebuilder-lang-btns a.sp-pagebuilder-btn-uninstall{
+  display: inline-block;
+}
+
+.sp-pagebuilder-languages .sp-pagebuilder-language-list tr.enabled.update-available .sp-pagebuilder-lang-btns a.sp-pagebuilder-btn-update{
+  display: inline-block;
+}
+
+.sp-pagebuilder-languages .sp-pagebuilder-language-list tr.enabled.update-updated .sp-pagebuilder-lang-btns a.sp-pagebuilder-btn-up-to-date {
+  display: inline-block;
+}
+
+.sp-pagebuilder-lang-btns{
+  display: inline-block;
+}
+
+/* Top Action Buttons */
+.sp-modal-top-action-btns{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-success{
+  margin-right: 12px;
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-default{
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.sp-modal-top-action-btns .sp-pagebuilder-btn-default:hover{
+  background-color: rgba(0, 0, 0, 0.3);
+}
+/* Updated on V2.5 */
+.sp-pagebuilder-modal .chzn-container-multi .chzn-choices, .com_sppagebuilder .chzn-container-multi .chzn-choices {
+    min-height: 44px;
+}
+
+/* Page Builder Notice CSS */
+.sp-pagebuilder-pages.top-notice-bar{
+    background: transparent;
+    margin-top: 0;
+    margin-right: 20px;
+    padding: 0;
+    margin-bottom: 20px;
+}
+.sppb-active-notice{
+    background: #fff;
+    padding: 15px 15px;
+    line-height: 1;
+    border-left: 10px solid #80c328 ;
+    margin-top: 20px;
+}
+
+.sppb-active-notice p{
+    margin-bottom: 0;
+}
+
+.sppb-active-notice a img{
+    width: 13px;
+}
+.sppb-active-notice a:hover img{
+    opacity: .7;
 }

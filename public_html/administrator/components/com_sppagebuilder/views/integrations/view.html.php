@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 jimport('joomla.application.component.view');
 
@@ -39,12 +39,18 @@ class SppagebuilderViewIntegrations extends JViewLegacy {
 		JHtmlSidebar::addEntry(
 			'<i class="fa fa-folder-o"></i> ' . JText::_('COM_SPPAGEBUILDER_CATEGORIES'),
 			'index.php?option=com_categories&extension=com_sppagebuilder',
-			$vName == 'categories');
+			$vName == 'categories'
+		);
 
 		JHtmlSidebar::addEntry(
-			'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
-			'index.php?option=com_sppagebuilder&view=integrations',
-			$vName == 'integrations'
+				'<i class="fa fa-plug"></i> ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'),
+				'index.php?option=com_sppagebuilder&view=integrations',
+				$vName == 'integrations'
+		);
+		JHtmlSidebar::addEntry(
+			'<i class="fa fa-globe"></i> ' . JText::_('COM_SPPAGEBUILDER_LANGUAGES'),
+			'index.php?option=com_sppagebuilder&view=languages',
+			$vName == 'languages'
 		);
 
 		JHtmlSidebar::addEntry(
@@ -55,7 +61,7 @@ class SppagebuilderViewIntegrations extends JViewLegacy {
 	}
 
 	protected function addToolBar() {
-		JToolBarHelper::title( JText::_('COM_SPPAGEBUILDER') . ' - ' . JText::_('COM_SPPAGEBUILEDR_INTEGRATIONS'));
+		JToolBarHelper::title( JText::_('COM_SPPAGEBUILDER') . ' - ' . JText::_('COM_SPPAGEBUILDER_INTEGRATIONS'));
 	}
 
 }

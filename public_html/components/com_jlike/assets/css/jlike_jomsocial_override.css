@@ -1,0 +1,32 @@
+.jlike_jomsocial_smileybox {
+ background: none repeat scroll 0 0 white;
+ border: 1px solid #999;
+ bottom: 18px;
+ right: 12px;
+ width: 50px;
+ position: absolute;
+}
+
+.jlike_jomsocial_smileybox table img {
+ padding: 5px!important
+}
+.jlike_jomsocial_smileybox table, .jlike_jomsocial_smileybox tr, .jlike_jomsocial_smileybox td {
+ border: 0!important;
+ margin: 0!important;
+ padding: 0!important;
+}
+.smiley {
+cursor: pointer;
+position: absolute;
+}
+
+button.jlike_jomsocial_smiley{
+background: url(../images/smileys/s2.png) -22px -25px;
+border: 0 none;
+height: 25px;
+margin-left: 95%;
+width: 15px;
+margin-bottom: -5% !important;
+box-shadow:none !important;
+padding:0px !important;
+}

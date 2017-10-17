@@ -1,0 +1,79 @@
+.feed-item-cover .feed-item {
+  position: relative;
+  padding-bottom: 20px;
+  padding-left: 30px;
+  border-left: 2px dashed #B8B5B4;
+  margin-left:10px;
+  top:15px;
+}
+.feed-item-cover .date{
+  top:10px;
+  position: relative;
+  text-transform: uppercase;
+  font-size: 12px;
+  text-align: right;
+  color: #5c5f63;
+  padding-left:8px;
+  font-family: inherit;
+}
+.feed-item-cover:last-child  .feed-item{
+  border-color: transparent;
+}
+.feed-item-cover .feed-item:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: -7px;
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+	background: grey;
+}
+
+.feed-item-cover .feed-item .text {
+  position: relative;
+  top: -3px;
+  color:#616468;
+}
+
+.feed-item-cover .feed-item-image {
+  padding: 3px;
+  border-radius: 50%;
+  height:40px;
+  width:40px;
+}
+
+.feed-item-cover span {
+  padding:5px;
+}
+
+.feed-item-cover {
+  display:flex;
+}
+
+.feed-item-inner {
+  transform:translateY(-13px);
+  padding: 10px;
+}
+
+.feed-item-image-upload, .feed-item-video-upload
+{
+  padding-top:20px;
+  padding-left:20px;
+}
+
+.todays-activity
+{
+  border: 1px dashed #c0c3c6;
+  padding-top: 15px;
+}
+
+.feed-item-cover .feed-item-text
+{
+  font-size: 18px;
+  color: #5c5f63;
+  padding-left: 0px;
+}
+
+.feed-item-video-upload #jt_video_gallery{width: 70%;}

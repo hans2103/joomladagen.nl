@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SpTypeIcon{
 
@@ -791,6 +791,62 @@ class SpTypeIcon{
 				'fa-youtube',
 				'fa-youtube-play',
 				'fa-youtube-square',
+				/* *** Updated Font-awesome to 4.7.0 *** */
+				'fa-address-book',
+				'fa-address-book-o',
+				'fa-address-book-o',
+				'fa-address-card',
+				'fa-address-card-o',
+				'fa-bandcamp',
+				'fa-bathtub',
+				'fa-bath',
+				'fa-drivers-license',
+				'fa-drivers-license-o',
+				'fa-eercast',
+				'fa-envelope-open',
+				'fa-envelope-open-o',
+				'fa-etsy',
+				'fa-free-code-camp',
+				'fa-grav',
+				'fa-handshake-o',
+				'fa-id-badge',
+				'fa-id-card',
+				'fa-id-card-o',
+				'fa-imdb',
+				'fa-linode',
+				'fa-meetup',
+				'fa-microchip',
+				'fa-podcast',
+				'fa-quora',
+				'fa-ravelry',
+				'fa-shower',
+				'fa-snowflake-o',
+				'fa-superpowers',
+				'fa-telegram',
+				'fa-thermometer-4',
+				'fa-thermometer',
+				'fa-thermometer-full',
+				'fa-thermometer-3',
+				'fa-thermometer-three-quarters',
+				'fa-thermometer-2',
+				'fa-thermometer-half',
+				'fa-thermometer-1',
+				'fa-thermometer-quarter',
+				'fa-thermometer-0',
+				'fa-thermometer-empty',
+				'fa-times-rectangle',
+				'fa-window-close',
+				'fa-times-rectangle-o',
+				'fa-window-close-o',
+				'fa-user-circle',
+				'fa-user-circle-o',
+				'fa-user-o',
+				'fa-vcard',
+				'fa-vcard-o',
+				'fa-window-maximize',
+				'fa-window-minimize',
+				'fa-window-restore',
+				'fa-wpexplorer',
 			);
 
 	}

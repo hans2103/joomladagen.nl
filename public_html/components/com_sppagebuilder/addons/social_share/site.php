@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonSocial_share extends SppagebuilderAddons {
 
@@ -169,6 +169,27 @@ class SppagebuilderAddonSocial_share extends SppagebuilderAddons {
 			}
 			$output .= '</a>';
 			$output .= '</li>';
+		} if (in_array('xing', $show_socials)) {
+			$output .= '<li class="sppb-social-share-xing">';
+			$output .= '<a onClick="window.open(\'https://www.xing.com/spi/shares/new?cb=0&url=' . $current_url .'\',\'Xing\',\'width=585,height=666,left=\'+(screen.availWidth/2-292)+\',top=\'+(screen.availHeight/2-333)+\'\'); return false;" href="https://www.xing.com/spi/shares/new?cb=0&url='.$current_url. '" >';
+			$output .= '<i class="fa fa-xing"></i>';
+			if ($show_social_names == 1) {
+				$output .= '<span class="sppb-social-share-title">' . JText::_('COM_SPPAGEBUILDER_ADDON_SOCIALSHARE_XING') . '</span>';
+			}
+			if (isset($statistics->shares->xing) && $statistics->shares && $show_counter) {
+				$output .= '<span class="sppb-social-share-count">' . $statistics->shares->xing . '</span>';
+			}
+			$output .= '</a>';
+			$output .= '</li>';
+		} if (in_array('whatsapp', $show_socials)) {
+			$output .= '<li class="sppb-social-share-whatsapp">';
+			$output .= '<a href="whatsapp://send?text='.$current_url. '" >';
+			$output .= '<i class="fa fa-whatsapp"></i>';
+			if ($show_social_names == 1) {
+				$output .= '<span class="sppb-social-share-title">' . JText::_('COM_SPPAGEBUILDER_ADDON_SOCIALSHARE_WHATSAPP') . '</span>';
+			}
+			$output .= '</a>';
+			$output .= '</li>';
 		}
 		$output .= '</ul>';
 		$output .= '</div>';
@@ -199,6 +220,10 @@ class SppagebuilderAddonSocial_share extends SppagebuilderAddons {
 
 		if($hover_style) {
 			$css .= $addon_id . ' .sppb-social-share-wrap ul li a:hover {' . $hover_style . '}';
+		}
+
+		if(isset($this->addon->settings->icon_align) && $this->addon->settings->icon_align) {
+			$css .= $addon_id . ' .sppb-social-share-wrap {text-align:' . $this->addon->settings->icon_align . ';}';
 		}
 
 		return $css;

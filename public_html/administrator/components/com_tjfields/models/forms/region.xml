@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="hidden" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_REGION_REGION_ID" description="COM_TJFIELDS_FORM_DESC_REGION_REGION_ID" filter="safehtml" />
+		<field name="region" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_REGION_REGION" description="COM_TJFIELDS_FORM_DESC_REGION_REGION" required="true" filter="safehtml" />
+		<field name="region_3_code" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_REGION_REGION_3_CODE" description="COM_TJFIELDS_FORM_DESC_REGION_REGION_3_CODE" required="true" filter="safehtml" />
+		<field name="region_code" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_REGION_REGION_CODE" description="COM_TJFIELDS_FORM_DESC_REGION_REGION_CODE" required="true" filter="safehtml" />
+		<field name="country_id" type="countries" label="COM_TJFIELDS_FORM_LBL_REGION_SELECT_COUNTRY" description="COM_TJFIELDS_FORM_DESC_REGION_SELECT_COUNTRY" required="true" filter="safehtml">
+			<option value="">COM_TJFIELDS_FILTER_SELECT_COUNTRY</option>
+		</field>
+		<field name="region_jtext" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_REGION_REGION_JTEXT" description="COM_TJFIELDS_FORM_DESC_REGION_REGION_JTEXT" filter="safehtml" />
+	</fieldset>
+</form>

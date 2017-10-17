@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,14 +11,24 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(__DIR__ . '/vendor/autoload.php'))
+// Do not instantiate plugin on install pages
+// to prevent installation/update breaking because of potential breaking changes
+if (
+	in_array(JFactory::getApplication()->input->get('option'), ['com_installer', 'com_regularlabsmanager'])
+	&& JFactory::getApplication()->input->get('action') != ''
+)
+{
+	return;
+}
+
+if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 {
 	return;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use RegularLabs\Sourcerer\Plugin;
+use RegularLabs\Plugin\System\Sourcerer\Plugin;
 
 /**
  * Plugin that replaces Sourcerer code with its HTML / CSS / JavaScript / PHP equivalent
@@ -30,5 +40,24 @@ class PlgSystemSourcerer extends Plugin
 	public $_lang_prefix = 'SRC';
 
 	public $_can_disable_by_url = false;
-	public $_page_types         = ['html', 'feed', 'pdf', 'ajax', 'xml', 'raw', 'json'];
+	public $_page_types         = ['html', 'feed', 'pdf', 'xml', 'ajax', 'json', 'raw'];
+
+	/*
+	 * Below are the events that this plugin uses
+	 * All handling is passed along to the parent run method
+	 */
+	public function onContentPrepare()
+	{
+		$this->run();
+	}
+
+	public function onAfterDispatch()
+	{
+		$this->run();
+	}
+
+	public function onAfterRender()
+	{
+		$this->run();
+	}
 }

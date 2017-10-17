@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="Profile" option="View">
+		<message><![CDATA[Show single vendor profile]]></message>
+	</layout>
+	<fields name="request">
+		<fieldset name="request" addfieldpath="/administrator/components/com_categories/models/fields">
+			<field name="client" type="list" description="JTAG_FIELD_SELECT_DESC" label="JTAG">
+				<option value="com_jticketing">COM_TJVENDOR_CLIENT_JTICKETING</option>
+				<option value="com_quick2cart">COM_TJVENDOR_CLIENT_QUICK2CART</option>
+				<option value="com_jgive">COM_TJVENDOR_CLIENT_JGIVE</option>
+				<option value="com_shika">COM_TJVENDOR_CLIENT_SHIKA</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,8 +24,9 @@ use ReflectionClass;
  */
 class EditorButtonPopup
 {
-	var $extension = '';
-	var $params    = null;
+	var $extension         = '';
+	var $params            = null;
+	var $require_core_auth = true;
 
 	public function __construct($extension)
 	{
@@ -35,12 +36,12 @@ class EditorButtonPopup
 
 	public function render()
 	{
-		if (!Extension::isAuthorised())
+		if ( ! Extension::isAuthorised($this->require_core_auth))
 		{
 			throw new Exception(JText::_("ALERTNOTAUTH"));
 		}
 
-		if (!Extension::isEnabledInArea($this->params))
+		if ( ! Extension::isEnabledInArea($this->params))
 		{
 			throw new Exception(JText::_("ALERTNOTAUTH"));
 		}

@@ -7,7 +7,7 @@
 */
 
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonBlocknumber extends SppagebuilderAddons{
 

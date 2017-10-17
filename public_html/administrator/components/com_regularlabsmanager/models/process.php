@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -55,14 +55,14 @@ class RegularLabsManagerModelProcess extends JModelItem
 	 */
 	public function install($id, $url)
 	{
-		if (!is_string($url))
+		if ( ! is_string($url))
 		{
 			die(JText::_('RLEM_ERROR_NO_VALID_URL'));
 		}
 
 		$url = 'http://' . str_replace('http://', '', $url);
 
-		if (!$target = JInstallerHelper::downloadPackage($url))
+		if ( ! $target = JInstallerHelper::downloadPackage($url))
 		{
 			die(JText::_('RLEM_ERROR_CANNOT_DOWNLOAD_FILE') . ' [' . $url . ']');
 		}
@@ -79,13 +79,13 @@ class RegularLabsManagerModelProcess extends JModelItem
 		// Unpack the package
 		$package = JInstallerHelper::unpack($target);
 
-		if (!isset($package['extractdir']))
+		if ( ! isset($package['extractdir']))
 		{
 			return;
 		}
 
 		// Cleanup the install files
-		if (!is_file($package['packagefile']))
+		if ( ! is_file($package['packagefile']))
 		{
 			$config                 = JFactory::getConfig();
 			$package['packagefile'] = $config->get('tmp_path') . '/' . $package['packagefile'];
@@ -97,7 +97,7 @@ class RegularLabsManagerModelProcess extends JModelItem
 		$installer->install($package['dir']);
 
 		// Cleanup the install files.
-		if (!is_file($package['packagefile']))
+		if ( ! is_file($package['packagefile']))
 		{
 			$config                 = JFactory::getConfig();
 			$package['packagefile'] = $config->get('tmp_path') . '/' . $package['packagefile'];
@@ -127,6 +127,7 @@ class RegularLabsManagerModelProcess extends JModelItem
 		require_once JPATH_ADMINISTRATOR . '/components/com_installer/models/manage.php';
 		$installer = JModelLegacy::getInstance('Manage', 'InstallerModel');
 		$installer->remove($ids);
-		echo 1;
+
+		die('1');
 	}
 }

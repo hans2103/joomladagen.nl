@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_modulesanywhere</name>
 	<description>PLG_SYSTEM_MODULESANYWHERE_DESC</description>
-	<version>7.3.2PRO</version>
-	<creationDate>May 2017</creationDate>
+	<version>7.4.0PRO</version>
+	<creationDate>September 2017</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -13,8 +13,8 @@
 	<scriptfile>script.install.php</scriptfile>
 
 	<updateservers>
-		<server type="extension" priority="1" name="Regular Labs Modules Anywhere">
-			http://download.regularlabs.com/updates.xml?e=modulesanywhere&amp;pro=1&amp;type=.xml
+		<server type="extension" priority="1" name="Regular Labs - Modules Anywhere">
+			https://download.regularlabs.com/updates.xml?e=modulesanywhere&amp;pro=1&amp;type=.xml
 		</server>
 	</updateservers>
 
@@ -174,7 +174,7 @@
 					<option value="1">JYES</option>
 				</field>
 
-				<field name="@block_tag_a" type="rl_block" start="1"
+				<field name="@block_default_tag_a" type="rl_block" start="1"
 					   label="MA_DEFAULT_DATA_TAG_SETTINGS"
 					   description="MA_DEFAULT_DATA_TAG_SETTINGS_DESC" />
 				<field name="showtitle" type="radio" class="btn-group" default=""
@@ -184,6 +184,7 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
+				<field name="@block_default_tag_ab" type="rl_block" end="1" />
 			</fieldset>
 
 			<fieldset name="advanced">

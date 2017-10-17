@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library\Condition;
 defined('_JEXEC') or die;
 
 use JFactory;
+use RegularLabs\Library\DB as RL_DB;
 
 /**
  * Class UserAccesslevel
@@ -49,12 +50,18 @@ class UserAccesslevel
 			$names[] = strtolower(str_replace(' ', '', $level));
 		}
 
+		if (empty($names))
+		{
+			return $selection;
+		}
+
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true)
 			->select($db->quoteName('id'))
 			->from('#__viewlevels')
-			->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", "")) IN (\'' . implode('\',\'', $names) . '\')');
+			->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", ""))'
+				. RL_DB::in($names));
 		$db->setQuery($query);
 
 		$level_ids = $db->loadColumn();

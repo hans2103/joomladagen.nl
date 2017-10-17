@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 jimport('joomla.form.formfield');
 
@@ -24,7 +24,7 @@ class JFormFieldPagebuilder extends JFormField
 		JHtml::_('jquery.framework');
 		JHtml::_('jquery.ui', array('core', 'sortable'));
 		$doc = JFactory::getDocument();
-		$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/apps.css' );
+
 		$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/jquery.minicolors.css' );
 		$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/font-awesome.min.css' );
 		$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/pbfont.css' );
@@ -53,9 +53,21 @@ class JFormFieldPagebuilder extends JFormField
 		}
 		$doc->addScriptdeclaration('var addonsJSON=' . json_encode($new_addons) . ';');
 
+		$conf   = JFactory::getConfig();
+		$editor   = $conf->get('editor');
+		if ($editor == 'jce') {
+			require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
+			wfimport('admin.models.editor');
+		  $editor = new WFModelEditor();
+			$app = JFactory::getApplication();
+		  $settings = $editor->getEditorSettings();
+		  $app->triggerEvent('onBeforeWfEditorRender', array(&$settings));
+			echo $editor->render($settings);
+		}
+
 		$output = '<div class="sp-pagebuilder-admin pagebuilder-module"><div id="sp-pagebuilder-page-tools" class="clearfix sp-pagebuilder-page-tools"></div><div id="container"></div></div>';
 
-		$output .= '<input type="hidden" name="'. $this->name .'" id="'. $this->id .'" value="'. $this->value .'">';
+		$output .= '<input type="hidden" name="'. $this->name .'" id="'. $this->id .'" value="">';
 		$output .= '<script type="text/javascript" src="' . JURI::base(true) . '/components/com_sppagebuilder/assets/js/engine.js"></script>';
 
 		return $output;

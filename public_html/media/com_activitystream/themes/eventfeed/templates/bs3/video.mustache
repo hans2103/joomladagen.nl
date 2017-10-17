@@ -1,0 +1,30 @@
+<div class="feed-item-cover">
+	<div class="date col-xs-3 col-sm-1 col-lg-1">{{created_day}} </br> {{created_date_month}}</div>
+	<div class="feed-item col-xs-9 col-sm-11 col-lg-11">
+		<div class="feed-item-inner">
+			<span><i class="fa fa-video-camera fa-lg"></i></span>
+			{{#actor.image.gravatar}}
+				<span><img class="feed-item-image" src="{{actor.image.avatar}}" /></span>
+			{{/actor.image.gravatar}}
+			{{^actor.image.gravatar}}
+				<span><img class="feed-item-image" src="{{root}}{{actor.image.avatar}}" /></span>
+			{{/actor.image.gravatar}}
+			<span class="language en-GB"><a href='{{root}}{{actor.url}}'>{{actor.name}}</a> added {{object.count}} video(s) to the event</span>
+			<div class="feed-item-video-upload">
+				<div class="media" id="jt_video_gallery">
+					<div class="row">
+						{{#object.videos}}
+							<div class=" jt_gallery_image_item col-xs-12 col-sm-6 col-md-6" >
+								<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="{{root}}{{link}}" class="modal jt-bs3-modal">
+									<img src="{{root}}{{playIcon}}" class="play_icon"/>
+									<img src="{{thumbSrc}}" width="100%"/>
+								</a>
+							</div>
+						{{/object.videos}}
+					</div>
+				</div>
+			</div>
+			<hr />
+		</div>
+	</div>
+</div>

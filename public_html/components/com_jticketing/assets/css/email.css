@@ -1,0 +1,45 @@
+.maindiv{border: 5px solid rgb(204, 204, 204); width: 500px;}
+table.maintab td{vertical-align:top; }
+table.maintab{background:#ccc;}
+table.info{vertical-align:top; }
+table.info2{vertical-align:top; }
+table.info td,table.info2 td{background:#fff;}
+.label{
+	color:#ccc;
+	font-size:22px;
+	font-family:Tahoma;
+	width: 150px;
+vertical-align: top;	
+}
+.labelsmall{
+	color:#ccc;
+	font-size:15px;
+	font-family:Tahoma;
+}
+.val{
+	color:#333;
+	font-size:18px;
+	font-family:Tahoma;
+	text-align:left;
+	width: 350px;
+}
+.valbig{
+	color:#333;
+	font-size:20px;
+	font-family:Tahoma;
+	font-weight:bold;
+}
+.valsmall{
+	color:#333;
+	font-size:14px;
+	font-family:Tahoma;
+}
+.event{
+	color:#333;
+	font-size:28px;
+	font-family:Tahoma;
+}
+.orderby, .orderdate{font-weight:bold;}
+tr.img{}
+.info tr{border:5px solid #ccc;}
+.barcode{vertical-align:middle !important;}

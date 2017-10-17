@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -36,13 +36,13 @@ trait ConditionContent
 			return null;
 		}
 
-		if (!$text)
+		if ( ! $text)
 		{
 			$item = $this->getItem($fields);
 
 			foreach ($fields as $field)
 			{
-				if (!isset($item->{$field}))
+				if ( ! isset($item->{$field}))
 				{
 					return false;
 				}
@@ -60,7 +60,7 @@ trait ConditionContent
 
 		foreach ($this->params->content_keywords as $keyword)
 		{
-			if (!RegEx::match('\b' . RegEx::quote($keyword) . '\b', $text))
+			if ( ! RegEx::match('\b' . RegEx::quote($keyword) . '\b', $text))
 			{
 				continue;
 			}
@@ -78,11 +78,11 @@ trait ConditionContent
 			return null;
 		}
 
-		if (!$keywords)
+		if ( ! $keywords)
 		{
 			$item = $this->getItem($field);
 
-			if (!isset($item->metakey) || empty($item->metakey))
+			if ( ! isset($item->metakey) || empty($item->metakey))
 			{
 				return false;
 			}
@@ -106,7 +106,7 @@ trait ConditionContent
 
 		foreach ($this->params->meta_keywords as $keyword)
 		{
-			if (!$keyword || !in_array(trim($keyword), $keywords))
+			if ( ! $keyword || ! in_array(trim($keyword), $keywords))
 			{
 				continue;
 			}
@@ -124,11 +124,11 @@ trait ConditionContent
 			return null;
 		}
 
-		if (!$author)
+		if ( ! $author)
 		{
 			$item = $this->getItem($field);
 
-			if (!isset($item->{$field}))
+			if ( ! isset($item->{$field}))
 			{
 				return false;
 			}

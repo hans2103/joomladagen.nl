@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,7 +28,7 @@ class Url
 	{
 		$regex = isset($this->params->regex) ? $this->params->regex : false;
 
-		if (!is_array($this->selection))
+		if ( ! is_array($this->selection))
 		{
 			$this->selection = explode("\n", $this->selection);
 		}
@@ -41,12 +41,12 @@ class Url
 		$url = JUri::getInstance();
 		$url = $url->toString();
 
-		$urls = array(
+		$urls = [
 			StringHelper::html_entity_decoder(urldecode($url)),
 			urldecode($url),
 			StringHelper::html_entity_decoder($url),
 			$url,
-		);
+		];
 		$urls = array_unique($urls);
 
 		$pass = false;

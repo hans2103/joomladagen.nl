@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,7 +20,7 @@ class RLAssignmentsMenu extends RLAssignment
 	public function passMenu()
 	{
 		// return if no Itemid or selection is set
-		if (!$this->request->Itemid || empty($this->selection))
+		if ( ! $this->request->Itemid || empty($this->selection))
 		{
 			return $this->pass($this->params->inc_noitemid);
 		}
@@ -39,7 +39,7 @@ class RLAssignmentsMenu extends RLAssignment
 			return $this->pass(($this->params->inc_children != 2));
 		}
 
-		if (!$this->params->inc_children)
+		if ( ! $this->params->inc_children)
 		{
 			return $this->pass(false);
 		}
@@ -48,7 +48,7 @@ class RLAssignmentsMenu extends RLAssignment
 		$parent_ids = array_diff($parent_ids, ['1']);
 		foreach ($parent_ids as $id)
 		{
-			if (!in_array($id, $this->selection))
+			if ( ! in_array($id, $this->selection))
 			{
 				continue;
 			}

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 //import Joomla controller library
 jimport('joomla.application.component.controller');
@@ -23,7 +23,11 @@ class SppagebuilderController extends JControllerLegacy{
 
 		if ($vName == 'page') {
 				$viewStatus = true;
-		} else if ($vName == 'ajax') {
+		}else if ($vName == 'form') {
+				$viewStatus = true;
+		}else if ($vName == 'ajax') {
+				$viewStatus = true;
+		}else if ($vName == 'media') {
 				$viewStatus = true;
 		}
 
@@ -45,7 +49,7 @@ class SppagebuilderController extends JControllerLegacy{
 			foreach ($template as &$row) {
 				foreach ($row->columns as &$column) {
 					foreach ($column->addons as &$addon){
-						if (isset($addon->type) && $addon->type == 'sp_row') {
+						if (isset($addon->type) && ($addon->type === 'sp_row' || $addon->type === 'inner_row')) {
 							foreach ($addon->columns as &$column) {
 								foreach ($column->addons as &$addon) {
 									if (isset($addon->htmlContent)) {

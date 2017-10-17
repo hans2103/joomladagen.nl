@@ -6,9 +6,10 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
-$html = '</div>';//end column
-$html .= '</div>';//end column
+$html = '</div>';
+$html .= '</div>';
+$html .= '</div>';
 
 echo $html;

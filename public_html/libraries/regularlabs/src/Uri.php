@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -73,6 +73,6 @@ class Uri
 		// hostname: give preference to SERVER_NAME, because this includes subdomains
 		$hostname = ($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : $_SERVER['HTTP_HOST'];
 
-		return !(strpos(RegEx::replace('^.*?://', '', $url), $hostname) === 0);
+		return ! (strpos(RegEx::replace('^.*?://', '', $url), $hostname) === 0);
 	}
 }

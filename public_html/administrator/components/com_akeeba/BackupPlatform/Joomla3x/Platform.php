@@ -18,6 +18,7 @@ use Akeeba\Engine\Factory;
 use Akeeba\Engine\Finalization\TestExtract;
 use Akeeba\Engine\Platform;
 use Akeeba\Engine\Platform\Base as BasePlatform;
+use DateTimeZone;
 use FOF30\Container\Container;
 use FOF30\Date\Date;
 use Psr\Log\LogLevel;
@@ -389,16 +390,19 @@ class Joomla3x extends BasePlatform
 		\JLoader::import('joomla.utilities.date');
 		\JLoader::import('joomla.environment.request');
 
-		$jregistry = $this->container->platform->getConfig();
-		$tz        = $jregistry->get('offset');
+		// Do I have a forced timezone?
+		$tz = $this->get_platform_configuration_option('forced_backup_timezone', 'AKEEBA/DEFAULT');
 
-		if (!$this->container->platform->isCli())
+		// No forced timezone set? Use the default Joomla! behavior.
+		if (empty($tz) || ($tz == 'AKEEBA/DEFAULT'))
 		{
-			$user = $this->container->platform->getUser();
-			$tz   = $user->getParam('timezone', $tz);
+			$tz = $this->getJoomlaTimezone();
 		}
 
-		$dateNow = new Date('now', $tz);
+		$utcTimeZone = new DateTimeZone('UTC');
+		$dateNow     = new Date('now', $utcTimeZone);
+		$timezone    = new DateTimeZone($tz);
+		$dateNow->setTimezone($timezone);
 
 		return $dateNow->format($format, true);
 	}
@@ -554,9 +558,14 @@ class Joomla3x extends BasePlatform
 		}
 		elseif (substr($driver, -5) == 'mysql')
 		{
-			// You really can't fix morons writing custom database drivers knowing jack shit about MySQL vs MySQLi but
-			// you can sure as heck work around them by FORCING MySQLi when the bastards tell you to use MySQL on a
-			// server that doesn't even have the bloody extension to begin with.
+			/**
+			 * Apparently there are some folks of dubious intelligence out there writing custom database drivers without
+			 * understanding or caring about the differences between mysql and mysqli drivers in PHP. They don't play
+			 * nice but I have my way to work around their ignorance, FORCING mysqli when they erroneously report mysql
+			 * on servers which no longer support this ancient, obsolete database connector. Of course the proper way
+			 * to address this would be having these folks fix their broken software but I think I'm asking for too
+			 * much. They know who they are, fa la la...
+			 */
 			if (!$hasMySQL)
 			{
 				return '\\Akeeba\\Engine\\Driver\\Mysqli';
@@ -729,7 +738,18 @@ class Joomla3x extends BasePlatform
 	 */
 	public function get_platform_configuration_option($key, $default)
 	{
-		return $this->container->params->get($key, $default);
+		$value = $this->container->params->get($key, $default);
+
+		// Some configuration options may have to be decrypted
+		switch ($key)
+		{
+			case 'frontend_secret_word':
+				$secureSettings = Factory::getSecureSettings();
+				$value          = $secureSettings->decryptSettings($value);
+				break;
+		}
+
+		return $value;
 	}
 
 	/**
@@ -1182,5 +1202,37 @@ class Joomla3x extends BasePlatform
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the applicable timezone in the same way Joomla! calculates it: if there is a logged in
+	 * user with a specific timezone set, use it. Otherwise use the Server Timezone defined in the
+	 * site's Global Configuration. If nothing is set there, use GMT instead.
+	 *
+	 * @return  string
+	 */
+	private function getJoomlaTimezone()
+	{
+		// Out ultimate default is the server timezone set up in the Global Configuration
+		$jregistry = $this->container->platform->getConfig();
+		$tz        = $jregistry->get('offset', 'GMT');
+
+		// If this is a CLI script, tough luck, we can't use a different TZ
+		if ($this->container->platform->isCli())
+		{
+			return $tz;
+		}
+
+		// If it's a guest user they can't have a special TZ set, return.
+		$user = $this->container->platform->getUser();
+
+		if ($user->guest)
+		{
+			return $tz;
+		}
+
+		$tz = $user->getParam('timezone', $tz);
+
+		return $tz;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -38,7 +38,7 @@ abstract class Zoo
 				break;
 		}
 
-		if (!isset($request->idname))
+		if ( ! isset($request->idname))
 		{
 			$request->idname = '';
 		}

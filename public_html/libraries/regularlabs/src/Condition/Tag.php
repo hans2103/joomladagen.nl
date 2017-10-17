@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -29,7 +29,7 @@ class Tag
 
 		if ($this->request->option != 'com_tags'
 			|| $this->request->view != 'tag'
-			|| !$this->request->id
+			|| ! $this->request->id
 		)
 		{
 			return $this->_(false);
@@ -66,7 +66,7 @@ class Tag
 				'INNER', '#__contentitem_tag_map AS m'
 				. ' ON m.tag_id = t.id'
 				. ' AND m.type_alias = ' . $this->db->quote($prefix)
-				. ' AND m.content_item_id IN ( ' . $this->request->id . ')'
+				. ' AND m.content_item_id = ' . $this->request->id
 			);
 		$this->db->setQuery($query);
 		$tags = $this->db->loadObjectList();
@@ -88,7 +88,7 @@ class Tag
 
 		foreach ($tags as $tag)
 		{
-			if (!$this->passTag($tag->id) && !$this->passTag($tag->title))
+			if ( ! $this->passTag($tag->id) && ! $this->passTag($tag->title))
 			{
 				continue;
 			}
@@ -110,7 +110,7 @@ class Tag
 			return ($this->params->inc_children != 2);
 		}
 
-		if (!$this->params->inc_children)
+		if ( ! $this->params->inc_children)
 		{
 			return false;
 		}
@@ -135,7 +135,7 @@ class Tag
 	{
 		foreach ($this->selection as $id)
 		{
-			if (!$this->passTagMatchAll($id, $tags))
+			if ( ! $this->passTagMatchAll($id, $tags))
 			{
 				return false;
 			}

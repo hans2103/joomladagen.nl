@@ -1,0 +1,68 @@
+.jtcalendar .btn-twitter {
+	padding-left: 30px;
+	background: rgba(0, 0, 0, 0) url(https://platform.twitter.com/widgets/images/btn.27237bab4db188ca749164efd38861b0.png) -20px 6px no-repeat;
+	background-position: -20px 11px !important;
+}
+.jtcalendar .btn-twitter:hover {
+	background-position:  -20px -18px !important;
+}
+.jtcalendar .toggle-header{
+padding:10px 0;
+margin:10px 0;
+background-color:black;
+color:white;
+}
+.jtcalendar  .txt-green{
+color:green;
+}
+.jtcalendar  .txt-red{
+color:red;
+}
+.jtcalendar  .navbar-brand
+{
+float : none;
+}
+.jtcalendar .fixed {position:fixed; top:0; left:0; z-index:2; width:100%;}
+
+.jtcalendar  .modal
+{
+position: initial !important;
+display : block !important;
+
+}
+.jtcalendar  .cal-cell1
+{
+display : block !important;
+}
+.jtcalendar .input-group .form-control {
+z-index: 1 !important;
+}
+.jtcalendar  input[type="text"]{height:30px;}
+.jtcalendar .search_b{margin-top:0px;}
+.jtcalendar .clear_b{height: 30px;}
+
+.jtcalendar  .btn-small-jt{
+margin-right:5px !important;
+min-height: 28px !important;
+text-align:center !important;
+width: 36px !important;
+
+}
+
+.jtcalendar #month_button{
+min-width: 150px !important;
+min-height: 22px !important;
+text-align:center !important;
+font-size: 15px !important;
+margin-right:5px !important;
+
+
+}
+
+.jtcalendar  .rt_align{
+float : right !important;
+}
+
+.jtcalendar  .badge-important {
+background-color: #579FC3 !important;
+}

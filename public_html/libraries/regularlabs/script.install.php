@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!class_exists('RegularLabsInstallerScript'))
+if ( ! class_exists('RegularLabsInstallerScript'))
 {
 	require_once __DIR__ . '/script.install.helper.php';
 
@@ -23,7 +23,7 @@ if (!class_exists('RegularLabsInstallerScript'))
 
 		public function onBeforeInstall($route)
 		{
-			if (!$this->isNewer())
+			if ( ! $this->isNewer())
 			{
 				$this->softbreak = true;
 

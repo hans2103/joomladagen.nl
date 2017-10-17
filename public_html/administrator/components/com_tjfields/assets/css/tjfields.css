@@ -1,0 +1,46 @@
+/* View icons */
+.icon-48-countries{background-image:url(../images/countries_48.png);padding-left:60px!important;}
+.icon-48-country{background-image:url(../images/countries_48.png);padding-left:60px!important;}
+.icon-48-regions{background-image:url(../images/regions_48.png);padding-left:60px!important;}
+.icon-48-region{background-image:url(../images/regions_48.png);padding-left:60px!important;}
+.icon-48-cities{background-image:url(../images/cities_48.png);padding-left:60px!important;}
+.icon-48-city{background-image:url(../images/cities_48.png);padding-left:60px!important;}
+
+.icon-48-fields {
+      background-image: url(../images/l_fields.png);
+      padding-left:60px!important;
+}
+
+.icon-48-field {
+      background-image: url(../images/l_fields.png);
+      padding-left:60px!important;
+}
+
+.com_tjfields_repeating_block , .tjfield_container .span9
+{
+	margin-left:0px !important;
+	margin-bottom:5px !important;
+}
+
+.com_tjfields_js_repeating_block , .tjfield_js_container .span9
+{
+	margin-left:0px !important;
+	margin-bottom:5px !important;
+}
+
+.techjoomla-bootstrap .displaynone
+{
+	display:none;
+}
+
+.alert_no_margin
+{
+	margin-left:0px !important;
+	margin-top:7px !important;
+
+}
+
+.tjfield_container .icon-unfeatured ,.tjfield_container .icon-featured
+{
+	cursor:pointer;
+}

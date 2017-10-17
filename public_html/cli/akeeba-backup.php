@@ -338,7 +338,13 @@ ENDSTEPINFO;
 			$phpversion     = PHP_VERSION;
 			$phpenvironment = PHP_SAPI;
 
-			// Sorry for the obscure code, I'm trying to work around idiot hosts
+			/**
+			 * Sorry for the obscure code, I'm trying to work around hosts who delete / rename files based on
+			 * arbitrary, dangerous assumptions about innocent, userful code patterns positively identifying a malicious
+			 * piece of code. Ironically, the best defence against that is writing my benign code in the same obscure
+			 * style as actual malicious code, of the kind that these hosts fail to detect. Yup. Their "detection" code
+			 * is about as watertight as a sieve!
+			 **/
 			$fName  = 'b' . strtolower('AS') . 'e' . (4 * 16) . '_';
 			$fName1 = $fName . 'en';
 			$fName2 = $fName . 'de';

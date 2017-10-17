@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ class GeoPostalcode
 {
 	public function pass()
 	{
-		if (!$this->getGeo() || empty($this->geo->postalCode))
+		if ( ! $this->getGeo() || empty($this->geo->postalCode))
 		{
 			return $this->_(false);
 		}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library\Condition;
 defined('_JEXEC') or die;
 
 use JFactory;
+use RegularLabs\Library\DB as RL_DB;
 
 /**
  * Class UserGrouplevel
@@ -26,7 +27,7 @@ class UserGrouplevel
 	{
 		$user = JFactory::getUser();
 
-		if (!empty($user->groups))
+		if ( ! empty($user->groups))
 		{
 			$groups = array_values($user->groups);
 		}
@@ -35,7 +36,7 @@ class UserGrouplevel
 			$groups = $user->getAuthorisedGroups();
 		}
 
-		if (!$this->params->match_all && $this->params->inc_children)
+		if ( ! $this->params->match_all && $this->params->inc_children)
 		{
 			$this->setUserGroupChildrenIds();
 		}
@@ -52,7 +53,7 @@ class UserGrouplevel
 
 	private function passMatchAll($groups)
 	{
-		$pass = !array_diff($this->selection, $groups) && !array_diff($groups, $this->selection);
+		$pass = ! array_diff($this->selection, $groups) && ! array_diff($groups, $this->selection);
 
 		return $this->_($pass);
 	}
@@ -73,12 +74,18 @@ class UserGrouplevel
 			$names[] = strtolower(str_replace(' ', '', $group));
 		}
 
+		if (empty($names))
+		{
+			return $selection;
+		}
+
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true)
 			->select($db->quoteName('id'))
 			->from('#__usergroups')
-			->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", "")) IN (\'' . implode('\',\'', $names) . '\')');
+			->where('LOWER(REPLACE(' . $db->quoteName('title') . ', " ", ""))'
+				. RL_DB::in($names));
 		$db->setQuery($query);
 
 		$group_ids = $db->loadColumn();

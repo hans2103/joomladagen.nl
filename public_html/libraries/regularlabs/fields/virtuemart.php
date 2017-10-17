@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -98,19 +98,19 @@ class JFormFieldRL_VirtueMart extends \RegularLabs\Library\FieldGroup
 
 		$this->language = 'en_gb';
 
-		if (!class_exists('VmConfig'))
+		if ( ! class_exists('VmConfig'))
 		{
 			require_once JPATH_ROOT . '/administrator/components/com_virtuemart/helpers/config.php';
 		}
 
-		if (!class_exists('VmConfig'))
+		if ( ! class_exists('VmConfig'))
 		{
 			return $this->language;
 		}
 
 		VmConfig::loadConfig();
 
-		if (!empty(VmConfig::$vmlang))
+		if ( ! empty(VmConfig::$vmlang))
 		{
 			$this->language = str_replace('-', '_', strtolower(VmConfig::$vmlang));
 
@@ -119,7 +119,7 @@ class JFormFieldRL_VirtueMart extends \RegularLabs\Library\FieldGroup
 
 		$active_languages = VmConfig::get('active_languages', []);
 
-		if (!isset($active_languages['0']))
+		if ( ! isset($active_languages['0']))
 		{
 			return $this->language;
 		}

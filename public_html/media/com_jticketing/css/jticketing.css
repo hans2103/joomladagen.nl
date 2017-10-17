@@ -1,0 +1,892 @@
+/* Added by Manoj. */
+#eventform1 .com_jticketing_image_w98pc{
+border: #999 1px solid;
+max-width: 500px;
+}
+.com_jticketing_vr{
+border-right: 1px dotted #000;
+padding: 5px;
+}
+.jticketing-wrapper .page-header{
+margin: 0 0 0;
+border-bottom: none;
+}
+
+/*bootstrap overriding start*/
+@media (max-width: 767px){
+	.row-fluid [class*="span"]{
+	float: none;
+	display: block;
+	width: 100% !important;
+	margin-left: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	}
+}
+.jticketing-wrapper ul li{
+list-style: none outside none;
+}
+.jticketing-wrapper .alert{
+margin-bottom: 0px !important;
+}
+.jticketing-wrapper textarea{
+width: 206px;
+}
+
+.com_jticketing_remove_button{
+position: relative;top: -85px;right: -85%;
+}
+.com_jticketing_add_button{
+position: relative;
+top: -80px;
+right: -85%;
+}
+/*campaigns - all*/
+.com_jticketing_border{
+border: 1px solid #DDDDDD !important;padding:15px;margin-bottom: 10px;
+}
+.com_jticketing_campaign_title{
+font-weight: bold;
+}
+.com_jticketing_campaign_image_block{
+padding-bottom: 15px;
+}
+.com_jticketing_campaign_short_desc{
+float: right;
+text-align: justify;
+}
+.com_jticketing_campaign_overview_block{
+width: 50%;
+float: left;
+}
+.com_jticketing_campaign_buttons_block{
+float: right;
+padding: 55px 5px 25px 25px;
+}
+.com_jticketing_campaign_buttons_block2{
+float: right;
+padding: 55px 150px 25px 25px;
+}
+.com_jticketing_border_ano_donor{
+float: left;
+border: 1px solid #DDDDDD !important;
+padding: 2px;
+margin: 10px;
+}
+
+.reading_list_images{
+float: right!important;
+}
+.terms_condition_paymentform_div{
+margin-left: 4%!important;
+}
+.submit_button_div{
+margin-left: 25% !important;
+}
+.campaign_category{
+font-size: 12px !important;
+font-weight: normal!important;
+height: 12px !important;
+}
+.checkout-heading{
+	background: none repeat scroll 0 0 #D9EDF7;
+	border: 1px solid #DBDEE1;
+	color: #555555;
+	font-size: 13px;
+	font-weight: bold;
+	margin-bottom: 15px;
+	padding: 8px;
+}
+.checkout-heading a{
+	float: right;
+	font-weight: normal;
+	margin-top: 1px;
+	text-decoration: none;
+	cursor: pointer;
+}
+.jticketing_display_none{
+	display: none;
+}
+.mod_jticketing_pin_layout_font_weight{
+font-size: 9px !important;
+}
+ul.com_jticketing_list_style_none{
+	list-style-type: none;
+	font-size: 14px;
+	margin: 0px !important;
+}
+.com_jticketing_img_410_610{
+height: 400px;
+}
+.jticketing-raised{
+font-size: 40px;
+margin: 20px 0;
+text-transform: uppercase;
+text-align: center;
+}
+.jticketing-raised-of{
+font-weight: bold;
+text-transform: uppercase;
+text-align: center;
+}
+.jticketing-days, .jticketing-percent{
+font-size: 20px;
+}
+.jticketing-fzmfwbu{
+font-size: medium;
+text-transform: uppercase;
+font-weight: bold;
+}
+.jticketing-funding-type{
+font-size: medium;
+font-weight: bold;
+}
+.jticketing-btn-block{
+display: block;
+width: 100%;
+padding-left: 0;
+padding-right: 0;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+}
+.jticketing-funding-type-info{
+padding: 10px 0px;
+font-size: x-small;
+}
+.jticketing-reward:hover{
+border-color: rgb(221, 221, 221);
+z-index: 2;
+background-color: rgb(238, 238, 238);
+text-decoration: none;
+}
+.jticketinggivback > div:first-child{
+border-top-left-radius: 4px;
+border-top-right-radius: 4px;
+}
+.jticketinggivback div.reward_title{
+text-transform: uppercase;
+font-weight: bold;
+color: rgb(108, 108, 108);
+cursor: text;
+border-bottom: none;
+}
+.jticketinggivback > div{
+float: none;
+margin-bottom: -1px;
+border: 1px solid rgb(221, 221, 221);
+line-height: 20px;
+padding-bottom: 8px;
+padding-top: 8px;
+padding-left: 12px;
+padding-right: 12px;
+display: block;
+}
+.jticketing-ramount{
+font-size: large;
+font-weight: bold;
+display: block;
+border-bottom: thin dashed gray;
+padding: 5px 0px;
+color: black;
+}
+
+.navbar-inner{
+padding-left: 0px !important;
+padding-right: 0px !important;
+padding-top: 0px !important;
+padding-bottom: 0px !important;
+}
+.jticketing-novbar-background{
+background: none !important;
+}
+.jticketing_progress{
+height: 5px !important;
+}
+.jticketing-wrapper .form-actions{
+margin-top: 4px!important;
+}
+.jticketing_steps{
+margin-top: -2%;
+margin-right: 3%;
+}
+.jticketing-progressbar{
+width: 16.6667%;
+}
+.jticketing_images{
+padding: 1%;
+}
+.jticketing_pin_div{
+margin-left: 1% !important;
+padding: 4px;
+height: 100% !important;
+height: 150px;
+}
+.jticketing_caption{
+font-weight: bold;
+padding-bottom: 25px;
+}
+.jt_online_img {
+position: absolute;
+top: 0px;
+right: 0px;
+z-index: 1000;
+}
+.jt_online_text{
+position: absolute;
+top: 9px;
+right: 9px;
+background: green;
+padding: 0 5px;
+color: #fff;
+opacity: 0.9;
+}
+.jt_featured_text{
+position: absolute;
+top: 9px;
+left: 9px;
+background: #333333;
+padding: 0 5px;
+color: #fff;
+opacity: 0.9;
+}
+.jt-event-ticket-price-text{
+position: absolute;
+top: 9px;
+right: 15px;
+background: #FAF8F8;
+padding: 0px 5px;
+color: #120808;
+opacity: 0.9;
+margin-right: 10px;
+}
+.jticketing_short_desc{
+word-wrap: break-word;
+margin-top: 5%;
+}
+.jt-heading h4, .caption > div{
+width: 96%;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+line-height: normal;
+text-transform: capitalize;
+}
+.jt-heading h4{
+padding: 0 10px;
+}
+.jticketing_place{
+margin-top: 5%;
+}
+.jticketing_amount{
+text-align: left;
+}
+.jticketing_text_aling{
+text-align: left;
+}
+.jticketing_funded{
+padding: 4px;
+}
+.jticketing_donation_per{
+background: #ddd;
+height: 6px;
+}
+.jticketing_div_pin_padding{
+padding: 4px;
+}
+.jticketing_thmb_style{
+width: 100% !important;
+}
+.jticketing_thmb_style_mod{
+height: 120px;
+width: 95% !important;
+}
+.jticketing-wrapper div.sug_case a.modal{
+position: relative !important;
+margin-left: 0px !important;
+left: 0px !important;
+border: none !important;
+-webkit-box-shadow: 0px 0px !important;
+box-shadow: none !important;
+}
+@media{
+	.table-responsive{
+	width: 100%;
+	margin-bottom: 15px;
+	overflow-y: hidden;
+	overflow-x: auto;
+	}
+}
+a.modal{
+position: relative !important;
+margin-left: 0px !important;
+left: 0px !important;
+border: none !important;
+box-shadow: none !important;
+display: inline !important;
+z-index: inherit;
+}
+#evnetGoogleMapLocation{
+height: 400px !important;
+margin: 5px 1px 1px;
+}
+.jticketing-wrapper a.modal{
+position: inherit !important;
+margin-left: 0px !important;
+z-index: 0px !important;
+}
+.jticketing_checkout_title{
+padding: 7px !important;
+}
+.jt_selectbox{
+max-width: 130px;
+}
+.jt_add_on{
+height: auto !important;
+}
+.jt_paid_ticket_box{
+padding-left: 150px;
+font-weight: bold;
+}
+.jt_paidevent{
+margin-top: 0px !important;
+}
+.jt_paid_ticket_box_admin{
+font-weight: bold;
+}
+jt_container_add_fields{
+margin-left: 100px !important;
+}
+
+.jticketing-wrapper #billing_info_data{
+display: none;
+}
+.modal-body{
+width: 98%;
+position: relative;
+max-height: 1000px !important;
+padding: 1%;
+}
+.jticketing-wrapper .jticketing_modal{
+display: block !important;
+}
+.jticketing-wrapper #search_order_chzn{
+min-width: 120px !important;
+}
+.jt-offset{
+padding-left: 10px;
+}
+#payment-info label.radio, #payment-info label.radiobtn{
+display: block !important;
+}
+.tj-list-group{
+min-width: 50px;
+margin-bottom: 20px;
+padding-left: 0;
+}
+.tj-list-group-item{
+position: relative;
+display: block;
+padding: 10px 15px;
+margin-bottom: -1px;
+background-color: #ffffff;
+border: 1px solid #dddddd;
+}
+.tj-list-group-item:first-child {
+border-top-right-radius: 4px;
+border-top-left-radius: 4px;
+}
+.tj-list-group-item:last-child {
+margin-bottom: 0;
+border-bottom-right-radius: 4px;
+border-bottom-left-radius: 4px;
+}
+.tj-list-group-item.active, .tj-list-group-item.active:hover, .tj-list-group-item.active:focus{
+z-index: 2;
+color: #ffffff;
+background-color: #0088cc;
+border-color: #0088cc;
+}
+.tj-list-group-item > .badge {
+float: right;
+}
+a.tj-list-group-item{
+color: #555555;
+}
+a.tj-list-group-item.active > .badge, .nav-pills > .active > a > .badge{
+color: #0088cc;
+background-color: #ffffff;
+text-shadow: 0 0 0;
+}
+a.tj-list-group-item:hover, a.tj-list-group-item:focus{
+text-decoration: none;
+color: #555555;
+background-color: #f5f5f5;
+}
+/* For bs-3 only*/
+.row .chzn-container {
+display: inline-block;
+margin-bottom: 15px;
+}
+
+.gallary-filters .chzn-container{
+width: 100% !important;
+}
+
+.jticketing-wrapper #eventform1 .chzn-container {
+width: 33% !important;
+}
+
+.jtick-wrapper .form-group .jtDispInline{
+display: inline;
+}
+.com_jticketing_ticketfields_add_button{
+padding-top: 2px;
+}
+.row  #search_event{
+display: inline;
+}
+.row  #search_paymentStatus{
+display: inline;
+}
+.jt_nowrap{
+word-wrap: break-word !important;
+}
+.jt-module{
+border: 1px solid #ddd;
+margin-bottom: 15px;
+}
+.jt-module h3{
+border-bottom: 1px solid #ddd;
+padding: 10px 25px;
+margin: 0;
+font-size: 100% !important;
+font-weight: bold !important;
+color: #333;
+text-transform: uppercase;
+line-height: 30px;
+background-color: #0088cc;
+color: white;
+}
+.jt-module-content{
+padding: 5px;
+}
+.jt-module .chzn-container{
+margin-left: auto !important;
+margin-right: auto !important;
+padding: 5px;
+max-width: 90% !important;
+}
+#extrafields .form-group .chzn-container{
+min-width: 170px;
+}
+#extrafields .form-group .input-append  input[type="text"]{
+display: inline-block;
+}
+#extrafields .form-group   textarea{
+min-height: 65px;
+}
+#attendeefields .form-group   textarea{
+min-height: 65px;
+}
+/*For ja_events_ii - Default template*/
+.order .dis_modal .modal{
+display: block;
+}
+.jtick-wrapper .hr-condensed {
+margin-top: 10px;
+margin-bottom: 10px;
+}
+/* Template's custom.css */
+.jtick-wrapper .thumbnail{
+background-color: #FFFFFF;
+}
+.jtick-wrapper .jt-module{
+background-color: #FFFFFF;
+}
+/* For bootstrap3 END */
+/** Template override **/
+#myTabContent{
+background-color: white;
+}
+/** Template override **/
+.jt-input-text{
+padding-top: 3px !important;
+}
+.jticketing-input{
+max-width: 310px !important;
+}
+.ticket_type_available_field_hide{
+display: none;
+}
+.jticketing_easysocial .jticketing-form-group .jticketing-controls{
+margin-left: 1px !important;
+}
+.jticketing_easysocial .jticketing-form-group .control-label{
+float: none!important;
+text-align: left;
+}
+.jticketing-wrapper .jticketing-controls input{
+min-height: 25px !important;
+}
+.jticketing-wrapper .jt_add_remove_button .pull-right .icon-minus-sign, .pull-right .icon-plus{
+display: block !important;
+width: 15px !important;
+height: 15px !important;
+}
+.jticketing-filter{
+padding-bottom: 9px;
+}
+.jticketing_schedule .fa-calendar,.fa-clock-o{
+padding-right: 3px;
+}
+.glyphicon{
+margin-right: 10px;
+}
+.jticketing_pin_img{
+text-align: center;
+}
+.jticketing_pin_img a{
+height: 150px;
+min-height: 150px;
+display: block;
+}
+.only-in-print{
+display: none;
+}
+/*
+.jticketing_pin_item {
+border: 1px solid #dddddd;
+}
+*/
+.event-heading{
+padding: 10px 15px;
+}
+@media print{
+	.no-print {
+	display: none !important;
+	}
+	.only-in-print{
+	display: block !important;
+	}
+}
+.jt-start{
+padding: 0 10px;
+margin: 5px -10px 10px -10px;
+font-weight: bold;
+}
+.countdown-containers{
+margin: 0px 50px 0px -10px;
+padding: 0 10px;
+color: white;
+font-weight: 500;
+}
+.box-style{ padding: 10px;
+background: white;
+margin-bottom: 20px;
+border: 1px solid #ddd;
+}
+.jt-panel-heading{
+font-weight: bold;
+margin-bottom: 20px;
+}
+.jt-filter-inner{
+padding: 10px 0;
+border-bottom: 1px solid #ddd;
+border-top: 1px solid #ddd;
+margin: 20px 0 15px 0px;
+}
+.clear{
+clear: both;
+}
+.jticketing_pin_item{
+background: #ffffff;
+border-bottom: 1px solid #e0e0e0;
+position: relative;
+transition-delay: 0s;
+transition-duration: 0.15s;
+transition-property: transform,box-shadow;
+transition-timing-function: ease-in-out;
+-webkit-transition-delay: 0s;
+-webkit-transition-duration: 0.15s;
+-webkit-transition-property: transform,box-shadow;
+-webkit-transition-timing-function: ease-in-out;
+}
+/*
+.jticketing_pin_item:hover{
+-webkit-box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+transform: translateY(-4px);
+-webkit-transform: translateY(-4px);
+}
+*/
+.jticketing_align{
+padding-left: 10px;
+}
+.box-style .table{
+margin-left: -12px;
+}
+@media print{
+	a[href]: after{
+	content: none !important;
+	}
+}
+.jtick-wrapper .fa-star{
+color: gold;
+}
+.jtick-wrapper .events-pin-location{
+width: 96%;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+text-transform: capitalize;
+}
+.jtick-wrapper .searchEvents{
+display: none;
+}
+.jticketing_rubber_stamp_text{
+border: 2px solid rgb(98, 196, 98);
+padding: 7px;
+border-radius: 9px;
+}
+.rubber_stamp {
+font-size: 34px;
+line-height: 26px;
+text-transform: uppercase;
+font-weight: bold;
+color: rgb(98, 196, 98);
+float: left;
+opacity: 0.6;
+-webkit-transform: rotate(-10deg);
+-o-transform: rotate(-10deg);
+-moz-transform: rotate(-10deg);
+-ms-transform: rotate(-10deg);
+position: absolute;
+top: 40%;
+text-align: left;
+width: auto;
+left: 12%;
+}
+.rubber_stamp::after {
+position: absolute;
+content: " ";
+width: 100%;
+height: auto;
+min-height: 100%;
+top: -10px;
+left: -10px;
+padding: 10px;
+}
+.jtick-wrapper .eventsFilterDefaultDis{
+display: none;
+}
+.jtick-wrapper .eventsCatFilterwrapper{
+overflow-y: auto;
+max-height: 200px;
+overflow-x: hidden;
+}
+
+.hide_jtdiv{
+	display: none !important;
+}
+.media_image_width{
+	width: 158px;
+	height: 120px;
+}
+.media_video_width{
+	width: 158px;
+    height: 116px;
+}
+
+/*Event Gallery Css*/
+#jt_image_gallery .jt_image_item{
+	position: relative;
+	margin-top: 10px;
+	overflow:hidden;
+}
+.jt-image-gallery-inner{
+text-align: center;
+border: 1px solid #ddd;
+height: 120px;
+}
+
+#jt_video_gallery .jt_gallery_image_item{
+	position: relative;
+	margin-top: 10px;
+}
+
+#jt_video_gallery .jt_gallery_image_item .play_icon{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -24px;
+	margin-top: -18px;
+	width:36px;
+}
+
+.jtick-wrapper .jt-bs3-modal{
+ display: block;
+ position: relative;
+ z-index: inherit;
+}
+
+.com_jticketing_float_left{float:left;}
+
+.attendeefieldRequired .radio input[type="radio"]{
+    margin-left: 0px!important;
+}
+.event-counter-details li {
+    padding-right: 35px;
+}
+.jtick-wrapper .event-gallery-option{
+ margin-top: 10px!important;
+}
+
+.jtick-wrapper #eventform1 .star,#venueform .star  {
+color: #d81717!important;
+}
+
+#eventform1 .jticketing-wrapper .star{
+color: #d81717!important;
+}
+
+.jtick-wrapper #eventform1 #commission{
+    margin-left: 0px;
+    margin-bottom: 5px;
+}
+
+.jticketing-wrapper hr {
+    margin-top: 5px!important;
+    margin-bottom: 5px!important;
+}
+
+.jticketing-wrapper .event-title{
+margin-top: -20px!important;
+}
+
+
+@media (min-width: 320px) and (max-width:600px){
+	.booking-btn-fixes{
+	position: fixed;
+	bottom: 0;
+	background: #fff;
+	z-index: 1;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 100%;
+	}
+}
+
+.jticketing-wrapper .booking-btn-fixes .btn {width: 80%!important;}
+.jticketing-wrapper .ticket-price-range {
+	display: table-cell;
+	vertical-align: bottom;
+	height: 100px;
+	width: 100px;
+	bottom: 0;
+}
+
+div.jt-pin-data:hover {
+	background-color: #e8e5e5;
+}
+
+.organizer-profile  img { max-width: 80%;}
+.jticketing-wrapper .eventMainImg img{max-width: 100%!important;}
+
+.jticketing-wrapper .subform-repeatable-group .controls input{width:200px !important;}
+.jticketing-wrapper .subform-repeatable-group .controls .chzn.single{width:200px !important;}
+.jticketing-wrapper .subform-repeatable-group .controls .chzn-container{width:200px !important;}
+.jticketing-wrapper .subform-repeatable-wrapper span{font: normal normal normal 14px/1 FontAwesome;}
+.jticketing-wrapper .subform-repeatable-wrapper span.icon-plus:before {content: "\f067"; font-family: "FontAwesome" !important;}
+.jticketing-wrapper .subform-repeatable-wrapper span.icon-minus:before {content: "\f068"; font-family: "FontAwesome" !important;}
+.jticketing-wrapper .field-calendar span.icon-calendar:before {content: "\f073"; font-family: "FontAwesome" !important;}
+
+.jticketing-wrapper .subform-repeatable {
+	padding-right: 10px;
+}
+.jticketing-wrapper .subform-repeatable > .btn-toolbar {
+	margin: 0;
+}
+.jticketing-wrapper .subform-repeatable > .btn-toolbar .group-add {
+	line-height: 26px;
+	width: 56px;
+	font-size: 13px;
+	margin-left: 28px;
+}
+.jticketing-wrapper .subform-repeatable-group {
+	margin-top: 20px;
+	margin-left: 28px;
+	border: 1px solid #ccc;
+	padding: 8px 25px 15px;
+	position: relative;
+	border-radius: 3px;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar {
+	margin: 0;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn-group {
+	margin-right: 0px;
+	margin-top: -1px;
+	position: static;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn {
+	font-size: 13px;
+	line-height: 26px;
+	position: absolute;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn span {
+	vertical-align: middle;
+	line-height: 11px;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-success {
+	bottom: 0;
+	right: 0;
+	border-radius: 3px 0 0 0;
+	border-width: 1px 0 0 1px;
+	padding-top: 1px;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-success .icon-plus:before {
+	content: "\f067";
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-danger {
+	color: #fff;
+	top: 0;
+	right: 0;
+	border-radius: 0 0 0 3px;
+	border-width: 0 0 1px 1px;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-danger .icon-minus:before {
+	content: "\f068";
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-primary {
+	color: #24748c;
+	color: #333;
+	right: 100%;
+	top: 50%;
+	margin-top: -27px;
+	margin-right: 1px;
+	border-radius: 3px 0 0 3px;
+	border-width: 1px 0 1px 1px;
+	line-height: 52px;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn.btn-primary .icon-move:before {
+	content: "Z";
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn [class^="icon-"],
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn [class*=" icon-"] {
+	margin: 0;
+}
+.jticketing-wrapper .subform-repeatable-group > .btn-toolbar .btn:hover {
+	background-color: #E6E6E6;
+}
+.jticketing-wrapper .subform-repeatable-group .control-group:last-of-type {
+	margin-bottom: 10px;
+}
+.event-gallery-option .control-group > .controls > .inputbox{
+width:100%!important;
+}
+
+.sbox-content-iframe iframe{
+width:100%!important;
+height:100%!important;}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\Sourcerer;
+namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
@@ -20,7 +20,7 @@ class Code
 {
 	public static function run($src_string = '', &$src_variables)
 	{
-		if (!is_string($src_string) || $src_string == '')
+		if ( ! is_string($src_string) || $src_string == '')
 		{
 			return '';
 		}
@@ -32,7 +32,7 @@ class Code
 		$src_output         = ob_get_contents();
 		ob_end_clean();
 
-		if (!is_array($src_post_variables))
+		if ( ! is_array($src_post_variables))
 		{
 			return $src_output;
 		}
@@ -56,7 +56,7 @@ class Code
 
 	private static function execute($string = '', $src_variables)
 	{
-		$function_name = 'src_' . md5($string);
+		$function_name = 'sourcerer_php_' . md5($string);
 
 		if (function_exists($function_name))
 		{
@@ -72,9 +72,12 @@ class Code
 
 		include_once $temp_file;
 
-		JFile::delete($temp_file);
+		if ( ! defined('JDEBUG') || ! JDEBUG)
+		{
+			JFile::delete($temp_file);
+		}
 
-		if (!function_exists($function_name))
+		if ( ! function_exists($function_name))
 		{
 			// Something went wrong!
 			return [];

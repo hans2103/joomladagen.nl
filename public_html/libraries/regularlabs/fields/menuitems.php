@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -32,11 +32,25 @@ class JFormFieldRL_MenuItems extends \RegularLabs\Library\Field
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple', 0);
 
-		RL_Language::load('com_menus', JPATH_ADMINISTRATOR);
+		return $this->selectListAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
 
 		$options = $this->getMenuItems();
 
-		return $this->selectList($options, $this->name, $this->value, $this->id, $size, $multiple);
+		$name     = $input->getString('name', $this->type);
+		$id       = $input->get('id', strtolower($name));
+		$value    = json_decode($input->getString('value', '[]'));
+		$size     = $input->getInt('size');
+		$multiple = $input->getBool('multiple');
+
+		return $this->selectList($options, $name, $value, $id, $size, $multiple);
 	}
 
 	/**
@@ -86,6 +100,8 @@ class JFormFieldRL_MenuItems extends \RegularLabs\Library\Field
 			return false;
 		}
 
+		RL_Language::load('com_menus', JPATH_ADMINISTRATOR);
+
 		// Create a reverse lookup and aggregate the links.
 		$rlu = [];
 		foreach ($menuTypes as &$type)
@@ -103,7 +119,7 @@ class JFormFieldRL_MenuItems extends \RegularLabs\Library\Field
 		// Loop through the list of menu links.
 		foreach ($links as &$link)
 		{
-			if (!isset($rlu[$link->menutype]))
+			if ( ! isset($rlu[$link->menutype]))
 			{
 				continue;
 			}

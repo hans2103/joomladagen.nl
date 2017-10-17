@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_JLIKE_TITLE_LIST_VIEW_ALL_ANNOTATIONS">
+		<message>
+			<![CDATA[COM_JLIKE_TITLE_LIST_VIEW_ALL_ANNOTATIONS_DESC]]>
+		</message>
+	</layout>
+	<state>
+		<name>All Annotations</name>
+		<description>All Annotations</description>
+		<params>
+		</params>
+	</state>
+</metadata>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="module" client ="site" method="upgrade">
+	<name>mod_tjfields_search_name</name>
+	<author>TechJoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<copyright>Copyright(C)2012-17 TechJoomla</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<creationDate>12th Apr 2017</creationDate>
+	<version>1.4</version>
+	<description>MOD_TJFIELDS_SEARCH_XML_DESCRIPTION</description>
+	<files>
+		<filename module="mod_tjfields_search">mod_tjfields_search.php</filename>
+		<filename>index.html</filename>
+		<folder>assets</folder>
+		<folder>tmpl</folder>
+	</files>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_tjfields_search.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_tjfields_search.ini</language>
+	</languages>
+	<!-- Fields for Joomla 1.6.x and onwards -->
+	<config name="params">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="client_type" type="list" default="" label="MOD_TJFIELDS_SEARCH_CLIENT_TYPE" description="MOD_TJFIELDS_SEARCH_CLIENT_TYPE_DESC">
+					<option value="com_quick2cart.product">MOD_TJFIELDS_CLIENT_QUICK2CART</option>
+					<option value="com_tjlms.course">MOD_TJFIELDS_CLIENT_SHIKA_COURSES</option>
+					<option value="com_tjlms.lesson">MOD_TJFIELDS_CLIENT_SHIKA_LESSON</option>
+					<option value="com_jgive.campaign">MOD_TJFIELDS_CLIENT_JGIVE_CAMPAIGN</option>
+					<option value="com_jticketing.ticket">MOD_TJFIELDS_CLIENT_JTICKETING_TICKET</option>
+					<option value="com_jticketing.event">MOD_TJFIELDS_CLIENT_JTICKETING_EVENT</option>
+				</field>
+
+				<field name="category_type" type="text" default="" label="MOD_TJFIELDS_SEARCH_CATEGORY_TYPE" description="MOD_TJFIELDS_SEARCH_CATEGORY_TYPE_DESC"/>
+
+				<field name="url_cat_param_name" type="text" default="" label="MOD_TJFIELDS_SEARCH_URL_CATEGORY_PARAM_NAME" description="MOD_TJFIELDS_SEARCH_URL_CATEGORY_PARAM_NAME_DESC"/>
+
+				<field name="URLParamConditions" type="text" default="" label="MOD_TJFIELDS_SEARCH_CONDITIONS_TO_DISPLAY_FILTER_DATA" description="MOD_TJFIELDS_SEARCH_CONDITIONS_TO_DISPLAY_FILTER_DATA_DESC"/>
+
+				<field name="showCategoryFilter" class="btn-group" type="radio" default="0" description="MOD_TJFIELDS_SEARCH_SHOW_SEARCH_FILTER_DESC" label="MOD_TJFIELDS_SEARCH_SHOW_SEARCH_FILTER" >
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="layout" class="btn-group" type="radio" default="vertical" description="MOD_TJFIELDS_SEARCH_DISPLAY_LAYOUT_DESC" label="MOD_TJFIELDS_SEARCH_DISPLAY_LAYOUT" >
+					<option value="horizontal">MOD_TJFIELDS_SEARCH_HORZONTAL_LAYOUT</option>
+					<option value="vertical">MOD_TJFIELDS_SEARCH_VERTICAL_LAYOUT</option>
+				</field>
+				<field name="bootstrapversion" class="btn-group" type="radio" default="bs3" description="MOD_TJFIELDS_SEARCH_SHOW_SEARCH_FILTER_DESC" label="MOD_TJFIELDS_SEARCH_SHOW_SEARCH_FILTER" >
+					<option value="bs3">MOD_TJFIELDS_SEARCH_BS3</option>
+					<option value="bs2">MOD_TJFIELDS_SEARCH_BS2</option>
+				</field>
+<!--
+				<field name="apply_clear_buttons" class="btn-group" type="radio" default="below" description="MOD_TJFIELDS_SEARCH_SHOW_BUTTONS_DESC" label="MOD_TJFIELDS_SEARCH_SHOW_BUTTONS" >
+					<option value="below">MOD_TJFIELDS_SEARCH_SHOW_BUTTON_BELOW</option>
+					<option value="above">MOD_TJFIELDS_SEARCH_SHOW_BUTTON_ABOVE</option>
+					<option value="both">MOD_TJFIELDS_SEARCH_SHOW_BUTTON_BOTH</option>
+					<option value="none">MOD_TJFIELDS_SEARCH_SHOW_BUTTON_NONE</option>
+				</field>
+-->
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="moduleclass_sfx" type="text" default="" label="MOD_SUFIX" description="MOD_SUFIX_DES" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

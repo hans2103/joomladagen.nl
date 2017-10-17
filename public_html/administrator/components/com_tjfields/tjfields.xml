@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.0" method="upgrade">
+	<name>com_tjfields</name>
+	<author>TechJoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>www.techjoomla.com</authorUrl>
+	<copyright>Copyright(C)2012-17 TechJoomla</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<creationDate>12th Apr 2017</creationDate>
+	<version>1.4</version>
+	<description>TJFields - Common code for TJ Fields Manager and TJ Geo Manager!</description>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<scriptfile>script.tjfields.php</scriptfile>
+	<files folder="site">
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+		<filename>controller.php</filename>
+		<filename>index.html</filename>
+		<filename>router.php</filename>
+		<filename>filterFields.php</filename>
+		<filename>tjfields.php</filename>
+	</files>
+	<languages folder="site_language">
+		<language tag="en-GB">en-GB/en-GB.com_tjfields.ini</language>
+		<language tag="en-GB">en-GB/en-GB.tjgeo.countries.ini</language>
+		<language tag="en-GB">en-GB/en-GB.tjgeo.regions.ini</language>
+		<language tag="en-GB">en-GB/en-GB.tjgeo.cities.ini</language>
+	</languages>
+	<administration>
+		<files folder="administrator">
+			<folder>assets</folder>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>index.html</filename>
+			<filename>tjfields.php</filename>
+		</files>
+		<languages folder="admin_language">
+			<language tag="en-GB">en-GB/en-GB.com_tjfields.ini</language>
+			<language tag="en-GB">en-GB/en-GB.com_tjfields.sys.ini</language>
+		</languages>
+	</administration>
+</extension>

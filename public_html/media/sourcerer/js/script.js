@@ -1,6 +1,6 @@
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -16,11 +16,6 @@ var RegularLabsSourcererPopup = null;
 	RegularLabsSourcererPopup = {
 		init: function() {
 			$editor = Joomla.editors.instances['source'];
-			$('.src_editor').resizable({
-				'minHeight': 150,
-				'grid'     : [100000, 17],
-				'handles'  : 's, se'
-			});
 
 			try {
 				var string = $editor.getValue();
@@ -41,7 +36,7 @@ var RegularLabsSourcererPopup = null;
 				var contentWindow = editor_frame.contentWindow;
 				var selection     = '';
 
-				if (typeof contentWindow.getSelection != "undefined") {
+				if (typeof contentWindow.getSelection !== 'undefined') {
 					var sel = contentWindow.getSelection();
 					if (sel.rangeCount) {
 						var container = contentWindow.document.createElement("div");
@@ -50,20 +45,19 @@ var RegularLabsSourcererPopup = null;
 						}
 						selection = container.innerHTML;
 					}
-				} else if (typeof contentWindow.document.selection != "undefined") {
+				} else if (typeof contentWindow.document.selection !== 'undefined') {
 					if (contentWindow.document.selection.type == "Text") {
 						selection = contentWindow.document.selection.createRange().htmlText;
 					}
 				}
+
 				selection = this.cleanRange(selection);
 
 				if (selection != '') {
 					$editor.setValue(selection);
-
-					if ($('.CodeMirror-sizer').height() < 180) {
-						$('.CodeMirror-sizer').height(180);
-					}
 				}
+
+				this.resizeEditorHeight();
 			}
 
 			string = $editor.getValue();
@@ -72,19 +66,39 @@ var RegularLabsSourcererPopup = null;
 			string = string.replace(/^\t/gm, '    ');
 			$editor.setValue(string);
 
-			var icon = $('span.icon-src-sourcetags');
+			var icon = $('span.icon-src_sourcetags');
 			if (string.search(this.preg_quote(sourcerer_tag_characters[0] + sourcerer_syntax_word)) != -1) {
-				icon.addClass('icon-src-nosourcetags');
+				icon.addClass('icon-src_nosourcetags');
 			}
 
 			if (sourcerer_default_addsourcetags) {
 				this.toggleSourceTags(1);
 			}
 
-			icon = $('span.icon-src-tagstyle');
+			icon = $('span.icon-src_tagstyle');
 			if (string.search(/\[\[/g) != -1 && string.search(/\]\]/g) != -1) {
-				icon.addClass('icon-src-tagstylebrackets');
+				icon.addClass('icon-src_tagstyle_brackets');
 			}
+		},
+
+		resizeEditorHeight: function() {
+			var min_height  = 220;
+			var html_height = $('html').height();
+			var new_height  = Math.max(html_height, min_height);
+
+			// Start by setting the editor to the height of the html page
+			// which we know is too large to fit inside the modal
+			$('.CodeMirror-wrap').css('min-height', 0).height(new_height);
+
+			// Then decrease the size is steps of 5px till the body is no longer larger than the html
+			while ($('body').height() > html_height && new_height > min_height) {
+				new_height = new_height - 5;
+
+				$('.CodeMirror-wrap').height(new_height);
+			}
+
+			// Also set the sizer element to this new height
+			$('.CodeMirror-sizer').height(new_height);
 		},
 
 		insertText: function() {
@@ -117,7 +131,7 @@ var RegularLabsSourcererPopup = null;
 		},
 
 		toggleSourceTags: function(add) {
-			var icon   = $('span.icon-src-sourcetags');
+			var icon   = $('span.icon-src_sourcetags');
 			var string = $editor.getValue();
 
 			var t_word  = sourcerer_syntax_word;
@@ -138,8 +152,8 @@ var RegularLabsSourcererPopup = null;
 			end_tag = t_start + '/' + t_word + t_end;
 			string  = string.replace(regex, '');
 
-			if (!add && !icon.hasClass('icon-src-nosourcetags')) {
-				icon.addClass('icon-src-nosourcetags');
+			if (!add && !icon.hasClass('icon-src_nosourcetags')) {
+				icon.addClass('icon-src_nosourcetags');
 			} else {
 				string = string.trim();
 
@@ -148,27 +162,27 @@ var RegularLabsSourcererPopup = null;
 				}
 
 				string = start_tag + string + end_tag;
-				icon.removeClass('icon-src-nosourcetags');
+				icon.removeClass('icon-src_nosourcetags');
 			}
 
 			$editor.setValue(string);
 		},
 
 		toggleTagStyle: function() {
-			var icon   = $('span.icon-src-tagstyle');
+			var icon   = $('span.icon-src_tagstyle');
 			var string = $editor.getValue();
 
 			string = string.replace(/\[\[/g, '<');
 			string = string.replace(/\]\]/g, '>');
 
-			if (!icon.hasClass('icon-src-tagstylebrackets')) {
+			if (!icon.hasClass('icon-src_tagstylebrackets')) {
 				string = string.replace(/<(\/?\w+((\s+\w+(\s*=\s*(?:"[\s\S.]*?"|'[\s\S.]*?'|[^'">\s]+))?)+\s*|\s*)\/?(--)?)>/gm, '[[$1]]');
 				string = string.replace(/<(!--[\s\S.]*?--)>/gm, '[[$1]]');
 				string = string.replace(/<\?(?:php)?([^a-z0-9])/gim, '[[?php$1');
 				string = string.replace(/( *)\?>/g, '$1?]]');
-				icon.addClass('icon-src-tagstylebrackets');
+				icon.addClass('icon-src_tagstylebrackets');
 			} else {
-				icon.removeClass('icon-src-tagstylebrackets');
+				icon.removeClass('icon-src_tagstylebrackets');
 			}
 
 			$editor.setValue(string);
@@ -352,7 +366,7 @@ var RegularLabsSourcererPopup = null;
 		preg_quote: function(str) {
 			return (str + '').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!<>\|\:])/g, '\\$1');
 		}
-	}
+	};
 
 	String.prototype.ltrim = function() {
 		return this.replace(/^ */, "");

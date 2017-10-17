@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -25,7 +25,7 @@ class RLHelper
 {
 	public static function getPluginHelper($plugin, $params = null)
 	{
-		if (!class_exists('RegularLabs\Library\Cache'))
+		if ( ! class_exists('RegularLabs\Library\Cache'))
 		{
 			return null;
 		}
@@ -37,14 +37,14 @@ class RLHelper
 			return RL_Cache::get($hash);
 		}
 
-		if (!$params)
+		if ( ! $params)
 		{
 			$params = RL_Parameters::getInstance()->getPluginParams($plugin->get('_name'));
 		}
 
 		$file = JPATH_PLUGINS . '/' . $plugin->get('_type') . '/' . $plugin->get('_name') . '/helper.php';
 
-		if (!is_file($file))
+		if ( ! is_file($file))
 		{
 			return null;
 		}

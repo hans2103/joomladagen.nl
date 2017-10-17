@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonFeature extends SppagebuilderAddons {
 
@@ -55,7 +55,9 @@ class SppagebuilderAddonFeature extends SppagebuilderAddons {
 		} else {
 			if($feature_image) {
 				$media  .= '<span class="sppb-img-container">';
+				if( ($title_url && $url_appear == 'icon') || ($title_url && $url_appear == 'both' ) ) $media .= '<a href="'. $title_url .'">';
 				$media  .= '<img class="sppb-img-responsive" src="' . $feature_image . '" alt="'.$title.'">';
+				if(($title_url && $url_appear == 'icon') || ($title_url && $url_appear == 'both' )) $media .= '</a>';
 				$media  .= '</span>';
 			}
 		}
@@ -122,6 +124,7 @@ class SppagebuilderAddonFeature extends SppagebuilderAddons {
 		$icon_margin_top = (isset($this->addon->settings->icon_margin_top) && $this->addon->settings->icon_margin_top) ? $this->addon->settings->icon_margin_top : '';
 		$icon_margin_bottom	= (isset($this->addon->settings->icon_margin_bottom) && $this->addon->settings->icon_margin_bottom) ? $this->addon->settings->icon_margin_bottom : '';
 		$icon_padding = (isset($this->addon->settings->icon_padding) && $this->addon->settings->icon_padding) ? $this->addon->settings->icon_padding : '';
+		$icon_padding = (isset($this->addon->settings->icon_padding) && strpos($icon_padding, 'px') === false) ? $icon_padding . 'px;' : $icon_padding;
 		$feature_type = (isset($this->addon->settings->feature_type) && $this->addon->settings->feature_type) ? $this->addon->settings->feature_type : 'icon';
 		$feature_image = (isset($this->addon->settings->feature_image) && $this->addon->settings->feature_image) ? $this->addon->settings->feature_image : '';
 		$icon_name = (isset($this->addon->settings->icon_name) && $this->addon->settings->icon_name) ? $this->addon->settings->icon_name : '';

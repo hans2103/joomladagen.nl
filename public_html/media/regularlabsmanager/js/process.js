@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ var RLEM_INSTALL    = 0;
 		RegularLabsManagerProcess.resizeModal();
 	});
 
-	if (typeof( window['RegularLabsManagerProcess'] ) != "undefined") {
+	if (typeof RegularLabsManagerProcess !== 'undefined') {
 		return;
 	}
 
@@ -43,20 +43,15 @@ var RLEM_INSTALL    = 0;
 			var sb = window.parent.SqueezeBox;
 			sb.overlay['removeEvent']('click', sb.bound.close);
 
-			if (RLEM_REFRESH_ON_CLOSE || RLEM_IDS[0] == 'extensionmanager') {
+			if (RLEM_IDS[0] == 'extensionmanager') {
 				RLEM_RLEM = 1;
-				sb.setOptions({
-					onClose: function() {
-						window.parent.location.href = window.parent.location;
-					}
-				});
-			} else {
-				sb.setOptions({
-					onClose: function() {
-						window.parent.RegularLabsManager.refreshData(1);
-					}
-				});
 			}
+
+			sb.setOptions({
+				onClose: function() {
+					window.parent.location.href = window.parent.location;
+				}
+			});
 
 			this.processNextStep(0);
 		},
@@ -93,41 +88,57 @@ var RLEM_INSTALL    = 0;
 			this.resizeModal();
 		},
 
-		install: function(step) {
+		install: function(step, retry_once) {
 			var id = RLEM_IDS[step];
 
 			this.hide('status', $('tr#row_' + id));
 			this.show('processing_' + id);
 
-			var url = 'index.php?option=com_regularlabsmanager&view=process&tmpl=component&id=' + id;
-			if (RLEM_INSTALL) {
-				url += '&action=install';
-				ext_url = $('#url_' + id).val() + '&action=' + RLEM_TASK + '&host=' + window.location.hostname;
-				url += '&url=' + encodeURIComponent(ext_url);
-			} else {
-				url += '&action=uninstall';
-			}
+			var url = this.getInstallUrl(id);
+
 			RegularLabsScripts.loadajax(url,
-				'RegularLabsManagerProcess.processResult( data, ' + step + ' )',
-				'RegularLabsManagerProcess.processResult( data, ' + step + ' )',
+				'RegularLabsManagerProcess.processResult( data, ' + step + ', ' + retry_once + ' )',
+				'RegularLabsManagerProcess.processResult( data, ' + step + ', ' + retry_once + ' )',
 				RLEM_TOKEN + '=1'
 			);
 		},
 
-		processResult: function(data, step) {
-			data = !data || typeof( data ) != "string" ? '' : data.trim();
+		getInstallUrl: function(id) {
+			var url = 'index.php?option=com_regularlabsmanager&view=process&tmpl=component&id=' + id;
+
+			if (!RLEM_INSTALL) {
+				return url + '&action=uninstall';
+			}
+
+			var ext_url = $('#url_' + id).val() + '&action=' + RLEM_TASK + '&host=' + window.location.hostname;
+
+			return url + '&action=install&url=' + encodeURIComponent(ext_url);
+		},
+
+		processResult: function(data, step, retry_once) {
+			data = !data || typeof data !== 'string' ? '' : data.trim();
+
+			if (!data && !retry_once) {
+				this.processNextStep(step, 1);
+
+				return;
+			}
 
 			var id = RLEM_IDS[step];
 
 			this.hide('status', $('tr#row_' + id));
-			if (!data || ( data !== '1' && data.indexOf('<div class="alert alert-success"') == -1 )) {
+
+			if (!data || ( data !== '1' && data.indexOf('<div class="alert alert-success"') < 0 )) {
 				RLEM_IDS_FAILED.push(id);
 				this.enqueueMessages('error', id, data);
 				this.show('failed_' + id);
-			} else {
-				this.enqueueMessages('warning', id, data);
-				this.show('success_' + id);
+				this.processNextStep(++step);
+
+				return;
 			}
+
+			this.enqueueMessages('warning', id, data);
+			this.show('success_' + id);
 			this.processNextStep(++step);
 		},
 
@@ -137,7 +148,8 @@ var RLEM_INSTALL    = 0;
 			} else {
 				parent.addClass(classes.replace(',', ''));
 			}
-			classes = '.' + classes.replace(', ', ', .')
+
+			classes = '.' + classes.replace(', ', ', .');
 			parent.find(classes).removeClass('hide');
 		},
 
@@ -147,7 +159,8 @@ var RLEM_INSTALL    = 0;
 			} else {
 				parent.removeClass(classes.replace(',', ''));
 			}
-			classes = '.' + classes.replace(', ', ', .')
+
+			classes = '.' + classes.replace(', ', ', .');
 			parent.find(classes).addClass('hide');
 		},
 
@@ -165,7 +178,7 @@ var RLEM_INSTALL    = 0;
 		enqueueMessages: function(type, id, data) {
 			var title = '<strong>' + $('#ext_name_' + id).html() + '</strong><br>';
 
-			if (data.indexOf('</') == -1) {
+			if (data.indexOf('</') < 0) {
 				if (type == 'error') {
 					RLEM_MESSAGES[type].push(title + data);
 				}
@@ -184,7 +197,7 @@ var RLEM_INSTALL    = 0;
 
 			var message = match[1];
 
-			if (message.indexOf('JFolder: :delete') != -1) {
+			if (message.indexOf('JFolder: :delete') > -1) {
 				return;
 			}
 
@@ -194,7 +207,7 @@ var RLEM_INSTALL    = 0;
 		resizeModal: function() {
 			var orig_height = $('.sbox-content-iframe > iframe', window.parent.document).height();
 			var max_height  = $(window.parent).height() - 100;
-			var new_height  = $('#rlem').height() + 30;
+			var new_height  = $('#rlem').height() + 38;
 
 			if (new_height < orig_height && new_height > orig_height - 20) {
 				new_height = orig_height;

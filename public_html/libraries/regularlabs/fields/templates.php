@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -26,9 +26,37 @@ class JFormFieldRL_Templates extends \RegularLabs\Library\Field
 	{
 		$this->params = $this->element->attributes();
 
+		// fix old '::' separator and change it to '--'
+		$value = json_encode($this->value);
+		$value = str_replace('::', '--', $value);
+		$value = (array) json_decode($value, true);
+
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple');
 
+		return $this->selectListAjax(
+			$this->type, $this->name, $value, $this->id,
+			compact('size', 'multiple')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getOptions();
+
+		$name     = $input->getString('name', $this->type);
+		$id       = $input->get('id', strtolower($name));
+		$value    = json_decode($input->getString('value', '[]'));
+		$size     = $input->getInt('size');
+		$multiple = $input->getBool('multiple');
+
+		return $this->selectList($options, $name, $value, $id, $size, $multiple);
+	}
+
+	protected function getOptions()
+	{
 		$options = [];
 
 		$templates = $this->getTemplates();
@@ -40,21 +68,17 @@ class JFormFieldRL_Templates extends \RegularLabs\Library\Field
 			{
 				$style->level = $level;
 				$options[]    = $style;
+
 				if (count($styles) <= 2)
 				{
-					$level = 0;
 					break;
 				}
+
 				$level = 1;
 			}
 		}
 
-		// fix old '::' separator and change it to '--'
-		$value = json_encode($this->value);
-		$value = str_replace('::', '--', $value);
-		$value = (array) json_decode($value, true);
-
-		return $this->selectList($options, $this->name, $value, $this->id, $size, $multiple);
+		return $options;
 	}
 
 	protected function getTemplates()
@@ -89,7 +113,7 @@ class JFormFieldRL_Templates extends \RegularLabs\Library\Field
 				$name = JText::_($style->name);
 
 				// Initialize the group if necessary.
-				if (!isset($groups[$template]))
+				if ( ! isset($groups[$template]))
 				{
 					$groups[$template]   = [];
 					$groups[$template][] = JHtml::_('select.option', $template, $name);

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 if(!class_exists('ContentHelperRoute')) require_once (JPATH_SITE . '/components/com_content/helpers/route.php');
 
@@ -15,7 +15,7 @@ abstract class SppagebuilderHelperArticles
 	public static function getArticles( $count = 5, $ordering = 'latest', $catid = '', $include_subcategories = true, $post_format = '' ) {
 
 		$authorised = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'));
-	
+
 		$app = JFactory::getApplication();
 		$db = JFactory::getDbo();
 		$nullDate = $db->quote($db->getNullDate());
@@ -30,24 +30,31 @@ abstract class SppagebuilderHelperArticles
 		->select($db->quoteName('b.title', 'category'))
 		->join('LEFT', $db->quoteName('#__categories', 'b') . ' ON (' . $db->quoteName('a.catid') . ' = ' . $db->quoteName('b.id') . ')')
 		->where($db->quoteName('b.extension') . ' = ' . $db->quote('com_content'));
-		
+
 		if($post_format) {
 			$query->where($db->quoteName('a.attribs') . ' LIKE ' . $db->quote('%"post_format":"'. $post_format .'"%'));
 		}
-		
-		$query->where($db->quoteName('a.state') . ' = ' . $db->quote(1));
-		
-		// Category filter
-		if ($catid != '') {
-			$categories = self::getCategories( $catid, $include_subcategories );
-			array_unshift($categories, $catid);
 
-			$query->where($db->quoteName('a.catid')." IN (" . implode( ',', $categories ) . ")");
+		$query->where($db->quoteName('a.state') . ' = ' . $db->quote(1));
+
+		// Category filter
+		if ( ($catid != '' || is_array($catid)) ) {
+			if (!is_array($catid)) {
+				$catid = array($catid);
+			}
+
+			if (!in_array('', $catid)) {
+				$categories = self::getCategories( $catid, $include_subcategories );
+				$categories = array_merge($categories, $catid);
+				//array_unshift($categories, $catid);
+				$query->where($db->quoteName('a.catid')." IN (" . implode( ',', $categories ) . ")");
+			}
+
 		}
 
 		$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 		$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
-		
+
 		// has order by
 		if ($ordering == 'hits') {
 			$query->order($db->quoteName('a.hits') . ' DESC');
@@ -259,10 +266,8 @@ abstract class SppagebuilderHelperArticles
 		return $items;
 	}
 
-	public static function getCategories($parent_id = 1, $include_subcategories = true, $child = false) {
-		if(!$child) {
-			$cats = array();
-		}
+	public static function getCategories($parent_id = 1, $include_subcategories = true, $child = false, $cats = array()) {
+
 		$app = JFactory::getApplication();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -274,18 +279,18 @@ abstract class SppagebuilderHelperArticles
 			->where($db->quoteName('published') . ' = ' . $db->quote(1))
 			->where($db->quoteName('access')." IN (" . implode( ',', JFactory::getUser()->getAuthorisedViewLevels() ) . ")")
 			->where($db->quoteName('language')." IN (" . $db->Quote(JFactory::getLanguage()->getTag()).", ".$db->Quote('*') . ")")
-			->where($db->quoteName('parent_id') . ' = ' . $db->quote($parent_id))
+			->where($db->quoteName('parent_id')." IN (" . implode( ',', $parent_id ) . ")")
 			->order($db->quoteName('lft') . ' ASC');
 
 		$db->setQuery($query);
-
 		$rows = $db->loadObjectList();
 
 		foreach ($rows as $row) {
-			array_push($cats, $row->id);
+
 			if($include_subcategories) {
+				array_push($cats, $row->id);
 				if (self::hasChildren($row->id)) {
-					self::getCategories($row->id, $include_subcategories, true);
+					$cats = self::getCategories(array($row->id), $include_subcategories, true, $cats);
 				}
 			}
 		}
@@ -294,6 +299,7 @@ abstract class SppagebuilderHelperArticles
 	}
 
 	private static function hasChildren($parent_id = 1) {
+
 		$app = JFactory::getApplication();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -312,7 +318,9 @@ abstract class SppagebuilderHelperArticles
 
 		$childrens = $db->loadObjectList();
 
-		if(count($childrens)) {
+
+
+		if(is_array($childrens) && count($childrens)) {
 			return true;
 		}
 

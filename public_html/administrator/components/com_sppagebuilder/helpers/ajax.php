@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 // all settings loading
 if ( $action === 'setting' ) {
@@ -35,12 +35,6 @@ if ( $action === 'setting' ) {
 		foreach ($form_fields as &$form_field) {
 			$form_field['visibility'] = true;
 		}
-
-		usort($form_fields, function($a){
-			if (isset($a['pro']) && $a['pro']) {
-				return 1;
-			}
-		});
 	}
 	else
 	{
@@ -64,6 +58,14 @@ if ( $action === 'setting' ) {
 
 			$first_attr = current($form_fields[$addon_name]['attr']);
 			$options = SpPgaeBuilderBase::addonOptions();
+
+            //sbou start
+            //sbou plugin support for options render
+            JPluginHelper::importPlugin( 'system' );
+            // Get the dispatcher and load the content plugins.
+            $dispatcher = JEventDispatcher::getInstance();
+            $results = $dispatcher->trigger( 'onBeforeAddonOptionsRender', array($addon_name,&$form_fields, &$options) );
+            //sbou end
 
 			if(isset($first_attr['type']) && !is_array($first_attr['type'])){
 				$newArry['general'] = $form_fields[$addon_name]['attr'];
@@ -120,16 +122,25 @@ if ($action === 'pre-page-list') {
 		$folders = JFolder::folders( $sppb_pages_dir_path );
 		if ( count( $folders ) ) {
 			foreach ( $folders as $key => $folder ) {
-				$page = array();
-				$page['name'] 	= $folder;
-				$page['img'] = false;
-				if(file_exists(JPATH_COMPONENT_ADMINISTRATOR . '/builder/templates/' . $folder . '/preview.png')) {
-					$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/builder/templates/' . $folder . '/preview.png';
-				} else {
-					$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/assets/img/template-preview.png';
-				}
+				$file_path = $sppb_pages_dir_path . '/' . $folder .'/page.json';
+				if( JFile::exists($file_path) ){
+					$page = array();
+					$page['name'] 	= $folder;
+					$page['img'] = false;
+					if(file_exists(JPATH_COMPONENT_ADMINISTRATOR . '/builder/templates/' . $folder . '/preview.png')) {
+						$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/builder/templates/' . $folder . '/preview.png';
+					} else {
+						$page['img'] 	= JURI::root( true ) . '/administrator/components/com_sppagebuilder/assets/img/template-preview.png';
+					}
 
-				array_push($templates, $page);
+					// Check frontend editing
+					if ($input->get('editarea', '', 'STRING') == 'frontend') {
+						$page['data'] 	= $file_path;
+					}else{
+						$page['data'] 	= file_get_contents($file_path);
+					}
+					array_push($templates, $page);
+				}
 			}
 		}
 	}
@@ -148,19 +159,29 @@ if ($action === 'pre-page-list') {
 
 // Load page from uploaded page
 if ($action === 'upload-page') {
-	if ( isset($_FILES['page']) && $_FILES['page']['error'] === 0 && $_FILES['page']['type'] === 'application/json') {
-		$content = file_get_contents($_FILES['page']['tmp_name']);
-		if (is_array(json_decode($content))) {
+	if ( isset($_FILES['page']) && $_FILES['page']['error'] === 0) {
 
-			// Check frontend editing
-			if ($input->get('editarea', '', 'STRING') == 'frontend') {
+		$file_name = $_FILES['page']['name'];
+		$file_extension = substr( $file_name, -5 );
+		$file_extension_lower = strtolower($file_extension);
+
+		if ($file_extension_lower === '.json')
+		{
+			$content = file_get_contents($_FILES['page']['tmp_name']);
+			if (is_array(json_decode($content))) {
+
 				require_once JPATH_COMPONENT_ADMINISTRATOR . '/builder/classes/addon.php';
 				$content = SpPageBuilderAddonHelper::__($content);
-				$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
-			}
 
-			echo json_encode( array('status' => true, 'data' => $content) ); die;
+				// Check frontend editing
+				if ($input->get('editarea', '', 'STRING') == 'frontend') {
+					$content = SpPageBuilderAddonHelper::getFontendEditingPage($content);
+				}
+
+				echo json_encode( array('status' => true, 'data' => $content) ); die;
+			}
 		}
+
 	}
 
 	echo json_encode(array('status'=> false, 'data'=>'Something worng there.')); die;

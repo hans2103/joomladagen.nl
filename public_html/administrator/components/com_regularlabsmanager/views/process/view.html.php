@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -58,7 +58,7 @@ class RegularLabsManagerViewProcess extends JViewLegacy
 	 */
 	protected function getConfig()
 	{
-		if (!isset($this->config))
+		if ( ! isset($this->config))
 		{
 
 			$this->config = RL_Parameters::getInstance()->getComponentParams('regularlabsmanager');

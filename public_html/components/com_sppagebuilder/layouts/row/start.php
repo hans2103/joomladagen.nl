@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 $options = $displayData['options'];
 
@@ -16,6 +16,8 @@ $custom_class .= (isset($options->columns_equal_height) && $options->columns_equ
 $row_id     = (isset($options->id) && $options->id )? $options->id : 'section-id-'.$options->dynamicId;
 $fluid_row = (isset($options->fullscreen) && $options->fullscreen) ? $options->fullscreen : 0;
 $row_class = (isset($options->no_gutter) && $options->no_gutter ) ?  ' sppb-no-gutter' : '';
+$external_video = (isset($options->background_external_video) && $options->background_external_video ) ?  $options->background_external_video : '';
+$background_parallax = (isset($options->background_parallax) && $options->background_parallax ) ?  (int) $options->background_parallax : 0;
 
 // Visibility
 if(isset($options->hidden_md) && $options->hidden_md) {
@@ -35,7 +37,7 @@ $addon_attr = '';
 // Animation
 if(isset($options->animation) && $options->animation) {
 
-	$custom_class = 'sppb-wow ' . $options->animation;
+	$custom_class .= ' sppb-wow ' . $options->animation;
 
 	if(isset($options->animationduration) && $options->animationduration) {
 		$addon_attr .= ' data-sppb-wow-duration="' . $options->animationduration . 'ms"';
@@ -46,14 +48,24 @@ if(isset($options->animation) && $options->animation) {
 	}
 }
 
+if (!empty($external_video)) {
+	$custom_class .= ' sppb-row-have-ext-bg';
+}
+
 $style ='';
 if (isset($options->margin) && $options->margin) $style .= 'margin:'.$options->margin.';';
 if (isset($options->padding) && $options->padding) $style .= 'padding:'.$options->padding.';';
 if (isset($options->color) && $options->color) $style .= 'color:'.$options->color.';';
 if (isset($options->background_color) && $options->background_color) $style .= 'background-color:'.$options->background_color.';';
 
-if (isset($options->background_image) && $options->background_image) {
-	$style .= 'background-image:url('. JURI::base(true) . '/' . $options->background_image.');';
+if (isset($options->background_image) && $options->background_image && !$background_parallax) {
+
+	if(strpos($options->background_image, "http://") !== false || strpos($options->background_image, "https://") !== false){
+		$style .= 'background-image:url(' . $options->background_image.');';
+	} else {
+		$style .= 'background-image:url('. JURI::base(true) . '/' . $options->background_image.');';
+	}
+
 
 	if (isset($options->background_repeat) && $options->background_repeat) $style .= 'background-repeat:'.$options->background_repeat.';';
 	if (isset($options->background_size) && $options->background_size) $style .= 'background-size:'.$options->background_size.';';
@@ -91,16 +103,21 @@ if (isset($options->background_video) && $options->background_video) {
 	$video_params .= ' data-vide-bg';
 }
 
+$parallax_params = '';
+if ($background_parallax && isset($options->background_image) && $options->background_image) {
+	$parallax_params = ' data-parallax="scroll" data-image-src="'.$options->background_image.'"';
+}
+
 $html = '';
 
 if(!$fluid_row){
-	$html .= '<section id="' . $row_id . '" class="sppb-section ' . $custom_class . '" '.$addon_attr.' ' . $video_params . '>';
+	$html .= '<section id="' . $row_id . '" class="sppb-section ' . $custom_class . '" '.$addon_attr.' ' . $video_params . $parallax_params . '>';
 	if (isset($options->overlay) && $options->overlay) {
 		$html .= '<div class="sppb-row-overlay"></div>';
 	}
 	$html .= '<div class="sppb-row-container">';
 } else {
-	$html .= '<div id="' . $row_id . '" class="sppb-section ' . $custom_class . '" '.$addon_attr.' ' . $video_params . '>';
+	$html .= '<div id="' . $row_id . '" class="sppb-section ' . $custom_class . '" '.$addon_attr.' ' . $video_params . $parallax_params . '>';
 	if (isset($options->overlay) && $options->overlay) {
 		$html .= '<div class="sppb-row-overlay"></div>';
 	}
@@ -194,6 +211,31 @@ if ( (isset($options->title) && $options->title) || (isset($options->subtitle) &
 
 	if( $fluid_row ) {
 		$html .= '</div>';
+	}
+}
+
+if (isset($options->background_video) && $options->background_video) {
+	if (!empty($external_video)) {
+			$video = parse_url($external_video);
+			$src = '';
+				switch($video['host']) {
+						case 'youtu.be':
+						$id = trim($video['path'],'/');
+						$src = '//www.youtube.com/embed/' . $id .'?playlist='.$id.'&iv_load_policy=3&enablejsapi=1&disablekb=1&autoplay=1&controls=0&showinfo=0&rel=0&loop=1&wmode=transparent&widgetid=1';
+						break;
+
+						case 'www.youtube.com':
+						case 'youtube.com':
+						parse_str($video['query'], $query);
+						$id = $query['v'];
+						$src = '//www.youtube.com/embed/' . $id .'?playlist='.$id.'&iv_load_policy=3&enablejsapi=1&disablekb=1&autoplay=1&controls=0&showinfo=0&rel=0&loop=1&wmode=transparent&widgetid=1';
+						break;
+						case 'vimeo.com':
+						case 'www.vimeo.com':
+						$id = trim($video['path'],'/');
+						$src = "//player.vimeo.com/video/{$id}?autoplay=1&loop=1&title=0&byline=0&portrait=0";
+				}
+			$html .= '<div class="sppb-youtube-video-bg hidden"><iframe src="'.$src.'" frameborder="0" allowfullscreen></iframe></div>';
 	}
 }
 

@@ -14,7 +14,7 @@ jQuery(function($) {
 		}
 	});
 
-	$('#btn-save-page, #btn-save-copy, #btn-save-new, #btn-save-close').on('click', function(event) {
+	$('#btn-save-page, #sp-pagebuilder-btn-save, #btn-save-copy, #btn-save-new, #btn-save-close').on('click', function(event) {
 		event.preventDefault();
 
 		var $this = $(this);
@@ -40,10 +40,6 @@ jQuery(function($) {
 					var data = $.parseJSON(response);
 
 					$this.find('.fa').removeClass('fa-spinner fa-spin').addClass('fa-save');
-
-					if($('.sp-pagebuilder-notifications').length === 0) {
-						$('<div class="sp-pagebuilder-notifications"></div>').appendTo('body')
-					}
 
 					var msg_class = 'success';
 
@@ -91,13 +87,17 @@ jQuery(function($) {
 
 					if(data.frontend_editor_url) {
 						if($('#btn-page-frontend-editor').length === 0) {
-							$('#btn-page-options').parent().before('<div class="sp-pagebuilder-btn-group"><a id="btn-page-frontend-editor" target="_blank" href="javascript:;" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> '+ Joomla.JText._('COM_SPPAGEBUILDER_FRONTEND_EDITOR') +' <small>(PRO)</small></a></div>' + "\n");
+							$('#btn-page-options').parent().before('<div class="sp-pagebuilder-btn-group"><a id="btn-page-frontend-editor" target="_blank" href="'+ data.frontend_editor_url +'" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> ' + Joomla.JText._('COM_SPPAGEBUILDER_FRONTEND_EDITOR') + '</a></div>' + "\n");
+						} else {
+							$('#btn-page-frontend-editor').attr('href',data.frontend_editor_url);
 						}
 					}
 
 					if(data.preview_url) {
 						if($('#btn-page-preview').length === 0) {
 							$('#btn-page-options').parent().before('<div class="sp-pagebuilder-btn-group"><a id="btn-page-preview" target="_blank" href="'+ data.preview_url +'" class="sp-pagebuilder-btn sp-pagebuilder-btn-inverse"><i class="fa fa-eye"></i> ' + Joomla.JText._('COM_SPPAGEBUILDER_PREVIEW') + '</a></div>' + "\n");
+						} else {
+							$('#btn-page-preview').attr('href',data.preview_url);
 						}
 					}
 

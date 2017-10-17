@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 $addon = $displayData['addon'];
 
@@ -79,6 +79,10 @@ if(isset($addon->settings->global_margin) && $addon->settings->global_margin) {
 
 if(isset($addon->settings->global_padding) && $addon->settings->global_padding) {
     $addon_css .= "padding: " . $addon->settings->global_padding . ";\n";
+}
+
+if(isset($addon->settings->global_boxshadow) && $addon->settings->global_boxshadow) {
+    $addon_css .= "box-shadow: " . $addon->settings->global_boxshadow . ";\n";
 }
 
 if($addon_css) {

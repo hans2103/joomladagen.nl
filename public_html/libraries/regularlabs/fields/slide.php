@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -63,7 +63,7 @@ class JFormFieldRL_Slide extends \RegularLabs\Library\Field
 			{
 				$inc = JPATH_SITE . '/' . $lang_path;
 			}
-			if (!$inc && $lang != 'en-GB')
+			if ( ! $inc && $lang != 'en-GB')
 			{
 				$lang      = 'en-GB';
 				$lang_path = 'language/' . $lang . '/' . $lang . '.' . $lang_file . '.inc.php';

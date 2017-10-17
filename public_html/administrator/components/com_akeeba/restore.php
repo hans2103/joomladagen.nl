@@ -177,7 +177,7 @@ abstract class AKAbstractObject
 	private $_warnings = array();
 
 	/**
-	 * Public constructor, makes sure we are instanciated only by the factory class
+	 * Public constructor, makes sure we are instantiated only by the factory class
 	 */
 	public function __construct()
 	{
@@ -293,7 +293,7 @@ abstract class AKAbstractObject
 	 * Propagates errors and warnings to a foreign object. The foreign object SHOULD
 	 * implement the setError() and/or setWarning() methods but DOESN'T HAVE TO be of
 	 * AKAbstractObject type. For example, this can even be used to propagate to a
-	 * JObject instance in Joomla!. Propagated items will be removed from ourself.
+	 * JObject instance in Joomla!. Propagated items will be removed from ourselves.
 	 *
 	 * @param object $object The object to propagate errors and warnings to.
 	 */
@@ -386,7 +386,8 @@ abstract class AKAbstractObject
 				array_shift($this->_errors);
 			}
 		}
-		array_push($this->_errors, $error);
+
+		$this->_errors[] = $error;
 	}
 
 	/**
@@ -404,7 +405,7 @@ abstract class AKAbstractObject
 			}
 		}
 
-		array_push($this->_warnings, $warning);
+		$this->_warnings[] = $warning;
 	}
 
 	/**
@@ -518,9 +519,9 @@ abstract class AKAbstractPart extends AKAbstractObject
 	/**
 	 * The public interface to an engine part. This method takes care for
 	 * calling the correct method in order to perform the initialisation -
-	 * run - finalisation cycle of operation and return a proper reponse array.
+	 * run - finalisation cycle of operation and return a proper response array.
 	 *
-	 * @return    array    A Reponse Array
+	 * @return    array    A Response Array
 	 */
 	final public function tick()
 	{
@@ -755,7 +756,7 @@ abstract class AKAbstractPart extends AKAbstractObject
 	}
 
 	/**
-	 * Dettaches an observer object
+	 * Detaches an observer object
 	 *
 	 * @param AKAbstractPartObserver $obs
 	 */
@@ -1243,7 +1244,7 @@ abstract class AKAbstractUnarchiver extends AKAbstractPart
 	/**
 	 * Concrete classes must use this method to read the file header
 	 *
-	 * @return bool True if reading the file was successful, false if an error occured or we reached end of archive
+	 * @return bool True if reading the file was successful, false if an error occurred or we reached end of archive
 	 */
 	protected abstract function readFileHeader();
 
@@ -1251,7 +1252,7 @@ abstract class AKAbstractUnarchiver extends AKAbstractPart
 	 * Concrete classes must use this method to process file data. It must set $runState to AK_STATE_DATAREAD when
 	 * it's finished processing the file data.
 	 *
-	 * @return bool True if processing the file data was successful, false if an error occured
+	 * @return bool True if processing the file data was successful, false if an error occurred
 	 */
 	protected abstract function processFileData();
 
@@ -3255,7 +3256,7 @@ class AKPostprocHybrid extends AKAbstractPostproc
 		// Turn off error reporting
 		if (!defined('KSDEBUG'))
 		{
-			$oldErrorReporting = @error_reporting(E_NONE);
+			$oldErrorReporting = error_reporting(0);
 		}
 
 		// Get UNIX style paths
@@ -3731,7 +3732,7 @@ class AKUnarchiverJPA extends AKAbstractUnarchiver
 	/**
 	 * Concrete classes must use this method to read the file header
 	 *
-	 * @return bool True if reading the file was successful, false if an error occured or we reached end of archive
+	 * @return bool True if reading the file was successful, false if an error occurred or we reached end of archive
 	 */
 	protected function readFileHeader()
 	{
@@ -4102,7 +4103,7 @@ class AKUnarchiverJPA extends AKAbstractUnarchiver
 	 * Concrete classes must use this method to process file data. It must set $runState to AK_STATE_DATAREAD when
 	 * it's finished processing the file data.
 	 *
-	 * @return bool True if processing the file data was successful, false if an error occured
+	 * @return bool True if processing the file data was successful, false if an error occurred
 	 */
 	protected function processFileData()
 	{
@@ -4241,7 +4242,7 @@ class AKUnarchiverJPA extends AKAbstractUnarchiver
 			// Can we write to the file?
 			if (($outfp === false) && (!$ignore))
 			{
-				// An error occured
+				// An error occurred
 				debugMsg('Could not write to output file');
 				$this->setError(AKText::sprintf('COULDNT_WRITE_FILE', $this->fileHeader->realFile));
 
@@ -4345,7 +4346,7 @@ class AKUnarchiverJPA extends AKAbstractUnarchiver
 
 			if (($outfp === false) && (!$ignore))
 			{
-				// An error occured
+				// An error occurred
 				debugMsg('Could not write to output file');
 				$this->setError(AKText::sprintf('COULDNT_WRITE_FILE', $this->fileHeader->realFile));
 
@@ -4493,7 +4494,7 @@ class AKUnarchiverZIP extends AKUnarchiverJPA
 	/**
 	 * Concrete classes must use this method to read the file header
 	 *
-	 * @return bool True if reading the file was successful, false if an error occured or we reached end of archive
+	 * @return bool True if reading the file was successful, false if an error occurred or we reached end of archive
 	 */
 	protected function readFileHeader()
 	{
@@ -5367,7 +5368,7 @@ class AKUnarchiverJPS extends AKUnarchiverJPA
 			// Can we write to the file?
 			if (($outfp === false) && (!$ignore))
 			{
-				// An error occured
+				// An error occurred
 				$this->setError(AKText::sprintf('COULDNT_WRITE_FILE', $this->fileHeader->realFile));
 
 				return false;
@@ -5414,7 +5415,7 @@ class AKUnarchiverJPS extends AKUnarchiverJPA
 				AKFactory::get('kickstart.setup.ignoreerrors', false) || $this->isIgnoredDirectory($this->fileHeader->file);
 			if (($outfp === false) && (!$ignore))
 			{
-				// An error occured
+				// An error occurred
 				$this->setError(AKText::sprintf('COULDNT_WRITE_FILE', $this->fileHeader->realFile));
 
 				return false;
@@ -6032,10 +6033,10 @@ class AKText extends AKAbstractObject
 		'RESTACLEANUP'                    => 'Restoration and Clean Up',
 		'BTN_RUNINSTALLER'                => 'Run the Installer',
 		'BTN_CLEANUP'                     => 'Clean Up',
-		'BTN_SITEFE'                      => 'Visit your site\'s front-end',
-		'BTN_SITEBE'                      => 'Visit your site\'s back-end',
+		'BTN_SITEFE'                      => 'Visit your site\'s frontend',
+		'BTN_SITEBE'                      => 'Visit your site\'s backend',
 		'WARNINGS'                        => 'Extraction Warnings',
-		'ERROR_OCCURED'                   => 'An error occured',
+		'ERROR_OCCURED'                   => 'An error occurred',
 		'STEALTH_MODE'                    => 'Stealth mode',
 		'STEALTH_URL'                     => 'HTML file to show to web visitors',
 		'ERR_NOT_A_JPS_FILE'              => 'The file is not a JPA archive',
@@ -6495,7 +6496,7 @@ class AKText extends AKAbstractObject
  */
 class AKFactory
 {
-	/** @var   array  A list of instanciated objects */
+	/** @var   array  A list of instantiated objects */
 	private $objectlist = array();
 
 	/** @var   array  Simple hash data storage */
@@ -7124,6 +7125,7 @@ class OpenSSL extends AKEncryptionAESAdapterAbstract implements AKEncryptionAESA
  *
  * Heavily modified for Akeeba Backup by Nicholas K. Dionysopoulos
  * Also added AES-128 CBC mode (with mcrypt and OpenSSL) on top of AES CTR
+ * Removed CTR encrypt / decrypt (no longer used)
  */
 class AKEncryptionAES
 {
@@ -7191,100 +7193,6 @@ class AKEncryptionAES
 	private static $pbkdf2StaticSalt = "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
 
 	/**
-	 * Encrypt a text using AES encryption in Counter mode of operation
-	 *  - see http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf
-	 *
-	 * Unicode multi-byte character safe
-	 *
-	 * @param   string $plaintext Source text to be encrypted
-	 * @param   string $password  The password to use to generate a key
-	 * @param   int    $nBits     Number of bits to be used in the key (128, 192, or 256)
-	 *
-	 * @return  string  Encrypted text
-	 */
-	public static function AESEncryptCtr($plaintext, $password, $nBits)
-	{
-		$blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-		if (!($nBits == 128 || $nBits == 192 || $nBits == 256))
-		{
-			return '';
-		}  // standard allows 128/192/256 bit keys
-		// note PHP (5) gives us plaintext and password in UTF8 encoding!
-
-		// use AES itself to encrypt password to get cipher key (using plain password as source for
-		// key expansion) - gives us well encrypted key
-		$nBytes  = $nBits / 8;  // no bytes in key
-		$pwBytes = array();
-		for ($i = 0; $i < $nBytes; $i++)
-		{
-			$pwBytes[$i] = ord(substr($password, $i, 1)) & 0xff;
-		}
-		$key = self::Cipher($pwBytes, self::KeyExpansion($pwBytes));
-		$key = array_merge($key, array_slice($key, 0, $nBytes - 16));  // expand key to 16/24/32 bytes long
-
-		// initialise counter block (NIST SP800-38A �B.2): millisecond time-stamp for nonce in
-		// 1st 8 bytes, block counter in 2nd 8 bytes
-		$counterBlock = array();
-		$nonce        = floor(microtime(true) * 1000);   // timestamp: milliseconds since 1-Jan-1970
-		$nonceSec     = floor($nonce / 1000);
-		$nonceMs      = $nonce % 1000;
-		// encode nonce with seconds in 1st 4 bytes, and (repeated) ms part filling 2nd 4 bytes
-		for ($i = 0; $i < 4; $i++)
-		{
-			$counterBlock[$i] = self::urs($nonceSec, $i * 8) & 0xff;
-		}
-		for ($i = 0; $i < 4; $i++)
-		{
-			$counterBlock[$i + 4] = $nonceMs & 0xff;
-		}
-		// and convert it to a string to go on the front of the ciphertext
-		$ctrTxt = '';
-		for ($i = 0; $i < 8; $i++)
-		{
-			$ctrTxt .= chr($counterBlock[$i]);
-		}
-
-		// generate key schedule - an expansion of the key into distinct Key Rounds for each round
-		$keySchedule = self::KeyExpansion($key);
-
-		$blockCount = ceil(strlen($plaintext) / $blockSize);
-		$ciphertxt  = array();  // ciphertext as array of strings
-
-		for ($b = 0; $b < $blockCount; $b++)
-		{
-			// set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-			// done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
-			for ($c = 0; $c < 4; $c++)
-			{
-				$counterBlock[15 - $c] = self::urs($b, $c * 8) & 0xff;
-			}
-			for ($c = 0; $c < 4; $c++)
-			{
-				$counterBlock[15 - $c - 4] = self::urs($b / 0x100000000, $c * 8);
-			}
-
-			$cipherCntr = self::Cipher($counterBlock, $keySchedule);  // -- encrypt counter block --
-
-			// block size is reduced on final block
-			$blockLength = $b < $blockCount - 1 ? $blockSize : (strlen($plaintext) - 1) % $blockSize + 1;
-			$cipherByte  = array();
-
-			for ($i = 0; $i < $blockLength; $i++)
-			{  // -- xor plaintext with ciphered counter byte-by-byte --
-				$cipherByte[$i] = $cipherCntr[$i] ^ ord(substr($plaintext, $b * $blockSize + $i, 1));
-				$cipherByte[$i] = chr($cipherByte[$i]);
-			}
-			$ciphertxt[$b] = implode('', $cipherByte);  // escape troublesome characters in ciphertext
-		}
-
-		// implode is more efficient than repeated string concatenation
-		$ciphertext = $ctrTxt . implode('', $ciphertxt);
-		$ciphertext = base64_encode($ciphertext);
-
-		return $ciphertext;
-	}
-
-	/**
 	 * AES Cipher function: encrypt 'input' with Rijndael algorithm
 	 *
 	 * @param   array $input    Message as byte-array (16 bytes)
@@ -7294,11 +7202,13 @@ class AKEncryptionAES
 	 * @return  string  Ciphertext as byte-array (16 bytes)
 	 */
 	protected static function Cipher($input, $w)
-	{    // main Cipher function [�5.1]
+	{
+		// main Cipher function [�5.1]
 		$Nb = 4;                 // block size (in words): no of columns in state (fixed at 4 for AES)
 		$Nr = count($w) / $Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
 
 		$state = array();  // initialise 4xNb byte-array 'state' with input [�3.4]
+
 		for ($i = 0; $i < 4 * $Nb; $i++)
 		{
 			$state[$i % 4][floor($i / 4)] = $input[$i];
@@ -7319,6 +7229,7 @@ class AKEncryptionAES
 		$state = self::AddRoundKey($state, $w, $Nr, $Nb);
 
 		$output = array(4 * $Nb);  // convert state to 1-d array before returning [�3.4]
+
 		for ($i = 0; $i < 4 * $Nb; $i++)
 		{
 			$output[$i] = $state[$i % 4][floor($i / 4)];
@@ -7328,7 +7239,8 @@ class AKEncryptionAES
 	}
 
 	protected static function AddRoundKey($state, $w, $rnd, $Nb)
-	{  // xor Round Key into state S [�5.1.4]
+	{
+		// xor Round Key into state S [�5.1.4]
 		for ($r = 0; $r < 4; $r++)
 		{
 			for ($c = 0; $c < $Nb; $c++)
@@ -7341,7 +7253,8 @@ class AKEncryptionAES
 	}
 
 	protected static function SubBytes($s, $Nb)
-	{    // apply SBox to state S [�5.1.1]
+	{
+		// apply SBox to state S [�5.1.1]
 		for ($r = 0; $r < 4; $r++)
 		{
 			for ($c = 0; $c < $Nb; $c++)
@@ -7354,19 +7267,23 @@ class AKEncryptionAES
 	}
 
 	protected static function ShiftRows($s, $Nb)
-	{    // shift row r of state S left by r bytes [�5.1.2]
+	{
+		// shift row r of state S left by r bytes [�5.1.2]
 		$t = array(4);
+
 		for ($r = 1; $r < 4; $r++)
 		{
 			for ($c = 0; $c < 4; $c++)
 			{
 				$t[$c] = $s[$r][($c + $r) % $Nb];
 			}  // shift into temp copy
+
 			for ($c = 0; $c < 4; $c++)
 			{
 				$s[$r][$c] = $t[$c];
 			}         // and copy back
 		}          // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
+
 		return $s;  // see fp.gladman.plus.com/cryptography_technology/rijndael/aes.spec.311.pdf
 	}
 
@@ -7452,7 +7369,8 @@ class AKEncryptionAES
 	}
 
 	protected static function SubWord($w)
-	{    // apply SBox to 4-byte word w
+	{
+		// apply SBox to 4-byte word w
 		for ($i = 0; $i < 4; $i++)
 		{
 			$w[$i] = self::$Sbox[$w[$i]];
@@ -7470,7 +7388,8 @@ class AKEncryptionAES
 	 */
 
 	protected static function RotWord($w)
-	{    // rotate 4-byte word w left by one byte
+	{
+		// rotate 4-byte word w left by one byte
 		$tmp = $w[0];
 		for ($i = 0; $i < 3; $i++)
 		{
@@ -7496,99 +7415,6 @@ class AKEncryptionAES
 		}
 
 		return $a;
-	}
-
-	/**
-	 * Decrypt a text encrypted by AES in counter mode of operation
-	 *
-	 * @param   string  $ciphertext  Source text to be decrypted
-	 * @param   string  $password    The password to use to generate a key
-	 * @param   int     $nBits       Number of bits to be used in the key (128, 192, or 256)
-	 *
-	 * @return  string  Decrypted text
-	 */
-	public static function AESDecryptCtr($ciphertext, $password, $nBits)
-	{
-		$blockSize = 16;  // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-
-		if (!($nBits == 128 || $nBits == 192 || $nBits == 256))
-		{
-			return '';
-		}
-
-		// standard allows 128/192/256 bit keys
-		$ciphertext = base64_decode($ciphertext);
-
-		// use AES to encrypt password (mirroring encrypt routine)
-		$nBytes  = $nBits / 8;  // no bytes in key
-		$pwBytes = array();
-
-		for ($i = 0; $i < $nBytes; $i++)
-		{
-			$pwBytes[$i] = ord(substr($password, $i, 1)) & 0xff;
-		}
-
-		$key = self::Cipher($pwBytes, self::KeyExpansion($pwBytes));
-		$key = array_merge($key, array_slice($key, 0, $nBytes - 16));  // expand key to 16/24/32 bytes long
-
-		// recover nonce from 1st element of ciphertext
-		$counterBlock = array();
-		$ctrTxt       = substr($ciphertext, 0, 8);
-
-		for ($i = 0; $i < 8; $i++)
-		{
-			$counterBlock[$i] = ord(substr($ctrTxt, $i, 1));
-		}
-
-		// generate key schedule
-		$keySchedule = self::KeyExpansion($key);
-
-		// separate ciphertext into blocks (skipping past initial 8 bytes)
-		$nBlocks = ceil((strlen($ciphertext) - 8) / $blockSize);
-		$ct      = array();
-
-		for ($b = 0; $b < $nBlocks; $b++)
-		{
-			$ct[$b] = substr($ciphertext, 8 + $b * $blockSize, 16);
-		}
-
-		$ciphertext = $ct;  // ciphertext is now array of block-length strings
-
-		// plaintext will get generated block-by-block into array of block-length strings
-		$plaintxt = array();
-
-		for ($b = 0; $b < $nBlocks; $b++)
-		{
-			// set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-			for ($c = 0; $c < 4; $c++)
-			{
-				$counterBlock[15 - $c] = self::urs($b, $c * 8) & 0xff;
-			}
-
-			for ($c = 0; $c < 4; $c++)
-			{
-				$counterBlock[15 - $c - 4] = self::urs(($b + 1) / 0x100000000 - 1, $c * 8) & 0xff;
-			}
-
-			$cipherCntr = self::Cipher($counterBlock, $keySchedule);  // encrypt counter block
-
-			$plaintxtByte = array();
-
-			for ($i = 0; $i < strlen($ciphertext[$b]); $i++)
-			{
-				// -- xor plaintext with ciphered counter byte-by-byte --
-				$plaintxtByte[$i] = $cipherCntr[$i] ^ ord(substr($ciphertext[$b], $i, 1));
-				$plaintxtByte[$i] = chr($plaintxtByte[$i]);
-
-			}
-
-			$plaintxt[$b] = implode('', $plaintxtByte);
-		}
-
-		// join array of blocks into single plaintext string
-		$plaintext = implode('', $plaintxt);
-
-		return $plaintext;
 	}
 
 	/**
@@ -7967,6 +7793,37 @@ class AKEncryptionAES
  */
 
 /**
+ * A timing safe equals comparison
+ *
+ * @param   string  $safe  The internal (safe) value to be checked
+ * @param   string  $user  The user submitted (unsafe) value
+ *
+ * @return  boolean  True if the two strings are identical.
+ *
+ * @see     http://blog.ircmaxell.com/2014/11/its-all-about-time.html
+ */
+function timingSafeEquals($safe, $user)
+{
+	$safeLen = strlen($safe);
+	$userLen = strlen($user);
+
+	if ($userLen != $safeLen)
+	{
+		return false;
+	}
+
+	$result = 0;
+
+	for ($i = 0; $i < $userLen; $i++)
+	{
+		$result |= (ord($safe[$i]) ^ ord($user[$i]));
+	}
+
+	// They are only identical strings if $result is exactly 0...
+	return $result === 0;
+}
+
+/**
  * The Master Setup will read the configuration parameters from restoration.php or
  * the JSON-encoded "configuration" input variable and return the status.
  *
@@ -8044,6 +7901,9 @@ function masterSetup()
 	// Detect a JSON string in the request variable and store it.
 	$json = getQueryParam('json', null);
 
+	// Detect a password in the request variable and store it.
+	$userPassword = getQueryParam('password', '');
+
 	// Remove everything from the request, post and get arrays
 	if (!empty($_REQUEST))
 	{
@@ -8069,41 +7929,75 @@ function masterSetup()
 		}
 	}
 
-	// Decrypt a possibly encrypted JSON string
+	// Authentication - Akeeba Restore 5.4.0 or later
 	$password = AKFactory::get('kickstart.security.password', null);
+	$isAuthenticated = false;
 
-	if (!empty($json))
+	/**
+	 * Akeeba Restore 5.3.1 and earlier use a custom implementation of AES-128 in CTR mode to encrypt the JSON data
+	 * between client and server. This is not used as a means to maintain secrecy (it's symmetrical encryption and the
+	 * key is, by necessity, transmitted with the HTML page to the client). It's meant as a form of authentication, so
+	 * that the server part can ensure that it only receives commands by an authorized client.
+	 *
+	 * The downside is that encryption in CTR mode (like CBC) is an all-or-nothing affair. This opens the possibility
+	 * for a padding oracle attack (https://en.wikipedia.org/wiki/Padding_oracle_attack). While Akeeba Restore was
+	 * hardened in 2014 to prevent the bulk of suck attacks it is still possible to attack the encryption using a very
+	 * large number of requests (several dozens of thousands).
+	 *
+	 * Since Akeeba Restore 5.4.0 we have removed this authentication method and replaced it with the transmission of a
+	 * very large length password. On the server side we use a timing safe password comparison. By its very nature, it
+	 * will only leak the (well known, constant and large) length of the password but no more information about the
+	 * password itself. See http://blog.ircmaxell.com/2014/11/its-all-about-time.html  As a result this form of
+	 * authentication is many orders of magnitude harder to crack than regular encryption.
+	 *
+	 * Now you may wonder "how is sending a password in the clear hardier than encryption?". If you ask that question
+	 * you were not paying attention. The password needs to be known by BOTH the server AND the client (browser). Since
+	 * this password is generated programmatically by the server, it MUST be sent to the client by the server. If an
+	 * attacker is able to intercept this transmission (man in the middle attack) using encryption is irrelevant: the
+	 * attacker already knows your password. This situation also applies when the user sends their own password to the
+	 * server, e.g. when logging into their site. The ONLY way to avoid security issues regarding information being
+	 * stolen in transit is using HTTPS with a commercially signed SSL certificate. Unlike 2008, when Kickstart was
+	 * originally written, obtaining such a certificate nowadays is trivial and costs absolutely nothing thanks to Let's
+	 * Encrypt (https://letsencrypt.org/).
+	 *
+	 * TL;DR: Use HTTPS with a commercially signed SSL certificate, e.g. a free certificate from Let's Encrypt. Client-
+	 * side cryptography does NOT protect you against an attacker (see
+	 * https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2011/august/javascript-cryptography-considered-harmful/).
+	 * Moreover, sending a plaintext password is safer than relying on client-side encryption for authentication as it
+	 * reoves the possibility of an attacker inferring the contents of the authentication key (password) in a relatively
+	 * easy and automated manner.
+	 */
+	if (!empty($password))
 	{
-		if (!empty($password))
-		{
-			$json = AKEncryptionAES::AESDecryptCtr($json, $password, 128);
-
-			if (empty($json))
-			{
-				die('###{"status":false,"message":"Invalid login"}###');
-			}
-		}
-
-		// Get the raw data
-		$raw = json_decode($json, true);
-
-		if (!empty($password) && (empty($raw)))
+		// Timing-safe password comparison. See http://blog.ircmaxell.com/2014/11/its-all-about-time.html
+		if (!timingSafeEquals($password, $userPassword))
 		{
 			die('###{"status":false,"message":"Invalid login"}###');
 		}
-
-		// Pass all JSON data to the request array
-		if (!empty($raw))
-		{
-			foreach ($raw as $key => $value)
-			{
-				$_REQUEST[$key] = $value;
-			}
-		}
 	}
-	elseif (!empty($password))
+
+	// No JSON data? Die.
+	if (empty($json))
 	{
-		die('###{"status":false,"message":"Invalid login"}###');
+		die('###{"status":false,"message":"Invalid JSON data"}###');
+	}
+
+	// Handle the JSON string
+	$raw = json_decode($json, true);
+
+	// Invalid JSON data?
+	if (empty($raw))
+	{
+		die('###{"status":false,"message":"Invalid JSON data"}###');
+	}
+
+	// Pass all JSON data to the request array
+	if (!empty($raw))
+	{
+		foreach ($raw as $key => $value)
+		{
+			$_REQUEST[$key] = $value;
+		}
 	}
 
 	// ------------------------------------------------------------
@@ -8272,24 +8166,32 @@ if (!defined('KICKSTART'))
 
 				$postproc = AKFactory::getPostProc();
 
-				// Rename htaccess.bak to .htaccess
-				if (file_exists($root . '/htaccess.bak'))
-				{
-					if (file_exists($root . '/.htaccess'))
-					{
-						$postproc->unlink($root . '/.htaccess');
-					}
-					$postproc->rename($root . '/htaccess.bak', $root . '/.htaccess');
-				}
+				/**
+				 * Should I rename the htaccess.bak and web.config.bak files back to their live filenames...?
+				 */
+				$renameFiles = AKFactory::get('kickstart.setup.postrenamefiles', true);
 
-				// Rename htaccess.bak to .htaccess
-				if (file_exists($root . '/web.config.bak'))
+				if ($renameFiles)
 				{
-					if (file_exists($root . '/web.config'))
+					// Rename htaccess.bak to .htaccess
+					if (file_exists($root . '/htaccess.bak'))
 					{
-						$postproc->unlink($root . '/web.config');
+						if (file_exists($root . '/.htaccess'))
+						{
+							$postproc->unlink($root . '/.htaccess');
+						}
+						$postproc->rename($root . '/htaccess.bak', $root . '/.htaccess');
 					}
-					$postproc->rename($root . '/web.config.bak', $root . '/web.config');
+
+					// Rename htaccess.bak to .htaccess
+					if (file_exists($root . '/web.config.bak'))
+					{
+						if (file_exists($root . '/web.config'))
+						{
+							$postproc->unlink($root . '/web.config');
+						}
+						$postproc->rename($root . '/web.config.bak', $root . '/web.config');
+					}
 				}
 
 				// Remove restoration.php
@@ -8349,12 +8251,6 @@ if (!defined('KICKSTART'))
 
 	// JSON encode the message
 	$json = json_encode($retArray);
-	// Do I have to encrypt?
-	$password = AKFactory::get('kickstart.security.password', null);
-	if (!empty($password))
-	{
-		$json = AKEncryptionAES::AESEncryptCtr($json, $password, 128);
-	}
 
 	// Return the message
 	echo "###$json###";

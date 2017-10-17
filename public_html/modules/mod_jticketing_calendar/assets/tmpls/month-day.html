@@ -1,0 +1,22 @@
+<div class="cal-month-day <%= cls %>" >
+	<span class="pull-right" style="overflow:hidden;"  data-cal-date="<%= data_day %>"  title="<%= tooltip %>"><%= day %></span>
+	<% if (events.length > 0) { %>
+		<!--<div class="wrapper" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
+			<% _.each(events, function(event) { %>
+				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" target="_blank" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
+					class=" pull-left" data-toggle=""
+					title="<%= event.event_time%>"><div style="background-color: <%= event.background_color%>; color:#fff;padding:0px;"><span>*</span></div></a><br/>
+			<% }); %>
+		</div>-->
+
+		<div class="hide events-list" data-cal-start="<%= start %>" data-cal-end="<%= end %>">
+			<% _.each(events, function(event) { %>
+				<a target="_blank" href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>"
+					class="pull-left event <%= event['class'] %> event<%= event.id %>" data-toggle="tooltip"
+					title="<%= event.title %>"></a>
+			<% }); %>
+		</div>
+		<small class="cal-events-num badge badge-important pull-left"><%= events.length %></small>
+
+	<% } %>
+</div>

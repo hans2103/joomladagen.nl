@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,9 +27,10 @@ class EditorButton
 	private $_init   = false;
 	private $_helper = null;
 
-	var $main_type       = 'plugin'; // The type of extension that holds the parameters
-	var $check_installed = null; // The types of extensions that need to be checked (will default to main_type)
-	var $folder          = null; // The path to the original caller file
+	var $main_type         = 'plugin'; // The type of extension that holds the parameters
+	var $check_installed   = null; // The types of extensions that need to be checked (will default to main_type)
+	var $require_core_auth = true; // Whether or not to the core content create/edit permissions are required
+	var $folder            = null; // The path to the original caller file
 
 	/**
 	 * Display the button
@@ -40,7 +41,7 @@ class EditorButton
 	 */
 	function onDisplay($editor_name)
 	{
-		if (!$this->getHelper())
+		if ( ! $this->getHelper())
 		{
 			return null;
 		}
@@ -69,17 +70,17 @@ class EditorButton
 
 		$this->_init = true;
 
-		if (!Extension::isFrameworkEnabled())
+		if ( ! Extension::isFrameworkEnabled())
 		{
 			return null;
 		}
 
-		if (!Extension::isAuthorised())
+		if ( ! Extension::isAuthorised($this->require_core_auth))
 		{
 			return null;
 		}
 
-		if (!$this->isInstalled())
+		if ( ! $this->isInstalled())
 		{
 			return null;
 		}
@@ -91,17 +92,17 @@ class EditorButton
 
 		$params = $this->getParams();
 
-		if (!Extension::isEnabledInComponent($params))
+		if ( ! Extension::isEnabledInComponent($params))
 		{
 			return null;
 		}
 
-		if (!Extension::isEnabledInArea($params))
+		if ( ! Extension::isEnabledInArea($params))
 		{
 			return null;
 		}
 
-		if (!$this->extraChecks($params))
+		if ( ! $this->extraChecks($params))
 		{
 			return null;
 		}
@@ -130,7 +131,7 @@ class EditorButton
 		switch ($this->main_type)
 		{
 			case 'component':
-				if (!Protect::isComponentInstalled($this->_name))
+				if ( ! Protect::isComponentInstalled($this->_name))
 				{
 					return null;
 				}
@@ -140,7 +141,7 @@ class EditorButton
 
 			case 'plugin':
 			default:
-				if (!Protect::isSystemPluginInstalled($this->_name))
+				if ( ! Protect::isSystemPluginInstalled($this->_name))
 				{
 					return null;
 				}
@@ -152,7 +153,7 @@ class EditorButton
 
 	private function isInstalled()
 	{
-		$extensions = !is_null($this->check_installed)
+		$extensions = ! is_null($this->check_installed)
 			? $this->check_installed
 			: [$this->main_type];
 

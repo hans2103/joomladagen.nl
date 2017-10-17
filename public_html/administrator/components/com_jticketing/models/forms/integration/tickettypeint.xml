@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field
+				name="id"
+				type="hidden"
+				/>
+		<field
+				name="title"
+				type="text"
+				label="COM_JTICKETING_TICKET_TITLE"
+				required="true"
+				size="40"
+				class=""
+				validation="required"
+				/>
+
+		<field
+				name="desc"
+				type="textarea"
+				label="COM_JTICKETING_TICKET_DESCRIPTION"
+				/>
+
+		<field name="state" type="list" default="1" label="JSTATUS" class="">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field
+				name="price"
+				type="text"
+				label="COM_JTICKETING_TICKET_PRICE"
+				size="40"
+				class=""
+				filter="integer"
+				default="0"
+				/>
+
+				<field name="unlimited_seats" type="list" default="1" label="COM_JTICKETING_TICKET_SEATS_AVAILABLE" class="">
+					<option value="1">COM_JTICKETING_TICKET_UNLIMITED_SEATS_YES</option>
+					<option value="0">COM_JTICKETING_TICKET_UNLIMITED_SEATS_NO</option>
+				</field>
+
+			<field
+				name="available"
+				type="text"
+				label="COM_JTICKETING_TICKET_NO_OF_SEATS"
+				size="20"
+				class=""
+				default=""
+				/>
+				<field name="access" type="accesslevel" label="JFIELD_ACCESS_LABEL" class="" size="1" />
+	</fieldset>
+</form>

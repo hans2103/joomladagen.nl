@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -32,7 +32,7 @@ class RLAssignmentsUsers extends RLAssignment
 	{
 		$user = JFactory::getUser();
 
-		if (!empty($user->groups))
+		if ( ! empty($user->groups))
 		{
 			$groups = array_values($user->groups);
 		}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -38,7 +38,7 @@ class K2Category
 			|| ($this->params->inc_items && $this->request->view == 'item')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->_(false);
 		}
@@ -50,7 +50,7 @@ class K2Category
 		{
 			return $this->_(false);
 		}
-		else if (!$pass && $this->params->inc_children)
+		else if ( ! $pass && $this->params->inc_children)
 		{
 			foreach ($cats as $cat)
 			{

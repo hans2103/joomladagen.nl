@@ -442,6 +442,8 @@
 
     $target.val($('.sp-pagebuilder-media > li.sp-pagebuilder-media-item.selected').data('path'))
 
+    $target.trigger('change');
+
     $('.sp-pagebuilder-media-modal-overlay').remove();
     $('body').removeClass('sp-pagebuilder-media-modal-open');
   })
@@ -454,6 +456,7 @@
     var $this = $(this);
     $this.siblings('.sp-pagebuilder-media-preview').addClass('sp-pagebuilder-media-no-image').removeAttr('src');
     $this.siblings('input').val('');
+    $this.siblings('input').trigger('change');
   })
 
   /* ========================================================================

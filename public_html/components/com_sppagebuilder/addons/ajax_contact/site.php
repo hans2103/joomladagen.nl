@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 
@@ -18,7 +18,10 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 
 		// Addon options
 		$recipient_email = (isset($this->addon->settings->recipient_email) && $this->addon->settings->recipient_email) ? $this->addon->settings->recipient_email : '';
+		$from_email = (isset($this->addon->settings->from_email) && $this->addon->settings->from_email) ? $this->addon->settings->from_email : '';
+		$from_name = (isset($this->addon->settings->from_name) && $this->addon->settings->from_name) ? $this->addon->settings->from_name : '';
 		$formcaptcha = (isset($this->addon->settings->formcaptcha) && $this->addon->settings->formcaptcha) ? $this->addon->settings->formcaptcha : '';
+		$captcha_type = (isset($this->addon->settings->captcha_type)) ? $this->addon->settings->captcha_type : 'default';
 		$captcha_question = (isset($this->addon->settings->captcha_question) && $this->addon->settings->captcha_question) ? $this->addon->settings->captcha_question : '';
 		$captcha_answer = (isset($this->addon->settings->captcha_answer) && $this->addon->settings->captcha_answer) ? $this->addon->settings->captcha_answer : '';
 		$button_text = JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_SEND');
@@ -47,7 +50,7 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 			$output .= '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>';
 		}
 
-		$output .= '<div class="sppb-addon-content">';
+		$output .= '<div class="sppb-ajax-contact-content">';
 		$output .= '<form class="sppb-ajaxt-contact-form">';
 
 		$output .= '<div class="sppb-form-group">';
@@ -62,7 +65,7 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 		$output .= '<input type="text" name="subject" class="sppb-form-control" placeholder="'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_SUBJECT') .'" required="required">';
 		$output .= '</div>';
 
-		if($formcaptcha) {
+		if($formcaptcha && $captcha_type == 'default') {
 			$output .= '<div class="sppb-form-group">';
 			$output .= '<input type="text" name="captcha_question" class="sppb-form-control" placeholder="'. $captcha_question .'" required="required">';
 			$output .= '</div>';
@@ -73,11 +76,21 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 		$output .= '</div>';
 
 		$output .= '<input type="hidden" name="recipient" value="'. base64_encode($recipient_email) .'">';
+		$output .= '<input type="hidden" name="from_email" value="'. base64_encode($from_email) .'">';
+		$output .= '<input type="hidden" name="from_name" value="'. base64_encode($from_name) .'">';
 
-		if($formcaptcha) {
+		if($formcaptcha && $captcha_type == 'default') {
 			$output .= '<input type="hidden" name="captcha_answer" value="'. md5($captcha_answer) .'">';
+		} elseif($formcaptcha && $captcha_type == 'gcaptcha'){
+			JPluginHelper::importPlugin('captcha', 'recaptcha');
+			$dispatcher = JDispatcher::getInstance();
+			$dispatcher->trigger('onInit', 'dynamic_recaptcha_' . $this->addon->id);
+			$recaptcha = $dispatcher->trigger('onDisplay', array(null, 'dynamic_recaptcha_' . $this->addon->id, 'class="sppb-dynamic-recaptcha"'));
+
+			$output .= (isset($recaptcha[0])) ? $recaptcha[0] : '<p class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_CAPTCHA_NOT_INSTALLED') . '</p>';
 		}
 
+		$output .= '<input type="hidden" name="captcha_type" value="'. $captcha_type .'">';
 		$output .= '<button type="submit" id="btn-' . $this->addon->id . '" class="sppb-btn' . $button_class . '"><i class="fa"></i> '. $button_text .'</button>';
 
 		$output .= '</form>';
@@ -93,22 +106,35 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 
 
 	public static function getAjax() {
+
 		$input = JFactory::getApplication()->input;
 		$mail = JFactory::getMailer();
 
 		$showcaptcha = false;
 
 		//inputs
-		$inputs 			= $input->get('data', array(), 'ARRAY');
+		$inputs = $input->get('data', array(), 'ARRAY');
 
 		foreach ($inputs as $input) {
+
+			if( $input['name'] == 'captcha_type' ) {
+				$captcha_type 	= $input['value'];
+			}
 
 			if( $input['name'] == 'recipient' ) {
 				$recipient 			= base64_decode($input['value']);
 			}
 
+			if( $input['name'] == 'from_email' ) {
+				$from_email 			= base64_decode($input['value']);
+			}
+
+			if( $input['name'] == 'from_name' ) {
+				$from_name 			= base64_decode($input['value']);
+			}
+
 			if( $input['name'] == 'email' ) {
-				$email 			= $input['value'];
+				$email 		= $input['value'];
 			}
 
 			if( $input['name'] == 'name' ) {
@@ -123,24 +149,49 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 				$message 			= nl2br( $input['value'] );
 			}
 
-			if( $input['name'] == 'captcha_question' ) {
+			if($input['name'] == 'captcha_question' ) {
 				$captcha_question 	= $input['value'];
-				$showcaptcha		= true;
 			}
 
-			if( $input['name'] == 'captcha_answer' ) {
+			if($input['name'] == 'captcha_answer' ) {
 				$captcha_answer 	= $input['value'];
 				$showcaptcha		= true;
 			}
+
+			if($input['name'] == 'g-recaptcha-response' ) {
+				$gcaptcha 			= $input['value'];
+				$showcaptcha		= true;
+			}
+
 		}
 
+		$output = array();
+		$output['status'] = false;
+
 		if($showcaptcha) {
-			if ( md5($captcha_question) != $captcha_answer ) {
-				return '<span class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_WRONG_CAPTCHA') .'</span>';
+			if($captcha_type =='gcaptcha') {
+				JPluginHelper::importPlugin('captcha');
+				$dispatcher = JEventDispatcher::getInstance();
+				$res = $dispatcher->trigger('onCheckAnswer');
+				if(!$res[0]) {
+					$output['content'] = '<span class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_INVALID_CAPTCHA') .'</span>';
+					return json_encode($output);
+				}
+			} else {
+				if (md5($captcha_question) != $captcha_answer) {
+					$output['content'] = '<span class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_WRONG_CAPTCHA') .'</span>';
+					return json_encode($output);
+				}
 			}
 		}
 
 		$sender = array($email, $name);
+
+		if (!empty($from_email)) {
+			$sender = array($from_email, $from_name);
+			$mail->addReplyTo($email, $name);
+		}
+		
 		$mail->setSender($sender);
 		$mail->addRecipient($recipient);
 		$mail->setSubject($subject);
@@ -149,10 +200,13 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 		$mail->setBody($message);
 
 		if ($mail->Send()) {
-			return '<span class="sppb-text-success">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_SUCCESS') .'</span>';
+			$output['status'] = true;
+			$output['content'] = '<span class="sppb-text-success">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_SUCCESS') .'</span>';
 		} else {
-			return '<span class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_FAILED') .'</span>';
+			$output['content'] = '<span class="sppb-text-danger">'. JText::_('COM_SPPAGEBUILDER_ADDON_AJAX_CONTACT_FAILED') .'</span>';
 		}
+
+		return json_encode($output);
 	}
 
 	public function css() {
@@ -165,6 +219,5 @@ class SppagebuilderAddonAjax_contact extends SppagebuilderAddons{
 		if($use_custom_button) {
 			return $css_path->render(array('addon_id' => $addon_id, 'options' => $this->addon->settings, 'id' => 'btn-' . $this->addon->id));
 		}
-
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -31,7 +31,7 @@ class Com_RegularLabsManagerInstallerScript extends Com_RegularLabsManagerInstal
 		$this->fixAssetsRules();
 
 		// Check if old NoNumber Extension Manager is still installed
-		if (!JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_nonumbermanager'))
+		if ( ! JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_nonumbermanager'))
 		{
 			return;
 		}
@@ -57,7 +57,7 @@ class Com_RegularLabsManagerInstallerScript extends Com_RegularLabsManagerInstal
 		$data = JComponentHelper::getComponent('com_regularlabsmanager');
 		$data = json_decode(json_encode($data), true);
 
-		if (!empty($data['params']))
+		if ( ! empty($data['params']))
 		{
 			return;
 		}
@@ -80,7 +80,7 @@ class Com_RegularLabsManagerInstallerScript extends Com_RegularLabsManagerInstal
 		$table = JTable::getInstance('extension');
 
 		// Load the previous Data
-		if (!$table->load($data['id']))
+		if ( ! $table->load($data['id']))
 		{
 			return;
 		}

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonCall_to_action extends SppagebuilderAddons {
 
@@ -52,7 +52,9 @@ class SppagebuilderAddonCall_to_action extends SppagebuilderAddons {
 			$output .= ($text) ? '<p class="sppb-cta-text">' . $text . '</p>' : '';
 			$output .= '</div>';
 			$output .= '<div class="sppb-col-sm-4 sppb-text-right">';
-			$output .= $button_output;
+			if (!empty($button_text)) {
+				$output .= $button_output;
+			}
 			$output .= '</div>';
 			$output .= '</div>';
 		} else {
@@ -61,7 +63,9 @@ class SppagebuilderAddonCall_to_action extends SppagebuilderAddons {
 			$output .= ($subtitle) ? '<p class="sppb-lead sppb-cta-subtitle">' . $subtitle . '</p>' : '';
 			$output .= ($text) ? '<p class="sppb-cta-text">' . $text . '</p>' : '';
 			$output .= '<div>';
-			$output .= $button_output;
+			if (!empty($button_text)) {
+				$output .= $button_output;
+			}
 			$output .= '</div>';
 			$output .= '</div>';
 		}

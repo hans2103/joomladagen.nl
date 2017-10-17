@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="jticketingtax" method="upgrade">
+	<name>PLG_JTICKETING_TAX_DEFAULT</name>
+	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.4</version>
+	<author>Techjoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>http://www.techjoomla.com</authorUrl>
+	<copyright>(c) Techjoomla</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<description>PLG_JTICKETING_TAX_DEFAULT_DESC</description>
+	<files>
+		<filename plugin="jticketing_tax_default">jticketing_tax_default.php</filename>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB/en-GB.plg_jticketingtax_jticketing_tax_default.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_jticketingtax_jticketing_tax_default.sys.ini</language>
+	</languages>
+	<config name="params">
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="tax_per" type="text" default="12.5" label="PLG_TAX" description="PLG_TAX_DESC" />
+			</fieldset>
+		</fields>
+	</config>
+</extension>

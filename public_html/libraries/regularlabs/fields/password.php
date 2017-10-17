@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 require_once JPATH_LIBRARIES . '/joomla/form/fields/password.php';
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -63,7 +63,7 @@ class JFormFieldRL_Password extends JFormFieldPassword
 
 	private function get($val, $default = '')
 	{
-		if (!isset($this->params[$val]) || (string) $this->params[$val] == '')
+		if ( ! isset($this->params[$val]) || (string) $this->params[$val] == '')
 		{
 			return $default;
 		}

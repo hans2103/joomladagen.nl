@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ class RLAssignmentsURLs extends RLAssignment
 	{
 		$regex = isset($this->params->regex) ? $this->params->regex : 0;
 
-		if (!is_array($this->selection))
+		if ( ! is_array($this->selection))
 		{
 			$this->selection = explode("\n", $this->selection);
 		}
@@ -35,12 +35,12 @@ class RLAssignmentsURLs extends RLAssignment
 		$url = JUri::getInstance();
 		$url = $url->toString();
 
-		$urls = array(
+		$urls = [
 			RLText::html_entity_decoder(urldecode($url)),
 			urldecode($url),
 			RLText::html_entity_decoder($url),
 			$url,
-		);
+		];
 		$urls = array_unique($urls);
 
 		$pass = false;

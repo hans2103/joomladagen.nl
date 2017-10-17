@@ -7,7 +7,7 @@
 */
 
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 
@@ -21,8 +21,9 @@ class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 		$arrows = (isset($this->addon->settings->arrows) && $this->addon->settings->arrows) ? $this->addon->settings->arrows : 0;
 		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : 0;
 		$carousel_autoplay = ($autoplay) ? ' data-sppb-ride="sppb-carousel"':'';
+		$interval = (isset($this->addon->settings->interval) && $this->addon->settings->interval) ? ((int) $this->addon->settings->interval * 1000) : 5000;
 
-		$output  = '<div id="sppb-carousel-'. $this->addon->id .'" class="sppb-carousel sppb-carousel-pro sppb-slide' . $class . '"'. $carousel_autoplay .'>';
+		$output  = '<div id="sppb-carousel-'. $this->addon->id .'" data-interval="'.$interval.'" class="sppb-carousel sppb-carousel-pro sppb-slide' . $class . '"'. $carousel_autoplay .'>';
 
 		if($controllers) {
 			$output .= '<ol class="sppb-carousel-indicators">';
@@ -35,6 +36,21 @@ class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 		$output .= '<div class="sppb-carousel-inner ' . $alignment . '">';
 
 		foreach ($this->addon->settings->sp_carouselpro_item as $key => $value) {
+			$hide_title = '';
+			$hide_title .= ( isset( $value->hide_title_md ) && $value->hide_title_md ) ? ' sppb-hidden-md sppb-hidden-lg' : '';
+			$hide_title .= ( isset( $value->hide_title_sm ) && $value->hide_title_sm ) ? ' sppb-hidden-sm' : '';
+			$hide_title .= ( isset( $value->hide_title_xs ) && $value->hide_title_xs ) ? ' sppb-hidden-xs' : '';
+
+			$hide_content = '';
+			$hide_content .= ( isset( $value->hide_content_md ) && $value->hide_content_md ) ? ' sppb-hidden-md sppb-hidden-lg' : '';
+			$hide_content .= ( isset( $value->hide_content_sm ) && $value->hide_content_sm ) ? ' sppb-hidden-sm' : '';
+			$hide_content .= ( isset( $value->hide_content_xs ) && $value->hide_content_xs ) ? ' sppb-hidden-xs' : '';
+
+			$hide_button = '';
+			$hide_button .= ( isset( $value->hide_button_md ) && $value->hide_button_md ) ? ' sppb-hidden-md sppb-hidden-lg' : '';
+			$hide_button .= ( isset( $value->hide_button_sm ) && $value->hide_button_sm ) ? ' sppb-hidden-sm' : '';
+			$hide_button .= ( isset( $value->hide_button_xs ) && $value->hide_button_xs ) ? ' sppb-hidden-xs' : '';
+
 			$output  .= '<div class="sppb-item'. (($value->bg) ? ' sppb-item-has-bg' : '') . (($key == 0) ? ' active' : '') .'">';
 			$output  .= ($value->bg) ? '<img src="' . $value->bg . '" alt="' . $value->title . '">' : '';
 
@@ -48,8 +64,8 @@ class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 			$output  .= '<div class="sppb-carousel-pro-text">';
 
 			if(($value->title) || ($value->content) ) {
-				$output  .= ($value->title) ? '<h2>' . $value->title . '</h2>' : '';
-				$output  .= '<p>' . $value->content . '</p>';
+				$output  .= ($value->title) ? '<h2 class="'.$hide_title.'">' . $value->title . '</h2>' : '';
+				$output  .= ($value->content) ? '<p class="'.$hide_content.'">' . $value->content . '</p>' : '';
 				if($value->button_text) {
 					$button_class = (isset($value->button_type) && $value->button_type) ? ' sppb-btn-' . $value->button_type : ' sppb-btn-default';
 					$button_class .= (isset($value->button_size) && $value->button_size) ? ' sppb-btn-' . $value->button_size : '';
@@ -66,7 +82,7 @@ class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 						$value->button_text = ($button_icon) ? $value->button_text . ' <i class="fa ' . $button_icon . '"></i>' : $value->button_text;
 					}
 
-					$output  .= '<a href="' . $value->button_url . '"  target="' . $button_target . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
+					$output  .= '<a href="' . $value->button_url . '"  target="' . $button_target . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class . $hide_button .'">' . $value->button_text . '</a>';
 				}
 			}
 
@@ -141,9 +157,13 @@ class SppagebuilderAddonCarouselpro extends SppagebuilderAddons {
 		foreach ($this->addon->settings->sp_carouselpro_item as $key => $value) {
 			if($value->button_text) {
 				$css_path = new JLayoutFile('addon.css.button', $layout_path);
-				$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $this->addon->settings, 'id' => 'btn-' . $this->addon->id + $key));
+				$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $value, 'id' => 'btn-' . ($this->addon->id + $key)));
 			}
 		}
+
+		$speed = (isset($this->addon->settings->speed) && $this->addon->settings->speed) ? $this->addon->settings->speed : 600;
+
+		$css .= $addon_id.' .sppb-carousel-inner > .sppb-item{-webkit-transition-duration: '.$speed.'ms; transition-duration: '.$speed.'ms;}';
 
 		return $css;
 	}

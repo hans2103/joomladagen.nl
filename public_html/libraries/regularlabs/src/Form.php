@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -38,10 +38,15 @@ class Form
 			return '<fieldset class="radio">' . JText::_('RL_NO_ITEMS_FOUND') . '</fieldset>';
 		}
 
+		if ( ! $multiple)
+		{
+			$simple = true;
+		}
+
 		$parameters = Parameters::getInstance();
 		$params     = $parameters->getPluginParams('regularlabs');
 
-		if (!is_array($value))
+		if ( ! is_array($value))
 		{
 			$value = explode(',', $value);
 		}
@@ -74,7 +79,7 @@ class Form
 			{
 				$value = implode(',', $value);
 			}
-			if (!$value)
+			if ( ! $value)
 			{
 				$input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>';
 			}
@@ -86,19 +91,22 @@ class Form
 			return '<fieldset class="radio"><label for="' . $id . '">' . JText::_('RL_ITEM_IDS') . ':</label>' . $input . '</fieldset>';
 		}
 
-		if (!$multiple)
+		if ($simple)
 		{
 			$first_level = isset($options['0']->level) ? $options['0']->level : 0;
 			foreach ($options as &$option)
 			{
-				if (!isset($option->level))
+				if ( ! isset($option->level))
 				{
 					continue;
 				}
 				$repeat       = ($option->level - $first_level > 0) ? $option->level - $first_level : 0;
 				$option->text = str_repeat(' - ', $repeat) . $option->text;
 			}
+		}
 
+		if ( ! $multiple)
+		{
 			$html = JHtml::_('select.genericlist', $options, $name, 'class="inputbox"', 'value', 'text', $value);
 
 			return self::handlePreparedStyles($html);
@@ -202,7 +210,7 @@ class Form
 				$labelclass .= ' nav-header';
 			}
 
-			if (isset($option->title) && (!isset($option->value) || !$option->value))
+			if (isset($option->title) && ( ! isset($option->value) || ! $option->value))
 			{
 				$item .= '<label class="' . $labelclass . '">' . $option->title . '</label>';
 			}
@@ -217,7 +225,7 @@ class Form
 			$item   .= '</div>';
 			$html[] = $item;
 
-			if (!isset($o[$i + 1]) && $option->level > 0)
+			if ( ! isset($o[$i + 1]) && $option->level > 0)
 			{
 				$html[] = str_repeat('</li></ul>', (int) $option->level);
 			}
@@ -272,6 +280,86 @@ class Form
 	}
 
 	/**
+	 * Render a select list loaded via Ajax
+	 *
+	 * @param string $field
+	 * @param string $name
+	 * @param string $value
+	 * @param string $id
+	 * @param array  $attributes
+	 * @param bool   $simple
+	 *
+	 * @return string
+	 */
+	public static function selectListAjax($field, $name, $value, $id, $attributes = [], $simple = false)
+	{
+		JHtml::_('jquery.framework');
+
+		$url = 'index.php?option=com_ajax&plugin=regularlabs&format=raw'
+			. '&field=' . $field
+			. '&name=' . urlencode($name)
+			. '&value=' . urlencode(json_encode($value))
+			. '&id=' . $id;
+
+		if ( ! empty($attributes))
+		{
+			$url .= '&' . http_build_query($attributes, '', '&');
+		}
+
+		$error   = "$('#" . $id . "_spinner').remove();";
+		$success = "$('#" . $id . "').replaceWith(data);$('#" . $id . "_spinner').remove();";
+
+		//	$success .= "console.log('#" . $id . "');";
+
+		if ($simple)
+		{
+			$success .= "if(data.indexOf('</select>') > -1)\{$('#" . $id . "').chosen();\}";
+		}
+		else
+		{
+			Document::script('regularlabs/multiselect.min.js');
+			Document::stylesheet('regularlabs/multiselect.min.css');
+
+			$success .= "if(data.indexOf('rl_multiselect') > -1)\{RegularLabsMultiSelect.init($('#" . $id . "'));\}";
+		}
+
+		$script = "jQuery(document).ready(function() {RegularLabsScripts.addToLoadAjaxList("
+			. "'" . addslashes($url) . "',"
+			. "'" . addslashes($success) . "',"
+			. "'" . addslashes($error) . "'"
+			. ")});";
+
+		if (is_array($value))
+		{
+			$value = implode(',', $value);
+		}
+
+		Document::script('regularlabs/script.min.js');
+		Document::stylesheet('regularlabs/style.min.css');
+
+		$input = '<textarea name="' . $name . '" id="' . $id . '" cols="40" rows="5">' . $value . '</textarea>'
+			. '<div id="' . $id . '_spinner" class="rl_spinner"></div>';
+
+		return $input . '<script>' . $script . '</script>';
+	}
+
+	/**
+	 * Render a simple select list loaded via Ajax
+	 *
+	 * @param string $field
+	 * @param string $name
+	 * @param string $value
+	 * @param string $id
+	 * @param array  $attributes
+	 *
+	 * @return string
+	 */
+	public static function selectListSimpleAjax($field, $name, $value, $id, $attributes = [])
+	{
+		return self::selectListAjax($field, $name, $value, $id, $attributes, true);
+	}
+
+	/**
 	 * Prepare the string for a select form field item
 	 *
 	 * @param string $string
@@ -313,7 +401,7 @@ class Form
 				$string = '[[:font-weight:normal;font-style:italic;color:grey;:]]' . $string;
 				break;
 
-			case (!$published):
+			case ( ! $published):
 				$string = '[[:font-style:italic;color:grey;:]]' . $string . ' [' . JText::_('JUNPUBLISHED') . ']';
 				break;
 

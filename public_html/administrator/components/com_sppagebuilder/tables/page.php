@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 // import Joomla table library
 jimport('joomla.database.table');
@@ -17,22 +17,52 @@ class SppagebuilderTablePage extends JTable {
 		parent::__construct('#__sppagebuilder', 'id', $db);
 	}
 
-	public function store($updateNulls = true) {
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+	public function bind($array, $ignore = ''){
+		if (isset($array['id'])) {
+			$date = JFactory::getDate();
+			$user = JFactory::getUser();
 
-		if ($this->id) {
-			$this->modified		= $date->toSql();
-			$this->modified_by		= $user->get('id');
-		} else {
-			if (!(int) $this->created_on) {
-				$this->created_on = $date->toSql();
-			}
-			if (empty($this->created_by)) {
-				$this->created_by = $user->get('id');
+			if ($array['id']) {
+				$array['modified'] = $date->toSql();
+				$array['modified_by'] = $user->get('id');
+			}else{
+				if (!(int) $array['created_on']) {
+					$array['created_on'] = $date->toSql();
+				}
+				if (empty($array['created_by'])) {
+					$array['created_by'] = $user->get('id');
+				}
 			}
 		}
 
-		return parent::store($updateNulls);
+		// Bind the rules.
+		if (isset($array['rules']) && is_array($array['rules'])) {
+			$rules = new JRules($array['rules']);
+			$this->setRules($rules);
+		}
+		return parent::bind($array, $ignore);
 	}
+
+	protected function _getAssetTitle(){
+		return $this->title;
+	}
+
+	/**
+	 * Redefined asset name, as we support action control
+	 */
+  protected function _getAssetName() {
+		$k = $this->_tbl_key;
+		return 'com_sppagebuilder.page.'.(int) $this->$k;
+  }
+	
+  /**
+   * We provide our global ACL as parent
+	 * @see JTable::_getAssetParentId()
+   */
+	protected function _getAssetParentId(JTable $table = NULL, $id = NULL){
+		$asset = JTable::getInstance('Asset');
+		$asset->loadByName('com_sppagebuilder');
+		return $asset->id;
+	}
+
 }

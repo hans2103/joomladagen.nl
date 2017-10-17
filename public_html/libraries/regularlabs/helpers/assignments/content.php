@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -20,7 +20,7 @@ class RLAssignmentsContent extends RLAssignment
 	public function passPageTypes()
 	{
 		$components = ['com_content', 'com_contentsubmit'];
-		if (!in_array($this->request->option, $components))
+		if ( ! in_array($this->request->option, $components))
 		{
 			return $this->pass(false);
 		}
@@ -40,7 +40,7 @@ class RLAssignmentsContent extends RLAssignment
 	{
 		// components that use the com_content secs/cats
 		$components = ['com_content', 'com_flexicontent', 'com_contentsubmit'];
-		if (!in_array($this->request->option, $components))
+		if ( ! in_array($this->request->option, $components))
 		{
 			return $this->pass(false);
 		}
@@ -56,9 +56,9 @@ class RLAssignmentsContent extends RLAssignment
 
 		if (
 			$this->request->option != 'com_contentsubmit'
-			&& !($this->params->inc_categories && $is_content && $is_category)
-			&& !($this->params->inc_articles && $is_content && $is_item)
-			&& !($this->params->inc_others && !($is_content && ($is_category || $is_item)))
+			&& ! ($this->params->inc_categories && $is_content && $is_category)
+			&& ! ($this->params->inc_articles && $is_content && $is_item)
+			&& ! ($this->params->inc_others && ! ($is_content && ($is_category || $is_item)))
 		)
 		{
 			return $this->pass(false);
@@ -79,16 +79,16 @@ class RLAssignmentsContent extends RLAssignment
 		$pass = false;
 		if (
 			$this->params->inc_others
-			&& !($is_content && ($is_category || $is_item))
+			&& ! ($is_content && ($is_category || $is_item))
 			&& $this->article
 		)
 		{
-			if (!isset($this->article->id) && isset($this->article->slug))
+			if ( ! isset($this->article->id) && isset($this->article->slug))
 			{
 				$this->article->id = (int) $this->article->slug;
 			}
 
-			if (!isset($this->article->catid) && isset($this->article->catslug))
+			if ( ! isset($this->article->catid) && isset($this->article->catslug))
 			{
 				$this->article->catid = (int) $this->article->catslug;
 			}
@@ -101,7 +101,7 @@ class RLAssignmentsContent extends RLAssignment
 
 		foreach ($catids as $catid)
 		{
-			if (!$catid)
+			if ( ! $catid)
 			{
 				continue;
 			}
@@ -114,7 +114,7 @@ class RLAssignmentsContent extends RLAssignment
 				continue;
 			}
 
-			if (!$pass && $this->params->inc_children)
+			if ( ! $pass && $this->params->inc_children)
 			{
 				$parent_ids = $this->getCatParentIds($catid);
 				$parent_ids = array_diff($parent_ids, ['1']);
@@ -141,7 +141,7 @@ class RLAssignmentsContent extends RLAssignment
 			return (array) $this->request->id;
 		}
 
-		if (!$this->article && $this->request->id)
+		if ( ! $this->article && $this->request->id)
 		{
 			$this->article = JTable::getInstance('content');
 			$this->article->load($this->request->id);
@@ -167,8 +167,8 @@ class RLAssignmentsContent extends RLAssignment
 
 	public function passArticles()
 	{
-		if (!$this->request->id
-			|| !(($this->request->option == 'com_content' && $this->request->view == 'article')
+		if ( ! $this->request->id
+			|| ! (($this->request->option == 'com_content' && $this->request->view == 'article')
 				|| ($this->request->option == 'com_flexicontent' && $this->request->view == 'item')
 			)
 		)
@@ -179,25 +179,25 @@ class RLAssignmentsContent extends RLAssignment
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentIds'))
+		if ( ! $this->passItemByType($pass, 'ContentIds'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Content Keywords
-		if (!$this->passItemByType($pass, 'ContentKeywords'))
+		if ( ! $this->passItemByType($pass, 'ContentKeywords'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Meta Keywords
-		if (!$this->passItemByType($pass, 'MetaKeywords'))
+		if ( ! $this->passItemByType($pass, 'MetaKeywords'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Authors
-		if (!$this->passItemByType($pass, 'Authors'))
+		if ( ! $this->passItemByType($pass, 'Authors'))
 		{
 			return $this->pass(false);
 		}
@@ -212,14 +212,14 @@ class RLAssignmentsContent extends RLAssignment
 			return $this->article;
 		}
 
-		if (!class_exists('ContentModelArticle'))
+		if ( ! class_exists('ContentModelArticle'))
 		{
 			require_once JPATH_SITE . '/components/com_content/models/article.php';
 		}
 
 		$model = JModelLegacy::getInstance('article', 'contentModel');
 
-		if (!method_exists($model, 'getItem'))
+		if ( ! method_exists($model, 'getItem'))
 		{
 			return null;
 		}

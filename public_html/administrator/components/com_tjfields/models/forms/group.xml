@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="text" default="0" label="COM_TJFIELDS_FORM_LBL_GROUP_ID" readonly="true" class="readonly" description="JGLOBAL_FIELD_ID_DESC" />
+		<field name="created_by" type="createdby" default="" label="COM_TJFIELDS_FORM_LBL_GROUP_CREATED_BY" description="COM_TJFIELDS_FORM_DESC_GROUP_CREATED_BY" />
+		<field name="name" type="text" class="required" label="COM_TJFIELDS_FORM_LBL_GROUP_NAME" description="COM_TJFIELDS_FORM_DESC_GROUP_NAME" required="true" />
+		<field name="client" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_GROUP_CLIENT" description="COM_TJFIELDS_FORM_DESC_GROUP_CLIENT" filter="safehtml" />
+		<field name="state" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1" default="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+	</fieldset>
+</form>

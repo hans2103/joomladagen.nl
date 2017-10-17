@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\ModulesAnywhere;
+namespace RegularLabs\Plugin\System\ModulesAnywhere;
 
 defined('_JEXEC') or die;
 
@@ -24,7 +24,7 @@ class Params
 
 	public static function get()
 	{
-		if (!is_null(self::$params))
+		if ( ! is_null(self::$params))
 		{
 			return self::$params;
 		}
@@ -35,7 +35,7 @@ class Params
 		$params->tag_pos    = RL_PluginTag::clean($params->modulepos_tag);
 
 		$params->disabled_components = $params->components;
-		if (!is_array($params->disabled_components))
+		if ( ! is_array($params->disabled_components))
 		{
 			$params->disabled_components = explode('|', $params->disabled_components);
 		}
@@ -92,7 +92,7 @@ class Params
 
 	private static function getRegexes()
 	{
-		if (!is_null(self::$regexes))
+		if ( ! is_null(self::$regexes))
 		{
 			return self::$regexes;
 		}
@@ -123,7 +123,7 @@ class Params
 	{
 		$params = self::get();
 
-		if (!isset($params->tag_character_start))
+		if ( ! isset($params->tag_character_start))
 		{
 			self::setTagCharacters();
 		}

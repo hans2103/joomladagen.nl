@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 JHtml::_('jquery.framework');
 JHtml::_('jquery.ui', array('core', 'sortable'));
@@ -17,6 +17,7 @@ require_once JPATH_COMPONENT_ADMINISTRATOR .'/builder/classes/config.php';
 
 $doc = JFactory::getDocument();
 $app = JFactory::getApplication();
+$params = JComponentHelper::getParams('com_sppagebuilder');
 
 $doc->addStylesheet( JURI::base(true) . '/administrator/components/com_sppagebuilder/assets/css/pbfont.css' );
 $doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/font-awesome.min.css');
@@ -24,6 +25,9 @@ $doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/a
 $doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/sppagebuilder.css');
 $doc->addStylesheet( JURI::base(true) . '/administrator/components/com_sppagebuilder/assets/css/jquery.minicolors.css' );
 $doc->addStyleSheet(JUri::base(true).'/components/com_sppagebuilder/assets/css/edit.css');
+if ($params->get('addcontainer', 1)) {
+	$doc->addStyleSheet(JUri::base(true) . '/components/com_sppagebuilder/assets/css/sppagecontainer.css');
+}
 
 $doc->addScriptdeclaration('var pagebuilder_base="' . JURI::root() . '";');
 $doc->addScript( JUri::base(true).'/components/com_sppagebuilder/assets/js/edit.js' );
@@ -32,6 +36,7 @@ $doc->addScript( JURI::base(true) . '/administrator/components/com_sppagebuilder
 $doc->addScript( JURI::base(true) . '/administrator/components/com_sppagebuilder/assets/js/media.js' );
 $doc->addScript( JURI::base(true) . '/administrator/components/com_sppagebuilder/assets/js/script.js' );
 $doc->addScript( JUri::base(true). '/components/com_sppagebuilder/assets/js/actions.js' );
+$doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/parallax.min.js' );
 $doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/sppagebuilder.js' );
 $doc->addScript( JURI::base(true) . '/components/com_sppagebuilder/assets/js/jquery.vide.js' );
 
@@ -62,6 +67,7 @@ SpPgaeBuilderBase::loadAssets($addons_list);
 $addon_cats = SpPgaeBuilderBase::getAddonCategories($addons_list);
 $doc->addScriptdeclaration('var addonsJSON=' . json_encode($addons_list) . ';');
 $doc->addScriptdeclaration('var addonCats=' . json_encode($addon_cats) . ';');
+$doc->addScriptdeclaration('var pageId=' . $this->item->id . ';');
 
 if (!$this->item->text) {
 	$doc->addScriptdeclaration('var initialState=[];');
@@ -75,8 +81,12 @@ $editor   = $conf->get('editor');
 if ($editor == 'jce') {
 	require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
 	wfimport('admin.models.editor');
-	$model = new WFModelEditor();
-	echo $model->buildEditor();
+  $editor = new WFModelEditor();
+
+  $settings = $editor->getEditorSettings();
+
+  $app->triggerEvent('onBeforeWfEditorRender', array(&$settings));
+	echo $editor->render($settings);
 }
 ?>
 

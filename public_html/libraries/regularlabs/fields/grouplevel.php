@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -31,6 +31,32 @@ class JFormFieldRL_GroupLevel extends \RegularLabs\Library\Field
 		$show_all  = $this->get('show_all');
 		$use_names = $this->get('use_names');
 
+		return $this->selectListAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'multiple', 'show_all', 'use_names')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getOptions(
+			$input->getBool('show_all'),
+			$input->getBool('use_names')
+		);
+
+		$name     = $input->getString('name', $this->type);
+		$id       = $input->get('id', strtolower($name));
+		$value    = json_decode($input->getString('value', '[]'));
+		$size     = $input->getInt('size');
+		$multiple = $input->getBool('multiple');
+
+		return $this->selectList($options, $name, $value, $id, $size, $multiple);
+	}
+
+	protected function getOptions($show_all = false, $use_names = false)
+	{
 		$options = $this->getUserGroups($use_names);
 
 		if ($show_all)
@@ -42,7 +68,7 @@ class JFormFieldRL_GroupLevel extends \RegularLabs\Library\Field
 			array_unshift($options, $option);
 		}
 
-		return $this->selectList($options, $this->name, $this->value, $this->id, $size, $multiple);
+		return $options;
 	}
 
 	protected function getUserGroups($use_names = false)

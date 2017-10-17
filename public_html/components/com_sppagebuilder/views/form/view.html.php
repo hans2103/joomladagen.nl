@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 // import Joomla view library
 jimport('joomla.application.component.view');
@@ -29,12 +29,22 @@ class SppagebuilderViewForm extends JViewLegacy
 		$this->item = $this->get('Item');
 		$this->form = $this->get('Form');
 
-		$authorised = $user->authorise('core.edit', 'com_sppagebuilder') || ($user->authorise('core.edit.own', 'com_sppagebuilder') && ($this->item->created_by == $user->id));
+		if ( !$user->id ) {
+				$uri = JFactory::getURI();
+				$pageURL = $uri->toString();
+				$return_url = base64_encode($pageURL);
+				$joomlaLoginUrl = 'index.php?option=com_users&view=login&return=' . $return_url;
+
+				$app->redirect(JRoute::_($joomlaLoginUrl, false), JText::_('JERROR_ALERTNOAUTHOR'), 'message');
+				return false;
+		}
+
+		$authorised = $user->authorise('core.edit', 'com_sppagebuilder') || $user->authorise('core.edit', 'com_sppagebuilder.page.' . $this->item->id) || ($user->authorise('core.edit.own', 'com_sppagebuilder') && ($this->item->created_by == $user->id));
+
 		if ($authorised !== true)
 		{
-			$app->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'error');
+			$app->enqueueMessage(JText::_('COM_SPPAGEBUILDER_ERROR_EDIT_PERMISSION'), 'error');
 			$app->setHeader('status', 403, true);
-
 			return false;
 		}
 

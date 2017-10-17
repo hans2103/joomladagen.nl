@@ -462,7 +462,7 @@ class WFImageManagerExtPlugin extends WFMediaManager
         $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
 
         if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
-            $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_CREATE_ERROR'), 'error');
+            $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_ERROR'), 'error');
         }
 
         return $browser->getResult();

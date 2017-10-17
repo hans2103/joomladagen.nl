@@ -43,7 +43,6 @@ $hidden = false;
 		<!-- Third party actions -->
 		<?php if(($asset->third) && ($asset->level != 0)):?>
 		<td class="norule center extra" colspan="<?php echo(AclmanagerHelper::loginActions($this->actions));?>">
-		<?php $actions	= JAccess::getActions($asset->component, $asset->type);?>
 		<?php if($layout == 'print'):?>
 			<?php echo JHtml::_('sliders.start','aclmanager-print-'.$asset->id, array('useCookie'=>0,'startOffset'=>0)); ?>
 		<?php else:?>
@@ -51,7 +50,7 @@ $hidden = false;
 		<?php endif;?>
 		<?php echo JHtml::_('sliders.panel',JText::_('COM_ACLMANAGER_TABLE_ADDITIONAL_ACTIONS'), 'thirdactions'); ?>
 			<table class="extra">
-			<?php foreach ($actions as $action): ?>
+			<?php foreach ($asset->actions as $action): ?>
 				<?php if(AclmanagerHelper::additionalAction($action)): ?>
 				<tr>
 					<td width="80%">
@@ -100,7 +99,7 @@ $hidden = false;
                 </td>
 			<?php elseif(AclmanagerHelper::displayAction($action[0],$asset->level)):?>
 				<?php if(($action[2] == 'coreoptions') && ($asset->level == 2) && ($asset->type == 'menu')):?>
-                <?php elseif(strpos($asset->rules,'"'.$action[0].'"') === false):?>
+                <?php elseif(strpos($asset->rules,'"'.$action[0].'"') === false && (!in_array($action[0], $asset->simpleactions))):?>
 					<td class="norule">&nbsp;</td>
 				<?php else:?>
 				<?php $assetcheck = AclmanagerHelper::assetAction($asset,$action[0],$id,0);?>

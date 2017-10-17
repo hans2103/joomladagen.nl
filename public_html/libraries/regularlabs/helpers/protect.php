@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -25,7 +25,7 @@ class RLProtect
 {
 	public static function isProtectedPage($extension_alias = '', $hastags = false, $exclude_formats = ['pdf'])
 	{
-		if (!class_exists('RegularLabs\Library\Protect'))
+		if ( ! class_exists('RegularLabs\Library\Protect'))
 		{
 			return true;
 		}

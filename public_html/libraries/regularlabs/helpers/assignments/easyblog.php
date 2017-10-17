@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -34,7 +34,7 @@ class RLAssignmentsEasyBlog extends RLAssignment
 			|| ($this->params->inc_items && $this->request->view == 'entry')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->pass(false);
 		}
@@ -47,7 +47,7 @@ class RLAssignmentsEasyBlog extends RLAssignment
 		{
 			return $this->pass(false);
 		}
-		else if (!$pass && $this->params->inc_children)
+		else if ( ! $pass && $this->params->inc_children)
 		{
 			foreach ($cats as $cat)
 			{
@@ -98,7 +98,7 @@ class RLAssignmentsEasyBlog extends RLAssignment
 			|| ($this->params->inc_items && $this->request->view == 'entry')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->pass(false);
 		}
@@ -130,7 +130,7 @@ class RLAssignmentsEasyBlog extends RLAssignment
 
 	public function passItems()
 	{
-		if (!$this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
+		if ( ! $this->request->id || $this->request->option != 'com_easyblog' || $this->request->view != 'entry')
 		{
 			return $this->pass(false);
 		}
@@ -138,19 +138,19 @@ class RLAssignmentsEasyBlog extends RLAssignment
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentIds'))
+		if ( ! $this->passItemByType($pass, 'ContentIds'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Content Keywords
-		if (!$this->passItemByType($pass, 'ContentKeywords'))
+		if ( ! $this->passItemByType($pass, 'ContentKeywords'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Authors
-		if (!$this->passItemByType($pass, 'Authors'))
+		if ( ! $this->passItemByType($pass, 'Authors'))
 		{
 			return $this->pass(false);
 		}

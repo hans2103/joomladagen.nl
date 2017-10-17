@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonEmpty_space extends SppagebuilderAddons{
 
@@ -21,6 +21,7 @@ class SppagebuilderAddonEmpty_space extends SppagebuilderAddons{
 		$addon_id = '#sppb-addon-' . $this->addon->id;
 		$gap = (isset($this->addon->settings->gap) && $this->addon->settings->gap) ? 'padding-bottom: ' . (int) $this->addon->settings->gap . 'px;': '';
 
+		$css = '';
 		if($gap) {
 			$css = $addon_id . ' .sppb-empty-space {';
 			$css .= $gap;

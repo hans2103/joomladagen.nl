@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -59,7 +59,7 @@ class PlgSystemModulesAnywhereInstallerScript extends PlgSystemModulesAnywhereIn
 		$this->db->setQuery($query);
 		$this->db->execute();
 
-		if (!$this->db->getAffectedRows())
+		if ( ! $this->db->getAffectedRows())
 		{
 			return;
 		}
@@ -75,7 +75,7 @@ class PlgSystemModulesAnywhereInstallerScript extends PlgSystemModulesAnywhereIn
 		$this->db->setQuery($query);
 		$this->db->execute();
 
-		if (!$this->db->getAffectedRows())
+		if ( ! $this->db->getAffectedRows())
 		{
 			return;
 		}

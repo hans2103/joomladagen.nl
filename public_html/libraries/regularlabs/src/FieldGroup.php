@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,6 +13,7 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
+use JFactory;
 use JText;
 
 class FieldGroup
@@ -35,12 +36,12 @@ class FieldGroup
 		return $this->get('group', $this->default_group ?: $this->type);
 	}
 
-	public function getOptions()
+	public function getOptions($group = false)
 	{
-		$group = $this->getGroup();
+		$group = $group ?: $this->getGroup();
 		$id    = $this->type . '_' . $group;
 
-		if (!isset($data[$id]))
+		if ( ! isset($data[$id]))
 		{
 			$data[$id] = $this->{'get' . $group}();
 		}
@@ -50,7 +51,7 @@ class FieldGroup
 
 	public function getSelectList($group = '')
 	{
-		if (!is_array($this->value))
+		if ( ! is_array($this->value))
 		{
 			$this->value = explode(',', $this->value);
 		}
@@ -58,31 +59,47 @@ class FieldGroup
 		$size     = (int) $this->get('size');
 		$multiple = $this->get('multiple');
 
-		$group   = $group ?: $this->getGroup();
-		$options = $this->getOptions();
+		$group = $group ?: $this->getGroup();
 
-		switch ($group)
-		{
-			case 'categories':
-				return Form::selectList($options, $this->name, $this->value, $this->id, $size, $multiple);
+		$simple = $this->get('simple', ! in_array($group, ['categories']));
 
-			default:
-				return Form::selectListSimple($options, $this->name, $this->value, $this->id, $size, $multiple);
-		}
+		return $this->selectListAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('group', 'size', 'multiple', 'simple'),
+			$simple
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getOptions(
+			$input->get('group')
+		);
+
+		$name     = $input->getString('name', $this->type);
+		$id       = $input->get('id', strtolower($name));
+		$value    = json_decode($input->getString('value', '[]'));
+		$size     = $input->getInt('size');
+		$multiple = $input->getBool('multiple');
+		$simple   = $input->getBool('simple');
+
+		return $this->selectList($options, $name, $value, $id, $size, $multiple, $simple);
 	}
 
 	public function missingFilesOrTables($tables = ['categories', 'items'], $component = '', $table_prefix = '')
 	{
 		$component = $component ?: $this->type;
 
-		if (!Extension::isInstalled($component))
+		if ( ! Extension::isInstalled($component))
 		{
 			return '<fieldset class="alert alert-danger">' . JText::_('ERROR') . ': ' . JText::sprintf('RL_FILES_NOT_FOUND', JText::_('RL_' . strtoupper($component))) . '</fieldset>';
 		}
 
 		$group = $this->getGroup();
 
-		if (!in_array($group, $tables) && !in_array($group, array_keys($tables)))
+		if ( ! in_array($group, $tables) && ! in_array($group, array_keys($tables)))
 		{
 			// no need to check database table for this group
 			return false;

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonGallery extends SppagebuilderAddons{
 
@@ -29,7 +29,7 @@ class SppagebuilderAddonGallery extends SppagebuilderAddons{
 			if($value->thumb) {
 				$output .= '<li>';
 				$output .= ($value->full) ? '<a href="' . $value->full . '" class="sppb-gallery-btn">' : '';
-				$output .= '<img class="sppb-img-responsive" src="' . $value->thumb . '" width="' . $width . '" height="' . $height . '" alt="' . $value->title . '">';
+				$output .= '<img class="sppb-img-responsive" src="' . $value->thumb . '" width="' . $width . '" height="' . $height . '" alt="' . $value->title . '" style="width:'.$width.'px;">';
 				$output .= ($value->full) ? '</a>' : '';
 				$output .= '</li>';
 			}
@@ -51,10 +51,10 @@ class SppagebuilderAddonGallery extends SppagebuilderAddons{
 	}
 
 	public function js() {
-
+		$addon_id = '#sppb-addon-' . $this->addon->id;
 		$js ='jQuery(function($){
-			$(document).magnificPopup({
-				delegate: ".sppb-gallery-btn",
+			$("'.$addon_id.' ul li").magnificPopup({
+				delegate: "a",
 				type: "image",
 				mainClass: "mfp-no-margins mfp-with-zoom",
 				gallery:{

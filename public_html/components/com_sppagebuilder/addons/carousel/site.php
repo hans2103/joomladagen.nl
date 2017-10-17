@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 
@@ -19,9 +19,10 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 		$controllers = (isset($this->addon->settings->controllers) && $this->addon->settings->controllers) ? $this->addon->settings->controllers : 0;
 		$arrows = (isset($this->addon->settings->arrows) && $this->addon->settings->arrows) ? $this->addon->settings->arrows : 0;
 		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : 0;
+		$interval = (isset($this->addon->settings->interval) && $this->addon->settings->interval) ? ((int) $this->addon->settings->interval * 1000) : 5000;
 		$carousel_autoplay = ($autoplay) ? ' data-sppb-ride="sppb-carousel"':'';
 
-		$output  = '<div id="sppb-carousel-'. $this->addon->id .'" class="sppb-carousel sppb-slide' . $class . '"'. $carousel_autoplay .'>';
+		$output  = '<div id="sppb-carousel-'. $this->addon->id .'" data-interval="'.$interval.'" class="sppb-carousel sppb-slide' . $class . '"'. $carousel_autoplay .'>';
 
 		if($controllers) {
 			$output .= '<ol class="sppb-carousel-indicators">';
@@ -53,6 +54,7 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 					$button_class .= (isset($value->button_block) && $value->button_block) ? ' ' . $value->button_block : '';
 					$button_icon = (isset($value->button_icon) && $value->button_icon) ? $value->button_icon : '';
 					$button_icon_position = (isset($value->button_icon_position) && $value->button_icon_position) ? $value->button_icon_position: 'left';
+					$button_target = (isset($value->button_target) && $value->button_target) ? $value->button_target : '_self';
 
 					if($button_icon_position == 'left') {
 						$value->button_text = ($button_icon) ? '<i class="fa ' . $button_icon . '"></i> ' . $value->button_text : $value->button_text;
@@ -60,7 +62,7 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 						$value->button_text = ($button_icon) ? $value->button_text . ' <i class="fa ' . $button_icon . '"></i>' : $value->button_text;
 					}
 
-					$output  .= '<a href="' . $value->button_url . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
+					$output  .= '<a href="' . $value->button_url . '" target="' . $button_target . '" id="btn-'. ($this->addon->id + $key) .'" class="sppb-btn'. $button_class .'">' . $value->button_text . '</a>';
 				}
 			}
 
@@ -92,9 +94,13 @@ class SppagebuilderAddonCarousel extends SppagebuilderAddons {
 		foreach ($this->addon->settings->sp_carousel_item as $key => $value) {
 			if($value->button_text) {
 				$css_path = new JLayoutFile('addon.css.button', $layout_path);
-				$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $this->addon->settings, 'id' => 'btn-' . ($this->addon->id + $key) ));
+				$css .= $css_path->render(array('addon_id' => $addon_id, 'options' => $value, 'id' => 'btn-' . ($this->addon->id + $key) ));
 			}
 		}
+
+		$speed = (isset($this->addon->settings->speed) && $this->addon->settings->speed) ? $this->addon->settings->speed : 600;
+
+		$css .= $addon_id.' .sppb-carousel-inner > .sppb-item{-webkit-transition-duration: '.$speed.'ms; transition-duration: '.$speed.'ms;}';
 
 		return $css;
 	}

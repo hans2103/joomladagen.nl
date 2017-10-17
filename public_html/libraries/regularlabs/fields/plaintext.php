@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -33,17 +33,17 @@ class JFormFieldRL_PlainText extends \RegularLabs\Library\Field
 		$label   = $this->prepareText($this->get('label'));
 		$tooltip = $this->prepareText($this->get('description'));
 
-		if (!$label && !$tooltip)
+		if ( ! $label && ! $tooltip)
 		{
 			return '';
 		}
 
-		if (!$label)
+		if ( ! $label)
 		{
 			return '<div>' . $tooltip . '</div>';
 		}
 
-		if (!$tooltip)
+		if ( ! $tooltip)
 		{
 			return '<div>' . $label . '</div>';
 		}
@@ -58,7 +58,7 @@ class JFormFieldRL_PlainText extends \RegularLabs\Library\Field
 
 		$text = $this->prepareText($this->value);
 
-		if (!$text)
+		if ( ! $text)
 		{
 			return '';
 		}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,8 +22,8 @@ class ContentArticle
 {
 	public function pass()
 	{
-		if (!$this->request->id
-			|| !(($this->request->option == 'com_content' && $this->request->view == 'article')
+		if ( ! $this->request->id
+			|| ! (($this->request->option == 'com_content' && $this->request->view == 'article')
 				|| ($this->request->option == 'com_flexicontent' && $this->request->view == 'item')
 			)
 		)
@@ -34,25 +34,25 @@ class ContentArticle
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentId'))
+		if ( ! $this->passItemByType($pass, 'ContentId'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Content Keywords
-		if (!$this->passItemByType($pass, 'ContentKeyword'))
+		if ( ! $this->passItemByType($pass, 'ContentKeyword'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Meta Keywords
-		if (!$this->passItemByType($pass, 'MetaKeyword'))
+		if ( ! $this->passItemByType($pass, 'MetaKeyword'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Author
-		if (!$this->passItemByType($pass, 'Author'))
+		if ( ! $this->passItemByType($pass, 'Author'))
 		{
 			return $this->_(false);
 		}

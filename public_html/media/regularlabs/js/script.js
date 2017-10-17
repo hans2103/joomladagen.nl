@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -51,6 +51,10 @@ var RegularLabsScripts = null;
 	});
 
 	RegularLabsScripts = {
+		ajax_list        : [],
+		started_ajax_list: false,
+		ajax_list_timer  : null,
+
 		loadajax: function(url, succes, fail, query, timeout, dataType, cache) {
 			if (url.substr(0, 9) != 'index.php') {
 				url = url.replace('http://', '');
@@ -63,6 +67,9 @@ var RegularLabsScripts = null;
 				}
 			}
 			var dt = dataType ? dataType : '';
+
+			// console.log(url);
+
 			$.ajax({
 				type    : 'post',
 				url     : url,
@@ -91,13 +98,13 @@ var RegularLabsScripts = null;
 				return;
 			}
 
-			if (typeof(xml[extension]) == 'undefined') {
+			if (typeof xml[extension] === 'undefined') {
 				return;
 			}
 
 			var dat = xml[extension];
 
-			if (!dat || typeof(dat['version']) == 'undefined' || !dat['version']) {
+			if (!dat || typeof dat['version'] === 'undefined' || !dat['version']) {
 				return;
 			}
 
@@ -118,6 +125,55 @@ var RegularLabsScripts = null;
 				el.css('display', 'block');
 				el.parent().removeClass('hide');
 			}
+		},
+
+		addToLoadAjaxList: function(url, success, error) {
+			// wrap inside the loadajax function (and escape string values)
+			var action = "RegularLabsScripts.loadajax(" +
+				"'" + url.replace(/'/g, "\\'") + "'," +
+				"'" + success.replace(/'/g, "\\'") + ";RegularLabsScripts.ajaxRun();'," +
+				"'" + error.replace(/'/g, "\\'") + ";RegularLabsScripts.ajaxRun();'" +
+				")";
+
+			this.addToAjaxList(action);
+		},
+
+		addToAjaxList: function(action) {
+			this.ajax_list.push(action);
+
+			if (!this.started_ajax_list) {
+				this.ajaxRun();
+			}
+		},
+
+		ajaxRun: function() {
+			if (typeof RegularLabsToggler !== 'undefined') {
+				RegularLabsToggler.initialize();
+			}
+
+			if (!this.ajax_list.length) {
+				return;
+			}
+
+			clearTimeout(this.ajax_list_timer);
+
+			this.started_ajax_list = true;
+
+			var action = this.ajax_list.shift();
+
+			eval(action + ';');
+
+			if (!this.ajax_list.length) {
+				return;
+			}
+
+			// Re-trigger this ajaxRun function just in case it hangs somewhere
+			this.ajax_list_timer = setTimeout(
+				function() {
+					RegularLabsScripts.ajaxRun();
+				},
+				5000
+			);
 		},
 
 		toggleSelectListSelection: function(id) {
@@ -142,7 +198,7 @@ var RegularLabsScripts = null;
 					el.setAttribute('size', ( el.length > 100 ) ? 100 : el.length);
 					link.getElement('span.show').setStyle('display', 'none');
 					link.getElement('span.hide').setStyle('display', 'inline');
-					if (typeof( window['RegularLabsToggler'] ) != "undefined") {
+					if (typeof RegularLabsToggler !== 'undefined') {
 						RegularLabsToggler.autoHeightDivs();
 					}
 				} else {
@@ -154,10 +210,10 @@ var RegularLabsScripts = null;
 		},
 
 		prependTextarea: function(id, content, separator) {
-			var textarea = jQuery('#' + id);
+			var textarea     = jQuery('#' + id);
 			var orig_content = textarea.val().trim();
 
-			if(orig_content && separator) {
+			if (orig_content && separator) {
 				orig_content = "\n\n" + separator + "\n\n" + orig_content;
 			}
 
@@ -199,10 +255,10 @@ var RegularLabsScripts = null;
 				$(this).children().each(function() {
 					el[this.nodeName.toLowerCase()] = String($(this).text()).trim();
 				});
-				if (typeof(el.alias) !== 'undefined') {
+				if (typeof el.alias !== 'undefined') {
 					obj[el.alias] = el;
 				}
-				if (typeof(el.extname) !== 'undefined' && el.extname != el.alias) {
+				if (typeof el.extname !== 'undefined' && el.extname != el.alias) {
 					obj[el.extname] = el;
 				}
 			});
@@ -219,10 +275,10 @@ var RegularLabsScripts = null;
 
 			var max = Math.max(num1.length, num2.length);
 			for (var i = 0; i < max; i++) {
-				if (typeof(num1[i]) == 'undefined') {
+				if (typeof num1[i] === 'undefined') {
 					num1[i] = '0';
 				}
-				if (typeof(num2[i]) == 'undefined') {
+				if (typeof num2[i] === 'undefined') {
 					num2[i] = '0';
 				}
 
@@ -300,7 +356,7 @@ var RegularLabsScripts = null;
 			var editor_frame  = iframes[0];
 			var contentWindow = editor_frame.contentWindow;
 
-			if (typeof contentWindow.getSelection != "undefined") {
+			if (typeof contentWindow.getSelection !== 'undefined') {
 				var sel = contentWindow.getSelection();
 
 				if (sel.rangeCount) {
@@ -316,7 +372,7 @@ var RegularLabsScripts = null;
 				return '';
 			}
 
-			if (typeof contentWindow.document.selection != "undefined") {
+			if (typeof contentWindow.document.selection !== 'undefined') {
 				if (contentWindow.document.selection.type == "Text") {
 					return contentWindow.document.selection.createRange().htmlText;
 				}

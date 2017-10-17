@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('JPATH_PLATFORM') or die;
 
-if (!class_exists('JFormFieldList'))
+if ( ! class_exists('JFormFieldList'))
 {
 	require_once JPATH_LIBRARIES . '/joomla/form/fields/list.php';
 }
@@ -26,7 +26,7 @@ class JFormFieldRL_List extends JFormFieldList
 		$attr = '';
 
 		// Initialize some field attributes.
-		$attr .= !empty($this->class) ? ' class="' . $this->class . '"' : '';
+		$attr .= ! empty($this->class) ? ' class="' . $this->class . '"' : '';
 		$attr .= $this->size ? ' style="width:' . $this->size . 'px"' : '';
 		$attr .= $this->multiple ? ' multiple' : '';
 		$attr .= $this->required ? ' required aria-required="true"' : '';

@@ -228,11 +228,6 @@ class AclmanagerModelDiagnostic extends JModelList
 		if (($assets = parent::getItems())) {
 
 			$default_asset = '{}';
-			$component_asset = '{"core.admin":[],"core.manage":[]}';
-			$category_asset = '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
-			$article_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-			$module_asset = '{"core.delete":[],"core.edit":[],"core.edit.state":[],"module.edit.frontend":[]}';
-			$menu_asset	= '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 			$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory','com_fields');
 			$issues = array();
 			$issuecount = 0;
@@ -311,18 +306,8 @@ class AclmanagerModelDiagnostic extends JModelList
 						if($asset->rules !='{}') {
 							$asset->correct_rules = $default_asset;
 						}
-					} elseif (($asset->rules == '') || ($asset->rules == '{}') || ($asset->rules == $component_asset)) {
-						$xmlfile = JPATH_ADMINISTRATOR.'/components/'.$asset->name.'/access.xml';
-						if(is_file($xmlfile)){
-							$actions = JAccess::getActionsFromFile($xmlfile);
-							$actionname = array();
-							foreach($actions as $action) {
-								$actionname[] = '"'.$action->name.'":[]';
-							}
-							$asset->correct_rules = '{'.implode(',', $actionname).'}';
-						} else {
-							$asset->correct_rules = $component_asset;
-						}
+					} elseif ($asset->rules == '') {
+						$asset->correct_rules = $default_asset;
 					}
 				// Category
 				} elseif ($asset->type == 'category' && in_array($asset->component, $categories_extensions)) {
@@ -348,18 +333,8 @@ class AclmanagerModelDiagnostic extends JModelList
 						}
 					}
 
-					if (($asset->rules == '') || ($asset->rules == '{}') || ($asset->rules == '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}') || ($asset->rules == $category_asset)) {
-						$xmlfile = JPATH_ADMINISTRATOR.'/components/'.$asset->component.'/access.xml';
-						if(is_file($xmlfile)){
-							$actions = JAccess::getActionsFromFile($xmlfile, "/access/section[@name='category']/");
-							$actionname = array();
-							foreach($actions as $action) {
-								$actionname[] = '"'.$action->name.'":[]';
-							}
-							$asset->correct_rules = '{'.implode(',', $actionname).'}';
-						} else {
-							$asset->correct_rules = $category_asset;
-						}
+					if ($asset->rules == '') {
+						$asset->correct_rules = $default_asset;
 					}
 				// Article
 				} elseif ($asset->type == 'article') {
@@ -372,8 +347,8 @@ class AclmanagerModelDiagnostic extends JModelList
 						$asset->correct_parent = $catinfo->asset_id;
 						$asset->correct_level = (int) $catinfo->level + 2;
 					}
-					if (($asset->rules == '') || ($asset->rules == '{}') || ($asset->rules == $category_asset)) {
-						$asset->correct_rules = $article_asset;
+					if (($asset->rules == '') || ($asset->rules == '{}')) {
+						$asset->correct_rules = $default_asset;
 					}
 					// Prevent parent_id = 0
 					if($asset->correct_parent == 0) {
@@ -389,14 +364,14 @@ class AclmanagerModelDiagnostic extends JModelList
 					$asset->correct_parent = $assets_name[$asset->component]->id;
 					$asset->correct_level = 2;
 					if (($asset->rules == '') || ($asset->rules == '{}')) {
-						$asset->correct_rules = $module_asset;
+						$asset->correct_rules = $default_asset;
 					}
 				// Menu
 				} elseif ($asset->type == 'menu') {
 					$asset->correct_parent = $assets_name[$asset->component]->id;
 					$asset->correct_level = 2;
 					if (($asset->rules == '') || ($asset->rules == '{}')) {
-						$asset->correct_rules = $menu_asset;
+						$asset->correct_rules = $default_asset;
 					}
 				// Anything else
 				} else {
@@ -445,11 +420,6 @@ class AclmanagerModelDiagnostic extends JModelList
 		$acl_categorymanager 	= $params->get('acl_categorymanager',1);
 		$acl_modules 			= $params->get('acl_modules',1);
 		$default_asset 			= '{}';
-		$component_asset 		= '{"core.admin":[],"core.manage":[]}';
-		$category_asset 		= '{"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[],"core.edit.own":[]}';
-		$article_asset 			= '{"core.delete":[],"core.edit":[],"core.edit.state":[]}';
-		$module_asset		 	= '{"core.delete":[],"core.edit":[],"core.edit.state":[],"module.edit.frontend":[]}';
-		$menu_asset		 	    = '{"core.manage":[],"core.create":[],"core.delete":[],"core.edit":[],"core.edit.state":[]}';
 		$core_noassets = array('com_admin','com_config','com_cpanel','com_login','com_mailto','com_massmail','com_wrapper','com_ajax','com_contenthistory','com_fields');
 
 		$assets_name = $this->getListQuery();
@@ -513,17 +483,7 @@ class AclmanagerModelDiagnostic extends JModelList
 			if (in_array($extension->name,$core_noassets,true)) {
 				$extension->correct_rules = $default_asset;
 			} else {
-				$xmlfile = JPATH_ADMINISTRATOR.'/components/'.$extension->name.'/access.xml';
-				if(is_file($xmlfile)){
-					$actions = JAccess::getActionsFromFile($xmlfile);
-					$actionname = array();
-					foreach($actions as $action) {
-						$actionname[] = '"'.$action->name.'":[]';
-					}
-					$extension->correct_rules = '{'.implode(',', $actionname).'}';
-				} else {
-					$extension->correct_rules = $component_asset;
-				}
+				$extension->correct_rules = $default_asset;
 			}
 			$extension->id = '';
 			$extension->asset_id = '';
@@ -584,17 +544,7 @@ class AclmanagerModelDiagnostic extends JModelList
 			}
 			$category->parent = '';
 			$category->rules = '';
-			$xmlfile = JPATH_ADMINISTRATOR.'/components/'.$category->extension.'/access.xml';
-			if(is_file($xmlfile)){
-				$actions = JAccess::getActionsFromFile($xmlfile, "/access/section[@name='category']/");
-				$actionname = array();
-				foreach($actions as $action) {
-					$actionname[] = '"'.$action->name.'":[]';
-				}
-				$category->correct_rules = '{'.implode(',', $actionname).'}';
-			} else {
-				$category->correct_rules = $category_asset;
-			}
+			$category->correct_rules = $default_asset;
 			$category->id = $category->asset_id;
 			$category->type = 'category';
 			if (!in_array($category->extension.'.category.'.$category->catid, $category_assets)) {
@@ -644,7 +594,7 @@ class AclmanagerModelDiagnostic extends JModelList
 			$article->level = '';
 			$article->parent = '';
 			$article->rules = '';
-			$article->correct_rules = $article_asset;
+			$article->correct_rules = $default_asset;
 			$article->id = $article->asset_id;
 			$article->type = 'article';
 			if (!in_array('com_content.article.'.$article->articleid, $article_assets)) {
@@ -694,7 +644,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				$module->level = '';
 				$module->parent = '';
 				$module->rules = '';
-				$module->correct_rules = $module_asset;
+				$module->correct_rules = $default_asset;
 				$module->id = $module->asset_id;
 				$module->type = 'module';
 				if (!in_array('com_modules.module.'.$module->moduleid, $module_assets)) {
@@ -734,7 +684,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				$module->level = '';
 				$module->parent = '';
 				$module->rules = '';
-				$module->correct_rules = $module_asset;
+				$module->correct_rules = $default_asset;
 				$module->id = '';
 				$module->type = 'module';
 				if (!in_array('com_modules.module.'.$module->moduleid, $module_assets)) {
@@ -787,7 +737,7 @@ class AclmanagerModelDiagnostic extends JModelList
 				$menu->level          = '';
 				$menu->parent         = '';
 				$menu->rules          = '';
-				$menu->correct_rules  = $menu_asset;
+				$menu->correct_rules  = $default_asset;
 				$menu->id             = '';
 				$menu->type           = 'menu';
 				if (!in_array('com_menus.menu.' . $menu->menuid, $menu_assets))

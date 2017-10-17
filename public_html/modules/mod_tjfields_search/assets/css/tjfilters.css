@@ -1,0 +1,42 @@
+.tj-filterlistwrapper-horizontal #tj-filterhrizontal_category
+{
+	overflow-y:auto;
+	height:250px;
+	overflow-x:hidden;
+}
+
+.tj-filterhrizontal_max_height_vertical
+{
+	overflow-y:auto;
+	max-height:250px;
+	overflow-x:hidden;
+}
+
+.tj-filterhrizontal_max_height
+{
+	overflow-y:auto;
+	height:250px;
+	overflow-x:hidden;
+}
+
+.filter-form-margin-0
+{
+	margin:0px !important;
+}
+
+.tj-filterlistwrapper-horizontal .tjfilter-radio-btn .controls .radio
+{
+	position:inherit !important;
+}
+
+.tj-filterlistwrapper-horizontal .radio input[type="radio"]
+{
+	position: relative;
+	margin-left: 0;
+	margin-right: 5px;
+}
+
+#tj-filterhrizontal_category .inputbox
+{
+	width: auto;
+}

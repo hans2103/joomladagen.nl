@@ -27,6 +27,22 @@ jQuery(function($) {
 		$self.closest('.sp-pagebuilder-margins-list').prev().val($.trim(margin));
 	});
 
+	// boxshadow
+	$(document).on('change', '.sppb-control-boxshadow', function(event) {
+		var boxshadow = '';
+		var $self = $(this);
+		$(this).closest('.sp-pagebuilder-boxshadow-list').find('>div').each(function(event){
+			var inputVal = $(this).find('.sppb-control-boxshadow').val();
+			if (inputVal == '') {
+				boxshadow += '0 ';
+			} else {
+				inputVal = inputVal.replace(/\s/g, '');
+				boxshadow += inputVal + ' ';
+			}
+		});
+		$self.closest('.sp-pagebuilder-boxshadow-list').prev().val($.trim(boxshadow));
+	});
+
 	// Page Options
 	var arrval = {};
 	$.fn.openPopupAlt = function() {

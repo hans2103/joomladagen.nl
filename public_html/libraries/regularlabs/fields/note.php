@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -43,10 +43,10 @@ class JFormFieldRL_Note extends \RegularLabs\Library\Field
 		$title       = $this->element['label'] ? (string) $this->element['label'] : ($this->element['title'] ? (string) $this->element['title'] : '');
 		$heading     = $this->element['heading'] ? (string) $this->element['heading'] : 'h4';
 		$description = (string) $this->element['description'];
-		$class       = !empty($this->class) ? ' class="' . $this->class . '"' : '';
+		$class       = ! empty($this->class) ? ' class="' . $this->class . '"' : '';
 		$close       = (string) $this->element['close'];
 
-		$html = array();
+		$html = [];
 
 		if ($close)
 		{
@@ -54,8 +54,8 @@ class JFormFieldRL_Note extends \RegularLabs\Library\Field
 			$html[] = '<button type="button" class="close" data-dismiss="' . $close . '">&times;</button>';
 		}
 
-		$html[] = !empty($title) ? '<' . $heading . '>' . JText::_($title) . '</' . $heading . '>' : '';
-		$html[] = !empty($description) ? JText::_($description) : '';
+		$html[] = ! empty($title) ? '<' . $heading . '>' . JText::_($title) . '</' . $heading . '>' : '';
+		$html[] = ! empty($description) ? JText::_($description) : '';
 
 		return '</div><div ' . $class . '>' . implode('', $html);
 	}

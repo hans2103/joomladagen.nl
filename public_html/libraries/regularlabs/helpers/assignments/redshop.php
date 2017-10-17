@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -43,7 +43,7 @@ class RLAssignmentsRedShop extends RLAssignment
 			|| ($this->params->inc_items && $this->request->view == 'product')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->pass(false);
 		}
@@ -71,7 +71,7 @@ class RLAssignmentsRedShop extends RLAssignment
 		{
 			return $this->pass(false);
 		}
-		else if (!$pass && $this->params->inc_children)
+		else if ( ! $pass && $this->params->inc_children)
 		{
 			foreach ($cats as $cat)
 			{
@@ -84,7 +84,7 @@ class RLAssignmentsRedShop extends RLAssignment
 
 	public function passProducts()
 	{
-		if (!$this->request->id || $this->request->option != 'com_redshop' || $this->request->view != 'product')
+		if ( ! $this->request->id || $this->request->option != 'com_redshop' || $this->request->view != 'product')
 		{
 			return $this->pass(false);
 		}

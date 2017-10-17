@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -19,7 +19,7 @@ class RLAssignmentsZoo extends RLAssignment
 {
 	public function init()
 	{
-		if (!$this->request->view)
+		if ( ! $this->request->view)
 		{
 			$this->request->view = $this->request->task;
 		}
@@ -41,7 +41,7 @@ class RLAssignmentsZoo extends RLAssignment
 	{
 		parent::initAssignment($assignment, $article);
 
-		if ($this->request->option != 'com_zoo' && !isset($this->request->idname))
+		if ($this->request->option != 'com_zoo' && ! isset($this->request->idname))
 		{
 			return;
 		}
@@ -75,7 +75,7 @@ class RLAssignmentsZoo extends RLAssignment
 			|| ($this->params->inc_items && $this->request->view == 'item')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->pass(false);
 		}
@@ -96,7 +96,7 @@ class RLAssignmentsZoo extends RLAssignment
 			return $this->pass(false);
 		}
 
-		if (!$pass && $this->params->inc_children)
+		if ( ! $pass && $this->params->inc_children)
 		{
 			foreach ($cats as $cat)
 			{
@@ -124,7 +124,7 @@ class RLAssignmentsZoo extends RLAssignment
 					return [$this->request->id];
 				}
 
-				if (!isset($menuparams->application))
+				if ( ! isset($menuparams->application))
 				{
 					return [];
 				}
@@ -160,12 +160,12 @@ class RLAssignmentsZoo extends RLAssignment
 			case 'item':
 				$id = $this->request->id;
 
-				if (!$id && isset($menuparams->item_id))
+				if ( ! $id && isset($menuparams->item_id))
 				{
 					$id = $menuparams->item_id;
 				}
 
-				if (!$id)
+				if ( ! $id)
 				{
 					return [];
 				}
@@ -194,7 +194,7 @@ class RLAssignmentsZoo extends RLAssignment
 
 	public function passItems()
 	{
-		if (!$this->request->id || $this->request->option != 'com_zoo')
+		if ( ! $this->request->id || $this->request->option != 'com_zoo')
 		{
 			return $this->pass(false);
 		}
@@ -207,13 +207,13 @@ class RLAssignmentsZoo extends RLAssignment
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentIds'))
+		if ( ! $this->passItemByType($pass, 'ContentIds'))
 		{
 			return $this->pass(false);
 		}
 
 		// Pass Authors
-		if (!$this->passItemByType($pass, 'Authors'))
+		if ( ! $this->passItemByType($pass, 'Authors'))
 		{
 			return $this->pass(false);
 		}
@@ -236,7 +236,7 @@ class RLAssignmentsZoo extends RLAssignment
 	{
 		$parent_ids = [];
 
-		if (!$id)
+		if ( ! $id)
 		{
 			return $parent_ids;
 		}
@@ -256,7 +256,7 @@ class RLAssignmentsZoo extends RLAssignment
 			$this->db->setQuery($query);
 			$pid = $this->db->loadResult();
 
-			if (!$pid)
+			if ( ! $pid)
 			{
 				$query = $this->db->getQuery(true)
 					->select('c.application_id')

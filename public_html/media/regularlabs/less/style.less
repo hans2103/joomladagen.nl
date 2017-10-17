@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,6 +9,7 @@
  */
 @import "init.less";
 @import "font.less";
+@import "form.less";
 
 .rl_tablelist {
 	td {
@@ -31,7 +32,7 @@ fieldset.rl_plaintext {
 
 .well {
 	.well {
-		border-color:     darken(@wellBackground, 7%);
+		border-color: darken(@wellBackground, 7%);
 	}
 }
 
@@ -91,9 +92,6 @@ div.rl_well {
 
 .icon-spin {
 	-webkit-animation: spin .5s infinite linear;
-	-moz-animation:    spin .5s infinite linear;
-	-ms-animation:     spin .5s infinite linear;
-	-o-animation:      spin .5s infinite linear;
 	animation:         spin .5s infinite linear;
 }
 
@@ -176,59 +174,12 @@ div.rl_well {
 	height:     16px !important;
 }
 
-.chzn-small {
-	width: 120px;
-}
-
-// hide chosen dropdown on color picker J3.2.3+
-div.chzn-container[id^="color_"][id$="_chzn"],
-div.chzn-container#advancedparams_color_chzn {
-	display: none;
-}
-
 .clearfix {
 	.clearfix();
 }
 
-.input-maximize {
-	&:hover,
-	&:focus,
-	.chzn-container:hover,
-	.chzn-with-drop {
-		min-width: 100%;
-	}
-}
-
-.btn-group-yesno-reverse {
-	.active {
-		&.btn-success {
-			.buttonBackground(@btnDangerBackground, @btnDangerBackgroundHighlight);
-		}
-		&.btn-danger {
-			.buttonBackground(@btnSuccessBackground, @btnSuccessBackgroundHighlight);
-		}
-	}
-}
-
 .thumbnail-small > .thumbnail > img {
 	max-width: 40px;
-}
-
-input.rl_codefield,
-input.rl_keyfield,
-div.rl_keycode {
-	#font > #family > .monospace;
-	font-size: 1.4em !important;
-}
-
-input.rl_codefield,
-input.rl_keyfield {
-	font-size: 14px !important;
-}
-
-.rl_keycode {
-	color:   @grayLight;
-	padding: 2px 0;
 }
 
 #key_button,

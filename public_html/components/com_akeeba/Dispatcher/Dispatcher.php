@@ -11,6 +11,7 @@ namespace Akeeba\Backup\Site\Dispatcher;
 defined('_JEXEC') or die();
 
 use Akeeba\Backup\Admin\Dispatcher\Dispatcher as AdminDispatcher;
+use Akeeba\Backup\Admin\Helper\SecretWord;
 use Akeeba\Engine\Factory;
 use Akeeba\Engine\Platform;
 use FOF30\Container\Container;
@@ -97,8 +98,12 @@ class Dispatcher extends AdminDispatcher
 		// Load the utils helper library
 		Platform::getInstance()->load_version_defines();
 
+		// Make sure the front-end backup Secret Word is stored encrypted
+		$params = $this->container->params;
+		SecretWord::enforceEncryption($params, 'frontend_secret_word');
+
 		// Make sure we have a version loaded
-		@include_once($this->container->backEndPath . '/components/com_akeeba/version.php');
+		@include_once($this->container->backEndPath . '/version.php');
 
 		if (!defined('AKEEBA_VERSION'))
 		{

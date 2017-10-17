@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.form.formfield');
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -29,7 +29,7 @@ class JFormFieldRL_Color extends JFormField
 
 	protected function getInput()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			return null;
 		}

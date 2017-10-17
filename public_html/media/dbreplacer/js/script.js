@@ -1,6 +1,6 @@
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,11 +12,6 @@ var RLDBReplacer = null;
 
 (function($) {
 	"use strict";
-
-	$(document).ready(function() {
-		RLDBReplacer.initialize();
-		RLDBReplacer.updateFields();
-	});
 
 	RLDBReplacer = {
 		// private property
@@ -132,7 +127,7 @@ var RLDBReplacer = null;
 				}
 				var elname = el.name.replace('[]', '');
 				if (self.params[elname] != val) {
-					self.update[elname] = 1 + (typeof(self.params[elname]) != "undefined");
+					self.update[elname] = 1 + (typeof self.params[elname] !== 'undefined');
 					update              = 1;
 				} else {
 					self.update[elname] = 0;
@@ -228,7 +223,7 @@ var RLDBReplacer = null;
 				el.html(data);
 			}
 			if (field == 'rows') {
-				if (data.indexOf('<span class="replace_string">') != -1) {
+				if (data.indexOf('<span class="replace_string">') > -1) {
 					this.submit.fadeIn();
 				} else {
 					this.submit.fadeOut();
@@ -246,5 +241,10 @@ var RLDBReplacer = null;
 			}
 			return vals.join(',');
 		}
-	}
+	};
+
+	$(document).ready(function() {
+		RLDBReplacer.initialize();
+		RLDBReplacer.updateFields();
+	});
 })(jQuery);

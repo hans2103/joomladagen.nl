@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(__DIR__ . '/vendor/autoload.php'))
+if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 {
 	return;
 }
@@ -25,10 +25,10 @@ if (is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 
 use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\Parameters as RL_Parameters;
-use RegularLabs\LibraryPlugin\AdminMenu as RL_AdminMenu;
-use RegularLabs\LibraryPlugin\DownloadKey as RL_DownloadKey;
-use RegularLabs\LibraryPlugin\QuickPage as RL_QuickPage;
-use RegularLabs\LibraryPlugin\SearchHelper as RL_SearchHelper;
+use RegularLabs\Plugin\System\RegularLabs\AdminMenu as RL_AdminMenu;
+use RegularLabs\Plugin\System\RegularLabs\DownloadKey as RL_DownloadKey;
+use RegularLabs\Plugin\System\RegularLabs\QuickPage as RL_QuickPage;
+use RegularLabs\Plugin\System\RegularLabs\SearchHelper as RL_SearchHelper;
 
 JFactory::getLanguage()->load('plg_system_regularlabs', __DIR__);
 
@@ -36,7 +36,7 @@ class PlgSystemRegularLabs extends JPlugin
 {
 	public function onAfterRoute()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			if (JFactory::getApplication()->isAdmin())
 			{
@@ -55,28 +55,30 @@ class PlgSystemRegularLabs extends JPlugin
 
 	public function onAfterDispatch()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			return;
 		}
 
-		if (!RL_Document::isAdmin() || !RL_Document::isHtml()
+		if ( ! RL_Document::isAdmin() || ! RL_Document::isHtml()
 		)
 		{
 			return;
 		}
+
+		JHtml::_('jquery.framework');
 
 		RL_Document::script('regularlabs/script.min.js');
 	}
 
 	public function onAfterRender()
 	{
-		if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+		if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 		{
 			return;
 		}
 
-		if (!RL_Document::isAdmin() || !RL_Document::isHtml()
+		if ( ! RL_Document::isAdmin() || ! RL_Document::isHtml()
 		)
 		{
 			return;
@@ -100,17 +102,14 @@ class PlgSystemRegularLabs extends JPlugin
 			return true;
 		}
 
+		$uri->setScheme('https');
 		$uri->setHost('download.regularlabs.com');
+		$uri->delVar('pro');
 		$url = $uri->toString();
-
-		if (strpos($host, 'pro=1') === false)
-		{
-			return true;
-		}
 
 		$params = RL_Parameters::getInstance()->getComponentParams('regularlabsmanager');
 
-		if (empty($params->key))
+		if (empty($params) || empty($params->key))
 		{
 			return true;
 		}
@@ -119,6 +118,71 @@ class PlgSystemRegularLabs extends JPlugin
 		$url = $uri->toString();
 
 		return true;
+	}
+
+	public function onAjaxRegularLabs()
+	{
+		$field  = JFactory::getApplication()->input->getString('field', '');
+		$type   = JFactory::getApplication()->input->getString('type', '');
+		$format = JFactory::getApplication()->input->getString('format', 'json');
+
+		$class = $this->getAjaxClass($field);
+
+		if (empty($class) || ! class_exists($class))
+		{
+			return false;
+		}
+
+		$method = 'getAjax' . ucfirst($format) . ucfirst($type);
+
+		$class = new $class;
+
+		if ( ! method_exists($class, $method))
+		{
+			return false;
+		}
+
+		echo $class->$method();
+	}
+
+	public function getAjaxClass($field)
+	{
+		if (empty($field))
+		{
+			return false;
+		}
+
+		$field_type = JFactory::getApplication()->input->get('fieldtype');
+
+		if ($field_type)
+		{
+			return $this->getFieldClass($field, $field_type);
+		}
+
+		$file = JPATH_LIBRARIES . '/regularlabs/fields/' . strtolower($field) . '.php';
+
+		if ( ! file_exists($file))
+		{
+			return false;
+		}
+
+		require_once $file;
+
+		return 'JFormFieldRL_' . ucfirst($field);
+	}
+
+	public function getFieldClass($field, $field_type)
+	{
+		$file = JPATH_PLUGINS . '/fields/' . strtolower($field_type) . '/fields/' . strtolower($field) . '.php';
+
+		if ( ! file_exists($file))
+		{
+			return false;
+		}
+
+		require_once $file;
+
+		return 'JFormField' . ucfirst($field);
 	}
 }
 

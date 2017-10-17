@@ -6,8 +6,6 @@
  * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU GPL version 3 or, at your option, any later version
  * @package   akeebaengine
- *
- *
  */
 
 namespace Akeeba\Engine\Postproc;
@@ -28,13 +26,16 @@ class Webdav extends Base
 	protected $password;
 
 	/** @var int The retry count of this file (allow up to 2 retries after the first upload failure) */
-	private $tryCount = 0;
+	protected $tryCount = 0;
 
 	/** @var ConnectorDavclient  WebDAV client */
-	private $webdav;
+	protected $webdav;
 
 	/** @var string The currently configured directory */
-	private $directory;
+	protected $directory;
+
+	/** @var string The key used for storing settings in the Configuration registry */
+	protected $settingsKey = 'webdav';
 
 	public function __construct()
 	{
@@ -45,7 +46,7 @@ class Webdav extends Base
 
 	public function processPart($absolute_filename, $upload_as = null)
 	{
-		$settings = $this->_getSettings();
+		$settings = $this->getSettings();
 
 		if ($settings === false)
 		{
@@ -90,7 +91,7 @@ class Webdav extends Base
 	public function downloadToFile($remotePath, $localFile, $fromOffset = null, $length = null)
 	{
 		// Get settings
-		$settings = $this->_getSettings();
+		$settings = $this->getSettings();
 		if ($settings === false)
 		{
 			return false;
@@ -140,7 +141,7 @@ class Webdav extends Base
 	public function delete($path)
 	{
 		// Get settings
-		$settings = $this->_getSettings();
+		$settings = $this->getSettings();
 
 		if ($settings === false)
 		{
@@ -178,20 +179,20 @@ class Webdav extends Base
 		return true;
 	}
 
-	protected function _getSettings()
+	protected function getSettings()
 	{
 		// Retrieve engine configuration data
 		$config = Factory::getConfiguration();
 
-		$username = trim($config->get('engine.postproc.webdav.username', ''));
-		$password = trim($config->get('engine.postproc.webdav.password', ''));
-		$url = trim($config->get('engine.postproc.webdav.url', ''));
+		$username = trim($config->get('engine.postproc.' . $this->settingsKey . '.username', ''));
+		$password = trim($config->get('engine.postproc.' . $this->settingsKey . '.password', ''));
+		$url = trim($config->get('engine.postproc.' . $this->settingsKey . '.url', ''));
 
 		$this->directory = $config->get('volatile.postproc.directory', null);
 
 		if (empty($this->directory))
 		{
-			$this->directory = $config->get('engine.postproc.webdav.directory', '');
+			$this->directory = $config->get('engine.postproc.' . $this->settingsKey . '.directory', '');
 		}
 
 		// Sanity checks
@@ -230,17 +231,37 @@ class Webdav extends Base
 			'password' => $password,
 		);
 
+		// Last chance to modify the settings!
+		$this->modifySettings($settings);
+
 		$this->webdav = new ConnectorDavclient($settings);
 		$this->webdav->addTrustedCertificates(AKEEBA_CACERT_PEM);
 
 		return true;
 	}
 
+	/**
+	 * Last chance to modify the settings before we create a WebDAV client.
+	 *
+	 * @param   array  $settings
+	 *
+	 * @return  void
+	 */
+	protected function modifySettings(array &$settings)
+	{
+		// No changes made in the default class. Only subclasses implement this.
+	}
+
 	protected function putFile($absolute_filename, $directory, $basename)
 	{
+		// Normalize double slashes
+		$directory = str_replace('//', '/', $directory);
+		$basename  = str_replace('//', '/', $basename);
+
 		// Store the absolute remote path in the class property
 		// Let's remove the starting slash, otherwise it read as an absolute path
-		$this->remote_path = trim(trim($directory, '/') . '/' . $basename, '/');
+		$this->remote_path = trim(trim($directory, '/') . '/' . trim($basename, '/'), '/');
+		$this->remote_path = str_replace('//', '/', $this->remote_path);
 
 		// A directory is supplied, let's check if it really exists or not
 		if ($directory)

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\ModulesAnywhere;
+namespace RegularLabs\Plugin\System\ModulesAnywhere;
 
 defined('_JEXEC') or die;
 

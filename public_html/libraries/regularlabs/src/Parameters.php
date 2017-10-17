@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -50,11 +50,11 @@ class Parameters
 	 *
 	 * @return object
 	 */
-	public function getParams($params, $path = '', $default = '')
+	public function getParams($params, $path = '', $default = '', $use_cache = true)
 	{
 		$hash = md5('getParams_' . json_encode($params) . '_' . $path . '_' . $default);
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
@@ -69,7 +69,7 @@ class Parameters
 			);
 		}
 
-		if (!is_object($params))
+		if ( ! is_object($params))
 		{
 			$params = json_decode($params);
 			if (is_null($xml))
@@ -82,7 +82,7 @@ class Parameters
 			$params = $params->toObject();
 		}
 
-		if (!$params)
+		if ( ! $params)
 		{
 			return Cache::set(
 				$hash,
@@ -122,13 +122,13 @@ class Parameters
 	 *
 	 * @return object
 	 */
-	public function getComponentParams($name, $params = null)
+	public function getComponentParams($name, $params = null, $use_cache = true)
 	{
 		$name = 'com_' . RegEx::replace('^com_', '', $name);
 
 		$hash = md5('getComponentParams_' . $name . '_' . json_encode($params));
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
@@ -153,13 +153,13 @@ class Parameters
 	 *
 	 * @return object
 	 */
-	public function getModuleParams($name, $admin = true, $params = '')
+	public function getModuleParams($name, $admin = true, $params = '', $use_cache = true)
 	{
 		$name = 'mod_' . RegEx::replace('^mod_', '', $name);
 
 		$hash = md5('getModuleParams_' . $name . '_' . json_encode($params));
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
@@ -184,11 +184,11 @@ class Parameters
 	 *
 	 * @return object
 	 */
-	public function getPluginParams($name, $type = 'system', $params = '')
+	public function getPluginParams($name, $type = 'system', $params = '', $use_cache = true)
 	{
 		$hash = md5('getPluginParams_' . $name . '_' . $type . '_' . json_encode($params));
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
@@ -212,16 +212,16 @@ class Parameters
 	 *
 	 * @return bool|mixed
 	 */
-	public function getObjectFromXml(&$xml)
+	public function getObjectFromXml(&$xml, $use_cache = true)
 	{
 		$hash = md5('getObjectFromXml_' . json_encode($xml));
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
 
-		if (!is_array($xml))
+		if ( ! is_array($xml))
 		{
 			$xml = [$xml];
 		}
@@ -242,18 +242,18 @@ class Parameters
 	 *
 	 * @return array
 	 */
-	private function loadXML($path, $default = '')
+	private function loadXML($path, $default = '', $use_cache = true)
 	{
 		$hash = md5('loadXML_' . $path . '_' . $default);
 
-		if (Cache::has($hash))
+		if ($use_cache && Cache::has($hash))
 		{
 			return Cache::get($hash);
 		}
 
-		if (!$path
-			|| !JFile::exists($path)
-			|| !$file = JFile::read($path)
+		if ( ! $path
+			|| ! JFile::exists($path)
+			|| ! $file = JFile::read($path)
 		)
 		{
 			return Cache::set(
@@ -272,12 +272,12 @@ class Parameters
 		foreach ($fields as $field)
 		{
 			if ($field['tag'] != 'FIELD'
-				|| !isset($field['attributes'])
-				|| (!isset($field['attributes']['DEFAULT']) && !isset($field['attributes'][$default]))
-				|| !isset($field['attributes']['NAME'])
+				|| ! isset($field['attributes'])
+				|| ( ! isset($field['attributes']['DEFAULT']) && ! isset($field['attributes'][$default]))
+				|| ! isset($field['attributes']['NAME'])
 				|| $field['attributes']['NAME'] == ''
 				|| $field['attributes']['NAME']['0'] == '@'
-				|| !isset($field['attributes']['TYPE'])
+				|| ! isset($field['attributes']['TYPE'])
 				|| $field['attributes']['TYPE'] == 'spacer'
 			)
 			{
@@ -312,7 +312,7 @@ class Parameters
 	 */
 	private function getKeyFromXML($xml)
 	{
-		if (!empty($xml->_attributes) && isset($xml->_attributes['name']))
+		if ( ! empty($xml->_attributes) && isset($xml->_attributes['name']))
 		{
 			return $xml->_attributes['name'];
 		}
@@ -329,7 +329,7 @@ class Parameters
 	 */
 	private function getValFromXML($xml)
 	{
-		if (!empty($xml->_attributes) && isset($xml->_attributes['value']))
+		if ( ! empty($xml->_attributes) && isset($xml->_attributes['value']))
 		{
 			return $xml->_attributes['value'];
 		}
@@ -358,13 +358,13 @@ class Parameters
 			$key   = $this->getKeyFromXML($child);
 			$value = $this->getValFromXML($child);
 
-			if (!isset($object->{$key}))
+			if ( ! isset($object->{$key}))
 			{
 				$object->{$key} = $value;
 				continue;
 			}
 
-			if (!is_array($object->{$key}))
+			if ( ! is_array($object->{$key}))
 			{
 				$object->{$key} = [$object->{$key}];
 			}

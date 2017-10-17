@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SpTypeEditor
 {
@@ -40,7 +40,16 @@ class SpTypeEditor
 		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$output .= '<textarea class="sp-pagebuilder-form-control sp-pagebuilder-editor sp-pagebuilder-addon-input" name="'. $key .'">'.$attr['std'].'</textarea>';
+		$apps = JFactory::getApplication();
+
+		$conf   = JFactory::getConfig();
+		$name   = $conf->get('editor');
+
+		if ($name !== 'jce') {
+			$name = 'tinymce';
+		}
+		$editor = JEditor::getInstance($name);
+		$output	.= $editor->display( $key, htmlspecialchars($attr['std'], ENT_COMPAT, 'UTF-8'), '100%', 300, 100, 70,false);
 
 		if( ( isset($attr['desc']) ) && ( isset($attr['desc']) != '' ) )
 		{

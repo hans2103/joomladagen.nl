@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -38,7 +38,7 @@ class RegularLabsManagerModelDefault extends JModelList
 		foreach ($rows as $row)
 		{
 			$item = $this->initItem();
-			if (!isset($row['name']))
+			if ( ! isset($row['name']))
 			{
 				continue;
 			}
@@ -48,7 +48,7 @@ class RegularLabsManagerModelDefault extends JModelList
 				? $row['id']
 				: RL_RegEx::replace('[^a-z\-]', '', str_replace('?', '-', strtolower($item->name)));
 
-			if (!empty($ids) && !in_array($item->id, $ids))
+			if ( ! empty($ids) && ! in_array($item->id, $ids))
 			{
 				continue;
 			}
@@ -66,7 +66,7 @@ class RegularLabsManagerModelDefault extends JModelList
 
 			$this->checkInstalled($item, $types);
 
-			if (isset($row['old']) && $row['old'] && !$item->installed)
+			if (isset($row['old']) && $row['old'] && ! $item->installed)
 			{
 				continue;
 			}
@@ -95,7 +95,7 @@ class RegularLabsManagerModelDefault extends JModelList
 
 		$table = JTable::getInstance('extension');
 		// Load the previous Data
-		if (!$table->load($data['id']))
+		if ( ! $table->load($data['id']))
 		{
 			throw new RuntimeException($table->getError());
 		}
@@ -103,41 +103,48 @@ class RegularLabsManagerModelDefault extends JModelList
 		unset($data['id']);
 
 		// Bind the data.
-		if (!$table->bind($data))
+		if ( ! $table->bind($data))
 		{
 			throw new RuntimeException($table->getError());
 		}
 
 		// Check the data.
-		if (!$table->check())
+		if ( ! $table->check())
 		{
 			throw new RuntimeException($table->getError());
 		}
 
 		// Store the data.
-		if (!$table->store())
+		if ( ! $table->store())
 		{
 			throw new RuntimeException($table->getError());
 		}
 
-		$db    = JFactory::getDbo();
+		$db = JFactory::getDbo();
+
+		// First, remove the &pro=1 from all regularlabs.com urls
+
 		$query = $db->getQuery(true)
 			->update('#__update_sites')
-			->set($db->quoteName('extra_query') . ' = ' . $db->quote(''))
-			->where($db->quoteName('location') . ' LIKE ' . $db->quote('http://download.regularlabs.com%'));
+			->set($db->quoteName('location')
+				. ' = replace(' . $db->quoteName('location') . ', ' . $db->quote('&pro=1') . ', ' . $db->quote('') . ')')
+			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
 		$db->setQuery($query);
 		$db->execute();
 
-		if ($key)
-		{
-			$query->clear()
-				->update('#__update_sites')
-				->set($db->quoteName('extra_query') . ' = ' . $db->quote('k=' . $key))
-				->where($db->quoteName('location') . ' LIKE ' . $db->quote('http://download.regularlabs.com%'))
-				->where($db->quoteName('location') . ' LIKE ' . $db->quote('%&pro=1%'));
-			$db->setQuery($query);
-			$db->execute();
-		}
+		// Place back the &pro=1 on all regularlabs.com urls
+		// And add the key
+
+		$extra_query = $key ? 'k=' . $key : '';
+
+		$query->clear()
+			->update('#__update_sites')
+			->set($db->quoteName('location')
+				. ' = replace(' . $db->quoteName('location') . ', ' . $db->quote('&type=') . ', ' . $db->quote('&pro=1&type=') . ')')
+			->set($db->quoteName('extra_query') . ' = ' . $db->quote($extra_query))
+			->where($db->quoteName('location') . ' LIKE ' . $db->quote('%download.regularlabs.com%'));
+		$db->setQuery($query);
+		$db->execute();
 
 		JFactory::getCache()->clean('_system');
 	}
@@ -159,14 +166,14 @@ class RegularLabsManagerModelDefault extends JModelList
 		$items = [];
 
 		jimport('joomla.filesystem.file');
-		if (!JFile::exists(JPATH_COMPONENT . '/extensions.xml'))
+		if ( ! JFile::exists(JPATH_COMPONENT . '/extensions.xml'))
 		{
 			return $items;
 		}
 
 		$file = JFile::read(JPATH_COMPONENT . '/extensions.xml');
 
-		if (!$file)
+		if ( ! $file)
 		{
 			return $items;
 		}
@@ -178,7 +185,7 @@ class RegularLabsManagerModelDefault extends JModelList
 		foreach ($fields as $field)
 		{
 			if ($field['tag'] != 'EXTENSION'
-				|| !isset($field['attributes'])
+				|| ! isset($field['attributes'])
 			)
 			{
 				continue;
@@ -246,7 +253,7 @@ class RegularLabsManagerModelDefault extends JModelList
 			$el->type = $type;
 			list($xml, $client_id) = $this->getXML($type, $item->element);
 
-			if (!$xml)
+			if ( ! $xml)
 			{
 				switch ($item->element)
 				{
@@ -262,7 +269,7 @@ class RegularLabsManagerModelDefault extends JModelList
 			$el->client_id = $client_id;
 			$el->link      = $this->getURL($type, $item->element, $client_id);
 
-			if (!$xml)
+			if ( ! $xml)
 			{
 				$item->missing[]    = $type;
 				$item->types[$type] = $el;
@@ -271,7 +278,7 @@ class RegularLabsManagerModelDefault extends JModelList
 
 			$el->id = $this->getID($type, $item->element);
 
-			if (!$file)
+			if ( ! $file)
 			{
 				$file = $xml;
 			}
@@ -279,7 +286,7 @@ class RegularLabsManagerModelDefault extends JModelList
 			$item->types[$type] = $el;
 		}
 
-		if (!$file)
+		if ( ! $file)
 		{
 			$item->missing = [];
 
@@ -287,7 +294,7 @@ class RegularLabsManagerModelDefault extends JModelList
 		}
 
 		$xml = JApplicationHelper::parseXMLInstallFile($file);
-		if (empty($xml) || !isset($xml['version']))
+		if (empty($xml) || ! isset($xml['version']))
 		{
 			return;
 		}
@@ -307,7 +314,7 @@ class RegularLabsManagerModelDefault extends JModelList
 			$item->pro = 1;
 		}
 
-		if (!$item->version)
+		if ( ! $item->version)
 		{
 			$item->version = '0.0.0';
 		}
@@ -318,73 +325,92 @@ class RegularLabsManagerModelDefault extends JModelList
 	 */
 	private function getXML($type, $element)
 	{
-		$client_id = 1;
-		$xml       = '';
 		switch ($type)
 		{
 			case 'com':
 				if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_' . $element . '/' . $element . '.xml'))
 				{
 					$xml = JPATH_ADMINISTRATOR . '/components/com_' . $element . '/' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				else if (JFile::exists(JPATH_SITE . '/components/com_' . $element . '/' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_SITE . '/components/com_' . $element . '/' . $element . '.xml'))
 				{
-					$client_id = 0;
-					$xml       = JPATH_SITE . '/components/com_' . $element . '/' . $element . '.xml';
+					$xml = JPATH_SITE . '/components/com_' . $element . '/' . $element . '.xml';
+
+					return [$xml, 0];
 				}
-				else if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_' . $element . '/com_' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_' . $element . '/com_' . $element . '.xml'))
 				{
 					$xml = JPATH_ADMINISTRATOR . '/components/com_' . $element . '/com_' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				else if (JFile::exists(JPATH_SITE . '/components/com_' . $element . '/com_' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_SITE . '/components/com_' . $element . '/com_' . $element . '.xml'))
 				{
-					$client_id = 0;
-					$xml       = JPATH_SITE . '/components/com_' . $element . '/com_' . $element . '.xml';
+					$xml = JPATH_SITE . '/components/com_' . $element . '/com_' . $element . '.xml';
+
+					return [$xml, 0];
 				}
-				break;
+
+				return ['', 1];
+
 			case 'plg_system':
-				if (JFile::exists(JPATH_PLUGINS . '/system/' . $element . '/' . $element . '.xml'))
-				{
-					$xml = JPATH_PLUGINS . '/system/' . $element . '/' . $element . '.xml';
-				}
-				else if (JFile::exists(JPATH_PLUGINS . '/system/' . $element . '.xml'))
-				{
-					$xml = JPATH_PLUGINS . '/system/' . $element . '.xml';
-				}
-				break;
+			case 'plg_fields':
 			case 'plg_editors-xtd':
-				if (JFile::exists(JPATH_PLUGINS . '/editors-xtd/' . $element . '/' . $element . '.xml'))
+				$plg_type = substr($type, 4);
+				if (JFile::exists(JPATH_PLUGINS . '/' . $plg_type . '/' . $element . '/' . $element . '.xml'))
 				{
-					$xml = JPATH_PLUGINS . '/editors-xtd/' . $element . '/' . $element . '.xml';
+					$xml = JPATH_PLUGINS . '/' . $plg_type . '/' . $element . '/' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				else if (JFile::exists(JPATH_PLUGINS . '/editors-xtd/' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_PLUGINS . '/' . $plg_type . '/' . $element . '.xml'))
 				{
-					$xml = JPATH_PLUGINS . '/editors-xtd/' . $element . '.xml';
+					$xml = JPATH_PLUGINS . '/' . $plg_type . '/' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				break;
+
+				return ['', 1];
+
 			case 'mod':
 				if (JFile::exists(JPATH_ADMINISTRATOR . '/modules/mod_' . $element . '/' . $element . '.xml'))
 				{
 					$xml = JPATH_ADMINISTRATOR . '/modules/mod_' . $element . '/' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				else if (JFile::exists(JPATH_SITE . '/modules/mod_' . $element . '/' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_SITE . '/modules/mod_' . $element . '/' . $element . '.xml'))
 				{
-					$client_id = 0;
-					$xml       = JPATH_SITE . '/modules/mod_' . $element . '/' . $element . '.xml';
+					$xml = JPATH_SITE . '/modules/mod_' . $element . '/' . $element . '.xml';
+
+					return [$xml, 0];
 				}
-				else if (JFile::exists(JPATH_ADMINISTRATOR . '/modules/mod_' . $element . '/mod_' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_ADMINISTRATOR . '/modules/mod_' . $element . '/mod_' . $element . '.xml'))
 				{
 					$xml = JPATH_ADMINISTRATOR . '/modules/mod_' . $element . '/mod_' . $element . '.xml';
+
+					return [$xml, 1];
 				}
-				else if (JFile::exists(JPATH_SITE . '/modules/mod_' . $element . '/mod_' . $element . '.xml'))
+
+				if (JFile::exists(JPATH_SITE . '/modules/mod_' . $element . '/mod_' . $element . '.xml'))
 				{
-					$client_id = 0;
-					$xml       = JPATH_SITE . '/modules/mod_' . $element . '/mod_' . $element . '.xml';
+					$xml = JPATH_SITE . '/modules/mod_' . $element . '/mod_' . $element . '.xml';
+
+					return [$xml, 0];
 				}
-				break;
+
+				return ['', 1];
 		}
 
-		return [$xml, $client_id];
+		return ['', 1];
 	}
 
 	/**
@@ -394,19 +420,18 @@ class RegularLabsManagerModelDefault extends JModelList
 	{
 		list($type, $folder) = explode('_', $type . '_');
 
-		$link = '';
 		switch ($type)
 		{
 			case 'com';
 				RL_Language::load('com_' . $element . '.sys', '', true);
-				$link = 'option=com_' . $element;
-				break;
+
+				return 'option=com_' . $element;
 
 			case 'mod';
 				RL_Language::load('mod_' . $element . '.sys', '', true);
-				$link = 'option=com_modules&filter_client_id=' . $client_id
+
+				return 'option=com_modules&filter_client_id=' . $client_id
 					. '&filter_module=mod_' . $element . '&filter_search=';
-				break;
 
 			case 'plg';
 				$db    = JFactory::getDbo();
@@ -422,11 +447,11 @@ class RegularLabsManagerModelDefault extends JModelList
 				RL_Language::load('plg_' . $folder . '_' . $element . '.sys', '', true);
 				$name = JText::_($name);
 				$name = RL_RegEx::replace('^(.*?)\?.*$', '\1', $name);
-				$link = 'option=com_plugins&filter_folder=&filter_search=' . $name;
-				break;
+
+				return 'option=com_plugins&filter_folder=&filter_search=' . $name;
 		}
 
-		return $link;
+		return '';
 	}
 
 	/**

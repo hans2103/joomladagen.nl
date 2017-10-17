@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 SpAddonsConfig::addonConfig(
 array(
@@ -141,6 +141,18 @@ array(
 					'panel-warning'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_WARNING'),
 					'panel-danger'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_DANGER'),
 					'panel-faq'=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_STYLE_FAQ'),
+				),
+				'std'=> ''
+			),
+
+			'openitem'=>array(
+				'type'=>'select',
+				'title'=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_OPEN_ITEM'),
+				'desc'=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_OPEN_ITEM_DESC'),
+				'values'=> array(
+					''=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_OPEN_FIRST_ITEM'),
+					'show'=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_OPEN_ALL_ITEM'),
+					'hide'=>JText::_('COM_SPPAGEBUILDER_ADDON_ACCORDION_CLOSE_ALL_ITEM'),
 				),
 				'std'=> ''
 			),

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<view title="Order">
+		<message>
+			<![CDATA[
+				Order view
+			]]>
+		</message>
+		<options var="layout"> 			
+			<option value="default" name="All Orders" msg="View all Orders" />
+			<option value="my" name="My Orders" msg="View my Orders" />
+		</options>
+	</view>
+	<!--
+	<state>
+		<name>Campaigns Layout</name>
+		<description>Layouts related to a campaigns</description>
+	</state>
+	-->
+</metadata>

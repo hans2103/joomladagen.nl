@@ -15,10 +15,10 @@ if (!defined('_WF_EXT')) {
     define('_WF_EXT', 1);
 }
 
-require_once WF_EDITOR_LIBRARIES.'/classes/manager/base.php';
+require_once WF_EDITOR_LIBRARIES . '/classes/manager/base.php';
 
 // load image processor class
-require_once dirname(__FILE__).'/editor.php';
+require_once dirname(__FILE__) . '/editor.php';
 
 class WFMediaManager extends WFMediaManagerBase
 {
@@ -96,7 +96,7 @@ class WFMediaManager extends WFMediaManagerBase
             $view = $this->getView();
 
             $view->setLayout('editor');
-            $view->addTemplatePath(WF_EDITOR_LIBRARIES.'/pro/views/editor/tmpl');
+            $view->addTemplatePath(WF_EDITOR_LIBRARIES . '/pro/views/editor/tmpl');
 
             $lists = array();
 
@@ -113,7 +113,7 @@ class WFMediaManager extends WFMediaManagerBase
 
             $document->addScript(array('webgl', 'filter', 'canvas', 'transform', 'editor'), 'pro');
             $document->addStyleSheet(array('editor.css'), 'pro');
-            $document->addScriptDeclaration('jQuery(document).ready(function($){EditorDialog.init({"site" : "'.JURI::root().'", "root" : "'.JURI::root(true).'"})});');
+            $document->addScriptDeclaration('jQuery(document).ready(function($){EditorDialog.init({"site" : "' . JURI::root() . '", "root" : "' . JURI::root(true) . '"})});');
 
             $document->setTitle(WFText::_('WF_MANAGER_IMAGE_EDITOR'));
         }
@@ -154,7 +154,7 @@ class WFMediaManager extends WFMediaManagerBase
                 'edit' => $this->get('can_edit_images'),
                 'prefer_imagick' => (bool) $this->getParam('editor.prefer_imagick', true),
                 'remove_exif' => (bool) $this->getParam('editor.upload_remove_exif', false),
-                'resample_image' => (bool) $this->getParam('editor.resample_image', true)
+                'resample_image' => (bool) $this->getParam('editor.resample_image', true),
             ));
         }
 
@@ -262,28 +262,44 @@ class WFMediaManager extends WFMediaManagerBase
 
         // dialog/form upload
         if (JRequest::getInt('inline', 0) === 0) {
+            $file_resize = false;
+
             // Resize options visible
             if ((bool) $this->getParam('editor.upload_resize', 1)) {
                 $resize = JRequest::getInt('upload_resize_state', 0);
 
                 foreach (array('resize_width', 'resize_height', 'file_resize_width', 'file_resize_height') as $var) {
-                    $$var = JRequest::getVar('upload_'.$var, '');
+                    $$var = JRequest::getVar('upload_' . $var, '');
                     // pass each value through intval
                     $$var = array_map(intval, $$var);
                 }
 
                 $resize_suffix = JRequest::getVar('upload_resize_suffix', '');
 
-                // check for set width or height value
+                // check for individual resize values
                 foreach (array_merge($file_resize_width, $file_resize_height) as $item) {
+                    // at least one value set, so resize
                     if (!empty($item)) {
-                        $resize_width = $file_resize_width;
-                        $resize_height = $file_resize_height;
 
-                        $resize = true;
+                        $file_resize = true;
 
                         break;
                     }
+                }
+
+                // transfer values
+                if ($file_resize) {
+                    $resize_width = $file_resize_width;
+                    $resize_height = $file_resize_height;
+
+                    $file_resize_suffix = JRequest::getVar('upload_file_resize_suffix', '');
+
+                    for ($i = 1; $i < count($file_resize_suffix); $i++) {
+                        $resize_suffix[i] = $file_resize_suffix[$i];
+                    }
+
+                    // set global resize option
+                    $resize = true;
                 }
             }
         }
@@ -327,14 +343,15 @@ class WFMediaManager extends WFMediaManagerBase
 
                             $suffix = '';
 
-                            if (empty($resize_suffix) && $count > 1) {
-                                $suffix = '_'.$resize_width[$i].'_'.$resize_height[$i];
+                            // create suffix based on width/height values for images after first
+                            if (empty($resize_suffix[$i]) && $i > 0) {
+                                $suffix = '_' . $resize_width[$i] . '_' . $resize_height[$i];
                             } else {
                                 // replace width and height variables
                                 $suffix = str_replace(array('$width', '$height'), array($resize_width[$i], $resize_height[$i]), $resize_suffix[$i]);
                             }
 
-                            $name .= $suffix.'.'.$ext;
+                            $name .= $suffix . '.' . $ext;
 
                             // validate name
                             WFUtility::checkPath($name);
@@ -365,10 +382,10 @@ class WFMediaManager extends WFMediaManagerBase
                 $font_style = $this->getParam('watermark_font_style', 'LiberationSans-Regular.ttf');
                 // default LiberationSans fonts
                 if (preg_match('#^LiberationSans-(Regular|Bold|BoldItalic|Italic)\.ttf$#', $font_style)) {
-                    $font_style = WF_EDITOR_LIBRARIES.'/pro/fonts/'.$font_style;
+                    $font_style = WF_EDITOR_LIBRARIES . '/pro/fonts/' . $font_style;
                     // custom font
                 } else {
-                    $font_style = JPATH_SITE.'/'.trim(preg_replace('#[\/\\\\]+#', '/', $font_style), '/');
+                    $font_style = JPATH_SITE . '/' . trim(preg_replace('#[\/\\\\]+#', '/', $font_style), '/');
                 }
 
                 $options = array(
@@ -406,7 +423,7 @@ class WFMediaManager extends WFMediaManagerBase
 
     private function toRelative($file)
     {
-        return WFUtility::makePath(str_replace(JPATH_ROOT.'/', '', dirname(JPath::clean($file))), basename($file));
+        return WFUtility::makePath(str_replace(JPATH_ROOT . '/', '', dirname(JPath::clean($file))), basename($file));
     }
 
     public function cleanEditorTmp($file = null, $exit = true)
@@ -423,7 +440,7 @@ class WFMediaManager extends WFMediaManagerBase
             $ext = WFUtility::getExtension($file);
 
             // create temp file
-            $tmp = 'wf_ie_'.md5($file).'.'.$ext;
+            $tmp = 'wf_ie_' . md5($file) . '.' . $ext;
             $path = WFUtility::makePath($this->getCacheDirectory(), $tmp);
 
             self::validateImagePath($file);
@@ -470,9 +487,6 @@ class WFMediaManager extends WFMediaManagerBase
         // check file
         self::validateImagePath($file);
 
-        // check new name
-        self::validateImagePath($name);
-
         $upload = JRequest::getVar('file', '', 'files', 'array');
 
         // create a filesystem result object
@@ -484,7 +498,7 @@ class WFMediaManager extends WFMediaManagerBase
             $ext = WFUtility::getExtension($file);
 
             // create temp file
-            $tmp = 'wf_ie_'.md5($file).'.'.$ext;
+            $tmp = 'wf_ie_' . md5($file) . '.' . $ext;
             $tmp = WFUtility::makePath($this->getCacheDirectory(), $tmp);
 
             // delete existing tmp file
@@ -493,9 +507,9 @@ class WFMediaManager extends WFMediaManagerBase
             }
 
             // load image class
-            require_once __DIR__.'/image/image.php';
+            require_once __DIR__ . '/image/image.php';
             // create image
-            $image = new WFImage($upload['tmp_name'], array('preferImagick' => $this->getParam('prefer_imagick', true)));
+            $image = new WFImage($upload['tmp_name'], array('preferImagick' => $this->getParam('editor.prefer_imagick', true)));
 
             switch ($task) {
                 case 'resize':
@@ -565,17 +579,17 @@ class WFMediaManager extends WFMediaManagerBase
             $upload = false;
 
             $file = WFUtility::makePath($filesystem->getBaseDir(), $file);
-            $dest = dirname($file).'/'.basename($name);
+            $dest = dirname($file) . '/' . basename($name);
 
             // get extension
             $ext = WFUtility::getExtension($dest);
 
             // load image class
-            require_once __DIR__.'/image/image.php';
+            require_once __DIR__ . '/image/image.php';
             // create image
             $image = new WFImage($file, array(
-                'preferImagick' => $this->getParam('prefer_imagick', true),
-                'resampleImage' => $this->getParam('resample_image', true)
+                'preferImagick' => $this->getParam('editor.prefer_imagick', true),
+                'resampleImage' => $this->getParam('editor.resample_image', true),
             ));
 
             foreach ($options as $filter) {
@@ -682,7 +696,7 @@ class WFMediaManager extends WFMediaManagerBase
         jimport('joomla.filesystem.folder');
 
         $cache = $app->getCfg('tmp_path');
-        $dir = $this->getParam('cache', $cache);
+        $dir = $this->getParam('editor.cache', $cache);
 
         // make sure a value is set
         if (empty($dir)) {
@@ -707,9 +721,9 @@ class WFMediaManager extends WFMediaManagerBase
         jimport('joomla.filesystem.folder');
         jimport('joomla.filesystem.file');
 
-        $cache_max_size = intval($this->getParam('cache_size', 10, false)) * 1024 * 1024;
-        $cache_max_age = intval($this->getParam('cache_age', 30, false)) * 86400;
-        $cache_max_files = intval($this->getParam('cache_files', 0, false));
+        $cache_max_size = intval($this->getParam('editor.cache_size', 10, false)) * 1024 * 1024;
+        $cache_max_age = intval($this->getParam('editor.cache_age', 30, false)) * 86400;
+        $cache_max_files = intval($this->getParam('editor.cache_files', 0, false));
 
         if ($cache_max_age > 0 || $cache_max_size > 0 || $cache_max_files > 0) {
             $path = $this->getCacheDirectory();
@@ -754,17 +768,17 @@ class WFMediaManager extends WFMediaManagerBase
     private function redirectThumb($file, $mime)
     {
         if (is_file($file)) {
-            header('Content-length: '.filesize($file));
-            header('Content-type: '.$mime);
-            header('Location: '.$this->toRelative($file));
+            header('Content-length: ' . filesize($file));
+            header('Content-type: ' . $mime);
+            header('Location: ' . $this->toRelative($file));
         }
     }
 
     private function outputImage($file, $mime)
     {
         if (is_file($file)) {
-            header('Content-length: '.filesize($file));
-            header('Content-type: '.$mime);
+            header('Content-length: ' . filesize($file));
+            header('Content-type: ' . $mime);
             ob_clean();
             flush();
 
@@ -779,7 +793,7 @@ class WFMediaManager extends WFMediaManagerBase
         jimport('joomla.filesystem.file');
 
         $mtime = @filemtime($file);
-        $thumb = 'wf_thumb_cache_'.md5(basename(JFile::stripExt($file)).$mtime.$width.$height).'.'.JFile::getExt($file);
+        $thumb = 'wf_thumb_cache_' . md5(basename(JFile::stripExt($file)) . $mtime . $width . $height) . '.' . JFile::getExt($file);
 
         return WFUtility::makePath($this->getCacheDirectory(), $thumb);
     }
@@ -812,7 +826,7 @@ class WFMediaManager extends WFMediaManagerBase
         if ($mime == 'image/jpeg' || $mime == 'image/tiff') {
             $exif = exif_thumbnail($file, $width, $height, $type);
             if ($exif !== false) {
-                header('Content-type: '.image_type_to_mime_type($type));
+                header('Content-type: ' . image_type_to_mime_type($type));
                 die($exif);
             }
         }
@@ -925,7 +939,7 @@ class WFMediaManager extends WFMediaManagerBase
 
                 // add back iptcc
                 /*if (!empty($iptcc)) {
-                    $img->profileImage($iptcc);
+                $img->profileImage($iptcc);
                 }*/
 
                 $img->writeImage($image);

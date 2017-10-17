@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="All Likes">
+		<message>
+			<![CDATA[All Likes]]>
+		</message>
+	</layout>
+	<state>
+		<name>All Likes</name>
+		<description>All Likes</description>
+		<params>
+		</params>
+	</state>
+</metadata>

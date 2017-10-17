@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -49,14 +49,14 @@ class Conditions
 			// Break if not passed and matching method is ALL
 			// Or if passed and matching method is ANY
 			if (
-				(!$pass && $matching_method == 'all')
+				( ! $pass && $matching_method == 'all')
 				|| ($pass && $matching_method == 'any')
 			)
 			{
 				break;
 			}
 
-			if (!isset($conditions[$type]))
+			if ( ! isset($conditions[$type]))
 			{
 				continue;
 			}
@@ -128,12 +128,17 @@ class Conditions
 		);
 	}
 
-	public static function getConditionsFromTagAttributes(&$attributes, $types = [])
+	public static function getConditionsFromTagAttributes(&$attributes, $only_types = [])
 	{
 		$conditions = [];
 
 		PluginTag::replaceKeyAliases($attributes, self::getTypeAliases(), true);
-		$condition_types = self::getTypes();
+		$types = self::getTypes($only_types);
+
+		if (empty($types))
+		{
+			return $conditions;
+		}
 
 		foreach ($attributes as $type => $value)
 		{
@@ -142,22 +147,16 @@ class Conditions
 				continue;
 			}
 
-			$type = self::getTypeId($type);
+			$condition_type = self::getType($type, $only_types);
 
-			if (empty($type))
+			if ( ! $condition_type)
 			{
 				continue;
 			}
 
-			if (!empty($types) && !in_array($type, $types))
-			{
-				continue;
-			}
-
-			$condition_type = $condition_types[$type];
-
+			$value   = html_entity_decode($value);
+			$params  = self::getDefaultParamsByType($condition_type, $type);
 			$reverse = false;
-			$params  = (object) [];
 
 			$selection = self::getSelectionFromTagAttribute($condition_type, $value, $params, $reverse);
 
@@ -214,7 +213,7 @@ class Conditions
 				break;
 
 			default:
-				if (!JFile::exists(__DIR__ . '/Condition/' . $condition->class_name . '.php'))
+				if ( ! JFile::exists(__DIR__ . '/Condition/' . $condition->class_name . '.php'))
 				{
 					break;
 				}
@@ -275,14 +274,14 @@ class Conditions
 			return $array;
 		}
 
-		if (!$trim)
+		if ( ! $trim)
 		{
 			return $array;
 		}
 
 		foreach ($array as $k => $v)
 		{
-			if (!is_string($v))
+			if ( ! is_string($v))
 			{
 				continue;
 			}
@@ -298,7 +297,7 @@ class Conditions
 
 	private static function mixedDataToArray($array = '', $delimiter = ',')
 	{
-		if (!is_array($array))
+		if ( ! is_array($array))
 		{
 			return explode($delimiter, $array);
 		}
@@ -355,26 +354,29 @@ class Conditions
 	{
 		if ($type == 'Date.Date')
 		{
-			$dates = explode(' - ', str_replace(' to ', ' - ', $value));
+			$value = str_replace('from', '', $value);
+			$dates = explode(' - ', str_replace('to', ' - ', $value));
 
 			$params->ignore_time_zone = true;
-			$params->publish_up       = date('Y-m-d H:i:s', strtotime($dates['0']));
 
-			if (isset($dates['1']))
+			if ( ! empty($dates[0]))
 			{
-				$params->publish_down = date('Y-m-d H:i:s', strtotime($dates['1']));
-
-				return [];
+				$params->publish_up = date('Y-m-d H:i:s', strtotime($dates[0]));
 			}
 
-			$params->publish_down = date('Y-m-d H:i:s', strtotime($dates['0'] . ' + 1 days'));
+			if ( ! empty($dates[1]))
+			{
+				$params->publish_down = date('Y-m-d H:i:s', strtotime($dates[1]));
+			}
 
 			return [];
 		}
 
 		if ($type == 'Date.Time')
 		{
-			$dates                = explode(' - ', str_replace(' to ', ' - ', $value));
+			$value = str_replace('from', '', $value);
+			$dates = explode(' - ', str_replace('to', ' - ', $value));
+
 			$params->publish_up   = $dates['0'];
 			$params->publish_down = isset($dates['1']) ? $dates['1'] : $dates['0'];
 
@@ -392,13 +394,44 @@ class Conditions
 			$value   = substr($value, 5);
 		}
 
-		if (!in_array($type, self::getNotArrayTextAreaTypes()))
+		if ( ! in_array($type, self::getNotArrayTextAreaTypes()))
 		{
 			$value = str_replace('[[:COMMA:]]', ',', str_replace(',', '[[:SPLIT:]]', str_replace('\\,', '[[:COMMA:]]', $value)));
 			$value = explode('[[:SPLIT:]]', $value);
 		}
 
 		return $value;
+	}
+
+	private static function getDefaultParamsByType($condition_type, $type)
+	{
+		switch ($condition_type)
+		{
+			case 'Content.Category':
+				return (object) [
+					'assignto_' . $type . '_inc' => [
+						'inc_cats',
+						'inc_arts',
+					],
+				];
+
+			case 'Easyblog.Category':
+			case 'K2.Category':
+			case 'Zoo.Category':
+			case 'Hikashop.Category':
+			case 'Mijoshop.Category':
+			case 'Redshop.Category':
+			case 'Virtuemart.Category':
+				return (object) [
+					'assignto_' . $type . '_inc' => [
+						'inc_cats',
+						'inc_items',
+					],
+				];
+
+			default:
+				return (object) [];
+		}
 	}
 
 	private static function addParams(&$object, $type, $id, &$params)
@@ -444,11 +477,11 @@ class Conditions
 				break;
 
 			case 'Agent.Browser':
-				if (!empty($params->conditions['mobile_selection']))
+				if ( ! empty($params->conditions['mobile_selection']))
 				{
 					$object->selection = array_merge(self::makeArray($object->selection), self::makeArray($params->conditions['mobile_selection']));
 				}
-				if (!empty($params->conditions['searchbots_selection']))
+				if ( ! empty($params->conditions['searchbots_selection']))
 				{
 					$object->selection = array_merge($object->selection, self::makeArray($params->conditions['searchbots_selection']));
 				}
@@ -575,9 +608,9 @@ class Conditions
 		return 0;
 	}
 
-	private static function getTypes()
+	private static function getTypes($only_types = [])
 	{
-		return [
+		$types = [
 			'menuitems'             => 'Menu',
 			'homepage'              => 'Homepage',
 			'date'                  => 'Date.Date',
@@ -636,31 +669,38 @@ class Conditions
 			'cookieconfirm'         => 'Cookieconfirm',
 			'php'                   => 'Php',
 		];
+
+		if (empty($only_types))
+		{
+			return $types;
+		}
+
+		return array_intersect_key($types, array_flip($only_types));
 	}
 
-	private static function getTypeId($type)
+	private static function getType(&$type, $only_types = [])
 	{
-		$condition_types = self::getTypes();
+		$types = self::getTypes($only_types);
 
-		if (isset($condition_types[$type]))
+		if (isset($types[$type]))
 		{
-			return $type;
+			return $types[$type];
 		}
 
 		// Make it plural
 		$type = rtrim($type, 's') . 's';
 
-		if (isset($condition_types[$type]))
+		if (isset($types[$type]))
 		{
-			return $type;
+			return $types[$type];
 		}
 
 		// Replace incorrect plural endings
 		$type = str_replace('ys', 'ies', $type);
 
-		if (isset($condition_types[$type]))
+		if (isset($types[$type]))
 		{
-			return $type;
+			return $types[$type];
 		}
 
 		return false;
@@ -722,41 +762,5 @@ class Conditions
 			'User.Grouplevel',
 			'Tag',
 		];
-	}
-
-	private static function getThirdPartyExtensions()
-	{
-		return [
-			'Easyblog',
-			'Flexicontent',
-			'Form2content',
-			'K2',
-			'Zoo',
-			'Akeebasubs',
-			'Hikashop',
-			'Mijoshop',
-			'Redshop',
-			'Virtuemart',
-			'Cookieconfirm',
-		];
-	}
-
-	private static function getInstalledExtensions()
-	{
-		if (!is_null(self::$installed_extensions))
-		{
-			return self::$installed_extensions;
-		}
-
-		$extensions = self::getThirdPartyExtensions();
-
-		self::$installed_extensions = [];
-
-		foreach ($extensions as $extension)
-		{
-			self::$installed_extensions[$extension] = Extension::isInstalled($extension);
-		}
-
-		return self::$installed_extensions;
 	}
 }

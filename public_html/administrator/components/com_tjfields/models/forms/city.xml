@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="hidden" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_CITY_CITY_ID" description="COM_TJFIELDS_FORM_DESC_CITY_CITY_ID" filter="safehtml" />
+		<field name="city" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_CITY_CITY" description="COM_TJFIELDS_FORM_DESC_CITY_CITY" required="true" filter="safehtml" />
+		<field name="country_id" type="countries" label="COM_TJFIELDS_FORM_LBL_CITY_SELECT_COUNTRY" description="COM_TJFIELDS_FORM_DESC_CITY_SELECT_COUNTRY" required="true" filter="safehtml" onchange="generateRegions();">
+			<option value="">COM_TJFIELDS_FILTER_SELECT_COUNTRY</option>
+		</field>
+		<field name="region_id" type="list" label="COM_TJFIELDS_FORM_LBL_CITY_SELECT_REGION" description="COM_TJFIELDS_FORM_DESC_CITY_SELECT_REGION" filter="safehtml" class="chzn-done" data-chosen="com_tjfields">
+			<option value="">COM_TJFIELDS_FILTER_SELECT_REGION</option>
+		</field>
+		<field name="city_jtext" type="text" size="40" class="inputbox" label="COM_TJFIELDS_FORM_LBL_CITY_CITY_JTEXT" description="COM_TJFIELDS_FORM_DESC_CITY_CITY_JTEXT" filter="safehtml" />
+	</fieldset>
+</form>

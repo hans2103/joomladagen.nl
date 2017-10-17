@@ -41,6 +41,8 @@ class Googlestorage extends Amazons3
 	{
 		parent::__construct();
 
+		Factory::getLog()->warning("The old Google Storage integration you are currently using, the one that makes use of the legacy S3 API, is deprecated and will be removed in a future version. Please switch to the new Upload to Google Storage (JSON API) integration.");
+
 		// You can't download directly to the browser
 		$this->can_download_to_browser = false;
 	}

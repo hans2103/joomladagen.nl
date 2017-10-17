@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonPricing extends SppagebuilderAddons {
 
@@ -14,10 +14,12 @@ class SppagebuilderAddonPricing extends SppagebuilderAddons {
 
 		$class = (isset($this->addon->settings->class) && $this->addon->settings->class) ? $this->addon->settings->class : '';
 		$title = (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
-		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
+		$heading_selector = (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'div';
 
 		//Options
+		$price_position = (isset($this->addon->settings->price_position) && $this->addon->settings->price_position) ? $this->addon->settings->price_position : 'before';
 		$price = (isset($this->addon->settings->price) && $this->addon->settings->price) ? $this->addon->settings->price : '';
+		$price_symbol = (isset($this->addon->settings->price_symbol) && $this->addon->settings->price_symbol) ? $this->addon->settings->price_symbol : '';
 		$duration = (isset($this->addon->settings->duration) && $this->addon->settings->duration) ? $this->addon->settings->duration : '';
 		$pricing_content = (isset($this->addon->settings->pricing_content) && $this->addon->settings->pricing_content) ? $this->addon->settings->pricing_content : '';
 		$button_text = (isset($this->addon->settings->button_text) && $this->addon->settings->button_text) ? $this->addon->settings->button_text : '';
@@ -43,12 +45,15 @@ class SppagebuilderAddonPricing extends SppagebuilderAddons {
 
 		$button_output = ($button_text) ? '<a' . $button_attribs . ' id="btn-'. $this->addon->id .'" class="sppb-btn' . $button_classes . '">' . $button_text . '</a>' : '';
 
+		$pricesymbol = ($price_symbol) ? '<span class="sppb-pricing-price-symbol">' . $price_symbol . '</span>' : '';
 		//Output
 		$output  = '<div class="sppb-addon sppb-addon-pricing-table ' . $alignment . ' ' . $class . '">';
 		$output .= '<div class="sppb-pricing-box '. $featured .'">';
 		$output .= '<div class="sppb-pricing-header">';
-		$output .= ($title) ? '<div class="sppb-pricing-title">' . $title . '</div>' : '';
-		$output .= ($price) ? '<span class="sppb-pricing-price">' . $price . '</span>' : '';
+		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title sppb-pricing-title">' . $title . '</'.$heading_selector.'>' : '';
+		if($price_position == 'before' ){
+			$output .= ($price) ? '<span class="sppb-pricing-price">' . $pricesymbol . $price . '</span>' : '';
+		}
 		$output .= ($duration) ? '<span class="sppb-pricing-duration">' . $duration . '</span>' : '';
 		$output .= '</div>';
 
@@ -65,7 +70,9 @@ class SppagebuilderAddonPricing extends SppagebuilderAddons {
 			$output .= '</ul>';
 			$output .= '</div>';
 		}
-
+		if($price_position == 'after' ){
+			$output .= ($price) ? '<span class="sppb-pricing-price after">' . $pricesymbol . $price . '</span>' : '';
+		}
 		$output .= '<div class="sppb-pricing-footer">';
 		$output .= $button_output;
 		$output .= '</div>';
@@ -79,6 +86,10 @@ class SppagebuilderAddonPricing extends SppagebuilderAddons {
 		$addon_id = '#sppb-addon-' . $this->addon->id;
 		$css = '';
 		$style = (isset($this->addon->settings->global_background_color) && $this->addon->settings->global_background_color) ? 'border: 0; background-color: '. $this->addon->settings->global_background_color .';' : '';
+		$price_style = (isset($this->addon->settings->price_font_size) && $this->addon->settings->price_font_size) ? 'font-size: '. $this->addon->settings->price_font_size .'px;' : '';
+		$price_symbol_style = (isset($this->addon->settings->price_symbol_font_size) && $this->addon->settings->price_symbol_font_size) ? 'font-size: '. $this->addon->settings->price_symbol_font_size .'px;' : '';
+		$duration_style = (isset($this->addon->settings->duration_font_size) && $this->addon->settings->duration_font_size) ? 'font-size: '. $this->addon->settings->duration_font_size .'px;' : '';
+		$pricing_content_style = (isset($this->addon->settings->pricing_content_color) && $this->addon->settings->pricing_content_color) ? 'color: '. $this->addon->settings->pricing_content_color .';' : '';
 
 		if($style) {
 			$css .= $addon_id . ' .sppb-pricing-box {';
@@ -86,6 +97,29 @@ class SppagebuilderAddonPricing extends SppagebuilderAddons {
 			$css .= '}';
 		}
 
+		if($price_style){
+			$css .= $addon_id . ' .sppb-pricing-price {';
+			$css .= $price_style;
+			$css .= '}';
+		}
+
+		if($price_symbol_style){
+			$css .= $addon_id . ' .sppb-pricing-price-symbol {';
+			$css .= $price_symbol_style;
+			$css .= '}';
+		}
+
+		if($duration_style){
+			$css .= $addon_id . ' .sppb-pricing-duration {';
+			$css .= $duration_style;
+			$css .= '}';
+		}
+
+		if($pricing_content_style){
+			$css .= $addon_id . ' .sppb-pricing-features {';
+			$css .= $pricing_content_style;
+			$css .= '}';
+		}
 		// Button css
 		$layout_path = JPATH_ROOT . '/components/com_sppagebuilder/layouts';
 		$css_path = new JLayoutFile('addon.css.button', $layout_path);

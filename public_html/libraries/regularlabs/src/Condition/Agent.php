@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -64,7 +64,7 @@ abstract class Agent
 	 */
 	public function passBrowser($browser = '')
 	{
-		if (!$browser)
+		if ( ! $browser)
 		{
 			return false;
 		}
@@ -86,7 +86,7 @@ abstract class Agent
 	 */
 	private function getDevice()
 	{
-		if (!is_null($this->device))
+		if ( ! is_null($this->device))
 		{
 			return $this->device;
 		}
@@ -117,7 +117,7 @@ abstract class Agent
 	 */
 	private function getAgent()
 	{
-		if (!is_null($this->agent))
+		if ( ! is_null($this->agent))
 		{
 			return $this->agent;
 		}

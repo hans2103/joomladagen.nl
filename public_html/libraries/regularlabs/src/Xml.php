@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -50,7 +50,7 @@ class Xml
 			$xml = simplexml_load_string($url, "SimpleXMLElement", LIBXML_NONET | LIBXML_NOCDATA);
 		}
 
-		if (!@count($xml))
+		if ( ! @count($xml))
 		{
 			return Cache::set(
 				$hash,
@@ -60,7 +60,7 @@ class Xml
 
 		if ($root)
 		{
-			if (!isset($xml->{$root}))
+			if ( ! isset($xml->{$root}))
 			{
 				return Cache::set(
 					$hash,

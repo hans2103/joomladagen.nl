@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,7 +27,7 @@ class Date
 	 */
 	public static function fix($date)
 	{
-		if (!$date)
+		if ( ! $date)
 		{
 			return null;
 		}
@@ -36,7 +36,7 @@ class Date
 
 		// Check if date has correct syntax: 00-00-00 00:00:00
 		// If so, the date format is correct
-		if (!RegEx::match('^[0-9]+-[0-9]+-[0-9]+( [0-9][0-9]:[0-9][0-9]:[0-9][0-9])?$', $date))
+		if ( ! RegEx::match('^[0-9]+-[0-9]+-[0-9]+( [0-9][0-9]:[0-9][0-9]:[0-9][0-9])?$', $date))
 		{
 			return $date;
 		}

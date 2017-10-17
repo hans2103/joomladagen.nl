@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonClients extends SppagebuilderAddons {
 
@@ -31,7 +31,7 @@ class SppagebuilderAddonClients extends SppagebuilderAddons {
 		foreach ($this->addon->settings->sp_clients_item as $key => $value) {
 			if($value->image) {
 				$output .= '<div class="' . $columns . '">';
-				if($value->url) $output .= '<a target="_blank" href="'. $value->url .'">';
+				if($value->url) $output .= '<a target="_blank" rel="nofollow" href="'. $value->url .'">';
 				$output .= '<img class="sppb-img-responsive" src="' . $value->image . '" alt="' . $value->title . '">';
 				if($value->url) $output .= '</a>';
 				$output .= '</div>';

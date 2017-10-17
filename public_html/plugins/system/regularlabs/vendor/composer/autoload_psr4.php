@@ -5,6 +5,6 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir   = dirname($vendorDir);
 
-return array(
-	'RegularLabs\\LibraryPlugin\\' => array($baseDir . '/src'),
-);
+return [
+	'RegularLabs\\Plugin\\System\\RegularLabs\\' => [$baseDir . '/src'],
+];

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -10,6 +10,8 @@
  */
 
 namespace RegularLabs\Library;
+
+use Joomla\String\Normalise;
 
 defined('_JEXEC') or die;
 
@@ -33,15 +35,14 @@ class StringHelper
 	{
 		if (is_array($data))
 		{
-			array_walk($data, function (&$part, $key, $quote_style, $encoding)
-			{
+			array_walk($data, function (&$part, $key, $quote_style, $encoding) {
 				$part = self::html_entity_decoder($part, $quote_style, $encoding);
 			}, $quote_style, $encoding);
 
 			return $data;
 		}
 
-		if (!is_string($data))
+		if ( ! is_string($data))
 		{
 			return $data;
 		}
@@ -138,7 +139,7 @@ class StringHelper
 		}
 
 		// No delimiters given or found
-		if (empty($delimiters) || !self::contains($string, $delimiters))
+		if (empty($delimiters) || ! self::contains($string, $delimiters))
 		{
 			return [$string];
 		}
@@ -146,7 +147,7 @@ class StringHelper
 		// preg_quote all delimiters
 		$array = preg_split('#' . RegEx::quote($delimiters) . '#s', $string, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
 
-		if (!$maximize_parts)
+		if ( ! $maximize_parts)
 		{
 			return $array;
 		}
@@ -155,7 +156,7 @@ class StringHelper
 		foreach ($array as $part)
 		{
 			// First element, add to new array
-			if (!count($new_array))
+			if ( ! count($new_array))
 			{
 				$new_array[] = $part;
 				continue;
@@ -220,7 +221,7 @@ class StringHelper
 			return $string;
 		}
 
-		if (!function_exists('iconv'))
+		if ( ! function_exists('iconv'))
 		{
 			// Still need to find a stable fallback
 			return $string;
@@ -234,5 +235,26 @@ class StringHelper
 		}
 
 		return $utf8_string;
+	}
+
+	/**
+	 * Converts a camelcased string to a underscore separated string
+	 * eg: FooBar => foo_bar
+	 *
+	 * @param string $string
+	 * @param bool   $tolowercase
+	 *
+	 * @return string
+	 */
+	public static function camelToUnderscore($string = '', $tolowercase = true)
+	{
+		$string = Normalise::toUnderscoreSeparated(Normalise::fromCamelCase($string));
+
+		if ( ! $tolowercase)
+		{
+			return $string;
+		}
+
+		return strtolower($string);
 	}
 }

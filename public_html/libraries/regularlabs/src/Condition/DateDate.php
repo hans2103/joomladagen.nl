@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -24,7 +24,7 @@ class DateDate
 {
 	public function pass()
 	{
-		if (!$this->params->publish_up && !$this->params->publish_down)
+		if ( ! $this->params->publish_up && ! $this->params->publish_down)
 		{
 			// no date range set
 			return ($this->include_type == 'include');
@@ -39,7 +39,7 @@ class DateDate
 
 		if (isset($this->params->recurring) && $this->params->recurring)
 		{
-			if (!(int) $this->params->publish_up || !(int) $this->params->publish_down)
+			if ( ! (int) $this->params->publish_up || ! (int) $this->params->publish_down)
 			{
 				// no date range set
 				return ($this->include_type == 'include');

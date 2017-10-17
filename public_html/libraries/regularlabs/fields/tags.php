@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -26,24 +26,55 @@ class JFormFieldRL_Tags extends \RegularLabs\Library\Field
 	{
 		$this->params = $this->element->attributes();
 
-		$size      = (int) $this->get('size');
-		$use_names = $this->get('use_names');
+		$size        = (int) $this->get('size');
+		$simple      = (int) $this->get('simple');
+		$show_ignore = $this->get('show_ignore');
+		$use_names   = $this->get('use_names');
 
+		if ($show_ignore && in_array('-1', $this->value))
+		{
+			$this->value = ['-1'];
+		}
+
+		return $this->selectListAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'simple', 'show_ignore', 'use_names'),
+			$simple
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getOptions(
+			$input->getBool('show_all'),
+			$input->getBool('use_names')
+		);
+
+		$name   = $input->getString('name', $this->type);
+		$id     = $input->get('id', strtolower($name));
+		$value  = json_decode($input->getString('value', '[]'));
+		$size   = $input->getInt('size');
+		$simple = $input->getBool('simple');
+
+		return $this->selectList($options, $name, $value, $id, $size, true, $simple);
+	}
+
+	protected function getOptions($show_ignore = false, $use_names = false, $value = [])
+	{
 		// assemble items to the array
 		$options = [];
-		if ($this->get('show_ignore'))
+
+		if ($show_ignore)
 		{
-			if (in_array('-1', $this->value))
-			{
-				$this->value = ['-1'];
-			}
 			$options[] = JHtml::_('select.option', '-1', '- ' . JText::_('RL_IGNORE') . ' -');
 			$options[] = JHtml::_('select.option', '-', '&nbsp;', 'value', 'text', true);
 		}
 
 		$options = array_merge($options, $this->getTags($use_names));
 
-		return $this->selectList($options, $this->name, $this->value, $this->id, $size, true);
+		return $options;
 	}
 
 	protected function getTags($use_names)

@@ -1,0 +1,916 @@
+
+/**** css customised for popover of "Please login this content" ****/
+.popover-inner{
+width: auto !important;
+}
+
+
+.techjoomla-bootstrap.native-jlike .likes .popover{
+top: -7px !important;
+left:87px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .likes .popover-inner{
+width: auto !important;
+box-shadow: 0px !important;
+padding:0px !important;
+background: none repeat scroll 0 0 transparent !important;
+}
+
+.techjoomla-bootstrap.native-jlike .likes .popover-inner .popover-title{
+display:none;
+}
+.techjoomla-bootstrap.native-jlike .likes .popover.right .arrow:after {
+   // bottom: -13px !important;
+}
+/**** css customised for popover of "Please login this content" ****/
+
+.techjoomla-bootstrap.native-jlike .jlike-btn-35
+{
+	/* height:30px;*/
+	 padding:5px 12px;
+	 line-height:18px;
+}
+
+.techjoomla-bootstrap.native-jlike div.pull-right .jlikeinnerdiv input#fromdate ,
+.techjoomla-bootstrap.native-jlike div.pull-right .jlikeinnerdiv input#todate{
+width:100px !important;
+}
+.techjoomla-bootstrap.native-jlike .annotation-snippet .jlike-form-actions .labels-space .dropdown-toggle{
+height: 30px !important;
+}
+
+.techjoomla-bootstrap.native-jlike div.pull-right .jlikeinnerdiv{
+float:left;
+margin-right:2px;
+}
+
+.techjoomla-bootstrap.native-jlike .pwltcb .pwltcb_img
+{
+width:32px;
+height:32px;
+border: 1px solid #dddddd;
+}
+
+.techjoomla-bootstrap.native-jlike select {
+    width: auto !important;
+}
+.techjoomla-bootstrap.native-jlike .element-invisible
+{
+display:none;
+}
+
+.techjoomla-bootstrap.native-jlike .likes .annotation-snippet .media .userimage{
+height: 45px;
+ width: 45px;
+}
+
+.techjoomla-bootstrap.native-jlike .likes #jlike-container .icon-thumbs-up,
+.techjoomla-bootstrap.native-jlike .likes #jlike-container .icon-thumbs-down
+{
+width:20px;
+}
+.likes .btn-success:hover {
+    background-color: #51A351 !important;
+}
+.techjoomla-bootstrap.native-jlike .likes .btn-danger:hover {
+    background-color: #BD362F !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .meunlike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meundislike{
+   background-color: #E6E6E6 !important;
+		color:	#333333 !important;
+}
+.techjoomla-bootstrap.native-jlike .likes .pwltcb_li
+{
+cursor:pointer;
+float:left;
+padding: 2px !important;
+}
+.techjoomla-bootstrap.native-jlike .likes .pwltcb_ul
+{
+list-style-type: none !important;
+padding: 0px !important;
+margin: 0px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike-loading-image{
+    background: url("../images/ajax-loading.gif") no-repeat scroll 0 0 transparent;
+    height: 16px;
+    margin: 3px 0;
+    padding: 0 5px;
+    width: 16px;
+    float: left;
+}
+
+.techjoomla-bootstrap.native-jlike .likes
+{
+position:relative;
+
+}
+
+.techjoomla-bootstrap.native-jlike .likes .annotation-snippet .annotationplace{
+  height: 35px;
+  margin-left: 5px;
+  width: auto;
+}
+.techjoomla-bootstrap.native-jlike .likes .annotation-snippet
+{
+position: absolute;
+visibility:hidden;
+margin-top: 30px;
+top: 0;
+left: 0;
+}
+.techjoomla-bootstrap.native-jlike .innerdiv {position: absolute;margin-top: 5px; left:2px ;background:#fff;z-index: 1;}
+.techjoomla-bootstrap.native-jlike .innerdiv {border: 1px solid #323232}
+.techjoomla-bootstrap.native-jlike .innerdiv .annotationNub {border-bottom-color: #323232;}
+.techjoomla-bootstrap.native-jlike .innerdiv .annotationNub {top: -10px;}
+.techjoomla-bootstrap.native-jlike .innerdiv .annotationNub {left: 6px;}
+.techjoomla-bootstrap.native-jlike .annotationNub {border: 5px solid transparent;}
+.techjoomla-bootstrap.native-jlike .annotationNub, .nibtip { height: 0;line-height: 0;position: absolute;width: 0;}
+.pam {
+    padding: 10px;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet #label-start{
+position: relative;
+height:20px;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet .user-labels
+{
+position:absolute;
+width: 98% !important;
+margin: 0px  !important;
+padding: 0px !important;
+list-style-type: none !important;
+visibility:hidden;
+}
+.techjoomla-bootstrap.native-jlike .annotation-snippet .labels-space{
+position:relative
+}
+
+.techjoomla-bootstrap.native-jlike .like-success-msg
+{
+margin-bottom:2px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet .labels-space .caret
+{
+margin-bottom: 7px;
+}
+.techjoomla-bootstrap.native-jlike .annotation-snippet .jlike-tag-append-button .icon-plus-sign
+{
+	margin-bottom: 5px;
+	margin-left: -6px;
+}
+.techjoomla-bootstrap.native-jlike .annotation-snippet .user-labels #jlike-add-label .input-append {
+    width: 98%;
+}
+.input-append #appendedInputButton
+{
+width: 71%!important;
+}
+
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet .labels-space  button{
+	border: 1px solid #ccc;
+	padding: 5px 12px;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet .labels-space .jlike-btn{
+	font-size: 12px;
+	background-color: #FFFFFF !important;
+	background-image: none !important;
+	width:85%;
+	color: #ccc;
+
+}
+
+.techjoomla-bootstrap.native-jlike .annotation-snippet .labels-space .dropdown-toggle{
+	margin-top: 0px;
+	width:15%;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container .melike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meunlike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meundislike,
+.techjoomla-bootstrap.native-jlike #jlike-container .medislike {
+
+    float: left;
+    font-weight: bold;
+}
+/*#jlike-container .like-snippet a:focus, #jlike-container .like-snippet a:hover{
+color:#095197 !important;
+}*/
+
+.techjoomla-bootstrap.native-jlike #jlike-container .likeCountButton ,
+.techjoomla-bootstrap.native-jlike #jlike-container .dislikeCountButton {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #C1C1C1;
+    height: 14px;
+    line-height: 14px;
+    margin-left: 6px;
+    min-width: 15px;
+    padding: 1px 2px;
+    text-align: center;
+    white-space: nowrap;
+		max-width:25px;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .likeCountButtonNub ,
+#jlike-container .dislikeCountButtonNub {
+    height: 0;
+    left: 2px;
+    position: relative;
+    top: -14px;
+    width: 5px;
+    z-index: 2;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .likeCountButtonNub s ,
+.techjoomla-bootstrap.native-jlike #jlike-container .dislikeCountButtonNub s {
+    border-color: transparent #D7D7D7;
+    border-style: solid;
+    border-width: 4px 5px 4px 0;
+    display: block;
+    position: relative;
+    top: 1px;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container .likeCountButtonNub s ,
+.techjoomla-bootstrap.native-jlike #jlike-container .dislikeCountButtonNub s {
+    border-color: transparent #D7D7D7;
+    border-style: solid;
+    border-width: 4px 5px 4px 0;
+    display: block;
+    position: relative;
+    top: 1px;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .likecountdiv ,
+.techjoomla-bootstrap.native-jlike #jlike-container .dislikecountdiv{
+margin: 7px 4px 0 0;
+float:left;
+}
+
+
+
+.techjoomla-bootstrap.native-jlike .annotation .openlable{
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.techjoomla-bootstrap.native-jlike .annotation .openlable .user-labels
+{
+visibility:visible;
+display:block !important;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation .openlable  .jlike-tag-append-text
+{
+	width:70% !important;
+	display: inline-block;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation .openlable  .jlike-tag-append-button
+{
+width:15% !important;
+}
+.techjoomla-bootstrap.native-jlike .span2 .icon-chevron-down{
+	float: right;
+	margin: 2px;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation .user-labels li{
+padding: 3px 0 5px 10px !important;
+}
+.techjoomla-bootstrap.native-jlike .annotation .user-labels li.divider{
+padding: 0px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .annotation .control-group {
+margin-bottom: 1px !important;
+margin-top: 1px !important;
+}
+/*
+.techjoomla-bootstrap .form-horizontal .form-actions {
+    padding: 17px 20px 18px !important;
+}*/
+
+.techjoomla-bootstrap.native-jlike .annotation .jlike-form-actions {
+margin-top: 5px !important;
+background: #d5d5d5;
+padding: 5px;
+text-align:center;
+}
+
+.techjoomla-bootstrap.native-jlike .form-horizontal .radio.btn-group input[type="radio"] {
+    display: none;
+}
+
+
+
+.techjoomla-bootstrap.native-jlike #jlike-container .like-snippet-text{
+padding-left:15px;
+}
+
+
+/*
+*  Added to get Jlike view**/
+.techjoomla-bootstrap.native-jlike #jlike-container .melike,#jlike-container .meunlike{
+    -moz-border-radius: 3px 0 0 3px;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container a.medislike {
+    background-position: 0 -48px !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container a.meunlike{
+    background-position: 0 -96px !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container a.meundislike {
+	background-position: 0 -120px !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container {
+    height: 35px;
+    line-height: 24px;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container a.medislike,
+.techjoomla-bootstrap.native-jlike #jlike-container a.meundislike{
+		 border-left: 0 none;
+    background-position: 0 -48px;
+    border-radius: 0 3px 3px 0;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container .melike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meunlike,
+.techjoomla-bootstrap.native-jlike #jlike-container .medislike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meundislike {
+    border: 1px solid #CCCCCC;
+    display: block;
+    float: left;
+    font-weight: bold;
+    margin: 4px 0;
+    padding: 0 10px;
+    text-decoration: none;
+      border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container .melike:hover {
+    background-position: 0 -24px !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container a.medislike:hover {
+    background-position: 0 -72px !important;
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .meunlike,
+.techjoomla-bootstrap.native-jlike #jlike-container .meundislike {
+    background-position: 0 -96px;
+    color: #FFFFFF;
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2);
+}
+.techjoomla-bootstrap.native-jlike #jlike-container .meundislike {
+    background-position: 0 -120px;
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container .meunlike, .techjoomla-bootstrap.native-jlike #jlike-container .meundislike {
+    background-position: 0 -96px;
+    color: #FFFFFF;
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.techjoomla-bootstrap.native-jlike #jlike-container a:hover, .techjoomla-bootstrap.native-jlike #jlike-container a:active, .techjoomla-bootstrap.native-jlike #jlike-container a:focus {
+color: #095197 !important;
+text-decoration: none !important;
+}
+
+//Comments Styling
+
+.techjoomla-bootstrap.native-jlike .jlike_smiley{
+background-repeat: no-repeat;
+}
+
+.techjoomla-bootstrap.native-jlike div.jlike_smiley{
+z-index:10;
+}
+
+.techjoomla-bootstrap.native-jlike button.jlike_smiley{
+background: url(../images/smileys/s2.png) -22px -25px !important;
+background-repeat: no-repeat ;
+width: 15px;
+height: 25px;
+border:0px !important;
+cursor:pointer;
+float:right;
+box-shadow:none !important;
+padding:0px !important;
+}
+
+
+.techjoomla-bootstrap.native-jlike div.pointer,
+.techjoomla-bootstrap.native-jlike .jlike_pointer{
+cursor:pointer;
+}
+.techjoomla-bootstrap.native-jlike .jlike_smileybox {/*manoj*/
+position:absolute;
+border: 1px solid #999;
+right: 0px;
+bottom: 25px;
+background: none repeat scroll 0 0 white;
+width: 50px;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_smileybox table,
+.techjoomla-bootstrap.native-jlike .jlike_smileybox tr, .jlike_smileybox td{
+border:0px !important;
+margin:0px !important;/*manoj*/
+padding:0px !important;/*manoj*/
+}
+.techjoomla-bootstrap.native-jlike .jlike_smileybox table img{
+	padding:5px  !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_commentbtn{
+
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_cancelbtn{
+
+}
+.techjoomla-bootstrap.native-jlike .jlike_cancelbtn_new_comment{
+float:right; margin-right:1%;
+}
+/*jlike_cancelbtn_new_comment */
+.techjoomla-bootstrap.native-jlike .jlike_renderedComment{
+background-color:white !important; border:0px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_userAvtar{
+display:inline-block;
+margin-top:0%;
+}
+
+.techjoomla-bootstrap.native-jlike ul.dropdown-menu #lioldest a:hover{
+background-color: #CCCCCC;
+background-image: none;
+
+color: #000000;
+text-decoration: none;
+}
+
+.techjoomla-bootstrap.native-jlike ul.dropdown-menu #lilatest a:hover{
+background-color: #CCCCCC;
+background-image: none;
+color: #000000;
+text-decoration: none;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_comment_msg{
+font-weight:bold;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_caret_margin{
+margin-top:6%;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_box_width{
+width:100%;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_position_relative{
+	position:relative;
+}
+.techjoomla-bootstrap.native-jlike .jlike_edit_dropdown{
+margin-left:86.3% !important;
+min-width:85px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_top_margin{
+margin-top:4%;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_display_none{
+display:none ;
+}
+.techjoomla-bootstrap.native-jlike .jlike_display_block{
+display:block;
+}
+.techjoomla-bootstrap.native-jlike .jlike_textarea{
+overflow-y:hidden;
+resize:vertical;
+min-height:56px !important;
+background-color: white !important;
+border:1px solid gray;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_display_inline_blk{
+display:inline-block;
+}
+.techjoomla-bootstrap.native-jlike .jlike_viewCommentsMsg{
+margin-top: 30px;
+}
+.techjoomla-bootstrap.native-jlike .jlike_center{
+margin-left:50%;
+}
+.techjoomla-bootstrap.native-jlike .jlike_add_comment{
+padding-top:5px;
+}
+.techjoomla-bootstrap.native-jlike .jlike_saved_comment{
+border: 0px !important;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_maring_left_span11{
+margin-left:1.2% !important;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_comment_padding{
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_userImg_padding{
+padding-top:10%;
+}
+.techjoomla-bootstrap.native-jlike .jlike_no_radius{
+border-radius:0px !important;
+}
+.techjoomla-bootstrap.native-jlike .jlike_comment_border_shadow{
+box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1) inset !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_margin_left{
+margin-left:1%;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_like_icon_margin{
+margin-right: -1px;
+margin-top:-1%;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_margin_from_left{
+margin-left:2%;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_like_dislike_count{
+margin-left: 0.5%;
+}
+.techjoomla-bootstrap.native-jlike .jlike_list_style_type{
+list-style-type:none !important;
+}
+
+@media all and (max-width: 480px) and (min-width: 100px) {
+  .techjoomla-bootstrap.native-jlike .jlike_comments_container .media-body {
+    padding-left: 0px !important;
+    overflow:visible !important;
+  }
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comments_container .media-body {
+overflow:visible !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comments_container .media {
+overflow:visible !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_hr_margin{
+margin:10px !important;;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_media_body{
+padding-left:48px;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comment_time{
+color:rgb(137, 143, 156);
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_smiley_container{
+z-index:1001;
+margin-top: -20px;
+float: right;
+margin-right:6px;
+height:15px;
+}
+.techjoomla-bootstrap.native-jlike .jlike_loadbar{
+padding-left:50%;
+}
+.techjoomla-bootstrap.native-jlike .jlike_btn_container{
+position:relative;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_cancel_comment_btn{
+float:right;
+}
+.techjoomla-bootstrap.native-jlike .jlike_cancel_btn{
+margin-right:5px;
+}
+.techjoomla-bootstrap.native-jlike .jlike-icon-time{
+	text-indent:-9999px;
+	background:url("../images/jlike_glyphicons-halflings.png") -23px -22px no-repeat;
+	width:20px;
+	height:20px;
+	padding:0;
+	position:relative;
+}
+.techjoomla-bootstrap.native-jlike .jlike_commment_padding{
+padding-top:7px;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comment_padding_top{
+padding-top:5px;
+word-break: break-all;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comment_padding_right{
+padding-right:5px;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_text_decoration a{
+text-decoration:none !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_comments_container .icon-pencil{
+opacity:0 !important;
+font-size:0px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_commentingArea:hover .icon-pencil{
+opacity:1 !important;
+}
+.techjoomla-bootstrap.native-jlike .jlike_tp_margin{
+margin-top:2px !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike_count_box{
+margin-left: 4px;
+padding: 0 3px;
+display: inline;
+position: relative;
+width: 25px;
+height: 15px;
+background: rgb(255, 255, 255);
+border-radius: 1px;
+border-color: rgb(127, 255, 212);
+border: 1px solid rgb(215, 215, 215);
+line-height: 14px;
+z-index:0;
+}
+
+
+.techjoomla-bootstrap.native-jlike .jlike_count_box:after{
+content: "";
+position: absolute;
+top: 3px;
+left: -5px;
+border-style: solid;
+border-width: 5px 5px 5px 0px;
+border-color: transparent #CBCFD4;
+display: block;
+width: 0;
+z-index: 1;
+}
+.techjoomla-bootstrap.native-jlike .avoid-clicks{
+	  pointer-events: none;
+
+}
+.techjoomla-bootstrap.native-jlike .jlike-comment-header{
+	border: 1px solid #CCCCCC !important;
+	padding:5px;
+}
+/** j25 */
+
+/* commented becoz comment icon looking wired on most of the templates
+.jlike_icon_comment_pos
+{
+background-position: -240px -121px !important;
+font-size: 0px !important;
+}
+*/
+
+ul li .techjoomla-bootstrap.native-jlike .likes a
+{
+line-height:22px !important;
+}
+
+/** JSN NEON template style overide **/
+
+.techjoomla-bootstrap.native-jlike .likes {
+text-align: left !important;
+}
+
+/*.t3-mainbody .techjoomla-bootstrap.native-jlike input, button, select, textarea {
+font-size: small !important;
+}*/
+
+.jlike_comment_sort{
+position:relative;
+}
+
+/** override Changes for jComment */
+#jc .rbox{
+overflow:visible !important;
+}
+
+.techjoomla-bootstrap.native-jlike .jlike-img-border{
+border: 1px solid #dddddd;
+}
+/*Added by vm*/
+
+/* Widths */
+.techjoomla-bootstrap.native-jlike .jlike_width_1{width:1%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_5{width:5%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_10{width:10%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_15{width:15%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_20{width:20%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_25{width:25%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_30{width:30%;}
+.techjoomla-bootstrap.native-jlike .jlike_width_auto{width: auto !important; max-width:150px;}
+.techjoomla-bootstrap.native-jlike .jlike_mylikeNoteStyle{width: 100%; height: 100%;}
+
+.techjoomla-bootstrap #recommenduserbtn{
+ margin:4px;
+}
+
+.jlike-wrapper .allUserAvaiable:nth-child(4n+1){
+	clear: left;
+	margin-left:0px;
+}
+
+.jlike-wrapper .allUserAvaiable{
+ cursor:pointer;
+ max-width:200px !important;
+ list-style-type: none;
+}
+
+.jlike-wrapper #jlike-users-list{
+ margin-left:0px;
+ overflow-x: hidden;
+ padding-left: 0px;
+}
+
+.jlike-wrapper .usersContainer{
+}
+
+.jlike-wrapper .user_avatar{
+ margin-right:10px;
+ padding:0;
+}
+
+.jlike-wrapper .contacts_check{
+ visibility:hidden;
+}
+
+.jlike-wrapper .jlike_pagination{
+ margin-left:0px;
+}
+
+.jlike_msg_container {
+ overflow:auto;
+}
+
+.jlike_msg{
+ max-height:80px; max-width:150px;
+}
+
+@media (max-width:767px){
+	.techjoomla-bootstrap .jlike_mylikeNoteStyle{
+		width:90%;
+	}
+}
+.jl_padding{padding: 4px !important;}
+
+.say-something-for-recomendation textarea
+{
+	width:100%;
+}
+
+.jlike-recommend .recommend-btn{
+ margin-top: 5px;
+ margin-left: 5px;
+}
+
+.jlike-recommend .assign-btn{
+ margin-top: 5px;
+ }
+
+#jlike-add-label .jlike-tag-append-text
+ {
+    font-size: initial;
+}
+
+.jlike-recommend {
+	text-align: center;
+}
+
+.recousername {
+	word-wrap: break-word;
+	width: 50%;
+	float: right;
+}
+
+/* change button style */
+.jlike-wrapper .btn_jlike_style{
+	display: inline-block;
+	padding: 4px 6px !important;
+	margin-bottom: 0;
+	font-size: 13px;
+	line-height: 18px;
+	text-align: center !important;
+	vertical-align: middle;
+	cursor: pointer !important;
+	color: #333 !important;
+	text-shadow: 0 1px 1px rgba(255,255,255,0.75) !important;
+	background-color: #f5f5f5 !important;
+	border-radius:2px !important;
+	border:1px solid #D2CFCF !important;
+	margin-right:2px;
+}
+
+.jlike-wrapper #start_date_img{
+	display: inline-block;
+	padding: 4px 6px !important;
+	margin-bottom: 0;
+	font-size: 13px;
+	line-height: 18px;
+	text-align: center !important;
+	vertical-align: middle;
+	cursor: pointer !important;
+	color: #333;
+	background-color: #f5f5f5 !important;
+	border-radius:2px !important;
+	border:1px solid #D2CFCF !important;
+	margin-right:2px;
+}
+
+.jlike-wrapper #due_date_img{
+		display: inline-block;
+	padding: 4px 6px !important;
+	margin-bottom: 0;
+	font-size: 13px;
+	line-height: 18px;
+	text-align: center !important;
+	vertical-align: middle;
+	cursor: pointer !important;
+	color: #333;
+	background-color: #f5f5f5 !important;
+	border-radius:2px !important;
+	border:1px solid #D2CFCF !important;
+	margin-right:2px;
+}
+.jcalender_button{
+	display: -webkit-inline-box !important;
+}
+.jlike-commentbox-height{
+	height: auto !important;
+}
+.jlike-uber-padding{
+	padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+.jlike-calender-div{
+	display: inline-flex !important;
+    margin-bottom: 0px !important;
+}
+.jlike-thumbnail-margin{
+	margin: 5px !important;
+}
+.recomment-popup-form div#onlysubuser_chzn {
+	width: initial !important;
+}
+/*recommend popup*/
+.recommend-popup-div div#system-message-container {display: none;}
+.recommend-popup .recommend-popup-div div#system-message-container {display: block !important;}
+.recommend-popup .modal-footer {position: absolute; bottom: 0; width: calc(100% - 60px); background-color: white;}
+.recommend-popup .modal-body {overflow-y: scroll; max-height: 100%; height: calc(100vh - 150px);}
+.recommend-popup form#adminForm {margin: 0; padding: 0;}
+html.recommend-popup,html.recommend-popup body,html.recommend-popup .techjoomla-bootstrap,html.recommend-popup .jlike-wrapper,html.recommend-popup form#adminForm {height: 100%;}
+html.recommend-popup body div#system-message-container {display: none;}
+.techjoomla-bootstrap.recommend-popup-div .input-append.jlike-calender-div + .techjoomla-bootstrap.recommend-popup-div .input-append.jlike-calender-div {margin-top: 8px;}
+.techjoomla-bootstrap.recommend-popup-div #adminForm div#filter-bar,.techjoomla-bootstrap.recommend-popup-div #adminForm .input-append.jlike-calender-div:first-child {
+    margin-bottom: 8px !important;
+}
+.recommend-popup-div #enrolGroups{
+	display:none;
+}
+.jlike_enrolUsers #enrolGroups,
+.jlike_enrolGroups #enrolUsers{
+	display:none !important;
+}
+.jlike_enrolUsers #enrolUsers,
+.jlike_enrolGroups #enrolGroups{
+	display:initial !important;
+}
+@media (max-width: 778px) {
+	.recommend-popup .modal-body {padding: 0 15px;}
+}
+.setgoal form#adminForm .js-calendar {
+	margin-top: 0px !important;
+}
+@media (min-width: 778px) {
+	.setgoal .modal-header h3 {margin-top: 0;}
+	.setgoal .modal-footer {position: fixed; width: calc(100% - 40px); bottom: 0;}
+}

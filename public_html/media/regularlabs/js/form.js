@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,7 +27,7 @@ var RegularLabsForm = null;
 
 			var type = $field.attr('type');
 
-			if (typeof( type ) == "undefined" && $field.prop("tagName").toLowerCase() == 'select') {
+			if (typeof type == "undefined" && $field.prop("tagName").toLowerCase() == 'select') {
 				type = 'select';
 			}
 
@@ -59,7 +59,7 @@ var RegularLabsForm = null;
 		},
 
 		prepareValue: function(value, escape) {
-			if (!isNaN(value) && value.indexOf('.') == -1) {
+			if (!isNaN(value) && value.indexOf('.') < 0) {
 				return parseInt(value);
 			}
 

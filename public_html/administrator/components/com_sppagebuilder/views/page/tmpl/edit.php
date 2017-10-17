@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 jimport('joomla.application.component.helper');
 require_once JPATH_COMPONENT .'/builder/classes/base.php';
 require_once JPATH_COMPONENT .'/builder/classes/config.php';
@@ -17,7 +17,6 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $doc = JFactory::getDocument();
 $doc->addScriptdeclaration('var pagebuilder_base="' . JURI::root() . '";');
-$doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/apps.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/jquery.minicolors.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/pbfont.css' );
 $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/css/sppagebuilder.css' );
@@ -34,7 +33,6 @@ $app = JFactory::getApplication();
 
 global $pageId;
 global $language;
-global $pageLayout;
 
 $pageId = $this->item->id;
 $language = $this->item->language;
@@ -56,8 +54,21 @@ if (!$this->item->text) {
   $this->item->text = SpPageBuilderAddonHelper::__($this->item->text);
   $doc->addScriptdeclaration('var initialState=' . $this->item->text . ';');
 }
-?>
 
+$conf   = JFactory::getConfig();
+$editor   = $conf->get('editor');
+if ($editor == 'jce') {
+  require_once(JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php');
+	wfimport('admin.models.editor');
+  $editor = new WFModelEditor();
+
+  $settings = $editor->getEditorSettings();
+
+  $app->triggerEvent('onBeforeWfEditorRender', array(&$settings));
+	echo $editor->render($settings);
+}
+
+?>
 
 <div class="sp-pagebuilder-admin">
 
@@ -81,7 +92,7 @@ if (!$this->item->text) {
 
     <?php if($this->item->id) { ?>
       <div class="sp-pagebuilder-btn-group">
-        <a id="btn-page-frontend-editor" target="_blank" href="javascript:;" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> <?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?> <small>(PRO)</small></a>
+        <a id="btn-page-frontend-editor" target="_blank" href="<?php echo JURI::root(true); ?>/index.php?option=com_sppagebuilder&amp;view=form&amp;id=<?php echo $this->item->id; ?>&amp;layout=edit" class="sp-pagebuilder-btn sp-pagebuilder-btn-info"><i class="fa fa-edit"></i> <?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?></a>
       </div>
 
       <div class="sp-pagebuilder-btn-group">
@@ -124,7 +135,6 @@ if (!$this->item->text) {
   </div>
 </div>
 
-
 <div class="sp-pagebuilder-modal-alt">
   <div id="page-options" class="sp-pagebuilder-modal-overlay" style="position:fixed;top:0;left:0;right:0;bottom:0;">
     <div class="sp-pagebuilder-modal-content" style="position:fixed;top:0px;left:0px;right:0px;bottom:0px;">
@@ -133,28 +143,29 @@ if (!$this->item->text) {
        <div>
         <div class="page-options-content">
 
-          <?php
-          $fieldsets = $this->form->getFieldsets();
-          ?>
+            <?php
+            $fieldsets = $this->form->getFieldsets();
+            ?>
 
-          <ul class="sp-pagebuilder-nav sp-pagebuilder-nav-tabs" id="pageTabs">
-            <li class="active"><a href="#seosettings" data-toggle="tab"><i class="fa fa-bullseye"></i> <?php echo JText::_($fieldsets['seosettings']->label, true); ?></a></li>
-            <li><a href="#pagecss" data-toggle="tab"><i class="fa fa-css3"></i> <?php echo JText::_($fieldsets['pagecss']->label, true); ?></a></li>
-            <li><a href="#publishing" data-toggle="tab"><i class="fa fa-calendar-check-o"></i> <?php echo JText::_($fieldsets['publishing']->label, true); ?></a></li>
-          </ul>
+            <ul class="sp-pagebuilder-nav sp-pagebuilder-nav-tabs" id="pageTabs">
+              <li class="active"><a href="#seosettings" data-toggle="tab"><i class="fa fa-bullseye"></i> <?php echo JText::_($fieldsets['seosettings']->label, true); ?></a></li>
+              <li><a href="#pagecss" data-toggle="tab"><i class="fa fa-css3"></i> <?php echo JText::_($fieldsets['pagecss']->label, true); ?></a></li>
+              <li><a href="#publishing" data-toggle="tab"><i class="fa fa-calendar-check-o"></i> <?php echo JText::_($fieldsets['publishing']->label, true); ?></a></li>
+              <li><a href="#permissions" data-toggle="tab"><i class="fa fa-globe"></i> <?php echo JText::_($fieldsets['permissions']->label, true); ?></a></li>
+            </ul>
 
-          <div class="tab-content" id="pageContent">
+            <div class="tab-content" id="pageContent">
 
-            <div id="seosettings" class="tab-pane active">
-              <?php foreach ($this->form->getFieldset('seosettings') as $key => $field) { ?>
-                <div class="sp-pagebuilder-form-group">
-                  <?php echo $field->label; ?>
-                  <?php echo str_replace(array('<input', '<textarea'), array('<input class="sp-pagebuilder-form-control"', '<textarea class="sp-pagebuilder-form-control"'), $field->input); ?>
+              <div id="seosettings" class="tab-pane active">
+                <?php foreach ($this->form->getFieldset('seosettings') as $key => $field) { ?>
+                  <div class="sp-pagebuilder-form-group">
+                    <?php echo $field->label; ?>
+                    <?php echo str_replace(array('<input', '<textarea'), array('<input class="sp-pagebuilder-form-control"', '<textarea class="sp-pagebuilder-form-control"'), $field->input); ?>
+                  </div>
+                  <?php } ?>
                 </div>
-                <?php } ?>
-              </div>
 
-              <div id="pagecss" class="tab-pane">
+                <div id="pagecss" class="tab-pane">
                 <?php foreach ($this->form->getFieldset('pagecss') as $key => $field) { ?>
                   <div class="sp-pagebuilder-form-group">
                     <?php echo $field->label; ?>
@@ -169,19 +180,27 @@ if (!$this->item->text) {
                       <?php echo $field->label; ?>
                       <?php echo str_replace(array('<input', '<textarea'), array('<input class="sp-pagebuilder-form-control"', '<textarea class="sp-pagebuilder-form-control"'), $field->input); ?>
                     </div>
-                    <?php } ?>
-                  </div>
-
+                  <?php } ?>
                 </div>
 
-                <a id="btn-apply-page-options" class="sp-pagebuilder-btn sp-pagebuilder-btn-success" href="#"><i class="fa fa-check-square-o"></i> <?php echo JText::_('COM_SPPAGEBUILDER_APPLY'); ?></a>
+                <div id="permissions" class="tab-pane">
+                  <?php foreach ($this->form->getFieldset('permissions') as $key => $field) { ?>
+                  <div class="sp-pagebuilder-form-group">
+                    <?php echo str_replace(array('<input', '<textarea'), array('<input class="sp-pagebuilder-form-control"', '<textarea class="sp-pagebuilder-form-control"'), $field->input); ?>
+                  </div>
+                  <?php } ?>
+                </div>
+
+            </div> <!-- /.tab-content -->
+
+            <a id="btn-apply-page-options" class="sp-pagebuilder-btn sp-pagebuilder-btn-success" href="#"><i class="fa fa-check-square-o"></i> <?php echo JText::_('COM_SPPAGEBUILDER_APPLY'); ?></a>
                 <a id="btn-cancel-page-options" class="sp-pagebuilder-btn sp-pagebuilder-btn-default" href="#"><i class="fa fa-times-circle-o"></i> <?php echo JText::_('COM_SPPAGEBUILDER_CANCEL'); ?></a>
-              </div>
-            </div>
-          </div>
+          </div> <!-- /.page-options-content -->
         </div>
       </div>
     </div>
+  </div>
+</div>
 
     <?php echo JLayoutHelper::render('footer'); ?>
 
@@ -189,5 +208,5 @@ if (!$this->item->text) {
     <?php echo JHtml::_('form.token'); ?>
   </form>
 </div>
-
+<div class="sp-pagebuilder-notifications"></div>
 <script type="text/javascript" src="<?php echo JURI::base(true) . '/components/com_sppagebuilder/assets/js/engine.js'; ?>"></script>

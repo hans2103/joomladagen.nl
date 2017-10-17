@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SpTypeMedia
 {
@@ -59,7 +59,11 @@ class SpTypeMedia
 
 		if($attr['std']) {
 			if($media_format == 'image') {
-				$output .= '<img class="sp-pagebuilder-media-preview" src="' . JURI::root(true) . '/' . $attr['std'] . '" alt="" />';
+				$img_src = JURI::root(true) . '/' . $attr['std'];
+				if(strpos($attr['std'], "http://") !== false || strpos($attr['std'], "https://") !== false){
+					 $img_src = $attr['std'];
+				}
+				$output .= '<img class="sp-pagebuilder-media-preview" src="' . $img_src . '" alt="" />';
 			}
 		} else {
 			if($media_format == 'image') {
@@ -68,7 +72,11 @@ class SpTypeMedia
 		}
 
 		if($media_format == 'image') {
-			$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="hidden" name="'. $key .'" value="'.$attr['std'].'">';
+			if (isset($attr['show_input']) && $attr['show_input'] == true) {
+				$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="text" name="'. $key .'" value="'.$attr['std'].'" placeholder="'.$attr['placeholder'].'" autocomplete="off">';
+			} else {
+				$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="hidden" name="'. $key .'" value="'.$attr['std'].'">';
+			}
 		} else {
 			$output	.= '<input class="sp-pagebuilder-form-control sp-pagebuilder-input-media sp-pagebuilder-media-input sp-pagebuilder-addon-input" type="text" name="'. $key .'" value="'.$attr['std'].'" placeholder="'.$attr['placeholder'].'" autocomplete="off">';
 		}

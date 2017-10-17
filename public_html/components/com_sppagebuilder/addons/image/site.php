@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonImage extends SppagebuilderAddons{
 
@@ -33,7 +33,15 @@ class SppagebuilderAddonImage extends SppagebuilderAddons{
 			$output .= '<div class="sppb-addon-content">';
 			$output .= '<div class="sppb-addon-single-image-container">';
 
-			if($image_overlay) {
+			if (empty($alt_text)) {
+				if (!empty($title)) {
+					$alt_text = $title;
+				} else {
+					$alt_text = basename($image);
+				}
+			}
+
+			if($image_overlay && $open_lightbox) {
 				$output .= '<div class="sppb-addon-image-overlay">';
 				$output .= '</div>';
 			}
@@ -46,7 +54,7 @@ class SppagebuilderAddonImage extends SppagebuilderAddons{
 				$output .= ($link) ? '<a ' . $target . ' href="' . $link . '">' : '';
 			}
 
-			$output  .= '<img class="sppb-img-responsive" src="' . $image . '" alt="'. $alt_text .'">';
+			$output  .= '<img class="sppb-img-responsive" src="' . $image . '" alt="'. $alt_text .'" title="'.$title.'">';
 
 			if(!$open_lightbox) {
 				$output .= ($link) ? '</a>' : '';

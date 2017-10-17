@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -29,7 +29,7 @@ class JFormFieldRL_Key extends \RegularLabs\Library\Field
 
 		$key = trim($this->value);
 
-		if (!$key)
+		if ( ! $key)
 		{
 			return '<div id="' . $this->id . '_field" class="btn-wrapper input-append clearfix">'
 				. '<input type="text" class="rl_codefield" name="' . $this->name . '" id="' . $this->id . '" autocomplete="off" value="">'

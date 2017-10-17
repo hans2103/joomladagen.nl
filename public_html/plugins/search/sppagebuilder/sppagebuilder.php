@@ -55,7 +55,7 @@ class PlgSearchSppagebuilder extends JPlugin
 	public function onContentSearch( $text, $phrase = '', $ordering = '', $areas = null )
 	{
 		$db 	= JFactory::getDbo();
-		$limit 	= 5;
+		$limit 	= $this->params->def('search_limit', 50);
 
 		if (is_array($areas)) {
 			if (!array_intersect($areas, array_keys($this->onContentSearchAreas()))) {
@@ -79,7 +79,7 @@ class PlgSearchSppagebuilder extends JPlugin
 				$wheres1 = array();
 				$wheres1[] = 'title LIKE ' . $text;
 				$wheres1[] = 'text LIKE ' . $text;
-				$where = '(' . implode(') OR (', $wheres1) . ')';
+				$where = '((' . implode(') OR (', $wheres1) . ')) AND extension = "com_sppagebuilder" AND published = 1';
 				break;
 		}
 
@@ -103,7 +103,7 @@ class PlgSearchSppagebuilder extends JPlugin
 			case 'category':
 			case 'popular':
 			default:
-				$order = 'created_time DESC';
+				$order = 'created_on DESC';
 				break;
 		}
 
@@ -112,7 +112,7 @@ class PlgSearchSppagebuilder extends JPlugin
 		if ( $limit > 0 ) {
 			$query->clear();
 
-			$query->select('id, title AS title, created_time as created, \'\' AS browsernav, \'Page\' AS section, language');
+			$query->select('id, title AS title, created_on as created, \'\' AS browsernav, \'Page\' AS section, language');
 			$query->from('#__sppagebuilder');
 			$query->where($where);
 			$query->order($order);
@@ -143,7 +143,7 @@ class PlgSearchSppagebuilder extends JPlugin
 
 	private function getItemid($id = null) {
 		$db = JFactory::getDbo();
-		$query = $db->getQuery(true); 
+		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array('id')));
 		$query->from($db->quoteName('#__menu'));
 		$query->where($db->quoteName('link') . ' LIKE '. $db->quote('%view=page&id='. $id .'%'));

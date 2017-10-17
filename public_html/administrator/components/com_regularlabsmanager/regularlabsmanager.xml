@@ -2,8 +2,8 @@
 <extension version="3.4" type="component" method="upgrade">
 	<name>com_regularlabsmanager</name>
 	<description>COM_REGULARLABSMANAGER_DESC</description>
-	<version>7.0.3</version>
-	<creationDate>March 2017</creationDate>
+	<version>7.1.4</version>
+	<creationDate>October 2017</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -14,7 +14,7 @@
 
 	<updateservers>
 		<server type="extension" priority="1" name="Regular Labs - Extension Manager">
-			http://download.regularlabs.com/updates.xml?e=extensionmanager&amp;type=.xml
+			https://download.regularlabs.com/updates.xml?e=extensionmanager&amp;type=.xml
 		</server>
 	</updateservers>
 

@@ -23,6 +23,8 @@ class WFSourcePluginConfig
 
         $settings['source_font_size'] = $wf->getParam('source.font_size', '', '');
         $settings['source_theme'] = $wf->getParam('source.theme', 'codemirror');
+
+        $settings['source_validate_content'] = $wf->getParam('source.validate_content', 1, 1, 'boolean');
     }
 
     public static function getStyles()

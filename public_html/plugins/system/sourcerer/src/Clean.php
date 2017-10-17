@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Sourcerer
- * @version         7.1.6PRO
+ * @version         7.1.9PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\Sourcerer;
+namespace RegularLabs\Plugin\System\Sourcerer;
 
 defined('_JEXEC') or die;
 
@@ -30,7 +30,7 @@ class Clean
 
 		$params = Params::get();
 
-		if (!$params->place_comments)
+		if ( ! $params->place_comments)
 		{
 			RL_Protect::removeCommentTags($string, 'Sourcerer');
 		}
@@ -55,7 +55,7 @@ class Clean
 
 	public static function cleanTagsFromHead(&$string)
 	{
-		if (!RL_String::contains($string, Params::getTags(true)))
+		if ( ! RL_String::contains($string, Params::getTags(true)))
 		{
 			return;
 		}

@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 JHtml::_('bootstrap.tooltip');
 JHtml::_('formbehavior.chosen', '.filter-select select, .sp-pagebuilder-pages-toolbar select');
@@ -88,6 +88,29 @@ Joomla.orderTable = function() {
 						</select>
 					</div>
 				</div>
+
+				<?php if (!$this->params->get('joomshaper_license_key') || !$this->params->get('gmap_api')) { ?>
+					<div class="sp-pagebuilder-pages top-notice-bar">
+						<div class="row-fluid">
+						    <div class="span12">
+									<?php if(!$this->params->get('joomshaper_license_key')) { ?>
+						        <div class="sppb-active-notice">
+						            <p class="pull-left">Hello! Would you like to receive automatic updates and get premium support? Please <a href="index.php?option=com_config&view=component&component=com_sppagebuilder#licenseupdate">activate SP Page Builder.</a></p>
+						            <a href="#" class="pull-right"><img alt="Close Icon" src="<?php echo JURI::root(true) . '/administrator/components/com_sppagebuilder/assets/img/close-icon.png'; ?>"></a>
+						            <div class="clearfix"></div>
+						        </div>
+										<?php } ?>
+										<?php if(!$this->params->get('gmap_api')) { ?>
+											<div class="sppb-active-notice">
+							            <p class="pull-left">Please add <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank">Google Maps API</a> credentials <a href="<?php echo JRoute::_('index.php?option=com_config&view=component&component=com_sppagebuilder&path=&return=' . urlencode(base64_encode(JUri::getInstance())));?>">here</a> to use Google Maps.</p>
+							            <a href="#" class="pull-right"><img alt="Close Icon" src="<?php echo JURI::root(true) . '/administrator/components/com_sppagebuilder/assets/img/close-icon.png'; ?>"></a>
+							            <div class="clearfix"></div>
+							        </div>
+					          <?php } ?>
+						    </div>
+						</div>
+					</div>
+				<?php } ?>
 
 				<?php
 				$app = JFactory::getApplication();
@@ -206,8 +229,8 @@ Joomla.orderTable = function() {
 												<?php echo $this->escape($item->title); ?>
 											<?php endif; ?>
 
-											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-default sp-pagebuilder-btn-xs sp-pagebuilder-btn-preview-page" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=page&amp;id=<?php echo $item->id; ?>" style="color: #fff; margin: 5px;">Preview</a>
-											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-xs sp-pagebuilder-btn-frontend-editor" target="_blank" href="javascript:;" style="color: #fff; margin: 5px 0;">Frontend Editor <small style="font-size: 8px; color: rgba(255, 255, 255, .8);">(PRO)</small></a>
+											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-default sp-pagebuilder-btn-xs sp-pagebuilder-btn-preview-page" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=page&amp;id=<?php echo $item->id; ?>" style="color: #fff; margin: 5px;"><?php echo JText::_('COM_SPPAGEBUILDER_PREVIEW'); ?></a>
+											<a class="sp-pagebuilder-btn sp-pagebuilder-btn-success sp-pagebuilder-btn-xs sp-pagebuilder-btn-frontend-editor" target="_blank" href="<?php echo JURI::root(); ?>index.php?option=com_sppagebuilder&amp;view=form&amp;id=<?php echo $item->id; ?>&amp;layout=edit" style="color: #fff; margin: 5px 0;"><?php echo JText::_('COM_SPPAGEBUILDER_FRONTEND_EDITOR'); ?></a>
 
 											<?php
 											if(isset($item->created_by) && $item->created_by) {
@@ -228,6 +251,7 @@ Joomla.orderTable = function() {
 													<?php echo JText::_('JCATEGORY') . ": " . $this->escape($item->category_title); ?>
 												</div>
 											<?php endif; ?>
+
 										</td>
 										<td class="small hidden-phone">
 											<?php echo $this->escape($item->access_title); ?>

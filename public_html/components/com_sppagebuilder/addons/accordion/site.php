@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonAccordion extends SppagebuilderAddons {
 
@@ -54,4 +54,20 @@ class SppagebuilderAddonAccordion extends SppagebuilderAddons {
 
 		return $output;
 	}
+
+	public function js() {
+		$addon_id = '#sppb-addon-' . $this->addon->id;
+		$openitem = (isset($this->addon->settings->openitem) && $this->addon->settings->openitem) ? $this->addon->settings->openitem : '';
+		if ($openitem) {
+			$js ="jQuery(document).ready(function($){'use strict';
+				$( '".$addon_id."' + ' .sppb-addon-accordion .sppb-panel-heading').removeClass('active');
+				$( '".$addon_id."' + ' .sppb-addon-accordion .sppb-panel-collapse')." . $openitem . "();
+			});";
+			return $js;
+		}
+		return ;
+	}
+
+
+
 }

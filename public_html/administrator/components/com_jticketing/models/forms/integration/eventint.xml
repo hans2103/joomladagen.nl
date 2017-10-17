@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+
+	<fieldset name= "ticket_types">
+		<field  name= "tickettypes" description= "COM_JTICKETING_INTEGRATION_FORM_LBL_TICKET_TYPES_DESC" type= "subform"  label= "COM_JTICKETING_INTEGRATION_FORM_LBL_TICKET_TYPES" min= "1"  required="true" default='[{"title": "Free"}]' formsource="/administrator/components/com_jticketing/models/forms/integration/tickettypeint.xml"  multiple=   "true" buttons= "add,remove"  layout="JTsubformlayouts.layouts.subform.repeatable" groupByFieldset="false" />
+	</fieldset>
+
+	<fieldset name= "attendeefields">
+		<field  name= "attendeefields"  description= "COM_JTICKETING_INTEGRATION_FORM_LBL_ATTENDEE_FIELDS_DESC" type= "subform"  label="COM_JTICKETING_INTEGRATION_FORM_LBL_ATTENDEE_FIELDS" min= "1"  formsource="/administrator/components/com_jticketing/models/forms/integration/attendeefieldsint.xml" multiple= "true"  buttons=   "add,remove" layout="JTsubformlayouts.layouts.subform.repeatable" groupByFieldset="false" />
+	</fieldset>
+
+</form>

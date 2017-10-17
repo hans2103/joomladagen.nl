@@ -98,13 +98,23 @@ svg {
 .chzn-container.chzn-container-multi input[type="text"] {
   min-height: 30px;
 }
-
-
-/* *** Joomla 3.7 Compatibility *** */
-.edit.item-page .modal {
-    position: initial;
+.com-content-adminForm textarea {
+  width: 350px;
+  height: 100px;
 }
-.edit.item-page .media-preview.add-on {
-    height: 34px;
-    line-height: 28px;
+.com-config .form-horizontal .accordion-body {
+  overflow: hidden;
+}
+.com-config .form-horizontal .accordion-body.in:hover {
+  overflow: visible;
+}
+.com-config .form-horizontal .accordion-body .input-prepend.input-append .media-preview.add-on {
+  height: 34px;
+  line-height: 26px;
+}
+.com-config .form-horizontal .accordion-body .input-prepend.input-append .btn {
+  position: relative;
+  cursor: pointer;
+  color: #333;
+  border: 1px solid #bbb;
 }

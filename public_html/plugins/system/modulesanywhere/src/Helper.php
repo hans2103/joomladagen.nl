@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\ModulesAnywhere;
+namespace RegularLabs\Plugin\System\ModulesAnywhere;
 
 defined('_JEXEC') or die;
 
@@ -23,24 +23,22 @@ use RegularLabs\Library\Html as RL_Html;
  */
 class Helper
 {
-	public function onContentPrepare($article, $context, $params)
+	public function onContentPrepare($context, &$article, &$params)
 	{
 		$area    = isset($article->created_by) ? 'article' : 'other';
 		$context = (($params instanceof \JRegistry) && $params->get('rl_search')) ? 'com_search.' . $params->get('readmore_limit') : $context;
 
 		RL_Article::process($article, $context, $this, 'processModules', [$area, $context, $article]);
-
-		return $article;
 	}
 
 	public function onAfterDispatch()
 	{
-		if (!$buffer = RL_Document::getBuffer())
+		if ( ! $buffer = RL_Document::getBuffer())
 		{
 			return;
 		}
 
-		if (!Replace::replaceTags($buffer, 'component'))
+		if ( ! Replace::replaceTags($buffer, 'component'))
 		{
 			return;
 		}

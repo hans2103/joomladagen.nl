@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -26,19 +26,44 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 	{
 		$this->params = $this->element->attributes();
 
-		$group = $this->get('group', 'os');
-
-		if (!is_array($this->value))
+		if ( ! is_array($this->value))
 		{
 			$this->value = explode(',', $this->value);
 		}
 
+		$size  = (int) $this->get('size');
+		$group = $this->get('group', 'os');
+
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size', 'group')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getAgents(
+			$input->get('group')
+		);
+
+		$name  = $input->getString('name', $this->type);
+		$id    = $input->get('id', strtolower($name));
+		$value = json_decode($input->getString('value', '[]'));
+		$size  = $input->getInt('size');
+
+		return $this->selectListSimple($options, $name, $value, $id, $size, true);
+	}
+
+	function getAgents($group = 'os')
+	{
 		$agents = [];
 		switch ($group)
 		{
 			/* OS */
 			case 'os':
-				$agents[] = array('Windows (' . JText::_('JALL') . ')', 'Windows');
+				$agents[] = ['Windows (' . JText::_('JALL') . ')', 'Windows'];
 				$agents[] = ['Windows 10', 'Windows nt 10.0'];
 				$agents[] = ['Windows 8', 'Windows nt 6.2'];
 				$agents[] = ['Windows 7', 'Windows nt 6.1'];
@@ -52,8 +77,8 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Windows 98', 'Windows 98'];
 				$agents[] = ['Windows 95', 'Windows 95'];
 				$agents[] = ['Windows CE', 'Windows ce'];
-				$agents[] = array('Mac OS (' . JText::_('JALL') . ')', '#(Mac OS|Mac_PowerPC|Macintosh)#');
-				$agents[] = array('Mac OSX (' . JText::_('JALL') . ')', 'Mac OS X');
+				$agents[] = ['Mac OS (' . JText::_('JALL') . ')', '#(Mac OS|Mac_PowerPC|Macintosh)#'];
+				$agents[] = ['Mac OSX (' . JText::_('JALL') . ')', 'Mac OS X'];
 				$agents[] = ['Mac OSX El Capitan', 'Mac OS X 10.11'];
 				$agents[] = ['Mac OSX Yosemite', 'Mac OS X 10.10'];
 				$agents[] = ['Mac OSX Mavericks', 'Mac OS X 10.9'];
@@ -66,7 +91,7 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Mac OSX Jaguar', 'Mac OS X 10.2'];
 				$agents[] = ['Mac OSX Puma', 'Mac OS X 10.1'];
 				$agents[] = ['Mac OSX Cheetah', 'Mac OS X 10.0'];
-				$agents[] = array('Mac OS (classic)', '#(Mac_PowerPC|Macintosh)#');
+				$agents[] = ['Mac OS (classic)', '#(Mac_PowerPC|Macintosh)#'];
 				$agents[] = ['Linux', '#(Linux|X11)#'];
 				$agents[] = ['Open BSD', 'OpenBSD'];
 				$agents[] = ['Sun OS', 'SunOS'];
@@ -89,22 +114,22 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 					break;
 				}
 
-				$agents[] = array('Chrome (' . JText::_('JALL') . ')', 'Chrome');
+				$agents[] = ['Chrome (' . JText::_('JALL') . ')', 'Chrome'];
 				$agents[] = ['Chrome 51-60', '#Chrome/(5[1-9]|60)\.#'];
 				$agents[] = ['Chrome 41-50', '#Chrome/(4[1-9]|50)\.#'];
 				$agents[] = ['Chrome 31-40', '#Chrome/(3[1-9]|40)\.#'];
 				$agents[] = ['Chrome 21-30', '#Chrome/(2[1-9]|30)\.#'];
 				$agents[] = ['Chrome 11-20', '#Chrome/(1[1-9]|20)\.#'];
 				$agents[] = ['Chrome 1-10', '#Chrome/([1-9]|10)\.#'];
-				$agents[] = array('Firefox (' . JText::_('JALL') . ')', 'Firefox');
+				$agents[] = ['Firefox (' . JText::_('JALL') . ')', 'Firefox'];
 				$agents[] = ['Firefox 41-50', '#Firefox/(4[1-9]|50)\.#'];
 				$agents[] = ['Firefox 31-40', '#Firefox/(3[1-9]|40)\.#'];
 				$agents[] = ['Firefox 21-30', '#Firefox/(2[1-9]|30)\.#'];
 				$agents[] = ['Firefox 11-20', '#Firefox/(1[1-9]|20)\.#'];
 				$agents[] = ['Firefox 1-10', '#Firefox/([1-9]|10)\.#'];
-				$agents[] = array('Edge (' . JText::_('JALL') . ')', 'Edge');
+				$agents[] = ['Edge (' . JText::_('JALL') . ')', 'Edge'];
 				$agents[] = ['Edge 12', 'Edge/12'];
-				$agents[] = array('Internet Explorer (' . JText::_('JALL') . ')', 'MSIE');
+				$agents[] = ['Internet Explorer (' . JText::_('JALL') . ')', 'MSIE'];
 				$agents[] = ['Internet Explorer Edge', 'MSIE Edge']; // missing MSIE is added to agent string in assingnments/agents.php
 				$agents[] = ['Internet Explorer 11', 'MSIE 11']; // missing MSIE is added to agent string in assingnments/agents.php
 				$agents[] = ['Internet Explorer 10.6', 'MSIE 10.6'];
@@ -114,12 +139,12 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 				$agents[] = ['Internet Explorer 8', 'MSIE 8.'];
 				$agents[] = ['Internet Explorer 7', 'MSIE 7.'];
 				$agents[] = ['Internet Explorer 1-6', '#MSIE [1-6]\.#'];
-				$agents[] = array('Opera (' . JText::_('JALL') . ')', 'Opera');
+				$agents[] = ['Opera (' . JText::_('JALL') . ')', 'Opera'];
 				$agents[] = ['Opera 31-40', '#Opera/(3[1-9]|40)\.#'];
 				$agents[] = ['Opera 21-30', '#Opera/(2[1-9]|30)\.#'];
 				$agents[] = ['Opera 11-20', '#Opera/(1[1-9]|20)\.#'];
 				$agents[] = ['Opera 1-10', '#Opera/([1-9]|10)\.#'];
-				$agents[] = array('Safari (' . JText::_('JALL') . ')', 'Safari');
+				$agents[] = ['Safari (' . JText::_('JALL') . ')', 'Safari'];
 				//$agents[] = ['Safari 10', '#Version/10\..*Safari/#'];
 				$agents[] = ['Safari 9', '#Version/9\..*Safari/#'];
 				$agents[] = ['Safari 8', '#Version/8\..*Safari/#'];
@@ -155,8 +180,6 @@ class JFormFieldRL_Agents extends \RegularLabs\Library\Field
 			$options[] = $option;
 		}
 
-		$size = (int) $this->get('size');
-
-		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, true);
+		return $options;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -34,7 +34,7 @@ class RLAssignmentsAgents extends RLAssignment
 
 		foreach ($this->selection as $browser)
 		{
-			if (!$this->passBrowser($browser))
+			if ( ! $this->passBrowser($browser))
 			{
 				continue;
 			}
@@ -102,7 +102,7 @@ class RLAssignmentsAgents extends RLAssignment
 	 */
 	private function getDevice()
 	{
-		if (!is_null($this->device))
+		if ( ! is_null($this->device))
 		{
 			return $this->device;
 		}
@@ -133,7 +133,7 @@ class RLAssignmentsAgents extends RLAssignment
 	 */
 	private function getAgent()
 	{
-		if (!is_null($this->agent))
+		if ( ! is_null($this->agent))
 		{
 			return $this->agent;
 		}
@@ -170,7 +170,7 @@ class RLAssignmentsAgents extends RLAssignment
 	 */
 	private function passBrowser($browser = '')
 	{
-		if (!$browser)
+		if ( ! $browser)
 		{
 			return false;
 		}
@@ -180,7 +180,7 @@ class RLAssignmentsAgents extends RLAssignment
 			return $this->isMobile();
 		}
 
-		if (!(strpos($browser, '#') === 0))
+		if ( ! (strpos($browser, '#') === 0))
 		{
 			$browser = '#' . RLText::pregQuote($browser) . '#';
 		}

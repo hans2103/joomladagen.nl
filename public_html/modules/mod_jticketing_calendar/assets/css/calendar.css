@@ -1,0 +1,706 @@
+.jtcalendarForm [class*="cal-cell"] {
+  float: left;
+  margin-left: 0;
+  min-height: 1px;
+}
+.jtcalendarForm  .cal-row-fluid {
+  width: 100%;
+  *zoom: 1;
+}
+.jtcalendarForm .cal-row-fluid:before,
+.jtcalendarForm .cal-row-fluid:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.jtcalendarForm .cal-row-fluid:after {
+  clear: both;
+}
+.jtcalendarForm  .cal-row-fluid [class*="cal-cell"] {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  margin-left: 0%;
+  *margin-left: -0.05213764337851929%;
+}
+.jtcalendarForm  .cal-row-fluid [class*="cal-cell"]:first-child {
+  margin-left: 0;
+}
+.jtcalendarForm  .cal-row-fluid .controls-row [class*="cal-cell"] + [class*="cal-cell"] {
+  margin-left: 0%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell7 {
+  width: 100%;
+  *width: 99.94669509594883%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell6 {
+  width: 85.71428571428571%;
+  *width: 85.66098081023453%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell5 {
+  width: 71.42857142857142%;
+  *width: 71.37526652452024%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell4 {
+  width: 57.14285714285714%;
+  *width: 57.089552238805965%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell3 {
+  width: 42.857142857142854%;
+  *width: 42.80383795309168%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell2 {
+  width: 28.57142857142857%;
+  *width: 28.518123667377395%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell1 {
+  width: 14.285714285714285%;
+  *width: 14.232409381663112%;
+}
+.jtcalendarForm  .cal-week-box .cal-offset7,
+.jtcalendarForm .cal-row-fluid .cal-offset7,
+.jtcalendarForm .cal-row-fluid .cal-offset7:first-child {
+  margin-left: 100%;
+  *margin-left: 99.89339019189765%;
+}
+.jtcalendarForm .cal-week-box .cal-offset6,
+.jtcalendarForm .cal-row-fluid .cal-offset6,
+.jtcalendarForm .cal-row-fluid .cal-offset6:first-child {
+  margin-left: 85.71428571428571%;
+  *margin-left: 85.60767590618336%;
+}
+.jtcalendarForm  .cal-week-box .cal-offset5,
+.jtcalendarForm .cal-row-fluid .cal-offset5,
+.jtcalendarForm .cal-row-fluid .cal-offset5:first-child {
+  margin-left: 71.42857142857142%;
+  *margin-left: 71.32196162046907%;
+}
+.jtcalendarForm  .cal-week-box .cal-offset4,
+.jtcalendarForm .cal-row-fluid .cal-offset4,
+.jtcalendarForm .cal-row-fluid .cal-offset4:first-child {
+  margin-left: 57.14285714285714%;
+  *margin-left: 57.03624733475479%;
+}
+.jtcalendarForm  .cal-week-box .cal-offset3,
+.jtcalendarForm .cal-row-fluid .cal-offset3,
+.jtcalendarForm .cal-row-fluid .cal-offset3:first-child {
+  margin-left: 42.857142857142854%;
+  *margin-left: 42.750533049040506%;
+}
+.jtcalendarForm  .cal-week-box .cal-offset2,
+.jtcalendarForm .cal-row-fluid .cal-offset2,
+.jtcalendarForm .cal-row-fluid .cal-offset2:first-child {
+  margin-left: 28.57142857142857%;
+  *margin-left: 28.46481876332622%;
+}
+.jtcalendarForm .cal-week-box .cal-offset1,
+.jtcalendarForm .cal-row-fluid .cal-offset1,
+.jtcalendarForm .cal-row-fluid .cal-offset1:first-child {
+  margin-left: 14.285714285714285%;
+  *margin-left: 14.17910447761194%;
+}
+.jtcalendarForm .cal-row-fluid .cal-cell1 {
+  width: 14.285714285714285%;
+  *width: 14.233576642335766%;
+}
+.jtcalendarForm [class*="cal-cell"].hide,
+.jtcalendarForm .cal-row-fluid [class*="cal-cell"].hide {
+  display: none;
+}
+.jtcalendarForm  [class*="cal-cell"].pull-right,
+.jtcalendarForm .cal-row-fluid [class*="cal-cell"].pull-right {
+  float: right;
+}
+.jtcalendarForm .cal-row-head [class*="cal-cell"]:first-child,
+.cal-row-head [class*="cal-cell"] {
+  min-height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jtcalendarForm .cal-events-num {
+	margin-top:0;
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+.jtcalendarForm .cal-month-day {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+#cal-week-box {
+  position: absolute;
+  width: 70px;
+  left: -71px;
+  top: -1px;
+  padding: 8px 5px;
+  cursor: pointer;
+}
+#cal-day-tick {
+  position: absolute;
+  right: 48%;
+  bottom: -18px;
+  padding: 0px 5px;
+  cursor: pointer;
+  z-index: 5;
+  text-align: center;
+  width: 22px;
+  margin-right: -16px
+
+}
+.cal-year-box #cal-day-tick {
+  margin-right: -7px;
+}
+#cal-slide-box {
+  /*position: relative;*/
+}
+.jtcalendarForm #cal-slide-tick {
+  position: absolute;
+  width: 16px;
+  margin-left: -7px;
+  height: 9px;
+  top: -1px;
+  z-index: 1;
+}
+.jtcalendarForm #cal-slide-tick.tick-month1, .jtcalendarForm #cal-slide-tick.tick-month4, .jtcalendarForm #cal-slide-tick.tick-month7, .jtcalendarForm #cal-slide-tick.tick-month10 {
+  left: 12.5%;
+}
+.jtcalendarForm #cal-slide-tick.tick-month2, .jtcalendarForm #cal-slide-tick.tick-month5, .jtcalendarForm #cal-slide-tick.tick-month8, .jtcalendarForm #cal-slide-tick.tick-month11 {
+  left: 37.5%;
+}
+.jtcalendarForm #cal-slide-tick.tick-month3, .jtcalendarForm #cal-slide-tick.tick-month6, .jtcalendarForm #cal-slide-tick.tick-month9, .jtcalendarForm #cal-slide-tick.tick-month12 {
+  left: 62.5%;
+}
+
+.jtcalendarForm #cal-slide-tick.tick-day1 {
+  left: 7.14285714285715%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day2 {
+  left: 21.42857142857143%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day3 {
+  left: 35.71428571428572%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day4 {
+  left: 50%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day5 {
+  left: 64.2857142857143%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day6 {
+  left: 78.57142857142859%;
+}
+.jtcalendarForm #cal-slide-tick.tick-day7 {
+  left: 92.85714285714285%;
+}
+.events-list {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+.jtcalendarForm #cal-slide-content ul.unstyled {
+  margin-bottom: 0;
+}
+.cal-week-box {
+  position: relative;
+}
+.cal-week-box [data-event-class] {
+  white-space: nowrap;
+  height: 30px;
+  margin: 1px 1px;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-left: 10px;
+}
+.cal-week-box .cal-column {
+  position: absolute;
+  height: 100%;
+  z-index: -1;
+}
+.cal-week-box .arrow-before,
+.cal-week-box .arrow-after {
+  position: relative;
+}
+.cal-week-box .arrow-after:after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 0;
+  height: 0;
+  right: 0;
+  border-top: 15px solid #ffffff;
+  border-left: 8px solid;
+  border-bottom: 15px solid #FFFFFF;
+}
+.cal-week-box .arrow-before:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  width: 0;
+  height: 0;
+  left: 1px;
+  border-top: 15px solid transparent;
+  border-left: 8px solid #FFFFFF;
+  border-bottom: 15px solid transparent;
+}
+.jtcalendarForm #cal-day-box {
+  text-wrap: none;
+}
+.jtcalendarForm #cal-day-box .cal-day-hour-part {
+  height: 30px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-bottom: thin dashed #e1e1e1;
+}
+.jtcalendarForm #cal-day-box .cal-day-hour .jtcalendarForm .day-highlight {
+  height: 30px;
+}
+#cal-day-box .cal-hours {
+  font-weight: bolder;
+}
+#cal-day-box .cal-day-hour:nth-child(odd) {
+  background-color: #fafafa;
+}
+.jtcalendarForm #cal-day-box #cal-day-panel {
+  position: relative;
+  padding-left: 60px;
+}
+.jtcalendarForm #cal-day-box #cal-day-panel-hour {
+  position: absolute;
+  width: 100%;
+  margin-left: -60px;
+}
+.jtcalendarForm #cal-day-box .day-event {
+  position: relative;
+  max-width: 200px;
+  overflow: hidden;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight {
+  line-height: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 1px solid #c3c3c3;
+  margin: 1px 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-important {
+  border: 1px solid #ad2121;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-warning {
+  border: 1px solid #e3bc08;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-info {
+  border: 1px solid #1e90ff;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-inverse {
+  border: 1px solid #1b1b1b;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-success {
+  border: 1px solid #006400;
+}
+.jtcalendarForm #cal-day-box .jtcalendarForm .day-highlight.dh-event-special {
+  background-color: #ffe6ff;
+  border: 1px solid #800080;
+}
+.jtcalendarForm .event {
+  display: block;
+  background-color: #c3c3c3;
+  width: 12px;
+  height: 12px;
+  margin-right: 2px;
+  margin-bottom: 2px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  border: 1px solid #ffffff;
+}
+.jtcalendarForm  .event-block {
+  display: block;
+  background-color: #c3c3c3;
+  width: 20px;
+  height: 100%;
+}
+.jtcalendarForm .cal-event-list .event.pull-left {
+  margin-top: 3px;
+}
+.jtcalendarForm .event-important {
+  background-color: #ad2121;
+}
+.jtcalendarForm .event-info {
+  background-color: #1e90ff;
+}
+.jtcalendarForm .event-warning {
+  background-color: #e3bc08;
+}
+.event-inverse {
+  background-color: #1b1b1b;
+}
+.event-success {
+  background-color: #006400;
+}
+.event-special {
+  background-color: #800080;
+}
+.jtcalendarForm .day-highlight:hover,
+.jtcalendarForm .jtcalendarForm .day-highlight {
+  background-color: #dddddd;
+}
+.jtcalendarForm .day-highlight.dh-event-important:hover,
+.jtcalendarForm .day-highlight.dh-event-important {
+  background-color: #fae3e3;
+}
+.jtcalendarForm .jtcalendarForm .day-highlight.dh-event-warning:hover,
+.jtcalendarForm .day-highlight.dh-event-warning {
+  background-color: #fdf1ba;
+}
+.jtcalendarForm .day-highlight.dh-event-info:hover,
+.jtcalendarForm .day-highlight.dh-event-info {
+  background-color: #d1e8ff;
+}
+.jtcalendarForm .day-highlight.dh-event-inverse:hover,
+.jtcalendarForm .day-highlight.dh-event-inverse {
+  background-color: #c1c1c1;
+}
+.jtcalendarForm .day-highlight.dh-event-success:hover,
+.jtcalendarForm .day-highlight.dh-event-success {
+  background-color: #caffca;
+}
+.jtcalendarForm .day-highlight.dh-event-special:hover,
+.jtcalendarForm .day-highlight.dh-event-special {
+  background-color: #ffe6ff;
+}
+.jtcalendarForm .cal-row-head [class*="cal-cell"]:first-child,
+.jtcalendarForm .cal-row-head [class*="cal-cell"] {
+  font-weight: bolder;
+  text-align: center;
+  border: 0px solid;
+  padding: 5px 0;
+}
+.jtcalendarForm .cal-row-head [class*="cal-cell"] small {
+  font-weight: normal;
+}
+.jtcalendarForm .cal-year-box .row-fluid:hover,
+.jtcalendarForm .cal-row-fluid:hover {
+  background-color: #fafafa;
+}
+.jtcalendarForm .cal-month-day {
+  height: 50px;
+}
+.jtcalendarForm [class*="cal-cell"]:hover {
+  background-color: #ededed;
+}
+.jtcalendarForm .cal-year-box [class*="span"],
+.jtcalendarForm .cal-month-box [class*="cal-cell"] {
+  min-height: 50px;
+  border-right: 1px solid #e1e1e1;
+  position: relative;
+  float: left;
+  width: 14.2857%;
+  /* height: 66px;
+  padding: 12px 0;*/
+  text-align: center;
+}
+.jtcalendarForm .cal-year-box [class*="span"]{
+	/*min-height: 100px;*/
+  border-right: 1px solid #e1e1e1;
+  position: relative;
+  float: left;
+  width: 31.9%;
+  /* height: 66px;
+  padding: 12px 0;*/
+  text-align: center;
+  min-height: 40px;
+}
+
+.jtcalendarForm .cal-year-box .row-fluid [class*="span"]:last-child,
+.jtcalendarForm .cal-month-box .jtcalendarForm .cal-row-fluid [class*="cal-cell"]:last-child {
+  border-right: 0px;
+}
+.jtcalendarForm .cal-year-box .row-fluid,
+.jtcalendarForm .cal-month-box .cal-row-fluid {
+  border-bottom: 1px solid #e1e1e1;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.jtcalendarForm .cal-year-box .row-fluid:last-child,
+.jtcalendarForm .cal-month-box .cal-row-fluid:last-child {
+  border-bottom: 0px;
+}
+.jtcalendarForm .cal-month-box,
+.jtcalendarForm .cal-year-box,
+.jtcalendarForm .cal-week-box {
+  border-top: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+  border-radius: 2px;
+}
+.jtcalendarForm span[data-cal-date] {
+
+  line-height: 34px;
+  font-size: 1em;
+  font-weight: normal;
+  opacity: 1;/*changed by pallavi*/
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  /*margin-top: 5px;
+  margin-right: 5px;*/
+}
+.jtcalendarForm span[data-cal-date]:hover {
+  opacity: 1;
+}
+.jtcalendarForm .cal-day-outmonth span[data-cal-date] {
+  opacity: 0.1;
+  cursor: default;
+}
+.jtcalendarForm .cal-day-today {
+  background-color: #e8fde7;
+}
+.jtcalendarForm .cal-day-today span[data-cal-date] {
+  color: darkgreen;
+}
+.jtcalendarForm .cal-month-box .cal-day-today span[data-cal-date] {
+  font-size: 1em;
+}
+.jtcalendarForm .cal-day-holiday span[data-cal-date] {
+  color: #800080;
+}
+.jtcalendarForm .cal-day-weekend span[data-cal-date] {
+  color: darkred;
+}
+.jtcalendarForm #cal-week-box {
+  border: 1px solid #e1e1e1;
+  border-right: 0px;
+  border-radius: 5px 0 0 5px;
+  background-color: #fafafa;
+  text-align: right;
+}
+.jtcalendarForm #cal-day-tick {
+  border: 1px solid #e1e1e1;
+  border-top: 0px solid;
+  border-radius: 0 0 5px 5px;
+  background-color: #fff;
+
+  text-align: center;
+}
+.jtcalendarForm #cal-slide-box {
+  border-top: 0px solid #8c8c8c;
+  position: absolute;
+  z-index: 9999999;
+  background: #BDD1E6;
+  width:100%;
+}
+.jtcalendarForm #cal-slide-content {
+  padding: 20px;
+  color: #ffffff;
+/*
+  background-image: url("../img/dark_wood.png");
+*/
+/*
+  -webkit-box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+*/
+/*
+  box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+*/
+}
+.jtcalendarForm #cal-slide-tick {
+  background-image: url("../img/tick.png?2");
+}
+.jtcalendarForm #cal-slide-content:hover {
+/*
+  background-color: transparent;
+*/
+}
+.jtcalendarForm #cal-slide-content a.event-item {
+  color: #fff;
+  font-weight: normal;
+  line-height: 22px;
+}
+.jtcalendarForm .badge-important .events-list {
+  max-height: 47px;
+  padding-left: 5px;
+}
+.jtcalendarForm .badge-important .cal-column {
+  border-left: 1px solid #e1e1e1;
+}
+.jtcalendarForm .badge-important a.cal-event-week {
+  text-decoration: none;
+  color: #151515;
+}
+.jtcalendarForm .badge-important {
+  background-color: #579FC3;
+}
+
+jtcalendarForm .btn.active, .btn:active{box-shadow: none !important;}
+
+
+/*************************************/
+.jtcalendarForm .btn-group{
+	margin-bottom:5px !important;
+}
+
+.jtcalendarForm .cal-month-day .wrapper a{
+	display:inline-block !important;
+	width:auto;
+}
+
+.jtcalendarForm span.pull-right {
+	display:inline !important;
+}
+
+.jtcalendarForm .badge {
+	line-height:10px ;
+	padding:2px 0 ;
+	padding-left: 4px ;
+	padding-right: 4px ;
+	cursor:pointer;
+	text-shadow: none;
+}
+
+.jtcalendarForm .page-header {
+  margin: 5px 0px;
+  font-family: Arial, Helvetica, sans-serif !important;
+  border-bottom:none;
+}
+.jtcalendarForm .input-group-btn{
+	background: none !important;
+	border:1px solid #aaa;
+	margin:0;
+	padding:0;
+	width:158px;
+}
+.jtcalendarForm .btn-info{
+	background-image: none !important;
+	border-color: transparent !important;
+	background-color: transparent !important;
+	color: #555 !important;
+	/*border-right:1px solid #555 !important;*/
+	text-shadow: none !important;
+}
+.jtcalendarForm .btn{
+	border-radius: 0 !important;
+	-webkit-border-radius: 0 !important;
+	margin:0 !important;
+	padding:5px !important;
+	width:auto;
+	border: none !important;
+}
+.jtcalendarForm .input-group-btn .btn{
+	background-color: transparent;
+	background-image: none;
+	border:none;
+}
+
+.jtcalendarForm .btn-small-jt{
+	width:17%;
+}
+
+.jtcalendarForm #month_button{
+	/*
+	height: 22px !important;*/
+	text-align:left !important;
+	font-weight: bold;
+	font-size:16px;
+	padding: 5px 0 !important;
+/*
+	width:50%;
+*/
+}
+
+.jtcalendarForm .pull-right{
+	float:none !important;
+}
+
+/*
+.btn-twitter {
+	padding-left: 30px;
+	background: rgba(0, 0, 0, 0) url(https://platform.twitter.com/widgets/images/btn.27237bab4db188ca749164efd38861b0.png) -20px 6px no-repeat;
+	background-position: -20px 11px !important;
+}
+.btn-twitter:hover {
+	background-position:  -20px -18px !important;
+}
+* */
+.jtcalendarForm .toggle-header{
+    padding:10px 0;
+    margin:10px 0;
+    background-color:black;
+    color:white;
+}
+.jtcalendarForm .txt-green{
+    color:green;
+}
+.jtcalendarForm .txt-red{
+    color:red;
+}
+.jtcalendarForm .navbar-brand{
+	float : none;
+}
+.jtcalendarForm .fixed {
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:2;
+	width:100%;
+}
+.jtcalendarForm .container{
+	width: 100% !important;
+}
+.jtcalendarForm .modal{
+	position: initial !important;
+	display : block !important;
+}
+.jtcalendarForm .cal-cell1{
+	display : block !important;
+}
+.jtcalendarForm .input-group .form-control {
+    z-index: 1 !important;
+}
+.jtcalendarForm  input[type="text"]{
+	height:30px;
+}
+.jtcalendarForm .search_b{
+	margin-top:0px;
+}
+.jtcalendarForm .clear_b{
+	height: 30px;
+}
+
+.jtcalendarForm .rt_align{
+	float : right !important;
+}
+
+.jtcalendarForm .btn:focus{
+	outline:none !important;
+}
+.jtcalendarForm .btn-group + .btn-group{
+	margin-left:0;
+	  border: 1px solid #f89406;
+}
+.jtcalendarForm  #calendar{
+	position:relative;
+}
+.jtcalendarForm .row-fluid [class*="span"]{
+	margin-left:0;
+}
+.jtcalendarForm .btn-info, .right-btn{
+	display: inline-block;
+}
+.jtcalendarForm .right-btn{
+	float:right;
+}
+.jtcalendarForm  #month_text{width: 90%}

@@ -7,7 +7,7 @@
 */
 
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonIcon extends SppagebuilderAddons {
 
@@ -17,12 +17,19 @@ class SppagebuilderAddonIcon extends SppagebuilderAddons {
 		$class .= (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? ' ' . $this->addon->settings->alignment : '';
 		$class .= (isset($this->addon->settings->hover_effect) && $this->addon->settings->hover_effect) ? ' sppb-icon-hover-effect-' . $this->addon->settings->hover_effect : '';
 		$name = (isset($this->addon->settings->name) && $this->addon->settings->name) ? $this->addon->settings->name : '';
+		$link = (isset($this->addon->settings->link) && $this->addon->settings->link) ? $this->addon->settings->link : '';
 
 		if($name) {
 			$output   = '<div class="sppb-icon' . $class . '">';
+			if (!empty($link)) {
+				$output .= '<a href="'.$link.'">';
+			}
 			$output  .= '<span class="sppb-icon-inner">';
 			$output  .= '<i class="fa ' . $name . '"></i>';
 			$output  .= '</span>';
+			if (!empty($link)) {
+				$output .= '</a>';
+			}
 			$output  .= '</div>';
 			return $output;
 		}

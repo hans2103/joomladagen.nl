@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,13 @@ namespace RegularLabs\Library;
 
 defined('_JEXEC') or die;
 
+use JClientFtp;
+use JClientHelper;
 use JFactory;
+use JFilesystemWrapperPath;
+use JFolder;
+use JLog;
+use JText;
 use JUri;
 
 /**
@@ -57,7 +63,7 @@ class File
 		{
 			$file_found = self::findMediaFileByFile($check_file, $type);
 
-			if (!$file_found)
+			if ( ! $file_found)
 			{
 				continue;
 			}
@@ -92,7 +98,7 @@ class File
 		{
 			$file_found = self::getFileUrl('/media/system/' . $type . '/' . $file);
 
-			if (!$file_found)
+			if ( ! $file_found)
 			{
 				return false;
 			}
@@ -114,7 +120,7 @@ class File
 		{
 			$file_found = self::getFileUrl($path . '/' . $file);
 
-			if (!$file_found)
+			if ( ! $file_found)
 			{
 				continue;
 			}
@@ -134,11 +140,164 @@ class File
 	 */
 	private static function getFileUrl($path)
 	{
-		if (!file_exists(JPATH_ROOT . $path))
+		if ( ! file_exists(JPATH_ROOT . $path))
 		{
 			return false;
 		}
 
 		return JUri::root(true) . $path;
+	}
+
+	/**
+	 * Delete a file or array of files
+	 *
+	 * @param   mixed   $file          The file name or an array of file names
+	 * @param   boolean $show_messages Whether or not to show error messages
+	 *
+	 * @return  boolean  True on success
+	 *
+	 * @since   11.1
+	 */
+	public static function delete($file, $show_messages = false)
+	{
+		$FTPOptions = JClientHelper::getCredentials('ftp');
+		$pathObject = new JFilesystemWrapperPath;
+
+		$files = is_array($file) ? $file : [$file];
+
+		if ($FTPOptions['enabled'] == 1)
+		{
+			// Connect the FTP client
+			$ftp = JClientFtp::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
+		}
+
+		foreach ($files as $file)
+		{
+			$file = $pathObject->clean($file);
+
+			if ( ! is_file($file))
+			{
+				continue;
+			}
+
+			// Try making the file writable first. If it's read-only, it can't be deleted
+			// on Windows, even if the parent folder is writable
+			@chmod($file, 0777);
+
+			if ($FTPOptions['enabled'] == 1)
+			{
+				$file = $pathObject->clean(str_replace(JPATH_ROOT, $FTPOptions['root'], $file), '/');
+
+				if ( ! $ftp->delete($file))
+				{
+					// FTP connector throws an error
+					return false;
+				}
+			}
+
+			// Try the unlink twice in case something was blocking it on first try
+			if ( ! @unlink($file) && ! @unlink($file))
+			{
+				$show_messages && JLog::add(JText::sprintf('JLIB_FILESYSTEM_DELETE_FAILED', basename($file)), JLog::WARNING, 'jerror');
+
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Delete a folder.
+	 *
+	 * @param   string  $path          The path to the folder to delete.
+	 * @param   boolean $show_messages Whether or not to show error messages
+	 *
+	 * @return  boolean  True on success.
+	 */
+	public static function deleteFolder($path, $show_messages = false)
+	{
+		@set_time_limit(ini_get('max_execution_time'));
+		$pathObject = new JFilesystemWrapperPath;
+
+		if ( ! $path)
+		{
+			$show_messages && JLog::add(__METHOD__ . ': ' . JText::_('JLIB_FILESYSTEM_ERROR_DELETE_BASE_DIRECTORY'), JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		$FTPOptions = JClientHelper::getCredentials('ftp');
+
+		// Check to make sure the path valid and clean
+		$path = $pathObject->clean($path);
+
+		if ( ! is_dir($path))
+		{
+			$show_messages && JLog::add(JText::sprintf('JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path), JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		// Remove all the files in folder if they exist; disable all filtering
+		$files = JFolder::files($path, '.', false, true, [], []);
+
+		if ( ! empty($files))
+		{
+			if (self::delete($files, $show_messages) !== true)
+			{
+				// JFile::delete throws an error
+				return false;
+			}
+		}
+
+		// Remove sub-folders of folder; disable all filtering
+		$folders = JFolder::folders($path, '.', false, true, [], []);
+
+		foreach ($folders as $folder)
+		{
+			if (is_link($folder))
+			{
+				// Don't descend into linked directories, just delete the link.
+
+				if (self::delete($folder, $show_messages) !== true)
+				{
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( ! self::deleteFolder($folder, $show_messages))
+			{
+				return false;
+			}
+		}
+
+		if (@rmdir($path))
+		{
+			return true;
+		}
+
+		if ($FTPOptions['enabled'] == 1)
+		{
+			// Connect the FTP client
+			$ftp = JClientFtp::getInstance($FTPOptions['host'], $FTPOptions['port'], [], $FTPOptions['user'], $FTPOptions['pass']);
+
+			// Translate path and delete
+			$path = $pathObject->clean(str_replace(JPATH_ROOT, $FTPOptions['root'], $path), '/');
+
+			// FTP connector throws an error
+			return $ftp->delete($path);
+		}
+
+		if ( ! @rmdir($path))
+		{
+			$show_messages && JLog::add(JText::sprintf('JLIB_FILESYSTEM_ERROR_FOLDER_DELETE', $path), JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
+		return true;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -28,7 +28,7 @@ class ContentCategory
 	{
 		// components that use the com_content secs/cats
 		$components = ['com_content', 'com_flexicontent', 'com_contentsubmit'];
-		if (!in_array($this->request->option, $components))
+		if ( ! in_array($this->request->option, $components))
 		{
 			return $this->_(false);
 		}
@@ -44,9 +44,9 @@ class ContentCategory
 
 		if (
 			$this->request->option != 'com_contentsubmit'
-			&& !($this->params->inc_categories && $is_content && $is_category)
-			&& !($this->params->inc_articles && $is_content && $is_item)
-			&& !($this->params->inc_others && !($is_content && ($is_category || $is_item)))
+			&& ! ($this->params->inc_categories && $is_content && $is_category)
+			&& ! ($this->params->inc_articles && $is_content && $is_item)
+			&& ! ($this->params->inc_others && ! ($is_content && ($is_category || $is_item)))
 		)
 		{
 			return $this->_(false);
@@ -67,16 +67,16 @@ class ContentCategory
 		$pass = false;
 		if (
 			$this->params->inc_others
-			&& !($is_content && ($is_category || $is_item))
+			&& ! ($is_content && ($is_category || $is_item))
 			&& $this->article
 		)
 		{
-			if (!isset($this->article->id) && isset($this->article->slug))
+			if ( ! isset($this->article->id) && isset($this->article->slug))
 			{
 				$this->article->id = (int) $this->article->slug;
 			}
 
-			if (!isset($this->article->catid) && isset($this->article->catslug))
+			if ( ! isset($this->article->catid) && isset($this->article->catslug))
 			{
 				$this->article->catid = (int) $this->article->catslug;
 			}
@@ -89,7 +89,7 @@ class ContentCategory
 
 		foreach ($catids as $catid)
 		{
-			if (!$catid)
+			if ( ! $catid)
 			{
 				continue;
 			}
@@ -102,7 +102,7 @@ class ContentCategory
 				continue;
 			}
 
-			if (!$pass && $this->params->inc_children)
+			if ( ! $pass && $this->params->inc_children)
 			{
 				$parent_ids = $this->getCatParentIds($catid);
 				$parent_ids = array_diff($parent_ids, ['1']);
@@ -129,7 +129,7 @@ class ContentCategory
 			return (array) $this->request->id;
 		}
 
-		if (!$this->article && $this->request->id)
+		if ( ! $this->article && $this->request->id)
 		{
 			$this->article = JTable::getInstance('content');
 			$this->article->load($this->request->id);

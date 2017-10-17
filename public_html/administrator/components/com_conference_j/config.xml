@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<fieldset name="sessions"
+		label="COM_CONFERENCE_TITLE_SESSIONS">
+		<field
+			name="language"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_OPTIONS_LANGUAGE_LABEL"
+			description="COM_CONFERENCE_OPTIONS_LANGUAGE_DESC">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		
+		<field 
+			name="languages" 
+			type="textarea" 
+			default="en=English&#13;&#10;nl=Nederlands" 
+			label="COM_CONFERENCE_OPTIONS_LANGUAGES_LABEL" 
+			description="COM_CONFERENCE_OPTIONS_LANGUAGES_DESC" 
+			rows="5" 
+			cols="5"
+		/>
+		
+		<field
+			name="status"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_OPTIONS_STATUS_LABEL"
+			description="COM_CONFERENCE_OPTIONS_STATUS_DESC">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		
+		<field 
+			name="statusoptions" 
+			type="textarea" 
+			default="0=Pending=label-warning&#13;&#10;1=Accepted=label-success&#13;&#10;2=Rejected=label-important" 
+			label="COM_CONFERENCE_OPTIONS_STATUSOPTIONS_LABEL" 
+			description="COM_CONFERENCE_OPTIONS_STATUSOPTIONS_DESC" 
+			rows="5" 
+			cols="5"
+		/>
+
+	</fieldset>
+	
+	<fieldset name="speakers"
+		label="COM_CONFERENCE_TITLE_SPEAKERS">
+		<field
+			name="twitter"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_FIELD_TWITTER">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		<field
+			name="facebook"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_FIELD_FACEBOOK">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		<field
+			name="googleplus"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_FIELD_GOOGLEPLUS">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		<field
+			name="linkedin"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_FIELD_LINKEDIN">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+		<field
+			name="website"
+			type="radio"
+			class="btn-group"
+			default="1"
+			label="COM_CONFERENCE_FIELD_WEBSITE">
+			<option
+				value="0">JNO</option>
+			<option
+				value="1">JYES</option>
+		</field>
+	</fieldset>
+	
+	<fieldset
+		name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL"
+		description="JCONFIG_PERMISSIONS_DESC"
+		>
+
+		<field
+			name="rules"
+			type="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"
+			class="inputbox"
+			filter="rules"
+			component="com_conference"
+			section="component" />
+	</fieldset>	
+</config>

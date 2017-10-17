@@ -400,10 +400,12 @@ table#global-aclmanager td.extra .pane-toggler-down {
 
 table#global-aclmanager td.extra h3 {
 	font-size: 1.0em;
+	margin: 0;
 }
 
 table#global-aclmanager table.extra {
 	border-spacing: 0;
+	margin-bottom: 0;
 }
 
 table#global-aclmanager table.extra td {

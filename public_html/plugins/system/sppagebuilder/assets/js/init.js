@@ -17,16 +17,42 @@ jQuery(document).ready(function($) {
 		$(this).addClass('active').addClass('sp-pagebuilder-btn-success');
 
 		var action = $(this).data('action');
+
 		if (action === 'editor') {
 			$('.sp-pagebuilder-admin').hide();
 			$(spIntergationElement).show();
 			$('#jform_attribs_sppagebuilder_active').val('0');
+
+			if (typeof WFEditor !== 'undefined') {
+	      $('.wf-editor-header').empty();
+				$('.mceEditor').each(function(){
+					var editorTempID = $(this).attr('id');
+					var currentEditorID = editorTempID.substring( 0, editorTempID.length - 7 );
+					var editorContentTemp = WFEditor.getContent(currentEditorID);
+					$('#'+currentEditorID).val(editorContentTemp);
+					$(this).remove();
+				});
+
+	      WFEditor.create();
+				$('.mceEditor').show();
+	    }
+
 		} else {
+
+			if (typeof WFEditor !== 'undefined') {
+	      $('.wf-editor-header').empty();
+				$('.mceEditor').each(function(){
+					var editorTempID = $(this).attr('id');
+					var currentEditorID = editorTempID.substring( 0, editorTempID.length - 7 );
+					var editorContentTemp = WFEditor.getContent(currentEditorID);
+					$('#'+currentEditorID).val(editorContentTemp);
+					$(this).remove();
+				});
+	    }
+
 			$(spIntergationElement).hide();
 			$('.sp-pagebuilder-admin').show();
 			$('#jform_attribs_sppagebuilder_active').val('1');
 		}
-
 	});
-
 });

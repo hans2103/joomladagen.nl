@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -14,6 +14,7 @@ namespace RegularLabs\Library;
 defined('_JEXEC') or die;
 
 use JFactory;
+use JHtml;
 
 /**
  * Class Document
@@ -21,7 +22,6 @@ use JFactory;
  */
 class Document
 {
-
 	/**
 	 * Check if page is an admin page
 	 *
@@ -31,15 +31,24 @@ class Document
 	 */
 	public static function isAdmin($exclude_login = false)
 	{
+		$hash = __FUNCTION__ . '_' . $exclude_login;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
 		$app = JFactory::getApplication();
 
-		return (
-			$app->isAdmin()
-			&& (!$exclude_login || !JFactory::getUser()->get('guest'))
-			&& $app->input->get('task') != 'preview'
-			&& !(
-				$app->input->get('option') == 'com_finder'
-				&& $app->input->get('format') == 'json'
+		return Cache::set($hash,
+			(
+				self::isClient('administrator')
+				&& ( ! $exclude_login || ! JFactory::getUser()->get('guest'))
+				&& $app->input->get('task') != 'preview'
+				&& ! (
+					$app->input->get('option') == 'com_finder'
+					&& $app->input->get('format') == 'json'
+				)
 			)
 		);
 	}
@@ -49,9 +58,33 @@ class Document
 	 *
 	 * @return bool
 	 */
+	public static function isClient($identifier)
+	{
+		$identifier = $identifier == 'admin' ? 'administrator' : $identifier;
+
+		$hash = __FUNCTION__ . '_' . $identifier;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
+		if (JVERSION < 3.7)
+		{
+			return Cache::set($hash, $identifier == 'administrator' ? JFactory::getApplication()->isAdmin() : JFactory::getApplication()->isSite());
+		}
+
+		return Cache::set($hash, JFactory::getApplication()->isClient($identifier));
+	}
+
+	/**
+	 * Check if page is an edit page
+	 *
+	 * @return bool
+	 */
 	public static function isEditPage()
 	{
-		$hash = md5('isEditPage');
+		$hash = __FUNCTION__;
 
 		if (Cache::has($hash))
 		{
@@ -61,16 +94,15 @@ class Document
 		$app = JFactory::getApplication();
 
 		$option = $app->input->get('option');
+
 		// always return false for these components
 		if (in_array($option, ['com_rsevents', 'com_rseventspro']))
 		{
-			return Cache::set(
-				$hash,
-				false
-			);
+			return Cache::set($hash, false);
 		}
 
 		$task = $app->input->get('task');
+
 		if (strpos($task, '.') !== false)
 		{
 			$task = explode('.', $task);
@@ -78,25 +110,23 @@ class Document
 		}
 
 		$view = $app->input->get('view');
+
 		if (strpos($view, '.') !== false)
 		{
 			$view = explode('.', $view);
 			$view = array_pop($view);
 		}
 
-		$isedit = (
-			in_array($task, ['edit', 'form', 'submission'])
-			|| in_array($view, ['edit', 'form'])
-			|| in_array($app->input->get('do'), ['edit', 'form'])
-			|| in_array($app->input->get('layout'), ['edit', 'form', 'write'])
-			|| in_array($app->input->get('option'), ['com_contentsubmit', 'com_cckjseblod'])
-			|| ($app->input->get('option') == 'com_comprofiler' && in_array($task, ['', 'userdetails']))
-			|| self::isAdmin()
-		);
-
-		return Cache::set(
-			$hash,
-			$isedit
+		return Cache::set($hash,
+			(
+				in_array($option, ['com_contentsubmit', 'com_cckjseblod'])
+				|| ($option == 'com_comprofiler' && in_array($task, ['', 'userdetails']))
+				|| in_array($task, ['edit', 'form', 'submission'])
+				|| in_array($view, ['edit', 'form'])
+				|| in_array($app->input->get('do'), ['edit', 'form'])
+				|| in_array($app->input->get('layout'), ['edit', 'form', 'write'])
+				|| self::isAdmin()
+			)
 		);
 	}
 
@@ -107,7 +137,16 @@ class Document
 	 */
 	public static function isHtml()
 	{
-		return (JFactory::getDocument()->getType() == 'html');
+		$hash = __FUNCTION__;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
+		return Cache::set($hash,
+			(JFactory::getDocument()->getType() == 'html')
+		);
 	}
 
 	/**
@@ -117,12 +156,21 @@ class Document
 	 */
 	public static function isFeed()
 	{
-		return (
-			JFactory::getDocument()->getType() == 'feed'
-			|| JFactory::getApplication()->input->getWord('format') == 'feed'
-			|| JFactory::getApplication()->input->getWord('format') == 'xml'
-			|| JFactory::getApplication()->input->getWord('type') == 'rss'
-			|| JFactory::getApplication()->input->getWord('type') == 'atom'
+		$hash = __FUNCTION__;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
+		return Cache::set($hash,
+			(
+				JFactory::getDocument()->getType() == 'feed'
+				|| JFactory::getApplication()->input->getWord('format') == 'feed'
+				|| JFactory::getApplication()->input->getWord('format') == 'xml'
+				|| JFactory::getApplication()->input->getWord('type') == 'rss'
+				|| JFactory::getApplication()->input->getWord('type') == 'atom'
+			)
 		);
 	}
 
@@ -133,10 +181,19 @@ class Document
 	 */
 	public static function isPDF()
 	{
-		return (
-			JFactory::getDocument()->getType() == 'pdf'
-			|| JFactory::getApplication()->input->getWord('format') == 'pdf'
-			|| JFactory::getApplication()->input->getWord('cAction') == 'pdf'
+		$hash = __FUNCTION__;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
+		return Cache::set($hash,
+			(
+				JFactory::getDocument()->getType() == 'pdf'
+				|| JFactory::getApplication()->input->getWord('format') == 'pdf'
+				|| JFactory::getApplication()->input->getWord('cAction') == 'pdf'
+			)
 		);
 	}
 
@@ -147,11 +204,20 @@ class Document
 	 */
 	public static function isHttps()
 	{
-		return (
-			(!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
-			|| (isset($_SERVER['SSL_PROTOCOL']))
-			|| (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
-			|| (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https')
+		$hash = __FUNCTION__;
+
+		if (Cache::has($hash))
+		{
+			return Cache::get($hash);
+		}
+
+		return Cache::set($hash,
+			(
+				( ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off')
+				|| (isset($_SERVER['SSL_PROTOCOL']))
+				|| (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)
+				|| (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https')
+			)
 		);
 	}
 
@@ -164,7 +230,7 @@ class Document
 	 */
 	public static function isCategoryList($context)
 	{
-		$hash = md5('isCategoryList_' . $context);
+		$hash = __FUNCTION__ . '_' . $context;
 
 		if (Cache::has($hash))
 		{
@@ -197,15 +263,15 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.5.13702';
+			$version = '17.10.8196';
 		}
 
-		if (!$file = File::getMediaFile('js', $file))
+		if ( ! $file = File::getMediaFile('js', $file))
 		{
 			return;
 		}
 
-		if (!empty($version))
+		if ( ! empty($version))
 		{
 			$file .= '?v=' . $version;
 		}
@@ -223,15 +289,15 @@ class Document
 	{
 		if (strpos($file, 'regularlabs/') === 0)
 		{
-			$version = '17.5.13702';
+			$version = '17.10.8196';
 		}
 
-		if (!$file = File::getMediaFile('css', $file))
+		if ( ! $file = File::getMediaFile('css', $file))
 		{
 			return;
 		}
 
-		if (!empty($version))
+		if ( ! empty($version))
 		{
 			$file .= '?v=' . $version;
 		}
@@ -251,6 +317,42 @@ class Document
 	}
 
 	/**
+	 * Adds extension options to the page
+	 *
+	 * @param array  $options
+	 * @param string $name
+	 */
+	public static function scriptOptions($options = [], $name = '')
+	{
+		if (JVERSION < 3.7)
+		{
+			self::scriptOptionsLegacy($options, $name);
+
+			return;
+		}
+
+		$key = 'rl_' . Extension::getAliasByName($name);
+		JHtml::_('behavior.core');
+
+		JFactory::getDocument()->addScriptOptions($key, $options);
+	}
+
+	/**
+	 * Adds extension options to the page for Joomla 3.6.5 and lower
+	 *
+	 * @param array  $options
+	 * @param string $name
+	 */
+	private static function scriptOptionsLegacy($options = [], $name = '')
+	{
+		$key = 'rl_' . Extension::getAliasByName($name);
+
+		$script = 'var ' . $key . '_options = ' . json_encode($options) . ';';
+
+		self::scriptDeclaration($script, $name, true);
+	}
+
+	/**
 	 * Adds a javascript declaration to the page
 	 *
 	 * @param string $content
@@ -265,7 +367,7 @@ class Document
 			$content = self::minify($content);
 		}
 
-		if (!empty($name))
+		if ( ! empty($name))
 		{
 			$content = Protect::wrapScriptDeclaration($content, $name, $minify);
 		}
@@ -288,7 +390,7 @@ class Document
 			$content = self::minify($content);
 		}
 
-		if (!empty($name))
+		if ( ! empty($name))
 		{
 			$content = Protect::wrapStyleDeclaration($content, $name, $minify);
 		}
@@ -301,6 +403,7 @@ class Document
 	 *
 	 * @param string $string
 	 * @param string $name
+	 * @param string $alias
 	 */
 	public static function removeScriptsStyles(&$string, $name, $alias = '')
 	{
@@ -313,6 +416,44 @@ class Document
 	}
 
 	/**
+	 * Remove joomla script options
+	 *
+	 * @param string $string
+	 * @param string $name
+	 * @param string $alias
+	 */
+	public static function removeScriptsOptions(&$string, $name, $alias = '')
+	{
+		RegEx::match(
+			'(<script type="application/json" class="joomla-script-options new">)(.*?)(</script>)',
+			$string,
+			$match
+		);
+
+		if (empty($match))
+		{
+			return;
+		}
+
+		$alias = $alias ?: Extension::getAliasByName($name);
+
+		$scripts = json_decode($match[2]);
+
+		if ( ! isset($scripts->{'rl_' . $alias}))
+		{
+			return;
+		}
+
+		unset($scripts->{'rl_' . $alias});
+
+		$string = str_replace(
+			$match[0],
+			$match[1] . json_encode($scripts) . $match[3],
+			$string
+		);
+	}
+
+	/**
 	 * Returns the document buffer
 	 *
 	 * @return null|string
@@ -321,7 +462,7 @@ class Document
 	{
 		$buffer = JFactory::getDocument()->getBuffer('component');
 
-		if (empty($buffer) || !is_string($buffer))
+		if (empty($buffer) || ! is_string($buffer))
 		{
 			return null;
 		}

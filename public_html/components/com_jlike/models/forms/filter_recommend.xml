@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset addfieldpath="/administrator/components/com_tjlms/models/fields">
+		<fields name="list">
+			<field
+				name="subuserfilter"
+				type="subuserfilter"
+				class="input"
+				label="COM_TJLMS_FILTER_SUBUSERFILTER"
+				description="COM_TJLMS_FILTER_SUBUSERFILTER_DESC"
+				onchange="this.form.submit();"
+			/>
+			<field
+				name="limit"
+				type="limitbox"
+				class="input-mini"
+				label="COM_TJLMST_LIST_LIMIT"
+				description="COM_TJLMST_LIST_LIMIT_DESC"
+				onchange="this.form.submit();"
+			/>
+		</fields>
+	</fieldset>
+</form>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -90,7 +90,7 @@ class Version
 	 */
 	public static function getMessage($alias)
 	{
-		if (!$alias)
+		if ( ! $alias)
 		{
 			return '';
 		}
@@ -98,7 +98,7 @@ class Version
 		$name  = Extension::getNameByAlias($alias);
 		$alias = Extension::getAliasByName($alias);
 
-		if (!$version = self::get($alias))
+		if ( ! $version = self::get($alias))
 		{
 			return '';
 		}
@@ -175,7 +175,7 @@ class Version
 			. StringHelper::html_entity_decoder(JText::sprintf('RL_UPDATE_TO', '<span id="regularlabs_newversionnumber_' . $alias . '"></span>'))
 			. '</a>';
 
-		if (!$is_pro)
+		if ( ! $is_pro)
 		{
 			$msg .= ' <a href="https://www.regularlabs.com/purchase?ext=' . $alias . '" target="_blank" class="btn btn-large btn-primary">'
 				. '<span class="icon-basket"></span> '
@@ -208,7 +208,7 @@ class Version
 	{
 		$is_pro = strpos($version, 'PRO') !== false;
 
-		if (!JFile::exists(JPATH_ADMINISTRATOR . '/components/com_regularlabsmanager/regularlabsmanager.xml'))
+		if ( ! JFile::exists(JPATH_ADMINISTRATOR . '/components/com_regularlabsmanager/regularlabsmanager.xml'))
 		{
 			$url = $is_pro
 				? 'https://www.regularlabs.com/' . $alias . '#download'
@@ -221,7 +221,7 @@ class Version
 
 		$key = trim($config->get('key'));
 
-		if ($is_pro && !$key)
+		if ($is_pro && ! $key)
 		{
 			return ['index.php?option=com_regularlabsmanager', ''];
 		}
@@ -239,9 +239,9 @@ class Version
 			var RLEM_TOKEN = '" . JSession::getFormToken() . "';
 		"
 		);
-		Document::script('regularlabsmanager/script.min.js', '17.5.13702');
+		Document::script('regularlabsmanager/script.min.js', '17.10.8196');
 
-		$url = 'http://download.regularlabs.com?ext=' . $alias . '&j=3';
+		$url = 'https://download.regularlabs.com?ext=' . $alias . '&j=3';
 
 		if ($is_pro)
 		{
@@ -262,7 +262,7 @@ class Version
 	{
 		$name = JText::_($name);
 
-		if (!$version = self::get($name))
+		if ( ! $version = self::get($name))
 		{
 			return $name;
 		}
@@ -316,7 +316,9 @@ class Version
 		return
 			JText::sprintf(
 				'RL_POWERED_BY',
-				'<a href="https://www.regularlabs.com" target="_blank"><img src="' . JUri::root() . 'media/regularlabs/images/logo.png"></a>'
+				'<a href="https://www.regularlabs.com" target="_blank">'
+				. '<img src="' . JUri::root() . 'media/regularlabs/images/logo.png" width="135" height="24" alt="Regular Labs">'
+				. '</a>'
 			);
 	}
 

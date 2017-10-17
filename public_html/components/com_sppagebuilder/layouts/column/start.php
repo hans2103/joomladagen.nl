@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 $options = $displayData['options'];
 $custom_class  = (isset($options->class)) ? ' ' . $options->class : '';
@@ -18,9 +18,30 @@ $style ='';
 if (isset($options->padding) && $options->padding) $style .= 'padding:'.$options->padding.';';
 if (isset($options->color) && $options->color) $style .= 'color:'.$options->color.';';
 if (isset($options->background) && $options->background) $style .= 'background-color:'.$options->background.';';
+if (isset($options->boxshadow) && $options->boxshadow) $style .= 'box-shadow:'.$options->boxshadow.';';
+
+if (isset($options->background_image) && $options->background_image) {
+
+	if(strpos($options->background_image, "http://") !== false || strpos($options->background_image, "https://") !== false){
+		$style .= 'background-image:url(' . $options->background_image.');';
+	} else {
+		$style .= 'background-image:url('. JURI::base(true) . '/' . $options->background_image.');';
+	}
+
+	if (isset($options->background_repeat) && $options->background_repeat) $style .= 'background-repeat:'.$options->background_repeat.';';
+	if (isset($options->background_size) && $options->background_size) $style .= 'background-size:'.$options->background_size.';';
+	if (isset($options->background_attachment) && $options->background_attachment) $style .= 'background-attachment:'.$options->background_attachment.';';
+	if (isset($options->background_position) && $options->background_position) $style .= 'background-position:'.$options->background_position.';';
+
+}
 
 if($style) {
 	$doc->addStyledeclaration('#column-id-' . $options->dynamicId . '{'. $style .'}');
+}
+if (isset($options->background_image) && $options->background_image) {
+	if (isset($options->overlay) && $options->overlay) {
+		$doc->addStyledeclaration('#column-id-' . $options->dynamicId . ' > .sppb-column-overlay {background-color: '. $options->overlay .'}');
+	}
 }
 
 // Responsive
@@ -61,6 +82,14 @@ if(isset($options->animation) && $options->animation) {
 
 $html  = '';
 $html .= '<div class="sppb-' . $options->cssClassName . '">';
-$html .= '<div id="column-id-'. $options->dynamicId .'" class="sppb-addon-container' . $custom_class . '" ' . $data_attr . '>';
+$html .= '<div id="column-id-'. $options->dynamicId .'" class="sppb-column' . $custom_class . '" ' . $data_attr . '>';
+
+if (isset($options->background_image) && $options->background_image) {
+	if (isset($options->overlay) && $options->overlay) {
+		$html .= '<div class="sppb-column-overlay"></div>';
+	}
+}
+
+$html .= '<div class="sppb-column-addons">';
 
 echo $html;

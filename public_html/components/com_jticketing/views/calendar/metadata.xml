@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<view title="Calendar">
+		<message>
+			<![CDATA[
+				Order view
+			]]>
+		</message>
+		<options var="layout">
+			<option value="default" name="COM_JTICKETING_TITLE_CALANDER" msg="COM_JTICKETING_TITLE_CALANDER_DESC" />
+		</options>
+	</view>
+	<fields name="params">
+    <fieldset name="advanced" label="COM_MENUS_LAYOUT_FEATURED_OPTIONS">
+<!--
+      <field name="defualtCatid" type="category" description="JGLOBAL_FIELD_CATEGORIES_CHOOSE_CATEGORY_DESC" extension="com_jticketing" label="JGLOBAL_FIELD_CATEGORIES_CHOOSE_CATEGORY_LABEL" show_root="true" required="true" />
+-->
+		<field name="back_colour" value="blue" type="text" label="COM_JTICKETING_CALENDAR_COLOUR"	description="COM_JTICKETING_CALENDAR_COLOUR_DESC"/>
+    </fieldset>
+  </fields>
+</metadata>
+

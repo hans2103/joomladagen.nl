@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         DB Replacer
- * @version         6.0.1PRO
+ * @version         6.0.2PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -109,7 +109,7 @@ class DBReplacer
 
 		$max = (int) $this->config->max_rows;
 
-		if (!$this->params->table)
+		if ( ! $this->params->table)
 		{
 			return '';
 		}
@@ -151,14 +151,14 @@ class DBReplacer
 		foreach ($cols as $col)
 		{
 			$class = '';
-			if (!in_array($col, $columns))
+			if ( ! in_array($col, $columns))
 			{
 				$class = 'ghosted';
 			}
 			$html[] = '<th class="' . $class . '">' . $col . '</th>';
 		}
 		$html[] = '</tr></thead>';
-		if ($rows && !empty($rows))
+		if ($rows && ! empty($rows))
 		{
 			$html[] = '<tbody>';
 			$html[] = $this->getTableRow($rows, $cols);
@@ -198,7 +198,7 @@ class DBReplacer
 		$class = '';
 		$val   = $row->{$col};
 
-		if (!in_array($col, $columns))
+		if ( ! in_array($col, $columns))
 		{
 			$class = 'ghosted';
 			if ($val == '' || $val === null || $val == '0000-00-00')
@@ -284,14 +284,14 @@ class DBReplacer
 		if ($search != '')
 		{
 			$s = $search;
-			if (!$this->params->regex)
+			if ( ! $this->params->regex)
 			{
 				$s = RL_RegEx::quote($s);
 				// replace multiple whitespace (with at least one enter) with regex whitespace match
 				$s = RL_RegEx::replace('\s*\n\s*', '\s*', $s);
 			}
 			$options = 's';
-			if (!$this->params->case)
+			if ( ! $this->params->case)
 			{
 				$options .= 'i';
 			}
@@ -342,8 +342,7 @@ class DBReplacer
 		$table = $this->params->table;
 
 		$select_colums = $cols;
-		array_walk($select_colums, function (&$col, $key, $db)
-		{
+		array_walk($select_colums, function (&$col, $key, $db) {
 			$col = $db->quoteName($col);
 		}, $db);
 
@@ -352,13 +351,13 @@ class DBReplacer
 			->from($db->quoteName(trim($table)));
 
 		$where = $this->getWhereClause($cols);
-		if (!empty($where))
+		if ( ! empty($where))
 		{
 			$query->where('(' . implode(' OR ', $where) . ')');
 		}
 
 		$custom_where = $this->getCustomWhereClause($cols);
-		if (!empty($custom_where))
+		if ( ! empty($custom_where))
 		{
 			$query->where($custom_where);
 		}
@@ -400,7 +399,7 @@ class DBReplacer
 			default:
 				$dbs = $s;
 
-				if (!$this->params->regex)
+				if ( ! $this->params->regex)
 				{
 					$dbs = RL_RegEx::quote($dbs);
 					// replace multiple whitespace (with at least one enter) with regex whitespace match

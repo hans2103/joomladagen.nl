@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<view title="Likes">
+		<message>
+			<![CDATA[
+				Likes view
+			]]>
+		</message>
+		<options var="layout">
+			<option value="all" name="COM_JLIKE_VIEW_ALL_LIKES" msg="COM_JLIKE_VIEW_ALL_LIKES_DESC" />
+			<option value="default" name="COM_JLIKE_VIEW_MY_LIKES" msg="COM_JLIKE_VIEW_MY_LIKES_DESC" />
+	  </options>
+	</view>
+</metadata>

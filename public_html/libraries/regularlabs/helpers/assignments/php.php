@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -21,7 +21,7 @@ class RLAssignmentsPHP extends RLAssignment
 	{
 		$article = $this->article;
 
-		if (!is_array($this->selection))
+		if ( ! is_array($this->selection))
 		{
 			$this->selection = [$this->selection];
 		}
@@ -40,7 +40,7 @@ class RLAssignmentsPHP extends RLAssignment
 				break;
 			}
 
-			if (!$article && strpos($php, '$article') !== false)
+			if ( ! $article && strpos($php, '$article') !== false)
 			{
 				$article = null;
 				if ($this->request->option == 'com_content' && $this->request->view == 'article')
@@ -48,35 +48,35 @@ class RLAssignmentsPHP extends RLAssignment
 					$article = $this->getArticleById($this->request->id);
 				}
 			}
-			if (!isset($Itemid))
+			if ( ! isset($Itemid))
 			{
 				$Itemid = JFactory::getApplication()->input->getInt('Itemid', 0);
 			}
-			if (!isset($mainframe))
+			if ( ! isset($mainframe))
 			{
 				$mainframe = JFactory::getApplication();
 			}
-			if (!isset($app))
+			if ( ! isset($app))
 			{
 				$app = JFactory::getApplication();
 			}
-			if (!isset($document))
+			if ( ! isset($document))
 			{
 				$document = JFactory::getDocument();
 			}
-			if (!isset($doc))
+			if ( ! isset($doc))
 			{
 				$doc = JFactory::getDocument();
 			}
-			if (!isset($database))
+			if ( ! isset($database))
 			{
 				$database = JFactory::getDbo();
 			}
-			if (!isset($db))
+			if ( ! isset($db))
 			{
 				$db = JFactory::getDbo();
 			}
-			if (!isset($user))
+			if ( ! isset($user))
 			{
 				$user = JFactory::getUser();
 			}
@@ -101,19 +101,19 @@ class RLAssignmentsPHP extends RLAssignment
 
 	private function getArticleById($id = 0)
 	{
-		if (!$id)
+		if ( ! $id)
 		{
 			return null;
 		}
 
-		if (!class_exists('ContentModelArticle'))
+		if ( ! class_exists('ContentModelArticle'))
 		{
 			require_once JPATH_SITE . '/components/com_content/models/article.php';
 		}
 
 		$model = JModelLegacy::getInstance('article', 'contentModel');
 
-		if (!method_exists($model, 'getItem'))
+		if ( ! method_exists($model, 'getItem'))
 		{
 			return null;
 		}

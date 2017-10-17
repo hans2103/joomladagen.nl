@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,14 +11,24 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(__DIR__ . '/vendor/autoload.php'))
+// Do not instantiate plugin on install pages
+// to prevent installation/update breaking because of potential breaking changes
+if (
+	in_array(JFactory::getApplication()->input->get('option'), ['com_installer', 'com_regularlabsmanager'])
+	&& JFactory::getApplication()->input->get('action') != ''
+)
+{
+	return;
+}
+
+if ( ! is_file(__DIR__ . '/vendor/autoload.php'))
 {
 	return;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use RegularLabs\ModulesAnywhere\Plugin;
+use RegularLabs\Plugin\System\ModulesAnywhere\Plugin;
 
 /**
  * Plugin that loads modules
@@ -30,4 +40,23 @@ class PlgSystemModulesAnywhere extends Plugin
 	public $_lang_prefix = 'MA';
 
 	public $_has_tags = true;
+
+	/*
+	 * Below are the events that this plugin uses
+	 * All handling is passed along to the parent run method
+	 */
+	public function onContentPrepare()
+	{
+		$this->run();
+	}
+
+	public function onAfterDispatch()
+	{
+		$this->run();
+	}
+
+	public function onAfterRender()
+	{
+		$this->run();
+	}
 }

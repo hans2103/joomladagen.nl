@@ -1,4 +1,48 @@
 <?php die();?>
+Akeeba Backup 5.6.0
+================================================================================
++ Added warning if HHVM instead of PHP is used
++ Added variables for timezone information: [TIME_TZ], [TZ], [TZ_RAW], [GMT_OFFSET]
++ Backup Timezone: force all date / time variables to be expressed in a fixed timezone during backup (gh-626)
++ Clicking on "Reload update information" will fix Joomla! erroneously reporting an update is available when you have the latest version installed
++ Display the Secret Word unencrypted in the component's Options page (required for you to easily set up third party services)
+~ Updates now use HTTPS URLs for both the XML update stream and the package download itself
+# [LOW] Save & New button in the Configuration page didn't work correctly
+# [LOW] Editing RegEx filters creates a new entry, doesn't edit in place (gh-623)
+# [LOW] Repeated messages in the JavaScript console after editing a filter in Tabular or RegEx views (gh-625)
+
+Akeeba Backup 5.5.2
+================================================================================
+! [SECURITY] Settings encryption key was neither cryptographically random or big enough. Now changed to 64 crypto-safe random bytes.
+! [SECURITY] Secret Word for front-end and JSON backups is now stored encrypted in the database (as long as settings encryption in the application's Options is NOT disabled and your server supports encryption).
+! [SECURITY] Improved internal authentication in restore.php makes brute forcing the restoration takeover a few dozen orders of magnitude harder.
+- [SECURITY ADVICE] ANGIE will no longer lock its session to prevent information leaks. Please always use the ANGIE Password feature.
+~ [SECURITY] akeeba-altbackup.php: verify SSL certificates by default. Use --no-verify command line option to revert to the old behavior.
+~ Work around broken MijoShop plugin causing an error in Joomla's backend when the System - Backup on Update plugin is enabled.
+# [HIGH] Editing two or more Multiple Databases definitions consecutively would overwrite all of them with the settings of the last definition saved
+# [HIGH] Disabling decryption can lead to loss of current settings
+# [LOW] "_QQ_" shown during restoration instead of double quotes
+# [LOW] Removed MB label from count quota
+# [LOW] ANGIE: restoring sites served by a server cluster could result in "random" errors due to session handling being tied to the server IP
+
+Akeeba Backup 5.5.1
+================================================================================
+! The System - Backup on Update plugin may cause an error accessing the backend on some sites
+
+Akeeba Backup 5.5.0
+================================================================================
++ Prevent simultaneous use of ANGIE (restoration script) from two or more people / browsers
++ Workaround for Joomla! bug "Sometimes files are not copied on update"
++ Alphabetical sorting of engines and installation scripts in the Configuration page
++ Backup on Update: Show the status in the backend status bar (footer), with the ability to quickly toggle it off
++ Support for Google Storage native JSON API
+~ ANGIE for Joomla (restoration): Use alternate method to read the site's configuration, preventing PHP errors from getting in the way
+# [HIGH] Cannot change database prefix on restoration if the backup was taken with No Dependency Tracking enabled
+# [MEDIUM] Double slashes in the WebDAV path cause 0 byte uploads on some servers
+# [MEDIUM] Version information not loaded correctly (thanks Joe F.!)
+# [LOW] Notice thrown converting memory_limit to bytes under PHP 7.1
+# [LOW] Workaround for Joomla! bug 16147 (https://github.com/joomla/joomla-cms/issues/16147) - Cannot access component after installation when cache is enabled
+
 Akeeba Backup 5.4.0
 ================================================================================
 # [HIGH] Resuming after error was broken when using the file storage for temporary files (default)
@@ -151,7 +195,7 @@ Akeeba Backup 5.1.3
 + Automatically handle unsupported database storage engines when restoring MySQL databases
 + Help buttons everywhere. No more excuses for not reading the fine manual.
 # [HIGH] Failure to upload to newly created Amazon S3 buckets
-# [MEDIUM] Import from S3 didn't work with API v4-only regions (Frankfurt, São Paulo)
+# [MEDIUM] Import from S3 didn't work with API v4-only regions (Frankfurt, S??o Paulo)
 # [LOW] The [WEEKDAY] variable in archive name templates returned the weekday number (e.g 1) instead of text (e.g. Sunday)
 # [LOW] Deleting the currently active profile would cause a white page / internal server error
 # [LOW] Chrome and other misbehaving browsers autofill the database username/password, leading to restoration failure if you're not paying very close attention. We are now working around these browsers.

@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension type="file" version="2.5" method="upgrade">
-    <!-- Generic Metadata -->
-    <name>AkeebaStrapper</name>
-    <author>Nicholas K. Dionysopoulos</author>
-    <authorEmail>nicholas@dionysopoulos.me</authorEmail>
-    <authorUrl>https://www.akeebabackup.com</authorUrl>
-    <copyright>(C) 2012-2013 Akeeba Ltd.</copyright>
-    <license>GNU GPL v2 or later</license>
-    <version>revAA17947</version>
-    <creationDate>2016-05-12</creationDate>
-    <description>Namespaced jQuery, jQuery UI and Bootstrap for Akeeba products.</description>
-
-    <!-- Fileset definition -->
-    <fileset>
-        <files folder="akeeba_strapper" target="media/akeeba_strapper">
-            <folder>css</folder>
-            <folder>img</folder>
-            <folder>js</folder>
-            <folder>less</folder>
-            <filename>strapper.ini</filename>
-            <filename>strapper.php</filename>
-            <filename>version.php</filename>
-        </files>
-		<files target="media/akeeba_strapper">
+<extension type="file" version="3.1" method="upgrade">
+	<name>TechjoomlaStrapper - Based on AkeebaStrapper</name>
+	<author>Techjoomla</author>
+	<authorEmail>extensions@techjoomla.com</authorEmail>
+	<authorUrl>http://techjoomla.com</authorUrl>
+	<copyright>(C) 2012 Akeeba Ltd.</copyright>
+	<license>GNU GPL v3 or later</license>
+	<version>2.1</version>
+	<creationDate>6th April 2017</creationDate>
+	<description>Namespaced jQuery, jQuery UI and Bootstrap for Techjoomla products. Based on AkeebaStrapper</description>
+	<fileset>
+		<files folder="techjoomla_strapper" target="media/techjoomla_strapper">
+			<folder>bs3</folder>
+			<folder>css</folder>
+			<folder>img</folder>
+			<folder>js</folder>
+			<folder>less</folder>
+			<folder>vendors</folder>
+			<filename>index.html</filename>
+			<filename>strapper.ini</filename>
+			<filename>tjstrapper.php</filename>
+		</files>
+		<files target="media/techjoomla_strapper">
 			<filename>version.txt</filename>
 		</files>
-    </fileset>
+	</fileset>
 </extension>

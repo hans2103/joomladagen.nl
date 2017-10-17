@@ -1,6 +1,6 @@
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -36,11 +36,6 @@
 table.hide_not_installed tbody tr.not_installed {
   display: none;
 }
-@media (min-width: 481px) {
-  #toolbar .btn-success {
-    width: auto !important;
-  }
-}
 .installselected,
 .updateall,
 .reinstallall,
@@ -54,7 +49,15 @@ div.has_install .installselected,
 div.has_update .installselected,
 div.has_update .updateall,
 div.has_reinstall .reinstallall {
-  display: inline-block !important;
+  display: block !important;
+}
+@media (min-width: 481px) {
+  div.has_install .installselected,
+  div.has_update .installselected,
+  div.has_update .updateall,
+  div.has_reinstall .reinstallall {
+    display: inline-block !important;
+  }
 }
 .well.well-danger {
   background-color: #f2dede;
@@ -63,4 +66,13 @@ div.has_reinstall .reinstallall {
 }
 .well > h4 {
   margin-top: 0;
+}
+#toolbar .btn-success.refresh {
+  min-width: 0;
+  width: auto;
+}
+@media (max-width: 480px) {
+  .nowrap.ext_name {
+    white-space: normal;
+  }
 }

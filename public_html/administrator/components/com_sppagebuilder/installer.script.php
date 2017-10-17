@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class com_sppagebuilderInstallerScript {
 
@@ -21,6 +21,31 @@ class com_sppagebuilderInstallerScript {
     $status = new stdClass;
     $status->modules = array();
     $manifest = $parent->getParent()->manifest;
+
+    // Uninstall Plugins
+    $plugins = $manifest->xpath('plugins/plugin');
+    foreach ($plugins as $plugin) {
+      $name = (string)$plugin->attributes()->name;
+      $group = (string)$plugin->attributes()->group;
+
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+      $query->select($db->quoteName(array('extension_id')));
+      $query->from($db->quoteName('#__extensions'));
+      $query->where($db->quoteName('type') . ' = '. $db->quote('plugin'));
+      $query->where($db->quoteName('element') . ' = '. $db->quote($name));
+      $query->where($db->quoteName('folder') . ' = '. $db->quote($group));
+      $db->setQuery($query);
+      $extensions = $db->loadColumn();
+
+      if (count($extensions)) {
+        foreach ($extensions as $id) {
+          $installer = new JInstaller;
+          $result = $installer->uninstall('plugin', $id);
+        }
+        $status->plugins[] = array('name' => $name, 'result' => $result);
+      }
+    }
 
     // Uninstal Modules
     $modules = $manifest->xpath('modules/module');
@@ -76,6 +101,33 @@ class com_sppagebuilderInstallerScript {
     $src = $parent->getParent()->getPath('source');
     $manifest = $parent->getParent()->manifest;
 
+    // Install Plugins
+    $plugins = $manifest->xpath('plugins/plugin');
+    foreach ($plugins as $plugin) {
+      $name = (string)$plugin->attributes()->name;
+      $group = (string)$plugin->attributes()->group;
+      $path = $src . '/plugins/' . $group . '/' . $name;
+
+      $installer = new JInstaller;
+      $result = $installer->install($path);
+
+      if ($result) {
+        $db = JFactory::getDbo();
+        $query = $db->getQuery(true);
+        $fields = array( $db->quoteName('enabled') . ' = 1' );
+
+        $conditions = array(
+          $db->quoteName('type') . ' = ' . $db->quote('plugin'),
+          $db->quoteName('element') . ' = ' . $db->quote($name),
+          $db->quoteName('folder') . ' = ' . $db->quote($group)
+        );
+
+        $query->update($db->quoteName('#__extensions'))->set($fields)->where($conditions);
+        $db->setQuery($query);
+        $db->execute();
+      }
+    }
+
     // Install Modules
     $modules = $manifest->xpath('modules/module');
     foreach ($modules as $module) {
@@ -130,8 +182,8 @@ class com_sppagebuilderInstallerScript {
     }
 
     if ($type == 'uninstall') {
-			return true;
-		} ?>
+      return true;
+    } ?>
 
     <style type="text/css">
     .sppb-installation-wrap{
@@ -139,9 +191,9 @@ class com_sppagebuilderInstallerScript {
       overflow: hidden;
     }
     .sppb-installation-wrap .sppb-installation-left {
-    	float: left;
-    	width: 250px;
-    	margin-right: 15px;
+      float: left;
+      width: 250px;
+      margin-right: 15px;
     }
     .sppb-installation-wrap .sppb-installation-footer{
       margin-top: 30px;
@@ -152,13 +204,13 @@ class com_sppagebuilderInstallerScript {
     }
     </style>
     <div class="sppb-installation-wrap row-fluid">
-    	<div class="span4 sppb-installation-left span2">
-    		<img src="../media/com_sppagebuilder/images/logo-pagebuilder.jpg" alt="SP Page Builder" />
-    	</div> <!-- /.sppb-installation-left -->
-    	<div class="sppb-installation-right span8">
+      <div class="span4 sppb-installation-left span2">
+        <img src="../media/com_sppagebuilder/images/logo-pagebuilder.jpg" alt="SP Page Builder" />
+      </div> <!-- /.sppb-installation-left -->
+      <div class="sppb-installation-right span8">
         <div class="sppb-installation-texts">
-          <h2>SP Page Builder Lite</h2>
-          <p>Trusted by 250,000+ people worldwide, SP Page Builder is an extremely powerful drag &amp; drop design system.<br/>
+          <h2>SP Page Builder Pro</h2>
+          <p>Trusted by 200,000+ people worldwide, SP Page Builder is an extremely powerful drag &amp; drop design system.<br/>
           Whether you're a beginner or a professional, you must love taking control over your website design.</p>
           <p>With SP Page Builder, you can build a unique, stunning and functional site without coding a single line.<br/>
           Using the tool, anyone can build a professional quality site in minutes.</p>
@@ -166,10 +218,10 @@ class com_sppagebuilderInstallerScript {
         <div class="sppb-installation-footer">
           <div class="pagebuilder-links">
             <a class="btn btn-success" href="index.php?option=com_sppagebuilder">Get Started</a>
-        		<a class="btn btn-info" href="index.php?option=com_sppagebuilder&task=page.add" target="_blank">Create a New Page</a>
+            <a class="btn btn-info" href="index.php?option=com_sppagebuilder&task=page.add" target="_blank">Create a New Page</a>
             <a class="btn btn-warning" href="https://www.joomshaper.com/documentation/joomla-extensions/sp-page-builder-2-x" target="_blank">Documentation</a>
-    			</div>
-    	 </div>
+          </div>
+       </div>
      </div> <!-- /.sppb-installation-right -->
     </div> <!-- /.sppb-installation-wrap -->
   <?php

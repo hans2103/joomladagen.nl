@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -68,7 +68,7 @@ class JFormFieldRL_Header extends \RegularLabs\Library\Field
 			}
 		}
 
-		if (!$xml && $this->form->getValue('element'))
+		if ( ! $xml && $this->form->getValue('element'))
 		{
 			if ($this->form->getValue('folder'))
 			{

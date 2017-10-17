@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -92,14 +92,24 @@ class Field
 		];
 	}
 
-	public static function selectList(&$options, $name, $value, $id, $size = 0, $multiple = false)
+	public static function selectList(&$options, $name, $value, $id, $size = 0, $multiple = false, $simple = false)
 	{
-		return Form::selectlist($options, $name, $value, $id, $size, $multiple);
+		return Form::selectlist($options, $name, $value, $id, $size, $multiple, $simple);
 	}
 
 	public static function selectListSimple(&$options, $name, $value, $id, $size = 0, $multiple = false)
 	{
-		return Form::selectListSimple($options, $name, $value, $id, $size, $multiple, true);
+		return Form::selectListSimple($options, $name, $value, $id, $size, $multiple);
+	}
+
+	public static function selectListAjax($field, $name, $value, $id, $attributes = [], $simple = false)
+	{
+		return Form::selectListAjax($field, $name, $value, $id, $attributes, $simple);
+	}
+
+	public static function selectListSimpleAjax($field, $name, $value, $id, $attributes = [])
+	{
+		return Form::selectListSimpleAjax($field, $name, $value, $id, $attributes);
 	}
 
 	/**
@@ -144,9 +154,9 @@ class Field
 	function getOptionsByList($list, $extras = [], $levelOffset = 0)
 	{
 		$options = [];
-		foreach ($list as $item)
+		foreach ($list as $id => $item)
 		{
-			$options[] = $this->getOptionByListItem($item, $extras, $levelOffset);
+			$options[$id] = $this->getOptionByListItem($item, $extras, $levelOffset);
 		}
 
 		return $options;
@@ -211,7 +221,7 @@ class Field
 		// TODO: use node model
 		$children = [];
 
-		if (!empty($items))
+		if ( ! empty($items))
 		{
 			// first pass - collect children
 			foreach ($items as $v)

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+        <field name="id"
+			type="text"
+			default="0"
+			label="COM_JLIKE_FORM_LBL_CONTENT_ID"
+			readonly="true"
+			class="readonly"
+			description="JGLOBAL_FIELD_ID_DESC"
+		/> 
+
+ 
+		<field name="created_by"
+			type="createdby"
+			default=""
+			label="COM_JLIKE_FORM_LBL_CONTENT_CREATED_BY"
+			description="COM_JLIKE_FORM_DESC_CONTENT_CREATED_BY" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_CREATED_BY"
+		/> 
+
+ 
+		<field name="modified_by"
+			type="modifiedby"
+			default=""
+			label="COM_JLIKE_FORM_LBL_CONTENT_MODIFIED_BY"
+			description="COM_JLIKE_FORM_DESC_CONTENT_MODIFIED_BY" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_MODIFIED_BY"
+		/> 
+
+ 
+		<field name="element_id"
+			type="text"
+			size="40"
+			class="inputbox"
+			label="COM_JLIKE_FORM_LBL_CONTENT_ELEMENT_ID"
+			description="COM_JLIKE_FORM_DESC_CONTENT_ELEMENT_ID" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_ELEMENT_ID"
+			filter="safehtml"
+		/> 
+
+ 
+		<field name="url"
+			type="url"
+			label="Url"
+			description=""
+			validate="url"
+		/> 
+
+ 
+		<field name="element"
+			type="text"
+			size="40"
+			class="inputbox"
+			label="COM_JLIKE_FORM_LBL_CONTENT_ELEMENT"
+			description="COM_JLIKE_FORM_DESC_CONTENT_ELEMENT" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_ELEMENT"
+			filter="safehtml"
+		/> 
+
+ 
+		<field name="title"
+			type="editor"
+			buttons="true"
+			class="inputbox"
+			filter="safehtml"
+			label="COM_JLIKE_FORM_LBL_CONTENT_TITLE"
+			description="COM_JLIKE_FORM_DESC_CONTENT_TITLE" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_TITLE"
+		/> 
+
+ 
+		<field name="img"
+			type="url"
+			label="Img"
+			description=""
+			validate="url"
+		/> 
+
+ 
+		<field name="like_cnt"
+			type="text"
+			size="40"
+			class="inputbox"
+			label="COM_JLIKE_FORM_LBL_CONTENT_LIKE_CNT"
+			description="COM_JLIKE_FORM_DESC_CONTENT_LIKE_CNT" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_LIKE_CNT"
+			filter="safehtml"
+		/> 
+
+ 
+		<field name="dislike_cnt"
+			type="text"
+			size="40"
+			class="inputbox"
+			label="COM_JLIKE_FORM_LBL_CONTENT_DISLIKE_CNT"
+			description="COM_JLIKE_FORM_DESC_CONTENT_DISLIKE_CNT" 
+			hint="COM_JLIKE_FORM_LBL_CONTENT_DISLIKE_CNT"
+			filter="safehtml"
+		/> 
+
+ 
+		<field name="state"
+			type="list"
+			label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC"
+			class="inputbox"
+			size="1"
+			default="1"
+		>
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field> 
+
+ 
+		<field name="checked_out"
+			type="hidden"
+			filter="unset"
+		/>
+
+		<field name="checked_out_time"
+			type="hidden"
+			filter="unset"
+		/>
+
+	</fieldset>
+
+</form>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -27,7 +27,7 @@ class VirtuemartProduct
 		// Because VM sucks, we have to get the view again
 		$this->request->view = JFactory::getApplication()->input->getString('view');
 
-		if (!$this->request->id || $this->request->option != 'com_virtuemart' || $this->request->view != 'productdetails')
+		if ( ! $this->request->id || $this->request->option != 'com_virtuemart' || $this->request->view != 'productdetails')
 		{
 			return $this->_(false);
 		}

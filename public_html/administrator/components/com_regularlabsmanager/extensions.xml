@@ -10,7 +10,9 @@
 	<extension name="ADVANCED_MODULE_MANAGER" element="advancedmodules" type="com,plg_system" />
 	<extension name="ADVANCED_TEMPLATE_MANAGER" element="advancedtemplates" type="com,plg_system" />
 	<extension name="ARTICLES_ANYWHERE" type="plg_system,plg_editors-xtd" />
+	<extension name="ARTICLES_FIELD" element="articles" type="plg_fields" />
 	<extension name="BETTER_PREVIEW" type="plg_system,plg_editors-xtd" />
+	<extension name="BETTER_TRASH" type="plg_system" />
 	<extension name="CACHE_CLEANER" type="plg_system,mod" />
 	<extension name="CDN_FOR_JOOMLA" type="plg_system" />
 	<extension name="COMPONENTS_ANYWHERE" type="plg_system" />
@@ -23,6 +25,7 @@
 	<extension name="IP_LOGIN" type="plg_system" />
 	<extension name="MODALS" type="plg_system" />
 	<extension name="MODULES_ANYWHERE" type="plg_system,plg_editors-xtd" />
+	<extension name="QUICK_INDEX" type="plg_system" />
 	<extension name="REREPLACER" type="com,plg_system" />
 	<extension name="SIMPLE_USER_NOTES" type="plg_system" />
 	<extension name="SLIDERS" type="plg_system,plg_editors-xtd" />

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset name="slot">
+        <field name="conference_slot_id"
+               type="hidden"/>
+
+        <field name="conference_day_id"
+               type="conference.days"
+               label="COM_CONFERENCE_FIELD_DAY"
+               required="true"
+               class="input-xlarge advancedSelect">
+            <option value="">COM_CONFERENCE_SELECT_DAY</option>
+        </field>
+
+        <field name="start_time"
+               type="text"
+               label="COM_CONFERENCE_FIELD_TIME_START"
+               hint="hh:mm"
+               class="input-small"/>
+
+        <field name="end_time"
+               type="text"
+               label="COM_CONFERENCE_FIELD_TIME_END"
+               hint="hh:mm"
+               class="input-small"/>
+
+        <field name="general"
+               type="list"
+               label="COM_CONFERENCE_FIELD_GENERAL"
+               size="1"
+               class="input-small advancedSelect"
+               default="">
+            <option value="">---</option>
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field name="enabled"
+               type="list"
+               label="JPUBLISHED"
+               size="1"
+               class="advancedSelect"
+               default="0">
+            <option value="1">JPUBLISHED</option>
+            <option value="0">JUNPUBLISHED</option>
+        </field>
+
+        <field name="created_by"
+               type="conference.user"
+               label="JGLOBAL_FIELD_CREATED_BY_LABEL"
+               readonly="true"
+               class="input-xlarge"/>
+
+        <field name="created_on"
+               type="calendar"
+               label="JGLOBAL_FIELD_CREATED_LABEL"
+               class="input-xlarge"/>
+
+        <field name="modified_by"
+               type="conference.user"
+               label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+               readonly="true"
+               class="input-xlarge"/>
+
+        <field name="modified_on"
+               type="calendar"
+               label="JGLOBAL_FIELD_MODIFIED_LABEL"
+               class="input-xlarge"/>
+    </fieldset>
+</form>

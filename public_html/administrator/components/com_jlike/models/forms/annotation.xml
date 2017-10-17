@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+
+              <field name="id" type="text" default="0" label="COM_JLIKE_FORM_LBL_ANNOTATION_ID"
+            readonly="true" class="readonly"
+            description="JGLOBAL_FIELD_ID_DESC" />
+
+       <field name="user_id" type="text" size="40" class="inputbox"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_USER_ID"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_USER_ID"
+
+
+
+        filter="safehtml" />
+
+       <field name="content_id" type="text" size="40" class="inputbox"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_CONTENT_ID"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_CONTENT_ID"
+
+
+
+        filter="safehtml" />
+
+       <field name="annotation" type="textarea"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_ANNOTATION"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_ANNOTATION"
+
+
+                 required="true"
+            cols="50"
+            rows="5" />
+
+       <field name="privacy" type="text" size="40" class="inputbox"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_PRIVACY"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_PRIVACY"
+
+
+
+        filter="safehtml" />
+
+       <field name="annotation_date" type="text" size="40" class="inputbox"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_ANNOTATION_DATE"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_ANNOTATION_DATE"
+
+
+
+        filter="safehtml" />
+
+       <field name="parent_id" type="text" size="40" class="inputbox"
+
+            label="COM_JLIKE_FORM_LBL_ANNOTATION_PARENT_ID"
+            description="COM_JLIKE_FORM_DESC_ANNOTATION_PARENT_ID"
+
+
+
+        filter="safehtml" />
+
+         <field
+        name="state"
+        type="list"
+        label="JSTATUS"
+        description="JFIELD_PUBLISHED_DESC"
+        class="inputbox"
+        size="1"
+        default="1">
+        <option value="1">JPUBLISHED</option>
+        <option value="0">JUNPUBLISHED</option>
+    </field>
+
+	</fieldset>
+
+</form>

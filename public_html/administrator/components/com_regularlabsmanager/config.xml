@@ -11,31 +11,45 @@
 		/>
 		<field name="@block_key_b" type="rl_block" end="1" />
 		<field name="@block_other_a" type="rl_block" start="1" />
-		<field name="check_data" type="radio" class="btn-group" default="1" label="RLEM_CHECK_DATA" description="RLEM_CHECK_DATA_DESC">
+		<field name="check_data" type="radio" class="btn-group" default="1"
+			   label="RLEM_CHECK_DATA"
+			   description="RLEM_CHECK_DATA_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="hide_notinstalled" type="radio" class="btn-group" default="0" label="RLEM_HIDE_NOTINSTALLED" description="RLEM_HIDE_NOTINSTALLED_DESC">
+		<field name="hide_notinstalled" type="radio" class="btn-group" default="0"
+			   label="RLEM_HIDE_NOTINSTALLED"
+			   description="RLEM_HIDE_NOTINSTALLED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="show_key_field" type="radio" class="btn-group" default="1" label="RLEM_SHOW_KEY_FIELD" description="RLEM_SHOW_KEY_FIELD_DESC">
+		<field name="show_key_field" type="radio" class="btn-group" default="1"
+			   label="RLEM_SHOW_KEY_FIELD"
+			   description="RLEM_SHOW_KEY_FIELD_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="show_reinstall_all" type="radio" class="btn-group" default="1" label="RLEM_SHOW_REINSTALL_ALL" description="RLEM_SHOW_REINSTALL_ALL_DESC">
+		<field name="show_reinstall_all" type="radio" class="btn-group" default="1"
+			   label="RLEM_SHOW_REINSTALL_ALL"
+			   description="RLEM_SHOW_REINSTALL_ALL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="show_copyright" type="radio" class="btn-group" default="1" label="RL_SHOW_COPYRIGHT" description="RL_SHOW_COPYRIGHT_DESC">
+		<field name="show_copyright" type="radio" class="btn-group" default="1"
+			   label="RL_SHOW_COPYRIGHT"
+			   description="RL_SHOW_COPYRIGHT_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="timeout" type="text" size="5" default="5" label="RLEM_TIMEOUT" description="RLEM_TIMEOUT_DESC" />
+		<field name="timeout" type="text" size="5" default="5"
+			   label="RLEM_TIMEOUT"
+			   description="RLEM_TIMEOUT_DESC" />
 		<field name="@block_other_b" type="rl_block" end="1" />
 	</fieldset>
 
-	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+	<fieldset name="permissions"
+			  label="JCONFIG_PERMISSIONS_LABEL"
+			  description="JCONFIG_PERMISSIONS_DESC">
 		<field name="rules" type="rules" filter="rules" validate="rules" component="com_regularlabsmanager" section="component"
 			   label="JCONFIG_PERMISSIONS_LABEL">
 			<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />

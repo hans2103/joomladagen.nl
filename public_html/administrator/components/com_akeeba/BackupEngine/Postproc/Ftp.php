@@ -22,9 +22,9 @@ class Ftp extends Base
 {
 	public function __construct()
 	{
-		$this->can_delete               = true;
-		$this->can_download_to_browser  = true;
-		$this->can_download_to_file     = true;
+		$this->can_delete              = true;
+		$this->can_download_to_browser = true;
+		$this->can_download_to_file    = true;
 	}
 
 	public function processPart($absolute_filename, $upload_as = null)
@@ -43,7 +43,7 @@ class Ftp extends Base
 			$directory = $config->get('engine.postproc.ftp.initial_directory', '');
 		}
 
-        $subdir  = trim($config->get('engine.postproc.ftp.subdirectory', ''), '/');
+		$subdir  = trim($config->get('engine.postproc.ftp.subdirectory', ''), '/');
 		$ssl     = $config->get('engine.postproc.ftp.ftps', 0) == 0 ? false : true;
 		$passive = $config->get('engine.postproc.ftp.passive_mode', 0) == 0 ? false : true;
 
@@ -52,8 +52,12 @@ class Ftp extends Base
 		{
 			$this->setWarning('YOU ARE *** N O T *** SUPPOSED TO ENTER THE ftp:// PROTOCOL PREFIX IN THE FTP HOSTNAME FIELD OF THE Upload to Remote FTP POST-PROCESSING ENGINE. I am trying to fix your bad configuration setting, but the backup might fail anyway. You MUST fix this in your configuration.');
 
-			Factory::getLog()->log(LogLevel::WARNING, 'YOU ARE *** N O T *** SUPPOSED TO ENTER THE ftp:// PROTOCOL PREFIX IN THE FTP HOSTNAME FIELD OF THE Upload to Remote FTP POST-PROCESSING ENGINE.');
-			Factory::getLog()->log(LogLevel::WARNING, 'I am trying to fix your bad configuration setting, but the backup might fail anyway. You MUST fix this in your configuration.');
+			Factory::getLog()
+			       ->log(LogLevel::WARNING, 'YOU ARE *** N O T *** SUPPOSED TO ENTER THE ftp:// PROTOCOL PREFIX IN THE FTP HOSTNAME FIELD OF THE Upload to Remote FTP POST-PROCESSING ENGINE.')
+			;
+			Factory::getLog()
+			       ->log(LogLevel::WARNING, 'I am trying to fix your bad configuration setting, but the backup might fail anyway. You MUST fix this in your configuration.')
+			;
 			$host = substr($host, 6);
 		}
 
@@ -67,63 +71,63 @@ class Ftp extends Base
 		// Connect to the FTP server
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . ':: Connecting to remote FTP');
 
-        $options = array(
-            'host'      => $host,
-            'port'      => $port,
-            'username'  => $user,
-            'password'  => $pass,
-            'directory' => $directory,
-            'ssl'       => $ssl,
-            'passive'   => $passive
-        );
+		$options = array(
+			'host'      => $host,
+			'port'      => $port,
+			'username'  => $user,
+			'password'  => $pass,
+			'directory' => $directory,
+			'ssl'       => $ssl,
+			'passive'   => $passive,
+		);
 
-        try
-        {
-            $ftp = new TransferFtp($options);
-        }
-        catch (\RuntimeException $e)
-        {
-            $this->setWarning($e->getMessage());
+		try
+		{
+			$ftp = new TransferFtp($options);
+		}
+		catch (\RuntimeException $e)
+		{
+			$this->setWarning($e->getMessage());
 
-            return false;
-        }
+			return false;
+		}
 
-        // If supplied, change to the subdirectory
-        if($subdir)
-        {
-            $subdir = trim(Factory::getFilesystemTools()->replace_archive_name_variables($subdir), '/');
+		// If supplied, change to the subdirectory
+		if ($subdir)
+		{
+			$subdir = trim(Factory::getFilesystemTools()->replace_archive_name_variables($subdir), '/');
 
-            if(!$ftp->isDir($directory.'/'.$subdir))
-            {
-                // Got an error? This means that the directory doesn't exist, let's try to create it
-                if(!$ftp->mkdir($directory.'/'.$subdir))
-                {
-                    // Ok, I really can't do anything, let's stop here
-                    $this->setWarning("Could not create the subdirectory $subdir in the remote FTP server");
+			if (!$ftp->isDir($directory . '/' . $subdir))
+			{
+				// Got an error? This means that the directory doesn't exist, let's try to create it
+				if (!$ftp->mkdir($directory . '/' . $subdir))
+				{
+					// Ok, I really can't do anything, let's stop here
+					$this->setWarning("Could not create the subdirectory $subdir in the remote FTP server");
 
-                    return false;
-                }
-                else
-                {
-                    // Let's move into the new directory
-                    if(!$ftp->isDir($directory.'/'.$subdir))
-                    {
-                        // This should never happen, anyway better be safe than sorry
-                        $this->setWarning("Could not move into the subdirectory $subdir in the remote FTP server");
+					return false;
+				}
+				else
+				{
+					// Let's move into the new directory
+					if (!$ftp->isDir($directory . '/' . $subdir))
+					{
+						// This should never happen, anyway better be safe than sorry
+						$this->setWarning("Could not move into the subdirectory $subdir in the remote FTP server");
 
-                        return false;
-                    }
-                }
-            }
-        }
+						return false;
+					}
+				}
+			}
+		}
 
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . ":: Starting FTP upload of $absolute_filename");
 		$realdir = substr($directory, -1) == '/' ? substr($directory, 0, strlen($directory) - 1) : $directory;
 
-        if($subdir)
-        {
-            $realdir .= '/'.$subdir;
-        }
+		if ($subdir)
+		{
+			$realdir .= '/' . $subdir;
+		}
 
 		$basename = empty($upload_as) ? basename($absolute_filename) : $upload_as;
 		$realname = $realdir . '/' . $basename;
@@ -168,11 +172,11 @@ class Ftp extends Base
 		// Retrieve engine configuration data
 		$config = Factory::getConfiguration();
 
-		$host = $config->get('engine.postproc.ftp.host', '');
-		$port = $config->get('engine.postproc.ftp.port', 21);
-		$user = $config->get('engine.postproc.ftp.user', '');
-		$pass = $config->get('engine.postproc.ftp.pass', 0);
-		$ssl = $config->get('engine.postproc.ftp.ftps', 0) == 0 ? false : true;
+		$host    = $config->get('engine.postproc.ftp.host', '');
+		$port    = $config->get('engine.postproc.ftp.port', 21);
+		$user    = $config->get('engine.postproc.ftp.user', '');
+		$pass    = $config->get('engine.postproc.ftp.pass', 0);
+		$ssl     = $config->get('engine.postproc.ftp.ftps', 0) == 0 ? false : true;
 		$passive = $config->get('engine.postproc.ftp.passive_mode', 0) == 0 ? false : true;
 
 		$directory = dirname($path);
@@ -180,26 +184,26 @@ class Ftp extends Base
 		// Connect to the FTP server
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::delete() -- Connecting to remote FTP');
 
-        $options = array(
-            'host'      => $host,
-            'port'      => $port,
-            'username'  => $user,
-            'password'  => $pass,
-            'directory' => $directory,
-            'ssl'       => $ssl,
-            'passive'   => $passive
-        );
+		$options = array(
+			'host'      => $host,
+			'port'      => $port,
+			'username'  => $user,
+			'password'  => $pass,
+			'directory' => $directory,
+			'ssl'       => $ssl,
+			'passive'   => $passive,
+		);
 
-        try
-        {
-            $ftp = new TransferFtp($options);
-        }
-        catch (\RuntimeException $e)
-        {
-            $this->setWarning($e->getMessage());
+		try
+		{
+			$ftp = new TransferFtp($options);
+		}
+		catch (\RuntimeException $e)
+		{
+			$this->setWarning($e->getMessage());
 
-            return false;
-        }
+			return false;
+		}
 
 		try
 		{
@@ -228,11 +232,11 @@ class Ftp extends Base
 		// Retrieve engine configuration data
 		$config = Factory::getConfiguration();
 
-		$host = $config->get('engine.postproc.ftp.host', '');
-		$port = $config->get('engine.postproc.ftp.port', 21);
-		$user = $config->get('engine.postproc.ftp.user', '');
-		$pass = $config->get('engine.postproc.ftp.pass', 0);
-		$ssl = $config->get('engine.postproc.ftp.ftps', 0) == 0 ? false : true;
+		$host    = $config->get('engine.postproc.ftp.host', '');
+		$port    = $config->get('engine.postproc.ftp.port', 21);
+		$user    = $config->get('engine.postproc.ftp.user', '');
+		$pass    = $config->get('engine.postproc.ftp.pass', 0);
+		$ssl     = $config->get('engine.postproc.ftp.ftps', 0) == 0 ? false : true;
 		$passive = $config->get('engine.postproc.ftp.passive_mode', 0) == 0 ? false : true;
 
 		$directory = dirname($remotePath);
@@ -240,26 +244,26 @@ class Ftp extends Base
 		// Connect to the FTP server
 		Factory::getLog()->log(LogLevel::DEBUG, __CLASS__ . '::delete() -- Connecting to remote FTP');
 
-        $options = array(
-            'host'      => $host,
-            'port'      => $port,
-            'username'  => $user,
-            'password'  => $pass,
-            'directory' => $directory,
-            'ssl'       => $ssl,
-            'passive'   => $passive
-        );
+		$options = array(
+			'host'      => $host,
+			'port'      => $port,
+			'username'  => $user,
+			'password'  => $pass,
+			'directory' => $directory,
+			'ssl'       => $ssl,
+			'passive'   => $passive,
+		);
 
-        try
-        {
-            $ftp = new TransferFtp($options);
-        }
-        catch (\RuntimeException $e)
-        {
-            $this->setWarning($e->getMessage());
+		try
+		{
+			$ftp = new TransferFtp($options);
+		}
+		catch (\RuntimeException $e)
+		{
+			$this->setWarning($e->getMessage());
 
-            return false;
-        }
+			return false;
+		}
 
 		try
 		{

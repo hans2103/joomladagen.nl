@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="hidden" />
+		<field name="vendor_title" type="text" label="COM_TJVENDORS_PAYOUTS_FORM_LBL_PAYOUT_USER_ID" class="readonly required" readonly="true" />
+		<field name="currency" type="text" label="COM_TJVENDORS_PAYOUTS_FORM_LBL_PAYOUT_CURRENCY" class="readonly required" readonly="true" />
+		<field name="status" type="radio" default="1" label="COM_TJVENDOR_FORM_LBL_PAYOUT_PAID" description="COM_TJVENDOR_FORM_DESC_PAYOUT_PAID" class="btn-group">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="reference_order_id" type="text" label="COM_TJVENDORS_PAYOUTS_FORM_LBL_PAYOUT_REFERENCE_ORDER_ID" class="required" />
+		<field name="total" type="text" label="COM_TJVENDORS_PAYOUTS_FORM_LBL_PAYOUT_TOTAL" description="COM_TJVENDORS_PAYOUTS_FORM_DESC_PAYOUT_TOTAL" min="0" class="required" />
+		<field name="bulk_total" type="number" label="COM_TJVENDORS_PAYOUTS_FORM_LBL_PAYOUT_TOTAL" description="COM_TJVENDORS_PAYOUTS_FORM_DESC_PAYOUT_TOTAL" min="0" class="readonly required" readonly="true" />
+	</fieldset>
+</form>

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonButton_group extends SppagebuilderAddons{
 
@@ -19,7 +19,7 @@ class SppagebuilderAddonButton_group extends SppagebuilderAddons{
 		$output .= '<div class="sppb-addon-content">';
 
 		foreach ($this->addon->settings->sp_button_group_item as $key => $value) {
-			if($value->title) {
+			if($value->title || $value->icon) {
 				$class  = (isset($value->type) && $value->type) ? ' sppb-btn-' . $value->type : '';
 				$class .= (isset($value->size) && $value->size) ? ' sppb-btn-' . $value->size : '';
 				$class .= (isset($value->block) && $value->block) ? ' ' . $value->block : '';
@@ -78,6 +78,7 @@ class SppagebuilderAddonButton_group extends SppagebuilderAddons{
 				$options->button_color_hover = (isset($value->color_hover) && $value->color_hover) ? $value->color_hover : '';
 				$options->button_background_color = (isset($value->background_color) && $value->background_color) ? $value->background_color : '';
 				$options->button_background_color_hover = (isset($value->background_color_hover) && $value->background_color_hover) ? $value->background_color_hover : '';
+				$options->button_padding = (isset($value->button_padding) && $value->button_padding) ? $value->button_padding : '';
 				$options->button_fontstyle = (isset($value->fontstyle) && $value->fontstyle) ? $value->fontstyle : '';
 				$options->button_letterspace = (isset($value->letterspace) && $value->letterspace) ? $value->letterspace : '';
 

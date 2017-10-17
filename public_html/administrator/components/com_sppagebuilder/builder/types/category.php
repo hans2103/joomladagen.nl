@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SpTypeCategory{
 
@@ -66,16 +66,34 @@ class SpTypeCategory{
 			}
 		}
 
+		// multiple
+		$multiple = false;
+		if(isset($attr['multiple'])) {
+			$multiple = 'multiple';
+		}
+
 		$output  = '<div class="sp-pagebuilder-form-group"' . $depend_data . '>';
 		$output .= '<label>'.$attr['title'].'</label>';
 
-		$output .= '<select class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" id="field_'.$key.'">';
+		$output .= '<select class="sp-pagebuilder-form-control sp-pagebuilder-addon-input" name="'.$key.'" id="field_'.$key.'" '. $multiple .'>';
 
-		$output .= '<option value=""> - All Categories - </option>';
+		// if selected all categories
+		$allcat = (is_array($attr['std']) && in_array('', $attr['std'])) ? 'selected' : '';
+		$output .= '<option value="" ' . $allcat . '> - '. JTEXT::_('COM_SPPAGEBUILDER_ADDON_ARTICLE_ALL_CAT') .' - </option>';
 
-		foreach( $options as $key=>$value )
-		{
-			$output .= '<option value="'.$key.'" '.(($attr['std'] == $key )?'selected':'').'>'.$value.'</option>';
+		foreach( $options as $key=>$value ){
+			if($multiple) {
+				$selected = '';
+				if(is_array($attr['std']) && (in_array($key, $attr['std']))) {
+					$selected = ' selected';
+				} else if ($key == $attr['std']) {
+					$selected = ' selected';
+				}
+
+				$output .= '<option value="'. $key .'"'. $selected .'>'. $value .'</option>';
+			} else {
+				$output .= '<option value="'.$key.'" '.(($attr['std'] == $key )?'selected':'').'>'.$value.'</option>';
+			}
 		}
 
 		$output .= '</select>';

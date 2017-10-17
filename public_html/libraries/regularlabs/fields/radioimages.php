@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -41,12 +41,12 @@ class JFormFieldRL_RadioImages extends \RegularLabs\Library\Field
 
 		$options = [];
 
-		if (!$this->get('hide_none'))
+		if ( ! $this->get('hide_none'))
 		{
 			$options[] = JHtml::_('select.option', '-1', JText::_('Do not use') . '<br>');
 		}
 
-		if (!$this->get('hide_default'))
+		if ( ! $this->get('hide_default'))
 		{
 			$options[] = JHtml::_('select.option', '', JText::_('Use default') . '<br>');
 		}

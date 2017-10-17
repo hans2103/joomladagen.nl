@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -42,9 +42,9 @@ class RLTags
 		RL_PluginTag::protectSpecialChars($string);
 	}
 
-	public static function unprotectSpecialChars(&$string, $keep_escaped = false)
+	public static function unprotectSpecialChars(&$string, $keep_escaped_chars = [])
 	{
-		RL_PluginTag::unprotectSpecialChars($string, $keep_escaped);
+		RL_PluginTag::unprotectSpecialChars($string, $keep_escaped_chars);
 	}
 
 	public static function replaceKeyAliases(&$values, $key_aliases = [], $handle_plurals = false)
@@ -137,7 +137,7 @@ class RLTags
 
 		if (count($b) < 2 || count($a) < 2)
 		{
-			return array(trim($pre), trim($post));
+			return [trim($pre), trim($post)];
 		}
 
 		$a      = array_reverse($a);
@@ -161,7 +161,7 @@ class RLTags
 
 		foreach ($b_tags as $i => $b_tag)
 		{
-			if (empty($b_tag) || !in_array($b_tag, $tags))
+			if (empty($b_tag) || ! in_array($b_tag, $tags))
 			{
 				continue;
 			}
@@ -182,7 +182,7 @@ class RLTags
 
 		foreach ($a_tags as $i => $tag)
 		{
-			if (empty($tag) || !in_array($tag, $tags))
+			if (empty($tag) || ! in_array($tag, $tags))
 			{
 				continue;
 			}
@@ -192,8 +192,8 @@ class RLTags
 		}
 
 		$a = array_reverse($a);
-		list($pre, $post) = array(implode('', $a), implode('', $b));
+		list($pre, $post) = [implode('', $a), implode('', $b)];
 
-		return array(trim($pre), trim($post));
+		return [trim($pre), trim($post)];
 	}
 }

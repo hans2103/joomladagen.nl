@@ -6,6 +6,6 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined('_JEXEC') or die ('restricted aceess');
+defined('_JEXEC') or die ('restricted access');
 
 require_once JPATH_ADMINISTRATOR . '/components/com_sppagebuilder/views/media/tmpl/browse.php';

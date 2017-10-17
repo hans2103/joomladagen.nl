@@ -1,0 +1,25 @@
+.icon-48-jlike {
+    background-image: url(../images/jlike.png)!important;
+}
+
+
+.paramHeaderContainer {clear:both; font-weight:bold; font-size:12px; color:#369; margin:12px 0 4px; padding:0; background:#d5e7fa; border-bottom:2px solid #96b0cb; float:left; width:100%;}
+
+/*custom elements style*/
+.jlike_div_outer{
+clear:both;float:left;background-color:#AED300;width:100%;
+}
+.jlike_div_inner{
+padding: 5px 5px;font-weight:bold;color:black;
+}
+
+/*For J3x*/
+#component-form .control-label {width: 250px !important;}
+/*For J2.5.x*/
+#component-form div.current label, div.current span.faux-label {min-width: 250px !important;}
+#component-form div.current fieldset.radio label {min-width: 45px !important;}
+/*Hack for component options form ends*/
+
+/*No content message*/
+#no_content_type{color:#9d261d; font-weight:bold;}
+

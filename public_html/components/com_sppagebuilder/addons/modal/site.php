@@ -2,11 +2,12 @@
 /**
  * @package SP Page Builder
  * @author JoomShaper http://www.joomshaper.com
- * @copyright Copyright (c) 2010 - 2016 JoomShaper
+ * @copyright Copyright (c) 2010 - 2017 JoomShaper
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
+
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonModal extends SppagebuilderAddons{
 
@@ -33,6 +34,7 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 			$button_text = ($button_icon) ? $button_text . ' <i class="fa ' . $button_icon . '"></i>' : $button_text;
 		}
 
+		$selector_text = (isset($this->addon->settings->selector_text) && $this->addon->settings->selector_text) ? $this->addon->settings->selector_text : '';
 		$selector_image = (isset($this->addon->settings->selector_image) && $this->addon->settings->selector_image) ? $this->addon->settings->selector_image : '';
 		$selector_icon_name = (isset($this->addon->settings->selector_icon_name) && $this->addon->settings->selector_icon_name) ? $this->addon->settings->selector_icon_name : '';
 		$alignment = (isset($this->addon->settings->alignment) && $this->addon->settings->alignment) ? $this->addon->settings->alignment : '';
@@ -57,27 +59,39 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 		if($modal_content_type == 'text') {
 			$url = '#' . $modal_unique_id;
 			$output .= '<div id="' . $modal_unique_id . '" class="mfp-hide white-popup-block">';
-			$output .= $modal_content_text;
+				$output .= '<div class="modal-inner-block">';
+					$output .= $modal_content_text;
+				$output .= '</div>';
 			$output .= '</div>';
 			$attribs = 'data-popup_type="inline" data-mainclass="mfp-no-margins mfp-with-zoom"';
 		} else if( $modal_content_type == 'video') {
 			$url = $modal_content_video_url;
 			$attribs = 'data-popup_type="iframe" data-mainclass="mfp-no-margins mfp-with-zoom"';
 		} else {
-			$url = $modal_content_image;
-			$attribs = 'data-popup_type="image" data-mainclass="mfp-no-margins mfp-with-zoom"';
+			$url = '#' . $modal_unique_id;
+			$output .= '<div id="' . $modal_unique_id . '" class="mfp-hide popup-image-block">';
+				$output .= '<div class="modal-inner-block">';
+				$output .= '<img class="mfp-img" src="'.$modal_content_image.'" >';
+				$output .= '</div>';
+			$output .= '</div>';
+			$attribs = 'data-popup_type="inline" data-mainclass="mfp-no-margins mfp-with-zoom"';
 		}
 
 		$output .= '<div class="' . $class . ' ' . $alignment . '">';
 
 		if($modal_selector=='image') {
-			$output .= ($selector_image) ? '<a class="sppb-modal-selector sppb-magnific-popup" '. $attribs .' href="'. $url . '" id="'. $modal_unique_id .'-selector"><img src="' . $selector_image . '" alt=""></a>' : '';
+			if ($selector_image) {
+				$output .= '<a class="sppb-modal-selector sppb-magnific-popup" '. $attribs .' href="'. $url . '" id="'. $modal_unique_id .'-selector"><img src="' . $selector_image . '" alt="">';
+					$output  .= ($selector_text) ? '<span class="text">' . $selector_text . '</span>' : '';
+				$output  .= '</a>';
+			}
 		} else if ($modal_selector=='icon') {
 			if($selector_icon_name) {
 				$output  .= '<a class="sppb-modal-selector sppb-magnific-popup" href="'. $url . '" '. $attribs .' id="'. $modal_unique_id .'-selector">';
 				$output  .= '<span>';
 				$output  .= '<i class="fa ' . $selector_icon_name . '"></i>';
 				$output  .= '</span>';
+				$output  .= ($selector_text) ? '<span class="text">' . $selector_text . '</span>' : '';
 				$output  .= '</a>';
 			}
 		} else {
@@ -100,11 +114,34 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 
 	public function css() {
 		$addon_id = '#sppb-addon-' . $this->addon->id;
-		$css = '';
+
+		$modal_content_type = (isset($this->addon->settings->modal_content_type) && $this->addon->settings->modal_content_type) ? $this->addon->settings->modal_content_type : 'text';
+
+		$modal_size  = (isset($this->addon->settings->modal_popup_width) && $this->addon->settings->modal_popup_width) ? 'width: ' .$this->addon->settings->modal_popup_width . 'px;' : '';
+		$modal_size .= (isset($this->addon->settings->modal_popup_height) && $this->addon->settings->modal_popup_height) ? ' height: ' . $this->addon->settings->modal_popup_height . 'px;' : '';
+
 		$modal_selector = (isset($this->addon->settings->modal_selector) && $this->addon->settings->modal_selector) ? $this->addon->settings->modal_selector : '';
 		$selector_icon_name = (isset($this->addon->settings->selector_icon_name) && $this->addon->settings->selector_icon_name) ? $this->addon->settings->selector_icon_name : '';
+		$selector_image = (isset($this->addon->settings->selector_image) && $this->addon->settings->selector_image) ? $this->addon->settings->selector_image : '';
 		$selector_style	= (isset($this->addon->settings->selector_margin_top) && $this->addon->settings->selector_margin_top) ? 'margin-top:' . (int) $this->addon->settings->selector_margin_top .'px;' : '';
 		$selector_style	.= (isset($this->addon->settings->selector_margin_bottom) && $this->addon->settings->selector_margin_bottom) ? 'margin-bottom:' . (int) $this->addon->settings->selector_margin_bottom .'px;' : '';
+
+		$css = '';
+
+		if( $modal_selector == 'icon' || $modal_selector == 'image' ) {
+			if($selector_icon_name || $selector_image) {
+				$selector_text_style	= (isset($this->addon->settings->selector_text_size) && $this->addon->settings->selector_text_size) ? 'font-size:' . $this->addon->settings->selector_text_size .'px;' : '';
+				$selector_text_style	.= (isset($this->addon->settings->selector_text_weight) && $this->addon->settings->selector_text_weight) ? 'font-weight:' . $this->addon->settings->selector_text_weight .';' : '';
+				$selector_text_style	.= (isset($this->addon->settings->selector_text_margin) && $this->addon->settings->selector_text_margin) ? 'margin:' . $this->addon->settings->selector_text_margin .';' : '';
+				$selector_text_style	.= (isset($this->addon->settings->selector_text_color) && $this->addon->settings->selector_text_color) ? 'color:' . $this->addon->settings->selector_text_color .';' : '';
+
+				if($selector_text_style) {
+					$css .= $addon_id . ' .sppb-modal-selector span.text {';
+					$css .= $selector_text_style;
+					$css .= '}';
+				}
+			}
+		}
 
 		if($modal_selector == 'icon') {
 			if($selector_icon_name) {
@@ -113,13 +150,14 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 				$selector_style	.= (isset($this->addon->settings->selector_icon_color) && $this->addon->settings->selector_icon_color) ? 'color:' . $this->addon->settings->selector_icon_color .';' : '';
 				$selector_style	.= (isset($this->addon->settings->selector_icon_background) && $this->addon->settings->selector_icon_background) ? 'background-color:' . $this->addon->settings->selector_icon_background .';' : '';
 				$selector_style	.= (isset($this->addon->settings->selector_icon_border_color) && $this->addon->settings->selector_icon_border_color) ? 'border-style:solid;border-color:' . $this->addon->settings->selector_icon_border_color .';' : '';
+
 				$selector_style	.= (isset($this->addon->settings->selector_icon_border_width) && $this->addon->settings->selector_icon_border_width) ? 'border-width:' . (int) $this->addon->settings->selector_icon_border_width .'px;' : '';
 				$selector_style	.= (isset($this->addon->settings->selector_icon_border_radius) && $this->addon->settings->selector_icon_border_radius) ? 'border-radius:' . (int) $this->addon->settings->selector_icon_border_radius .'px;' : '';
 
 				$selector_icon_style	= (isset($this->addon->settings->selector_icon_size) && $this->addon->settings->selector_icon_size) ? 'font-size:' . (int) $this->addon->settings->selector_icon_size . 'px;width:' . (int) $this->addon->settings->selector_icon_size . 'px;height:' . (int) $this->addon->settings->selector_icon_size . 'px;line-height:' . (int) $this->addon->settings->selector_icon_size . 'px;' : '';
 
 				if($selector_style) {
-					$css .= $addon_id . ' .sppb-modal-selector span {';
+					$css .= $addon_id . ' .sppb-modal-selector span:not(.text) {';
 					$css .= $selector_style;
 					$css .= '}';
 				}
@@ -139,6 +177,18 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 			}
 		}
 
+		if( $modal_content_type != 'video' && $modal_size) {
+			if ($modal_content_type == 'image') {
+				$css .= '#sppb-modal-' . $this->addon->id . '.popup-image-block img{';
+				$css .= $modal_size;
+				$css .= '}';
+			} else {
+				$css .= '#sppb-modal-' . $this->addon->id . '.white-popup-block {';
+				$css .= $modal_size;
+				$css .= '}';
+			}
+		}
+
 		// Button css
 		$layout_path = JPATH_ROOT . '/components/com_sppagebuilder/layouts';
 		$css_path = new JLayoutFile('addon.css.button', $layout_path);
@@ -146,5 +196,4 @@ class SppagebuilderAddonModal extends SppagebuilderAddons{
 
 		return $css;
 	}
-
 }

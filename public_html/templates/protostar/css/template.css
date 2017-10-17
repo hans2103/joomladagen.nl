@@ -1705,6 +1705,14 @@ legend + .control-group {
 .subform-repeatable-wrapper tr.ui-sortable-helper {
 	display: table;
 }
+@media (min-width: 980px) and (max-width: 1215px) {
+	.float-cols .control-label {
+		float: none;
+	}
+	.float-cols .controls {
+		margin-left: 0;
+	}
+}
 table {
 	max-width: 100%;
 	background-color: transparent;
@@ -6173,6 +6181,7 @@ fieldset.radio.btn-group {
 }
 input.invalid {
 	border: 1px solid #9d261d;
+	background: #f2dede;
 }
 select.chzn-done.invalid + .chzn-container.chzn-container-single > a.chzn-single,
 select.chzn-done.invalid + .chzn-container.chzn-container-multi > ul.chzn-choices {

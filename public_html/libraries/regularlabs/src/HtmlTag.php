@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -35,14 +35,14 @@ class HtmlTag
 			return $tag1;
 		}
 
-		if (!RegEx::match('<([a-z][a-z0-9]*)', $tag1, $tag_type))
+		if ( ! RegEx::match('<([a-z][a-z0-9]*)', $tag1, $tag_type))
 		{
 			return $tag2;
 		}
 
 		$tag_type = $tag_type[1];
 
-		if (!$attribs = self::combineAttributes($tag1, $tag2))
+		if ( ! $attribs = self::combineAttributes($tag1, $tag2))
 		{
 			return '<' . $tag_type . '>';
 		}

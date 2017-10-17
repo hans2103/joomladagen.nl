@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -13,7 +13,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.form.formfield');
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -94,7 +94,7 @@ class RLFieldDependency
 
 		$file_alt = RL_RegEx::replace('(com|mod)_([a-z-_]+\.)', '\2', $file);
 
-		if (!JFile::exists($file) && !JFile::exists($file_alt))
+		if ( ! JFile::exists($file) && ! JFile::exists($file_alt))
 		{
 			$msg          = JText::sprintf('RL_THIS_EXTENSION_NEEDS_THE_MAIN_EXTENSION_TO_FUNCTION', JText::_($name));
 			$message_set  = 0;
@@ -107,7 +107,7 @@ class RLFieldDependency
 					break;
 				}
 			}
-			if (!$message_set)
+			if ( ! $message_set)
 			{
 				JFactory::getApplication()->enqueueMessage($msg, 'error');
 			}

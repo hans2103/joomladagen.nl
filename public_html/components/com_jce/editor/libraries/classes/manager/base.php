@@ -196,9 +196,10 @@ class WFMediaManagerBase extends WFEditorPlugin
             $meta['width'] = round($size[0]);
             $meta['height'] = round($size[1]);
         }
+
         if ($ext == 'wmv' && $meta['x'] == '') {
-            $meta['width'] = round($fileinfo['asf']['video_media']['2']['image_width']);
-            $meta['height'] = round(($fileinfo['asf']['video_media']['2']['image_height']) + 60);
+            $meta['width']  = round($fileinfo['asf']['video_media']['2']['image_width']);
+            $meta['height'] = round(($fileinfo['asf']['video_media']['2']['image_height']));
         }
 
         return $meta;
@@ -258,12 +259,25 @@ class WFMediaManagerBase extends WFEditorPlugin
         $filter = array_filter($filter);
 
         // get directory from parameter
-        $dir = $this->getParam('dir');
+        $dir = $this->getParam('dir', '', '', 'string', false);
 
         // fix Link plugin legacy "direction" conflict
         if ($this->get('caller') === 'link') {
             $fallback = $this->getParam('editor.dir');
             $dir = $this->getParam($this->getName().'.dir', $fallback);
+        }
+
+        $websafe_spaces = $this->getParam('editor.websafe_allow_spaces', '_');
+
+        if (is_numeric($websafe_spaces)) {
+            // legacy replacement
+            if ($websafe_spaces == 0) {           
+                $websafe_spaces = '_';
+            }
+            // convert to space
+            if ($websafe_spaces == 1) {
+                $websafe_spaces = ' ';
+            }
         }
 
         $base = array(
@@ -296,7 +310,7 @@ class WFMediaManagerBase extends WFEditorPlugin
                 ),
             ),
             'websafe_mode' => $this->getParam('editor.websafe_mode', 'utf-8'),
-            'websafe_spaces' => $this->getParam('editor.websafe_allow_spaces', 0),
+            'websafe_spaces' => $websafe_spaces,
             'websafe_textcase' => $textcase,
             'date_format' => $this->getParam('editor.date_format', '%d/%m/%Y, %H:%M'),
             'position' => $this->getParam('editor.filebrowser_position', $this->getParam('editor.browser_position', 'bottom')),

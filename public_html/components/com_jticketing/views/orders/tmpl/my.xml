@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="My Orders">
+		<message>
+			<![CDATA[My Campaigns]]>
+		</message>
+	</layout>
+	<!-- Add fields to the parameters object for the layout. -->
+	
+	<state>
+		<name>My Orders</name>
+		<description>My Orders</description>
+	</state>
+</metadata>

@@ -38,8 +38,19 @@ class SppagebuilderControllerIntegrations extends JControllerLegacy
 			die(json_encode($report));
 		}
 
+		$integration_api = 'http://sppagebuilder.com/api/integrations/integrations.json';
+
+		if( ini_get('allow_url_fopen') ) {
+			$ch_output = file_get_contents($integration_api);
+		} elseif(extension_loaded('curl')) {
+			$ch_output = self::getCurlData($integration_api);
+		} else {
+			$report['message'] = JText::_('Please enable \'cURL\' or url_fopen in PHP or Contact with your Server or Hosting administrator.');
+			die(json_encode($report));
+		}
+
+		$integrations = json_decode($ch_output);
 		$component = $input->get('integration', 'com_content', 'STRING');
-		$integrations = json_decode(file_get_contents('https://www.joomshaper.com/updates/pagebuilder/integrations.json'));
 
 		if(isset($integrations->$component) && $integrations->$component) {
 			$url = $integrations->$component->downloadUrl;
@@ -94,6 +105,15 @@ class SppagebuilderControllerIntegrations extends JControllerLegacy
 		JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
 
 		die(json_encode($report));
+	}
+
+	private static function getCurlData($url) {
+	    $ch = curl_init();
+	    curl_setopt($ch, CURLOPT_URL, $url);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+	    $data = curl_exec($ch);
+	    curl_close($ch);
+	    return $data;
 	}
 
 	// Activate

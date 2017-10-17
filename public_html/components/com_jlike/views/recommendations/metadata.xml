@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<view title="Recommendations">
+		<message><![CDATA[TYPESEARCHDESC]]></message>
+
+		<options var="layout">
+			<option value="recommendbyme" name="COM_JLIKE_RECOMMENDATIONS_BY_ME" msg="COM_JLIKE_RECOMMENDATIONS_BY_ME_MSG" />
+			<option value="recommendtome" name="COM_JLIKE_RECOMMENDATIONS_TO_ME" msg="COM_JLIKE_RECOMMENDATIONS_TO_ME_MSG" />
+			<option value="myassign" name="COM_JLIKE_MY_ASSIGNMENT" msg="COM_JLIKE_MY_ASSIGNMENT_DESC" />
+			<option value="sentassign" name="COM_JLIKE_SENT_ASSIGNMENT" msg="COM_JLIKE_SENT_ASSIGNMENT_DESV" />
+		</options>
+
+	</view>
+</metadata>

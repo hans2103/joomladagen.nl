@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter" >
+		<field
+			name="search"
+			type="text"
+			label="JSEARCH_FILTER"
+			hint="JSEARCH_FILTER"
+			description="JSEARCH_FILTER"
+		/>
+		<field
+			name="content_type"
+			type="jlikecontenttype"
+			label="COM_JLIKE_FORM_LBL_REMINDER_CONTENT_TYPE"
+			description="COM_JLIKE_FORM_LBL_REMINDER_CONTENT_TYPE"
+			onchange="this.form.submit();"
+			>
+			<option value="">COM_JLIKE_REMINDERS_CONTENT_TYPE_FILTER</option>
+		</field>
+		<field
+			name="state"
+			type="list"
+			label="COM_TJLMST_FILTER_PUBLISHED"
+			description="COM_TJLMST_FILTER_PUBLISHED_DESC"
+			onchange="this.form.submit();"
+			>
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+	</fields>
+	<fields name="list">
+		<field
+			name="fullordering"
+			type="list"
+			label="COM_CONTENT_LIST_FULL_ORDERING"
+			description="COM_CONTENT_LIST_FULL_ORDERING_DESC"
+			onchange="this.form.submit();"
+			default="a.id DESC"
+			>
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="a.ordering ASC">JGRID_HEADING_ORDERING_ASC</option>
+			<option value="a.ordering DESC">JGRID_HEADING_ORDERING_DESC</option>
+			<option value="a.state ASC">JSTATUS_ASC</option>
+			<option value="a.state DESC">JSTATUS_DESC</option>
+			<option value="a.title ASC">JGLOBAL_TITLE_ASC</option>
+			<option value="a.title DESC">JGLOBAL_TITLE_DESC</option>
+			<option value="a.days_before ASC">COM_JLIKE_REMINDERS_DAYS_BEFORE_ASC</option>
+			<option value="a.days_before DESC">COM_JLIKE_REMINDERS_DAYS_BEFORE_DESC</option>
+			<option value="a.content_type ASC">COM_JLIKE_REMINDERS_CONTENT_TYPE_ASC</option>
+			<option value="a.content_type DESC">COM_JLIKE_REMINDERS_CONTENT_TYPE_DESC</option>
+		</field>
+		<field
+			name="limit"
+			type="limitbox"
+			class="input-mini"
+			default="25"
+			label="COM_CONTENT_LIST_LIMIT"
+			description="COM_CONTENT_LIST_LIMIT_DESC"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -22,7 +22,7 @@ class ZooItem
 {
 	public function pass()
 	{
-		if (!$this->request->id || $this->request->option != 'com_zoo')
+		if ( ! $this->request->id || $this->request->option != 'com_zoo')
 		{
 			return $this->_(false);
 		}
@@ -35,13 +35,13 @@ class ZooItem
 		$pass = false;
 
 		// Pass Article Id
-		if (!$this->passItemByType($pass, 'ContentId'))
+		if ( ! $this->passItemByType($pass, 'ContentId'))
 		{
 			return $this->_(false);
 		}
 
 		// Pass Author
-		if (!$this->passItemByType($pass, 'Author'))
+		if ( ! $this->passItemByType($pass, 'Author'))
 		{
 			return $this->_(false);
 		}

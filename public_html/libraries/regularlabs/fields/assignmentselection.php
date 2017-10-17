@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -47,7 +47,7 @@ class JFormFieldRL_AssignmentSelection extends \RegularLabs\Library\Field
 
 		$html = [];
 
-		if (!$label)
+		if ( ! $label)
 		{
 			if ($use_main_toggle)
 			{
@@ -92,7 +92,7 @@ class JFormFieldRL_AssignmentSelection extends \RegularLabs\Library\Field
 		$html[] = '<fieldset id="' . $this->id . '"  class="radio btn-group">';
 
 		$onclick = ' onclick="RegularLabsScripts.setToggleTitleClass(this, 0)"';
-		$html[]  = '<input type="radio" id="' . $this->id . '0" name="' . $this->name . '" value="0"' . ((!$this->value) ? ' checked="checked"' : '') . $onclick . '>';
+		$html[]  = '<input type="radio" id="' . $this->id . '0" name="' . $this->name . '" value="0"' . (( ! $this->value) ? ' checked="checked"' : '') . $onclick . '>';
 		$html[]  = '<label class="rl_btn-ignore" for="' . $this->id . '0">' . JText::_('RL_IGNORE') . '</label>';
 
 		$onclick = ' onclick="RegularLabsScripts.setToggleTitleClass(this, 1)"';

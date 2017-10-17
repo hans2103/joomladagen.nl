@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 $row_settings = array(
 	'type' 	=> 'content',
@@ -197,6 +197,14 @@ $row_settings = array(
 				'format'=>'image',
 				'title'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_BACKGROUND_IMAGE'),
 				'std'=>'',
+				'show_input' => true
+			),
+
+			'background_parallax'=>array(
+				'type'=>'checkbox',
+				'title'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_PARALLAX_ENABLE'),
+				'desc'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_PARALLAX_ENABLE_DESC'),
+				'std'=>'0',
 			),
 
 			'overlay'=>array(
@@ -277,18 +285,41 @@ $row_settings = array(
 				'std'=>'0',
 			),
 
+			'external_background_video'=>array(
+				'type'=>'checkbox',
+				'title'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_EXTERNAL_VIDEO_ENABLE'),
+				'desc'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_EXTERNAL_VIDEO_ENABLE_DESC'),
+				'std'=>'0',
+				'depends'=>array('background_video'=>1)
+			),
+
 			'background_video_mp4'=>array(
 				'type'=>'media',
 				'format'=>'video',
 				'title'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_VIDEO_MP4'),
-				'depends'=>array('background_video'=>1)
+				'depends'=>array(
+					'background_video'=>1,
+					'external_background_video' => 0
+				)
 			),
 
 			'background_video_ogv'=>array(
 				'type'=>'media',
 				'format'=>'video',
 				'title'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_VIDEO_OGV'),
-				'depends'=>array('background_video'=>1)
+				'depends'=>array(
+					'background_video'=>1,
+					'external_background_video' => 0
+				)
+			),
+
+			'background_external_video'=>array(
+				'type'=>'text',
+				'title'=>JText::_('COM_SPPAGEBUILDER_ROW_BACKGROUND_VIDEO_YOUTUBE_VIMEO'),
+				'depends'=>array(
+					'background_video'=>1,
+					'external_background_video' => 1
+				)
 			),
 
 		),

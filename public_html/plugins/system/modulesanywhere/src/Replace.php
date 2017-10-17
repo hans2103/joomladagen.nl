@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Modules Anywhere
- * @version         7.3.2PRO
+ * @version         7.4.0PRO
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -9,7 +9,7 @@
  * @license         http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-namespace RegularLabs\ModulesAnywhere;
+namespace RegularLabs\Plugin\System\ModulesAnywhere;
 
 defined('_JEXEC') or die;
 
@@ -36,14 +36,14 @@ class Replace
 
 	public static function replaceTags(&$string, $area = 'article', $context = '')
 	{
-		if (!is_string($string) || $string == '')
+		if ( ! is_string($string) || $string == '')
 		{
 			return false;
 		}
 
 		$params = Params::get();
 
-		if (!RL_String::contains($string, Params::getTags(true)))
+		if ( ! RL_String::contains($string, Params::getTags(true)))
 		{
 			return false;
 		}
@@ -51,7 +51,7 @@ class Replace
 		// allow in component?
 		if (RL_Protect::isRestrictedComponent(isset($params->disabled_components) ? $params->disabled_components : [], $area))
 		{
-			if (!$params->disable_components_remove)
+			if ( ! $params->disable_components_remove)
 			{
 				Protect::protectTags($string);
 
@@ -112,7 +112,7 @@ class Replace
 
 	public static function processModules(&$string, $area = 'article', $context = '', $article = null)
 	{
-		if ($area == 'article' && $article && !RL_Protect::articlePassesSecurity($article, Params::get()->articles_security_level))
+		if ($area == 'article' && $article && ! RL_Protect::articlePassesSecurity($article, Params::get()->articles_security_level))
 		{
 			self::$message = JText::_('MA_OUTPUT_REMOVED_SECURITY');
 		}
@@ -125,7 +125,7 @@ class Replace
 
 			$string_check = substr($string, 0, $limit);
 
-			if (!RL_String::contains($string_check, Params::getTags(true)))
+			if ( ! RL_String::contains($string_check, Params::getTags(true)))
 			{
 				return;
 			}
@@ -134,22 +134,22 @@ class Replace
 		$params = Params::get();
 
 		if (
-			$area == 'article' && !$params->articles_enable
-			|| $area == 'components' && !$params->components_enable
-			|| $area == 'other' && !$params->other_enable
+			$area == 'article' && ! $params->articles_enable
+			|| $area == 'components' && ! $params->components_enable
+			|| $area == 'other' && ! $params->other_enable
 		)
 		{
 			self::$message = JText::_('MA_OUTPUT_REMOVED_NOT_ENABLED');
 		}
 
-		if (!RL_String::contains($string, Params::getTags(true)))
+		if ( ! RL_String::contains($string, Params::getTags(true)))
 		{
 			return;
 		}
 
 		jimport('joomla.application.module.helper');
 
-		if (!RL_Document::isFeed())
+		if ( ! RL_Document::isFeed())
 		{
 			JPluginHelper::importPlugin('content');
 		}
@@ -173,7 +173,7 @@ class Replace
 			$end_tags
 		);
 
-		if ($string == '' || !RL_String::contains($string, Params::getTags(true)))
+		if ($string == '' || ! RL_String::contains($string, Params::getTags(true)))
 		{
 			$string = $pre_string . $string . $post_string;
 
@@ -182,7 +182,7 @@ class Replace
 
 		$regex = Params::getRegex();
 
-		if (!RL_RegEx::match($regex, $string))
+		if ( ! RL_RegEx::match($regex, $string))
 		{
 			$string = $pre_string . $string . $post_string;
 
@@ -242,7 +242,7 @@ class Replace
 	{
 		$params = Params::get();
 
-		if (!empty(self::$message))
+		if ( ! empty(self::$message))
 		{
 			$html = '';
 
@@ -314,7 +314,7 @@ class Replace
 
 		if ($type == $params->module_tag)
 		{
-			if (!$chrome)
+			if ( ! $chrome)
 			{
 				$chrome = ($forcetitle && $params->style == 'none') ? 'xhtml' : $params->style;
 			}
@@ -329,7 +329,7 @@ class Replace
 		}
 		else
 		{
-			if (!$chrome)
+			if ( ! $chrome)
 			{
 				$chrome = ($forcetitle) ? 'xhtml' : '';
 			}
@@ -370,7 +370,7 @@ class Replace
 
 		$params = Params::get();
 
-		if (!$params->fix_html)
+		if ( ! $params->fix_html)
 		{
 			return false;
 		}
@@ -490,54 +490,12 @@ class Replace
 	{
 		$params = Params::get();
 
-		$ignore_access      = isset($ignores['ignore_access']) ? $ignores['ignore_access'] : $params->ignore_access;
-		$ignore_state       = isset($ignores['ignore_state']) ? $ignores['ignore_state'] : $params->ignore_state;
 		$ignore_assignments = isset($ignores['ignore_assignments']) ? $ignores['ignore_assignments'] : $params->ignore_assignments;
 		$ignore_caching     = isset($ignores['ignore_caching']) ? $ignores['ignore_caching'] : $params->ignore_caching;
 
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true)
-			->select('m.*')
-			->from('#__modules AS m')
-			->where('m.client_id = 0');
-		if (is_numeric($id))
-		{
-			$query->where('m.id = ' . (int) $id);
-		}
-		else
-		{
-			$query->where('m.title = ' . $db->quote(RL_String::html_entity_decoder($id)));
-		}
-		if (!$ignore_access)
-		{
-			$levels = JFactory::getUser()->getAuthorisedViewLevels();
-			$query->where('m.access IN (' . implode(',', $levels) . ')');
-		}
-		if (!$ignore_state)
-		{
-			$query->where('m.published = 1')
-				->join('LEFT', '#__extensions AS e ON e.element = m.module AND e.client_id = m.client_id')
-				->where('e.enabled = 1');
-		}
+		$module = self::getModuleFromDatabase($id, $ignores);
 
-		if (!$ignore_assignments)
-		{
-			$date     = JFactory::getDate();
-			$now      = $date->toSql();
-			$nullDate = $db->getNullDate();
-			$query->where('(m.publish_up = ' . $db->quote($nullDate) . ' OR m.publish_up <= ' . $db->quote($now) . ')')
-				->where('(m.publish_down = ' . $db->quote($nullDate) . ' OR m.publish_down >= ' . $db->quote($now) . ')');
-
-			if (JFactory::getApplication()->isSite() && JFactory::getApplication()->getLanguageFilter())
-			{
-				$query->where('m.language IN (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
-			}
-		}
-		$query->order('m.ordering');
-		$db->setQuery($query);
-		$module = $db->loadObject();
-
-		if (!$ignore_assignments)
+		if ( ! $ignore_assignments)
 		{
 			self::applyAssignments($module);
 		}
@@ -558,47 +516,11 @@ class Replace
 		// set style
 		$module->style = $chrome ?: 'none';
 
-		$settings = (object) [];
-
-		if (!empty($module->params))
-		{
-			$settings = substr(trim($module->params), 0, 1) == '{'
-				? json_decode($module->params)
-				// Old ini style. Needed for crappy old style modules like swMenuPro
-				: JRegistryFormat::getInstance('INI')->stringToObject($module->params);
-		}
-
-		if (!empty($overrides))
-		{
-			// override module parameters
-			foreach ($overrides as $key => $value)
-			{
-				if (isset($module->{$key}))
-				{
-					$module->{$key} = $value;
-					continue;
-				}
-
-				if ($value && $value['0'] == '[' && $value[strlen($value) - 1] == ']')
-				{
-					$value            = json_decode('{"val":' . $value . '}');
-					$settings->{$key} = $value->val;
-					continue;
-				}
-
-				if (isset($settings->{$key}) && is_array($settings->{$key}))
-				{
-					$settings->{$key} = explode(',', $value);
-					continue;
-				}
-
-				$settings->{$key} = $value;
-			}
-		}
+		$settings = self::getSettings($module, $overrides, $chrome);
 
 		$levels = JFactory::getUser()->getAuthorisedViewLevels();
 
-		if (isset($module->access) && !in_array($module->access, $levels))
+		if (isset($module->access) && ! in_array($module->access, $levels))
 		{
 			if ($params->place_comments)
 			{
@@ -608,27 +530,11 @@ class Replace
 			return '';
 		}
 
-		// Set style in params to override the chrome override in module settings
-		if ($chrome)
-		{
-			if (is_null($settings))
-			{
-				$settings = (object) [];
-			}
-
-			if (isset($settings->style) && $pos = strrpos($settings->style, '-'))
-			{
-				// Get part before the last '-'
-				$settings->style = substr($settings->style, 0, $pos);
-			}
-
-			$settings->style = isset($settings->style) && $settings->style ? $settings->style . '-' . $chrome : $chrome;
-		}
-
 		$module->params = json_encode($settings);
-		$document       = clone JFactory::getDocument();
-		$renderer       = $document->setType('html')->loadRenderer('module');
-		$html           = $renderer->render($module, ['style' => $module->style, 'name' => '']);
+
+		$document = clone JFactory::getDocument();
+		$renderer = $document->setType('html')->loadRenderer('module');
+		$html     = $renderer->render($module, ['style' => $module->style, 'name' => '']);
 
 		$show_edit = isset($overrides['show_edit']) ? $overrides['show_edit'] : $params->show_edit;
 		if ($show_edit)
@@ -639,10 +545,10 @@ class Replace
 		// don't return html on article level when caching is set
 		if (
 			$area == 'article'
-			&& !$ignore_caching
+			&& ! $ignore_caching
 			&& (
-				(isset($settings->cache) && !$settings->cache)
-				|| (isset($settings->owncache) && !$settings->owncache) // for stupid modules like RAXO that mess about with default params
+				(isset($settings->cache) && ! $settings->cache)
+				|| (isset($settings->owncache) && ! $settings->owncache) // for stupid modules like RAXO that mess about with default params
 			)
 		)
 		{
@@ -652,20 +558,164 @@ class Replace
 		return $html;
 	}
 
+	private static function getModuleFromDatabase($id, $ignores = [])
+	{
+		$params = Params::get();
+
+		$ignore_access      = isset($ignores['ignore_access']) ? $ignores['ignore_access'] : $params->ignore_access;
+		$ignore_state       = isset($ignores['ignore_state']) ? $ignores['ignore_state'] : $params->ignore_state;
+		$ignore_assignments = isset($ignores['ignore_assignments']) ? $ignores['ignore_assignments'] : $params->ignore_assignments;
+
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->select('m.*')
+			->from('#__modules AS m')
+			->where('m.client_id = 0')
+			->where(is_numeric($id)
+				? 'm.id = ' . (int) $id
+				: 'm.title = ' . $db->quote(RL_String::html_entity_decoder($id))
+			);
+
+		if ( ! $ignore_access)
+		{
+			$levels = JFactory::getUser()->getAuthorisedViewLevels();
+			$query->where('m.access IN (' . implode(',', $levels) . ')');
+		}
+
+		if ( ! $ignore_state)
+		{
+			$query->where('m.published = 1')
+				->join('LEFT', '#__extensions AS e ON e.element = m.module AND e.client_id = m.client_id')
+				->where('e.enabled = 1');
+		}
+
+		if ( ! $ignore_assignments)
+		{
+			$date     = JFactory::getDate();
+			$now      = $date->toSql();
+			$nullDate = $db->getNullDate();
+			$query->where('(m.publish_up = ' . $db->quote($nullDate) . ' OR m.publish_up <= ' . $db->quote($now) . ')')
+				->where('(m.publish_down = ' . $db->quote($nullDate) . ' OR m.publish_down >= ' . $db->quote($now) . ')');
+
+			if (RL_Document::isClient('site') && JFactory::getApplication()->getLanguageFilter())
+			{
+				$query->where('m.language IN (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
+			}
+		}
+
+		$query->order('m.ordering');
+		$db->setQuery($query);
+
+		return $db->loadObject();
+	}
+
+	private static function getSettings(&$module, $overrides = [], $chrome = '')
+	{
+		$settings = (object) [];
+
+		if ( ! empty($module->params))
+		{
+			$settings = substr(trim($module->params), 0, 1) == '{'
+				? json_decode($module->params)
+				// Old ini style. Needed for crappy old style modules like swMenuPro
+				: JRegistryFormat::getInstance('INI')->stringToObject($module->params);
+		}
+
+		if ( ! empty($chrome))
+		{
+			self::setSettingsChrome($chrome, $settings);
+		}
+
+		if ( ! empty($overrides))
+		{
+			self::setSettingsFromOverrides($overrides, $settings, $module);
+		}
+
+		return $settings;
+	}
+
+	private static function setSettingsChrome($chrome, &$settings)
+	{
+		// Set style in params to override the chrome override in module settings
+
+		if (isset($settings->style) && $pos = strrpos($settings->style, '-'))
+		{
+			// Get part before the last '-'
+			$settings->style = substr($settings->style, 0, $pos);
+		}
+
+		$settings->style = ! empty($settings->style)
+			? $settings->style . '-' . $chrome
+			: $chrome;
+	}
+
+	private static function setSettingsFromOverrides($overrides, &$settings, &$module)
+	{
+		// override module parameters
+		foreach ($overrides as $key => $value)
+		{
+			// Key is found in main module attributes
+			if (isset($module->{$key}))
+			{
+				$module->{$key} = $value;
+				continue;
+			}
+
+			// Key is found in advancedparams (Advanced Module Manager)
+			if (isset($module->advancedparams)
+				&& isset($module->advancedparams->{$key}))
+			{
+				$module->advancedparams->{$key} = $value;
+				continue;
+			}
+
+			// Key is an Advanced Module Manager assignment
+			if (isset($module->advancedparams)
+				&& isset($module->advancedparams->conditions)
+				&& strpos($key, 'assignto_') === 0)
+			{
+				$module->advancedparams->conditions[substr($key, 9)] = $value;
+				continue;
+			}
+
+			// Else just add to the $settings object
+
+			// Value is a json formatted array
+			if ($value
+				&& $value['0'] == '['
+				&& $value[strlen($value) - 1] == ']')
+			{
+				$value            = json_decode('{"val":' . $value . '}');
+				$settings->{$key} = $value->val;
+				continue;
+			}
+
+			// Value is found in the module params and should be an array
+			if (isset($settings->{$key})
+				&& is_array($settings->{$key}))
+			{
+				$settings->{$key} = explode(',', $value);
+				continue;
+			}
+
+			$settings->{$key} = $value;
+		}
+	}
+
 	private static function addFrontendEditing(&$module, &$html)
 	{
 		if (
 			trim($html) == ''
-			|| !JFactory::getApplication()->isSite()
-			|| !JFactory::getUser()->id
-			|| !JFactory::getUser()->authorise('core.edit', 'com_modules')
-			|| !JFactory::getUser()->authorise('core.edit', 'com_modules.module.' . $module->id)
+			|| ! RL_Document::isClient('site')
+			|| ! JFactory::getUser()->id
+			|| ! JFactory::getUser()->authorise('core.edit', 'com_modules')
+			|| ! JFactory::getUser()->authorise('core.edit', 'com_modules.module.' . $module->id)
 		)
 		{
 			return;
 		}
 
-		if (!$frontediting = JFactory::getApplication()->get('frontediting', 1))
+		if ( ! $frontediting = JFactory::getApplication()->get('frontediting', 1))
 		{
 			return;
 		}
@@ -713,6 +763,7 @@ class Replace
 		// for new Advanced Module Manager versions
 		if (class_exists('PlgSystemAdvancedModuleHelper'))
 		{
+			$module->use_amm_cache = false;
 			$modules = [$module->id => $module];
 			$helper  = new PlgSystemAdvancedModuleHelper;
 			$helper->onPrepareModuleList($modules);
@@ -731,6 +782,6 @@ class Replace
 		$db->setQuery($query);
 		$result = $db->loadResult();
 
-		$module->published = !empty($result);
+		$module->published = ! empty($result);
 	}
 }

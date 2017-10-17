@@ -103,6 +103,15 @@ class Pkg_AkeebaInstallerScript
 			return false;
 		}
 
+		// HHVM made sense in 2013, now PHP 7 is a way better solution than an hybrid PHP interpreter
+		if (defined('HHVM_VERSION'))
+		{
+			$msg = "<p>We have detected that you are running HHVM instead of PHP. This software WILL NOT WORK properly on HHVM. Please switch to PHP 7 instead.</p>";
+			JLog::add($msg, JLog::WARNING, 'jerror');
+
+			return false;
+		}
+
 		// Try to install FOF. We need to do this in preflight to make sure that FOF is available when we install our
 		// component. The reason being that the component's installation script extends FOF's InstallScript class.
 		// We can't use a <file> tag in our package manifest because FOF's package is *supposed* to fail to install if
@@ -111,6 +120,58 @@ class Pkg_AkeebaInstallerScript
 		$this->installOrUpdateFOF($parent);
 
 		return true;
+	}
+
+	/**
+	 * Runs after install, update or discover_update. In other words, it executes after Joomla! has finished installing
+	 * or updating your component. This is the last chance you've got to perform any additional installations, clean-up,
+	 * database updates and similar housekeeping functions.
+	 *
+	 * @param   string                       $type   install, update or discover_update
+	 * @param   \JInstallerAdapterComponent  $parent Parent object
+	 */
+	public function postflight($type, $parent)
+	{
+		/**
+		 * Clean the cache after installing the package.
+		 *
+		 * See bug report https://github.com/joomla/joomla-cms/issues/16147
+		 */
+		$conf = \JFactory::getConfig();
+		$clearGroups = array('_system', 'com_modules', 'mod_menu', 'com_plugins', 'com_modules');
+		$cacheClients = array(0, 1);
+
+		foreach ($clearGroups as $group)
+		{
+			foreach ($cacheClients as $client_id)
+			{
+				try
+				{
+					$options = array(
+						'defaultgroup' => $group,
+						'cachebase' => ($client_id) ? JPATH_ADMINISTRATOR . '/cache' : $conf->get('cache_path', JPATH_SITE . '/cache')
+					);
+
+					/** @var JCache $cache */
+					$cache = \JCache::getInstance('callback', $options);
+					$cache->clean();
+				}
+				catch (Exception $exception)
+				{
+					$options['result'] = false;
+				}
+
+				// Trigger the onContentCleanCache event.
+				try
+				{
+					JFactory::getApplication()->triggerEvent('onContentCleanCache', $options);
+				}
+				catch (Exception $e)
+				{
+					// Suck it up
+				}
+			}
+		}
 	}
 
 	/**
@@ -140,6 +201,10 @@ class Pkg_AkeebaInstallerScript
 		// Preload FOF classes required for the InstallScript. This is required since we'll be trying to uninstall FOF
 		// before uninstalling the component itself. The component has an uninstallation script which uses FOF, so...
 		@include_once(JPATH_LIBRARIES . '/fof30/include.php');
+		class_exists('FOF30\\Utils\\InstallScript\\BaseInstaller', true);
+		class_exists('FOF30\\Utils\\InstallScript\\Component', true);
+		class_exists('FOF30\\Utils\\InstallScript\\Module', true);
+		class_exists('FOF30\\Utils\\InstallScript\\Plugin', true);
 		class_exists('FOF30\\Utils\\InstallScript', true);
 		class_exists('FOF30\\Database\\Installer', true);
 

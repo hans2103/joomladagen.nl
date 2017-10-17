@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -49,7 +49,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 			|| ($this->params->inc_items && $this->request->view == 'productdetails')
 		);
 
-		if (!$pass)
+		if ( ! $pass)
 		{
 			return $this->pass(false);
 		}
@@ -67,7 +67,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 		else if ($this->request->category_id)
 		{
 			$cats = $this->request->category_id;
-			if (!is_numeric($cats))
+			if ( ! is_numeric($cats))
 			{
 				$query = $this->db->getQuery(true)
 					->select('config')
@@ -104,7 +104,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 			return $this->pass(false);
 		}
 
-		if (!$pass && $this->params->inc_children)
+		if ( ! $pass && $this->params->inc_children)
 		{
 			foreach ($cats as $cat)
 			{
@@ -120,7 +120,7 @@ class RLAssignmentsVirtueMart extends RLAssignment
 		// Because VM sucks, we have to get the view again
 		$this->request->view = JFactory::getApplication()->input->getString('view');
 
-		if (!$this->request->id || $this->request->option != 'com_virtuemart' || $this->request->view != 'productdetails')
+		if ( ! $this->request->id || $this->request->option != 'com_virtuemart' || $this->request->view != 'productdetails')
 		{
 			return $this->pass(false);
 		}

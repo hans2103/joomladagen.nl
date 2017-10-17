@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -11,7 +11,7 @@
 
 defined('_JEXEC') or die;
 
-if (!is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
+if ( ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php'))
 {
 	return;
 }
@@ -28,16 +28,26 @@ class JFormFieldRL_Components extends \RegularLabs\Library\Field
 	{
 		$this->params = $this->element->attributes();
 
-		$options = $this->getComponents();
-
-		if (empty($options))
-		{
-			return '';
-		}
-
 		$size = (int) $this->get('size');
 
-		return $this->selectListSimple($options, $this->name, $this->value, $this->id, $size, true);
+		return $this->selectListSimpleAjax(
+			$this->type, $this->name, $this->value, $this->id,
+			compact('size')
+		);
+	}
+
+	function getAjaxRaw()
+	{
+		$input = JFactory::getApplication()->input;
+
+		$options = $this->getComponents();
+
+		$name  = $input->getString('name', $this->type);
+		$id    = $input->get('id', strtolower($name));
+		$value = json_decode($input->getString('value', '[]'));
+		$size  = $input->getInt('size');
+
+		return $this->selectListSimple($options, $name, $value, $id, $size, true);
 	}
 
 	function getComponents()
@@ -45,7 +55,7 @@ class JFormFieldRL_Components extends \RegularLabs\Library\Field
 		$frontend = $this->get('frontend', 1);
 		$admin    = $this->get('admin', 1);
 
-		if (!$frontend && !$admin)
+		if ( ! $frontend && ! $admin)
 		{
 			return [];
 		}
@@ -77,13 +87,13 @@ class JFormFieldRL_Components extends \RegularLabs\Library\Field
 			$component_folder = ($frontend ? JPATH_SITE : JPATH_ADMINISTRATOR) . '/components/' . $component->element;
 
 			// return if there is no main component folder
-			if (!JFolder::exists($component_folder))
+			if ( ! JFolder::exists($component_folder))
 			{
 				continue;
 			}
 
 			// return if there is no view(s) folder
-			if (!JFolder::exists($component_folder . '/views') && !JFolder::exists($component_folder . '/view'))
+			if ( ! JFolder::exists($component_folder . '/views') && ! JFolder::exists($component_folder . '/view'))
 			{
 				continue;
 			}

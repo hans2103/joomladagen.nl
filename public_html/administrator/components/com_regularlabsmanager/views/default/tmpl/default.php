@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -15,6 +15,7 @@ use RegularLabs\Library\Document as RL_Document;
 use RegularLabs\Library\StringHelper as RL_String;
 use RegularLabs\Library\Version as RL_Version;
 
+JHtml::_('jquery.framework');
 JHtml::_('bootstrap.framework');
 JHtml::_('behavior.modal');
 JHtml::_('behavior.tooltip');
@@ -48,8 +49,8 @@ $script = "
 ";
 RL_Document::scriptDeclaration($script);
 
-RL_Document::script('regularlabsmanager/script.min.js', '7.0.3');
-RL_Document::style('regularlabsmanager/style.min.css', '7.0.3');
+RL_Document::script('regularlabsmanager/script.min.js', '7.1.4');
+RL_Document::style('regularlabsmanager/style.min.css', '7.1.4');
 
 $script = "
 	jQuery(document).ready(function() {
@@ -60,7 +61,7 @@ RL_Document::scriptDeclaration($script);
 
 $loading = '<div class="progress progress-striped active" style="min-width: 60px;"><div class="bar" style="width: 100%;"></div></div>';
 ?>
-	<div id="rl_key" <?php echo ($key || !$config->get('show_key_field', 1)) ? ' style="display:none;"' : '' ?>>
+	<div id="rl_key" <?php echo ($key || ! $config->get('show_key_field', 1)) ? ' style="display:none;"' : '' ?>>
 		<form action="<?php echo JRoute::_('index.php?option=com_regularlabsmanager'); ?>" method="post" class="form-horizontal">
 			<div class="well">
 				<h4><?php echo JText::_('RLEM_DOWNLOAD_KEY'); ?></h4>
@@ -162,6 +163,9 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 											case 'mod':
 												$icon = '<span class="label label-important">M</span>';
 												break;
+											case 'plg_fields':
+												$icon = '<span class="label label-info">P<small>F</small></span>';
+												break;
 											case 'plg_system':
 												$icon = '<span class="label label-info">P<small>S</small></span>';
 												break;
@@ -219,7 +223,7 @@ $loading = '<div class="progress progress-striped active" style="min-width: 60px
 										</span>
 										<?php
 										$missing = '';
-										if ($item->installed && !empty($item->missing))
+										if ($item->installed && ! empty($item->missing))
 										{
 											$missing = [];
 											foreach ($item->missing as $m)

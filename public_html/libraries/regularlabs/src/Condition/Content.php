@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Library
- * @version         17.5.13702
+ * @version         17.10.8196
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -31,14 +31,14 @@ abstract class Content
 			return $this->article;
 		}
 
-		if (!class_exists('ContentModelArticle'))
+		if ( ! class_exists('ContentModelArticle'))
 		{
 			require_once JPATH_SITE . '/components/com_content/models/article.php';
 		}
 
 		$model = JModelLegacy::getInstance('article', 'contentModel');
 
-		if (!method_exists($model, 'getItem'))
+		if ( ! method_exists($model, 'getItem'))
 		{
 			return null;
 		}

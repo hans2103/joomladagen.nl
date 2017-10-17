@@ -7,7 +7,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined('_JEXEC') or die('restricted aceess');
+defined('_JEXEC') or die('restricted access');
 
 class SppagebuilderAddonHeading extends SppagebuilderAddons {
 
@@ -62,7 +62,7 @@ class SppagebuilderAddonHeading extends SppagebuilderAddons {
       } else if(in_array('bold', $font_style)) {
         $style .= 'font-weight: bold;';
       } else if(in_array('bolder', $font_style)) {
-        $style .= 'font-weight: bolder;';
+        $style .= 'font-weight: 900;';
       }
     }
 
@@ -75,5 +75,4 @@ class SppagebuilderAddonHeading extends SppagebuilderAddons {
 
 		return $css;
   }
-
 }

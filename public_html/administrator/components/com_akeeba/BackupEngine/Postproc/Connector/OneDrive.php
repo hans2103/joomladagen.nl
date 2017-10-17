@@ -23,19 +23,19 @@ class OneDrive
 	 *
 	 * @var string
 	 */
-	private $accessToken = '';
+	protected $accessToken = '';
 
 	/**
 	 * The refresh token used to get a new access token for OneDrive
 	 *
 	 * @var string
 	 */
-	private $refreshToken = '';
+	protected $refreshToken = '';
 
 	/**
 	 * The root URL for the OneDrive API, ref http://onedrive.github.io/README.htm
 	 */
-	const rootUrl = 'https://api.onedrive.com/v1.0/';
+	protected $rootUrl = 'https://api.onedrive.com/v1.0/';
 
 	/**
 	 * The URL of the helper script which is used to get fresh API tokens
@@ -47,7 +47,7 @@ class OneDrive
 	 *
 	 * @var array
 	 */
-	private $defaultOptions = array(
+	protected $defaultOptions = array(
 		CURLOPT_SSL_VERIFYPEER => true,
 		CURLOPT_SSL_VERIFYHOST => true,
 		CURLOPT_VERBOSE        => true,
@@ -112,7 +112,7 @@ class OneDrive
 			return $response;
 		}
 
-		$refreshUrl = self::helperUrl . '?refresh_token=' . urlencode($this->refreshToken);
+		$refreshUrl = $this->getRefreshUrl();
 
 		$refreshResponse = $this->fetch('GET', $refreshUrl);
 
@@ -559,7 +559,7 @@ class OneDrive
 
 		if (substr($relativeUrl, 0, 6) != 'https:')
 		{
-			$url = self::rootUrl . ltrim($relativeUrl, '/');
+			$url = $this->rootUrl . ltrim($relativeUrl, '/');
 		}
 
 		// Should I expect a specific header?
@@ -788,7 +788,7 @@ class OneDrive
 	 */
 	protected function getAuthenticatedUrl($relativeUrl)
 	{
-		$url = self::rootUrl . ltrim($relativeUrl, '/');
+		$url = $this->rootUrl . ltrim($relativeUrl, '/');
 		$url .= (strpos($relativeUrl, '?') !== false) ? '&' : '?';
 		$url .= 'access_token=' . $this->accessToken;
 
@@ -829,5 +829,13 @@ class OneDrive
 		$path = str_replace(' ', '%20', $path);
 
 		return $path;
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getRefreshUrl()
+	{
+		return self::helperUrl . '?refresh_token=' . urlencode($this->refreshToken);
 	}
 }

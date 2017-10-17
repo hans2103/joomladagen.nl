@@ -1,7 +1,7 @@
 <?php
 /**
  * @package         Regular Labs Extension Manager
- * @version         7.0.3
+ * @version         7.1.4
  * 
  * @author          Peter van Westen <info@regularlabs.com>
  * @link            http://www.regularlabs.com
@@ -12,14 +12,14 @@
 defined('_JEXEC') or die;
 
 // Access check.
-if (!JFactory::getUser()->authorise('core.manage', 'com_regularlabsmanager'))
+if ( ! JFactory::getUser()->authorise('core.manage', 'com_regularlabsmanager'))
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
 $helper = new RegularLabsManagerHelper;
 
-if (!$helper->isFrameworkEnabled())
+if ( ! $helper->isFrameworkEnabled())
 {
 	return false;
 }
@@ -57,12 +57,12 @@ class RegularLabsManagerHelper
 	public function isFrameworkEnabled()
 	{
 		// Return false if Regular Labs Library is not installed
-		if (!$this->isFrameworkInstalled())
+		if ( ! $this->isFrameworkInstalled())
 		{
 			return false;
 		}
 
-		if (!JPluginHelper::isEnabled('system', 'regularlabs'))
+		if ( ! JPluginHelper::isEnabled('system', 'regularlabs'))
 		{
 			$this->throwError(
 				JText::_($this->_lang_prefix . '_REGULAR_LABS_LIBRARY_NOT_ENABLED')
@@ -85,8 +85,8 @@ class RegularLabsManagerHelper
 		jimport('joomla.filesystem.file');
 
 		if (
-			!is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
-			|| !is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
+			! is_file(JPATH_PLUGINS . '/system/regularlabs/regularlabs.xml')
+			|| ! is_file(JPATH_LIBRARIES . '/regularlabs/autoload.php')
 		)
 		{
 			$this->throwError(
@@ -113,7 +113,7 @@ class RegularLabsManagerHelper
 		jimport('joomla.filesystem.folder');
 
 		// Check if old NoNumber Extension Manager is still installed
-		if (!JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_nonumbermanager'))
+		if ( ! JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_nonumbermanager'))
 		{
 			return;
 		}

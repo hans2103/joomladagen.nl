@@ -2,8 +2,8 @@
 <extension version="3.4" type="plugin" group="system" method="upgrade">
 	<name>plg_system_regularlabs</name>
 	<description>PLG_SYSTEM_REGULARLABS_DESC</description>
-	<version>17.5.13702</version>
-	<creationDate>May 2017</creationDate>
+	<version>17.10.8196</version>
+	<creationDate>October 2017</creationDate>
 	<author>Regular Labs (Peter van Westen)</author>
 	<authorEmail>info@regularlabs.com</authorEmail>
 	<authorUrl>https://www.regularlabs.com</authorUrl>
@@ -41,7 +41,7 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="max_list_count" type="text" size="10" class="input-mini" default="2500"
+				<field name="max_list_count" type="text" size="10" class="input-mini" default="5000"
 					   label="RL_MAX_LIST_COUNT"
 					   description="RL_MAX_LIST_COUNT_DESC" />
 			</fieldset>

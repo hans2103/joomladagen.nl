@@ -6,7 +6,7 @@
 * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 $column_settings = array(
 	'attr' => array(
@@ -109,6 +109,11 @@ $column_settings = array(
 				'desc'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_PADDING_DESC'),
 			),
 
+			'boxshadow'=>array(
+				'type'=>'boxshadow',
+				'title'=>JText::_('COM_SPPAGEBUILDER_GLOBAL_BOXSHADOW'),
+			),
+
 			'class'=>array(
 				'type' 		=> 'text',
 				'title' 	=> JText::_('COM_SPPAGEBUILDER_CSS_CLASS'),
@@ -183,7 +188,7 @@ $column_settings = array(
 					'desc'		=> JText::_('COM_SPPAGEBUILDER_GLOBAL_HIDDEN_MD_DESC'),
 					'std'		=> '',
 				),
-				
+
 			),
 
 			'animation' => array(

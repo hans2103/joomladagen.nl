@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 require_once __DIR__ . '/twitteroauth/twitteroauth.php';
 jimport( 'joomla.filesystem.folder' );
@@ -21,12 +21,12 @@ class sppbAddonHelperTweet
 		$cachetime           = 60*15;
 
 		$tweets = '';
-		
+
 		//Create cache folder if not exists
 		if(!JFolder::exists( $cache_path )) JFolder::create( $cache_path );
 
 		$cache_file_created  = ((Jfile::exists($cache_file))) ? filemtime($cache_file) : 0;
-		
+
 		if (time() - $cachetime < $cache_file_created)
 		{
 			$tweets = json_decode(JFile::read( $cache_file ) );

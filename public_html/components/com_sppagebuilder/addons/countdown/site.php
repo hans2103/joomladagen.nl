@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 or later
 */
 //no direct accees
-defined ('_JEXEC') or die ('restricted aceess');
+defined ('_JEXEC') or die ('restricted access');
 
 class SppagebuilderAddonCountdown extends SppagebuilderAddons{
 
@@ -17,25 +17,12 @@ class SppagebuilderAddonCountdown extends SppagebuilderAddons{
 		$title 				= (isset($this->addon->settings->title) && $this->addon->settings->title) ? $this->addon->settings->title : '';
 		$heading_selector 	= (isset($this->addon->settings->heading_selector) && $this->addon->settings->heading_selector) ? $this->addon->settings->heading_selector : 'h3';
 
-		$countdown_data = array(
-			'date' 		  		=> JHtml::_('date', $this->addon->settings->date, 'Y/m/d'),
-			'time' 		  		=> $this->addon->settings->time,
-			'finish_text' 	=> $this->addon->settings->finish_text,
-			'text_sec' 	  	=> JTEXT::_('COM_SPPAGEBUILDER_SECOND'),
-			'text_secs' 		=> JTEXT::_('COM_SPPAGEBUILDER_SECONDS'),
-			'text_min' 	  	=> JTEXT::_('COM_SPPAGEBUILDER_MINUTE'),
-			'text_mins' 		=> JTEXT::_('COM_SPPAGEBUILDER_MINUTES'),
-			'text_hour'   	=> JTEXT::_('COM_SPPAGEBUILDER_HOUR'),
-			'text_hours'   	=> JTEXT::_('COM_SPPAGEBUILDER_HOURS'),
-			'text_day'   		=> JTEXT::_('COM_SPPAGEBUILDER_DAY'),
-			'text_days'   	=> JTEXT::_('COM_SPPAGEBUILDER_DAYS'),
-		);
-
-		$output  = '<div class="sppb-addon sppb-addon-countdown' . $class . '">';
+		$output  = '';
+		$output .= '<div class="sppb-addon sppb-addon-countdown ' . $class . '">';
 		$output .= '<div class="countdown-text-wrap">';
 		$output .= ($title) ? '<'.$heading_selector.' class="sppb-addon-title">' . $title . '</'.$heading_selector.'>' : '';
 		$output .= '</div>';
-		$output .= "<div class='sppb-countdown-timer sppb-row' data-countdown='" . json_encode($countdown_data) . " '></div>";
+		$output .= "<div class='sppb-countdown-timer sppb-row'></div>";
 		$output .= '</div>';
 
 		return $output;
@@ -46,17 +33,20 @@ class SppagebuilderAddonCountdown extends SppagebuilderAddons{
 	}
 
 	public function js() {
+		$date 		  			= JHtml::_('date', $this->addon->settings->date, 'Y/m/d');
+		$time 		  			= $this->addon->settings->time;
+		$finish_text 			= addslashes($this->addon->settings->finish_text);
+
 		$js ="jQuery(function($){
-			$('.sppb-countdown-timer[data-countdown]').each(function () {
-					var cdData = $(this).data('countdown');
-					var cdData = $.parseJSON(cdData);
-					var cdDate = cdData.date.split('/');
-					var cdDateFormate = cdDate[0] + '/' + cdDate[1] + '/' + cdDate[2] + ' ' + cdData.time;
-					var finalDate = cdDateFormate;
-					$(this).countdown(finalDate, function (event) {
-							$(this).html(event.strftime('<div class=\"sppb-countdown-days sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%-D</span><span class=\"sppb-countdown-text\">%!D: ' + cdData.text_day + ',' + cdData.text_days + ';</span></div><div class=\"sppb-countdown-hours sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%H</span><span class=\"sppb-countdown-text\">%!H: ' + cdData.text_hour + ',' + cdData.text_hours + ';</span></div><div class=\"sppb-countdown-minutes sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%M</span><span class=\"sppb-countdown-text\">%!M:' + cdData.text_min + ',' + cdData.text_mins + ';</span></div><div class=\"sppb-countdown-seconds sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%S</span><span class=\"sppb-countdown-text\">%!S:' + cdData.text_sec + ',' + cdData.text_secs + ';</span></div>'))
+			var addon_id = '#sppb-addon-'+'".$this->addon->id."';
+			//console.log(addon_id +' .sppb-addon-countdown .sppb-countdown-timer');
+			$( addon_id +' .sppb-addon-countdown .sppb-countdown-timer').each(function () {
+					var cdDateFormate = '".$date."' + ' ' + '".$time."';
+					//console.log(cdDateFormate);
+					$(this).countdown(cdDateFormate, function (event) {
+							$(this).html(event.strftime('<div class=\"sppb-countdown-days sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%-D</span><span class=\"sppb-countdown-text\">%!D: ' + '".JTEXT::_('COM_SPPAGEBUILDER_DAY')."' + ',' + '".JTEXT::_('COM_SPPAGEBUILDER_DAYS')."' + ';</span></div><div class=\"sppb-countdown-hours sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%H</span><span class=\"sppb-countdown-text\">%!H: ' + '".JTEXT::_('COM_SPPAGEBUILDER_HOUR')."' + ',' + '".JTEXT::_('COM_SPPAGEBUILDER_HOURS')."' + ';</span></div><div class=\"sppb-countdown-minutes sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%M</span><span class=\"sppb-countdown-text\">%!M:' + '".JTEXT::_('COM_SPPAGEBUILDER_MINUTE')."' + ',' + '".JTEXT::_('COM_SPPAGEBUILDER_MINUTES')."' + ';</span></div><div class=\"sppb-countdown-seconds sppb-col-xs-6 sppb-col-sm-3 sppb-text-center\"><span class=\"sppb-countdown-number\">%S</span><span class=\"sppb-countdown-text\">%!S:' + '".JTEXT::_('COM_SPPAGEBUILDER_SECOND')."' + ',' + '".JTEXT::_('COM_SPPAGEBUILDER_SECONDS')."' + ';</span></div>'))
 							.on('finish.countdown', function () {
-									$(this).html('<strong>' + cdData.finish_text + '</strong>');
+									$(this).html('<div class=\"sppb-countdown-finishedtext-wrap sppb-col-xs-12 sppb-col-sm-12 sppb-text-center\"><h3 class=\"sppb-countdown-finishedtext\">' + '".$finish_text."' + '</h3></div>');
 							});
 					});
 			});
@@ -87,7 +77,7 @@ class SppagebuilderAddonCountdown extends SppagebuilderAddons{
 
 		$css = '';
 		if($counter_style) {
-			$css .= $addon_id . ' .sppb-countdown-number {';
+			$css .= $addon_id . ' .sppb-countdown-number, '. $addon_id .' .sppb-countdown-finishedtext {';
 			$css .= $counter_style;
 			$css .= '}';
 		}

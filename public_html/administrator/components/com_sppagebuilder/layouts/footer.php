@@ -41,6 +41,12 @@ $doc->addStylesheet( JURI::base(true) . '/components/com_sppagebuilder/assets/cs
 					</li>
 
 					<li>
+						<a target="_blank" href="https://www.transifex.com/joomshaper/sp-page-builder/">
+							Find &amp; Help Translate
+						</a>
+					</li>
+
+					<li>
 						<a target="_blank" href="http://extensions.joomla.org/extension/sp-page-builder">
 							<img src="<?php echo JURI::base(true) . '/components/com_sppagebuilder/assets/img/joomla.png'; ?>" alt="JED"> Rate on JED
 						</a>
