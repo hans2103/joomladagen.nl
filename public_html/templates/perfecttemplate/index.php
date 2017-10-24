@@ -9,7 +9,10 @@
 defined('_JEXEC') or die;
 
 // Load Perfect Template Helper
-include_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+
+// JLayout render
+require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 
 PWTTemplateHelper::setMetadata();
 PWTTemplateHelper::setFavicon();
@@ -17,10 +20,7 @@ PWTTemplateHelper::unloadCss();
 PWTTemplateHelper::unloadJs();
 PWTTemplateHelper::loadCss();
 PWTTemplateHelper::loadJs();
-PWTTemplateHelper::localstorageFont('PerfectFont');
-
-// Load JLayouts helper
-require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout/render.php';
+PWTTemplateHelper::localstorageFont();
 
 ?>
 <!DOCTYPE html>
@@ -30,7 +30,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
 </head>
 
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
-<?php echo PWTTemplateHelper::getAnalytics(2, 'GTM-NQZ8SP')['script']; ?>
+<?php echo PWTTemplateHelper::getAnalytics(2,'GTM-NQZ8SP'); ?>
 
 <header class="header" role="banner">
     <div class="header__wrapper">
