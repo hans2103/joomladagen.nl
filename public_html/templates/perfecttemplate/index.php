@@ -36,7 +36,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/perfectlayout
     <div class="header__wrapper">
         <div class="header__logo">
             <a href="<?php echo JURI::base(); ?>" class="logo">
-                <span class="logo--brand">Joomla</span>Dagen 2017
+                <span class="logo--brand">Joomla</span>Dagen 2018
             </a>
         </div>
         <div class="header__navigation">
