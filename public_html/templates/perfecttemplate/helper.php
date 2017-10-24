@@ -9,7 +9,10 @@ defined('_JEXEC') or die();
 
 class PWTTemplateHelper
 {
-	const template = 'perfecttemplate';
+	static public function template()
+	{
+		return JFactory::getApplication()->getTemplate();
+	}
 
 	/**
 	 * Method to manually override the META-generator
@@ -44,7 +47,7 @@ class PWTTemplateHelper
 		$doc->setMetaData('apple-mobile-web-app-capable', 'yes');
 		$doc->setMetaData('apple-mobile-web-app-status-bar-style', 'black');
 		$doc->setMetaData('apple-mobile-web-app-title', $config->get('sitename'));
-		$doc->setGenerator($config->get('sitename'));
+		self::setGenerator(self::getSitename());
 	}
 
 	/**
@@ -56,9 +59,9 @@ class PWTTemplateHelper
 	{
 		$doc = JFactory::getDocument();
 
-		$doc->addHeadLink('templates/' . self::template . '/images/favicon.ico', 'shortcut icon', 'rel', array('type' => 'image/ico'));
-		$doc->addHeadLink('templates/' . self::template . '/images/favicon.png', 'shortcut icon', 'rel', array('type' => 'image/png'));
-		$doc->addHeadLink('templates/' . self::template . '/images/xtouch-icon.png', 'apple-touch-icon', 'rel', array('type' => 'image/png'));
+		$doc->addHeadLink('templates/' . self::template() . '/images/favicon.ico', 'shortcut icon', 'rel', array('type' => 'image/ico'));
+		$doc->addHeadLink('templates/' . self::template() . '/images/favicon.png', 'shortcut icon', 'rel', array('type' => 'image/png'));
+		$doc->addHeadLink('templates/' . self::template() . '/images/xtouch-icon.png', 'apple-touch-icon', 'rel', array('type' => 'image/png'));
 	}
 
 	/**
@@ -79,6 +82,20 @@ class PWTTemplateHelper
 	static public function getSitename()
 	{
 		return JFactory::getConfig()->get('config.sitename');
+	}
+
+	/**
+	 * Method to get wether site is in development
+	 *
+	 * @access public
+	 *
+	 * @param string $name Name of last word in site title
+	 *
+	 * @return string
+	 */
+	static public function isDevelopment($name = '[dev]')
+	{
+		return boolval(strpos(JFactory::getConfig()->get('sitename'), $name));
 	}
 
 	/**
@@ -121,6 +138,58 @@ class PWTTemplateHelper
 	}
 
 	/**
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	static public function getPageOption()
+	{
+		$input = JFactory::getApplication()->input;
+
+		return str_replace('_', '-', $input->getCmd('option', ''));
+	}
+
+	/**
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	static public function getPageView()
+	{
+		$input = JFactory::getApplication()->input;
+
+		return str_replace('_', '-', $input->getCmd('view', ''));
+	}
+
+	/**
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	static public function getPageLayout()
+	{
+		$input = JFactory::getApplication()->input;
+
+		return str_replace(self::template(), '', $input->getCmd('layout', ''));
+	}
+
+	/**
+	 *
+	 * @return mixed
+	 *
+	 * @since version
+	 */
+	static public function getPageTask()
+	{
+		$input = JFactory::getApplication()->input;
+
+		return str_replace('_', '', $input->getCmd('task', ''));
+	}
+	
+	/**
 	 * get parameter 'Show Intro Image' set with Menu Item
 	 *
 	 * @return mixed
@@ -130,7 +199,6 @@ class PWTTemplateHelper
 	{
 		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
 		$parameter  = ($activeMenu) ? $activeMenu->params->get($param, 1) : '';
-
 		return $parameter;
 	}
 
@@ -144,25 +212,15 @@ class PWTTemplateHelper
 	 */
 	static public function getBodySuffix()
 	{
-		$input = JFactory::getApplication()->input;
-
 		$classes   = array();
-		$classes[] = 'option-' . str_replace('_', '-', $input->getCmd('option'));
-		$classes[] = 'view-' . $input->getCmd('view');
-		$classes[] = 'page-' . self::getItemId();
-		$classes[] = PWTTemplateHelper::getPageClass();
-
-		if (self::isHome())
-		{
-			$classes[] = 'path-home';
-		}
-
-		if (!self::isHome())
-		{
-			$classes[] = 'path-' . implode('-', self::getPath('array'));
-		}
-
-		//$classes[] = 'home-' . (int) self::isHome();
+		$classes[] = 'option-' . self::getPageOption();
+		$classes[] = 'view-' . self::getPageView();
+		$classes[] = self::getPageLayout() ? 'layout-' . self::getPageLayout() : 'no-layout';
+		$classes[] = self::getPageTask() ? 'task-' . self::getPageTask() : 'no-task';
+		$classes[] = 'itemid-' . self::getItemId();
+		$classes[] = self::getPageClass();
+		$classes[] = self::isHome() ? 'path-home' : 'path-' . implode('-', self::getPath('array'));
+		$classes[] = 'home-' . (int) self::isHome();
 
 		return implode(' ', $classes);
 	}
@@ -194,7 +252,7 @@ class PWTTemplateHelper
 	{
 		$doc = JFactory::getDocument();
 
-		$unset_css = array('com_finder', 'com_rsform');
+		$unset_css = array('com_finder');
 		foreach ($doc->_styleSheets as $name => $style)
 		{
 			foreach ($unset_css as $css)
@@ -213,7 +271,7 @@ class PWTTemplateHelper
 	 */
 	static public function loadCss()
 	{
-		JFactory::getDocument()->addStyleSheet('templates/' . self::template . '/css/style.css');
+		JHtml::_('stylesheet', 'templates/' . self::template() . '/css/style.css', array('version' => 'auto'));
 	}
 
 	/**
@@ -235,7 +293,7 @@ class PWTTemplateHelper
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
-		//unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
+		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);
@@ -263,56 +321,35 @@ class PWTTemplateHelper
 	 */
 	static public function loadJs()
 	{
-		$doc = JFactory::getDocument();
-
-		$doc->addScript('templates/' . self::template . '/js/modernizr.js');
-		$doc->addScript('templates/' . self::template . '/js/scripts.js');
+		JHtml::_('script', 'templates/' . self::template() . '/js/modernizr.js', array('version' => 'auto'));
+		JHtml::_('script', 'templates/' . self::template() . '/js/scripts.js', array('version' => 'auto'));
 	}
 
-	/**
-	 * Load script for Vanilla JS Responsive Menu
-	 * @since  PerfectSite2.1.0
-	 */
-	static public function loadResponsiveMenuJS()
-	{
-		$javascript = '<!-- Vanilla JS Responsive Menu -->
-function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"))}var el=document.documentElement;var cl="no-js";if(hasClass(el,cl)){var reg=new RegExp("(\\s|^)"+cl+"(\\s|$)");el.className=el.className.replace(reg," js")}
-		';
-
-		JFactory::getDocument()->addScriptDeclaration($javascript);
-	}
 
 	/**
 	 * Load custom font in localstorage
 	 *
-	 * @param $fontname
+	 * @since  PerfectSite2.1.0
+	 */
+	static public function localstorageFont()
+	{
+		// Keep whitespace below for nicer source code
+		$javascript = "    !function(){\"use strict\";function e(e,t,n){e.addEventListener?e.addEventListener(t,n,!1):e.attachEvent&&e.attachEvent(\"on\"+t,n)}function t(e){return window.localStorage&&localStorage.font_css_cache&&localStorage.font_css_cache_file===e}function n(){if(window.localStorage&&window.XMLHttpRequest)if(t(o))c(localStorage.font_css_cache);else{var n=new XMLHttpRequest;n.open(\"GET\",o,!0),e(n,\"load\",function(){4===n.readyState&&(c(n.responseText),localStorage.font_css_cache=n.responseText,localStorage.font_css_cache_file=o)}),n.send()}else{var a=document.createElement(\"link\");a.href=o,a.rel=\"stylesheet\",a.type=\"text/css\",document.getElementsByTagName(\"head\")[0].appendChild(a),document.cookie=\"font_css_cache\"}}function c(e){var t=document.createElement(\"style\");t.innerHTML=e,document.getElementsByTagName(\"head\")[0].appendChild(t)}var o=\"/templates/".self::template()."/css/font.css\";window.localStorage&&localStorage.font_css_cache||document.cookie.indexOf(\"font_css_cache\")>-1?n():e(window,\"load\",n)}();";
+		JFactory::getDocument()->addScriptDeclaration($javascript);
+	}
+
+
+	/**
+	 * Ajax for SVG
 	 *
 	 * @since  PerfectSite2.1.0
 	 */
-	static public function localstorageFont($fontname)
+	static public function ajaxSVG()
 	{
-		$javascript = "<!-- Local Storage for font -->
-  !function () {
-    function addFont(font) {
-      var style = document.createElement('style');
-      style.rel = 'stylesheet';
-      document.head.appendChild(style);
-      style.textContent = font
-    }
-    var font = '" . $fontname . "';
-    try {
-      if (localStorage[font])addFont(localStorage[font]); else {
-        var request = new XMLHttpRequest;
-        request.open('GET', '" . JURI::Base() . "templates/" . self::template . "/css/font.css', !0);
-        request.onload = function () {
-          request.status >= 200 && request.status < 400 && (localStorage[font] = request.responseText, addFont(request.responseText))
-        }, request.send()
-      }
-    } catch (d) {
-    }
-  }();";
+		$javascript = "var ajax=new XMLHttpRequest;ajax.open(\"GET\",\"" . JURI::Base() . "templates/" . self::template() . "/icons/icons.svg\",!0),ajax.send(),ajax.onload=function(a){var b=document.createElement(\"div\");b.className='svg-sprite';b.innerHTML=ajax.responseText,document.body.insertBefore(b,document.body.childNodes[0])};";
 		JFactory::getDocument()->addScriptDeclaration($javascript);
 	}
+
 
 	/**
 	 * Method to detect a certain browser type
@@ -369,23 +406,27 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
 	 *
 	 * @param $template
 	 *
-	 * @return array
+	 * @return string
 	 * @since  PerfectSite2.1.0
 	 */
 	static public function getAnalytics($analytics = null, $analyticsId = null)
 	{
-		$doc = JFactory::getDocument();
+		$doc        = JFactory::getDocument();
+		$bodyScript = '';
+
+		if (!$analyticsId)
+		{
+			return false;
+		}
 
 		switch ($analytics)
 		{
 			case 0:
 				break;
+
 			case 1:
 				// Universal Google Universal Analytics - loaded in head
-				if ($analyticsId)
-				{
-					$analyticsScript = "
-
+				$headScript = "
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -394,45 +435,40 @@ function hasClass(e,t){return e.className.match(new RegExp("(\\s|^)"+t+"(\\s|$)"
         ga('create', '" . $analyticsId . "', 'auto');
         ga('send', 'pageview');
       ";
-					$doc->addScriptDeclaration($analyticsScript);
-				}
+				$doc->addScriptDeclaration($headScript);
+
 				break;
+
 			case 2:
 				// Google Tag Manager - party loaded in head
-				if ($analyticsId)
-				{
-					$analyticsScript = "
-
+				$headScript = "
   <!-- Google Tag Manager -->
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','" . $analyticsId . "');
   <!-- End Google Tag Manager -->
 
           ";
-					$doc->addScriptDeclaration($analyticsScript);
+				$doc->addScriptDeclaration($headScript);
 
-					// Google Tag Manager - partly loaded directly after body
-					$analyticsScript = "<!-- Google Tag Manager -->
+				// Google Tag Manager - partly loaded directly after body
+				$bodyScript = "<!-- Google Tag Manager -->
 <noscript><iframe src=\"//www.googletagmanager.com/ns.html?id=" . $analyticsId . "\" height=\"0\" width=\"0\" style=\"display:none;visibility:hidden\"></iframe></noscript>
 <!-- End Google Tag Manager -->
 ";
 
-					return array('script' => $analyticsScript, 'position' => 'after_body_start');
-				}
 				break;
 			case 3:
 				// Mixpanel.com - loaded in head
-				if ($analyticsId)
-				{
-					$analyticsScript = "
-
+				$headScript = "
 <!-- start Mixpanel -->(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(\".\");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;\"undefined\"!==typeof d?c=b[d]=[]:d=\"mixpanel\";c.people=c.people||[];c.toString=function(b){var a=\"mixpanel\";\"mixpanel\"!==d&&(a+=\".\"+d);b||(a+=\" (stub)\");return a};c.people.toString=function(){return c.toString(1)+\".people (stub)\"};i=\"disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user\".split(\" \");
 for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=e.createElement(\"script\");a.type=\"text/javascript\";a.async=!0;a.src=\"undefined\"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:\"file:\"===e.location.protocol&&\"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\".match(/^\/\//)?\"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\":\"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js\";f=e.getElementsByTagName(\"script\")[0];f.parentNode.insertBefore(a,f)}})(document,window.mixpanel||[]);
 mixpanel.init(\"" . $analyticsId . "\");<!-- end Mixpanel -->
       ";
-					$doc->addScriptDeclaration($analyticsScript);
-				}
+				$doc->addScriptDeclaration($headScript);
+
 				break;
 		}
+
+		return $bodyScript;
 	}
 
 	static public function renderHelixTitle()
