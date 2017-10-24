@@ -1,29 +1,47 @@
-module.exports = function (grunt) {
+'use strict';
+
+module.exports = function(grunt) {
 
     // measures the time each task takes
     require('time-grunt')(grunt);
 
-    var config = {
-        src: 'public_html/templates/perfecttemplate/assets',
-        dest: 'public_html/templates/perfecttemplate',
-        proxy: 'http://joomladagen.local',
-        templateScripts: [
-            'bower_components/apollo.js/dist/apollo.min.js',
-            'bower_components/vanilla-js-responsive-menu/vanilla.js.responsive.menu.js',
-            //'bower_components/jquery/dist/jquery.min.js',
-            '<%= config.src %>/scripts/svg-injector.js',
-            '<%= config.src %>/scripts/main.js'
-        ]
-    };
-
-    // load grunt config
-    require('load-grunt-config')(grunt, {
-        config: {
-            config: config
-        }
+    // load time-grunt and all grunt plugins found in the package.json
+    require('jit-grunt')(grunt, {
+        versioncheck: 'grunt-version-check'
     });
 
-    // grunt tasks
-    grunt.registerTask('default', ['shell', 'modernizr', 'webfont', 'watch']);
+    var options = {
+        // Project settings
+        paths: {
+            // Configurable paths
+            template: 'public_html/templates/perfecttemplate',
+            assets: 'public_html/templates/perfecttemplate/assets'
+        },
+        browsersync : {
+            port : '5666', //NVML
+            proxy: 'joomladagen.dev',
+            open: false
+        }
+    };
+
+    // Load grunt configurations automatically
+    var configs = require('load-grunt-configs')(grunt, options);
+
+    // Define the configuration for all the tasks
+    grunt.initConfig(configs);
+
+    // The dev task will be used during development
+    grunt.registerTask('default', [
+        'shell',
+        'copy',
+        'modernizr',
+        'browserSync',
+        'watch'
+    ]);
+
+    // The js task will be used during development
+    grunt.registerTask('dev', [
+        'watch:concat'
+    ]);
 
 };
