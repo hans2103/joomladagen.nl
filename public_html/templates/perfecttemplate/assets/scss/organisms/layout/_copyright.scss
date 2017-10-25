@@ -8,30 +8,30 @@
 	}
 
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 		@include block-spacing;
 	}
 
 	@include e('content') {
 		margin: 0;
-		@include media($charlie) {
-			@include display(flex);
-			@include flex-direction(row);
-			@include justify-content(space-between);
+		@include grid-media($grid-charlie) {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
 		}
 	}
 
 	.module {
 		&:first-child {}
 		&:last-child {
-			@include media($charlie) {
+			@include grid-media($grid-charlie) {
 				text-align: right;
 			}
 		}
 	}
 
 	.menu {
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			> li {
 				padding: 1/8 * $base-spacing 1/2 * $base-spacing;
 				padding-left: 0;

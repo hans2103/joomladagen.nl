@@ -93,6 +93,27 @@ if(false)
 
 <main class="main" role="main">
 	<?php if (PWTTemplateHelper::isHome() == true) : ?>
+        intro<br>
+        twee blokken<br>
+        locatie<br>
+        onze sponsoren<br>
+        Google maps<br>
+
+
+        <div class="block block__gmap"><?php
+	        $array = array(
+		        'title'      => $this->item->title,
+		        'latitude'   => '51.4105738',
+		        'longitude'  => '5.4571851',
+		        'adres'      => 'High Tech Campus 1b',
+		        'postcode'   => '5656 AE',
+		        'woonplaats' => 'Eindhoven'
+	        );
+
+	        echo Jlayouts::render('block-gmap', $array);
+	    ?></div>
+
+
 		<?php if ($this->countModules('block-info')) : ?>
             <div class="block block--info">
                 <div class="block__wrapper">

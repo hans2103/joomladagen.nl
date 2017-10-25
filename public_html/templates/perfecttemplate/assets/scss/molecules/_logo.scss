@@ -2,7 +2,7 @@
 	@include anchor($white, $white);
 	@include font($font-size--h3, $medium, $line-height);
 
-	@include media ($delta) {
+	@include grid-media ($grid-delta) {
 		@include font($font-size--h2, $medium, $line-height);
 	}
 
@@ -10,7 +10,7 @@
 		font-weight: $bold;
 	}
 
-	@include icon-before(joomladagen_logo, true) {
-
+	@include pseudo(before) {
+		@include svg-background($icon--joomladagen, $color-type, 1.5 * $spacing-s);
 	}
 }

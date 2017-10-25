@@ -31,7 +31,7 @@
 		}
 
 		&.image-coverall-beta {
-			@include media($beta) {
+			@include grid-media($grid-beta) {
 				@include coverall;
 
 				/* No coverall when flexbox isn't working */
@@ -74,7 +74,7 @@
 
 
 .item-image {
-	@include media($charlie) {
+	@include grid-media($grid-charlie) {
 		&.pull-right {
 			margin-left: 2/3 * $base-spacing;
 		}

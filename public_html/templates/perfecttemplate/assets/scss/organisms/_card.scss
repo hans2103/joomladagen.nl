@@ -1,6 +1,6 @@
 .blog {
 	.cards {
-		@include outer-container(100%);
+		@include container;
 	}
 
 	.card {
@@ -17,7 +17,7 @@
 				display: block;
 			}
 
-			@include media($charlie) {
+			@include grid-media($grid-charlie) {
 				padding: 0;
 			}
 
@@ -25,7 +25,7 @@
 				border: 1px solid $jd-gray;
 				padding: 2 * $base-spacing $base-spacing;
 
-				@include media($charlie) {
+				@include grid-media($grid-charlie) {
 					padding: 2 * $base-spacing 0;
 				}
 			}
@@ -35,21 +35,21 @@
 			position: relative;
 			padding: 0 $base-spacing;
 
-			@include media($charlie) {
+			@include grid-media($grid-charlie) {
 				padding: 0;
 			}
 		}
 
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			@include e('image') {
-				@include span-columns(2 of 8);
+				@include grid-column(2 of 8);
 			}
 
 			@include e('content') {
-				@include span-columns(6 of 8);
+				@include grid-column(6 of 8);
 
 				@include m('hideimage') {
-					@include span-columns(8 of 8);
+					@include grid-column(8 of 8);
 				}
 			}
 		}
@@ -64,10 +64,11 @@
 			}
 		}
 
-		@include media(max-width $charlie) {
-			.card--body,
-			.card--actions {
-				display: none;
+		.card--body,
+		.card--actions {
+			display: none;
+			@include grid-media($grid-charlie) {
+				display: block;
 			}
 		}
 	}
@@ -96,7 +97,7 @@
 			@include font($font-size--h4, $normal, $line-height, $font-family);
 		}
 
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			padding-right: 3 * $base-spacing;
 		}
 
@@ -160,10 +161,10 @@
 	margin: $base-spacing 0;
 
 	@include e('item') {
-		@include outer-container(100%);
-		@include display(flex);
-		@include justify-content(space-between);
-		@include flex-wrap(wrap);
+		@include container;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
 		border-top: 1px solid $jd-gray;
 		padding: 0 0.5 * $base-spacing;
 
@@ -173,24 +174,24 @@
 	}
 
 	@include e('link') {
-		@include flex-basis(percentage(8/8));
+		flex-basis: percentage(8/8);
 		@include font($font-size--h3, $bold, $line-height--header, $font-family);
 		@include anchor;
 	}
 
 	@include e('create') {
-		@include flex-basis(percentage(8/8));
+		flex-basis: percentage(8/8);
 		@include font($font-size--h5, $normal, $line-height--header, $font-family);
 		color: $jd-blue;
 	}
 
-	@include media($charlie) {
+	@include grid-media($grid-charlie) {
 		@include e('link') {
-			@include flex-basis(percentage(6/8));
+			flex-basis: percentage(6/8);
 		}
 
 		@include e('create') {
-			@include flex-basis(percentage(2/8));
+			flex-basis:percentage(2/8);
 			text-align: right;
 		}
 	}

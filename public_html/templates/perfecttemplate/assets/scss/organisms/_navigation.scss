@@ -111,11 +111,11 @@
 		color: tint($jd-blue, 90%);
 		padding: 8px 16px;
 
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			padding: 8px 6px;
 		}
 
-		@include media($delta) {
+		@include grid-media($grid-delta) {
 			padding: 8px 16px;
 		}
 		line-height: 24px;

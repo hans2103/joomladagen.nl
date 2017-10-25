@@ -1,40 +1,38 @@
 .title {
 	background-color: $jd-blue--dark;
-	@include background-image(url('../images/headers/headerbeeld_laag.png'));
+	background-image: url('../images/headers/headerbeeld_laag.png');
 	background-position: center top, top left;
 	background-repeat: no-repeat;
 	height: 216px;
 
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 		position: relative;
 	}
 
 	@include e('text') {
-		@include span-columns(12);
+		@include grid-column(12);
 		@include font($font-size--h1, $bold, 1.5 * $font-size--h1);
 		color: $white;
 		text-align: center;
 		margin: 1/2 * 2/3 * $base-spacing 0 0;
 
-		@include media($charlie) {
-			@include span-columns(10);
+		@include grid-media($grid-charlie) {
+			@include grid-column(10);
 			@include shift(1);
-			@include omega;
 			margin: $base-spacing 0 0;
 		}
 	}
 
 	@include e('subtext') {
-		@include span-columns(12);
+		@include grid-column(12);
 		@include font($font-size--h2, $bold, 1.5 * $font-size--h1);
 		color: $white;
 		text-align: center;
 
-		@include media($charlie) {
-			@include span-columns(10);
+		@include grid-media($grid-charlie) {
+			@include grid-column(10);
 			@include shift(1);
-			@include omega;
 		}
 	}
 }

@@ -2,15 +2,15 @@
 
 .main {
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 	}
 
 	@include e('content') {
-		@include span-columns(12 of 12);
+		@include grid-column(12 of 12);
 		padding: 2 * $base-spacing 0;
 
-		@include media($charlie){
-			@include span-columns(10 of 12);
+		@include grid-media($grid-charlie){
+			@include grid-column(10 of 12);
 			@include shift(1 of 12);
 		}
 	}

@@ -2,7 +2,7 @@
 
 	@include e('countdown') {
 		@include m('container') {
-			@include outer-container;
+			@include container;
 			position: relative;
 		}
 
@@ -14,7 +14,7 @@
 			.path-home & {
 				@include position(absolute, 20px null null 45%);
 
-				@include media($beta) {
+				@include grid-media($grid-beta) {
 					@include position(absolute, 100px null null 30%);
 				}
 			}
@@ -45,8 +45,8 @@
 
 			color: $white;
 
-			@include media ($charlie) {
-				@include span-columns(5 of 12);
+			@include grid-media($grid-charlie) {
+				@include grid-column(5 of 12);
 				@include shift(1 of 12);
 			}
 		}
@@ -64,18 +64,18 @@
 				text-overflow: ellipsis;
 			}
 
-			@include media ($charlie) {
-				@include span-columns(4 of 12);
+			@include grid-media($grid-charlie) {
+				@include grid-column(4 of 12);
 				@include shift(1 of 12);
 			}
 		}
 	}
 
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 		padding: 3 * $base-spacing $base-spacing 2 * $base-spacing;
 
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			padding: 3 * $base-spacing 0 2 * $base-spacing;
 		}
 
@@ -92,34 +92,34 @@
 	}
 
 	@include m('info') {
-		@include outer-container;
+		@include container;
 
 		.module {
-			@include span-columns(12 of 12);
+			@include grid-column(12 of 12);
 
-			@include media ($charlie) {
-				@include span-columns(8 of 12);
+			@include  grid-media($grid-charlie) {
+				@include grid-column(8 of 12);
 				@include shift(2 of 12);
 			}
 		}
 
 		.custom {
-			@include outer-container(100%);
+			@include container;
 
 			.block__figure {
 				@include reset;
-				@include span-columns(12 of 12);
+				@include grid-column(12 of 12);
 
-				@include media ($charlie) {
-					@include span-columns(4 of 12);
+				@include grid-media($grid-charlie) {
+					@include grid-column(4 of 12);
 				}
 			}
 
 			.block__content {
-				@include span-columns(12 of 12);
+				@include grid-column(12 of 12);
 
-				@include media ($charlie) {
-					@include span-columns(7 of 12);
+				@include grid-media($grid-charlie) {
+					@include grid-column(7 of 12);
 					@include shift(1 of 12);
 				}
 			}
@@ -158,7 +158,7 @@
 				color: $jd-gray;
 				@include font($font-size--h3, $light);
 
-				@include media($charlie) {
+				@include grid-media($grid-charlie) {
 					&:before,
 					&:after {
 						content: "";
@@ -180,11 +180,11 @@
 			}
 			@include e('content') {
 				text-align: center;
-				@include outer-container(100%);
+				@include container;
 				.custom {
-					@include span-columns(12 of 12);
+					@include grid-column(12 of 12);
 					padding: 0 $base-spacing;
-					@include media($charlie) {
+					@include grid-media($grid-charlie) {
 						@include span(8 of 12);
 						@include shift(2 of 12);
 						padding: 0;

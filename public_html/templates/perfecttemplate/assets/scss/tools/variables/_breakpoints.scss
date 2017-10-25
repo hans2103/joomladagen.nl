@@ -1,0 +1,85 @@
+// Grid settings
+$site-spacing:          $spacing;
+//$site-width:            1240px;
+$site-width: 80rem;
+//$container-width:       $site-width + ($site-spacing * 2);
+$gutter-from:           0;
+$base-gutter:           2rem;
+
+
+// Breakpoints
+$alpha:                 320px;
+$alpha--plus:           440px;
+$alpha--plus--min:      $alpha--plus - 1px;
+$beta:                  600px;
+$beta--min:             $beta - 1px;
+$charlie:               760px;
+$charlie--min:          $charlie - 1px;
+$delta:                 1020px;
+$delta--min:            $delta - 1px;
+$echo:                  1200px;
+$echo--min:             $echo - 1px;
+$foxtrot:               $site-width;
+
+
+// Neat Grid settings
+$grid-alpha: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $alpha,
+);
+$grid-alpha--plus: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $alpha--plus,
+);
+$grid-alpha--plus--min: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $alpha--plus--min,
+);
+$grid-beta: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $beta,
+);
+$grid-beta--min: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $beta--min,
+);
+$grid-charlie: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $charlie,
+);
+$grid-charlie--min: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $charlie--min,
+);
+$grid-delta: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $delta,
+);
+$grid-delta--min: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $delta--min,
+);
+$grid-echo: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $echo,
+);
+$grid-echo--min: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $echo--min,
+);
+$grid-foxtrot: (
+        columns: 12,
+        gutter: $base-gutter,
+        media: $foxtrot,
+);

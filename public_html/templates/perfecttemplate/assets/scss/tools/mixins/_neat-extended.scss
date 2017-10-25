@@ -17,8 +17,8 @@ $gutter: golden-ratio(1em, 3) !global;
     margin-right: flex-gutter($gutter);
   }
 
-  // Use Neat span-columns to align items
-  @include span-columns($span);
+  // Use Neat grid-column to align items
+  @include grid-column($span);
 
   // Custom omega since @include omega won't work with custom variables
   &:nth-child(#{$omega}n) {
@@ -31,7 +31,7 @@ $gutter: golden-ratio(1em, 3) !global;
 
 // Just laziness
 @mixin span($span) {
-  @include span-columns($span);
+  @include grid-column($span);
 }
 
 // In markup all stacked but behaving as 2 columns

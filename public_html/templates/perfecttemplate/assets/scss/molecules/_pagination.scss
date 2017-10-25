@@ -41,7 +41,7 @@ Styleguide 3.4
 		margin-left: 1px;
 		white-space: nowrap; /* 3 */
 
-		@include media($beta) {
+		@include grid-media($grid-beta) {
 			display: inline-block; /* 4 */
 		}
 
@@ -148,7 +148,7 @@ Styleguide 3.4
 		 * Only space from $site-width media because text isn't visible before this media
 		 */
 
-		@include media($site-width) {
+		@include grid-media($grid-foxtrot) {
 			svg + span {
 				margin-left: $spacing--micro;
 			}
@@ -165,11 +165,11 @@ Styleguide 3.4
 		 */
 
 		.hidden-mobile {
-			@include media($alpha--plus) {
+			@include grid-media($grid-alpha--plus) {
 				display: none;
 			}
 
-			@include media($site-width) {
+			@include grid-media($grid-foxtrot) {
 				display: inline;
 			}
 		}

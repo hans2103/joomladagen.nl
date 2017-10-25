@@ -4,7 +4,7 @@
 	padding: 5px;
 
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 		//@include block-spacing;
 		padding: 0;
 		@include clearfix;
@@ -13,14 +13,14 @@
 	}
 
 	@include e('logo') {
-		@include media($charlie) {
+		@include grid-media($grid-charlie) {
 			@include position(absolute,5px null null null);
 		}
 	}
 
 	@include e('navigation') {
-		@include media($charlie) {
-			@include span-columns(8);
+		@include grid-media($grid-charlie) {
+			@include grid-column(8);
 			@include shift(4);
 		}
 	}
