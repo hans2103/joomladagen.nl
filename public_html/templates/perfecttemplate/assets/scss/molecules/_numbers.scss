@@ -21,16 +21,19 @@
 .numbers__item {
   display: inline-block;
   text-align: center;
-  font-size: 0.7rem;
-  font-weight: $weight-light;
 
   & + & {
     @include spacing(left, margin, 0.5);
   }
+}
 
-  span {
-    display: block;
-    font-size: 1.1rem;
-    font-weight: $weight-bold;
-  }
+.numbers__item-head  {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: $weight-bold;
+}
+
+.numbers__item-label {
+  font-size: 0.7rem;
+  font-weight: $weight-light;
 }

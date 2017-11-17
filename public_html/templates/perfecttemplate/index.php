@@ -68,10 +68,10 @@ PWTTemplateHelper::localstorageFont();
         <div class="container">
             <div class="numbers__wrapper">
                 <div class="numbers">
-                    <div class="numbers__item countdown__dd"><span>183</span>dagen</div>
-                    <div class="numbers__item countdown__hh"><span>07</span>dagen</div>
+                    <div class="numbers__item countdown__dd"><span>145</span>dagen</div>
+                    <!--<div class="numbers__item countdown__hh"><span>07</span>uren</div>
                     <div class="numbers__item countdown__mm"><span>46</span>dagen</div>
-                    <div class="numbers__item countdown__ss"><span>27</span>dagen</div>
+                    <div class="numbers__item countdown__ss"><span>27</span>dagen</div>-->
                 </div>
                 <div class="numbers">
                     <div class="numbers__item"><span>271</span>deelnemers</div>
@@ -80,6 +80,58 @@ PWTTemplateHelper::localstorageFont();
                     <div class="numbers__item"><span>175</span>overnachtingen</div>
                 </div>
             </div>
+<?php /*
+            <script>
+                const countDownClock = (number = 100, format = 'seconds') => {
+
+                    const d = document;
+                    const daysElement = d.querySelector('.days');
+                    const hoursElement = d.querySelector('.hours');
+                    const minutesElement = d.querySelector('.minutes');
+                    const secondsElement = d.querySelector('.seconds');
+                    let countdown;
+                    convertFormat(format);
+
+
+                    function convertFormat(format) {
+                        switch(format) {
+                            case 'seconds':
+                                return timer(number);
+                            case 'minutes':
+                                return timer(number * 60);
+                            case 'hours':
+                                return timer(number * 60 * 60);
+                            case 'days':
+                                return timer(number * 60 * 60 * 24);;
+                        }
+                    }
+
+                    function timer(seconds) {
+                        const now = Date.now();
+                        const then = now + seconds * 1000;
+
+                        countdown = setInterval(() => {
+                            const secondsLeft = Math.round((then - Date.now()) / 1000);
+
+                        if(secondsLeft <= 0) {
+                            clearInterval(countdown);
+                            return;
+                        };
+
+                        displayTimeLeft(secondsLeft);
+
+                    },1000);
+                    }
+
+                    function displayTimeLeft(seconds) {
+                        daysElement.textContent = Math.floor(seconds / 86400);
+                        hoursElement.textContent = Math.floor((seconds % 86400) / 3600);
+                        minutesElement.textContent = Math.floor((seconds % 86400) % 3600 / 60);
+                        secondsElement.textContent = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60;
+                    }
+                }
+                countDownClock(20, 'days');
+            </script>*/ ?>
         </div>
     </aside>
 <?php endif; ?>
