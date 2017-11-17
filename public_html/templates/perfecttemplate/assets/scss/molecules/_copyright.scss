@@ -1,0 +1,39 @@
+.copyright {
+  background-color: $jd-blue--dark;
+  color: white;
+  font-size: $font-size-m;
+  @include spacing(top, padding, 0.5);
+  @include spacing(bottom, padding, 0.5);
+}
+
+.copyright__content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.copyright__menu {
+  @include reset;
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  li {
+    @include spacing(bottom, padding, 0.5);
+  }
+
+  @include breakpoint($beta) {
+    justify-content: flex-start;
+
+    li + li {
+      @include spacing(left, margin, 0.5);
+    }
+  }
+
+  a {
+    @include anchor-decoration;
+  }
+}
+.copyright__text {
+  margin-left: auto;
+}

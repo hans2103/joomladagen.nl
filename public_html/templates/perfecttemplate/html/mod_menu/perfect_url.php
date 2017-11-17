@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 // Note. It is important to remove spaces between elements.
 $attribute = ' role="menuitem" ';
-$class     = '';
+$class     = $item->anchor_css ? $item->anchor_css : '';
 $title     = $item->anchor_title ? $item->anchor_title : '';
 $linktype  = $item->title;
 

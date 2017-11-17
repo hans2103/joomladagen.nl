@@ -1,0 +1,26 @@
+$headings: (
+        'heading_0': (
+                color: white,
+                font-size: 72px,
+                font-weight: $weight-light,
+                line-height: 80px
+        ),
+        'heading_1': (
+                color: $jd-blue,
+                font-size: 40px,
+                font-weight: $weight-normal,
+                line-height: 48px
+        ),
+        'heading_2': (
+                color: $jd-blue,
+                font-size: 32px,
+                font-weight: $weight-normal,
+                line-height: 40px
+        ),
+        'heading_3': (
+                color: $jd-blue,
+                font-size: 24px,
+                font-weight: $weight-normal,
+                line-height: 32px
+        )
+);

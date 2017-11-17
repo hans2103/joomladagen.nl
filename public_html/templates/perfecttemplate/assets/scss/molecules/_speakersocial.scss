@@ -14,7 +14,8 @@
 		}
 
 		@include m('twitter') {
-			@include icon-before(twitter, true) {
+			@include pseudo(before) {
+				@include svg-background($icon--twitter, $color-twitter, 1.5 * $spacing-s);
 				@include speakersocialiconstyling($color-twitter);
 			}
 			span {
@@ -22,7 +23,8 @@
 			}
 		}
 		@include m('facebook') {
-			@include icon-before(facebook, true) {
+			@include pseudo(before) {
+				@include svg-background($icon--facebook, $color-facebook, 1.5 * $spacing-s);
 				@include speakersocialiconstyling($color-facebook);
 			}
 			span {
@@ -30,7 +32,8 @@
 			}
 		}
 		@include m('linkedin') {
-			@include icon-before(linkedin, true) {
+			@include pseudo(before) {
+				@include svg-background($icon--linkedin, $color-linkedin, 1.5 * $spacing-s);
 				@include speakersocialiconstyling($color-linkedin);
 			}
 			span {
@@ -38,8 +41,9 @@
 			}
 		}
 		@include m('googleplus') {
-			@include icon-before(google-plus, true) {
-				@include speakersocialiconstyling($color-googleplus);
+			@include pseudo(before) {
+				@include svg-background($icon--google-plus, $color-google-plus, 1.5 * $spacing-s);
+				@include speakersocialiconstyling($color-google-plus);
 			}
 			span {
 				@include visually-hidden;

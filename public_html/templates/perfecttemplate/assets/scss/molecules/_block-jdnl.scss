@@ -1,0 +1,47 @@
+.block__jdnl {
+
+  @include span(10 of 12, $delta to $echo);
+  @include shift(1 of 12, $delta to $echo);
+
+  @include span(8 of 12, $echo);
+  @include shift(2 of 12, $echo);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.jdnl__title {
+  font-size: 2.5rem;
+  font-weight: $weight-light;
+  color: white;
+  flex: 1 0 100%;
+}
+
+.jdnl__logo {
+  flex: 0 0 5em;
+
+  svg {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.jdnl__meta {
+  flex: 1 1 0;
+  @include spacing(left, padding, 0.5);
+}
+
+.jdnl__date {
+  font-weight: $weight-bold;
+  color: white;
+  font-size: 1.5rem;
+  @include breakpoint($menu) {
+    font-size: 2.5rem;
+  }
+}
+
+.jdnl__location {
+  font-size: 1.5rem;
+  font-weight: $weight-light;
+  color: white;
+  text-transform: uppercase;
+}

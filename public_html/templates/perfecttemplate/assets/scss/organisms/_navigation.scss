@@ -111,11 +111,11 @@
 		color: tint($jd-blue, 90%);
 		padding: 8px 16px;
 
-		@include media($charlie) {
+		@include breakpoint(charlie) {
 			padding: 8px 6px;
 		}
 
-		@include media($delta) {
+		@include breakpoint(delta) {
 			padding: 8px 16px;
 		}
 		line-height: 24px;

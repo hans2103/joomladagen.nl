@@ -74,7 +74,6 @@ $all-text-inputs-hover: assign-inputs($text-inputs-list, hover);
 }
 
 select {
-	@include appearance(none);
 	margin-bottom: 0.5 * $base-spacing;
 	padding: 2/3 * 0.5 * $base-spacing;
 	background-color: $white;
@@ -101,7 +100,8 @@ select {
 .chzn-container-single .chzn-single {
 	position: relative;
 	background-color: transparent;
-	@include icon-before(chevron-down, true) {
+	@include pseudo(before) {
+		@include svg-background($icon--chevron-down, $color-type, 1.5 * $spacing-s);
 		position: absolute;
 		right: 0.5 * $base-spacing;
 		top: 0.5 * $base-spacing;

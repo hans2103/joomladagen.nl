@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="joomlamailer" method="upgrade">
+    <name>joomlamailer - MySpace icon</name>
+    <version>1.0</version>
+    <creationDate>2013-11-02</creationDate>
+    <author>freakedout</author>
+    <authorEmail>contact@feakedout.de</authorEmail>
+    <authorUrl>http://www.freakedout.de</authorUrl>
+    <copyright>Copyright (C) 2013 freakedout. All rights reserved.</copyright>
+    <license>GNU/GPL - http://www.gnu.org/licenses/gpl-2.0.html</license>
+    <description>MySpace icon plugin for joomlamailer.</description>
+
+    <files>
+        <filename plugin="myspace_icon">myspace_icon.php</filename>
+        <filename>index.html</filename>
+    </files>
+
+    <media destination="plg_joomlamailer_myspace_icon" folder="media">
+        <filename>images/addms.png</filename>
+    </media>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_joomlamailer_myspace_icon.ini</language>
+        <language tag="de-DE">language/de-DE/de-DE.plg_joomlamailer_myspace_icon.ini</language>
+        <language tag="es-ES">language/es-ES/es-ES.plg_joomlamailer_myspace_icon.ini</language>
+    </languages>
+</extension>

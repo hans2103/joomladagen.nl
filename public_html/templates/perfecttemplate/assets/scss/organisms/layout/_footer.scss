@@ -1,3 +1,52 @@
+.footer__content {
+	@include spacing(top, padding, 2);
+	@include spacing(bottom, padding, 2);
+	@include flexbox($menu) {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
+	.footer__module--25 {
+		flex: 1 1 100%;
+
+		@include flexbox($menu) {
+			flex: 1 1 23%;
+		}
+	}
+
+	.footer__module--50 {
+		flex: 1 1 100%;
+
+		@include flexbox($menu) {
+			flex: 1 1 46%;
+		}
+	}
+
+	.footer__module--100 {
+		flex: 1 1 100%;
+		@include spacing(top, margin, 2);
+	}
+
+
+	.module {
+		@include spacing(left, margin, 1);
+
+		&.footer__module--100,
+		&:first-child {
+			margin-left: 0;
+		}
+	}
+
+	ul {
+		@include reset;
+	}
+}
+
+
+
+
+
 .footer {
 	background-color: $jd-blue;
 	color: $white;
@@ -13,7 +62,7 @@
 	}
 
 	@include e('wrapper') {
-		@include outer-container;
+		@include container;
 
 		padding: 2 * $base-spacing 2/3 * $base-spacing;
 
@@ -22,41 +71,39 @@
 			@include font($font-size--h6);
 		}
 
-		@include media($charlie) {
+		@include breakpoint(charlie) {
 			@include m('about') {
-				@include span-columns(12 of 12);
+				@include span(12 of 12);
 			}
 
 			@include m('links') {
-				@include span-columns(6 of 12);
+				@include span(6 of 12);
 			}
 
 			@include m('form') {
-				@include span-columns(6 of 12);
-				@include omega();
+				@include span(6 of 12);
 			}
 
 			@include m('disclaimer') {
-				@include span-columns(12 of 12);
+				@include span(12 of 12);
 			}
 		}
 
-		@include media($delta) {
+		@include breakpoint(delta) {
 			@include m('about') {
-				@include span-columns(6 of 12);
+				@include span(6 of 12);
 			}
 
 			@include m('links') {
-				@include span-columns(3 of 12);
+				@include span(3 of 12);
 			}
 
 			@include m('form') {
-				@include span-columns(3 of 12);
-				@include omega();
+				@include span(3 of 12);
 			}
 		}
 
-		@include media($echo) {
+		@include breakpoint(echo) {
 			padding: 2 * $base-spacing 0;
 		}
 	}

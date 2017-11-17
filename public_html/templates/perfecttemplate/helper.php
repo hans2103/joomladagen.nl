@@ -81,7 +81,7 @@ class PWTTemplateHelper
 	 */
 	static public function getSitename()
 	{
-		return JFactory::getConfig()->get('config.sitename');
+		return JFactory::getConfig()->get('sitename');
 	}
 
 	/**
@@ -188,7 +188,7 @@ class PWTTemplateHelper
 
 		return str_replace('_', '', $input->getCmd('task', ''));
 	}
-	
+
 	/**
 	 * get parameter 'Show Intro Image' set with Menu Item
 	 *
@@ -293,7 +293,7 @@ class PWTTemplateHelper
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
+		//unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);

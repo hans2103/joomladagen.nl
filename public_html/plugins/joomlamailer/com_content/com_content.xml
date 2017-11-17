@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="joomlamailer" method="upgrade">
+	<name>joomlamailer - com_content</name>
+	<version>1.2</version>
+	<creationDate>2015-08-16</creationDate>
+	<author>freakedout</author>
+	<authorEmail>contact@feakedout.de</authorEmail>
+	<authorUrl>http://www.freakedout.de</authorUrl>
+	<copyright>Copyright (C) 2015 freakedout. All rights reserved.</copyright>
+	<license>GNU/GPL - http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<description>Joomla core article integration for joomlamailer</description>
+
+	<files>
+		<file plugin="com_content">com_content.php</file>
+        <filename>index.html</filename>
+	</files>
+
+</extension>

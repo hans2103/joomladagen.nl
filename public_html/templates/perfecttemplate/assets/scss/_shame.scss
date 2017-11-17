@@ -1,7 +1,34 @@
-// Classes
-//.pull-left {
-//	float: left !important;
-//}
-//.pull-right {
-//	float: right !important;
-//}
+.block__payoff {
+  @include spacing(top, margin, 4);
+  @include spacing(bottom, margin, 2);
+  @include span(10 of 12, $delta to $echo);
+  @include shift(1 of 12, $delta to $echo);
+
+  @include span(8 of 12, $echo);
+  @include shift(2 of 12, $echo);
+  text-align: center;
+
+  h2 {
+    @include heading(heading_1);
+    display: inline-block;
+    color: $jd-blue--dark;
+    font-weight: $weight-bold;
+
+    position: relative;
+    svg {
+      position: absolute;
+      top: -2.5rem;
+      left: 0;
+      width: 7rem;
+      height: auto;
+    }
+  }
+
+  .module__header {
+    .module__title--h3 {
+      @include heading(heading_2);
+      padding-top: 0;
+    }
+  }
+
+}

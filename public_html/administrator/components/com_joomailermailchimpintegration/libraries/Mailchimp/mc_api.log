@@ -1,0 +1,191 @@
+[2017-11-17 23:36:11] GET https://us1.api.mailchimp.com/3.0//
+*   Trying 95.101.216.234...
+* TCP_NODELAY set
+* Connected to us1.api.mailchimp.com (95.101.216.234) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /Applications/MAMP/Library/OpenSSL/cert.pem
+  CApath: none
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=US; ST=Georgia; L=Atlanta; O=The Rocket Science Group, LLC; OU=IT; CN=*.api.mailchimp.com
+*  start date: Mar  8 00:00:00 2017 GMT
+*  expire date: Jun  7 23:59:59 2018 GMT
+*  subjectAltName: host "us1.api.mailchimp.com" matched cert's "*.api.mailchimp.com"
+*  issuer: C=US; O=GeoTrust Inc.; CN=GeoTrust SSL CA - G3
+*  SSL certificate verify ok.
+> GET /3.0// HTTP/1.1
+Host: us1.api.mailchimp.com
+User-Agent: Joomlamailer/3.0
+Accept: */*
+Authorization: apikey 
+
+< HTTP/1.1 401 Unauthorized
+< Server: openresty
+< Content-Type: application/problem+json; charset=utf-8
+< Content-Length: 229
+< X-Request-Id: bfbfbde3-7a37-468a-b9ea-234906f05918
+< Link: <https://us1.api.mailchimp.com/schema/3.0/ProblemDetailDocument.json>; rel="describedBy"
+< Date: Fri, 17 Nov 2017 22:36:12 GMT
+< Connection: keep-alive
+< Set-Cookie: _AVESTA_ENVIRONMENT=prod; path=/
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host us1.api.mailchimp.com left intact
+.... Completed in 422.70ms
+.... Response: {"type":"http://developer.mailchimp.com/documentation/mailchimp/guides/error-glossary/","title":"API Key Missing","status":401,"detail":"Your request did not include an API key.","instance":"bfbfbde3-7a37-468a-b9ea-234906f05918"}
+[2017-11-17 23:36:52] GET https://us1.api.mailchimp.com/3.0//
+*   Trying 2.19.73.79...
+* TCP_NODELAY set
+* Connected to us1.api.mailchimp.com (2.19.73.79) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /Applications/MAMP/Library/OpenSSL/cert.pem
+  CApath: none
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=US; ST=Georgia; L=Atlanta; O=The Rocket Science Group, LLC; OU=IT; CN=*.api.mailchimp.com
+*  start date: Mar  8 00:00:00 2017 GMT
+*  expire date: Jun  7 23:59:59 2018 GMT
+*  subjectAltName: host "us1.api.mailchimp.com" matched cert's "*.api.mailchimp.com"
+*  issuer: C=US; O=GeoTrust Inc.; CN=GeoTrust SSL CA - G3
+*  SSL certificate verify ok.
+> GET /3.0// HTTP/1.1
+Host: us1.api.mailchimp.com
+User-Agent: Joomlamailer/3.0
+Accept: */*
+Authorization: apikey 
+
+< HTTP/1.1 401 Unauthorized
+< Server: openresty
+< Content-Type: application/problem+json; charset=utf-8
+< Content-Length: 229
+< X-Request-Id: b29f78ea-74a4-4f53-8a76-ee20caf89336
+< Link: <https://us1.api.mailchimp.com/schema/3.0/ProblemDetailDocument.json>; rel="describedBy"
+< Date: Fri, 17 Nov 2017 22:36:52 GMT
+< Connection: keep-alive
+< Set-Cookie: _AVESTA_ENVIRONMENT=prod; path=/
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host us1.api.mailchimp.com left intact
+.... Completed in 376.21ms
+.... Response: {"type":"http://developer.mailchimp.com/documentation/mailchimp/guides/error-glossary/","title":"API Key Missing","status":401,"detail":"Your request did not include an API key.","instance":"b29f78ea-74a4-4f53-8a76-ee20caf89336"}
+[2017-11-17 23:37:03] GET https://us1.api.mailchimp.com/3.0//
+* Hostname us1.api.mailchimp.com was found in DNS cache
+*   Trying 95.101.216.234...
+* TCP_NODELAY set
+* Connected to us1.api.mailchimp.com (95.101.216.234) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /Applications/MAMP/Library/OpenSSL/cert.pem
+  CApath: none
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=US; ST=Georgia; L=Atlanta; O=The Rocket Science Group, LLC; OU=IT; CN=*.api.mailchimp.com
+*  start date: Mar  8 00:00:00 2017 GMT
+*  expire date: Jun  7 23:59:59 2018 GMT
+*  subjectAltName: host "us1.api.mailchimp.com" matched cert's "*.api.mailchimp.com"
+*  issuer: C=US; O=GeoTrust Inc.; CN=GeoTrust SSL CA - G3
+*  SSL certificate verify ok.
+> GET /3.0// HTTP/1.1
+Host: us1.api.mailchimp.com
+User-Agent: Joomlamailer/3.0
+Accept: */*
+Authorization: apikey 
+
+< HTTP/1.1 401 Unauthorized
+< Server: openresty
+< Content-Type: application/problem+json; charset=utf-8
+< Content-Length: 229
+< X-Request-Id: d6746aa9-8921-46c8-af7c-c4d61e7c2f96
+< Link: <https://us1.api.mailchimp.com/schema/3.0/ProblemDetailDocument.json>; rel="describedBy"
+< Date: Fri, 17 Nov 2017 22:37:03 GMT
+< Connection: keep-alive
+< Set-Cookie: _AVESTA_ENVIRONMENT=prod; path=/
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host us1.api.mailchimp.com left intact
+.... Completed in 359.11ms
+.... Response: {"type":"http://developer.mailchimp.com/documentation/mailchimp/guides/error-glossary/","title":"API Key Missing","status":401,"detail":"Your request did not include an API key.","instance":"d6746aa9-8921-46c8-af7c-c4d61e7c2f96"}
+[2017-11-17 23:37:31] GET https://us1.api.mailchimp.com/3.0//
+*   Trying 2.19.73.79...
+* TCP_NODELAY set
+* Connected to us1.api.mailchimp.com (2.19.73.79) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /Applications/MAMP/Library/OpenSSL/cert.pem
+  CApath: none
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=US; ST=Georgia; L=Atlanta; O=The Rocket Science Group, LLC; OU=IT; CN=*.api.mailchimp.com
+*  start date: Mar  8 00:00:00 2017 GMT
+*  expire date: Jun  7 23:59:59 2018 GMT
+*  subjectAltName: host "us1.api.mailchimp.com" matched cert's "*.api.mailchimp.com"
+*  issuer: C=US; O=GeoTrust Inc.; CN=GeoTrust SSL CA - G3
+*  SSL certificate verify ok.
+> GET /3.0// HTTP/1.1
+Host: us1.api.mailchimp.com
+User-Agent: Joomlamailer/3.0
+Accept: */*
+Authorization: apikey 
+
+< HTTP/1.1 401 Unauthorized
+< Server: openresty
+< Content-Type: application/problem+json; charset=utf-8
+< Content-Length: 229
+< X-Request-Id: 651175d5-c9cf-4bf9-b7b1-475381ce3350
+< Link: <https://us1.api.mailchimp.com/schema/3.0/ProblemDetailDocument.json>; rel="describedBy"
+< Date: Fri, 17 Nov 2017 22:37:31 GMT
+< Connection: keep-alive
+< Set-Cookie: _AVESTA_ENVIRONMENT=prod; path=/
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host us1.api.mailchimp.com left intact
+.... Completed in 357.77ms
+.... Response: {"type":"http://developer.mailchimp.com/documentation/mailchimp/guides/error-glossary/","title":"API Key Missing","status":401,"detail":"Your request did not include an API key.","instance":"651175d5-c9cf-4bf9-b7b1-475381ce3350"}
+[2017-11-17 23:37:36] GET https://us1.api.mailchimp.com/3.0//
+*   Trying 2.19.73.79...
+* TCP_NODELAY set
+* Connected to us1.api.mailchimp.com (2.19.73.79) port 443 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: /Applications/MAMP/Library/OpenSSL/cert.pem
+  CApath: none
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server accepted to use http/1.1
+* Server certificate:
+*  subject: C=US; ST=Georgia; L=Atlanta; O=The Rocket Science Group, LLC; OU=IT; CN=*.api.mailchimp.com
+*  start date: Mar  8 00:00:00 2017 GMT
+*  expire date: Jun  7 23:59:59 2018 GMT
+*  subjectAltName: host "us1.api.mailchimp.com" matched cert's "*.api.mailchimp.com"
+*  issuer: C=US; O=GeoTrust Inc.; CN=GeoTrust SSL CA - G3
+*  SSL certificate verify ok.
+> GET /3.0// HTTP/1.1
+Host: us1.api.mailchimp.com
+User-Agent: Joomlamailer/3.0
+Accept: */*
+Authorization: apikey 
+
+< HTTP/1.1 401 Unauthorized
+< Server: openresty
+< Content-Type: application/problem+json; charset=utf-8
+< Content-Length: 229
+< X-Request-Id: 17898ad0-1b1f-4311-a6ac-d4cee1f7c70e
+< Link: <https://us1.api.mailchimp.com/schema/3.0/ProblemDetailDocument.json>; rel="describedBy"
+< Date: Fri, 17 Nov 2017 22:37:36 GMT
+< Connection: keep-alive
+< Set-Cookie: _AVESTA_ENVIRONMENT=prod; path=/
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host us1.api.mailchimp.com left intact
+.... Completed in 358.00ms
+.... Response: {"type":"http://developer.mailchimp.com/documentation/mailchimp/guides/error-glossary/","title":"API Key Missing","status":401,"detail":"Your request did not include an API key.","instance":"17898ad0-1b1f-4311-a6ac-d4cee1f7c70e"}

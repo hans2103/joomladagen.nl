@@ -1,12 +1,12 @@
 .bannergroup {
-	@include display(flex);
-	@include flex-wrap(wrap);
-	@include justify-content(center);
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:center;
 }
 
 .banneritem {
-	@include flex-grow(0);
-	@include flex-shrink(1);
+	flex-grow:0;
+	flex-shrink:1;
 
 	a {
 		display: block;
@@ -14,14 +14,14 @@
 	}
 
 	.module__sponsor--diamant & {
-		@include flex-basis(320px);
+		flex-basis:320px;
 	}
 
 	.module__sponsor--goud & {
-		@include flex-basis(250px);
+		flex-basis:250px;
 	}
 
 	.module__sponsor--zilver & {
-		@include flex-basis(180px);
+		flex-basis:180px;
 	}
 }

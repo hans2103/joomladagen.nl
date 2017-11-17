@@ -22,9 +22,16 @@ body        - BODY tag styling
 Styleguide 2.1.2
 */
 
+html {
+	//font-size: calc(16px - (24 - 16) * (100vw - 400px) / (800 - 400));
+	font-size: calc(18px + .25vw);
+}
+
 body {
-	@include font($font-size, $normal, $line-height, $font-family);
+	font-family: $font-family;
+	//@include font(1em, $normal, $line-height, $font-family);
 	letter-spacing: 0.02em;
+	//overflow: hidden;
 	color: $type;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

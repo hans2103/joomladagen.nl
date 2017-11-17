@@ -2,7 +2,7 @@
 !function(n,t){"function"==typeof define&&define.amd?define(t):"object"==typeof exports?module.exports=t:n.apollo=t()}(this,function(){"use strict";var n,t,s,e,o={},c=function(n,t){"[object Array]"!==Object.prototype.toString.call(n)&&(n=n.split(" "));for(var s=0;s<n.length;s++)t(n[s],s)};return"classList"in document.documentElement?(n=function(n,t){return n.classList.contains(t)},t=function(n,t){n.classList.add(t)},s=function(n,t){n.classList.remove(t)},e=function(n,t){n.classList.toggle(t)}):(n=function(n,t){return new RegExp("(^|\\s)"+t+"(\\s|$)").test(n.className)},t=function(t,s){n(t,s)||(t.className+=(t.className?" ":"")+s)},s=function(t,s){n(t,s)&&(t.className=t.className.replace(new RegExp("(^|\\s)*"+s+"(\\s|$)*","g"),""))},e=function(e,o){(n(e,o)?s:t)(e,o)}),o.hasClass=function(t,s){return n(t,s)},o.addClass=function(n,s){c(s,function(s){t(n,s)})},o.removeClass=function(n,t){c(t,function(t){s(n,t)})},o.toggleClass=function(n,t){c(t,function(t){e(n,t)})},o});
 /**
  *
- * Responsive menu v1.1.8
+ * Responsive menu
  * A vanilla JS responsive menu plugin, by Robin Poort - Timble
  * http://robinpoort.com - http://www.timble.net
  *
@@ -236,7 +236,7 @@
         apollo.addClass(toggle_element, [settings.toggleclass, settings.hideclass]);
         if ( settings.before_element == '' ) { settings.before_element = settings.wrapper.firstChild }
         settings.before_element.parentNode.insertBefore(toggle_element, settings.before_element);
-        var togglebutton = settings.wrapper.getElementsByClassName(settings.toggleclass)[0];
+        var togglebutton = document.getElementsByClassName(settings.toggleclass)[0];
         togglebutton.innerHTML = settings.togglecontent;
         togglebutton.setAttribute('aria-hidden', 'true');
         togglebutton.setAttribute('aria-pressed', 'false');

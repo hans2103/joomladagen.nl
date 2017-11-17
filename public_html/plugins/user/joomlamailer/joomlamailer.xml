@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="user" method="upgrade">
+    <name>joomlamailer - Registration</name>
+    <version>1.1</version>
+    <creationDate>2015-10-10</creationDate>
+    <author>freakedout</author>
+    <authorEmail>contact@feakedout.de</authorEmail>
+    <authorUrl>https://www.freakedout.de</authorUrl>
+    <copyright>Copyright (C) 2015 freakedout. All rights reserved.</copyright>
+    <license>GNU/GPL - http://www.gnu.org/licenses/gpl-2.0.html</license>
+    <description>Adding newsletter options to your Joomla registration and user profile.</description>
+
+	<files>
+		<filename plugin="joomlamailer">joomlamailer.php</filename>
+        <filename>index.html</filename>
+        <folder>fields</folder>
+        <folder>profiles</folder>
+	</files>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.plg_user_joomlamailer.ini</language>
+        <language tag="de-DE">language/de-DE/de-DE.plg_user_joomlamailer.ini</language>
+        <language tag="es-ES">language/es-ES/es-ES.plg_user_joomlamailer.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic" addfieldpath="/plugins/user/joomlamailer/fields">
+                <field name="listid" type="lists" default="" label="Newsletter List" description="Select a list to which new users will be assigned if they choose to receive your newsletter"/>
+                <field name="fields" type="fields" default="" label="Fields" description="Select list fields to display"/>
+                <field name="interests" type="interests" default="" label="Groups" description="Select groups to display"/>
+
+                <field name="dateFormat" type="radio" default="DD/MM" label="Date format" description="Show dates as DD/MM/YYYY (default) or MM/DD/YYYY">
+                    <option value="DD/MM">DD/MM</option>
+                    <option value="MM/DD">MM/DD</option>
+                </field>
+
+                <field name="unsubscribe" type="radio" default="1" label="Unsubscribe onDelete" description="Unsubscribe the user when his account is deleted.">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </field>
+
+                <field name="sugar" type="radio" default="0" label="SugarCRM" description="Add the user to SugarCRM on signup. Please make sure you have configured SugarCRM in joomlamailer!">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </field>
+
+                <field name="highrise" type="radio" default="0" label="Highrise" description="Add the user to Highrise on signup. Please make sure you have configured Highrise in joomlamailer!">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

@@ -1,5 +1,5 @@
 .pager {
-	@include outer-container(100%);
+	@include container;
 	margin: $base-spacing 0;
 
 	.previous {
