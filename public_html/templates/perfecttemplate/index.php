@@ -32,7 +32,7 @@ PWTTemplateHelper::localstorageFont();
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
 <?php echo PWTTemplateHelper::getAnalytics(2, 'GTM-NQZ8SP'); ?>
 
-<header class="header" role="banner">
+<?php /*<header class="header" role="banner">
     <div class="header__wrapper">
         <div class="header__logo">
             <a href="<?php echo JURI::base(); ?>" class="logo">
@@ -45,7 +45,7 @@ PWTTemplateHelper::localstorageFont();
             </nav>
         </div>
     </div>
-</header>
+</header> */ ?>
 
 <?php echo JLayouts::render('countdown'); ?>
 
@@ -209,13 +209,13 @@ PWTTemplateHelper::localstorageFont();
     </div>
 </div>
 
-<script type="text/javascript">
+<?php /* <script type="text/javascript">
     responsivemenu.init({
         wrapper: document.querySelector('.navigation_container'),
         togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
         width: 760
     });
-</script>
+</script> */ ?>
 
 </body>
 </html>

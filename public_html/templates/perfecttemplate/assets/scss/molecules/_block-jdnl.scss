@@ -28,6 +28,7 @@
 .jdnl__meta {
   flex: 1 1 0;
   @include spacing(left, padding, 0.5);
+  line-height:1;
 }
 
 .jdnl__date {
