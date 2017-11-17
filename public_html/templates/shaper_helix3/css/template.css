@@ -3419,3 +3419,12 @@ table.category tbody >tr td {
     font-size: 90%;
   }
 }
+@media (min-width: 768px) {
+  .sppb-col-sm-offset-6 {
+    margin-left: 50%;
+  }
+}
+.sppb-testimonial-pro .sppb-item img {
+  display: inline-block;
+  margin-bottom: 10px;
+}

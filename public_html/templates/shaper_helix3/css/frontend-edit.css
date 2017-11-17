@@ -102,6 +102,14 @@ svg {
   width: 350px;
   height: 100px;
 }
+.com-content-adminForm .input-prepend.input-append .media-preview.add-on {
+  height: 34px;
+  line-height: 26px;
+}
+.com-content-adminForm .input-prepend.input-append .modal.btn {
+  position: relative;
+  background: #ccc;
+}
 .com-config .form-horizontal .accordion-body {
   overflow: hidden;
 }

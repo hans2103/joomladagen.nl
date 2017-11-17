@@ -49,7 +49,8 @@ class WFMediaManager extends WFMediaManagerBase
                     return $this->createCacheThumb(rawurldecode($file));
                 }
             }
-        } else {
+        }
+        else {
             $request->setRequest(array($this, 'applyEdit'));
         }
 
@@ -124,10 +125,10 @@ class WFMediaManager extends WFMediaManagerBase
         $list = array();
 
         switch ($type) {
-            case 'resize':
+            case 'resize' :
                 $list = explode(',', $this->getParam('editor.resize_presets', '320x240,640x480,800x600,1024x768', '', 'string', false));
                 break;
-            case 'crop':
+            case 'crop' :
                 $list = explode(',', $this->getParam('editor.crop_presets', '4:3,16:9,20:30,320x240,240x320,640x480,480x640,800x600,1024x768', '', 'string', false));
                 break;
         }
@@ -152,9 +153,9 @@ class WFMediaManager extends WFMediaManagerBase
             $editor = new WFImageEditor(array(
                 'ftp' => $this->isFtp(),
                 'edit' => $this->get('can_edit_images'),
-                'prefer_imagick' => (bool) $this->getParam('editor.prefer_imagick', true),
-                'remove_exif' => (bool) $this->getParam('editor.upload_remove_exif', false),
-                'resample_image' => (bool) $this->getParam('editor.resample_image', true),
+                'prefer_imagick' => (bool)$this->getParam('editor.prefer_imagick', true),
+                'remove_exif' => (bool)$this->getParam('editor.upload_remove_exif', false),
+                'resample_image' => (bool)$this->getParam('editor.resample_image', true),
             ));
         }
 
@@ -173,26 +174,26 @@ class WFMediaManager extends WFMediaManagerBase
         }
         // get value
         if (isset($matches[1])) {
-            $value = (int) $matches[1];
+            $value = (int)$matches[1];
         }
 
         // Convert to bytes
         switch (strtolower($suffix)) {
-            case 'g':
-            case 'gb':
+            case 'g' :
+            case 'gb' :
                 $value *= 1073741824;
                 break;
-            case 'm':
-            case 'mb':
+            case 'm' :
+            case 'mb' :
                 $value *= 1048576;
                 break;
-            case 'k':
-            case 'kb':
+            case 'k' :
+            case 'kb' :
                 $value *= 1024;
                 break;
         }
 
-        return (int) $value;
+        return (int)$value;
     }
 
     private static function checkMem($image)
@@ -211,7 +212,8 @@ class WFMediaManager extends WFMediaManagerBase
             // can't get from ini, assume low value of 32M
             if (empty($limit)) {
                 $limit = 32 * 1048576;
-            } else {
+            }
+            else {
                 $limit = self::convertIniValue($limit);
             }
 
@@ -245,17 +247,17 @@ class WFMediaManager extends WFMediaManagerBase
         $editor = $this->getImageEditor();
 
         // default values from parameters
-        $resize = (int) $this->getParam('editor.upload_resize_state', 0);
+        $resize = (int)$this->getParam('editor.upload_resize_state', 0);
 
         $resize_width = $this->getParam('editor.resize_width', '640');
         $resize_height = $this->getParam('editor.resize_height', '480');
 
         if (!is_array($resize_width)) {
-            $resize_width = explode(',', (string) $resize_width);
+            $resize_width = explode(',', (string)$resize_width);
         }
 
         if (!is_array($resize_height)) {
-            $resize_height = explode(',', (string) $resize_height);
+            $resize_height = explode(',', (string)$resize_height);
         }
 
         jimport('joomla.input.filter');
@@ -265,13 +267,13 @@ class WFMediaManager extends WFMediaManagerBase
             $file_resize = false;
 
             // Resize options visible
-            if ((bool) $this->getParam('editor.upload_resize', 1)) {
+            if ((bool)$this->getParam('editor.upload_resize', 1)) {
                 $resize = JRequest::getInt('upload_resize_state', 0);
 
                 foreach (array('resize_width', 'resize_height', 'file_resize_width', 'file_resize_height') as $var) {
-                    $$var = JRequest::getVar('upload_' . $var, '');
+                    $ $var = JRequest::getVar('upload_' . $var, '');
                     // pass each value through intval
-                    $$var = array_map(intval, $$var);
+                    $ $var = array_map(intval, $ $var);
                 }
 
                 $resize_suffix = JRequest::getVar('upload_resize_suffix', '');
@@ -280,7 +282,6 @@ class WFMediaManager extends WFMediaManagerBase
                 foreach (array_merge($file_resize_width, $file_resize_height) as $item) {
                     // at least one value set, so resize
                     if (!empty($item)) {
-
                         $file_resize = true;
 
                         break;
@@ -305,7 +306,7 @@ class WFMediaManager extends WFMediaManagerBase
         }
 
         // should exif data be removed?
-        $removeExif = (int) $this->getParam('editor.upload_remove_exif', 0) && preg_match('#\.(jpg|jpeg|png)$#i', $file);
+        $removeExif = (int)$this->getParam('editor.upload_remove_exif', 0) && preg_match('#\.(jpg|jpeg|png)$#i', $file);
 
         $dim = getimagesize($file);
 
@@ -313,8 +314,10 @@ class WFMediaManager extends WFMediaManagerBase
             $width = $dim[0];
             $height = $dim[1];
 
+            $files = array($file);
+
             if ($resize) {
-                $resize_quality = (int) $this->getParam('editor.resize_quality', 100);
+                $resize_quality = (int)$this->getParam('editor.resize_quality', 100);
 
                 $count = max(count($resize_width), count($resize_height));
 
@@ -346,7 +349,8 @@ class WFMediaManager extends WFMediaManagerBase
                             // create suffix based on width/height values for images after first
                             if (empty($resize_suffix[$i]) && $i > 0) {
                                 $suffix = '_' . $resize_width[$i] . '_' . $resize_height[$i];
-                            } else {
+                            }
+                            else {
                                 // replace width and height variables
                                 $suffix = str_replace(array('$width', '$height'), array($resize_width[$i], $resize_height[$i]), $resize_suffix[$i]);
                             }
@@ -362,7 +366,13 @@ class WFMediaManager extends WFMediaManagerBase
                             // no need to remove exif data on successful resize
                             if ($editor->resize($file, $destination, $resize_width[$i], $resize_height[$i], $resize_quality)) {
                                 $removeExif = false;
-                            } else {
+
+                                if ($file !== $destination) {
+                                    $files[] = $destination;
+                                }
+
+                            }
+                            else {
                                 $browser->setResult(WFText::_('WF_MANAGER_RESIZE_ERROR'), 'error');
                             }
                         }
@@ -374,7 +384,7 @@ class WFMediaManager extends WFMediaManagerBase
             $watermark = $this->getParam('editor.upload_watermark_state', 0);
 
             // option visible so allow user set value
-            if ((bool) $this->getParam('editor.upload_watermark', 0)) {
+            if ((bool)$this->getParam('editor.upload_watermark', 0)) {
                 $watermark = JRequest::getInt('upload_watermark_state', 0);
             }
 
@@ -384,7 +394,10 @@ class WFMediaManager extends WFMediaManagerBase
                 if (preg_match('#^LiberationSans-(Regular|Bold|BoldItalic|Italic)\.ttf$#', $font_style)) {
                     $font_style = WF_EDITOR_LIBRARIES . '/pro/fonts/' . $font_style;
                     // custom font
-                } else {
+
+
+                }
+                else {
                     $font_style = JPATH_SITE . '/' . trim(preg_replace('#[\/\\\\]+#', '/', $font_style), '/');
                 }
 
@@ -401,11 +414,67 @@ class WFMediaManager extends WFMediaManagerBase
                     'angle' => $this->getParam('editor.watermark_angle', 0),
                 );
 
-                // no need to remove exif on successful watermark
-                if ($editor->watermark($file, $options)) {
-                    $removeExif = false;
-                } else {
-                    $browser->setResult(WFText::_('WF_MANAGER_WATERMARK_ERROR'), 'error');
+                foreach ($files as $file) {
+                    // no need to remove exif on successful watermark
+                    if ($editor->watermark($file, $options)) {
+                        $removeExif = false;
+                    }
+                    else {
+                        $browser->setResult(WFText::_('WF_MANAGER_WATERMARK_ERROR'), 'error');
+                    }
+                }
+            }
+
+            $thumbnail = $this->getParam('upload_thumbnail_state', 0);
+
+            $tw = (int)$this->getParam('thumbnail_width', 120);
+            $th = (int)$this->getParam('thumbnail_height', 90);
+
+            $crop = $this->getParam('upload_thumbnail_crop', 0);
+            
+            // Thumbnail options visible
+            if ((bool)$this->getParam('upload_thumbnail', 1)) {
+                $thumbnail = JRequest::getInt('upload_thumbnail_state', 0);
+
+                $tw = (int)JRequest::getInt('upload_thumbnail_width');
+                $th = (int)JRequest::getInt('upload_thumbnail_height');
+            
+                // Crop Thumbnail
+                $crop = JRequest::getInt('upload_thumbnail_crop', 0);
+            }
+
+            if ($thumbnail) {
+                $dim = @getimagesize($file);
+                $tq = $this->getParam('upload_thumbnail_quality', 80, false);
+            
+                // need at least one value
+                if ($tw || $th) {
+                    // calculate width if not set
+                    if (!$tw) {
+                        $tw = round($th / $dim[1] * $dim[0], 0);
+                    }
+                    // calculate height if not set
+                    if (!$th) {
+                        $th = round($tw / $dim[0] * $dim[1], 0);
+                    }
+                
+                    // Make relative
+                    $source = str_replace($browser->getBaseDir(), '', $file);
+
+                    $coords = array(
+                        'sx' => null,
+                        'sy' => null,
+                        'sw' => null,
+                        'sh' => null,
+                    );
+
+                    if ($crop) {
+                        $coords = $this->cropThumbnail($dim[0], $dim[1], $tw, $th);
+                    }
+
+                    if (!$this->createThumbnail($source, $tw, $th, $tq, $coords['sx'], $coords['sy'], $coords['sw'], $coords['sh'], true)) {
+                        $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_ERROR'), 'error');
+                    }
                 }
             }
 
@@ -452,9 +521,10 @@ class WFMediaManager extends WFMediaManagerBase
             }
 
             if ($exit) {
-                return (bool) $result;
+                return (bool)$result;
             }
-        } else {
+        }
+        else {
             $files = JFolder::files($this->getCacheDirectory(), '^(wf_ie_)([a-z0-9]+)\.(jpg|jpeg|gif|png)$');
 
             if (count($files)) {
@@ -512,10 +582,10 @@ class WFMediaManager extends WFMediaManagerBase
             $image = new WFImage($upload['tmp_name'], array('preferImagick' => $this->getParam('editor.prefer_imagick', true)));
 
             switch ($task) {
-                case 'resize':
+                case 'resize' :
                     $image->resize($value->width, $value->height);
                     break;
-                case 'crop':
+                case 'crop' :
                     $image->crop($value->width, $value->height, $value->x, $value->y, false, 1);
                     break;
             }
@@ -524,13 +594,14 @@ class WFMediaManager extends WFMediaManagerBase
 
             // write to file
             if ($data) {
-                $result->state = (bool) @JFile::write($tmp, $data);
+                $result->state = (bool)@JFile::write($tmp, $data);
             }
 
             if ($result->state === true) {
                 $tmp = str_replace(WFUtility::cleanPath(JPATH_SITE), '', $tmp);
                 $browser->setResult(WFUtility::cleanPath($tmp, '/'), 'files');
-            } else {
+            }
+            else {
                 $browser->setResult(WFText::_('WF_IMAGE_EDIT_APPLY_ERROR'), 'error');
             }
 
@@ -574,7 +645,8 @@ class WFMediaManager extends WFMediaManagerBase
             $result = $filesystem->upload('multipart', trim($tmp), dirname($file), basename($name));
 
             @unlink($tmp);
-        } else {
+        }
+        else {
             // set upload as false - JSON request
             $upload = false;
 
@@ -594,16 +666,16 @@ class WFMediaManager extends WFMediaManagerBase
 
             foreach ($options as $filter) {
                 if (isset($filter->task)) {
-                    $args = isset($filter->args) ? (array) $filter->args : array();
+                    $args = isset($filter->args) ? (array)$filter->args : array();
 
                     switch ($filter->task) {
-                        case 'resize':
+                        case 'resize' :
                             $w = $args[0];
                             $h = $args[1];
 
                             $image->resize($w, $h);
                             break;
-                        case 'crop':
+                        case 'crop' :
                             $w = $args[0];
                             $h = $args[1];
 
@@ -612,13 +684,13 @@ class WFMediaManager extends WFMediaManagerBase
 
                             $image->crop($w, $h, $x, $y);
                             break;
-                        case 'rotate':
+                        case 'rotate' :
                             $image->rotate(array_shift($args));
                             break;
-                        case 'flip':
+                        case 'flip' :
                             $image->flip(array_shift($args));
                             break;
-                        default:
+                        default :
                             $image->filter($filter->task, $args);
                             break;
                     }
@@ -629,7 +701,7 @@ class WFMediaManager extends WFMediaManagerBase
             $data = $image->toString($ext);
             // write to file
             if ($data) {
-                $result->state = (bool) @JFile::write($dest, $data);
+                $result->state = (bool)@JFile::write($dest, $data);
             }
             // set path
             $result->path = $dest;
@@ -640,11 +712,13 @@ class WFMediaManager extends WFMediaManagerBase
             if (@getimagesize($result->path) === false) {
                 JFile::delete($result->path);
                 throw new InvalidArgumentException('Invalid image file');
-            } else {
+            }
+            else {
                 $result->path = str_replace(WFUtility::cleanPath(JPATH_SITE), '', $result->path);
                 $browser->setResult(WFUtility::cleanPath($result->path, '/'), 'files');
             }
-        } else {
+        }
+        else {
             $browser->setResult($result->message || WFText::_('WF_MANAGER_EDIT_SAVE_ERROR'), 'error');
         }
         // return to WFRequest
@@ -665,7 +739,8 @@ class WFMediaManager extends WFMediaManagerBase
                 $w = $w * ($sh / $h);
                 $h = $sh;
             }
-        } else {
+        }
+        else {
             $w = $w * ($sh / $h);
             $h = $sh;
             if ($w > $sw) {
@@ -675,14 +750,16 @@ class WFMediaManager extends WFMediaManagerBase
         }
 
         if ($w < $sw) {
-            $sx = floor(($sw - $w) / 2);
-        } else {
+            $sx = floor( ($sw - $w) / 2);
+        }
+        else {
             $sx = 0;
         }
 
         if ($h < $sh) {
-            $sy = floor(($sh - $h) / 2);
-        } else {
+            $sy = floor( ($sh - $h) / 2);
+        }
+        else {
             $sy = 0;
         }
 
@@ -753,7 +830,7 @@ class WFMediaManager extends WFMediaManagerBase
                             }
                         }
                         if ($cache_max_files > 0) {
-                            if (($size + $fsize) > $cache_max_size) {
+                            if ( ($size + $fsize) > $cache_max_size) {
                                 @JFile::delete($file);
                             }
                         }
@@ -818,7 +895,7 @@ class WFMediaManager extends WFMediaManagerBase
         $data = @getimagesize($file);
         $mime = $data['mime'];
 
-        if (($data[0] < $width && $data[1] < $height)) {
+        if ( ($data[0] < $width && $data[1] < $height)) {
             return $this->outputImage($file, $mime);
         }
 
@@ -907,17 +984,17 @@ class WFMediaManager extends WFMediaManagerBase
             $rotate = 0;
 
             if (!empty($exif['Orientation'])) {
-                $orientation = (int) $exif['Orientation'];
+                $orientation = (int)$exif['Orientation'];
 
                 // Fix Orientation
                 switch ($orientation) {
-                    case 3:
+                    case 3 :
                         $rotate = 180;
                         break;
-                    case 6:
+                    case 6 :
                         $rotate = 90;
                         break;
-                    case 8:
+                    case 8 :
                         $rotate = 270;
                         break;
                 }
@@ -949,7 +1026,8 @@ class WFMediaManager extends WFMediaManagerBase
                 return true;
             } catch (Exception $e) {
             }
-        } elseif (extension_loaded('gd')) {
+        }
+        elseif (extension_loaded('gd')) {
             try {
                 $info = getimagesize($image);
 
@@ -995,6 +1073,68 @@ class WFMediaManager extends WFMediaManagerBase
         return false;
     }
 
+    /**
+     * Get an image's thumbnail file name.
+     *
+     * @param string $file the full path to the image file
+     *
+     * @return string of the thumbnail file
+     */
+    protected function getThumbName($file)
+    {
+        $ext = WFUtility::getExtension($file);
+        $string = $this->getParam($this->getName() . '.thumbnail_prefix', 'thumb_$', '', 'string', false);
+
+        if (strpos($string, '$') !== false) {
+            return str_replace('$', basename($file, '.' . $ext), $string) . '.' . $ext;
+        }
+
+        return $string . basename($file);
+    }
+
+    protected function getThumbDir($file, $create)
+    {
+        $browser = $this->getFileBrowser();
+        $filesystem = $browser->getFileSystem();
+
+        $dir = WFUtility::makePath(dirname($file), $this->getParam($this->getName() . '.thumbnail_folder', 'thumbnails'));
+
+        if ($create && !$filesystem->exists($dir)) {
+            $filesystem->createFolder(dirname($dir), basename($dir));
+        }
+
+        return $dir;
+    }
+
+    /**
+     * Create a thumbnail.
+     *
+     * @param string $file    relative path of the image
+     * @param string $width   thumbnail width
+     * @param string $height  thumbnail height
+     * @param string $quality thumbnail quality (%)
+     * @param string $mode    thumbnail mode
+     */
+    public function createThumbnail($file, $width = null, $height = null, $quality = 100, $sx = null, $sy = null, $sw = null, $sh = null)
+    {
+        // check path
+        self::validateImagePath($file);
+
+        $browser = $this->getFileBrowser();
+        $editor = $this->getImageEditor();
+
+        $thumb = WFUtility::makePath($this->getThumbDir($file, true), $this->getThumbName($file));
+
+        $path = WFUtility::makePath($browser->getBaseDir(), $file);
+        $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
+
+        if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
+            $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_ERROR'), 'error');
+        }
+
+        return $browser->getResult();
+    }
+
     protected function getFileBrowserConfig($config = array())
     {
         $data = array(
@@ -1004,11 +1144,17 @@ class WFMediaManager extends WFMediaManagerBase
             // Upload
             'upload_resize' => $this->getParam('editor.upload_resize', 1),
             'upload_resize_state' => $this->getParam('editor.upload_resize_state', 0),
-            'upload_resize_width' => (string) $this->getParam('editor.resize_width', '640'),
-            'upload_resize_height' => (string) $this->getParam('editor.resize_height', '480'),
+            'upload_resize_width' => (string)$this->getParam('editor.resize_width', '640'),
+            'upload_resize_height' => (string)$this->getParam('editor.resize_height', '480'),
             'upload_resize_quality' => $this->getParam('editor.resize_quality', 100),
             'upload_watermark' => $this->getParam('editor.upload_watermark', 0),
             'upload_watermark_state' => $this->getParam('editor.upload_watermark_state', 0),
+            'upload_thumbnail' => $this->getParam('upload_thumbnail', 1),
+            'upload_thumbnail_state' => $this->getParam('upload_thumbnail_state', 0),
+            'upload_thumbnail_crop' => $this->getParam('upload_thumbnail_crop', 0),
+            'upload_thumbnail_width' => $this->getParam('upload_thumbnail_width', 120),
+            'upload_thumbnail_height' => $this->getParam('upload_thumbnail_height', 90),
+            'upload_thumbnail_quality' => $this->getParam('upload_thumbnail_quality', 80)
         );
 
         $config = WFUtility::array_merge_recursive_distinct($data, $config);

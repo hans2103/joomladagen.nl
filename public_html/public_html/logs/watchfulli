@@ -1,0 +1,11 @@
+#
+#<?php die('Forbidden.'); ?>
+#Date: 2017-11-07 16:42:33 UTC
+#Software: Joomla Platform 13.1.0 Stable [ Curiosity ] 24-Apr-2013 00:00 GMT
+
+#Fields: datetime	priority clientip	category	message
+2017-11-07T16:42:33+00:00	INFO 34.250.7.114	update	COM_JOOMLAUPDATE_UPDATE_LOG_URL
+2017-11-07T16:44:12+00:00	INFO 34.250.7.114	update	COM_JOOMLAUPDATE_UPDATE_LOG_URL
+2017-11-07T16:44:25+00:00	INFO 34.250.7.114	update	COM_JOOMLAUPDATE_UPDATE_LOG_INSTALL
+2017-11-07T16:44:50+00:00	INFO 34.250.7.114	update	Zoekopdracht uitgevoerd in bestand 3.8.2-2017-10-14. Zoektekst: ALTER TABLE `#__content` ADD INDEX `idx_alias` (`alias`(191));.
+2017-11-07T16:44:50+00:00	INFO 34.250.7.114	update	COM_JOOMLAUPDATE_UPDATE_LOG_DELETE_FILES

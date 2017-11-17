@@ -67,6 +67,40 @@
             <option value="300">300</option>
         </param-->
 
+        <param type="spacer" label="WF_MANAGER_THUMBNAIL" />
+
+        <param name="upload_thumbnail" type="radio" default="1" label="WF_IMGMANAGER_EXT_THUMBNAIL_UPLOAD" description="WF_IMGMANAGER_EXT_THUMBNAIL_UPLOAD_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+
+        <param name="upload_thumbnail_state" type="radio" default="0" label="WF_IMGMANAGER_EXT_THUMBNAIL_UPLOAD_STATE" description="WF_IMGMANAGER_EXT_THUMBNAIL_UPLOAD_STATE_DESC">
+            <option value="1">WF_OPTION_ON</option>
+            <option value="0">WF_OPTION_OFF</option>
+        </param>
+
+        <param name="upload_thumbnail_crop" type="radio" default="0" label="WF_IMGMANAGER_EXT_UPLOAD_THUMBNAIL_CROP" description="WF_IMGMANAGER_EXT_UPLOAD_THUMBNAIL_CROP_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+
+        <param name="upload_thumbnail_width" type="text" default="120" label="WF_IMGMANAGER_EXT_THUMBNAIL_WIDTH" description="WF_IMGMANAGER_EXT_THUMBNAIL_WIDTH_DESC"/>
+        <param name="upload_thumbnail_height" type="text" default="90" label="WF_IMGMANAGER_EXT_THUMBNAIL_HEIGHT" description="WF_IMGMANAGER_EXT_THUMBNAIL_HEIGHT_DESC"/>
+        <param name="upload_thumbnail_quality" type="list" default="80" label="WF_IMGMANAGER_EXT_THUMBNAIL_QUALITY" description="WF_IMGMANAGER_EXT_THUMBNAIL_QUALITY_DESC">
+            <option value="100">100</option>
+            <option value="90">90</option>
+            <option value="80">80</option>
+            <option value="70">70</option>
+            <option value="60">60</option>
+            <option value="50">50</option>
+            <option value="40">40</option>
+            <option value="30">30</option>
+            <option value="20">20</option>
+            <option value="10">10</option>
+        </param>
+        <param name="thumbnail_folder" type="text" default="thumbnails" label="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER" description="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER_DESC"/>
+        <param name="thumbnail_prefix" type="text" default="thumb_" label="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX" description="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX_DESC"/>
+
         <param type="spacer" label="WF_MANAGER_WATERMARK" />
 
         <param name="upload_watermark_state" type="radio" default="0" label="WF_MANAGER_WATERMARK_UPLOAD_STATE" description="WF_MANAGER_WATERMARK_UPLOAD_STATE_DESC">

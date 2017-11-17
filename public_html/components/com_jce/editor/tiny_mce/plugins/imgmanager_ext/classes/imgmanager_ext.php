@@ -121,59 +121,6 @@ class WFImageManagerExtPlugin extends WFMediaManager
 
         $params = $this->getParams(array('key' => 'imgmanager_ext'));
 
-        $thumbnail = $params->get('upload_thumbnail_state', 0);
-
-        $tw = (int) $params->get('thumbnail_width', 120);
-        $th = (int) $params->get('thumbnail_height', 90);
-
-        $crop = $params->get('upload_thumbnail_crop', 0);
-
-        // Thumbnail options visible
-        if ((bool) $params->get('upload_thumbnail', 1)) {
-            $thumbnail = JRequest::getInt('upload_thumbnail_state', 0);
-
-            $tw = (int) JRequest::getInt('upload_thumbnail_width');
-            $th = (int) JRequest::getInt('upload_thumbnail_height');
-
-            // Crop Thumbnail
-            $crop = JRequest::getInt('upload_thumbnail_crop', 0);
-        }
-
-        if ($thumbnail) {
-            $dim = @getimagesize($file);
-            $tq = $params->get('thumbnail_quality', 80, false);
-
-            // need at least one value
-            if ($tw || $th) {
-                // calculate width if not set
-                if (!$tw) {
-                    $tw = round($th / $dim[1] * $dim[0], 0);
-                }
-                // calculate height if not set
-                if (!$th) {
-                    $th = round($tw / $dim[0] * $dim[1], 0);
-                }
-
-                // Make relative
-                $source = str_replace($browser->getBaseDir(), '', $file);
-
-                $coords = array(
-                    'sx' => null,
-                    'sy' => null,
-                    'sw' => null,
-                    'sh' => null,
-                );
-
-                if ($crop) {
-                    $coords = $this->cropThumbnail($dim[0], $dim[1], $tw, $th);
-                }
-
-                if (!$this->createThumbnail($source, $tw, $th, $tq, $coords['sx'], $coords['sy'], $coords['sw'], $coords['sh'], true)) {
-                    $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_ERROR'), 'error');
-                }
-            }
-        }
-
         if (JRequest::getInt('inline', 0) === 1) {
             $result = array(
                 'file' => $relative,
@@ -390,39 +337,6 @@ class WFImageManagerExtPlugin extends WFMediaManager
         return WFUtility::makePath($this->getThumbDir($file, false), $this->getThumbName($file));
     }
 
-    /**
-     * Get an image's thumbnail file name.
-     *
-     * @param string $file the full path to the image file
-     *
-     * @return string of the thumbnail file
-     */
-    private function getThumbName($file)
-    {
-        $ext = WFUtility::getExtension($file);
-        $string = $this->getParam($this->getName().'.thumbnail_prefix', 'thumb_$', '', 'string', false);
-
-        if (strpos($string, '$') !== false) {
-            return str_replace('$', basename($file, '.'.$ext), $string).'.'.$ext;
-        }
-
-        return $string.basename($file);
-    }
-
-    private function getThumbDir($file, $create)
-    {
-        $browser = $this->getFileBrowser();
-        $filesystem = $browser->getFileSystem();
-
-        $dir = WFUtility::makePath(dirname($file), $this->getParam($this->getName().'.thumbnail_folder', 'thumbnails'));
-
-        if ($create && !$filesystem->exists($dir)) {
-            $filesystem->createFolder(dirname($dir), basename($dir));
-        }
-
-        return $dir;
-    }
-
     public function onFilesDelete($file)
     {
         $browser = $this->getFileBrowser();
@@ -437,35 +351,6 @@ class WFImageManagerExtPlugin extends WFMediaManager
     public function getThumbnailDimensions($file)
     {
         return $this->getDimensions($this->getThumbPath($file));
-    }
-
-    /**
-     * Create a thumbnail.
-     *
-     * @param string $file    relative path of the image
-     * @param string $width   thumbnail width
-     * @param string $height  thumbnail height
-     * @param string $quality thumbnail quality (%)
-     * @param string $mode    thumbnail mode
-     */
-    public function createThumbnail($file, $width = null, $height = null, $quality = 100, $sx = null, $sy = null, $sw = null, $sh = null)
-    {
-        // check path
-        self::validateImagePath($file);
-
-        $browser = $this->getFileBrowser();
-        $editor = $this->getImageEditor();
-
-        $thumb = WFUtility::makePath($this->getThumbDir($file, true), $this->getThumbName($file));
-
-        $path = WFUtility::makePath($browser->getBaseDir(), $file);
-        $thumb = WFUtility::makePath($browser->getBaseDir(), $thumb);
-
-        if (!$editor->resize($path, $thumb, $width, $height, $quality, $sx, $sy, $sw, $sh)) {
-            $browser->setResult(WFText::_('WF_IMGMANAGER_EXT_THUMBNAIL_ERROR'), 'error');
-        }
-
-        return $browser->getResult();
     }
 
     public function deleteThumbnail($file)
@@ -515,5 +400,16 @@ class WFImageManagerExtPlugin extends WFMediaManager
         );
 
         return parent::getSettings($settings);
+    }
+
+    protected function getFileBrowserConfig($config = array())
+    {
+        $config = array(
+            'upload_thumbnail_width' => $this->getParam('thumbnail_width', 120),
+            'upload_thumbnail_height' => $this->getParam('thumbnail_height', 90),
+            'upload_thumbnail_quality' => $this->getParam('thumbnail_quality', 80)
+        );
+
+        return parent::getFileBrowserConfig($config);
     }
 }
