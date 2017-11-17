@@ -41,7 +41,7 @@ Styleguide 3.4
 		margin-left: 1px;
 		white-space: nowrap; /* 3 */
 
-		@include grid-media($grid-beta) {
+		@include breakpoint(beta) {
 			display: inline-block; /* 4 */
 		}
 
@@ -148,7 +148,7 @@ Styleguide 3.4
 		 * Only space from $site-width media because text isn't visible before this media
 		 */
 
-		@include grid-media($grid-foxtrot) {
+		@include breakpoint(foxtrot) {
 			svg + span {
 				margin-left: $spacing--micro;
 			}
@@ -165,11 +165,11 @@ Styleguide 3.4
 		 */
 
 		.hidden-mobile {
-			@include grid-media($grid-alpha--plus) {
+			@include breakpoint(alpha--plus) {
 				display: none;
 			}
 
-			@include grid-media($grid-foxtrot) {
+			@include breakpoint(foxtrot) {
 				display: inline;
 			}
 		}

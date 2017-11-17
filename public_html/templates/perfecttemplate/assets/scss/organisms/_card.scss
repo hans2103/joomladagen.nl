@@ -17,7 +17,7 @@
 				display: block;
 			}
 
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				padding: 0;
 			}
 
@@ -25,7 +25,7 @@
 				border: 1px solid $jd-gray;
 				padding: 2 * $base-spacing $base-spacing;
 
-				@include grid-media($grid-charlie) {
+				@include breakpoint(charlie) {
 					padding: 2 * $base-spacing 0;
 				}
 			}
@@ -35,21 +35,21 @@
 			position: relative;
 			padding: 0 $base-spacing;
 
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				padding: 0;
 			}
 		}
 
-		@include grid-media($grid-charlie) {
+		@include breakpoint(charlie) {
 			@include e('image') {
-				@include grid-column(2 of 8);
+				@include span(2 of 8);
 			}
 
 			@include e('content') {
-				@include grid-column(6 of 8);
+				@include span(6 of 8);
 
 				@include m('hideimage') {
-					@include grid-column(8 of 8);
+					@include span(8 of 8);
 				}
 			}
 		}
@@ -67,7 +67,7 @@
 		.card--body,
 		.card--actions {
 			display: none;
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				display: block;
 			}
 		}
@@ -97,7 +97,7 @@
 			@include font($font-size--h4, $normal, $line-height, $font-family);
 		}
 
-		@include grid-media($grid-charlie) {
+		@include breakpoint(charlie) {
 			padding-right: 3 * $base-spacing;
 		}
 
@@ -185,7 +185,7 @@
 		color: $jd-blue;
 	}
 
-	@include grid-media($grid-charlie) {
+	@include breakpoint(charlie) {
 		@include e('link') {
 			flex-basis: percentage(6/8);
 		}

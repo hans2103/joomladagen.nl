@@ -5,14 +5,14 @@
 		margin: 1.5 * $base-spacing 0;
 	}
 
-	@include grid-media($grid-charlie) {
+	@include breakpoint(charlie) {
 		@include e('image') {
-			@include grid-column(3 of 12);
+			@include span(3 of 12);
 			@include shift(1 of 12);
 		}
 
 		@include e('content') {
-			@include grid-column(6 of 12);
+			@include span(6 of 12);
 			@include shift(1 of 12);
 		}
 
@@ -37,14 +37,14 @@
 		border-bottom: 1px solid $jd-gray--dark;
 	}
 
-	@include grid-media($grid-charlie) {
+	@include breakpoint(charlie) {
 		@include e('image') {
-			@include grid-column(2 of 12);
+			@include span(2 of 12);
 			@include shift(1 of 12);
 		}
 
 		@include e('content') {
-			@include grid-column(8 of 12);
+			@include span(8 of 12);
 		}
 
 		@include e('create') {

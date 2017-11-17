@@ -13,14 +13,15 @@
 	}
 
 	@include e('logo') {
-		@include grid-media($grid-charlie) {
-			@include position(absolute,5px null null null);
+		@include breakpoint(charlie) {
+			position: absolute;
+			top: 5px;
 		}
 	}
 
 	@include e('navigation') {
-		@include grid-media($grid-charlie) {
-			@include grid-column(8);
+		@include breakpoint(charlie) {
+			@include span(8);
 			@include shift(4);
 		}
 	}

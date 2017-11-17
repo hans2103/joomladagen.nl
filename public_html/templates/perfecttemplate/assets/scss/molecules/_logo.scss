@@ -2,7 +2,7 @@
 	@include anchor($white, $white);
 	@include font($font-size--h3, $medium, $line-height);
 
-	@include grid-media ($grid-delta) {
+	@include breakpoint($delta) {
 		@include font($font-size--h2, $medium, $line-height);
 	}
 

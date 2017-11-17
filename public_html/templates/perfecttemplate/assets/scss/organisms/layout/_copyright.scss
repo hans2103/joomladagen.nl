@@ -14,7 +14,7 @@
 
 	@include e('content') {
 		margin: 0;
-		@include grid-media($grid-charlie) {
+		@include breakpoint(charlie) {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
@@ -24,14 +24,14 @@
 	.module {
 		&:first-child {}
 		&:last-child {
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				text-align: right;
 			}
 		}
 	}
 
 	.menu {
-		@include grid-media($grid-charlie) {
+		@include breakpoint(charlie) {
 			> li {
 				padding: 1/8 * $base-spacing 1/2 * $base-spacing;
 				padding-left: 0;

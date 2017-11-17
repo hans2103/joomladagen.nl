@@ -1,7 +1,7 @@
 @mixin block-spacing {
 	padding: 2/3 * $base-spacing;
 
-	@include grid-media($grid-echo) {
+	@include breakpoint(echo) {
 		padding: 2/3 * $base-spacing 0;
 	}
 }

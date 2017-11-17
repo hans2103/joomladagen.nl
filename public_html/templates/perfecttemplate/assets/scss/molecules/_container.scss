@@ -1,0 +1,23 @@
+/**
+ * Base container that follows the grid overlay
+ *
+ * Best to use as inner container like:
+ * <div class="some-section">
+ *   <div class="container"></div>
+ * </div>
+ *
+ * Also usable as mixin on other elements in your SCSS files like shown below
+ */
+
+.container {
+  @include container;
+}
+
+.container--shift {
+  @include breakpoint($charlie) {
+    padding-left: $menu-width + ($spacing-l * 2);
+  }
+  @include breakpoint($delta) {
+    padding-left: $menu-width + ($spacing-xl * 2);
+  }
+}

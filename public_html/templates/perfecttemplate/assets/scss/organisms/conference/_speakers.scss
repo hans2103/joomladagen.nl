@@ -15,13 +15,13 @@
 			margin-bottom: $base-spacing;
 
 			padding: $base-spacing;
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				padding: 0;
 			}
 		}
 
 		.span4 {
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				flex-grow: 1;
 				flex-shrink: 1;
 				flex-basis: 0;
@@ -31,7 +31,7 @@
 
 		.span8 {
 
-			@include grid-media($grid-charlie) {
+			@include breakpoint(charlie) {
 				flex-grow: 3;
 				flex-shrink: 1;
 				flex-basis: 0;

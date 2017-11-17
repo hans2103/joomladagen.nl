@@ -6,11 +6,11 @@
 	}
 
 	@include e('content') {
-		@include grid-column(12 of 12);
+		@include span(12 of 12);
 		padding: 2 * $base-spacing 0;
 
-		@include grid-media($grid-charlie){
-			@include grid-column(10 of 12);
+		@include breakpoint(charlie){
+			@include span(10 of 12);
 			@include shift(1 of 12);
 		}
 	}

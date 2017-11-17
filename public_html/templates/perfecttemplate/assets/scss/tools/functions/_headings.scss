@@ -1,0 +1,3 @@
+@function heading($heading-name, $tone: base) {
+  @return map-get(map-get($headings, $heading-name), $tone);
+}

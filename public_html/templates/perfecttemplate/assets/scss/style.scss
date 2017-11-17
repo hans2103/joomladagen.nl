@@ -12,16 +12,23 @@
 @import "atoms/anchor";
 @import "atoms/buttons";
 @import "atoms/form";
+@import "atoms/img";
 
 // Molecules
 @import "molecules/bannergroup";
+@import "molecules/block-jdnl";
+@import "molecules/container";
 @import "molecules/gmap";
+@import "molecules/grid";
 @import "molecules/hamburger";
 @import "molecules/images";
 @import "molecules/labels";
 @import "molecules/logo";
 @import "molecules/mailchimp";
+@import "molecules/media-placeholder";
 @import "molecules/module";
+@import "molecules/module-location";
+@import "molecules/numbers";
 @import "molecules/pager";
 @import "molecules/pagination";
 @import "molecules/speakersocial";

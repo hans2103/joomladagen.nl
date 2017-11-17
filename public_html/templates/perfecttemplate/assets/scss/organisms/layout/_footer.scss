@@ -22,39 +22,39 @@
 			@include font($font-size--h6);
 		}
 
-		@include grid-media($grid-charlie) {
+		@include breakpoint(charlie) {
 			@include m('about') {
-				@include grid-column(12 of 12);
+				@include span(12 of 12);
 			}
 
 			@include m('links') {
-				@include grid-column(6 of 12);
+				@include span(6 of 12);
 			}
 
 			@include m('form') {
-				@include grid-column(6 of 12);
+				@include span(6 of 12);
 			}
 
 			@include m('disclaimer') {
-				@include grid-column(12 of 12);
+				@include span(12 of 12);
 			}
 		}
 
-		@include grid-media($grid-delta) {
+		@include breakpoint(delta) {
 			@include m('about') {
-				@include grid-column(6 of 12);
+				@include span(6 of 12);
 			}
 
 			@include m('links') {
-				@include grid-column(3 of 12);
+				@include span(3 of 12);
 			}
 
 			@include m('form') {
-				@include grid-column(3 of 12);
+				@include span(3 of 12);
 			}
 		}
 
-		@include grid-media($grid-echo) {
+		@include breakpoint(echo) {
 			padding: 2 * $base-spacing 0;
 		}
 	}
