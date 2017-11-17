@@ -81,7 +81,7 @@ class PWTTemplateHelper
 	 */
 	static public function getSitename()
 	{
-		return JFactory::getConfig()->get('config.sitename');
+		return JFactory::getConfig()->get('sitename');
 	}
 
 	/**

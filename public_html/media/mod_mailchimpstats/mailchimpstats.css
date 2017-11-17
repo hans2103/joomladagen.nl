@@ -1,0 +1,113 @@
+#mcStatsContent {
+    background:white;
+}
+
+#mcStatsContent h3 {
+    padding: 5px 0;
+    margin: 10px 0;
+    background: transparent;
+}
+
+#mcStatsSelectContainer {
+    padding: 8px 10px;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#mcStatsSelectContainer form {
+    margin: 0;
+}
+
+#mcStatsSelect {
+    float:left;
+    padding: 5px 0 0 0;
+}
+
+#mcStatsSelectContainer a.JMbutton {
+    display: inline-block;
+    height: 22px;
+    background-color: rgb(207,104,0);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.47, rgb(207,104,0)),
+        color-stop(0.87, rgb(251,151,0))
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(207,104,0) 47%,
+        rgb(251,151,0) 87%
+    );
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin: 7px 0 0 5px;
+    padding: 6px 10px 0;
+    outline:none;
+    float:right;
+    font-size: 13px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px #616161;
+}
+
+#mcStatsSelectContainer a.JMbutton:hover {
+    color: #F4F4F4;
+    text-decoration: none;
+    background-color: rgb(207,104,0);
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.47, rgb(186,93,0)),
+        color-stop(0.87, rgb(251,151,0))
+    );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(186,93,0) 47%,
+        rgb(251,151,0) 87%
+    );
+}
+
+#mcStatsDetails {
+    padding-bottom: 1em;
+    width: 520px;
+    margin: auto;
+}
+
+#detail-stats {
+    width: 250px;
+    float:left;
+    height:auto;
+}
+
+#complaints {
+    border: 1px solid #ebebeb;
+    border-width: 0 1px 0 0;
+}
+
+.stats-list {
+    margin-top: 4px;
+}
+
+.stats-list li {
+    padding: 4px 0;
+}
+
+.stats-list .name, .stats-list .value {
+    top: 1px;
+}
+
+#ap-main #mcStatsSelect {
+    padding: 3px 0 0 0;
+}
+
+#ap-main .stats-list li {
+    padding: 1px 0;
+}
+
+#mcStatsPieChart {
+    display: block;
+    width: 265px;
+    height: 300px;
+    float: left;
+}

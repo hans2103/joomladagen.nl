@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<access component="com_joomailermailchimpintegration">
+    <section name="component">
+	<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+	<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
+	<action name="joomlamailer.lists" title="JM_MANAGE_LISTS" description="JM_MANAGE_LISTS_DESC" />
+	<action name="joomlamailer.create" title="JM_CREATE_DRAFTS" description="JM_CREATE_DRAFTS_DESC" />
+	<action name="joomlamailer.campaigns" title="JM_MANAGE_CAMPAIGNS" description="JM_MANAGE_CAMPAIGNS_DESC" />
+	<action name="joomlamailer.reports" title="JM_MANAGE_REPORTS" description="JM_MANAGE_REPORTS_DESC" />
+    </section>
+</access>

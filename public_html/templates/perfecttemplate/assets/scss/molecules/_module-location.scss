@@ -1,4 +1,11 @@
 .module__location {
+  @include spacing(top, margin, 1);
+  @include spacing(bottom, margin, 2);
+
+  .module__header {
+    text-align: center;
+  }
+
   .module__content {
     display: flex;
     flex-wrap: wrap;

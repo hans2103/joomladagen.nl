@@ -88,16 +88,20 @@ PWTTemplateHelper::localstorageFont();
 	<?php if (PWTTemplateHelper::isHome() == true) : ?>
         <section class="section">
             <div class="container">
-                de vernieuwde joomladagen
+                <div class="block block__payoff">
 
-                <jdoc:include type="modules" name="home_intro" style="tpl"/>
+                    <h2><?php echo JLayouts::icon('vernieuwde'); ?>
+                        De Joomla dagen 2018</h2>
+
+                    <jdoc:include type="modules" name="home_intro" style="tpl"/>
+                </div>
             </div>
         </section>
 
         <section class="section">
             <div class="container">
-                <div class="grid grid--1-1">
-                    <div class="grid__item">
+                <div class="grid--flex grid--1-1">
+                    <div class="grid__item grid__item--dark">
                         <jdoc:include type="modules" name="home_vrijdag" style="tpl"/>
                     </div>
                     <div class="grid__item">
@@ -110,12 +114,6 @@ PWTTemplateHelper::localstorageFont();
         <section class="section">
             <div class="container">
                 <jdoc:include type="modules" name="home_locatie" style="tpl"/>
-            </div>
-        </section>
-
-        <section class="section section--grey-light">
-            <div class="container">
-                onze sponsoren
             </div>
         </section>
 
@@ -192,16 +190,21 @@ PWTTemplateHelper::localstorageFont();
 
 </main>
 
+
 <footer class="footer" role="contentinfo">
-    <div class="footer__wrapper">
-        <jdoc:include type="modules" name="footer" style="tpl"/>
+    <div class="container">
+        <div class="footer__content">
+            <jdoc:include type="modules" name="footer" style="tpl"/>
+        </div>
     </div>
 </footer>
 
 <div class="copyright" role="contentinfo">
-    <div class="copyright__wrapper">
+    <div class="container">
         <div class="copyright__content">
-            <jdoc:include type="modules" name="copyright" style="tpl"/>
+            <jdoc:include type="modules" name="copyright" style="none"/>
+            <p class="copyright__text">&copy; Copyright 2005<?php echo(date('Y') != 2005 ? ' - ' . date('Y') : ''); ?>
+				<?php echo PWTTemplateHelper::getSitename(); ?></p>
         </div>
     </div>
 </div>

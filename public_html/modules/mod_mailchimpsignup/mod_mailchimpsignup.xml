@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="2.5" method="upgrade" client="site">
+    <name>MailChimp Signup</name>
+    <version>2.1</version>
+    <creationDate>2015-01-26</creationDate>
+    <author>freakedout</author>
+    <authorEmail>contact@feakedout.de</authorEmail>
+    <authorUrl>http://www.freakedout.de</authorUrl>
+    <copyright>Copyright (C) 2015 freakedout. All rights reserved.</copyright>
+    <license>GNU/GPL - http://www.gnu.org/licenses/gpl-2.0.html</license>
+    <description>This module allows your website visitors to subscribe to your MailChimp newsletter lists.</description>
+
+    <files>
+        <filename module="mod_mailchimpsignup">mod_mailchimpsignup.php</filename>
+        <filename>index.html</filename>
+        <folder>tmpl</folder>
+        <folder>includes</folder>
+    </files>
+
+    <media destination="mod_mailchimpsignup" folder="media">
+        <folder>css</folder>
+        <folder>images</folder>
+        <folder>js</folder>
+        <filename>index.html</filename>
+    </media>
+
+    <languages>
+        <language tag="en-GB">language/en-GB/en-GB.mod_mailchimpsignup.ini</language>
+        <language tag="de-DE">language/de-DE/de-DE.mod_mailchimpsignup.ini</language>
+        <language tag="es-ES">language/es-ES/es-ES.mod_mailchimpsignup.ini</language>
+        <language tag="ru-RU">language/ru-RU/ru-RU.mod_mailchimpsignup.ini</language>
+        <language tag="fr-FR">language/fr-FR/fr-FR.mod_mailchimpsignup.ini</language>
+    </languages>
+
+    <config>
+        <fields name="params" addfieldpath="/modules/mod_mailchimpsignup/includes">
+            <fieldset name="basic">
+                <field name="intro-text" type="textarea" default="" filter="raw" cols="25" rows="2" label="JM_INTRO_TEXT" description="JM_INTRO_TEXT_DESC" />
+                <field name="outro-text-1" type="textarea" default="" filter="raw" cols="25" rows="2" label="JM_OUTRO_TEXT_1" description="JM_OUTRO_TEXT_1_DESC" />
+                <field name="outro-text-2" type="textarea" default="" filter="raw" cols="25" rows="2" label="JM_OUTRO_TEXT_2" description="JM_OUTRO_TEXT_2_DESC" />
+                <field name="thankyou" type="textarea" filter="raw" default="Thank you! Please check your email and confirm the newsletter subscription." cols="25" rows="2" label="JM_THANKYOU_MESSAGE" description="JM_THANK_YOU_DESC" />
+                <field name="updateMsg" type="textarea" filter="raw" default="You were already subscribed to this list. Your settings have been updated. Thank you!" cols="25" rows="2" label="JM_UPDATE_MESSAGE" description="JM_UPDATE_DESC" />
+                <field name="listid" type="mclists" default="" cols="25" rows="2" label="JM_LIST" description="JM_LIST_DESC" />
+                <field name="fields" type="fields" default="" label="JM_FIELDS" description="JM_FIELDS_DESC"/>
+                <field name="interests" type="interests" default="" label="JM_INTERESTS" description="JM_INTERESTS_DESC"/>
+                <field name="email-type" type="list" default="0" label="JM_EMAILTYPE" description="JM_EMAILTYPE_DESC">
+                    <option value="html">JM_EMAILTYPE_DEFAULT</option>
+                    <option value="text">JM_EMAILTYPE_TEXT</option>
+                    <option value="show">JM_EMAILTYPE_SHOW</option>
+                </field>
+
+                <field name="dateFormat" type="text" default="%Y-%m-%d" label="JM_DATE_FORMAT" description="JM_DATE_FORMAT_DESC"/>
+                <field name="phoneFormat" type="radio" default="inter" label="JM_PHONE_FORMAT" description="JM_PHONE_FORMAT_DESC">
+                    <option value="us">JM_US_FORMAT</option>
+                    <option value="inter">JM_INTERNATIONAL_FORMAT</option>
+                </field>
+                <field name="address2" type="radio" default="0" label="JM_SHOW_ADDRESS2" description="JM_SHOW_ADDRESS2_DESC">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                    name="layout"
+                    type="modulelayout"
+                    label="JFIELD_ALT_LAYOUT_LABEL"
+                    description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+                <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+            </fieldset>
+        </fields>
+    </config>
+</extension>

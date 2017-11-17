@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="2.5" type="plugin" group="community" method="upgrade">
+    <name>Community - joomlamailer</name>
+    <author>freakedout</author>
+    <creationDate>2014-08-23</creationDate>
+    <copyright>Copyright (C) 2014 freakedout. All rights reserved.</copyright>
+    <license>http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
+    <authorEmail>contact@freakedout.de</authorEmail>
+    <authorUrl>www.freakedout.de</authorUrl>
+    <version>1.0</version>
+    <description>This plugin updates the email address in MailChimp lists when changed by the user.</description>
+
+    <isapplication>false</isapplication>
+
+    <files>
+        <file plugin="joomlamailer">joomlamailer.php</file>
+        <filename>index.html</filename>
+    </files>
+</extension>

@@ -11,6 +11,7 @@
 
 .container {
   @include container;
+  overflow: hidden;
 }
 
 .container--shift {

@@ -191,3 +191,9 @@
     @include span(4 of 12, $beta);
   }
 }
+
+
+.grid__item--dark {
+  background-color: $jd-blue--dark;
+  color: white;
+}

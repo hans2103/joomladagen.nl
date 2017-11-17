@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+    <layout title="COM_JOOMAILERMAILCHIMPINTEGRATION_ARCHIVE_VIEW_DEFAULT_TITLE"
+	    option="COM_JOOMAILERMAILCHIMPINTEGRATION_ARCHIVE_VIEW_DEFAULT_DESC">
+	<message>
+	    <![CDATA[COM_JOOMAILERMAILCHIMPINTEGRATION_ARCHIVE_VIEW_DEFAULT_DESC]]>
+	</message>
+    </layout>
+
+    <state>
+	<name>JM_CAMPAIGN_ARCHIVE</name>
+	<description>JM_CAMPAIGN_ARCHIVE_DESC</description>
+	<params>
+	    <param name="limit" type="text" default="10" label="JM_LIMIT" description="JM_LIMIT_DESC" />
+	    <param name="display_type" type="radio" default="0" label="JM_OPEN_IN" description="JM_DISPLAYTYPEDESC">
+		<option value="0">JM_LIGHTBOX</option>
+		<option value="1">JM_NEW_TAB</option>
+	    </param>
+	</params> 
+    </state>
+     
+    <fields name="params">
+	<fieldset name="basic" label="JOPTIONS">
+	    <field name="limit" type="text" default="10" label="JM_LIMIT" description="JM_LIMIT_DESC" />
+	    <field name="display_type" type="radio" default="0" label="JM_OPEN_IN" description="JM_DISPLAYTYPEDESC">
+		<option value="0">JM_LIGHTBOX</option>
+		<option value="1">JM_NEW_TAB</option>
+	    </field>
+	</fieldset>
+    </fields>
+
+</metadata>
