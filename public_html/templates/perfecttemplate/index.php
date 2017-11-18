@@ -67,71 +67,93 @@ PWTTemplateHelper::localstorageFont();
     <aside class="section section--blue section__numbers">
         <div class="container">
             <div class="numbers__wrapper">
-                <div class="numbers">
-                    <div class="numbers__item countdown__dd"><span>145</span>dagen</div>
-                    <!--<div class="numbers__item countdown__hh"><span>07</span>uren</div>
-                    <div class="numbers__item countdown__mm"><span>46</span>dagen</div>
-                    <div class="numbers__item countdown__ss"><span>27</span>dagen</div>-->
+                <div class="numbers" id="clockdiv">
+                    <div class="numbers__item">
+                        <span class="numbers__item-head days"></span>
+                        <div class="numbers__item-label">dagen</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head hours"></span>
+                        <div class="numbers__item-label">uren</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head minutes"></span>
+                        <div class="numbers__item-label">min</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head seconds"></span>
+                        <div class="numbers__item-label">sec</div>
+                    </div>
+
+
+                    <script>
+                        function getTimeRemaining(endtime) {
+                            var t = Date.parse(endtime) - Date.parse(new Date());
+                            var seconds = Math.floor((t / 1000) % 60);
+                            var minutes = Math.floor((t / 1000 / 60) % 60);
+                            var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+                            var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                            return {
+                                'total': t,
+                                'days': days,
+                                'hours': hours,
+                                'minutes': minutes,
+                                'seconds': seconds
+                            };
+                        }
+
+                        function initializeClock(id, endtime) {
+                            var clock = document.getElementById(id);
+                            var daysSpan = clock.querySelector('.days');
+                            var hoursSpan = clock.querySelector('.hours');
+                            var minutesSpan = clock.querySelector('.minutes');
+                            var secondsSpan = clock.querySelector('.seconds');
+
+                            function updateClock() {
+                                var t = getTimeRemaining(endtime);
+
+                                if (t.total <= 0) {
+                                    addClass('#' + id, 'hidden');
+                                    return;
+                                }
+
+                                daysSpan.innerHTML = t.days;
+                                hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                                minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                                secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                                if (t.total <= 0) {
+                                    clearInterval(timeinterval);
+                                }
+                            }
+
+                            updateClock();
+                            var timeinterval = setInterval(updateClock, 1000);
+                        }
+
+                        var deadline = new Date('2018-04-13 09:00:00');
+                        initializeClock('clockdiv', deadline);
+                    </script>
                 </div>
                 <div class="numbers">
-                    <div class="numbers__item"><span>271</span>deelnemers</div>
-                    <div class="numbers__item"><span>42</span>sprekers</div>
-                    <div class="numbers__item"><span>54</span>presentaties</div>
-                    <div class="numbers__item"><span>175</span>overnachtingen</div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head">271</span>
+                        <div class="numbers__item-label">deelnemers</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head">42</span>
+                        <div class="numbers__item-label">sprekers</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head">54</span>
+                        <div class="numbers__item-label">presentaties</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head">175</span>
+                        <div class="numbers__item-label">overnachtingen</div>
+                    </div>
                 </div>
             </div>
-<?php /*
-            <script>
-                const countDownClock = (number = 100, format = 'seconds') => {
-
-                    const d = document;
-                    const daysElement = d.querySelector('.days');
-                    const hoursElement = d.querySelector('.hours');
-                    const minutesElement = d.querySelector('.minutes');
-                    const secondsElement = d.querySelector('.seconds');
-                    let countdown;
-                    convertFormat(format);
-
-
-                    function convertFormat(format) {
-                        switch(format) {
-                            case 'seconds':
-                                return timer(number);
-                            case 'minutes':
-                                return timer(number * 60);
-                            case 'hours':
-                                return timer(number * 60 * 60);
-                            case 'days':
-                                return timer(number * 60 * 60 * 24);;
-                        }
-                    }
-
-                    function timer(seconds) {
-                        const now = Date.now();
-                        const then = now + seconds * 1000;
-
-                        countdown = setInterval(() => {
-                            const secondsLeft = Math.round((then - Date.now()) / 1000);
-
-                        if(secondsLeft <= 0) {
-                            clearInterval(countdown);
-                            return;
-                        };
-
-                        displayTimeLeft(secondsLeft);
-
-                    },1000);
-                    }
-
-                    function displayTimeLeft(seconds) {
-                        daysElement.textContent = Math.floor(seconds / 86400);
-                        hoursElement.textContent = Math.floor((seconds % 86400) / 3600);
-                        minutesElement.textContent = Math.floor((seconds % 86400) % 3600 / 60);
-                        secondsElement.textContent = seconds % 60 < 10 ? `0${seconds % 60}` : seconds % 60;
-                    }
-                }
-                countDownClock(20, 'days');
-            </script>*/ ?>
         </div>
     </aside>
 <?php endif; ?>

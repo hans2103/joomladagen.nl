@@ -38,6 +38,7 @@
     "time-grunt": "^1.3.*"
   },
   "dependencies": {
+    "Bitters": "git+https://github.com/thoughtbot/bitters.git",
     "vanilla-js-responsive-menu": "robinpoort/vanilla-js-responsive-menu"
   }
 }
