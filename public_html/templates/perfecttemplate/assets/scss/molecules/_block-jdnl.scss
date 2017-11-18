@@ -7,6 +7,7 @@
   @include shift(2 of 12, $echo);
   display: flex;
   flex-wrap: wrap;
+  text-shadow: 1px 1px 2px $jd-blue--dark;
 }
 
 .jdnl__title {
