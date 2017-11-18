@@ -93,7 +93,7 @@
 	@include e('header') {
 		@include m('home') {
 			background-image: url("../images/headers/jd18nl-location-high_tech_campus-eindhoven.jpg");
-			background-position: 50% 0;
+			background-position: 50% 50%;
 			background-size: cover;
 		}
 	}
