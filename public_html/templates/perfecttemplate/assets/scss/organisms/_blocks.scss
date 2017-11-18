@@ -28,22 +28,22 @@
 	}
 
 	@include e('paralax') {
-		position: relative;
-		height: auto;
+		//position: relative;
+		//height: auto;
 		padding: 3 * $base-spacing 0;
-		background-position: 50% 50%;
+		//background-position: 50% 50%;
 		background-repeat: no-repeat;
-		background-attachment: fixed;
+		//background-attachment: fixed;
 
-		&:after {
-			position: absolute;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			top: 0;
-			z-index: -1;
-			content: ' ';
-		}
+		//&:after {
+		//	position: absolute;
+		//	left: 0;
+		//	right: 0;
+		//	bottom: 0;
+		//	top: 0;
+		//	z-index: -1;
+		//	content: ' ';
+		//}
 
 		@include m('logo') {
 			position: relative;
