@@ -94,6 +94,7 @@
 		@include m('home') {
 			background-image: url("../images/headers/header_afbeelding_jd17nl-dark.jpg");
 			background-position: 50% 0;
+			background-size: cover;
 		}
 	}
 
