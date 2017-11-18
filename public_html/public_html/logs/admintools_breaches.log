@@ -1728,3 +1728,48 @@ UA         : Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, lik
 admin
 
 
+-------------------------------------------------------------------------------
+Blocking reason: loginfailure
+-------------------------------------------------------------------------------
+Reason     : Login failure (Username: admin -- Password: oomladage)
+Timestamp  : 2017-11-18 12:54:57 GMT
+Local time : 2017-11-18 12:54:57 UTC 
+URL        : https://www.joomladagen.nl/administrator/index.php
+User       : Guest
+IP         : 185.119.81.63
+Country    : (unknown country)
+Continent  : (unknown continent)
+UA         : Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+admin
+
+
+-------------------------------------------------------------------------------
+Blocking reason: loginfailure
+-------------------------------------------------------------------------------
+Reason     : Login failure (Username: aanwezigheid -- Password: aanwezigheid)
+Timestamp  : 2017-11-18 13:27:45 GMT
+Local time : 2017-11-18 13:27:45 UTC 
+URL        : https://www.joomladagen.nl/administrator/index.php
+User       : Guest
+IP         : 185.86.5.212
+Country    : (unknown country)
+Continent  : (unknown continent)
+UA         : Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+aanwezigheid
+
+
+-------------------------------------------------------------------------------
+Blocking reason: loginfailure
+-------------------------------------------------------------------------------
+Reason     : Login failure (Username: admin -- Password: 135790)
+Timestamp  : 2017-11-18 13:45:56 GMT
+Local time : 2017-11-18 13:45:56 UTC 
+URL        : https://www.joomladagen.nl/administrator/index.php
+User       : Guest
+IP         : 91.217.90.39
+Country    : (unknown country)
+Continent  : (unknown continent)
+UA         : Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2977.45 Safari/537.36
+admin
+
+

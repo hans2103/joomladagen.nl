@@ -113,3 +113,6 @@
 2017-11-17T13:34:17+00:00	INFO 185.86.167.4	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
 2017-11-17T13:43:14+00:00	INFO 149.154.157.119	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
 2017-11-17T23:33:30+00:00	INFO 185.85.239.156	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
+2017-11-18T12:54:57+00:00	INFO 185.119.81.63	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
+2017-11-18T13:27:45+00:00	INFO 185.86.5.212	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
+2017-11-18T13:45:56+00:00	INFO 91.217.90.39	joomlafailure	De combinatie van gebruikersnaam en wachtwoord is niet correct of u heeft nog geen account.
