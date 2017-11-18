@@ -1,48 +1,52 @@
-#{$all-buttons} {
-	background-color: $jd-green;
-	border-bottom: 4px solid $black;
-	border-radius: 0;
-	text-transform: uppercase;
+.button {
+	@include button;
 }
 
-#{$all-buttons-focus},
-#{$all-buttons-hover} {
-	background-color: darken($jd-green, 10%);
-	outline:none;
-}
-
-#{$all-buttons-active} {
-	background-color: darken($jd-green, 10%);
-	border-bottom: 0;
-	margin-top: 4px;
-}
-
-//.btn {
-//
-//
-//	@include m('ghost') {
-//		//color: $white;
-//		//-webkit-appearance: inherit;
-//		//padding: 1/8 * 2/3 * $base-spacing 1/2 * $base-spacing;
-//	}
+//#{$all-buttons} {
+//	background-color: $jd-green;
+//	border-bottom: 4px solid $black;
+//	border-radius: 0;
+//	text-transform: uppercase;
 //}
-
-
-#{$all-buttons--ghost} {
-	text-transform: uppercase;
-}
-
-#{$all-buttons--ghost-focus},
-#{$all-buttons--ghost-hover} {
-}
-
-#{$all-buttons--ghost-active} {
-}
-
-.btn--ghost--inverse {
-	@extend .btn--ghost !optional;
-	color: $jd-gray--dark;
-	border-color: $jd-gray--dark;
-	padding: 1/2 * 2/3 * $base-spacing;
-}
-
+//
+//#{$all-buttons-focus},
+//#{$all-buttons-hover} {
+//	background-color: darken($jd-green, 10%);
+//	outline:none;
+//}
+//
+//#{$all-buttons-active} {
+//	background-color: darken($jd-green, 10%);
+//	border-bottom: 0;
+//	margin-top: 4px;
+//}
+//
+////.btn {
+////
+////
+////	@include m('ghost') {
+////		//color: $white;
+////		//-webkit-appearance: inherit;
+////		//padding: 1/8 * 2/3 * $base-spacing 1/2 * $base-spacing;
+////	}
+////}
+//
+//
+//#{$all-buttons--ghost} {
+//	text-transform: uppercase;
+//}
+//
+//#{$all-buttons--ghost-focus},
+//#{$all-buttons--ghost-hover} {
+//}
+//
+//#{$all-buttons--ghost-active} {
+//}
+//
+//.btn--ghost--inverse {
+//	@extend .btn--ghost !optional;
+//	color: $jd-gray--dark;
+//	border-color: $jd-gray--dark;
+//	padding: 1/2 * 2/3 * $base-spacing;
+//}
+//
