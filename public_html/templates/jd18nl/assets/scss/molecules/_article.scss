@@ -1,0 +1,94 @@
+.article {
+
+}
+
+.article__item {
+  @include spacing(bottom, margin, 2);
+
+  h2, .h2 {
+    @include heading(heading_2);
+  }
+
+  h3, .h3 {
+    @include heading(heading_2);
+  }
+
+  &:first-child {
+    @include spacing(top, padding, 2);
+  }
+}
+
+.article__item--list {
+  @include flexbox($menu, 0) {
+    display: flex;
+  }
+
+  .article__image {
+    flex: 0 0 20%;
+  }
+
+  .article__body {
+    @include spacing(left, padding, 0.5);
+    @include spacing(right, padding, 0.5);
+    flex: 1 1 auto;
+  }
+}
+
+.article__item--blog {
+  @include flexbox($menu, 0) {
+    display: flex;
+  }
+
+  .article__body {
+    @include spacing(all, padding, 1, $menu);
+  }
+
+  @include flexbox($menu, 0) {
+    display: flex;
+    justify-items: stretch;
+    flex-wrap: wrap;
+
+    .article__image,
+    .article__body {
+      flex: 1 1 50%;
+    }
+  }
+
+  @at-root .content--flipped & {
+    @include flexbox($menu, 0) {
+      &:nth-child(even) {
+        .article__image {
+          order: 1;
+        }
+      }
+    }
+  }
+}
+
+.article__item--shift {
+  @include span(10 of 12, $delta);
+  @include shift(1 of 12, $delta);
+
+  .article__image {
+    @include spacing(bottom, margin, 1);
+  }
+}
+
+.article__info {
+  font-size: $font-size-m;
+  color: color(grey, light);
+}
+
+.article__title-link {
+  @include anchor-decoration;
+}
+
+.article__content {
+  p {
+    @include reset;
+
+    & + p:not(.readmore) {
+      @include spacing(top, margin, 0.5);
+    }
+  }
+}

@@ -1,5 +1,9 @@
 .header {
   @include font-smoothing;
+  background-color: color(text);
+  background-image: url('../images/headers/headerbeeld_laag.png');
+  background-position: center top, top left;
+  background-repeat: no-repeat;
 }
 
 .header__inner {
@@ -10,9 +14,20 @@
 
 .header__content {
   clear: left;
-  @include spacing(top, padding, 6);
-  @include spacing(bottom, padding, 7);
+  color: white;
   text-shadow: 2px 2px 2px  color(text);
+  @include spacing(top, padding, 3);
+  @include spacing(bottom, padding, 3);
+  @include span(10 of 12, $delta to $echo);
+  @include shift(1 of 12, $delta to $echo);
+  @include span(8 of 12, $echo);
+  @include shift(2 of 12, $echo);
+}
+
+.header__title {
+  font-size: 1.5rem;
+  font-weight: $weight-bold;
+  color: white;
 }
 
 .header--home {
@@ -22,18 +37,15 @@
   background-repeat:no-repeat;
 
   .header__content {
-    @include span(10 of 12, $delta to $echo);
-    @include shift(1 of 12, $delta to $echo);
-    @include span(8 of 12, $echo);
-    @include shift(2 of 12, $echo);
+    @include spacing(top, padding, 6);
+    @include spacing(bottom, padding, 7);
     display: flex;
     flex-wrap: wrap;
   }
 
-  .header__text-title {
+  .header__title {
     font-size: 2.5rem;
     font-weight: $weight-light;
-    color: white;
     flex: 1 0 100%;
   }
 
@@ -68,3 +80,4 @@
     text-transform: uppercase;
   }
 }
+

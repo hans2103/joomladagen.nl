@@ -11,6 +11,7 @@
 @import "atoms/base";
 
 // Molecules
+@import "molecules/article";
 @import "molecules/buttons";
 @import "molecules/container";
 @import "molecules/copyright";
@@ -22,6 +23,7 @@
 @import "molecules/headers";
 @import "molecules/homepage";
 @import "molecules/mailchimp";
+@import "molecules/media-placeholder";
 @import "molecules/module";
 @import "molecules/numbers";
 @import "molecules/sections";
@@ -34,5 +36,5 @@
 
 // Load utilities classes last so they win over other classes
 // without an !important
-@import "utilities/revenge";
+//@import "utilities/revenge";
 @import "utilities/utilities";

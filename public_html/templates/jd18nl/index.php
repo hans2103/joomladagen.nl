@@ -54,8 +54,8 @@ PWTTemplateHelper::loadJs();
                 <a href="<?php echo $url = JURI::base(); ?>"><?php echo JLayouts::icon('joomladagen_logo'); ?></a>
             </div>
             <div class="logo--name">
-                <?php $url = JURI::base(); ?>
-                <?php $text = '<span class="logo--brand">Joomla</span>dagen 2018'; ?>
+				<?php $url = JURI::base(); ?>
+				<?php $text = '<span class="logo--brand">Joomla</span>dagen 2018'; ?>
 				<?php echo JHtml::_('link', $url, $text); ?>
             </div>
         </div>
@@ -91,12 +91,19 @@ PWTTemplateHelper::loadJs();
     </div>
 </div>
 
-<?php /*<script type="text/javascript">
-    responsivemenu.init({
+<script type="text/javascript">
+	<?php /*    responsivemenu.init({
         wrapper: document.querySelector('.navigation-container'),
         togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
     });
-</script>*/ ?>
+ */ ?>
+
+
+    var bLazy = new Blazy({
+        selector: '.lazyload img',
+        offset: 100
+    });
+</script>
 
 <?php
 if (PWTTemplateHelper::isDevelopment())
