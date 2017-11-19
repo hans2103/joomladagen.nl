@@ -131,7 +131,7 @@ PWTTemplateHelper::localstorageFont();
                             var timeinterval = setInterval(updateClock, 1000);
                         }
 
-                        var deadline = new Date('2018-04-13 09:00:00');
+                        var deadline = new Date('04/13/2018 09:00:00');
                         initializeClock('clockdiv', deadline);
                     </script>
                 </div>
@@ -231,7 +231,7 @@ PWTTemplateHelper::localstorageFont();
 
 	<?php endif; ?>
 
-	<?php if (PWTTemplateHelper::isHome() == false) : ?>
+	<?php if (false && PWTTemplateHelper::isHome() == false) : ?>
 
 		<?php echo PWTTemplateHelper::renderHelixTitle(); ?>
 
