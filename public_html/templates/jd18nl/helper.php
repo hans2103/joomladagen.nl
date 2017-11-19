@@ -190,6 +190,19 @@ class PWTTemplateHelper
 	}
 
 	/**
+	 * get parameter 'Show Intro Image' set with Menu Item
+	 *
+	 * @return mixed
+	 * @since  PerfectSite2.1.0
+	 */
+	static public function getParam($param)
+	{
+		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
+		$parameter  = ($activeMenu) ? $activeMenu->params->get($param, 1) : '';
+		return $parameter;
+	}
+
+	/**
 	 * Generate a list of useful CSS classes for the body
 	 *
 	 * @param null

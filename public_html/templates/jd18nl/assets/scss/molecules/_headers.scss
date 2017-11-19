@@ -30,6 +30,11 @@
   color: white;
 }
 
+.header__intro {
+  @include spacing(top, margin, 5);
+
+}
+
 .header--home {
   background-image: url("../images/headers/jd18nl-location-high_tech_campus-eindhoven.jpg");
   background-position: 50% 50%;
