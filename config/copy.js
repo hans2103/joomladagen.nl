@@ -12,6 +12,7 @@ module.exports = {
             {
                 expand: true,
                 src: [
+                    'node_modules/optimised-svgs/icons/misc/icon.svg',
                     '<%= paths.assets %>/icons/svg/*.svg'
                 ],
                 dest: '<%= paths.template %>/icons',
