@@ -1,0 +1,70 @@
+.header {
+  @include font-smoothing;
+}
+
+.header__inner {
+  position: relative;
+  z-index: 2;
+  @include spacing(top);
+}
+
+.header__content {
+  clear: left;
+  @include spacing(top, padding, 6);
+  @include spacing(bottom, padding, 7);
+  text-shadow: 2px 2px 2px  color(text);
+}
+
+.header--home {
+  background-image: url("../images/headers/jd18nl-location-high_tech_campus-eindhoven.jpg");
+  background-position: 50% 50%;
+  background-size: cover;
+  background-repeat:no-repeat;
+
+  .header__content {
+    @include span(10 of 12, $delta to $echo);
+    @include shift(1 of 12, $delta to $echo);
+    @include span(8 of 12, $echo);
+    @include shift(2 of 12, $echo);
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .header__text-title {
+    font-size: 2.5rem;
+    font-weight: $weight-light;
+    color: white;
+    flex: 1 0 100%;
+  }
+
+  .header__text-logo {
+    flex: 0 0 5em;
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .header__text-meta {
+    flex: 1 1 0;
+    @include spacing(left, padding, 0.5);
+    line-height:1;
+  }
+
+  .header__text-date {
+    font-weight: $weight-bold;
+    color: white;
+    font-size: 1.5rem;
+    @include breakpoint($menu) {
+      font-size: 2.5rem;
+    }
+  }
+
+  .header__text-location {
+    font-size: 1.5rem;
+    font-weight: $weight-light;
+    color: white;
+    text-transform: uppercase;
+  }
+}

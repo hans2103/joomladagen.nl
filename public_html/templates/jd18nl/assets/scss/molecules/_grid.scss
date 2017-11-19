@@ -1,0 +1,199 @@
+// Grid
+//
+// Default class for grids
+//
+// .grid--flex - Flexbox children, can be used on all grids
+//
+// Markup:
+// <div class="grid {{modifier_class}}">
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid
+
+.grid.grid {
+  @include clearfix;
+  @include spacing(bottom, margin, -1);
+  display: block;
+}
+
+.grid--flex {
+  @include clearfix(reset);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid__item {
+  display: block;
+  @include spacing(bottom, margin, 1);
+
+  &:last-child {
+    .grid__item:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+// Grid 1-1
+//
+// Two halfs grid items
+//
+// Markup:
+// <div class="grid grid--1-1">
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid11
+
+.grid--1-1 {
+  > .grid__item {
+    @include gallery(6, $beta);
+  }
+
+  .grid--1-3-2 {
+    > .grid__item:nth-child(2) {
+      @include breakpoint($charlie) {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+
+// Grid 1-1-1
+//
+// Three thirds grid items
+//
+// Markup:
+// <div class="grid grid--1-1-1">
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid111
+
+.grid--1-1-1 {
+  > .grid__item {
+    @include gallery(6 of 12, $beta to $charlie);
+    @include gallery(4 of 12, $charlie, $defaultProperties: false);
+  }
+}
+
+
+// Grid 1-1-1-1
+//
+// Four fourths grid items
+//
+// Markup:
+// <div class="grid grid--1-1-1-1">
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid1111
+
+.grid--1-1-1-1 {
+  > .grid__item {
+    @include gallery(6 of 12, $beta to $charlie);
+    @include gallery(4 of 12, $charlie to $delta, $defaultProperties: false);
+    @include gallery(3 of 12, $delta, $defaultProperties: false);
+  }
+}
+
+
+// Grid 1-2
+//
+// One third first grid item, two thirds last grid item
+//
+// Markup:
+// <div class="grid grid--1-2">
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid12
+
+.grid--1-2 {
+  > .grid__item:first-child {
+    @include span(4 of 12, $beta);
+  }
+  > .grid__item:last-child {
+    @include span(8 of 12, $beta);
+  }
+}
+
+// Grid 1-3-2
+//
+// Stacked on mobile. On desktop the third div gets placed on the right top
+//
+// Markup:
+// <div class="grid grid--1-3-2">
+//   <div class="grid__item">Content 1</div>
+//   <div class="grid__item">Content 2</div>
+//   <div class="grid__item">Content 3</div>
+// </div>
+//
+// Styleguide layout.grid132
+
+.grid--1-3-2 {
+  @include clearfix;
+  @include flexbox($charlie, 0) {
+    @include clearfix(reset);
+    display: flex;
+    flex-wrap: wrap;
+
+    > .grid__item {
+      &:nth-child(1) {
+        flex: 99 1 auto;
+        order: 1;
+        margin-bottom: $spacing-m;
+      }
+
+      &:nth-child(2) {
+        flex: 0 0 100%;
+        order: 3;
+      }
+
+      &:nth-child(3) {
+        flex: 1 1 auto;
+        order: 2;
+        align-self: flex-end;
+        text-align: right;
+        margin-bottom: $spacing-m;
+      }
+    }
+  }
+}
+
+
+// Grid 2-1
+//
+// Two thirds first grid item, one third last grid item
+//
+// Markup:
+// <div class="grid grid--2-1">
+//   <div class="grid__item">Content</div>
+//   <div class="grid__item">Content</div>
+// </div>
+//
+// Styleguide layout.grid21
+
+.grid--2-1 {
+  > .grid__item:first-child {
+    @include span(8 of 12, $beta);
+  }
+  > .grid__item:last-child {
+    @include span(4 of 12, $beta);
+  }
+}
+
+
+.grid__item--dark {
+  background-color: color(text);
+  color: white;
+}
