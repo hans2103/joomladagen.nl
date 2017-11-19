@@ -21,6 +21,7 @@
 
 # Log Files
 /log
+*.log
 
 # IDE & System Related Files #
 .buildpath
