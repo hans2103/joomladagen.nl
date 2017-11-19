@@ -14,8 +14,8 @@ module.exports = function(grunt) {
         // Project settings
         paths: {
             // Configurable paths
-            template: 'public_html/templates/perfecttemplate',
-            assets: 'public_html/templates/perfecttemplate/assets'
+            template: 'public_html/templates/jd18nl',
+            assets: 'public_html/templates/jd18nl/assets'
         },
         browsersync : {
             port : '5666', //NVML

@@ -1,0 +1,39 @@
+.footer {
+  background-color: color(blue, base);
+  color: white;
+  @include spacing(top, padding, 2);
+  @include spacing(bottom, padding, 2);
+}
+
+.footer__content {
+  @include flexbox($menu) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .footer__module--25 {
+    flex: 1 1 100%;
+
+    @include flexbox($menu) {
+      flex: 1 1 23%;
+    }
+  }
+
+  .footer__module--50 {
+    flex: 1 1 100%;
+
+    @include flexbox($menu) {
+      flex: 1 1 46%;
+    }
+  }
+
+  .footer__module--100 {
+    flex: 1 1 100%;
+    @include spacing(top, margin, 2);
+  }
+
+  ul {
+    @include reset;
+  }
+}

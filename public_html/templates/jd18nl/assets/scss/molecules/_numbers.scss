@@ -1,0 +1,34 @@
+.numbers__wrapper {
+  @include flexbox($beta) {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.numbers {
+  @include reset;
+  display: flex;
+  justify-content: space-between;
+  @include spacing(top, padding, 0.5);
+  @include spacing(bottom, padding, 0.5);
+}
+
+.numbers__item {
+  display: inline-block;
+  text-align: center;
+
+  & + & {
+    @include spacing(left, margin, 0.5);
+  }
+}
+
+.numbers__item-head  {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: $weight-bold;
+}
+
+.numbers__item-label {
+  font-size: 0.7rem;
+  font-weight: $weight-light;
+}

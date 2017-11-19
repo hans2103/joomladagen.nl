@@ -1,0 +1,35 @@
+.topbar {
+  background-color: color(text);
+  color: white;
+  @include spacing(top, padding, 0.5);
+  @include spacing(bottom, padding, 0.5);
+
+  .content {
+    display: flex;
+  }
+
+  .logo {
+    margin-top: auto;
+    margin-bottom: auto;
+    svg {
+      display: block;
+      width: 1rem;
+      height: auto;
+
+      path {
+        fill: white;
+      }
+    }
+  }
+
+  .logo--name {
+    @include spacing(left, margin, 0.5);
+    a {
+      @include anchor-decoration(none);
+    }
+  }
+
+  .logo--brand {
+    font-weight: $weight-bold;
+  }
+}

@@ -1,0 +1,15 @@
+// Type
+$font-family--serif: serif;
+$font-family--sans-serif: sans-serif;
+$font-family--fallback: 'Helvetica Neue', 'Helvetica', 'Roboto', 'Arial', $font-family--sans-serif;
+$font-family--opensans: 'Open Sans', $font-family--fallback;
+$font-family: $font-family--opensans;
+
+$font-stack-system: $font-family;
+
+$font-size-xs: 12px;
+$font-size-s: 14px;
+$font-size-m: 16px;
+$font-size: 18px;
+
+$line-height: 28px;

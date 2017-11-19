@@ -1,0 +1,62 @@
+// Button
+//
+// .button--large - Large button
+//
+// Markup:
+// <button type="button" class="button {{modifier_class}}">Example</button>
+//
+// Styleguide molecules.button
+
+.button {
+  @include button-structure($vertical-align: false);
+  background: color(green, base);
+  color: white;
+  text-decoration: none;
+  padding: $spacing-s $spacing-m;
+  box-shadow: 0 2px 2px color(grey, trans);
+  border: none;
+  border-bottom: 4px solid color(text);
+  border-radius: 0;
+  @include transition(background);
+  font-size: $font-size;
+  line-height: $line-height;
+
+  span {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  svg {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 3px;
+
+    &:first-child {
+      margin-right: 6px;
+    }
+
+    &:last-child {
+      margin-left: 6px;
+    }
+  }
+
+  @include hover {
+    background: color(green, light);
+  }
+
+  &:focus {
+    outline: 2px solid color(orange, base);
+  }
+}
+
+.button--large {
+  font-size: $font-size;
+  padding: 10px $spacing-m 6px;
+}
+
+.is-android-chrome {
+  .button span {
+    padding-top: 2px;
+    margin-bottom: -2px;
+  }
+}

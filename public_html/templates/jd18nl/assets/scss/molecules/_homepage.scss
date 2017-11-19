@@ -1,0 +1,86 @@
+.content__payoff {
+  @include spacing(top, margin, 4);
+  @include spacing(bottom, margin, 2);
+  @include span(10 of 12, $delta to $echo);
+  @include shift(1 of 12, $delta to $echo);
+
+  @include span(8 of 12, $echo);
+  @include shift(2 of 12, $echo);
+  text-align: center;
+
+  h2 {
+    @include heading(heading_1);
+    display: inline-block;
+    color: color(text);
+    font-weight: $weight-bold;
+
+    position: relative;
+    svg {
+      position: absolute;
+      top: -2.5rem;
+      left: 0;
+      width: 7rem;
+      height: auto;
+    }
+  }
+
+  h3 {
+    @include heading(heading_2);
+    color: color(blue, light);
+    padding-top: 0;
+  }
+}
+
+.module__dagopzet {
+  @include spacing(top, padding, 2);
+  @include spacing(right, padding, 1);
+  @include spacing(bottom, padding, 2);
+  @include spacing(left, padding, 1);
+
+  .module__header {
+    text-align: center;
+
+    h2 {
+      font-weight: $weight-bold;
+      font-size: 1.5rem;
+      @include spacing(bottom, padding, 1);
+    }
+  }
+
+  img {
+    width: 12vw;
+    @include spacing(all, margin, 0.5);
+  }
+}
+
+.module__location {
+  @include spacing(top, margin, 1);
+  @include spacing(bottom, margin, 2);
+
+  .module__header {
+    text-align: center;
+  }
+
+  .module__content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .media-placeholder {
+    @include spacing(bottom, margin, 0.5);
+    @include spacing(left, margin, 0.5);
+
+    &:first-child,
+    &:nth-child(4) {
+      margin-left: 0;
+    }
+  }
+
+  .media-placeholder--4by3 {
+    flex: 1 1 20%;
+  }
+
+  .media-placeholder--8by3 {
+    flex: 1 1 45.5%;
+  }
+}

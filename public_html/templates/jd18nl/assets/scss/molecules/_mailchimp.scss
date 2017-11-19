@@ -1,0 +1,9 @@
+#mc-embedded-subscribe-form {
+	label {
+		@include visually-hidden;
+	}
+
+	#mce-responses {
+		@include visually-hidden;
+	}
+}

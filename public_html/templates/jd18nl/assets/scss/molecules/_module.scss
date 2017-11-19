@@ -1,0 +1,24 @@
+.module__title--h1 {
+  @include heading(heading_2);
+  @include spacing(top, padding, 1);
+  @include spacing(bottom, padding, 0.5);
+}
+
+.module__header {
+  @include spacing(top, margin, 0.5);
+  @include spacing(bottom, margin, 0.5);
+
+  h2 {
+    @include heading(heading_2);
+    @include spacing(top, padding, 0.5);
+    @include spacing(bottom, padding, 0.5);
+  }
+}
+
+.module__title--h3 {
+  @include heading(heading_3);
+  @include spacing(top, padding, 1);
+  @include spacing(bottom, padding, 0.5);
+}
+
+

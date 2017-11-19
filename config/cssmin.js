@@ -4,7 +4,7 @@
 module.exports = {
     options: {
         roundingPrecision: -1,
-        sourceMap: false
+        sourceMap: true
     },
     site: {
         files: {
