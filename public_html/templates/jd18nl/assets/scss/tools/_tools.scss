@@ -5,14 +5,15 @@
 // Third party
 @import '../../../../../../node_modules/illusion/scss/illusion';
 
+// Functions
+@import "functions/color";
+@import "functions/headings";
+
+
 // Variables
 @import "variables/color";
 @import "variables/headings";
 @import "variables/navigation";
-
-// Functions
-@import "functions/color";
-@import "functions/headings";
 
 // Mixins
 @import "mixins/anchor-decoration";

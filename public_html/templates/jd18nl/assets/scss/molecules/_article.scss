@@ -92,3 +92,27 @@
     }
   }
 }
+
+.path-organisatie {
+  .article__item--list {
+    display: flex;
+  }
+
+  .article__title {
+    h2, .h2 {
+      @include heading(heading_3);
+
+      @include breakpoint($menu) {
+        @include heading(heading_2);
+      }
+    }
+  }
+
+  .article__content {
+    display: none;
+
+    @include breakpoint($menu) {
+      display: block;
+    }
+  }
+}
