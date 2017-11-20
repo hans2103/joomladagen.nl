@@ -4,6 +4,7 @@
 
 .article__item {
   @include spacing(bottom, margin, 2);
+  @include clearfix;
 
   h2, .h2 {
     @include heading(heading_2);
@@ -89,6 +90,23 @@
 
     & + p:not(.readmore) {
       @include spacing(top, margin, 0.5);
+    }
+  }
+}
+
+.view-article {
+  .article__item {
+    .article__image {
+      @include span(8 of 12, 0 to $menu);
+      @include span(3 of 12, $menu, $defaultProperties: false);
+      @include shift(2 of 12, 0 to $menu);
+      @include shift(0 of 12, $menu);
+      @include spacing(bottom, margin, 1);
+    }
+
+    .article__body {
+      @include span(12 of 12, 0 to $menu, $omega: 1);
+      @include span(9 of 12, $menu, $defaultProperties: false, $omega: 2);
     }
   }
 }

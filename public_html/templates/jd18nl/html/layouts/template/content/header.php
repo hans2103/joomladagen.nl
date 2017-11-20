@@ -13,7 +13,7 @@ $this->template = JFactory::getApplication()->getTemplate();
 require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
 $showbreadcrumbs = true;
-$showbreadcrumbs = false;
+//$showbreadcrumbs = false;
 if (isset($displayData['breadcrumbs']) && $displayData['breadcrumbs'] == false)
 {
 	$showbreadcrumbs = false;
@@ -42,7 +42,7 @@ if (isset($displayData['breadcrumbs']) && $displayData['breadcrumbs'] == false)
 
 			echo isset($displayData['create_date']) ? JLayoutHelper::render('template.content.create_date', array('date' => $displayData['create_date'], 'format' => 'DATE_FORMAT_CC1', 'class' => 'header__date')) : '';
 			echo isset($displayData['title']) ? '<h1 class="header__title">' . $displayData['title'] . '</h1>' : '';
-			echo isset($displayData['intro']) ? '<div class="header__intro">' . $displayData['intro'] . '</div>' : '';
+			echo (isset($displayData['intro'])  && !empty($displayData['intro']) )? '<div class="header__intro">' . $displayData['intro'] . '</div>' : '';
 			?>
         </div>
     </div>

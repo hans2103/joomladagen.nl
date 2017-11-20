@@ -30,7 +30,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
         <div class="article__item">
 			<?php if (isset($images->image_intro) && !empty($images->image_intro)) : ?>
                 <div class="article__image">
-                    <div class="media-placeholder media-placeholder--16by9">
+                    <div class="media-placeholder media-placeholder--1by1">
 						<?php $src = $images->image_intro; ?>
 						<?php $alt = $images->image_intro_alt ? $images->image_intro_alt : ''; ?>
 						<?php echo JLayouts::render('template.image', array('img' => $src, 'alt' => $alt)); ?>

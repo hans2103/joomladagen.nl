@@ -16,7 +16,7 @@
   clear: left;
   color: white;
   text-shadow: 2px 2px 2px  color(text);
-  @include spacing(top, padding, 3);
+  @include spacing(top, padding, 2);
   @include spacing(bottom, padding, 3);
   @include span(10 of 12, $delta to $echo);
   @include shift(1 of 12, $delta to $echo);
@@ -31,7 +31,10 @@
 }
 
 .header__intro {
-  @include spacing(top, margin, 5);
+  @include spacing(top, margin, 10, 0 to $beta);
+  @include spacing(top, margin, 7, $beta to $charlie);
+  @include spacing(top, margin, 7, $charlie to $delta);
+  @include spacing(top, margin, 6, $delta);
 
 }
 

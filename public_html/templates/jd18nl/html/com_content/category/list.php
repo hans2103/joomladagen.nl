@@ -14,10 +14,12 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
 
-$title       = JHtml::_('content.prepare', $this->category->title);
-$description = ($this->category->description) ? $this->category->description : '';
+$array = array(
+        'title' => JHtml::_('content.prepare', $this->category->title),
+        'intro' => (($this->category->description) ? $this->category->description : '')
+);
 
-echo JLayouts::render('template.content.header', array('title' => $title, 'intro' => $description));
+echo JLayouts::render('template.content.header', $array);
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">

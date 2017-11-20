@@ -21,7 +21,7 @@ PWTTemplateHelper::unloadCss();
 PWTTemplateHelper::unloadJs();
 PWTTemplateHelper::loadCss();
 PWTTemplateHelper::loadJs();
-//PWTTemplateHelper::localstorageFont();
+PWTTemplateHelper::localstorageFont();
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ PWTTemplateHelper::loadJs();
 </head>
 
 <body class="<?php echo PWTTemplateHelper::getBodySuffix(); ?>">
-<?php //echo PWTTemplateHelper::getAnalytics(2,'GTM-XXXXXX'); ?>
+<?php echo PWTTemplateHelper::getAnalytics(2, 'GTM-NQZ8SP'); ?>
 
 <noscript>
     <div class="svg-sprite"><?php include_once JPATH_THEMES . '/' . $this->template . '/icons/icons.svg'; ?></div>

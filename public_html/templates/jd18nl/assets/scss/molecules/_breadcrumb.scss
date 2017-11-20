@@ -1,0 +1,35 @@
+/**
+ * Breadcrumb
+ */
+.breadcrumbs__wrapper {
+  @include clearfix;
+}
+
+.breadcrumb {
+  @include reset;
+  display: flex;
+  justify-content: flex-start;
+  font-size: $font-size-xs;
+}
+
+.breadcrumb__item {
+  > a,
+  > span {
+    color: color(grey, light);
+  }
+
+  & + li {
+    margin-left: $spacing-s;
+    padding-left: $spacing-s;
+
+    @include pseudo(before) {
+      content: "/";
+      color: color(grey, light);
+      left: -2px;
+    }
+  }
+}
+
+.breadcrumb__pathway {
+  @include anchor-decoration;
+}
