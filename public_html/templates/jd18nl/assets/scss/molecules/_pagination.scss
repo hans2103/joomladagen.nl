@@ -1,0 +1,214 @@
+/**
+ * Pagination
+ *
+ * Center by default for non-flexbox browsers
+ */
+
+.pagination {
+  text-align: center;
+  @include spacing(bottom, margin,1);
+}
+
+/**
+ * Pagination list
+ *
+ * Reset font-size nad line-height dis we can use inline block to center items on non-flexbox browsers
+ */
+
+.pagination__list {
+  @include reset;
+  font-size: 0;
+  line-height: 0;
+  display: inline-block;;
+
+  @include flexbox(0,0) {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+  }
+}
+
+/**
+ * Items
+ *
+ * 1. Hide items by default for slim pagination on mobile
+ * 2. Re-set font-size and line-height
+ * 3. nowrap items so the whole pagination stays neatly on one line
+ * 4. Display items from $beta viewport
+ * 5. Always display first, prev, active, next and last items
+ */
+.pagination__item {
+  display: none; /* 1 */
+  font-size: $font-size-s; /* 2 */
+  line-height: $spacing-xl; /* 2 */
+  white-space: nowrap; /* 3 */
+
+  border: 1px solid color(grey, light);
+  border-width: 1px 0 1px 1px;
+
+  &:last-child {
+    border-right-width: 1px;
+  }
+
+  //& + & {
+  //  margin-left: $spacing-s;
+  //}
+
+  @include breakpoint($beta) {
+    display: inline-block; /* 4 */
+  }
+
+  /* 5 */
+  &.pagination--first,
+  &.pagination--prev,
+  &.pagination--active,
+  &.pagination--next,
+  &.pagination--last {
+    display: inline-block;
+  }
+
+  @include flexbox(0,0) {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+
+  /**
+   * Pagination content
+   */
+  .pagination__item__content {
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+
+    background: white;
+    text-decoration: none;
+    @include transition;
+  }
+
+  &.pagination--first,
+  &.pagination--prev,
+  &.pagination--next,
+  &.pagination--last {
+    .pagination__item__content {
+      font-weight: $weight-normal;
+
+      @include breakpoint($menu) {
+        width: inherit;
+        padding-left: $spacing-m;
+        padding-right: $spacing-m;
+      }
+
+      svg {
+        @include breakpoint(800px) {
+          @include visually-hidden()
+        }
+      }
+      span {
+        @include visually-hidden();
+
+        @include breakpoint(800px) {
+          @include visually-shown();
+        }
+      }
+    }
+  }
+
+  a.pagination__item__content {
+    color: $blue;
+
+    svg {
+      fill: $blue;
+    }
+
+    &:focus,
+    &:hover {
+      background: color(blue, light);
+      color: color(grey, dark);
+
+      svg {
+        fill: color(grey, dark);
+      }
+    }
+  }
+
+  span.pagination__item__content {
+    color: color(grey, dark);
+
+    svg {
+      fill: color(grey, dark);
+    }
+  }
+
+  svg {
+    width: $font-size-m;
+    height: $font-size-m;
+    vertical-align: middle;
+  }
+
+  &.pagination__item--inactive {
+    .pagination__item__content {
+      color: color(grey, light);
+
+      svg {
+        fill: color(grey, light);
+      }
+    }
+
+    &.pagination--active {
+      .pagination__item__content {
+        color: color(grey, dark);
+        background-color: color(blue, light);
+
+        svg {
+          fill: color(grey, dark);
+        }
+      }
+
+    }
+  }
+
+  /**
+   * Space icons
+   *
+   * Only space from $site-width breakpoint because text isn't visible before this breakpoint
+   */
+
+  @include breakpoint($echo) {
+    svg + span {
+      margin-left: $spacing-xs;
+    }
+
+    span + svg {
+      margin-left: $spacing-xs;
+    }
+  }
+
+  /**
+   * Hidden on mobile
+   *
+   * We're hiding text on mobile so we get a neat little paginator
+   */
+
+  .hidden-mobile {
+    @include breakpoint($alpha--plus) {
+      display: none;
+    }
+
+    @include breakpoint($echo) {
+      display: inline;
+    }
+  }
+}
+
+.pagination--pager {
+  display: flex;
+  justify-content: space-between;
+
+  .pagination__item {
+    @include flexbox {
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+  }
+}
