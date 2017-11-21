@@ -36,4 +36,8 @@
   ul {
     @include reset;
   }
+
+  .module__title--h3 {
+    color: white;
+  }
 }
