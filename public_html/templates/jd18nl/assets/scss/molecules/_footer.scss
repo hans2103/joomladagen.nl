@@ -6,30 +6,16 @@
 }
 
 .footer__content {
-  @include flexbox($menu) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
   .footer__module--25 {
-    flex: 1 1 100%;
-
-    @include flexbox($menu) {
-      flex: 1 1 23%;
-    }
+    @include span(3 of 12, $menu);
   }
 
   .footer__module--50 {
-    flex: 1 1 100%;
-
-    @include flexbox($menu) {
-      flex: 1 1 46%;
-    }
+    @include span(6 of 12, $menu);
   }
 
   .footer__module--100 {
-    flex: 1 1 100%;
+    @include span(12 of 12, $menu, $omega: 1);
     @include spacing(top, margin, 2);
   }
 
