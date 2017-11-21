@@ -157,11 +157,11 @@
 
     &.pagination--active {
       .pagination__item__content {
-        color: color(grey, dark);
+        color: white;
         background-color: color(blue, light);
 
         svg {
-          fill: color(grey, dark);
+          fill: white;
         }
       }
 
