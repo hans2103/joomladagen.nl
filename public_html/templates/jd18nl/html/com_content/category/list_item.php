@@ -18,4 +18,9 @@ if (PWTTemplateHelper::getPath()[0] == 'sponsors')
 	$this->item->image_ratio = 'media-placeholder--16by9';
 }
 
+if (PWTTemplateHelper::getPath()[0] == 'nieuws')
+{
+	$this->item->image_ratio = 'media-placeholder--16by9';
+}
+
 echo JLayoutHelper::render('template.content.article_item-list', $this->item);
