@@ -8,6 +8,7 @@
   @include spacing(top, margin, 0.5);
   @include spacing(bottom, margin, 0.5);
 
+  .module__title--h2,
   h2 {
     @include heading(heading_2);
     @include spacing(top, padding, 0.5);
