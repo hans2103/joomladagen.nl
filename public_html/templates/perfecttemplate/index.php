@@ -231,7 +231,7 @@ PWTTemplateHelper::localstorageFont();
 
 	<?php endif; ?>
 
-	<?php if (false && PWTTemplateHelper::isHome() == false) : ?>
+	<?php if (PWTTemplateHelper::isHome() == false) : ?>
 
 		<?php echo PWTTemplateHelper::renderHelixTitle(); ?>
 
