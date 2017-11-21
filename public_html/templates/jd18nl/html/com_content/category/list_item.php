@@ -23,4 +23,9 @@ if (PWTTemplateHelper::getPath()[0] == 'nieuws')
 	$this->item->image_ratio = 'media-placeholder--4by3';
 }
 
+if (PWTTemplateHelper::getPath()[0] == 'interviews')
+{
+	$this->item->image_ratio = 'media-placeholder--4by3';
+}
+
 echo JLayoutHelper::render('template.content.article_item-list', $this->item);
