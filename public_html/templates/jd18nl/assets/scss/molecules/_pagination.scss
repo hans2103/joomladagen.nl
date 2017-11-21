@@ -115,10 +115,10 @@
   }
 
   a.pagination__item__content {
-    color: $blue;
+    color: color(blue, base);
 
     svg {
-      fill: $blue;
+      fill: color(blue, base);
     }
 
     &:focus,
