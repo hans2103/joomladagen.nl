@@ -252,7 +252,7 @@ class PWTTemplateHelper
 	{
 		$doc = JFactory::getDocument();
 
-		$unset_css = array('com_finder');
+		$unset_css = array('com_finder', 'com_rsform');
 		foreach ($doc->_styleSheets as $name => $style)
 		{
 			foreach ($unset_css as $css)
