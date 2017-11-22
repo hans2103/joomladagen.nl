@@ -103,16 +103,16 @@ fieldset,
 .rsform-button,
 .rsform-submit-button {
   @include button-structure($vertical-align: false);
-  background: color(blue, dark);
-  color: white;
+  //background: color(blue, dark);
+  //color: white;
   text-decoration: none;
-  padding: 5px $spacing-m 3px;
-  box-shadow: 0 2px 2px rgba(black, 0.5);
-  border: none;
-  border-radius: 0;
-  @include transition(background);
-  font-size: 15px;
-  line-height: 24px;
+  //padding: 5px $spacing-m 3px;
+  //box-shadow: 0 2px 2px rgba(black, 0.5);
+  //border: none;
+  //border-radius: 0;
+  //@include transition(background);
+  //font-size: 15px;
+  //line-height: 24px;
 
   span {
     display: inline-block;
@@ -133,13 +133,13 @@ fieldset,
     }
   }
 
-  @include hover {
-    background: color(blue, base);
-  }
-
-  &:focus {
-    outline: 2px solid color(blue, base);
-  }
+  //@include hover {
+  //  background: color(blue, base);
+  //}
+  //
+  //&:focus {
+  //  outline: 2px solid color(blue, base);
+  //}
 
   &:last-child {
     margin-right: 0;
