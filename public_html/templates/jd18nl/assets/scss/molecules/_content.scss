@@ -1,0 +1,26 @@
+.content {
+  @include reset;
+  @include clearfix;
+}
+
+.content__header {
+  @include reset;
+  @include clearfix;
+}
+
+/**
+ * Search
+ */
+.content--search {
+  @include span(10 of 12, $delta);
+  @include shift(1 of 12, $delta);
+
+  @include spacing(top, margin, 1, $menu);
+  @include spacing(bottom, margin, 1, $menu);
+  @include spacing(all, padding, 2);
+}
+
+.content--search-results {
+  @include span(10 of 12, $delta);
+  @include shift(1 of 12, $delta);
+}

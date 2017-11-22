@@ -71,7 +71,9 @@ PWTTemplateHelper::localstorageFont();
     </div>
 <?php endif; ?>
 
+<main role="main" id="content">
 <jdoc:include type="component"/>
+</main>
 
 <footer class="footer" role="contentinfo">
     <div class="container">
