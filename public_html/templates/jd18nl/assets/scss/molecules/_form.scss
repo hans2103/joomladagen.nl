@@ -251,3 +251,72 @@ fieldset,
     height: auto;
   }
 }
+
+
+.formResponsive {
+  .formValidation {
+    display: inline;
+  }
+
+  input[type="submit"] {
+    .btn();
+    .btn-primary();
+    .btn-block();
+    .btn-lg();
+  }
+
+  input[type="radio"] + label {
+    margin: 0 10px;
+  }
+
+  .rsform-block {
+    .form-group();
+    margin-bottom: 5px;
+    overflow: hidden;
+  }
+
+  .formControlLabel {
+    .make-md-column(4);
+    text-align: left;
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @media (min-width: @screen-md-min) {
+      text-align: right;
+    }
+  }
+
+  .formControls {
+    .make-md-column(8);
+
+    .rsform-input-box {
+      .form-control();
+    }
+
+    .rsform-error {
+      border-color: @state-danger-text;
+    }
+
+    .formError {
+      color: @state-danger-text;
+      display: block;
+      margin-top: 5px;
+    }
+  }
+
+  .formNoError {
+    display: none;
+  }
+
+  select.rsform-select-box {
+    .form-control();
+    border: 1px solid color(grey, base);
+  }
+
+  .rsform-block-date-of-birth select.rsform-select-box {
+    width: inherit;
+    display: inline;
+    max-width: 100px;
+  }
+}
