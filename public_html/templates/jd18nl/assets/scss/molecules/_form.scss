@@ -259,10 +259,7 @@ fieldset,
   }
 
   input[type="submit"] {
-    .btn();
-    .btn-primary();
-    .btn-block();
-    .btn-lg();
+
   }
 
   input[type="radio"] + label {
@@ -270,36 +267,32 @@ fieldset,
   }
 
   .rsform-block {
-    .form-group();
     margin-bottom: 5px;
     overflow: hidden;
   }
 
   .formControlLabel {
-    .make-md-column(4);
     text-align: left;
     padding-top: 7px;
     margin-top: 0;
     margin-bottom: 0;
 
-    @media (min-width: @screen-md-min) {
+    @include breakpoint($menu) {
       text-align: right;
     }
   }
 
   .formControls {
-    .make-md-column(8);
 
     .rsform-input-box {
-      .form-control();
     }
 
     .rsform-error {
-      border-color: @state-danger-text;
+      border-color: color(red,base);
     }
 
     .formError {
-      color: @state-danger-text;
+      color: color(red,base);
       display: block;
       margin-top: 5px;
     }
@@ -310,7 +303,6 @@ fieldset,
   }
 
   select.rsform-select-box {
-    .form-control();
     border: 1px solid color(grey, base);
   }
 
