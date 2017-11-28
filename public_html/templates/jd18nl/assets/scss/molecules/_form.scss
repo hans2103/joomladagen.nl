@@ -251,3 +251,64 @@ fieldset,
     height: auto;
   }
 }
+
+
+.formResponsive {
+  .formValidation {
+    display: inline;
+  }
+
+  input[type="submit"] {
+
+  }
+
+  input[type="radio"] + label {
+    margin: 0 10px;
+  }
+
+  .rsform-block {
+    margin-bottom: 5px;
+    overflow: hidden;
+  }
+
+  .formControlLabel {
+    text-align: left;
+    padding-top: 7px;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @include breakpoint($menu) {
+      text-align: right;
+    }
+  }
+
+  .formControls {
+
+    .rsform-input-box {
+    }
+
+    .rsform-error {
+      border-color: color(red,base);
+    }
+
+    .formError {
+      color: color(red,base);
+      display: block;
+      margin-top: 5px;
+    }
+  }
+
+  .formNoError {
+    display: none;
+  }
+
+  select.rsform-select-box {
+    border: 1px solid color(grey, base);
+  }
+
+  .rsform-block-date-of-birth select.rsform-select-box {
+    width: inherit;
+    display: inline;
+    max-width: 100px;
+  }
+}
