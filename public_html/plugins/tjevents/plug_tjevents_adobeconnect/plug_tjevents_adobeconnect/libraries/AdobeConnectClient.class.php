@@ -561,7 +561,7 @@ class AdobeConnectClient
 	 *
 	 * @return array
 	 */
-	public function createMeetingRoom($folder_id, $name, $url = '')
+	public function createMeetingRoom($folder_id, $name, $url)
 	{
 		$result = $this->makeRequest('sco-update',
 			array(

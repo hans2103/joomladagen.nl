@@ -86,6 +86,9 @@ class JticketingModelattendee_List extends JModelList
 
 			$searchPaymentStatusList = $app->getUserStateFromRequest($this->context . '.filter.status', 'filter_status', '', 'string');
 			$this->setState('filter.status', $searchPaymentStatusList);
+
+			$searchAttendedStatusList = $app->getUserStateFromRequest($this->context . '.filter.attended_status', 'filter_attended_status', '', 'string');
+			$this->setState('filter.attended_status', $searchAttendedStatusList);
 		}
 		else
 		{
@@ -119,7 +122,7 @@ class JticketingModelattendee_List extends JModelList
 		$query = $db->getQuery(true);
 		$query->select(
 				array(
-					'o.customer_note, o.amount as amount, check.checkin, o.order_id as order_id,
+					'o.customer_note, o.amount as amount, chck.checkin, chck.ticketid, o.order_id as order_id,
 					o.email as buyeremail, i.eventid as evid, o.cdate, e.attendee_id, o.id, o.status,
 					o.name, o.event_details_id, o.user_id, e.type_id, e.id AS order_items_id, e.ticketcount AS ticketcount,
 					f.title AS ticket_type_title, f.price AS amount, (f.price * e.ticketcount) AS totalamount,
@@ -129,7 +132,7 @@ class JticketingModelattendee_List extends JModelList
 		$query->from($db->qn('#__jticketing_order', 'o'));
 		$query->join('LEFT', $db->qn('#__jticketing_order_items', 'e') . 'ON (' . $db->qn('o.id') . ' = ' . $db->qn('e.order_id') . ')');
 		$query->join('LEFT', $db->qn('#__jticketing_integration_xref', 'i') . 'ON (' . $db->qn('i.id') . ' = ' . $db->qn('o.event_details_id') . ')');
-		$query->join('LEFT', $db->qn('#__jticketing_checkindetails', 'check') . 'ON (' . $db->qn('check.ticketid') . ' = ' . $db->qn('e.id') . ')');
+		$query->join('LEFT', $db->qn('#__jticketing_checkindetails', 'chck') . 'ON (' . $db->qn('chck.ticketid') . ' = ' . $db->qn('e.id') . ')');
 		$query->join('INNER', $db->qn('#__jticketing_types', 'f') . 'ON (' . $db->qn('f.id') . ' = ' . $db->qn('e.type_id') . ')');
 		$query->join('INNER', $db->qn('#__jticketing_users', 'user') . 'ON (' . $db->qn('o.id') . ' = ' . $db->qn('user.order_id') . ')');
 
@@ -167,6 +170,7 @@ class JticketingModelattendee_List extends JModelList
 		{
 			$searchEvent = $this->getState('filter.events');
 			$searchPaymentStatusList = $this->getState('filter.status');
+			$searchAttendedStatusList = $this->getState('filter.attended_status');
 		}
 		else
 		{
@@ -221,6 +225,18 @@ class JticketingModelattendee_List extends JModelList
 					$intXrefEventIdArray = implode(',', $intXrefEventIdArray);
 					$query->where('o.event_details_id IN (' . $intXrefEventIdArray . ')');
 				}
+			}
+		}
+
+		if (!empty($searchAttendedStatusList))
+		{
+			if ($searchAttendedStatusList == '1')
+			{
+				$query->where($db->quoteName('chck.checkin') . '=' . $db->quote($searchAttendedStatusList));
+			}
+			else
+			{
+				$query->where('(' . $db->quoteName('chck.checkin') . '=' . $db->quote('0') . " OR " . $db->quoteName('chck.ticketid') . ' is NULL)');
 			}
 		}
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0" type="plugin" group="jticketingtax" method="upgrade">
 	<name>PLG_JTICKETING_TAX_DEFAULT</name>
-	<creationDate>26th Jul 2017</creationDate>
-	<version>2.0.4</version>
+	<creationDate>17th Nov 2017</creationDate>
+	<version>2.0.10</version>
 	<author>Techjoomla</author>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>http://www.techjoomla.com</authorUrl>

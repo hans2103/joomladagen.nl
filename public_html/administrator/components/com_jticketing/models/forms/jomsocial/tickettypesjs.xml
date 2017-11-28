@@ -9,8 +9,7 @@
 				name="title"
 				type="text"
 				label="COM_JTICKETING_TICKET_TITLE"
-				required="true"
-				class="joms-input required"
+				class="joms-input"
 				description="COM_JTICKETING_TICKET_TITLE_DESC"
 				size="40"
 				/>
@@ -24,8 +23,8 @@
 				/>
 
 		<field name="state" type="list" default="1" label="JSTATUS" description="COM_JTICKETING_TICKET_STATE_DESC" class="input-mini">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
+			<option value="1">COM_JTICKETING_PUBLISH</option>
+			<option value="0">COM_JTICKETING_UNPUBLISH</option>
 		</field>
 
 		<field

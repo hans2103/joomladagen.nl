@@ -117,6 +117,54 @@ class JticketingControllerpayment extends jticketingController
 	}
 
 	/**
+	 * Function to get IPN response from Payment gateway.
+	 *
+	 * @return  redirects
+	 *
+	 * @since  1.0.0
+	 */
+	public function notify()
+	{
+		$mainframe = JFactory::getApplication();
+		$jinput    = $mainframe->input;
+		$session   = JFactory::getSession();
+
+		if ($session->has('payment_submitpost'))
+		{
+			$post = $session->get('payment_submitpost');
+			$session->clear('payment_submitpost');
+		}
+		else
+		{
+			$post = $jinput->post->getArray();
+		}
+
+		$pg_plugin = $jinput->get('processor', '', 'STRING');
+		$model     = $this->getModel('payment');
+		$order_id  = $jinput->get('order_id', '', 'STRING');
+
+		if (empty($post) || empty($pg_plugin))
+		{
+			http_response_code(400);
+			echo new JResponseJson(JText::_('SOME_ERROR_OCCURRED'));
+
+			return;
+		}
+
+		try
+		{
+			$response = $model->processpayment($post, $pg_plugin, $order_id);
+			echo new JResponseJson($response['status'], $response['msg'], true);
+		}
+		catch (Exception $e)
+		{
+			echo new JResponseJson($e);
+		}
+
+		jexit();
+	}
+
+	/**
 	 * Get autorisation url for stripe
 	 *
 	 * @return  void

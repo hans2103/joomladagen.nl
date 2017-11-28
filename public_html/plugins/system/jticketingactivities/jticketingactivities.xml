@@ -2,12 +2,12 @@
 <extension version="3.0" type="plugin" group="system" method="upgrade">
 	<name>PLG_JTICKETING_ACTIVITY</name>
 	<author>TechJoomla</author>
-	<creationDate>19th Jul 2017</creationDate>
+	<creationDate>17th Nov 2017</creationDate>
+	<version>2.0.10</version>
 	<copyright>Techjoomla. All Rights Reserved.</copyright>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>http://www.techjoomla.com</authorUrl>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<version>1.0</version>
 	<description>PLG_JTICKETING_ACTIVITY_DESC</description>
 	<files>
 		<filename plugin="jticketingactivities">jticketingactivities.php</filename>

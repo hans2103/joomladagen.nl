@@ -30,7 +30,7 @@
 						?>
 							<div class="form-group">
 								<label class=" col-lg-2 col-md-2 col-sm-3 col-xs-12  control-label">
-									<?php	echo $field_data->label;?>
+									<?php	echo JText::_($field_data->label);?>
 								</label>
 								<div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
 									<?php	echo $field_data->attendee_value[$attendee_id]->field_value;?>

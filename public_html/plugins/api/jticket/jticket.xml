@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0" type="plugin" group="api" method="upgrade">
 	<name>Api - Jticketing</name>
-	<version>2.0.4</version>
-	<creationDate>26th Jul 2017</creationDate>
+	<version>2.0.10</version>
+	<creationDate>17th Nov 2017</creationDate>
 	<author>Tekdi</author>
 	<authorEmail>support@tekdi.com</authorEmail>
 	<authorUrl>http://www.tekdi.com</authorUrl>

@@ -47,7 +47,7 @@ class JticketApiResourceGeteventdetails extends ApiResource
 		{
 			$res->empty_message = JText::_("COM_JTICKETING_INVALID_EVENT");
 
-			return $this->plugin->setApiResponse(false, $res);
+			return $this->plugin->setResponse($res);
 		}
 
 		$eventdatapaid = $jticketingmainhelper->GetUserEventsAPI('', $eventid);
@@ -148,7 +148,7 @@ class JticketApiResourceGeteventdetails extends ApiResource
 			$res->err_message    = JText::_("COM_JTICKETING_NO_EVENT_DATA");
 		}
 
-		$this->plugin->setApiResponse(false, $res);
+		$this->plugin->setResponse($res);
 	}
 
 	/**
@@ -162,7 +162,7 @@ class JticketApiResourceGeteventdetails extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -176,7 +176,7 @@ class JticketApiResourceGeteventdetails extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -190,6 +190,6 @@ class JticketApiResourceGeteventdetails extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 }

@@ -32,6 +32,7 @@ if (file_exists(JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php'))
 // Require_once( JPATH_COMPONENT.DS.'controller.php' );
 require_once JPATH_SITE . "/components/com_jticketing/helpers/main.php";
 require_once JPATH_SITE . "/components/com_jticketing/helpers/frontendhelper.php";
+require_once JPATH_SITE . "/components/com_jticketing/helpers/order.php";
 
 // Get bootstrap
 jimport('joomla.html.html.bootstrap');
@@ -78,6 +79,15 @@ if (!class_exists('jticketingmainhelper'))
 	// Require_once $path;
 	JLoader::register('jticketingmainhelper', $JticketingmainHelper);
 	JLoader::load('jticketingmainhelper');
+}
+
+$JticketingmainHelper = JPATH_SITE . '/components/com_jticketing/helpers/order.php';
+
+if (!class_exists('JticketingOrdersHelper'))
+{
+	// Require_once $path;
+	JLoader::register('JticketingOrdersHelper', $JticketingOrdersHelper);
+	JLoader::load('JticketingOrdersHelper');
 }
 
 // Define wrapper class

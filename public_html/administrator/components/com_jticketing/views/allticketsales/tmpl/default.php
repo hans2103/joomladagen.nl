@@ -167,25 +167,25 @@ else
 							<?php echo $data->eticketscount ?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eoriginal_amount),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eoriginal_amount),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->ecoupon_discount),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->ecoupon_discount),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eoriginal_amount-$data->ecoupon_discount),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eoriginal_amount-$data->ecoupon_discount),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eorder_tax),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eorder_tax),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eamount),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eamount),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->ecommission),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->ecommission),2),$currency);?>
 						</td>
 						<td align="center">
-							<?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eamount-$data->ecommission),2),$currency);?>
+							<?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eamount-$data->ecommission),2),$currency);?>
 						</td>
 
 					</tr>
@@ -203,26 +203,26 @@ else
 					<b><?php echo number_format($totalnooftickets, 0, '', '');?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totaloriginalamt),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totaloriginalamt),2),$currency);?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totaldiscount),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totaldiscount),2),$currency);?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($amtafter_disc),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($amtafter_disc),2),$currency);?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalordertax),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalordertax),2),$currency);?></b>
 				</td>
 
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalamount),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalamount),2),$currency);?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalcommission),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalcommission),2),$currency);?></b>
 				</td>
 				<td >
-					<b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($amt_to_bepaid_eventowner),2),$currency);?></b>
+					<b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($amt_to_bepaid_eventowner),2),$currency);?></b>
 				</td>
 				</tr>
 				<tfoot>

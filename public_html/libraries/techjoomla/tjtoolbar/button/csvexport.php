@@ -48,7 +48,7 @@ class JToolbarButtonCsvExport extends JToolbarButton
 
 		// Store all data to the options array for use with JLayout
 		$options = array();
-		$options['text'] = JText::_($buttontext);
+		$options['text'] = isset($messages['btn-name']) ? $messages['btn-name'] : JText::_($buttontext);
 
 		if (isset($messages['text']) && $messages['text'])
 		{

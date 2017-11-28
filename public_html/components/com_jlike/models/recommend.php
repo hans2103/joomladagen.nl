@@ -29,10 +29,20 @@ class JlikeModelRecommend extends JModelList
 	/**
 	 * Class constructor.
 	 *
+	 * @param   array  $config  An optional ordering field.
+	 *
 	 * @since   1.6
 	 */
-	public function __construct()
+	public function __construct($config = array())
 	{
+		if (empty($config['filter_fields']))
+		{
+			$config['filter_fields'] = array(
+				'id', 'a.id',
+				'groups', 'a.groups',
+			);
+		}
+
 		$this->_params = JComponentHelper::getParams('com_jlike');
 		$this->user = JFactory::getUser();
 		$this->db = JFactory::getDbo();
@@ -45,7 +55,7 @@ class JlikeModelRecommend extends JModelList
 			JLoader::load('comjlikeHelper');
 		}
 
-		parent::__construct();
+		parent::__construct($config);
 	}
 
 	/**
@@ -60,22 +70,20 @@ class JlikeModelRecommend extends JModelList
 	 *
 	 * @since   1.0.0
 	 */
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = 'a.id', $direction = 'DESC')
 	{
-		// Initialise variables.
-		// List state information.
-		parent::populateState('u.username', 'asc');
-
 		$app = JFactory::getApplication();
-
-		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
+		$userGroup = $app->getUserStateFromRequest($this->context . '.filter.usergroup', 'filter_author_id');
+		$this->setState('filter.usergroup', $userGroup);
+		$ordering = $app->input->get('filter_order', 'a.id');
+		$direction = $app->input->get('filter_order_Dir', 'ASC');
 
-		$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'), 'uint');
-		$this->setState('list.limit', $limit);
+		$this->setState('list.ordering', $ordering);
+		$this->setState('list.direction', $direction);
 
-		$limitstart = $app->input->get('limitstart', 0, 'uint');
-		$this->setState('list.start', $limitstart);
+		parent::populateState($ordering, $direction);
 	}
 
 	/**
@@ -185,9 +193,9 @@ class JlikeModelRecommend extends JModelList
 		// Get all user which are already recommended & Assigned by this user.
 		$usersToRemove = (array) $this->getTypewiseUsers($elementId, $element, $type);
 		array_push($usersToRemove, $oluser_id);
-		$query->where('u.id NOT IN (' . implode(',', $usersToRemove) . ')');
+		$query->where('a.id NOT IN (' . implode(',', $usersToRemove) . ')');
 
-		$subUsers = $this->getState('list.subuserfilter', 0);
+		$subUsers = $this->getState('filter.subuserfilter', 0);
 
 		if ($subUsers == 1)
 		{
@@ -199,7 +207,7 @@ class JlikeModelRecommend extends JModelList
 				$hasUsers = array(0);
 			}
 
-			$query->where('u.id IN(' . implode(',', $hasUsers) . ')');
+			$query->where('a.id IN(' . implode(',', $hasUsers) . ')');
 		}
 
 		return $query;
@@ -217,9 +225,7 @@ class JlikeModelRecommend extends JModelList
 	public function getJSFriends($id)
 	{
 		$db    = JFactory::getDBO();
-
 		$query = $db->getQuery(true);
-
 		$query->select('DISTINCT(a.' . $db->quoteName('connect_to') . ') AS ' . $db->quoteName('friendid'));
 		$query->select('u.name, u.username');
 		$query->from($db->quoteName('#__community_connection', 'a'));
@@ -257,11 +263,11 @@ class JlikeModelRecommend extends JModelList
 		// Assignment can only happen once irrespective of their assignee
 		if ($type != 'assign')
 		{
-			$Rquery->where('t.assigned_by=' . $oluser_id);
+			$Rquery->where('t.assigned_by=' . (int) $oluser_id);
 		}
 
-		$Rquery->where('c.element_id=' . $elementId);
-		$Rquery->where('c.element=' . $element);
+		$Rquery->where('c.element_id=' . (int) $elementId);
+		$Rquery->where('c.element=' . $db->Quote($element));
 
 		$db->setQuery($Rquery);
 
@@ -297,7 +303,8 @@ class JlikeModelRecommend extends JModelList
 
 		foreach ($items as $item)
 		{
-			$item->avatar   = $sLibObj->getAvatar(JFactory::getUser($item->friendid), 50);
+			$item->avatar   = $sLibObj->getAvatar(JFactory::getUser($item->id), 50);
+			$item->group_names = $this->_getUserDisplayedGroups($item->id);
 		}
 
 		return $items;
@@ -636,11 +643,16 @@ class JlikeModelRecommend extends JModelList
 				}
 				elseif ($table->type == 'assign')
 				{
+					$options['due_date'] = $table->due_date;
+					$options['start_date'] = $table->start_date;
+					$options['sender_msg'] = $data['sender_msg'];
 					$grt_response = $dispatcher->trigger('onAfterAssignment', array(
 																		$recid,
 																		$eachrecommendation,
 																		$this->user->id,
-																		$options
+																		$options,
+																		$notify_user
+
 																	)
 												);
 				}
@@ -709,41 +721,15 @@ class JlikeModelRecommend extends JModelList
 	 */
 	public function getAllUser()
 	{
-		$db    = JFactory::getDBO();
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_users/models');
 
-		$query = $db->getQuery(true);
+		$usersModel = JModelLegacy::getInstance('Users', 'UsersModel', array('ignore_request' => true));
+		$usersModel->setState('filter.search', $this->getState('filter.search'));
+		$usersModel->setState('filter.groups', $this->getState('filter.groups'));
+		$usersModel->setState('list.ordering', $this->getState('list.ordering', 'a.id'));
+		$usersModel->setState('list.direction', $this->getState('list.direction', 'DESC'));
 
-		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'distinct(u.id) as friendid, u.name, u.username'));
-		$query->from('`#__users` AS u');
-		$query->where('u.block=0');
-
-		// Filter by search in title
-		$search = $this->getState('filter.search');
-
-		if (!empty($search))
-		{
-			if (stripos($search, 'id:') === 0)
-			{
-				$query->where('u.id = ' . (int) substr($search, 3));
-			}
-			else
-			{
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(( u.name LIKE ' . $search . ' ) OR ( u.username LIKE ' . $search . ' ))');
-			}
-		}
-
-		// Add the list ordering clause.
-		$orderCol  = $this->state->get('list.ordering');
-		$orderDirn = $this->state->get('list.direction');
-
-		if ($orderCol && $orderDirn)
-		{
-			$query->order($db->escape($orderCol . ' ' . $orderDirn));
-		}
-
-		return $query;
+		return $usersModel->getListQuery();
 	}
 
 	/**
@@ -819,5 +805,33 @@ class JlikeModelRecommend extends JModelList
 		}
 
 		return $elementdata;
+	}
+
+	/**
+	 * Get users group
+	 *
+	 * @param   integer  $user_id  User identifier
+	 *
+	 * @return  string   Groups titles imploded :$
+	 */
+	protected function _getUserDisplayedGroups($user_id)
+	{
+		$db    = $this->getDbo();
+		$query = $db->getQuery(true)
+			->select($db->qn('title'))
+			->from($db->qn('#__usergroups', 'ug'))
+			->join('LEFT', $db->qn('#__user_usergroup_map', 'map') . ' ON (ug.id = map.group_id)')
+			->where($db->qn('map.user_id') . ' = ' . (int) $user_id);
+
+		try
+		{
+			$result = $db->setQuery($query)->loadColumn();
+		}
+		catch (RunTimeException $e)
+		{
+			$result = array();
+		}
+
+		return implode("\n", $result);
 	}
 }

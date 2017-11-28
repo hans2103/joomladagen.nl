@@ -54,7 +54,7 @@ class JticketingViewVenue extends JViewLegacy
 
 		if (!empty($this->googleMapApiKey))
 		{
-			$this->googleMapLink      = 'https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&key=' . $this->googleMapApiKey;
+			$this->googleMapLink      = 'https://maps.googleapis.com/maps/api/js?libraries=places&key=' . $this->googleMapApiKey;
 		}
 
 		$this->EnableOnlineEvents = $this->params->get('enable_online_events');

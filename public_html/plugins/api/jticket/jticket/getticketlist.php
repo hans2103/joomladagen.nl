@@ -47,7 +47,7 @@ class JticketApiResourceGetticketlist extends ApiResource
 		{
 			$res->empty_message = JText::_("COM_JTICKETING_INVALID_EVENT");
 
-			return $this->plugin->setApiResponse(false, $res);
+			return $this->plugin->setResponse($res);
 		}
 
 		if ($eventid)
@@ -136,7 +136,7 @@ class JticketApiResourceGetticketlist extends ApiResource
 			$res->err_message = JText::_("COM_JTICKETING_INVALID_EVENT");
 		}
 
-		$this->plugin->setApiResponse(false, $res);
+		$this->plugin->setResponse($res);
 	}
 
 	/**
@@ -150,7 +150,7 @@ class JticketApiResourceGetticketlist extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -164,7 +164,7 @@ class JticketApiResourceGetticketlist extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -178,6 +178,6 @@ class JticketApiResourceGetticketlist extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 }

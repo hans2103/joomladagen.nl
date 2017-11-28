@@ -187,7 +187,6 @@
 			var elementId=techjoomla.jQuery(selector).parent().attr("id");
 			elementId=elementId.replace('showEditDeleteButton','');
 
-			techjoomla.jQuery('#editingOptions'+elementId).hide();
 			techjoomla.jQuery('#showlimited'+elementId).hide();
 			techjoomla.jQuery('#showlFullComment'+elementId).hide();
 			techjoomla.jQuery('#EditComment'+elementId).show();

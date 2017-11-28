@@ -129,7 +129,7 @@ else
 							</td>
 							<?php endif; ?>
 							<td >
-								<?php echo $item->label; ?>
+								<?php echo JText::_($item->label); ?>
 							</td>
 							<td >
 								<?php echo $item->type; ?>

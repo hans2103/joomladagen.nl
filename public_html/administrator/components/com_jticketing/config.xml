@@ -23,7 +23,7 @@
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
 	</field>
-	<field name="default_accesslevels" type="accesslevels" default="1" label="COM_JTICKETING_SELECT_ACCESS_LEVELS" description="COM_JTICKETING_SELECT_ACCESS_LEVELS_DESC" />
+	<field name="default_accesslevels" type="accesslevels" default="1" showon="show_access_level:1" label="COM_JTICKETING_SELECT_ACCESS_LEVELS" description="COM_JTICKETING_SELECT_ACCESS_LEVELS_DESC" />
 	<field name="gravatar" class="btn-group" type="radio" default="0" label="COM_JTICKETING_GRAVATAR_INT_CONF" description="COM_JTICKETING_GRAVATAR_INT_CONF_DESC" >
 		<option value="1">JYES</option>
 		<option value="0">JNO</option>
@@ -223,9 +223,12 @@
 <fieldset name="pricing_settings" label="JT_PRICING_SET" description="" addfieldpath="/administrator/components/com_jticketing/assets/elements">
 	<field menu="hide" name="" type="legend" default="COM_JTICKETING_PAYMENT_GATEWAY_SETTING" label="" description="" />
 	<field name="gateways" type="gatewayplg" default="bycheck" multiple="multiple" label="SELECT_GATEWAY" description="SELECT_GATEWAY_DES" />
-	<field name="currency" type="text" default="USD" label="JT_CURRENCY" description="JT_CURRENCY_DES" />
-	<field name="currency_symbol" type="text" default="$" label="JT_CURRENCY_SYMBOL" description="JT_CURRENCY_SYMBOL_DEC" />
-	<field name="currency_display_format" type="text" default="{AMOUNT} {CURRENCY_SYMBOL} " label="JT_CURRENCY_DISPLAY_FORMAT" description="JT_CURRENCY_DISPLAY_FORMAT_DESC" />
+	<field name="currency" type="currencylist" label="COM_JTICKETING_CURRENCY_LIST" description="COM_JTICKETING_CURRENCY_LIST_DES" />
+	<field name="currency_code_or_symbol" class="radio btn-group" type="radio" default="symbol" label="COM_JTICKETING_CURRENCY_SYMBOL_OR_CODE" description="COM_JTICKETING_CURRENCY_SYMBOL_OR_CODE_DES">
+		<option value="code">COM_JTICKETING_CODE</option>
+		<option value="symbol">COM_JTICKETING_SYMBOL</option>
+	</field>
+	<field name="currency_display_format" type="text" default="{AMOUNT} {CURRENCY_SYMBOL} " label="COM_JTICKETING_CURRENCY_DISPLAY_FORMAT" description="COM_JTICKETING_CURRENCY_DISPLAY_FORMAT_DESC" />
 	<field menu="hide" name="" type="legend" default="COM_JTICKETING_FEES_CONFIG_SETTING" label="" description="" />
 	<field name="handle_transactions" class="radio btn-group" type="radio" default="0" label="COM_JTICKETING_HANDLE_TRANSACTIONS" description="COM_JTICKETING_HANDLE_TRANSACTIONS_DESC">
 		<option value="1">JYES</option>

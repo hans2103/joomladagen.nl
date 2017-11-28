@@ -30,7 +30,7 @@ class JticketApiResourceCheckin extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = 'Get method not allow, Use post method.';
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -80,6 +80,6 @@ class JticketApiResourceCheckin extends ApiResource
 			}
 		}
 
-		$this->plugin->setApiResponse(false, $result);
+		$this->plugin->setResponse($result);
 	}
 }

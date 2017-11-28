@@ -158,7 +158,7 @@
 						<td align="center" data-title="<?php echo JText::_('EVENTDATE');?>"> <?php    echo $datetoshow;?></td>
 						<td align="center" data-title="<?php echo JText::_('TICKET_RATE');?>">
 							<?php
-								echo $this->jticketingmainhelper->getFromattedPrice(number_format(($data->price), 2), $currency);
+								echo $this->jticketingmainhelper->getFormattedPrice(number_format(($data->price), 2), $currency);
 								?>
 						</td>
 						<!--
@@ -166,7 +166,7 @@
 							-->
 						<td align="center" data-title="<?php echo JText::_('TOTAL_AMOUNT_BUY');?>">
 							<?php
-								echo $this->jticketingmainhelper->getFromattedPrice(number_format(($data->totalamount), 2), $currency);
+								echo $this->jticketingmainhelper->getFormattedPrice(number_format(($data->totalamount), 2), $currency);
 								?>
 						</td>
 						<td align="center" data-title="<?php echo JText::_('PAYMENT_STATUS');?>">
@@ -203,7 +203,7 @@
 					<tr>
 						<td colspan="3" align="right" class = "hidden-xs hidden-sm"><?php	echo JText::_('TOTAL');?></td>
 						<td align="center" data-title="<?php echo JText::_('TOTAL');?>">
-							<b><?php	echo $this->jticketingmainhelper->getFromattedPrice(number_format(($totalprice), 2));?></b>
+							<b><?php	echo $this->jticketingmainhelper->getFormattedPrice(number_format(($totalprice), 2));?></b>
 						</td>
 						<td ></td>
 						<td ></td>

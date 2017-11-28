@@ -33,7 +33,7 @@ $data_present = 0;
 							?>
 							<div class="control-group">
 								<label class="control-label">
-									<?php echo $field_data->label;?>
+									<?php echo JText::_($field_data->label);?>
 								</label>
 								<div class="controls">
 									<?php echo $field_data->attendee_value[$attendee_id]->field_value;?>

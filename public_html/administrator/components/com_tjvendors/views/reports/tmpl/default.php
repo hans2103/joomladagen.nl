@@ -303,9 +303,9 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				$options[] = array("type"=>JText::_('Paid'),"value" => "1");
-				$options[] = array("type"=>JText::_('Unpaid'),"value" => "0");
-				$doneOptions[] = array("type"=>JText::_('Credit Done'),"value" => "");
+				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_PAID'),"value" => "1");
+				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_UNPAID'),"value" => "0");
+				$doneOptions[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_CREDIT_DONE'),"value" => "");
 				foreach ($this->items as $i => $item)
 				{
 					?>

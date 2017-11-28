@@ -30,6 +30,7 @@ class JticketApiResourceGetTicketSales extends ApiResource
 	{
 		$com_params  = JComponentHelper::getParams('com_jticketing');
 		$integration = $com_params->get('integration');
+		$currency = $com_params->get('currency_symbol');
 		$input       = JFactory::getApplication()->input;
 		$lang      = JFactory::getLanguage();
 		$extension = 'com_jticketing';
@@ -46,7 +47,7 @@ class JticketApiResourceGetTicketSales extends ApiResource
 		{
 			$res->empty_message = JText::_("COM_JTICKETING_INVALID_USER");
 
-			return $this->plugin->setApiResponse(false, $res);
+			return $this->plugin->setResponse($res);
 		}
 
 		$jticketingmainhelper = new jticketingmainhelper;
@@ -63,7 +64,7 @@ class JticketApiResourceGetTicketSales extends ApiResource
 		// If user is in allowed user to access APP show all events to that user
 		if (is_array($users_allow_access_app) and in_array($userid, $users_allow_access_app))
 		{
-			$eventdatapaid        = $jticketingmainhelper->getMypayoutDataAPI();
+			$eventdatapaid        = $jticketingmainhelper->getSalesDataAdmin($userid);
 			$obj_merged = $eventdatapaid;
 		}
 		else
@@ -78,13 +79,14 @@ class JticketApiResourceGetTicketSales extends ApiResource
 		if ($obj_merged)
 		{
 			$res->result = $obj_merged;
+			$res->result[0]->currency = $currency;
 		}
 		else
 		{
 			$res->empty_message = JText::_("NODATA");
 		}
 
-		$this->plugin->setApiResponse(false, $res);
+		$this->plugin->setResponse($res);
 	}
 
 	/**
@@ -98,7 +100,7 @@ class JticketApiResourceGetTicketSales extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -112,7 +114,7 @@ class JticketApiResourceGetTicketSales extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -126,6 +128,6 @@ class JticketApiResourceGetTicketSales extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 }

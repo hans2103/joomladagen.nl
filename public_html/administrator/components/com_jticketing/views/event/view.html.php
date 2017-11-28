@@ -53,6 +53,8 @@ class JTicketingViewEvent extends JViewLegacy
 		$frontEndHelper = new Jticketingfrontendhelper;
 		$attendeeGlobalFields = $frontEndHelper->getGlobalAtendeeFields();
 		$this->attendeeList = $attendeeGlobalFields;
+		$adaptivePayment = $this->com_params->get('gateways');
+		$this->arra_check = in_array('adaptive_paypal', $adaptivePayment);
 
 		if (!empty($item))
 		{
@@ -72,7 +74,7 @@ class JTicketingViewEvent extends JViewLegacy
 							"layout" => 'edit')
 							);
 
-			$this->form_extra_fields = array_filter($this->form_extra);
+			$this->form_extra = array_filter($this->form_extra);
 		}
 
 		// Check for errors.
@@ -89,7 +91,6 @@ class JTicketingViewEvent extends JViewLegacy
 		$this->params = JComponentHelper::getParams('com_jticketing');
 		$this->googleMapApiKey = $this->params->get('google_map_api_key');
 		$this->collect_attendee_info_checkout = $this->params->get('collect_attendee_info_checkout');
-		$this->form_extra = '';
 
 		// Set the toolbar
 		$this->addToolBar();

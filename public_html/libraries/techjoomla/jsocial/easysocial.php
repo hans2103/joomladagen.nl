@@ -10,6 +10,7 @@
 defined('JPATH_BASE') or die;
 jimport('joomla.filesystem.file');
 jimport('techjoomla.common');
+jimport('techjoomla.jsocial.jsocial');
 
 /**
  * Interface to handle Social Extensions
@@ -588,6 +589,35 @@ class JSocialEasysocial implements JSocial
 		if (!$table->store())
 		{
 			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * The function to update the custom fields
+	 *
+	 * @param   ARRAY   $fieldsArray  Custom field array
+	 * @param   OBJECT  $userId       User Id
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function addUserFields($fieldsArray, $userId)
+	{
+		$path = JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/easysocial.php';
+		JLoader::register('ES', $path, true);
+		$esUser = ES::user($userId);
+
+		foreach ($fieldsArray as $fieldKey => $fieldValue)
+		{
+			$state = $esUser->setFieldValue($fieldKey, $fieldValue);
+
+			if ($state != 1)
+			{
+				return json_encode($state);
+			}
 		}
 
 		return true;

@@ -159,12 +159,15 @@ class Tjnotifications
 		$model = JModelList::getInstance('Preferences', 'TjnotificationsModel', array('ignore_request' => true));
 		$unsubscribed_users = $model->getUnsubscribedUsers($client, $key);
 
-		foreach ($recipients as $recipient)
+		if (!empty($recipients))
 		{
-			if (!in_array($recipient->id, $unsubscribed_users) && !($recipient->block))
+			foreach ($recipients as $recipient)
 			{
-				// Make an array of recipients.
-				$addRecipients[] = $recipient->email;
+				if (!in_array($recipient->id, $unsubscribed_users) && !($recipient->block))
+				{
+					// Make an array of recipients.
+					$addRecipients[] = $recipient->email;
+				}
 			}
 		}
 
@@ -193,19 +196,38 @@ class Tjnotifications
 	{
 		$matches = self::getTags($body_template);
 
-		$tags = $matches[0];
-
+		$replacamentTags = $matches[0];
+		$tags = $matches[1];
 		$index = 0;
 
-		foreach ($tags as $tag)
+		if (isset($replacements))
 		{
-			// Explode e.g doner.name with "." so $data[0]=doner and $data[1]=name
-			$data = explode(".", $matches[1][$index]);
-			$key = $data[0];
-			$value = $data[1];
-			$replaceWith = $replacements->$key->$value;
-			$body_template = str_replace($tag, $replaceWith, $body_template);
-			$index++;
+			foreach ($replacamentTags as $ind => $replacamentTag)
+			{
+				// Explode e.g doner.name with "." so $data[0]=doner and $data[1]=name
+				$data = explode(".", $tags[$ind]);
+
+				if (isset($data))
+				{
+					$key = $data[0];
+					$value = $data[1];
+
+					if (!empty($replacements->$key->$value))
+					{
+						$replaceWith = $replacements->$key->$value;
+					}
+					else
+					{
+						$replaceWith = "";
+					}
+
+					if (isset ($replaceWith))
+					{
+						$body_template = str_replace($replacamentTag, $replaceWith, $body_template);
+						$index++;
+					}
+				}
+			}
 		}
 
 		return $body_template;

@@ -104,7 +104,7 @@
 
 						?>
 					</td>
-					<td align="center" data-title="<?php echo JText::_('PAYOUTAMOUNT');?>"><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->amount),2),$currency);?></td>
+					<td align="center" data-title="<?php echo JText::_('PAYOUTAMOUNT');?>"><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->amount),2),$currency);?></td>
 				</tr>
 				<?php $i++;} ?>
 
@@ -114,13 +114,13 @@
 					</td>
 					<td align="center" data-title="<?php echo JText::_('SUBTOTAL');?>"><b><?php
 						$subtotalamount=$this->subtotalamount;
-						echo $this->jticketingmainhelper->getFromattedPrice( number_format(($this->subtotalamount),2),$currency);?></b></td>
+						echo $this->jticketingmainhelper->getFormattedPrice( number_format(($this->subtotalamount),2),$currency);?></b></td>
 				</tr>
 				<tr >
 					<td align="right" colspan="3" class = "hidden-xs hidden-xm">
 						<div class="jtright"><b><?php echo JText::_( 'PAID'); ?></b></div>
 					</td>
-					<td align="center" data-title="<?php echo JText::_('PAID');?>"><b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($this->totalpaidamt),2),$currency);?></b></td>
+					<td align="center" data-title="<?php echo JText::_('PAID');?>"><b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($this->totalpaidamt),2),$currency);?></b></td>
 				</tr>
 				<tr>
 					<td align="right" colspan="3"  class = "hidden-xs hidden-xm">
@@ -133,9 +133,9 @@
 						$balanceamt1=$subtotalamount-$this->totalpaidamt;
 						 $balanceamt=number_format($balanceamt1, 2, '.', '');
 							if($balanceamt=='-0.00')
-							echo $this->jticketingmainhelper->getFromattedPrice( number_format((0.00),2),$currency);
+							echo $this->jticketingmainhelper->getFormattedPrice( number_format((0.00),2),$currency);
 							else
-							echo $this->jticketingmainhelper->getFromattedPrice( number_format(($balanceamt1),2),$currency);
+							echo $this->jticketingmainhelper->getFormattedPrice( number_format(($balanceamt1),2),$currency);
 
 							?></b></td>
 				</tr>

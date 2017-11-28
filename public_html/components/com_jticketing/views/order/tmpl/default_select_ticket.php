@@ -170,10 +170,7 @@ if (isset($this->orderdata['order_info']['0']))
 														}
 														else
 														{
-															if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-															echo $this->currency_symbol . ' ' . $type->price;
-															else
-															echo $type->price . ' ' . $this->currency_symbol;
+															echo $this->jticketingmainhelper->getFormattedPrice($type->price);
 														}
 
 														if (isset($this->orderdata['ticket_type_count'][$type->id]))
@@ -205,7 +202,7 @@ if (isset($this->orderdata['order_info']['0']))
 													<td data-title="<?php echo JText::_('TICKET_TYPE_NO');?>">
 														<input id="type_ticketcount[<?php echo $type->id?>]"
 															name="type_ticketcount[<?php echo $type->id?>]"
-															class="input-small type_ticketcounts"
+															class="input-sm type_ticketcounts"
 															Onkeyup = "jtSite.order.checkForAlpha(this)"
 															onblur="jtSite.order.calTotal('<?php echo $type->count;?>',
 																							'<?php echo $type->id;?>',
@@ -221,12 +218,11 @@ if (isset($this->orderdata['order_info']['0']))
 													</td>
 													<td data-title="<?php echo JText::_('TICKET_TYPE_TOTAL_PRICE');?>">
 														<?php
-														if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-															echo $this->currency_symbol;
+														if ($currencyDisplayFormat)
 														?>
-														<span id="ticket_total_price<?php echo $type->id;?>"><?php echo $ticketTypePrice; ?></span>
+														<span id="ticket_total_price<?php echo $type->id;?>"><?php echo $this->jticketingmainhelper->getFormattedPrice($ticketTypePrice); ?></span>
 														<?php
-														if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+														if (empty($currencyDisplayFormat))
 															echo $this->currency_symbol;
 														?>
 														<input class="totalpriceclass"id="ticket_total_price_inputbox<?php echo $type->id;?>" name="ticket_total_price_inputbox<?php echo $type->id;?>" type="hidden" value="<?php echo $ticketTypePrice; ?>" >
@@ -247,11 +243,10 @@ if (isset($this->orderdata['order_info']['0']))
 											</td>
 											<td>
 											<?php
-												if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-													echo $this->currency_symbol;
+												if ($currencyDisplayFormat)
 												?>
-												<span name="total_amt" id="total_amt"><?php echo $totalTypePrice;?></span> <?php
-													if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+												<span name="total_amt" id="total_amt"><?php echo $this->jticketingmainhelper->getFormattedPrice($totalTypePrice);?></span> <?php
+													if (empty($currencyDisplayFormat))
 													echo $this->currency_symbol;?>
 											</td>
 											<input type="hidden" value="<?php echo $totalTypePrice;?>" name="total_amt_inputbox" id="total_amt_inputbox">
@@ -294,18 +289,17 @@ if (isset($this->orderdata['order_info']['0']))
 													</td>
 													<td>
 													<?php
-														if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-															echo $this->currency_symbol;
+														if ($currencyDisplayFormat)
 														?>
 														<span id="dis_cop_amt">
 														<?php
 															if (!empty($orderdata->coupon_discount))
 															{
-																echo $orderdata->coupon_discount;
+																echo $this->jticketingmainhelper->getFormattedPrice($orderdata->coupon_discount);
 															}
 														?>
 														</span>&nbsp;<?php
-														if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+														if (empty($currencyDisplayFormat))
 															echo $this->currency_symbol;
 														?>
 													</td>
@@ -331,12 +325,11 @@ if (isset($this->orderdata['order_info']['0']))
 													}
 												?>
 												<?php
-												if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-													echo $this->currency_symbol;
+												if ($currencyDisplayFormat)
 												?>
-												<span id="net_amt_pay" name="net_amt_pay"><?php echo $netAmountPay?></span>
+												<span id="net_amt_pay" name="net_amt_pay"><?php echo $this->jticketingmainhelper->getFormattedPrice($netAmountPay);?></span>
 												<?php
-													if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+													if (empty($currencyDisplayFormat))
 														echo $this->currency_symbol;
 												?>
 											</td>
@@ -355,14 +348,13 @@ if (isset($this->orderdata['order_info']['0']))
 												</td>
 												<td>
 												<?php
-													if ($currencyDisplayFormat == '{CURRENCY_SYMBOL}{AMOUNT}')
-														echo $this->currency_symbol;
+													if ($currencyDisplayFormat)
 													?>
 													<span id="tax_to_pay" name="tax_to_pay">
 													<?php
 														if (isset($orderdata->order_tax))
 														{
-															echo $orderdata->order_tax;
+															echo $this->jticketingmainhelper->getFormattedPrice($orderdata->order_tax);
 														}
 
 														if (isset($orderdata->amount))
@@ -376,7 +368,7 @@ if (isset($this->orderdata['order_info']['0']))
 													?>
 													</span>
 													<?php
-													if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+													if (empty($currencyDisplayFormat))
 														echo $this->currency_symbol;
 													?>
 													<input type="hidden" class="inputbox" value="<?php if (isset($orderdata->order_tax)){ echo $orderdata->order_tax; } ?>" name="tax_to_pay_inputbox" id="tax_to_pay_inputbox">
@@ -389,14 +381,13 @@ if (isset($this->orderdata['order_info']['0']))
 												</td>
 												<td>
 													<?php
-													if ($currencyDisplayFormat ==  '{CURRENCY_SYMBOL}{AMOUNT}')
-														echo $this->currency_symbol;
+													if ($currencyDisplayFormat)
 														?>
 													<span id="net_amt_after_tax" name="net_amt_after_tax">
-														<?php echo $finalAmount; ?>
+														<?php echo $this->jticketingmainhelper->getFormattedPrice($finalAmount); ?>
 													</span>
 													<?php
-														if ($currencyDisplayFormat !=  '{CURRENCY_SYMBOL}{AMOUNT}')
+														if (empty($currencyDisplayFormat))
 														echo $this->currency_symbol;
 													?>
 													<input type="hidden" class="inputbox" value="<?php  echo $finalAmount; ?>" name="net_amt_after_tax_inputbox" id="net_amt_after_tax_inputbox" />

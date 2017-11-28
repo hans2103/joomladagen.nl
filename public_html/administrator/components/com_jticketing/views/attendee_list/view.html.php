@@ -263,8 +263,6 @@ class JticketingViewattendee_List extends JViewLegacy
 	 */
 	public function _setToolBar($eventlist='')
 	{
-		$document = JFactory::getDocument();
-		$document->addStyleSheet(JUri::base() . 'components/com_jticketing/css/jticketing.css');
 		$bar = JToolBar::getInstance('toolbar');
 
 		JToolBarHelper::title(JText::_('COM_JTICKETING_COMPONENT') . JText::_('COM_JTICKETING_ATTENDEES_LIST'), 'list');

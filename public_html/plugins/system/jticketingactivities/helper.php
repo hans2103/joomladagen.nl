@@ -391,7 +391,7 @@ class PlgSystemJticketingActivitiesHelper
 
 		$objectData = array();
 		$objectData['type'] = $eventType;
-		$objectData['amount'] = str_replace("&nbsp;", "", strip_tags($jticketingFrontendHelper->getFromattedPrice($orderDetails->amount)));
+		$objectData['amount'] = str_replace("&nbsp;", "", strip_tags($this->Jticketingmainhelper->getFormattedPrice($orderDetails->amount)));
 		$activityData['object'] = json_encode($objectData);
 		$activityData['object_id'] = 'order';
 

@@ -2,8 +2,8 @@
 <extension version="3.0" type="plugin" group="tjsms" method="upgrade">
 	<name>PLG_TJSMS_CLICKATELL</name>
 	<author>Techjoomla</author>
-	<creationDate>26th Jul 2017</creationDate>
-	<version>2.0.4</version>
+	<creationDate>22nd Aug 2017</creationDate>
+	<version>2.0.7</version>
 	<copyright>(C)techjoomla.com</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>contact@techjoomla.com</authorEmail>

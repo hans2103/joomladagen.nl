@@ -58,7 +58,7 @@ foreach ($this->items as $eventData)
 				elseif (($eventData->eventPriceMaxValue == $eventData->eventPriceMinValue) AND  (($eventData->eventPriceMaxValue != 0) AND ($eventData->eventPriceMinValue != 0)))
 				{
 				?>
-					<strong><?php echo $jticketingMainHelper->getFromattedPrice(number_format(($eventData->eventPriceMaxValue), 2), $this->params['currency']);?></strong>
+					<strong><?php echo $jticketingMainHelper->getFormattedPrice(number_format(($eventData->eventPriceMaxValue), 2), $this->params['currency']);?></strong>
 				<?php
 				}
 				else
@@ -66,9 +66,9 @@ foreach ($this->items as $eventData)
 				?>
 					<strong>
 						<?php
-							echo $jticketingMainHelper->getFromattedPrice(number_format(($eventData->eventPriceMinValue), 2), $this->params['currency']);
+							echo $jticketingMainHelper->getFormattedPrice(number_format(($eventData->eventPriceMinValue), 2), $this->params['currency']);
 							echo ' - ';
-							echo $jticketingMainHelper->getFromattedPrice(number_format(($eventData->eventPriceMaxValue), 2), $this->params['currency']);
+							echo $jticketingMainHelper->getFormattedPrice(number_format(($eventData->eventPriceMaxValue), 2), $this->params['currency']);
 						?>
 					</strong>
 				<?php

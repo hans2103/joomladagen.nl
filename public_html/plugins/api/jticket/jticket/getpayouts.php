@@ -51,7 +51,7 @@ class JticketApiResourceGetPayouts extends ApiResource
 		{
 			$res->empty_message = JText::_("COM_JTICKETING_INVALID_USER");
 
-			return $this->plugin->setApiResponse(false, $res);
+			return $this->plugin->setResponse($res);
 		}
 
 		$jticketingmainhelper = new jticketingmainhelper;
@@ -88,7 +88,7 @@ class JticketApiResourceGetPayouts extends ApiResource
 			$res->empty_message = JText::_("NODATA");
 		}
 
-		$this->plugin->setApiResponse(false, $res);
+		$this->plugin->setResponse($res);
 	}
 
 	/**
@@ -102,7 +102,7 @@ class JticketApiResourceGetPayouts extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -116,7 +116,7 @@ class JticketApiResourceGetPayouts extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -130,6 +130,6 @@ class JticketApiResourceGetPayouts extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 }

@@ -109,7 +109,7 @@ class JticketingControllerorders extends JControllerLegacy
 					$dispatcher = JDispatcher::getInstance();
 					JPluginHelper::importPlugin('tjevents');
 					$result = $dispatcher->trigger('tj_inviteUsers', array($venueParams));
-					$email  = JticketingMailHelper::onlineEventNotify($venueParams, $order['eventinfo']);
+					$email  = JticketingMailHelper::onlineEventNotify($order_id, $venueParams, $order['eventinfo']);
 				}
 			}
 		}

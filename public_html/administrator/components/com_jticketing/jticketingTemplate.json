@@ -120,7 +120,7 @@
     "client": "com_jticketing",
     "key": "payment",
     "title": "Payment invoice",
-    "email_body": "<div class='jticketing-wrapper'> <div id='printDiv'> <div class='row-fluid'><hr class='hr hr-condensed' /> <div class=''> <div class='span8'> <div class='span4'> <h3 class=''>{event.title}</h3> </div> </div> <div style='text-align: right;'> <div class='pull-right '></div> <div style='clear: both;'></div> <div class='pull-right '> <div><strong>Order Id</strong> {order.orderid_with_prefix}</div> <div class='row-fluid'><strong>Payment Status</strong> {order.newStatus}</div> <div><strong>Order Date</strong> {order.cdate}</div> </div> </div> </div> <div class='span12'><hr class='hr hr-condensed' /> <div class='pull-left'> <div>{order.firstname} {order.lastname}</div> <div>{order.phone}</div> <div>{order.user_email}</div> <div>{oder.address} {order.city}</div> <div>{order.zipcode}, {order.state}, {order.country}</div> </div> </div> </div> <div class='row-fluid'><hr class='hr hr-condensed' /> <div class='span12 well'> <div class='jt-payment-info'> <h3>Payment Information:</h3> </div> <h3>Ticket Information:</h3> <div class='table-responsive'> <table style='width: 100.161%; border: 1px solid black;'> <tbody> <tr style='vertical-align: middle;border: 1px solid black;'> <th class='jtitem_num' style='text-align: left; width: 2%; border: 1px solid black;' align='right'>No</th> <th class='jtitem_name' style='text-align: left; width: 23%; border: 1px solid black;' align='left'>Ticket Title</th> <th class='jtitem_qty' style='text-align: left; width: 16%; border: 1px solid black;' align='left'>Ticket Qty</th> <th class='jtitem_price' style='text-align: right; width: 27%; border: 1px solid black;' align='left'>Ticket Price</th> <th class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;' align='left'>Total Price</th> </tr> <tr class='row0'> <td class='jtitem_num' style='vertical-align: middle; border: 1px solid black; padding: 7px; width: 2%;'>1</td> <td class='jtitem_name' style='vertical-align: middle; border: 1px solid black; padding: 7px; width: 23%;'>{ticket.order_item_name}</td> <td class='jtitem_qty' style='vertical-align: middle; border: 1px solid black; padding: 7px; width: 16%;'>{ticket.ticketcount}</td> <td class='jtitem_price' style='text-align: right; width: 27%; border: 1px solid black;'>{ticket.currencyPrice}</td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'>{ticket.totalPrice}</td> </tr> <tr> <td style='width: 86.2453%; border: 1px solid black;' colspan='5'></td> </tr> <tr> <td style=' padding: 7px; width: 41%; border: 1px solid black;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Discount {order.taxPercent}</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><span id='cop_discount'> {order.amountDisc} </span></td> </tr> <tr> <td style='border: 1px solid black; padding: 7px; width: 41%;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Tax Amount</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><span id='cop_discount'> {order.taxAmount} </span></td> </tr> <tr> <td style='border: 1px solid black; padding: 7px; width: 41%;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Order Total</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><strong><span id='final_amt_pay'> {ticket.totalPrice}</span></strong></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>",
+    "email_body": "<div class='jticketing-wrapper'> <div id='printDiv'> <div class='row-fluid'><hr class='hr hr-condensed' /> <div class=''> <div class='span8'> <div class='span4'> <h3 class=''>{event.title}</h3> </div> </div> <div style='text-align: right;'> <div class='pull-right '></div> <div style='clear: both;'></div> <div class='pull-right '> <div><strong>Order Id</strong> {order.orderid_with_prefix}</div> <div class='row-fluid'><strong>Payment Status</strong> {order.newStatus}</div> <div><strong>Order Date</strong> {order.cdate}</div> </div> </div> </div> <div class='span12'><hr class='hr hr-condensed' /> <div class='pull-left'> <div>{order.firstname} {order.lastname}</div> <div>{order.phone}</div> <div>{order.user_email}</div> <div>{oder.address} {order.city}</div> <div>{order.zipcode}, {order.state}, {order.country}</div> </div> </div> </div> <div class='row-fluid'><hr class='hr hr-condensed' /> <div class='span12 well'> <div class='jt-payment-info'> <h3>Payment Information:</h3> </div> <h3>Ticket Information:</h3> <div class='table-responsive'> <table style='width: 100.161%; border: 1px solid black;'> <tbody> <tr><td>{ticket.TICKET_INFO}</td></tr> <tr> <td style='width: 86.2453%; border: 1px solid black;' colspan='5'></td> </tr> <tr> <td style=' padding: 7px; width: 41%; border: 1px solid black;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Amount + Discount {order.taxPercent}</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><span id='cop_discount'> {order.amountDisc} </span></td> </tr> <tr> <td style='border: 1px solid black; padding: 7px; width: 41%;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Tax Amount</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><span id='cop_discount'> {order.taxAmount} </span></td> </tr> <tr> <td style='border: 1px solid black; padding: 7px; width: 41%;' colspan='3'></td> <td class='jtitem_tprice_label' style='border: 1px solid black; padding: 7px; width: 27%;' align='left'><strong>Order Total</strong></td> <td class='jtitem_tprice' style='text-align: right; width: 18.2453%; border: 1px solid black;'><strong><span id='final_amt_pay'> {order.total}</span></strong></td> </tr> </tbody> </table> </div> </div> </div> </div> </div>",
     "sms_body": "",
     "push_body": "",
     "web_body": "",
@@ -197,27 +197,19 @@
       },
       {
         "name": "order.amountDisc",
-        "description": "Discount amount"
+        "description": "Amount including discount"
       },
       {
         "name": "order.taxAmount",
         "description": "Tax amount"
       },
       {
-        "name": "ticket.order_item_name",
-        "description": "Ticket title"
+        "name": "order.total",
+        "description": "Order total price"
       },
       {
-        "name": "ticket.ticketcount",
-        "description": "Ticket count"
-      },
-      {
-        "name": "ticket.currencyPrice",
-        "description": "Ticket price"
-      },
-      {
-        "name": "ticket.totalPrice",
-        "description": "Ticket total price"
+        "name": "ticket.TICKET_INFO",
+        "description": "TICKET_INFO contain all ticket type information. TICKET_INFO is a language constant which have two langauge constant TICKET_HEAD and TICKET_TYPES. You can accordingly change your HTML from langauge file."
       }
     ]
   },

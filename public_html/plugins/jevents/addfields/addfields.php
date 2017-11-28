@@ -95,6 +95,37 @@ class PlgJeventsaddFields extends JPlugin
 		<?php
 		}
 
+		$userId = JFactory::getUser()->id;
+		$jticketingOrdersHelper = new JTicketingOrdersHelper;
+		$jticketingCommonHelper = new JticketingCommonHelper;
+		$emailCheck = $jticketingOrdersHelper->checkGatewayDetails($userId);
+		$vendor_id = $jticketingCommonHelper->checkVendor();
+		$params = JComponentHelper::getParams('com_jticketing');
+		$handle_transactions = $params->get('handle_transactions');
+		$adaptivePayment = $params->get('gateways');
+
+		if ($emailCheck == "true" && ($handle_transactions == 1 || in_array('adaptive_paypal', $adaptivePayment)))
+		{
+		?>
+			<div class="alert alert-warning">
+			<?php
+				if ($site)
+				{
+					$link = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client=com_jticketing';
+				}
+				else
+				{
+					$link = 'index.php?option=com_tjvendors&view=vendor&layout=update&client=com_jticketing';
+				}
+
+				echo JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG1');?>
+					<a href="<?php echo JRoute::_($link . '&vendor_id=' . $vendor_id, false);?>" target="_blank">
+					<?php echo JText::_('COM_JTICKETING_VENDOR_FORM_LINK'); ?></a>
+				<?php echo JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2');?>
+				</div>
+		<?php
+		}
+
 		$customFields = array();
 
 		$customTicketFields = $jticketingfrontendhelper->getCustomFieldTypes('ticketFields', $event_id, 'com_jevents');
@@ -285,6 +316,22 @@ class PlgJeventsaddFields extends JPlugin
 		{
 			JLoader::register('jteventHelper', $jteventHelperPath);
 			JLoader::load('jteventHelper');
+		}
+
+		$jticketingOrdersHelper = JPATH_ROOT . '/components/com_jticketing/helpers/order.php';
+
+		if (!class_exists('JTicketingOrdersHelper'))
+		{
+			JLoader::register('JTicketingOrdersHelper', $jticketingOrdersHelper);
+			JLoader::load('JTicketingOrdersHelper');
+		}
+
+		$jticketingCommonHelper = JPATH_ROOT . '/components/com_jticketing/helpers/common.php';
+
+		if (!class_exists('JticketingCommonHelper'))
+		{
+			JLoader::register('JticketingCommonHelper', $jticketingCommonHelper);
+			JLoader::load('JticketingCommonHelper');
 		}
 	}
 }

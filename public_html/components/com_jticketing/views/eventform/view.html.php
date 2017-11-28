@@ -114,7 +114,7 @@ class JticketingViewEventform extends JViewLegacy
 							"layout" => 'edit')
 							);
 
-			$this->form_extra_fields = array_filter($this->form_extra);
+			$this->form_extra = array_filter($this->form_extra);
 		}
 
 		if (!empty($this->item->id))

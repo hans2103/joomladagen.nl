@@ -194,7 +194,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$input = JFactory::getApplication()->input;
 
 		// Redirect to the list screen.
-		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
+		$this->setMessage(JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR'));
 		$this->setRedirect(
 				JRoute::_(
 				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $input->get('client', '', 'STRING'), false

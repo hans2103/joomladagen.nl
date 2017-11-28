@@ -22,8 +22,8 @@
 				/>
 
 		<field name="state" type="list" default="1" label="JSTATUS" class="">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
+			<option value="1">COM_JTICKETING_PUBLISH</option>
+			<option value="0">COM_JTICKETING_UNPUBLISH</option>
 		</field>
 
 		<field

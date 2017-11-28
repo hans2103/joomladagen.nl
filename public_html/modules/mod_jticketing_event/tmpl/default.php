@@ -81,7 +81,7 @@ else
 						elseif (($modEventData['event_max_ticket'] == $modEventData['event_min_ticket']) AND  (($modEventData['event_max_ticket'] != 0) AND ($modEventData['event_min_ticket'] != 0)))
 						{
 						?>
-							<strong><?php echo $jticketingmainhelper->getFromattedPrice(number_format(($modEventData['event_max_ticket']), 2), $com_params->get('currency'));?></strong>
+							<strong><?php echo $jticketingmainhelper->getFormattedPrice(number_format(($modEventData['event_max_ticket']), 2), $com_params->get('currency'));?></strong>
 						<?php
 						}
 						else
@@ -89,9 +89,9 @@ else
 						?>
 							<strong>
 								<?php
-									echo $jticketingmainhelper->getFromattedPrice(number_format(($modEventData['event_min_ticket']), 2), $com_params->get('currency'));
+									echo $jticketingmainhelper->getFormattedPrice(number_format(($modEventData['event_min_ticket']), 2), $com_params->get('currency'));
 									echo ' - ';
-									echo $jticketingmainhelper->getFromattedPrice(number_format(($modEventData['event_max_ticket']), 2), $com_params->get('currency'));
+									echo $jticketingmainhelper->getFormattedPrice(number_format(($modEventData['event_max_ticket']), 2), $com_params->get('currency'));
 								?>
 							</strong>
 						<?php

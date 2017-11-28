@@ -6,8 +6,8 @@
 	<authorUrl>www.techjoomla.com</authorUrl>
 	<copyright>Copyright(C)2012-17 TechJoomla</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<creationDate>26th Jul 2017</creationDate>
-	<version>2.0.4</version>
+	<creationDate>17th Nov 2017</creationDate>
+	<version>2.0.10</version>
 	<description>MOD_JTICKETING_RECOMMEND_DESC</description>
 	<languages folder="language">
 		<language tag="en-GB">en-GB/en-GB.mod_jticketing_recommend.ini</language>

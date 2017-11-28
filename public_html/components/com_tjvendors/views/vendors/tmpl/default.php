@@ -146,19 +146,19 @@ if (!empty($this->vendor_id))
 							<?php echo "Sr.No";?>
 					   </th>
 						<th width="5%">
-							<?php echo JHtml::_('grid.sort', 'Transaction ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 						</th>
 					<?php if($client == '0')
 						{?>
 						<th width="5%">
-							<?php echo JHtml::_('grid.sort', 'Client', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
 						</th>
 					<?php }
 						if ($currency == '0')
 						{?>
 
 						<th width="5%">
-							<?php echo JHtml::_('grid.sort', 'Currency', 'pass.`currency`', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 					   </th>
 					<?php }
 						if($transactionType == "credit" || empty($transactionType))
@@ -177,13 +177,13 @@ if (!empty($this->vendor_id))
 						}
 					?>
 						<th width="10%">
-							<?php echo JHtml::_('grid.sort', 'Reference Order ID', 'pass.`reference_order_id`', $listDirn, $listOrder);?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder);?>
 						</th>
 						<th width="15%">
-							<?php echo JHtml::_('grid.sort', 'Transaction Time', 'pass.`transaction_time`', $listDirn, $listOrder);?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder);?>
 						</th>
 						<th width="10%">
-							<?php echo JHtml::_('grid.sort', 'Pending Amount', 'pass.`total`', $listDirn, $listOrder);?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_PENDING_AMOUNT', 'pass.`total`', $listDirn, $listOrder);?>
 						</th>
 						<th>
 							<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>

@@ -43,6 +43,7 @@ class JticketingMailHelper
 		$mail_to              = $com_params->get('mail_to');
 		$replytoemail         = $com_params->get('reply_to');
 		$onlyInvoiceToCreator = $com_params->get('only_invoice_to_event_creator');
+		$dateFormat           = $com_params->get('date_format_show');
 		$jticketingmainhelper = new Jticketingmainhelper;
 		$where                = '';
 		$db                   = JFactory::getDBO();
@@ -138,8 +139,6 @@ class JticketingMailHelper
 				$toemail['event_buyer'] = trim($buyeremail);
 			}
 
-			$toemail = array_unique($toemail);
-
 			// Load other libraries since we are generating PDF there are some issues after that
 			// Add config for from address
 			$headers       = '';
@@ -154,7 +153,9 @@ class JticketingMailHelper
 
 			$recipients = '';
 
-			$row->site = $sitename;
+			$row->site      = $sitename;
+			$row->startdate = JHtml::date($row->startdate, $dateFormat, true);
+			$row->enddate   = JHtml::date($row->enddate, $dateFormat, true);
 			$model       = JModelAdmin::getInstance('EventForm', 'JticketingModel');
 			$eventDetails = $model->getItem($row->eid);
 			$eventDetails->link = $link;
@@ -193,7 +194,7 @@ class JticketingMailHelper
 		}
 
 		// Update mailsent flag if email sent
-		if ($result == 1)
+		if ($result['success'])
 		{
 			$obj                    = new StdClass;
 			$obj->id                = $ticketid;
@@ -420,6 +421,7 @@ class JticketingMailHelper
 		$db                   = JFactory::getDBO();
 		$com_params           = JComponentHelper::getParams('com_jticketing');
 		$mail_to              = $com_params->get('mail_to');
+		$dateFormat           = $com_params->get('date_format_show');
 		$jticketingmainhelper = new jticketingmainhelper;
 		$orderItemid          = $jticketingmainhelper->getItemId('index.php?option=com_jticketing&view=orders');
 		$jinput               = JFactory::getApplication()->input;
@@ -535,20 +537,80 @@ class JticketingMailHelper
 		$recipients = '';
 
 		$replacements = new stdclass;
+		$orderinfo[0]->cdate      = JHtml::date($orderinfo[0]->cdate, $dateFormat, true);
 		$orderinfo[0]->newStatus  = $paymentStatus[$orderinfo[0]->status];
-		$orderinfo[0]->amountDisc = $jticketingmainhelper->getFromattedPrice(number_format(($total_amount_after_disc), 2), $order_currency);
-		$orderinfo[0]->taxAmount  = $jticketingmainhelper->getFromattedPrice(number_format(($orderinfo[0]->order_tax), 2), $order_currency);
+		$orderinfo[0]->amountDisc = $jticketingmainhelper->getFormattedPrice(number_format(($total_amount_after_disc), 2), $order_currency);
+		$orderinfo[0]->taxAmount  = $jticketingmainhelper->getFormattedPrice(number_format(($orderinfo[0]->order_tax), 2), $order_currency);
 		$orderinfo[0]->state      = $TjGeoHelper->getRegionNameFromId($orderinfo[0]->state_code);
 		$orderinfo[0]->country    = $TjGeoHelper->getCountryNameFromId($orderinfo[0]->country_code);
-		$replacements->order      = $orderinfo[0];
-
-		$orderitems[0]->currencyPrice = $jticketingmainhelper->getFromattedPrice(number_format(($orderitems[0]->price), 2), $order_currency);
+		$orderitems[0]->currencyPrice = $jticketingmainhelper->getFormattedPrice(number_format(($orderitems[0]->price), 2), $order_currency);
 		$totalprice                   = $orderitems[0]->ticketcount * $orderitems[0]->price;
-		$orderitems[0]->totalPrice    = $jticketingmainhelper->getFromattedPrice(number_format(($totalprice), 2), $order_currency);
+		$orderitems[0]->totalPrice    = $jticketingmainhelper->getFormattedPrice(number_format(($totalprice), 2), $order_currency);
 		$replacements->ticket         = $orderitems[0];
 
-		$eventinfo->site     = $sitename;
-		$replacements->event = $eventinfo;
+		$total     = 0;
+		$replace   = new stdclass;
+
+		$tagConstant  = JText::_('COM_JTICKETING_EMAIL_TICKET_INFO');
+		$tags         = explode(",", $tagConstant);
+		$tags         = str_replace(array('<table>', '</table>'), '', $tags);
+		$headConstant = [];
+
+		$innerConstant          = str_replace(array('[', ']'), '', $tags[0]);
+		$headConstant['header'] = JText::_($innerConstant);
+
+		$innerConstant1          = str_replace(array('[', ']'), '', $tags[1]);
+		$headConstant['replace'] = JText::_($innerConstant1);
+
+		$pattern = "/\[([\w.]+)\]/";
+		preg_match_all($pattern, $headConstant['replace'], $matches);
+
+		$replaceTags               = new stdclass;
+
+		foreach ($orderitems as $i => $item)
+		{
+			$i++;
+			$item->currencyPrice  = $jticketingmainhelper->getFormattedPrice(number_format(($item->price), 2), $order_currency);
+			$totalprice           = $item->ticketcount * $item->price;
+			$item->totalPrice     = $jticketingmainhelper->getFormattedPrice(number_format(($totalprice), 2), $order_currency);
+			$item->no             = $i;
+			$total                = $total + $totalprice;
+
+			$replaceTags->{'ticket' . $i} = $item;
+		}
+
+		$appendTemplate = '';
+
+		foreach ($replaceTags as $replaceTag)
+		{
+			$template = JText::_($innerConstant1);
+
+			foreach ($replaceTag as $i => $index)
+			{
+				foreach ($matches[1] as $values)
+				{
+					if ($i == $values)
+					{
+						$template = str_replace('[' . $values . ']', $index, $template);
+					}
+				}
+			}
+
+			$appendTemplate .= $template;
+		}
+
+		$appendTemplate = $headConstant['header'] . $appendTemplate;
+
+		$replace->TICKET_INFO = $appendTemplate;
+
+		$ticket               = new stdclass;
+		$replacements->ticket = $replace;
+
+		$orderinfo[0]->total  = $jticketingmainhelper->getFormattedPrice(number_format($total, 2), $order_currency);
+		$replacements->order  = $orderinfo[0];
+
+		$eventinfo->site      = $sitename;
+		$replacements->event  = $eventinfo;
 
 		$options = new JRegistry;
 		$options->set('subject', $eventinfo);
@@ -562,16 +624,21 @@ class JticketingMailHelper
 	/**
 	 * Send invoice email after payment
 	 *
-	 * @param   string  $venueParams   id in jticketing_order
-	 * @param   string  $eventDetails  id in jticketing_order
+	 * @param   string  $order_id      id in jticketing_order
+	 * @param   string  $venueParams   venueParams in jticketing_order
+	 * @param   string  $eventDetails  eventDetails in jticketing_order
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	public static function onlineEventNotify($venueParams, $eventDetails)
+	public static function onlineEventNotify($order_id, $venueParams, $eventDetails)
 	{
 		$com_params           = JComponentHelper::getParams('com_jticketing');
+		$mail_to              = $com_params->get('mail_to');
+		$replytoemail         = $com_params->get('reply_to');
+		$onlyInvoiceToCreator = $com_params->get('only_invoice_to_event_creator');
+		$dateFormat           = $com_params->get('date_format_show');
 		$jticketingmainhelper = new Jticketingmainhelper;
 		$where                = '';
 		$db                   = JFactory::getDBO();
@@ -581,6 +648,34 @@ class JticketingMailHelper
 		$fromname             = $app->getCfg('fromname');
 		$sitename             = $app->getCfg('sitename');
 		$email = '';
+
+		$creator_id = $jticketingmainhelper->getEventCreator($eventDetails->id);
+
+		if ($creator_id == '')
+		{
+			$creator_id = $eventDetails->creator;
+		}
+
+		$db = JFactory::getDBO();
+		$query = "SELECT email FROM #__users WHERE id = " . $creator_id;
+		$db->setQuery($query);
+		$event_creator_mail = $db->loadResult();
+
+		// Chk whom to send email
+		if (in_array('site_admin', $mail_to))
+		{
+			$toemail['site_admin'] = trim($mailfrom);
+		}
+
+		if (in_array('event_creator', $mail_to) && $onlyInvoiceToCreator == '0')
+		{
+			$toemail['event_creator'] = trim($event_creator_mail);
+		}
+
+		if (in_array('event_buyer', $mail_to))
+		{
+			$toemail['event_buyer'] = trim($venueParams->email);
+		}
 
 		$client = "com_jticketing";
 		$key    = "e-ticketsOnlineEvent";
@@ -606,17 +701,40 @@ class JticketingMailHelper
 		$userDetails->adobePassword = $password;
 		$userDetails->url           = $hostUrl . $venueParams->meeting_url;
 
+		$eventDetails->startdate    = JHtml::date($eventDetails->startdate, $dateFormat, true);
+		$eventDetails->enddate      = JHtml::date($eventDetails->enddate, $dateFormat, true);
+
 		$replacements        = new stdClass;
 		$replacements->event = $eventDetails;
 		$replacements->user  = $userDetails;
 
 		$options = new JRegistry;
 		$options->set('subject', $eventDetails);
-		$options->set('guestEmails', array($venueParams->email));
+		$options->set('guestEmails', $toemail);
 		$options->set('from', $mailfrom);
 		$options->set('fromname', $fromname);
 
 		$result = Tjnotifications::send($client, $key, $recipients, $replacements, $options);
+
+		// Update mailsent flag if email sent
+		if ($result['success'])
+		{
+			$obj                    = new StdClass;
+			$obj->id                = $order_id;
+
+			if (in_array('event_buyer', $mail_to))
+			{
+				$obj->ticket_email_sent = 1;
+			}
+			else
+			{
+				$obj->ticket_email_sent = 0;
+			}
+
+			if ($db->updateObject('#__jticketing_order', $obj, 'id'))
+			{
+			}
+		}
 	}
 
 	/**
@@ -642,11 +760,13 @@ class JticketingMailHelper
 		$eventDetails->site = $sitename;
 
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_jticketing/models');
-		$eventModel = JModelLegacy::getInstance('Event', 'JticketingModel');
+		$eventModel = JModelLegacy::getInstance('EventForm', 'JticketingModel');
 
 		$checkInDetails = (object) $data;
 		$eventDetails = new stdClass;
 		$eventDetails = $eventModel->getItem($data['eventid']);
+		$eventDetails->startdate    = JHtml::date($eventDetails->startdate, $dateFormat, true);
+		$eventDetails->enddate      = JHtml::date($eventDetails->enddate, $dateFormat, true);
 
 		$replacements = new stdClass;
 		$replacements->event = $eventDetails;

@@ -167,4 +167,3 @@ defined('_JEXEC') or die;
 	<div class=" col-lg-2 col-md-2 col-sm-2 col-xs-12 control-label "><?php echo $this->form->getLabel('long_description');?></div>
 	<div class="col-lg-10 col-md-10 col-sm-9 col-xs-12"><?php echo $this->form->getInput('long_description');?></div>
 </div>
-

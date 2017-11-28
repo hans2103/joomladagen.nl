@@ -9,6 +9,8 @@
 
 defined('JPATH_BASE') or die;
 jimport('joomla.filesystem.file');
+jimport('techjoomla.jsocial.jsocial');
+
 /**
  * Interface to handle Social Extensions
  *
@@ -371,6 +373,20 @@ class JSocialAlphauserpoints implements JSocial
 	 * @since   1.0
 	 */
 	public function addMemberToGroup($groupId, JUser $groupmember)
+	{
+	}
+
+	/**
+	 * The function to update the custom fields
+	 *
+	 * @param   ARRAY   $fieldsArray  Custom field array
+	 * @param   OBJECT  $userId       User Id
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function addUserFields($fieldsArray, $userId)
 	{
 	}
 }

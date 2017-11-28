@@ -217,25 +217,25 @@ if (empty($this->Data) or $this->noeventsfound==1)
 							<?php echo $data->ticketscount ?>
 						</td>
 						<td align="center" data-title="<?php echo JText::_('ORIGINAL_AMOUNT');?>">
-							<?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->original_amount),2),$this->currency);?>
+							<?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->original_amount),2),$this->currency);?>
 						</td>
 						<td align="center" data-title="<?php echo JText::_('DISCOUNT_AMOUNT');?>">
 							<?php $subDisc += $discount = $data->coupon_discount;
-								echo $this->jticketingmainhelper->getFromattedPrice( number_format(($discount),2),$this->currency);?>
+								echo $this->jticketingmainhelper->getFormattedPrice( number_format(($discount),2),$this->currency);?>
 						</td>
 						<?php
 						if ($this->jticketingparams->get('allow_taxation'))
 						{
 							?>
 							<td align="center" data-title="<?php echo JText::_('TAX_AMOUNT');?>">
-							<?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->order_tax),2),$this->currency); ?>
+							<?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->order_tax),2),$this->currency); ?>
 							</td>
 							<?php
 						}
 						?>
 						<td align="center" data-title="<?php echo JText::_('PAID_AMOUNT');?>">
 							<?php $subPaid += $data->paid_amount;
-								echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->paid_amount),2),$this->currency); ?>
+								echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->paid_amount),2),$this->currency); ?>
 						</td>
 						<td align="center" data-title="<?php echo JText::_('COUPON_CODE_DIS');?>">
 							<?php if(!empty($data->coupon_code)){ echo $data->coupon_code. ' ';} else echo '-';?>
@@ -256,23 +256,23 @@ if (empty($this->Data) or $this->noeventsfound==1)
 						<b><?php echo number_format($totalNoOfTickets, 0, '', '');?></b>
 					</td>
 					<td align="center" data-title="<?php echo JText::_('TOTAL_ORIGINAL_AMOUNT');?>">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($totalPrice),2),$this->currency); ?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($totalPrice),2),$this->currency); ?></b>
 					</td>
 					<td align="center" data-title="<?php echo JText::_('TOTAL_DISCOUNT_AMOUNT');?>">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($totalEarn),2),$this->currency); ?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($totalEarn),2),$this->currency); ?></b>
 					</td>
 					<?php
 					if ($this->jticketingparams->get('allow_taxation'))
 					{
 						?>
 						<td align="center" data-title="<?php echo JText::_('TOTAL_TAX_AMOUNT');?>">
-							<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($totalTax),2),$this->currency); ?></b>
+							<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($totalTax),2),$this->currency); ?></b>
 						</td>
 						<?php
 					}
 					?>
 					<td align="center" data-title="<?php echo JText::_('TOTAL_PAID_AMOUNT');?>">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($subPaid),2),$this->currency); ?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($subPaid),2),$this->currency); ?></b>
 					</td>
 					<td align="center" class = "hidden-xs hidden-sm"></td>
 					<td align="center" class = "hidden-xs hidden-sm"></td>

@@ -331,10 +331,10 @@ class com_jticketingInstallerScript
 		if (empty($attendee_fields))
 		{
 			// If no core ateende fields, add a sample one.First name,Last name is required
-			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'First Name','text','First Name','first_name',1,1,1);";
-			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'Last Name','text','Last Name','last_name',1,1,1);";
-			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'Phone','text','Phone','phone',1,1,0);";
-			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'Email','text','Email','email',1,1,0);";
+			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'COM_JTICKETING_AF_FNAME','text','COM_JTICKETING_AF_FNAME','first_name',1,1,1);";
+			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'COM_JTICKETING_AF_LNAME','text','COM_JTICKETING_AF_LNAME','last_name',1,1,1);";
+			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'COM_JTICKETING_AF_PHONE','text','COM_JTICKETING_AF_PHONE','phone',1,1,0);";
+			$queries[] = "INSERT INTO `#__jticketing_attendee_fields` (`eventid`, `placeholder`, `type`, `label`, `name`,`core`,`state`,`required`) VALUES(0, 'COM_JTICKETING_AF_EMAIL','text','COM_JTICKETING_AF_EMAIL','email',1,1,0);";
 
 			// Execute sql queries.
 			if (count($queries) != 0)
@@ -820,6 +820,7 @@ class com_jticketingInstallerScript
 		$this->fixCheckindetailsTable($db, $dbprefix, $config);
 		$this->fixJtUsersTable($db, $dbprefix, $config);
 		$this->fixVenuesTable($db, $dbprefix, $config);
+		$this->updateCoreAttendeeFields();
 	}
 
 
@@ -1119,6 +1120,58 @@ class com_jticketingInstallerScript
 			if (!$db->updateObject('#__jticketing_venues', $obj, 'id'))
 			{
 				return false;
+			}
+		}
+	}
+
+	/**
+	 * Update core attendee fields values
+	 *
+	 * @return  void
+	 *
+	 * @since  1.0
+	 */
+	public function updateCoreAttendeeFields()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName(array('id', 'placeholder', 'label')));
+		$query->from($db->quoteName('#__jticketing_attendee_fields'));
+		$db->setQuery($query);
+		$attendeeFields = $db->loadObjectList();
+
+		if (!empty($attendeeFields))
+		{
+			foreach ($attendeeFields as $field)
+			{
+				$obj = new stdclass;
+				$obj->id = $field->id;
+
+				if ($field->id == '1' && $field->placeholder != 'COM_JTICKETING_AF_FNAME' && $field->label != 'COM_JTICKETING_AF_FNAME')
+				{
+					$obj->placeholder = 'COM_JTICKETING_AF_FNAME';
+					$obj->label = 'COM_JTICKETING_AF_FNAME';
+				}
+				elseif ($field->id == '2' && $field->placeholder != 'COM_JTICKETING_AF_LNAME' && $field->label != 'COM_JTICKETING_AF_LNAME')
+				{
+					$obj->placeholder = 'COM_JTICKETING_AF_LNAME';
+					$obj->label = 'COM_JTICKETING_AF_LNAME';
+				}
+				elseif ($field->id == '3' && $field->placeholder != 'COM_JTICKETING_AF_PHONE' && $field->label != 'COM_JTICKETING_AF_PHONE')
+				{
+					$obj->placeholder = 'COM_JTICKETING_AF_PHONE';
+					$obj->label = 'COM_JTICKETING_AF_PHONE';
+				}
+				elseif ($field->id == '4' && $field->placeholder != 'COM_JTICKETING_AF_EMAIL' && $field->label != 'COM_JTICKETING_AF_EMAIL')
+				{
+					$obj->placeholder = 'COM_JTICKETING_AF_EMAIL';
+					$obj->label = 'COM_JTICKETING_AF_EMAIL';
+				}
+
+				if (!$db->updateObject('#__jticketing_attendee_fields', $obj, 'id'))
+				{
+					return false;
+				}
 			}
 		}
 	}

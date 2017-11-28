@@ -2,13 +2,13 @@
 <!DOCTYPE install PUBLIC "-//Joomla! 1.5//DTD plugin 1.0//EN" "http://www.joomla.org/xml/dtd/1.5/plugin-install.dtd">
 <extension version="3.0" type="plugin" group="content" method="upgrade">
 <name>PLG_CONTENT_JLIKE_JTICKETING_NAME</name>
-<creationDate>26th Jul 2017</creationDate>
+<creationDate>17th Nov 2017</creationDate>
 <author>TechJoomla</author>
 <authorEmail>extensions@techjoomla.com</authorEmail>
 <authorUrl>http://www.techjoomla.com</authorUrl>
 <copyright>Copyright(C)2012-17 TechJoomla</copyright>
 <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-<version>2.0.4</version>
+<version>2.0.10</version>
 <description>PLG_CONTENT_JLIKE_JTICKETING_NAME</description>
 <files>
 	<filename plugin="jlike_events">jlike_events.php</filename>

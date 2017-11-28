@@ -81,9 +81,9 @@ else
 		echo JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG1');
 		$Jticketingmainhelper = new Jticketingmainhelper;
 		$itemid = $Jticketingmainhelper->getItemId($link);?>
-			<a href="<?php echo JRoute::_($link . '&itemId='. $itemid .'&vendor_id=' . $vendor_id,false);?>">
+			<a href="<?php echo JRoute::_($link . '&itemId='. $itemid .'&vendor_id=' . $vendor_id,false);?>" target="_blank">
 			<?php echo JText::_('COM_JTICKETING_VENDOR_FORM_LINK'); ?></a>
-		<?php echo " <br> ".JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2');?>
+		<?php echo JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2');?>
 	</div>
 <?php
 }
@@ -338,6 +338,7 @@ if (!empty($this->item->gallery))
 	var vendor_id = '<?php $this->vendorCheck;?>';
 	var selectedVenue = '<?php echo $this->item->venue;?>';
 	jtSite.eventform.initEventJs();
+	validation.positiveNumber();
 </script>
 <?php
 if (!$this->accessLevel)

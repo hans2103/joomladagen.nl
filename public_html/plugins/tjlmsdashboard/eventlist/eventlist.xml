@@ -2,8 +2,8 @@
 <extension version="3.1" type="plugin" group="tjlmsdashboard" method="upgrade">
 	<name>PLG_TJLMSDASHBOARD_EVENT_LIST</name>
 	<author>Techjoomla</author>
-	<creationDate>26th Jul 2017</creationDate>
-	<version>2.0.4</version>
+	<creationDate>17th Nov 2017</creationDate>
+	<version>2.0.10</version>
 	<copyright>(C)techjoomla.com</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>contact@techjoomla.com</authorEmail>

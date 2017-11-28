@@ -21,8 +21,6 @@
 				label="COM_JTICKETING_TICKET_FIELD_TYPE"
 				description="COM_JTICKETING_TICKET_FIELD_TYPE"
 				class="input-mini"
-				required="true"
-				validation="required"
 				default="">
 				<option value="text">COM_JTICKETING_TICKET_FIELD_TYPE_TEXT</option>
 				 <option value="textarea">COM_JTICKETING_TICKET_FIELD_TYPE_TEXTAREA</option>

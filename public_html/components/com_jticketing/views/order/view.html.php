@@ -12,6 +12,7 @@ jimport('joomla.application.component.view');
 jimport('joomla.filesystem.file');
 jimport('joomla.filesystem.folder');
 jimport('joomla.html.parameter');
+jimport('techjoomla.tjmoney.tjmoney');
 
 /**
  * View for checkout
@@ -282,6 +283,19 @@ class JticketingViewOrder extends JViewLegacy
 			$this->billing_data = $this->jticketingmainhelper->getbillingdata('', $user->id);
 		}
 
+		$currencyCode          = $com_params->get('currency', '', 'STRING');
+		$currencyCodeOrSymbol  = $com_params->get('currency_code_or_symbol', '0', 'STRING');
+		$currencyDisplayFormat = $com_params->get('currency_display_format', '', 'STRING');
+
+		if ($currencyCodeOrSymbol)
+		{
+			$currencyCodeOrSymbol = 'code';
+		}
+
+		// Currency object
+		$tjCurrency = new TjMoney($currencyCode);
+		$this->currency_symbol = $tjCurrency->getSymbol();
+
 		$this->siteadmin_comm_per              = $com_params->get('siteadmin_comm_per');
 		$this->article                         = $com_params->get('article');
 		$this->currency                        = $com_params->get('currency');
@@ -290,7 +304,6 @@ class JticketingViewOrder extends JViewLegacy
 		$this->allow_buy_guestreg              = $com_params->get('allow_buy_guestreg');
 		$this->allow_taxation                  = $com_params->get('allow_taxation');
 		$this->enable_bill_vat                 = $com_params->get('enable_bill_vat');
-		$this->currency_symbol                 = $com_params->get('currency_symbol');
 		$this->tnc                             = $com_params->get('tnc');
 		$this->max_noticket_peruserperpurchase = $com_params->get('max_noticket_peruserperpurchase');
 		$this->collect_attendee_info_checkout  = $com_params->get('collect_attendee_info_checkout');

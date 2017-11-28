@@ -12,6 +12,9 @@ defined('_JEXEC') or die('Restricted access');
 
 // Component Helper
 jimport('joomla.application.component.helper');
+JLoader::import('attendeefields', JPATH_SITE . '/components/com_jticketing/models');
+JLoader::import('tickettypes', JPATH_SITE . '/components/com_jticketing/models');
+JLoader::import('attendeecorefields', JPATH_ADMINISTRATOR . '/components/com_jticketing/models');
 
 /**
  * JteventHelper
@@ -146,7 +149,7 @@ class JteventHelper
 	 */
 	public function updateReminderQueue($xrefid ='')
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
 		// Delete entries which are present for that reminder and still not sent
 		$query = 'SELECT id FROM #__jticketing_queue
@@ -186,7 +189,7 @@ class JteventHelper
 	 */
 	public function addPendingEntriestoQueue($xrefid = '', $reminder_queue_id = '')
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$input = JFactory::getApplication()->input;
 		$jticketingmainhelper = new Jticketingmainhelper;
 		$jticketingfrontendhelper = new jticketingfrontendhelper;
@@ -324,7 +327,7 @@ class JteventHelper
 	 */
 	public function getEventCategories($firstOption = '')
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$app     = JFactory::getApplication();
 		$com_params = JComponentHelper::getParams('com_jticketing');
 		$integration = $com_params->get('integration');
@@ -437,7 +440,7 @@ class JteventHelper
 		$jticketingmainhelper = new jticketingmainhelper;
 		$XrefID               = $jticketingmainhelper->getEventrefid($eventid);
 
-		$db                       = JFactory::getDBO();
+		$db                       = JFactory::getDbo();
 		$jticketingfrontendhelper = JPATH_ROOT . '/components/com_jticketing/helpers/frontendhelper.php';
 
 		if (!class_exists('jticketingfrontendhelper'))
@@ -545,7 +548,7 @@ class JteventHelper
 	 */
 	public function delete_Ateendee_fields($delete_ids)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
 		foreach ($delete_ids as $key => $value)
 		{
@@ -573,7 +576,7 @@ class JteventHelper
 	 */
 	public function delete_Event($integration_ids)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
 		// Delete From universal field values which are saved against that event
 		$TjfieldsHelperPath = JPATH_ROOT . DS . 'components' . DS . 'com_tjfields' . DS . 'helpers' . DS . 'tjfields.php';
@@ -668,7 +671,7 @@ class JteventHelper
 	 */
 	public function updatePaypalEmail($userid, $paypal_email)
 	{
-		$db    = JFactory::getDBO();
+		$db    = JFactory::getDbo();
 		$paypal_email = trim($paypal_email);
 
 		if (!empty($paypal_email))
@@ -692,7 +695,7 @@ class JteventHelper
 	 */
 	public function fixavailableSeats($available_current, $ticket_type_info_db, $xrefid)
 	{
-		$db         = JFactory::getDBO();
+		$db         = JFactory::getDbo();
 		$difference = 0;
 		$difference = $available_current - $ticket_type_info_db->count;
 
@@ -765,7 +768,8 @@ class JteventHelper
 	public function saveEvent($eventid, $backend_integration = 1, $ev_creator = '')
 	{
 		$jteventHelper = new jteventHelper;
-		$input = JFactory::getApplication()->input;
+		$app = JFactory::getApplication();
+		$input = $app->input;
 		$userName = JFactory::getUser();
 		$post  = $input->post;
 		$this->loadJTclasses();
@@ -822,7 +826,7 @@ class JteventHelper
 				$xrefData['userid'] = $dat->userid;
 				$xrefId = $frontHelper->getXreftableID($dat->source, $xrefData['eventid']);
 
-				if ($eventid != $xrefId->eventid)
+				if (empty($xrefId->eventid))
 				{
 					JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'integrationxref');
 					$JTIcketingModelIntegrationXref = JModelLegacy::getInstance('Integrationxref', 'JTicketingModel');
@@ -831,86 +835,167 @@ class JteventHelper
 				}
 			}
 
-				$xrefId = $frontHelper->getXreftableID($dat->source, $eventid);
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'Attendeecorefields');
-				$attendeeCoreFieldModel = JModelLegacy::getInstance('Attendeecorefields', 'JTicketingModel');
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'attendeefields');
-				$attendeeFieldModel = JModelLegacy::getInstance('Attendeefields', 'JTicketingModel');
-				JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/tables', 'attendeefields');
+			$xrefId = $frontHelper->getXreftableID($dat->source, $eventid);
 
-				$attendeeFieldIds = $attendeeCoreFieldModel->getAttendeeFields($xrefId->id);
+			// Save Attendee fields
+			$attendeeFields = $attendee_fields;
+			$attendeeFieldsModel = JModelLegacy::getInstance('Attendeefields', 'JticketingModel');
+			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/tables', 'Attendeefields');
+			$attendeeCoreFieldsModel = JModelLegacy::getInstance('AttendeeCoreFields', 'JticketingModel');
+			$existingAttendeeFields = $attendeeCoreFieldsModel->getAttendeeFields($xrefId->id);
+			$attendeeFieldsArray = array();
+			$newAttendeeField = array();
+			$existingId = array();
+			$newCount = 0;
+			$existingCount = 0;
 
-				if ($attendeeFieldIds)
-				{
-					foreach ($attendeeFieldIds as $attendeeId)
-					{
-						$deleteAttendeeField = $attendeeFieldModel->delete($attendeeId['id']);
-					}
-				}
-
-				// Save Attendee fields
-				$attendeeFields = $attendee_fields;
-				$attendeeFieldsModel = JModelLegacy::getInstance('Attendeefields', 'JticketingModel');
-
-				foreach ($attendeeFields as $attendeeField)
-				{
-					$attendeeData['id'] = '';
-
-					$attendeeData['label'] = $attendeeField['label'];
-					$attendeeData['type'] = $attendeeField['type'];
-					$attendeeData['default_selected_option'] = $attendeeField['default_selected_option'];
-					$attendeeData['required'] = $attendeeField['required'];
-					$attendeeData['eventid'] = $xrefId->id;
-					$attendeeData['state'] = 1;
-
-					if (!empty($attendeeData['label']))
-					{
-						$string = strtolower($attendeeData['label']);
-						$string = str_replace(' ', '_', $string);
-						$attendeeData['name'] = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-						$return = $attendeeFieldsModel->save($attendeeData);
-					}
-				}
-
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'tickettypes');
-				$ticketTypesModel = JModelLegacy::getInstance('Tickettypes', 'JticketingModel');
-				$ticketTypeFields = $ticketTypesModel->getTicketTypeFields($xrefId->id);
-
-				if ($ticketTypeFields)
-				{
-					foreach ($ticketTypeFields as $ticketfield)
-					{
-						$deleteAttendeeField = $ticketTypesModel->delete($ticketfield['id']);
-					}
-				}
-
-			$ticketTypes = $ticket_fields;
-			$tickets = array();
-
-			foreach ($ticketTypes as $ticketType)
+			// Saving new Attendee fields
+			foreach ($attendeeFields as $attendeeField)
 			{
-					$tickets['id'] = '';
-					$tickets['count'] = $ticketType['available'];
-
-				if ($ticketType['price'] == 0 && empty($ticketType['title']))
+				if (!empty($attendeeField['id']))
 				{
-					$tickets['title'] = "Free Ticket";
-					$tickets['unlimited_seats'] = $ticketType['unlimited_seats'];
-					$tickets['state'] = $ticketType['state'];
+					$attendeeFieldsArray['id'] = $attendeeField['id'];
 				}
 				else
 				{
-					$tickets['title'] = $ticketType['title'];
-					$tickets['desc'] = $ticketType['desc'];
-					$tickets['unlimited_seats'] = $ticketType['unlimited_seats'];
-					$tickets['available'] = $ticketType['available'];
-					$tickets['state'] = $ticketType['state'];
-					$tickets['price'] = $ticketType['price'];
+					$attendeeFieldsArray['id'] = '';
 				}
 
-				$tickets['access'] = $ticketType['access'];
+				$attendeeFieldsArray['label'] = $attendeeField['label'];
+				$attendeeFieldsArray['type'] = $attendeeField['type'];
+				$attendeeFieldsArray['core'] = 0;
+				$attendeeFieldsArray['default_selected_option'] = $attendeeField['default_selected_option'];
+				$attendeeFieldsArray['required'] = $attendeeField['required'];
+				$attendeeFieldsArray['eventid'] = $xrefId->id;
+				$attendeeFieldsArray['state'] = 1;
+
+				if (!empty($attendeeFieldsArray['label']))
+				{
+					$string = strtolower($attendeeField['label']);
+					$string = str_replace(' ', '_', $string);
+					$attendeeFieldsArray['name'] = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+					$return = $attendeeFieldsModel->save($attendeeFieldsArray);
+				}
+			}
+
+			// Collecting existing attendee fields
+			foreach ($existingAttendeeFields as $existingAttendeeField)
+			{
+				$existingId[$existingCount] = $existingAttendeeField['id'];
+				$existingCount++;
+
+				foreach ($attendeeFields as $attendeeField)
+				{
+					if ($attendeeField['id'] == $existingAttendeeField['id'])
+					{
+						$newAttendeeField[$newCount] = $attendeeField['id'];
+						$newCount++;
+					}
+				}
+			}
+
+			// Collecting attendee fields to be deleted
+			$invalidAttendeeFieldIds = array_diff($existingId, $newAttendeeField);
+
+			// Deleting attendee fields
+			foreach ($invalidAttendeeFieldIds as $invalidId)
+			{
+				// A check to see if this particular attendee field has any attendee field values against it.
+				$attendeeFieldCheck = $attendeeFieldsModel->checkAttendeeFieldValue($invalidId);
+
+				if (empty($attendeeFieldCheck))
+				{
+					$attendeeFieldsModel->delete($invalidId);
+				}
+				else
+				{
+					$app->enqueueMessage(JText::_('COM_JTICKETING_EVENT_ATENDEE_FIELDS_DELETE_ERROR'), 'warning');
+
+					return false;
+				}
+			}
+
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'tickettypes');
+			$ticketTypesModel = JModelLegacy::getInstance('Tickettypes', 'JticketingModel');
+			$ticketTypes = $ticket_fields;
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'tickettypes');
+			$ticketTypesModel = JModelLegacy::getInstance('Tickettypes', 'JticketingModel');
+			$existingTicketTypes = $ticketTypesModel->getTicketTypes($xrefId->id);
+
+			$tickets = array();
+			$newTicketType = array();
+			$existingId = array();
+			$newCount = 0;
+			$existingCount = 0;
+
+			// Saving new ticket types
+			foreach ($ticketTypes as $ticketType)
+			{
+				if (!empty($ticketType['id']))
+				{
+					$tickets['id'] = $ticketType['id'];
+				}
+				else
+				{
+					$tickets['id'] = '';
+				}
+
+				$tickets['count'] = $ticketType['available'];
+				$tickets['title'] = $ticketType['title'];
+				$tickets['desc'] = $ticketType['desc'];
+				$tickets['unlimited_seats'] = $ticketType['unlimited_seats'];
+				$tickets['available'] = $ticketType['available'];
+				$tickets['state'] = $ticketType['state'];
+				$tickets['price'] = $ticketType['price'];
+
+				if ($com_params->get('show_access_level') == 0)
+				{
+					$tickets['access'] = $com_params->get('default_accesslevels', '1');
+				}
+				else
+				{
+					$tickets['access'] = $ticketType['access'];
+				}
+
 				$tickets['eventid'] = $xrefId->id;
 				$ticketTypesModel->save($tickets);
+			}
+
+			// Collecting existing ticket types
+			foreach ($existingTicketTypes as $existingTicketType)
+			{
+				$existingId[$existingCount] = $existingTicketType['id'];
+				$existingCount++;
+
+				foreach ($ticketTypes as $ticketType)
+				{
+					if ($ticketType['id'] == $existingTicketType['id'])
+					{
+						$newTicketType[$newCount] = $ticketType['id'];
+						$newCount++;
+					}
+				}
+			}
+
+			// Collecting ticket types to be deleted
+			$invalidTicketTypeIds = array_diff($existingId, $newTicketType);
+
+			// Deleting ticket types
+			foreach ($invalidTicketTypeIds as $invalidId)
+			{
+				// A check to see if this particular ticket type has any orders against it.
+				$ticketOrder = $ticketTypesModel->checkOrderExistsTicketType($invalidId);
+
+				if (empty($ticketOrder))
+				{
+					$ticketTypesModel->delete($invalidId);
+				}
+				else
+				{
+					$app->enqueueMessage(JText::_('COM_JTICKETING_EVENT_TICKET_TYPES_DELETE_ERROR'), 'warning');
+
+					return false;
+				}
 			}
 
 		if ($data_edit == 1)
@@ -930,7 +1015,7 @@ class JteventHelper
 	 */
 	public function saveintegration($eventid, $dat)
 	{
-		$db                        = JFactory::getDBO();
+		$db                        = JFactory::getDbo();
 		$integration               = new stdClass;
 		$integration->id           = '';
 		$integration->eventid      = $eventid;
@@ -958,7 +1043,7 @@ class JteventHelper
 	 */
 	public function updateintegration($xrefid, $dat)
 	{
-		$db                        = JFactory::getDBO();
+		$db                        = JFactory::getDbo();
 		$integration               = new stdClass;
 		$integration->id           = $xrefid;
 
@@ -1062,7 +1147,7 @@ class JteventHelper
 	 */
 	public function getEventColumn($event_id,$columns_array)
 	{
-		$db   = JFactory::getDBO();
+		$db   = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
 		$query->select($columns_array);
@@ -1188,7 +1273,7 @@ class JteventHelper
 	 */
 	public function getuserRecommendedUsers($courseId, $userId)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('lr.assigned_to');
 		$query->from('`#__jlike_todos` as lr');
@@ -1239,7 +1324,7 @@ class JteventHelper
 	{
 		if ($eventId)
 		{
-			$db = JFactory::getDBO();
+			$db = JFactory::getDbo();
 			$query = $db->getQuery(true);
 
 			$query->select(
@@ -1272,5 +1357,28 @@ class JteventHelper
 		}
 
 		return false;
+	}
+
+	/**
+	 * Method to get Buyers count
+	 *
+	 * @param   integer  $id  event id
+	 *
+	 * @return  integer
+	 *
+	 * @since   1.6
+	 */
+	public function getBuyersCount($id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query->select('count(ordr.user_id) AS buyersCount');
+		$query->from('#__jticketing_order AS ordr');
+		$query->where('ordr.event_details_id = ' . $id . ' AND ordr.status = "C"');
+		$db->setQuery($query);
+		$buyersCount = $db->loadResult();
+
+		return $buyersCount;
 	}
 }
