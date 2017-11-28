@@ -1,0 +1,299 @@
+/**
+ * Navigation
+ */
+
+.navigation {
+  //width: 100%;
+  margin-left: auto;
+  @include js-enabled {
+    //position: absolute;
+    //top: 48px;
+    //left: 0;
+  }
+
+  @include breakpoint($menu) {
+    margin-left: auto;
+    //position: absolute;
+    //top: 40px;
+
+    @include js-enabled {
+      //top: 40px;
+    }
+  }
+
+  @include breakpoint($delta) {
+    //top: 48px;
+
+    @include js-enabled {
+      //top: 48px;
+    }
+  }
+
+  @include breakpoint($echo) {
+    //width: auto;
+    //top: 0;
+    //left: 96px;
+    //right: 300px + 32px;
+
+    @include js-enabled {
+      //top: 0;
+      //left: 96px;
+      //right: 300px + 32px;
+    }
+  }
+
+  .container {
+    @include breakpoint($menu) {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      height: 60px;
+    }
+
+    @include breakpoint($delta) {
+      height: 64px;
+    }
+  }
+}
+
+.navigation-container {
+  overflow: hidden;
+  @include spacing(horizontal, margin, -1);
+
+  @include breakpoint($menu) {
+    margin: 0;
+  }
+
+  .nav {
+    @include js-enabled {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: color(blue, light);
+      background-image: linear-gradient(to bottom, rgba(black, 0.33) 0%, rgba(black, 0) 50%);
+      @include spacing(all minus top);
+      padding-top: 120px;
+      @include transition(opacity, transform);
+
+      @include breakpoint($menu) {
+        position: static;
+        background: transparent;
+        padding: 0;
+        @include clearfix;
+      }
+    }
+
+    &.rm-closed {
+      display: block;
+      opacity: 0;
+      transform: translateY(-100%);
+      transform-origin: 0 0;
+    }
+
+    &.rm-opened {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &.is-closing {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
+
+  ul {
+    @include reset;
+
+
+    &.rm-opened {
+      position: absolute;
+      top: 48px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9;
+      background-color: color(blue, dark);
+    }
+  }
+
+  li {
+    font-size: 20px;
+    text-decoration: none;
+    padding-top: $spacing-s;
+    padding-bottom: $spacing-s;
+    text-align: center;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+
+    @include breakpoint($menu) {
+      float: left;
+      font-size: 16px;
+      line-height: 1em;
+      padding-top: $spacing-xs;
+      padding-bottom: $spacing-xs;
+      margin-left: $spacing-s;
+      padding-left: $spacing-s;
+
+      + li {
+        border-left: 1px solid white;
+      }
+    }
+
+    @include breakpoint($delta) {
+      font-size: 18px;
+    }
+
+    @include breakpoint($echo) {
+      font-size: 17px;
+      padding-top: $spacing-s;
+      padding-bottom: $spacing-s;
+    }
+
+    @include breakpoint($illusion-grid-maxwidth) {
+      font-size: 19px;
+    }
+
+    ul {
+      display: none;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    text-transform: uppercase;
+
+    @include hover {
+      text-decoration: underline;
+    }
+  }
+
+  .active {
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+.rm-togglebutton {
+  //position: absolute;
+  z-index: 1;
+  //right: 8px;
+  //top: 4px;
+  background: white;
+  border: none;
+  padding: 0 $spacing-s;
+  border-radius: 4px;
+  height: 32px;
+  overflow: hidden;
+
+  .hamburger {
+    margin-top: -1px;
+  }
+}
+
+/**
+ * Submenu
+ *
+ * 1. Clearing floats
+ * 2. Set apart from content
+ * 3. Reset apart styling
+ */
+
+.contentmenu {
+  overflow: hidden; /* 1 */
+  background: color(blue, dark); /* 2 */
+
+  @include breakpoint($menu) {
+    background: transparent; /* 3 */
+  }
+}
+
+.header + .contentmenu {
+  @include spacing(top, margin, -1);
+  @include spacing(bottom, margin);
+  @include spacing(top, padding);
+
+  @include breakpoint($menu) {
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.rm-subtogglebutton {
+  @include reset;
+  @include button-structure;
+  background: white;
+  border-radius: 4px;
+  padding: 8px;
+
+  &.rm-closed {
+    display: none;
+  }
+}
+
+.contentmenu-container {
+  overflow: hidden;
+
+  @include breakpoint($menu) {
+    margin: 0;
+  }
+
+  .nav {
+    margin-top: 16px;
+
+    @include breakpoint($menu) {
+      margin-top: 0;
+    }
+
+    &.rm-closed {
+      display: block;
+      opacity: 0;
+    }
+
+    &.rm-opened {
+      opacity: 1;
+      z-index: 9;
+    }
+  }
+
+  ul {
+    @include reset;
+  }
+
+  li {
+    font-size: 20px;
+    text-decoration: none;
+    padding-top: $spacing-s;
+    padding-bottom: $spacing-s;
+
+    @include breakpoint($menu) {
+      float: left;
+
+      & + li {
+        margin-left: 1em;
+      }
+    }
+
+    ul {
+      display: none;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    color: $color-type;
+
+    @include hover {
+      text-decoration: underline;
+    }
+  }
+
+  .active {
+    a {
+      text-decoration: underline;
+    }
+  }
+}

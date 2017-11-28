@@ -58,21 +58,21 @@ PWTTemplateHelper::localstorageFont();
 				<?php $text = '<span class="logo--brand">Joomla</span>dagen 2018'; ?>
 				<?php echo JHtml::_('link', $url, $text); ?>
             </div>
+
+
+			<?php if ($this->countModules('mainmenu')) : ?>
+                <div class="navigation">
+                    <nav class="navigation-container" role="navigation" aria-label="Hoofdmenu">
+                        <jdoc:include type="modules" name="mainmenu" style="none"/>
+                    </nav>
+                </div>
+			<?php endif; ?>
         </div>
     </div>
 </div>
-<?php if ($this->countModules('mainmenu')) : ?>
-    <div class="navigation">
-        <div class="container">
-            <nav class="navigation-container" role="navigation" aria-label="Hoofdmenu">
-                <jdoc:include type="modules" name="mainmenu" style="none"/>
-            </nav>
-        </div>
-    </div>
-<?php endif; ?>
 
 <main role="main" id="content">
-<jdoc:include type="component"/>
+    <jdoc:include type="component"/>
 </main>
 
 <footer class="footer" role="contentinfo">
@@ -94,12 +94,12 @@ PWTTemplateHelper::localstorageFont();
 </div>
 
 <script type="text/javascript">
-//    responsivemenu.init({
-//        wrapper: document.querySelector('.navigation-container'),
-//        togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
-//        before_element: document.querySelector('.logo'),
-//        subtogglecontent: ' '
-//    });
+    responsivemenu.init({
+        wrapper: document.querySelector('.navigation-container'),
+        togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
+        //before_element: document.querySelector('.logo'),
+        subtogglecontent: ' '
+    });
 
     var bLazy = new Blazy({
         selector: '.lazyload img',
