@@ -94,12 +94,12 @@ PWTTemplateHelper::localstorageFont();
 </div>
 
 <script type="text/javascript">
-	<?php /*    responsivemenu.init({
-        wrapper: document.querySelector('.navigation-container'),
-        togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
-    });
- */ ?>
-
+//    responsivemenu.init({
+//        wrapper: document.querySelector('.navigation-container'),
+//        togglecontent: '<span class="toggle-text">menu</span><span class="hamburger"><span class="bar1"></span><span class="bar2"></span><span class="bar3"></span></span>',
+//        before_element: document.querySelector('.logo'),
+//        subtogglecontent: ' '
+//    });
 
     var bLazy = new Blazy({
         selector: '.lazyload img',
