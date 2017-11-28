@@ -53,6 +53,14 @@
   }
 }
 
+.module__nieuws {
+  @include spacing(top, margin, 1);
+
+  .module__header {
+    text-align: center;
+  }
+}
+
 .module__location {
   @include spacing(top, margin, 1);
   @include spacing(bottom, margin, 2);
