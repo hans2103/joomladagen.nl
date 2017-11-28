@@ -75,7 +75,7 @@ class JTicketingModelAttendeefields extends JModelAdmin
 	 * @param   string  $prefix  True if the form is to load its own data (default case), false if not.
 	 * @param   array   $config  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  table 
+	 * @return  table
 	 *
 	 * @since   1.6
 	 */
@@ -228,5 +228,32 @@ class JTicketingModelAttendeefields extends JModelAdmin
 				return $details;
 			}
 		}
+	}
+
+	/**
+	 * check for attendee field values
+	 *
+	 * @param   integer  $attendeeFieldId  id for the attendee field
+	 *
+	 * @return integer   $res           id if there exists attendee field value against it
+	 *
+	 * @since  2.1
+	 */
+	public function checkAttendeeFieldValue($attendeeFieldId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__jticketing_attendee_field_values'));
+
+		if (!empty($attendeeFieldId))
+		{
+			$query->where($db->quoteName('field_id') . ' = ' . $db->quote($attendeeFieldId));
+		}
+
+		$db->setQuery($query);
+		$res = $db->loadResult();
+
+		return $res;
 	}
 }

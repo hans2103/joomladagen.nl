@@ -86,7 +86,7 @@ if ($saveOrder)
 	if (empty($this->items ))
 	{
 		?>
-		<div class="alert alert-info" role="alert>
+		<div class="alert alert-info" role="alert">
 		<?php echo JText::_('NODATA'); ?>
 		</div>
 		<?php

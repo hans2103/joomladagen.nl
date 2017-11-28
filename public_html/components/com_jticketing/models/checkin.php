@@ -94,20 +94,26 @@ class JticketingModelCheckin extends JModelAdmin
 		$state = isset($data['state']) ? $data['state'] : 0;
 		$event = isset($data['event_obj']) ? $data['event_obj'] : '';
 
-		if (empty($event) && isset($data['eventid']))
-		{
-			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_jticketing/models');
-			$eventModel = JModelLegacy::getInstance('EventForm', 'JticketingModel');
-			$event = $eventModel->getItem($data['eventid']);
-		}
-
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_jticketing/models');
+
 		$modelOrderItem = JModelLegacy::getInstance('OrderItem', 'JticketingModel');
-		$orderItemData = $modelOrderItem->getItem($orderItemId);
+		$orderItemData  = $modelOrderItem->getItem($orderItemId);
+
+		if (empty($event) && isset($data['eventid']) || $orderItemData->event_details_id)
+		{
+			$eventid     = isset($data['eventid']) ? $data['eventid'] : $orderItemData->event_details_id;
+			$eventModel = JModelLegacy::getInstance('EventForm', 'JticketingModel');
+			$event      = $eventModel->getItem($eventid);
+		}
 
 		if ($orderItemData->status != 'C')
 		{
 			return;
+		}
+
+		if (empty($event))
+		{
+			return false;
 		}
 
 		$tableCheckin = $this->getTable("Checkin", "JTicketingTable");
@@ -117,17 +123,12 @@ class JticketingModelCheckin extends JModelAdmin
 
 		// Here orderItemId consider as unique ticketid in checkin details
 		$checkinData['ticketid']     = $orderItemId;
-		$checkinData['checkintime']  = isset($event->checkintime) ? $event->checkintime : '';
-		$checkinData['checkouttime'] = isset($event->checkouttime) ? $event->checkouttime : '';
-		$checkinData['spend_time']   = isset($event->spend_time) ? $event->spend_time : '';
-
-		if (empty($checkinData['spend_time']))
-		{
-			$checkinData['spend_time'] = strtotime($checkinData['checkintime']) + strtotime($checkinData['checkouttime']);
-		}
-
+		$checkinData['checkintime']  = isset($event->checkintime) ? $event->checkintime : $event->startdate;
+		$checkinData['checkouttime'] = isset($event->checkouttime) ? $event->checkouttime : $event->enddate;
+		$checkinData['spend_time']   = isset($event->spend_time) ? $event->spend_time
+									: strtotime($checkinData['checkouttime']) - strtotime($checkinData['checkintime']);
 		$checkinData['checkin']      = $state;
-		$checkinData['eventid']      = $orderItemData->event_details_id;
+		$checkinData['eventid']      = isset($eventid) ? $eventid : $event->eventId;
 		$checkinData['attendee_id']  = $orderItemData->user_id;
 		$checkinData['attendee_email'] = !empty($orderItemData->email) ? $orderItemData->email : JFactory::getUser($orderItemData->user_id)->email;
 		$checkinData['attendee_name']  = !empty($orderItemData->name) ? $orderItemData->name : JFactory::getUser($orderItemData->user_id)->name;

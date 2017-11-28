@@ -179,7 +179,7 @@
 
 </div>
 
-<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&key=<?php echo $this->googleMapApiKey;?>" type="text/javascript"></script>
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places&key=<?php echo $this->googleMapApiKey;?>" type="text/javascript"></script>
 <script type="text/javascript">
 
 	// Google Map autosuggest  for location

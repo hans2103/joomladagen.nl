@@ -264,9 +264,9 @@ class JticketingModelOrder extends JModelAdmin
 		}
 
 		$ordData['coupon_code']             = $orderdata['coupon_code'];
-		$ordData['coupon_discount']         = $orderdata['coupon_discount'];
+		$ordData['coupon_discount']         = $this->jticketingmainhelper->getRoundedPrice($orderdata['coupon_discount']);
 		$ordData['coupon_discount_details'] = $orderdata['coupon_discount_details'];
-		$ordData['order_tax']               = $orderdata['order_tax'];
+		$ordData['order_tax']               = $this->jticketingmainhelper->getRoundedPrice($orderdata['order_tax']);
 		$ordData['order_tax_details']       = $orderdata['order_tax_details'];
 		$ordData['cdate']                   = JFactory::getDate()->toSql();
 		$ordData['mdate']                   = JFactory::getDate()->toSql();
@@ -295,9 +295,9 @@ class JticketingModelOrder extends JModelAdmin
 		$ordData['status'] = 'P';
 
 		// This is calculated amount
-		$ordData['original_amount'] = $orderdata['original_amt'];
-		$ordData['amount']          = $orderdata['amount'];
-		$ordData['fee']             = $orderdata['fee'];
+		$ordData['original_amount'] = $this->jticketingmainhelper->getRoundedPrice($orderdata['original_amt']);
+		$ordData['amount']          = $this->jticketingmainhelper->getRoundedPrice($orderdata['amount']);
+		$ordData['fee']             = $this->jticketingmainhelper->getRoundedPrice($orderdata['fee']);
 		$ordData['ip_address']      = $_SERVER["REMOTE_ADDR"];
 
 		if (parent::save($ordData))

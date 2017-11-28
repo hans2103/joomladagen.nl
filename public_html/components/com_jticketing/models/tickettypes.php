@@ -96,4 +96,54 @@ class JTicketingModelTickettypes extends JModelAdmin
 
 		return $this->item;
 	}
+
+	/**
+	 * get ticket types of the event
+	 *
+	 * @param   integer  $xrefId  id for the event in integration table
+	 *
+	 * @return integer   $db        ticket types ids
+	 *
+	 * @since  2.1
+	 */
+	public function getTicketTypes($xrefId)
+	{
+		$db = JFactory::getDbo();
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__jticketing_types'));
+		$query->where($db->quoteName('eventid') . ' = ' . $db->quote($xrefId));
+		$db->setQuery($query);
+
+		return $db->loadAssocList();
+	}
+
+	/**
+	 * check for orders for this ticket type
+	 *
+	 * @param   integer  $ticketTypeId  id for the ticket type
+	 *
+	 * @return integer   $res           id if there exists order against it
+	 *
+	 * @since  2.1
+	 */
+	public function checkOrderExistsTicketType($ticketTypeId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id');
+		$query->from($db->quoteName('#__jticketing_order_items'));
+
+		if (!empty($ticketTypeId))
+		{
+			$query->where($db->quoteName('type_id') . ' = ' . $db->quote($ticketTypeId));
+		}
+
+		$db->setQuery($query);
+		$res = $db->loadResult();
+
+		return $res;
+	}
 }

@@ -150,10 +150,10 @@ if($integration==1) //if Jomsocial show JS Toolbar Header
 						 <a href="<?php echo $link;?>"><?php echo ucfirst($data->title);?></a>
 					  </td>
 					  <td align="center" data-title="<?php echo JText::_('NUMBEROFTICKETS_SOLD');?>"><?php echo $data->eticketscount ?></td>
-					  <td align="center" data-title="<?php echo JText::_('EARNINGTOTAL_AMOUNT');?>"><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->eamount),2),$currency); ?></td>
-					  <td align="center" data-title="<?php echo JText::_('COMMISSION');?>"><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($data->ecommission),2),$currency); ?></td>
+					  <td align="center" data-title="<?php echo JText::_('EARNINGTOTAL_AMOUNT');?>"><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->eamount),2),$currency); ?></td>
+					  <td align="center" data-title="<?php echo JText::_('COMMISSION');?>"><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($data->ecommission),2),$currency); ?></td>
 					  <td align="center" data-title="<?php echo JText::_('TOTAL_AMOUNT');?>"><?php	$subtotalearn=$data->eamount-$data->ecommission;
-						 echo $jticketingmainhelper->getFromattedPrice( number_format(($subtotalearn),2),$currency); ?>
+						 echo $jticketingmainhelper->getFormattedPrice( number_format(($subtotalearn),2),$currency); ?>
 					  </td>
 				   </tr>
 				   <?php $i++;} ?>
@@ -162,9 +162,9 @@ if($integration==1) //if Jomsocial show JS Toolbar Header
 						 <div class="jtright hidden-xs hidden-sm"><b><?php echo JText::_('TOTAL');?></b></div>
 					  </td>
 					  <td data-title="<?php echo JText::_('TOTAL_NUMBEROFTICKETS_SOLD');?>"><b><?php echo number_format($totalnooftickets, 0, '', '');?></b></td>
-					  <td data-title="<?php echo JText::_('EARNINGTOTAL_AMOUNT');?>"><b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalprice),2),$currency); ?></b></td>
-					  <td data-title="<?php echo JText::_('COMMISSION');?>"><b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalcommission),2),$currency); ?></b></td>
-					  <td data-title="<?php echo JText::_('TOTAL_AMOUNT');?>"><b><?php echo $jticketingmainhelper->getFromattedPrice( number_format(($totalearn),2),$currency); ?></b></td>
+					  <td data-title="<?php echo JText::_('EARNINGTOTAL_AMOUNT');?>"><b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalprice),2),$currency); ?></b></td>
+					  <td data-title="<?php echo JText::_('COMMISSION');?>"><b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalcommission),2),$currency); ?></b></td>
+					  <td data-title="<?php echo JText::_('TOTAL_AMOUNT');?>"><b><?php echo $jticketingmainhelper->getFormattedPrice( number_format(($totalearn),2),$currency); ?></b></td>
 				   </tr>
 				 </table>
 			 </div>

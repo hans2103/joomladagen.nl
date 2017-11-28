@@ -32,7 +32,7 @@ class JticketingModelEvents extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'ordering', 'a.ordering',
-				'published', 'a.published',
+				'state', 'a.state',
 				'title', 'a.title',
 				'catid', 'a.catid',
 				'created_by', 'a.created_by',
@@ -158,6 +158,10 @@ class JticketingModelEvents extends JModelList
 		// Join over the user field 'created_by'
 		$query->select('created_by.name AS created_by');
 		$query->join('LEFT', '#__users AS created_by ON created_by.id = a.created_by');
+
+		// Join over the xref field 'checkin'
+		$query->select('jt_xref.checkin AS attended_count');
+		$query->join('LEFT', '#__jticketing_integration_xref AS jt_xref ON jt_xref.eventid = a.id');
 
 		$online_offline = $this->getState('filter.online_offline');
 

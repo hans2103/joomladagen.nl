@@ -182,12 +182,12 @@ if (empty($this->lists['search_event']))
 							<?php echo $data->ticketscount ?>
 						</td>
 						<td align="center">
-							<?php  echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->original_amount),2),$this->currency);?>
+							<?php  echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->original_amount),2),$this->currency);?>
 						</td>
 						<td align="center">
 							<?php
 							$subdisc += $discount = $data->coupon_discount;
-							echo $this->jticketingmainhelper->getFromattedPrice( number_format(($discount), 2), $this->currency);
+							echo $this->jticketingmainhelper->getFormattedPrice( number_format(($discount), 2), $this->currency);
 							?>
 						</td>
 						<?php
@@ -195,7 +195,7 @@ if (empty($this->lists['search_event']))
 						{
 							?>
 							<td align="center">
-								<?php  echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->order_tax),2),$this->currency);?>
+								<?php  echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->order_tax),2),$this->currency);?>
 							</td>
 							<?php
 						}
@@ -203,12 +203,12 @@ if (empty($this->lists['search_event']))
 						<td align="center">
 							<?php
 							$subpaid += $data->paid_amount;
-							echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->paid_amount), 2),$this->currency);?>
+							echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->paid_amount), 2),$this->currency);?>
 						</td>
 						<td align="center">
 							<?php
 							$subFee += $data->fee;
-							echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->fee), 2), $this->currency);?>
+							echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->fee), 2), $this->currency);?>
 						</td>
 						<td align="center">
 							<?php
@@ -249,26 +249,26 @@ if (empty($this->lists['search_event']))
 						<b><?php echo number_format($totalNoOfTickets, 0, '', '');?></b>
 					</td>
 					<td align="center">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($totalPrice),2),$this->currency);?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($totalPrice),2),$this->currency);?></b>
 					</td>
 					<td align="center">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($subdisc),2),$this->currency);?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($subdisc),2),$this->currency);?></b>
 					</td>
 					<?php
 					if ($this->jticketingparams->get('allow_taxation'))
 					{
 						?>
 						<td align="center">
-							<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($totalTax),2),$this->currency);?></b>
+							<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($totalTax),2),$this->currency);?></b>
 						</td>
 						<?php
 					}
 					?>
 					<td align="center">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($subpaid),2),$this->currency);?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($subpaid),2),$this->currency);?></b>
 					</td>
 					<td align="center">
-						<b><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($subFee),2),$this->currency);?></b>
+						<b><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($subFee),2),$this->currency);?></b>
 					</td>
 					<td align="center" colspan="3"></td>
 				</tr>

@@ -637,7 +637,7 @@ class JticketingModelcp extends JModelLegacy
 
 		// Get the update sites for current extension
 		$query = $db->getQuery(true)->select($db->qn('update_site_id'))->from($db->qn('#__update_sites_extensions'));
-		$query = $query . $db->getQuery(true)->where($db->qn('extension_id') . ' = ' . $db->q($extension_id));
+		$query->where($db->qn('extension_id') . ' = ' . $db->q($extension_id));
 		$db->setQuery($query);
 
 		$updateSiteIDs = $db->loadColumn(0);
@@ -667,7 +667,7 @@ class JticketingModelcp extends JModelLegacy
 				$aSite = $db->loadObject();
 
 				// Does the name and location match?
-				if (($aSite->name == $update_site['name']) && ($aSite->location == $update_site['location']))
+				if (!empty($aSite) && ($aSite->name == $update_site['name']) && ($aSite->location == $update_site['location']))
 				{
 					// Do we have the extra_query property (J 3.2+) and does it match?
 					if (property_exists($aSite, 'extra_query'))
@@ -730,7 +730,7 @@ class JticketingModelcp extends JModelLegacy
 	public function getDashboardData()
 	{
 		$db = $this->getDbo();
-		$dashboadData = array();
+		$dashboardData = array();
 		$today = date("Y-m-d");
 		JLoader::import('main', JPATH_SITE . '/components/com_jticketing/helpers');
 		$jticketingMainHelper = new Jticketingmainhelper;
@@ -743,8 +743,8 @@ class JticketingModelcp extends JModelLegacy
 		$query->from($db->quoteName('#__jticketing_integration_xref', 'i'));
 		$query->where($db->quoteName('i.source') . ' = ' . $db->quote($source));
 		$db->setQuery($query);
-		$dashboadData['totalEvents'] = $db->loadResult();
-		$dashboadData['integrationSource'] = $source;
+		$dashboardData['totalEvents'] = $db->loadResult();
+		$dashboardData['integrationSource'] = $source;
 
 		// Fetching ongoing events count
 		$query = $db->getQuery(true);
@@ -754,7 +754,7 @@ class JticketingModelcp extends JModelLegacy
 		$query->where($db->quoteName('i.source') . ' = ' . $db->quote($source));
 		$query->where($db->quoteName('e.startdate') . ' = ' . $db->quote($today));
 		$db->setQuery($query);
-		$dashboadData['ongoingEvents'] = $db->loadResult();
+		$dashboardData['ongoingEvents'] = $db->loadResult();
 
 		// Fetching past events count
 		$query = $db->getQuery(true);
@@ -764,7 +764,7 @@ class JticketingModelcp extends JModelLegacy
 		$query->where($db->quoteName('i.source') . ' = ' . $db->quote($source));
 		$query->where($db->quoteName('e.startdate') . ' < ' . $db->quote($today));
 		$db->setQuery($query);
-		$dashboadData['pastEvents'] = $db->loadResult();
+		$dashboardData['pastEvents'] = $db->loadResult();
 
 		// Fetching upcoming events count
 		$query = $db->getQuery(true);
@@ -774,19 +774,23 @@ class JticketingModelcp extends JModelLegacy
 		$query->where($db->quoteName('i.source') . ' = ' . $db->quote($source));
 		$query->where($db->quoteName('e.startdate') . ' >= ' . $db->quote($today));
 		$db->setQuery($query);
-		$dashboadData['upcomingEvents'] = $db->loadResult();
+		$dashboardData['upcomingEvents'] = $db->loadResult();
 
 		// Fetching Attendee count
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_jticketing/models', 'attendee_List');
 		$jtickeitngModelAttendeeList = JModelLegacy::getInstance('attendee_List', 'JticketingModel');
-		$attendeeRecords = $jtickeitngModelAttendeeList->getItems();
-		$dashboadData['totalAttendees'] = count($attendeeRecords);
+		$attendeeRecords             = $jtickeitngModelAttendeeList->getItems();
+		$attendeeRecordsCount        = $jtickeitngModelAttendeeList->getTotal();
+
+		$dashboardData['totalAttendees'] = $attendeeRecordsCount;
 
 		// Fetching all orders count
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_jticketing/models', 'orders');
 		$jtickeitngModelOrders = JModelLegacy::getInstance('orders', 'JticketingModel');
-		$ordersRecords = $jtickeitngModelOrders->getItems();
-		$dashboadData['totalOrders'] = count($ordersRecords);
+		$ordersRecords         = $jtickeitngModelOrders->getItems();
+		$ordersRecordCount     = $jtickeitngModelOrders->getTotal();
+
+		$dashboardData['totalOrders'] = $ordersRecordCount;
 
 		// Fetching commission amount
 		$commissionAmount = 0;
@@ -802,8 +806,8 @@ class JticketingModelcp extends JModelLegacy
 			}
 		}
 
-		$dashboadData['commissionAmount'] = $commissionAmount;
+		$dashboardData['commissionAmount'] = $commissionAmount;
 
-		return $dashboadData;
+		return $dashboardData;
 	}
 }

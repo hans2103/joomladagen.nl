@@ -110,7 +110,7 @@ class JticketingHelper
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_EVENT_GROUP_MENU'), $event_field_group_view, $client_event_groups == 1);
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_ATTENDEE_FIELD_MENU'), $attendee_field_view, $client_ticket_fields == 1);
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_ATTENDEE_FIELDS_GROUP'), $attendee_field_group_view, $client_ticket_groups == 1);
-			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_GLOBAL_ATTENDEE_FIELDS'), $ticket_attendee_view, $vName == "attendeecorefields");
+			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_CORE_ATTENDEE_FIELDS'), $ticket_attendee_view, $vName == "attendeecorefields");
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_VENDORS'), $vendor_view, $vName == "vendors");
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_COUNTRIES'), $country_view, $vName == "countries");
 			JHtmlSidebar::addEntry(JText::_('COM_JTICKETING_REGIONS'), $regions_view, $vName == "regions");
@@ -182,5 +182,9 @@ class JticketingHelper
 		JText::script('COM_JTICKETING_DATE_ERROR_MSG');
 		JText::script('COM_JTICKETING_NO_VENUE_ERROR_MSG');
 		JText::script('COM_JTICKETING_NO_ONLINE_VENUE_ERROR');
+		JText::script('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG1');
+		JText::script('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2');
+		JText::script('COM_JTICKETING_VENDOR_FORM_LINK');
+		JText::script('COM_JTICKETING_VALIDATE_ROUNDED_PRICE');
 	}
 }

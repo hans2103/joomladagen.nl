@@ -129,9 +129,11 @@ function checkeventselected()
 				return;
 			}
 			?>
+			<br>
+			<div class="alert alert-info jtleft"><?php echo JText::_( 'JT_TICKET_NOTE' ); ?></div>
+
 			<div class="table-responsive">
 				<table class="table table-striped table-hover">
-					<tr><td colspan="12"><div class="alert alert-info jtleft"><?php echo JText::_( 'JT_TICKET_NOTE' ); ?></div></td></tr>
 					<tr >
 						<th width="1%" >
 							<input type="checkbox" name="toggle" value="" onclick="Joomla.checkAll(this);" />

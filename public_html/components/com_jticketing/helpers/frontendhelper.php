@@ -113,7 +113,17 @@ class Jticketingfrontendhelper
 			{
 				$enroll = 1;
 
-				if (!$isboughtEvent)
+				if ($integration == 2)
+				{
+					$displayEnrollButton = 0;
+
+					if (!empty($eventdata->online_events) == 1 && (!empty($isboughtEvent) || $eventdata->created_by == $userid))
+					{
+						$displayEnrollButton = 1;
+					}
+				}
+
+				if (!$isboughtEvent && $displayEnrollButton != 1)
 				{
 					$itemid = JFactory::getApplication()->input->get('Itemid');
 					$enrollTicketLink = JRoute::_('index.php?option=com_jticketing&task=order.createOrderAPI&eventid=' . $eventid . '&Itemid=' . $itemid, false);
@@ -621,34 +631,6 @@ class Jticketingfrontendhelper
 		$result = $model->getEventsCats();
 
 		return $result;
-	}
-
-	/**
-	 * This is function is used to delete ticket types
-	 *
-	 * @param   int  $price       price
-	 * @param   int  $curr        currency format
-	 * @param   int  $formatting  formatting 1
-	 *
-	 * @return  void
-	 *
-	 * @since   1.0
-	 */
-	public function getFromattedPrice($price, $curr = null, $formatting = 1)
-	{
-		$db                         = JFactory::getDBO();
-		$params                     = JComponentHelper::getParams('com_jticketing');
-		$curr_sym                   = $params->get("currency_symbol");
-		$curr_nam                   = $params->get("currency");
-		$currency_display_format    = $params->get('currency_display_format', "{CURRENCY_SYMBOL} {AMOUNT} ");
-		$price                      = intval(str_replace(',', '', $price));
-		$price                      = number_format($price, 2);
-		$currency_display_formatstr = str_replace('{AMOUNT}', $price, $currency_display_format);
-		$currency_display_formatstr = str_replace('{CURRENCY_SYMBOL}', $curr_sym, $currency_display_formatstr);
-		$currency_display_formatstr = str_replace('{CURRENCY}', $curr_nam, $currency_display_formatstr);
-		$html                       = $currency_display_formatstr;
-
-		return $html;
 	}
 
 	/**
@@ -1980,7 +1962,7 @@ class Jticketingfrontendhelper
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models');
 			$jticketingTickettypesModel = JModelLegacy::getInstance('Tickettypes', 'JticketingModel');
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/tables', 'Tickettypes');
-			$ticketData = $jticketingTickettypesModel->getTicketTypeFields($xrefId->id);
+			$ticketData = $jticketingTickettypesModel->getTicketTypes($xrefId->id);
 			$attendeeFieldModel = JModelLegacy::getInstance('Attendeefields', 'JTicketingModel');
 			$attendeeCoreFieldModel = JModelLegacy::getInstance('Attendeecorefields', 'JTicketingModel');
 			$attendeeData = $attendeeCoreFieldModel->getAttendeeFields($xrefId->id);

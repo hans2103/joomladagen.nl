@@ -6,8 +6,8 @@
 	<authorUrl>http://www.techjoomla.com</authorUrl>
 	<copyright>(c) Techjoomla</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<creationDate>26th Jul 2017</creationDate>
-	<version>2.0.4</version>
+	<creationDate>17th Nov 2017</creationDate>
+	<version>2.0.10</version>
 	<description>Module to show JTicketing Events(Only for Native Integration)</description>
 	<languages folder="languages">
 		<language tag="en-GB">en-GB/en-GB.mod_jticketing_event.ini</language>

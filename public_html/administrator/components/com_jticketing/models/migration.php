@@ -52,9 +52,6 @@ class JticketingModelMigration extends InstallerModelDatabase
 		JLoader::import('main', JPATH_SITE . '/components/com_jticketing/helpers');
 		$jticketingMainHelper  = new Jticketingmainhelper;
 
-		JLoader::import('frontendhelper', JPATH_SITE . '/components/com_jticketing/helpers');
-		$jticketingFrontendHelper = new Jticketingfrontendhelper;
-
 		require_once JPATH_SITE . '/plugins/system/jticketingactivities/helper.php';
 		$plgSystemJticketingActivities = new PlgSystemJticketingActivitiesHelper;
 
@@ -96,7 +93,7 @@ class JticketingModelMigration extends InstallerModelDatabase
 
 			$objectData = array();
 			$objectData['type'] = $eventType;
-			$objectData['amount'] = str_replace("&nbsp;", "", strip_tags($jticketingFrontendHelper->getFromattedPrice($orderDetails->amount)));
+			$objectData['amount'] = str_replace("&nbsp;", "", strip_tags($jticketingMainHelper->getFormattedPrice($orderDetails->amount)));
 			$activityData['object'] = json_encode($objectData);
 			$activityData['object_id'] = 'order';
 

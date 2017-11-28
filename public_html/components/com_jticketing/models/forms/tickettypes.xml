@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
+	<fieldset addfieldpath ="/administrator/components/com_jticketing/models/fields">
 		<field
 				name="id"
 				type="hidden"
@@ -31,11 +31,11 @@
 
 		<field
 				name="price"
-				type="text"
+				type="price"
 				label="COM_JTICKETING_TICKET_PRICE"
 				description="COM_JTICKETING_TICKET_PRICE_DESC"
 				size="40"
-				class="inputbox"
+				class="price inputbox validate-positive-number form-control"
 				filter="integer"
 				default="0"
 				/>

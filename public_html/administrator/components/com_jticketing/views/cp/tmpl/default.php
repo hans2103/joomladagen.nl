@@ -22,7 +22,7 @@ $document->addStyleSheet(JUri::root(true) . '/media/com_jticketing/css/jticketin
 $document->addScript(JUri::root(true) . '/media/com_jticketing/vendors/js/morris.min.js');
 $document->addScript(JUri::root(true) . '/media/com_jticketing/vendors/js/raphael.min.js');
 
-$jticketingfrontendhelper = new Jticketingfrontendhelper;
+$jticketingMainhelper = new Jticketingmainhelper;
 $i = 0;
 
 foreach ($this->allMonthName as $allMonthName)
@@ -201,7 +201,7 @@ else
 											</div>
 											<div class="col-xs-9 text-right">
 												<div class="huge">
-													<span><?php echo $jticketingfrontendhelper->getFromattedPrice($this->dashboardData['commissionAmount']);?></span>
+													<span><?php echo $jticketingMainhelper->getFormattedPrice($this->dashboardData['commissionAmount']);?></span>
 												</div>
 												<div><?php echo JText::_('COM_JTICKETING_DASHBOARD_COMMISSION_AMOUNT');?></div>
 											</div>
@@ -382,7 +382,7 @@ else
 															<tr>
 																<td><?php echo wordwrap($this->escape($topFiveEvents->title),15,"<br>\n");?></td>
 																<td>
-																	<?php echo $jticketingfrontendhelper->getFromattedPrice($topFiveEvents->salesAmount);?>
+																	<?php echo $jticketingMainhelper->getFormattedPrice($topFiveEvents->salesAmount);?>
 																</td>
 																<td>
 																	<?php echo $topFiveEvents->orderCount;?>

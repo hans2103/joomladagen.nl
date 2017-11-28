@@ -141,7 +141,7 @@ if($this->issite)
 							{
 								if ($eventData->venue != "0")
 								{
-									echo $eventData->name . " : " . JText::_('COM_JTICKETING_BILLIN_ADDR') .  "- " . $eventData->address;
+									echo $eventData->name . " - " . $eventData->address;
 								}
 								else
 								{

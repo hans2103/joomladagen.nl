@@ -204,7 +204,7 @@ class JticketingViewEvent extends JViewLegacy
 
 		// Google Map Data
 		$address = str_replace(" ", "+", $this->item->event_address);
-		$url = "http://maps.google.com/maps/api/geocode/json?address=$address&sensor=true";
+		$url = "https://maps.google.com/maps/api/geocode/json?address=$address";
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

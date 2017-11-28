@@ -19,8 +19,9 @@ jimport('joomla.html.html');
 jimport('joomla.html.parameter');
 jimport('joomla.utilities.date');
 jimport('techjoomla.tjnotifications.tjnotifications');
-JLoader::import('time', JPATH_SITE . '/components/com_jticketing/helpers');
+jimport('techjoomla.tjmoney.tjmoney');
 
+JLoader::import('time', JPATH_SITE . '/components/com_jticketing/helpers');
 use Dompdf\Dompdf;
 
 /**
@@ -295,18 +296,46 @@ class Jticketingmainhelper
 	 *
 	 * @return  html    formated like 3$ or $3
 	 */
-	public function getFromattedPrice($price, $curr = null)
+	public function getFormattedPrice($price, $curr = null)
 	{
-		$curr_sym                   = $this->getCurrencySymbol();
-		$params                     = JComponentHelper::getParams('com_jticketing');
-		$currency_display_format    = $params->get('currency_display_format');
-		$currency_display_formatstr = '';
-		$currency_display_formatstr = str_replace('{AMOUNT}', "&nbsp;" . $price, $currency_display_format);
-		$currency_display_formatstr = str_replace('{CURRENCY_SYMBOL}', "&nbsp;" . $curr_sym, $currency_display_formatstr);
+		$params = JComponentHelper::getParams('com_jticketing');
+
+		$currencyCode = $params->get('currency', '', 'STRING');
+		$currencyCodeOrSymbol = $params->get('currency_code_or_symbol', 'code', 'STRING');
+		$currencyDisplayFormat = $params->get('currency_display_format', '', 'STRING');
+
+		$config = new JRegistry;
+		$config->CurrencyDisplayFormat = $currencyDisplayFormat;
+		$config->CurrencyCodeOrSymbol = $currencyCodeOrSymbol;
+
+		$tjCurrency = new TjMoney($currencyCode);
+
+		// Get formatted output to display directly
+		$formattedAmount = $tjCurrency->displayFormattedValue($price, $config);
 		$html                       = '';
-		$html                       = "<span>" . $currency_display_formatstr . "</span>";
+		$html                       = "<span>" . $formattedAmount . "</span>";
 
 		return $html;
+	}
+
+	/**
+	 * Get rounded price
+	 *
+	 * @param   float  $price  price
+	 *
+	 * @return  html   formated like 3$ or $3
+	 */
+	public function getRoundedPrice($price)
+	{
+		$params = JComponentHelper::getParams('com_jticketing');
+		$currencyCode = $params->get('currency', '', 'STRING');
+
+		$tjCurrency = new TjMoney($currencyCode);
+
+		// Get rounded output to display directly
+		$roundedAmount = $tjCurrency->getRoundedValue($price);
+
+		return $roundedAmount;
 	}
 
 	/**
@@ -551,6 +580,7 @@ class Jticketingmainhelper
 			$query->from($db->quoteName('#__menu'));
 			$query->where($db->quoteName('link') . ' LIKE ' . $db->Quote('%' . $link . '%'));
 			$query->where($db->quoteName('published') . '=' . $db->Quote(1));
+			$query->where($db->quoteName('client_id') . '=' . $db->Quote(0));
 			$query->setLimit(1);
 			$db->setQuery($query);
 			$itemid = $db->loadResult();
@@ -848,10 +878,7 @@ class Jticketingmainhelper
 			{
 				if ($data->venue != "0")
 				{
-					$name = $location_data->name . " : " . JText::_('COM_JTICKETING_BILLIN_ADDR') . "- " . $location_data->address;
-					$city = ", " . $location_data->city . ", " . $location_data->region . ", " . $location_data->coutryName;
-					$zipcode = ", " . JText::_('COM_JTICKETING_FORM_LBL_VENUE_ZIPCODE') . " - " . $location_data->zipcode;
-					$location = $name . $city . $zipcode;
+					$location = $location_data->name . " - " . $location_data->address;
 				}
 				else
 				{
@@ -928,7 +955,7 @@ class Jticketingmainhelper
 		}
 
 		// Create QR Image Using Google Graphs
-		$qrstring                 = "Booking ID:" . JText::_("TICKET_PREFIX") . $data->id . '-' . $data->order_items_id;
+		$ticket_id = $qrstring = $data->ticket_id;
 		$qrstring                 = urlencode($qrstring);
 		$qr_url                   = "http://chart.apis.google.com/chart?cht=qr&chs=";
 		$qrimage                  = $qr_url . $qr_code_width . "x" . $qr_code_height . "&chl=" . $qrstring . "&chld=H|0";
@@ -941,7 +968,7 @@ class Jticketingmainhelper
 		$msg['event_end_date']    = $ev_enddate;
 		$msg['event_description'] = $description;
 		$msg['event_location']    = $location;
-		$msg['ticket_id']         = JText::_("TICKET_PREFIX") . $data->id . '-' . $data->order_items_id;
+		$msg['ticket_id']         = $ticket_id;
 
 		if (isset($data->ticketprice))
 		{
@@ -2004,17 +2031,24 @@ class Jticketingmainhelper
 			return '';
 		}
 
-		$query = "SELECT ordertble.cdate AS cdate,orderitem.order_id As id,ordertble.name AS name,ordertble.user_id,ordertble.amount AS amount,
-		ticket_types.price,ticket_types.price AS totalamount,
-		ticket_types.title AS ticket_type_title,ticket_types.count AS ticket_type_count,
-		ticket_types.desc AS ticket_type_desc,orderitem.type_id AS type_id,orderitem.ticketcount AS ticketscount,
-		ordertble.status AS STATUS,orderitem.type_id,orderitem.attendee_id AS attendee_id,orderitem.id AS order_items_id
-		FROM #__jticketing_order AS ordertble,#__jticketing_order_items AS orderitem,#__jticketing_types AS ticket_types
-		WHERE ticket_types.eventid=ordertble.event_details_id AND ticket_types.id=orderitem.type_id
-		AND orderitem.order_id=ordertble.id AND orderitem.id=" . $ticketid . " AND ordertble.event_details_id=" . $evxref_id;
+		$query = $db->getQuery(true);
+		$query->select('ordertble.cdate AS cdate,orderitem.order_id As id,ordertble.name AS name,ordertble.user_id,
+		ordertble.amount AS amount,ordertble.order_id AS ord_id,
+		ticket_types.price,ticket_types.price AS totalamount,ticket_types.title AS ticket_type_title,
+		ticket_types.count AS ticket_type_count,ticket_types.desc AS ticket_type_desc,
+		orderitem.type_id AS type_id,orderitem.ticketcount AS ticketscount,ordertble.status AS STATUS,
+		orderitem.type_id,orderitem.attendee_id AS attendee_id,orderitem.id AS order_items_id');
+		$query->from($db->quoteName('#__jticketing_order', 'ordertble'));
+		$query->from($db->quoteName('#__jticketing_order_items', 'orderitem'));
+		$query->from($db->quoteName('#__jticketing_types', 'ticket_types'));
+		$query->where($db->quoteName('ticket_types.eventid') . " = " . $db->quoteName('ordertble.event_details_id'));
+		$query->where($db->quoteName('ticket_types.id') . " = " . $db->quoteName('orderitem.type_id'));
+		$query->where($db->quoteName('orderitem.order_id') . " = " . $db->quoteName('ordertble.id'));
+		$query->where($db->quoteName('orderitem.id') . " = " . $db->quote($ticketid));
+		$query->where($db->quoteName('ordertble.event_details_id') . " = " . $db->quote($evxref_id));
 
 		$db->setQuery($query);
-		$result      = $db->loadObject();
+		$result = $db->loadObject();
 		$result->eid = $eventid;
 		$eventdata   = $this->getAllEventDetails($eventid);
 
@@ -2106,6 +2140,15 @@ class Jticketingmainhelper
 		{
 			$result->customfields_ticket = $ticketfields;
 		}
+		else
+		{
+			$orderDetails                = $jticketingmainhelper->getorderinfo($ticketid);
+			$orderInfoDetails            = $orderDetails['order_info'][0];
+			$buyerDetails->first_name    = $orderInfoDetails->firstname;
+			$buyerDetails->last_name     = $orderInfoDetails->lastname;
+			$buyerDetails->email         = $orderInfoDetails->user_email;
+			$result->customfields_ticket = $buyerDetails;
+		}
 
 		$eventpathmodel = JPATH_SITE . '/components/com_jticketing/models/event.php';
 
@@ -2165,10 +2208,7 @@ class Jticketingmainhelper
 			{
 				if ($result->venue != "0")
 				{
-					$name = $location_data->name . " : " . JText::_('COM_JTICKETING_BILLIN_ADDR') . "- " . $location_data->address;
-					$city = ", " . $location_data->city . ", " . $location_data->region . ", " . $location_data->coutryName;
-					$zipcode = ", " . JText::_('COM_JTICKETING_FORM_LBL_VENUE_ZIPCODE') . " - " . $location_data->zipcode;
-					$result->location = $name . $city . $zipcode;
+					$result->location = $location_data->name . " - " . $location_data->address;
 				}
 				else
 				{
@@ -2185,8 +2225,7 @@ class Jticketingmainhelper
 			$result->location = $result->location;
 		}
 
-		$qrstring                 = "Booking ID:" . JText::_("TICKET_PREFIX") . $result->id . '-' . $result->order_items_id;
-		$result->ticket_id                 = urlencode($qrstring);
+		$result->ticket_id = $qrstring = $result->ord_id . '-' . $result->order_items_id;
 		$qr_url                   = "http://chart.apis.google.com/chart?cht=qr&chs=";
 		$qrimage                  = $qr_url . $qr_code_width . "x" . $qr_code_height . "&chl=" . $qrstring . "&chld=H|0";
 		$result->qr_url              = $qrimage;
@@ -2386,7 +2425,8 @@ class Jticketingmainhelper
 			AS integr_xref
 			WHERE integr_xref.id = ticket.event_details_id
 			AND integr_xref.eventid = events.id
-			AND integr_xref.source='com_jticketing'";
+			AND integr_xref.source='com_jticketing'
+			AND events.state =1";
 		}
 		elseif ($integration == 3)
 		{
@@ -2781,10 +2821,7 @@ class Jticketingmainhelper
 			{
 				if ($row->venue != "0")
 				{
-					$name = $location_data->name . " : " . JText::_('COM_JTICKETING_BILLIN_ADDR') . "- " . $location_data->address;
-					$city = ", " . $location_data->city . ", " . $location_data->region . ", " . $location_data->coutryName;
-					$zipcode = ", " . JText::_('COM_JTICKETING_FORM_LBL_VENUE_ZIPCODE') . " - " . $location_data->zipcode;
-					$row->location = $name . $city . $zipcode;
+					$row->location = $location_data->name . " - " . $location_data->address;
 				}
 				else
 				{
@@ -3236,9 +3273,9 @@ class Jticketingmainhelper
 		$date_format_to_show = JText::_('COM_JTICKETING_DATE_FORMAT_SHOW_AMPM');
 		$com_params = JComponentHelper::getParams('com_jticketing');
 		$dateFormat = $com_params->get('date_format_show');
-		$startDate  = JFactory::getDate($eventdata->startdate)->Format($dateFormat);
-		$endDate    = JFactory::getDate($eventdata->enddate)->Format($dateFormat);
-		$startTime = JFactory::getDate($eventdata->startdate)->Format(JText::_('COM_JTICKETING_TIME_FORMAT_AM_PM'));
+		$startDate  = JHtml::date($eventdata->startdate, $dateFormat, true);
+		$endDate    = JHtml::date($eventdata->enddate, $dateFormat, true);
+		$startTime  = JHtml::date($eventdata->startdate, JText::_('COM_JTICKETING_TIME_FORMAT_AM_PM'), true);
 
 		if ($eventdata->startdate == "0000-00-00")
 		{
@@ -3260,24 +3297,11 @@ class Jticketingmainhelper
 
 		$eventr['start_time'] = $startTime;
 
-		if (!empty($eventdata->offset))
-		{
-			$eventtimezone = Jtick_TimeHelper::getTimezone($eventdata->offset);
-		}
-		else
-		{
-			$config = JFactory::getConfig();
+		$config = JFactory::getConfig();
 
-			if (JVERSION >= 3.0)
-			{
-				$offset = $config->get('config.offset');
-			}
+		$offset = $config->get('config.offset');
 
-			if ($offset)
-			{
-				$eventtimezone = Jtick_TimeHelper::getTimezone($offset);
-			}
-		}
+		$eventtimezone = JticketingTimeHelper::getTimezone($offset);
 
 		if ($offset)
 		{
@@ -4723,6 +4747,17 @@ class Jticketingmainhelper
 		$db->setQuery($query);
 		$result = $db->loadObjectlist();
 
+		if ($integration == 4)
+		{
+			require_once JPATH_ROOT . '/administrator/components/com_easysocial/includes/foundry.php';
+
+			foreach ($result AS $key => $res)
+			{
+				$event                 = FD::event($res->id);
+				$result[$key]->avatar = str_replace(JUri::root(), '', $event->getAvatar());
+			}
+		}
+
 		if ($integration == 2)
 		{
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'media');
@@ -5213,7 +5248,7 @@ class Jticketingmainhelper
 		$query->select($arrayColumns);
 		$query->from($db->quoteName('#__jticketing_order', 'o'));
 		$query->join('LEFT', $db->quoteName('#__jticketing_integration_xref', 'ex') .
-		' ON (' . $db->quoteName('o.event_details_id') . ' = ' . $db->quoteName('ex.eventid') . ')');
+		' ON (' . $db->quoteName('o.event_details_id') . ' = ' . $db->quoteName('ex.id') . ')');
 		$query->join('LEFT', $db->quoteName('#__vendor_client_xref', 'vc') .
 		' ON (' . $db->quoteName('ex.vendor_id') . ' = ' . $db->quoteName('vc.vendor_id') . ')');
 		$query->where($db->quoteName('o.id') . ' = ' . $db->quote($order_id));

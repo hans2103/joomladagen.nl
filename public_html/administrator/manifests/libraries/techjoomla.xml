@@ -7,8 +7,8 @@
 	<authorUrl>https://techjoomla.com</authorUrl>
 	<copyright>Copyright (c) 2009-2017 Techjoomla. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-	<creationDate>19th May 2017</creationDate>
-	<version>1.0.10</version>
+	<creationDate>1st Nov 2017</creationDate>
+	<version>1.0.11</version>
 	<description>Common code library for all Techjoola extensions</description>
 	<files>
 		<folder>assets</folder>
@@ -22,6 +22,7 @@
 		<folder>tjcsv</folder>
 		<folder>tjmail</folder>
 		<folder>tjmedia</folder>
+		<folder>tjmoney</folder>
 		<folder>tjtoolbar</folder>
 		<folder>tjnotifications</folder>
 		<file>common.php</file>

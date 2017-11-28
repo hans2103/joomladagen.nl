@@ -40,7 +40,7 @@ class JlikeViewrecommend extends JViewLegacy
 		if ($this->type == 'assign')
 		{
 			// Only Manager
-			if ($canManage == -2)
+			if ($canManage === -2)
 			{
 				$this->state->set('list.subuserfilter', 1);
 			}
@@ -56,7 +56,7 @@ class JlikeViewrecommend extends JViewLegacy
 		$this->filterForm = $this->get('FilterForm');
 		$this->activeFilters = $this->get('ActiveFilters');
 
-		if ($canManage == -2)
+		if ($canManage === -2)
 		{
 			$this->filterForm->removeField('subuserfilter', 'list');
 		}

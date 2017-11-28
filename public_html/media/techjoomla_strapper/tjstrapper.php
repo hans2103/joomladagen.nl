@@ -845,10 +845,63 @@ class TjStrapper
 		{
 			foreach ($filenames as $file)
 			{
-				// $scriptList[]='<link rel="stylesheet" href="'.JUri::root(true).'components/com_jbolo/css/'.$file.'" type="text/css" />';
+				$cssFileName = basename($file, ".min.css");
+				$cssFileName = basename($cssFileName, ".css");
+				$file = self::getOverridedFiles($file, 'css', $cssFileName);
+
 				$scriptList[] = '<link rel="stylesheet" href="' . JUri::root(true) . '/' . $file . '" type="text/css" />';
 			}
 		}
+	}
+
+	/**
+	 * Get the all files in array from script function 
+	 *
+	 * @param   string  $file              Array of files
+	 * @param   string  $pathName          Folder name of path
+	 * @param   string  $overrideFileName  File name
+	 *
+	 * @return  void
+	 *
+	 * @since   3.0
+	 */
+	public static function getOverridedFiles($file, $pathName, $overrideFileName)
+	{
+			$app    = JFactory::getApplication();
+			$config = JFactory::getConfig();
+
+			// Get the Debug configuration set To 'YES' or 'NO'
+			$debug = $config->get('debug');
+
+			// If debug is set to 'NO' then $debugCss load .min files
+			$debugCss = $debug ? '' : '.min';
+
+			// If debug is set to 'NO' then $notdebugCss load .css/.js files
+			$notdebugCss = $debugCss ? '' : '.min';
+
+			// Get the path from component name
+			$path = strstr($file, "com_");
+
+			// Get the files from component name
+			$fileExtension = strstr($file, ".");
+
+			$component = explode("/", $path);
+
+			$override = JPATH_BASE . '/templates/' . $app->getTemplate() . '/' .
+						$pathName . '/' . $component[0] . '/' . $overrideFileName . $debugCss . $fileExtension;
+			$nonDebudOverride = JPATH_BASE . '/templates/' . $app->getTemplate() . '/' .
+						$pathName . '/' . $component[0] . '/' . $overrideFileName . $notdebugCss . $fileExtension;
+
+			if (file_exists($override))
+			{
+				$file = '/templates/' . $app->getTemplate() . '/' . $pathName . '/' . $component[0] . '/' . $overrideFileName . $debugCss . $fileExtension;
+			}
+			elseif (file_exists($nonDebudOverride))
+			{
+				$file = '/templates/' . $app->getTemplate() . '/' . $pathName . '/' . $component[0] . '/' . $overrideFileName . $notdebugCss . $fileExtension;
+			}
+
+				return $file;
 	}
 
 	/**
@@ -920,12 +973,10 @@ class TjStrapper
 				{
 					if ($file[0] == '/')
 					{
-						// $scriptList[]='<script type="text/javascript" src="'.JUri::root(true).'/components/com_jbolo'.$file.'"> </script>';
 						$scriptList[] = '<script src="' . JUri::root(true) . '/' . $file . '" type="text/javascript"></script>';
 					}
 					else
 					{
-						// $scriptList[]='<script type="text/javascript" src="'.JUri::root(true).'/components/com_jbolo/js/'.$file.'"> </script>';
 						$scriptList[] = '<script src="' . JUri::root(true) . '/' . $file . '" type="text/javascript"></script>';
 					}
 				}
@@ -937,14 +988,17 @@ class TjStrapper
 			{
 				foreach ($filenames as $file)
 				{
+					$jsFileName = basename($file, ".min.js");
+					$jsFileName = basename($jsFileName, ".js");
+
+					$file = self::getOverridedFiles($file, 'js', $jsFileName);
+
 					if ($file[0] == '/')
 					{
-						// $scriptList[]='<script type="text/javascript" src="'.JUri::root(true).'/components/com_jbolo'.$file.'"> </script>';
 						$scriptList[] = '<script src="' . JUri::root(true) . '/' . $file . '" type="text/javascript"></script>';
 					}
 					else
 					{
-						// $scriptList[]='<script type="text/javascript" src="'.JUri::root(true).'/components/com_jbolo/js/'.$file.'"> </script>';
 						$scriptList[] = '<script src="' . JUri::root(true) . '/' . $file . '" type="text/javascript"></script>';
 					}
 				}

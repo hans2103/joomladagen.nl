@@ -102,7 +102,7 @@ $existingScoUrl = '';
 </form>
 <script src="<?php echo $this->googleMapLink ?>" type="text/javascript"></script>
 <script type="text/javascript">
-		jtAdmin.venue.initVenueJs();
+	jtAdmin.venue.initVenueJs();
 	var editId     = "<?php echo $editId; ?>";
 	var getValue   = <?php $this->form->getValue('online_provider');?>
 	Joomla.submitbutton = function(task){jtAdmin.venue.venueSubmitButton(task);}

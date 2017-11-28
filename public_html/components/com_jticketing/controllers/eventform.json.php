@@ -30,9 +30,9 @@ class JticketingControllerEventForm extends JticketingController
 {
 	/**
 	 * Get venue list
-	 * 
+	 *
 	 * @return null
-	 * 
+	 *
 	 * @since   1.6
 	 */
 	public function getVenueList()
@@ -188,5 +188,22 @@ class JticketingControllerEventForm extends JticketingController
 		$model = $this->getModel('media');
 		$model->delete($mediaId);
 		echo new JResponseJson(1, JText::_('COM_JTICKETING_MEDIA_FILE_DELETED'));
+	}
+
+	/**
+	 * Get Rounded value
+	 *
+	 * @return JSON
+	 *
+	 * @since   2.0
+	 */
+	public function getRoundedValue()
+	{
+		$jticketingMainHelper = new jticketingmainhelper;
+		$price = $this->input->get('price', 'float');
+
+		$roundedValue = $jticketingMainHelper->getRoundedPrice($price);
+
+		echo new JResponseJson($roundedValue);
 	}
 }

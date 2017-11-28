@@ -23,14 +23,15 @@ $jticketingMainHelper = new jticketingmainhelper;
 		</div>
 	</div>
 	<div class="col-sm-12 event-title">
-		<h1>
-			<?php 
+		<h2>
+			<?php
 				if ($this->item->created_by == $this->userid)
 				{
 					$editEventlink = JRoute::_('index.php?option=com_jticketing&task=eventform.edit&id=' . $this->item->id . '&Itemid=' . $this->createEventItemid, false);
 				?>
 					<a id="eventEdit" href="<?php echo $editEventlink?>" title="<?php echo JText::_('COM_JTICKETING_EDIT_EVENT_LINK')?>">
 						<?php echo $this->escape($this->item->title);?>
+						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					</a>
 				<?php
 				}
@@ -39,7 +40,7 @@ $jticketingMainHelper = new jticketingmainhelper;
 					echo $this->escape($this->item->title);
 				}
 			?>
-		</h1>
+		</h2>
 	</div>
 	<div class="col-sm-12">
 		<?php
@@ -123,7 +124,7 @@ $jticketingMainHelper = new jticketingmainhelper;
 			elseif (($this->item->eventPriceMaxValue == $this->item->eventPriceMinValue) AND  (($this->item->eventPriceMaxValue != 0) AND ($this->item->eventPriceMinValue != 0)))
 			{
 			?>
-				<strong><?php echo $jticketingMainHelper->getFromattedPrice(number_format(($this->item->eventPriceMaxValue), 2), $this->params['currency']);?></strong>
+				<strong><?php echo $jticketingMainHelper->getFormattedPrice(number_format(($this->item->eventPriceMaxValue), 2), $this->params['currency']);?></strong>
 			<?php
 			}
 			else
@@ -131,9 +132,9 @@ $jticketingMainHelper = new jticketingmainhelper;
 			?>
 				<strong>
 					<?php
-						echo $jticketingMainHelper->getFromattedPrice(number_format(($this->item->eventPriceMinValue), 2), $this->params->get('currency'));
+						echo $jticketingMainHelper->getFormattedPrice(number_format(($this->item->eventPriceMinValue), 2), $this->params->get('currency'));
 						echo ' - ';
-						echo $jticketingMainHelper->getFromattedPrice(number_format(($this->item->eventPriceMaxValue), 2), $this->params->get('currency'));
+						echo $jticketingMainHelper->getFormattedPrice(number_format(($this->item->eventPriceMaxValue), 2), $this->params->get('currency'));
 					?>
 				</strong>
 			<?php

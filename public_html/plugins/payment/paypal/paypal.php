@@ -7,16 +7,9 @@
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.plugin.plugin');
 
-if (JVERSION >= '1.6.0')
-{
-	require_once JPATH_SITE . '/plugins/payment/paypal/paypal/helper.php';
-}
-else
-{
-	require_once JPATH_SITE . '/plugins/payment/paypal/helper.php';
+require_once JPATH_SITE . '/plugins/payment/paypal/paypal/helper.php';
 $lang = JFactory::getLanguage();
 $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
-}
 
 /**
  * PlgPaymentPaypal
@@ -309,7 +302,7 @@ class PlgPaymentPaypal extends JPlugin
 
 		if (!$verify)
 		{
-			return false;
+			throw new Exception(JText::_('PLG_PAYPAL_PAYMENT_ERR_INVALID_IPN'));
 		}
 
 		$payment_status = $this->translateResponse($data['payment_status']);

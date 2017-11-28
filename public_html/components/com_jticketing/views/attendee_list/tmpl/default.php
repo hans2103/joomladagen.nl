@@ -210,10 +210,10 @@ $eventid =$this->lists['search_event'];
 						 <?php echo $data->ticket_type_title; ?>
 					</td>
 					<td align="center" data-title="<?php echo JText::_('TICKET_TYPE_RATE'); ?>">
-							<?php  echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->amount),2),$currency);?>
+							<?php  echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->amount),2),$currency);?>
 					</td>
 					<td align="center" data-title="<?php echo JText::_('ORIGINAL_AMOUNT'); ?>">
-						<?php  echo $this->jticketingmainhelper->getFromattedPrice( number_format(($data->totalamount),2),$currency);?>
+						<?php  echo $this->jticketingmainhelper->getFormattedPrice( number_format(($data->totalamount),2),$currency);?>
 					</td>
 					<td align="center" data-title="<?php echo JText::_('PAYMENT_STATUS'); ?>">
 						<?php echo $payment_statuses[$data->status];?>

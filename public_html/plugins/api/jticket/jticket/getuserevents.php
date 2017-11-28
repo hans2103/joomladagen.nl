@@ -48,7 +48,7 @@ class JticketApiResourceGetuserevents extends ApiResource
 		{
 			$res->empty_message = JText::_("COM_JTICKETING_INVALID_USER");
 
-			return $this->plugin->setApiResponse(false, $res);
+			return $this->plugin->setResponse($res);
 		}
 
 		$jticketingmainhelper = new jticketingmainhelper;
@@ -97,48 +97,11 @@ class JticketApiResourceGetuserevents extends ApiResource
 				}
 
 				$return                = $jticketingmainhelper->getTimezoneString($eventdata1->id);
-				$sdate = date_create($return['startdate']);
-				$syear = substr(date_format($sdate, 'D, jS M Y'), 14);
-				$smonth = substr(date_format($sdate, 'D, jS M Y'), 10);
-				$sday = substr(date_format($sdate, 'D, jS M Y'), 5);
-
-				$edate = date_create($return['enddate']);
-				$eyear = substr(date_format($edate, 'D, jS M Y'), 14);
-				$emonth = substr(date_format($edate, 'D, jS M Y'), 10);
-				$eday = substr(date_format($edate, 'D, jS M Y'), 5);
-
-				if ($syear == $eyear)
-				{
-						$start = substr(date_format($sdate, 'D, jS M Y'), 0, 13);
-						$eventdata1->startdate = $start;
-						$eventdata1->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($smonth == $emonth)
-				{
-						$start = substr(date_format($sdate, 'D, jS M Y'), 0, 9);
-						$eventdata1->startdate = $start;
-						$eventdata1->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($sday == $eday)
-				{
-						$eventdata1->startdate = date_format($sdate, 'D, jS M Y');
-						$eventdata1->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($syear != $eyear)
-				{
-						$eventdata1->startdate = date_format($sdate, 'D, jS M Y');
-						$eventdata1->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				$datetoshow            = $return['startdate'] . '-' . $return['enddate'];
-
-				if (!empty($return['eventshowtimezone']))
-				{
-					$datetoshow .= $return['eventshowtimezone'];
-				}
+				$sdate = $return['startdate'];
+				$edate = $return['enddate'];
+				$eventdata1->startdate =  JHtml::date($sdate, 'D, jS M Y', true);
+				$eventdata1->enddate =  JHtml::date($edate, 'D, jS M Y', true);
+				$datetoshow            = $eventdata1->startdate . '-' . $eventdata1->enddate;
 			}
 		}
 
@@ -155,42 +118,10 @@ class JticketApiResourceGetuserevents extends ApiResource
 					$eventdata3->totaltickets = 0;
 				}
 
-				$sdate = date_create($eventdata3->startdate);
-				$syear = substr(date_format($sdate, 'D, jS M Y'), 14);
-				$smonth = substr(date_format($sdate, 'D, jS M Y'), 10);
-				$sday = substr(date_format($sdate, 'D, jS M Y'), 5);
-
-				$edate = date_create($eventdata3->enddate);
-				$eyear = substr(date_format($edate, 'D, jS M Y'), 14);
-				$emonth = substr(date_format($edate, 'D, jS M Y'), 10);
-				$eday = substr(date_format($edate, 'D, jS M Y'), 5);
-
-				if ($syear == $eyear)
-				{
-						$start = substr(date_format($sdate, 'D, jS M Y'), 0, 13);
-						$eventdata3->startdate = $start;
-						$eventdata3->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($smonth == $emonth)
-				{
-						$start = substr(date_format($sdate, 'D, jS M Y'), 0, 9);
-						$eventdata3->startdate = $start;
-						$eventdata3->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($sday == $eday)
-				{
-						$eventdata3->startdate = date_format($sdate, 'D, jS M Y');
-						$eventdata3->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
-				if ($syear != $eyear)
-				{
-						$eventdata3->startdate = date_format($sdate, 'D, jS M Y');
-						$eventdata3->enddate   = date_format($edate, 'D, jS M Y');
-				}
-
+				$sdate = $eventdata3->startdate;
+				$edate = $eventdata3->enddate;
+				$eventdata3->startdate =  JHtml::date($sdate, 'D, jS M Y', true);
+				$eventdata3->enddate =  JHtml::date($edate, 'D, jS M Y', true);
 				$eventdata3->soldtickets = 0;
 				$eventdata3->checkin     = 0;
 			}
@@ -251,10 +182,11 @@ class JticketApiResourceGetuserevents extends ApiResource
 		}
 		else
 		{
+			$res->result = array();
 			$res->empty_message = JText::_("COM_JTICKETING_NO_EVENT_DATA_USER");
 		}
 
-		$this->plugin->setApiResponse(false, $res);
+		$this->plugin->setResponse($res);
 	}
 
 	/**
@@ -268,7 +200,7 @@ class JticketApiResourceGetuserevents extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -282,7 +214,7 @@ class JticketApiResourceGetuserevents extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 
 	/**
@@ -296,6 +228,6 @@ class JticketApiResourceGetuserevents extends ApiResource
 	{
 		$this->plugin->err_code = 405;
 		$this->plugin->err_message = JText::_("COM_JTICKETING_SELECT_GET_METHOD");
-		$this->plugin->setApiResponse(true, null);
+		$this->plugin->setResponse(null);
 	}
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @version    SVN: <svn_id>
  * @package    JTicketing
@@ -10,7 +10,7 @@
 // No direct access
 defined( '_JEXEC' ) or die( ';)' );
 
-/*If user is on payment layout and log out at that time undefined order is is found 
+/*If user is on payment layout and log out at that time undefined order is is found
 in such condition send to home page or provide error msg */
 
 $session = JFactory::getSession();
@@ -116,7 +116,7 @@ if (isset($orderBlocks))
 					<tr>
 						<td><?php echo JText::_('COM_JTICKETING_ORDER_USER');?></td>
 						<td>
-						<?php 
+						<?php
 						$table   = JUser::getTable();
 						$userId = intval( $this->orderinfo->user_id );
 
@@ -127,7 +127,7 @@ if (isset($orderBlocks))
 							{
 								$creaternm = JFactory::getUser($this->orderinfo->user_id);
 							}
-							echo (!$creaternm)?JText::_('COM_JTICKETING_NO_USER'): $creaternm->username; 
+							echo (!$creaternm)?JText::_('COM_JTICKETING_NO_USER'): $creaternm->username;
 						 }
 						 else
 						 {
@@ -137,7 +137,7 @@ if (isset($orderBlocks))
 						</td>
 					</tr>
 					<tr>
-						<td><?php echo JText::_('COM_JTICKETING_ORDER_IP');?></td>	
+						<td><?php echo JText::_('COM_JTICKETING_ORDER_IP');?></td>
 						<td><?php echo $this->orderinfo->ip_address;?></td>
 					</tr>
 					<?php
@@ -145,15 +145,15 @@ if (isset($orderBlocks))
 					{
 						?>
 						<tr>
-							<td><?php echo JText::_('COM_JTICKETING_ORDER_PAYMENT');?></td>	
+							<td><?php echo JText::_('COM_JTICKETING_ORDER_PAYMENT');?></td>
 							<td>
-							<?php 
+							<?php
 								if(isset($this->orderinfo->processor)){
 								$plugin = JPluginHelper::getPlugin('payment',  $this->orderinfo->processor);
 								if(isset($plugin->params)){
 								$pluginParams = new JRegistry();
 								$pluginParams->loadString($plugin->params);
-								$param = $pluginParams->get('plugin_name',  $this->orderinfo->processor); 
+								$param = $pluginParams->get('plugin_name',  $this->orderinfo->processor);
 								echo $param;}
 								else
 								echo $this->orderinfo->processor;
@@ -167,7 +167,7 @@ if (isset($orderBlocks))
 					{
 						?>
 						<tr>
-							<td><?php echo JText::_('COM_JTICKETING_ORDER_PAYMENT_STATUS');?></td>	
+							<td><?php echo JText::_('COM_JTICKETING_ORDER_PAYMENT_STATUS');?></td>
 							<td><?php echo $this->payment_statuses[$this->orderinfo->status];?></td>
 						</tr>
 						<?php
@@ -185,14 +185,14 @@ if (isset($orderBlocks))
 			<h3><?php echo JText::_('COM_JTICKETING_BILLIN_INFO'); ?></h3>
 				<table class="table" >
 					<tr>
-						<td><?php echo JText::_('COM_JTICKETING_BILLIN_FNAM');?></td>	
+						<td><?php echo JText::_('COM_JTICKETING_BILLIN_FNAM');?></td>
 						<td><?php echo $billinfo->firstname;?></td>
 					</tr>
 					<tr>
-						<td><?php echo JText::_('COM_JTICKETING_BILLIN_LNAM');?></td>	
+						<td><?php echo JText::_('COM_JTICKETING_BILLIN_LNAM');?></td>
 						<td><?php echo $billinfo->lastname;?></td>
 					</tr>
-					<?php 
+					<?php
 					if (!empty($billinfo->vat_number))
 					{
 						?>
@@ -233,11 +233,11 @@ if (isset($orderBlocks))
 					</tr>
 				</table>
 			</div>  <!-- customer info end  id=qtc_wholeCustInfoDiv-->
-			<?php 
+			<?php
 		}
 		?>
 </div>
-<div class="row-fluid"> 
+<div class="row-fluid">
 	<div class="span12 well"> <!-- cart detail start -->
 	<h3><?php echo JText::_('COM_JTICKETING_TICKET_INFO'); ?></h3>
 		<?php
@@ -266,12 +266,12 @@ if (isset($orderBlocks))
 				$order->price = 0;
 				?>
 				<tr class="row0">
-						<td class="jtitem_num" ><?php echo $i++;?></td>	
+						<td class="jtitem_num" ><?php echo $i++;?></td>
 						<td class="jtitem_name" ><?php echo $order->order_item_name;?></td>
 						<td class="jtitem_qty" ><?php echo $order->ticketcount;?></td>
-						<td class="jtitem_price" <?php echo $priceColStyle;?>><span><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format(($order->price),2), $this->currency);?></span></td>
-						<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span><?php $totalprice=$order->price*$order->ticketcount;echo $this->jticketingmainhelper->getFromattedPrice(number_format($totalprice,2), $this->currency); ?></span></td>
-					<?php 
+						<td class="jtitem_price" <?php echo $priceColStyle;?>><span><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format(($order->price),2), $this->currency);?></span></td>
+						<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span><?php $totalprice=$order->price*$order->ticketcount;echo $this->jticketingmainhelper->getFormattedPrice(number_format($totalprice,2), $this->currency); ?></span></td>
+					<?php
 						$tprice = $totalprice + $tprice;
 					?>
 				</tr>
@@ -289,10 +289,10 @@ if (isset($orderBlocks))
 				?>
 				<td colspan="<?php echo $col;?>" > </td>
 				<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_PRODUCT_TOTAL'); ?></strong></td>
-				<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "cop_discount" ><?php echo $this->jticketingmainhelper->getFromattedPrice( number_format($tprice, 2), $this->currency); ?></span></td>
+				<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "cop_discount" ><?php echo $this->jticketingmainhelper->getFormattedPrice( number_format($tprice, 2), $this->currency); ?></span></td>
 			</tr>
 			<!--discount price -->
-			<?php 
+			<?php
 				$couponCode = trim($couponCode);
 				$totalAmountAfterDisc = $this->orderinfo->original_amount;
 				if ($this->orderinfo->coupon_discount > 0)
@@ -303,7 +303,7 @@ if (isset($orderBlocks))
 							<td colspan="<?php echo $col;?>" > </td>
 							<td class="jtitem_tprice_label" align="left"><strong><?php echo sprintf(JText::_('COM_JTICKETING_PRODUCT_DISCOUNT'),$this->orderinfo->coupon_code); ?></strong></td>
 							<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "coupon_discount" >
-							<?php echo $this->jticketingmainhelper->getFromattedPrice(number_format($this->orderinfo->coupon_discount,2), $this->currency); 
+							<?php echo $this->jticketingmainhelper->getFormattedPrice(number_format($this->orderinfo->coupon_discount,2), $this->currency);
 							?>
 							</span></td>
 						</tr>
@@ -312,7 +312,7 @@ if (isset($orderBlocks))
 							<td colspan = "<?php echo $col;?>"></td>
 							<td  class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_NET_AMT_PAY');?></strong></td>
 							<td class="jtitem_tprice" <?php echo $priceColStyle; ?> ><span id= "total_dis_cop" >
-							<?php echo $this->jticketingmainhelper->getFromattedPrice(number_format($totalAmountAfterDisc, 2), $this->currency); 
+							<?php echo $this->jticketingmainhelper->getFormattedPrice(number_format($totalAmountAfterDisc, 2), $this->currency);
 							?></span></td>
 						</tr>
 					<?php
@@ -326,7 +326,7 @@ if (isset($orderBlocks))
 					<tr>
 						<td colspan="<?php echo $col;?>" > </td>
 						<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::sprintf('TAX_AMOOUNT',$taxArr['percent']).""; ; ?></strong></td>
-						<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "tax_amt" ><?php echo $this->jticketingmainhelper->getFromattedPrice(number_format($this->orderinfo->order_tax,2), $this->currency); ?></span></td>
+						<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "tax_amt" ><?php echo $this->jticketingmainhelper->getFormattedPrice(number_format($this->orderinfo->order_tax,2), $this->currency); ?></span></td>
 					</tr>
 					<?php
 				}
@@ -334,7 +334,7 @@ if (isset($orderBlocks))
 				<tr>
 					<td colspan="<?php echo $col;?>" > </td>
 					<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_ORDER_TOTAL'); ?></strong></td>
-					<td class="jtitem_tprice" <?php echo $priceColStyle;?>><strong><span id="final_amt_pay"	name="final_amt_pay"><?php echo $this->jticketingmainhelper->getFromattedPrice(number_format($this->orderinfo->amount, 2), $this->currency); ?></span></td>
+					<td class="jtitem_tprice" <?php echo $priceColStyle;?>><strong><span id="final_amt_pay"	name="final_amt_pay"><?php echo $this->jticketingmainhelper->getFormattedPrice(number_format($this->orderinfo->amount, 2), $this->currency); ?></span></td>
 				</tr>
 				<?php
 				if ($this->orderinfo->amount <= 0 and empty($this->orderview))
@@ -363,5 +363,5 @@ if (isset($orderBlocks))
 			}
 			?>
 		</table>
-	</div> 
+	</div>
 </div>

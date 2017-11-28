@@ -10,6 +10,7 @@
 defined('JPATH_BASE') or die;
 jimport('joomla.filesystem.file');
 jimport('techjoomla.jsocial.helper');
+jimport('techjoomla.jsocial.jsocial');
 
 /**
  * Interface to handle Social Extensions
@@ -32,7 +33,7 @@ class JSocialJoomla implements JSocial
 
 	private $gravatar_rating = 'g';
 
-	private $gravatar_secure = false;
+	private $gravatar_secure = true;
 
 	/**
 	 * The constructor
@@ -280,6 +281,20 @@ class JSocialJoomla implements JSocial
 	 * @since   1.0
 	 */
 	public function advPushActivity($streamOption)
+	{
+	}
+
+	/**
+	 * The function to update the custom fields
+	 *
+	 * @param   ARRAY   $fieldsArray  Custom field array
+	 * @param   OBJECT  $userId       User Id
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function addUserFields($fieldsArray, $userId)
 	{
 	}
 }

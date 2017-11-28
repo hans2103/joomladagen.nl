@@ -313,7 +313,7 @@ class JticketingCommonHelper
 					$dispatcher = JDispatcher::getInstance();
 					JPluginHelper::importPlugin('tjevents');
 					$result = $dispatcher->trigger('tj_inviteUsers', array($jtParams));
-					$email  = JticketingMailHelper::onlineEventNotify($jtParams, $order['eventinfo']);
+					$email  = JticketingMailHelper::onlineEventNotify($order_id, $jtParams, $order['eventinfo']);
 				}
 			}
 
@@ -353,6 +353,7 @@ class JticketingCommonHelper
 		JText::script('COM_JTICKETING_ENTER_NO_OF_TICKETS');
 		JText::script('COM_JTICKETING_FILL_ALL_REQUIRED_FIELDS');
 		JText::script('COM_JTICKETING_ACCEPT_TERMS_AND_CONDITIONS');
+		JText::script('COM_JTICKETING_PREV');
 
 		// Gallary Upload File validation
 		JText::sprintf('COM_TJMEDIA_VALIDATE_MEDIA_SIZE', $mediaSize, 'MB', array('script' => true));
@@ -387,6 +388,8 @@ class JticketingCommonHelper
 		JText::script('COM_JTICKETING_NO_ONLINE_VENUE_ERROR');
 		JText::script('UNLIM_SEATS');
 		JText::script('COM_JTICKETING_VALIDATE_CAPTCHA');
+		JText::script('COM_JTICKETING_VALIDATE_ROUNDED_PRICE');
+		JText::script('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION');
 
 		// Event Detail page Gallery
 		JText::script('COM_JTICKETING_GALLERY_VIDEO_TEXT');

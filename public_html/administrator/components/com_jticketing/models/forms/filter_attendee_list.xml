@@ -33,6 +33,17 @@
 			<option value="CRV">JT_PSTATUS_CANCEL_REVERSED</option>
 			<option value="RV">JT_PSTATUS_REVERSED</option>
 		</field>
+		<field
+			name="attended_status"
+			type="list"
+			label="COM_JTICKETING_FILTER_ATTENDEE_STATUS"
+			description="COM_JTICKETING_FILTER_ATTENDEE_STATUS_DESC"
+			onchange="this.form.submit();"
+			>
+			<option value="0">COM_JTICKETING_SELECT_ATTENDED_STATUS</option>
+			<option value="1">COM_JTICKETING_ATTENDED</option>
+			<option value="2">COM_JTICKETING_NOT_ATTENDED</option>
+		</field>
 	</fields>
 
 	<fields name="list">

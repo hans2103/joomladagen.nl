@@ -260,9 +260,9 @@ if (isset($this->orderview))
 															<td data-title="<?php echo JText::_('COM_JTICKETING_NO'); ?>"><?php echo $i++;?></td>
 															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_NAM'); ?>"><?php echo htmlspecialchars($order->order_item_name, ENT_COMPAT, 'UTF-8');?></td>
 															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_QTY'); ?>"><?php echo $order->ticketcount;?></td>
-															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_PRICE'); ?>"><?php echo $helperobj->getFromattedPrice( number_format(($order->price),2),$this->currency);?>
+															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_PRICE'); ?>"><?php echo $helperobj->getFormattedPrice( number_format(($order->price),2),$this->currency);?>
 															</td>
-															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_TPRICE'); ?>"><?php $totalprice=$order->price*$order->ticketcount; echo $helperobj->getFromattedPrice(number_format($totalprice,2),$this->currency);?>
+															<td class="text-left" data-title="<?php echo JText::_('COM_JTICKETING_PRODUCT_TPRICE'); ?>"><?php $totalprice=$order->price*$order->ticketcount; echo $helperobj->getFormattedPrice(number_format($totalprice,2),$this->currency);?>
 															</td>
 															<?php
 																$tprice = $totalprice + $tprice;
@@ -279,7 +279,7 @@ if (isset($this->orderview))
 														<strong><?php echo JText::_('COM_JTICKETING_PRODUCT_TOTAL'); ?></strong>
 													</td>
 													<td class="thick-line text-lfet">
-														<span id= "cop_discount" ><?php echo $helperobj->getFromattedPrice( number_format($tprice,2),$this->currency);
+														<span id= "cop_discount" ><?php echo $helperobj->getFormattedPrice( number_format($tprice,2),$this->currency);
 														?>
 														</span>
 													</td>
@@ -302,7 +302,7 @@ if (isset($this->orderview))
 														</td>
 														<td class="no-line text-left">
 															<span id= "coupon_discount" >
-															<?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->coupon_discount,2),$this->currency);
+															<?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->coupon_discount,2),$this->currency);
 															?>
 															</span>
 														</td>
@@ -317,7 +317,7 @@ if (isset($this->orderview))
 														<td class="no-line text-left">
 															<span id= "total_dis_cop" >
 															<?php
-																echo $helperobj->getFromattedPrice(number_format($totalAmountAfterDisc,2),$this->currency);
+																echo $helperobj->getFormattedPrice(number_format($totalAmountAfterDisc,2),$this->currency);
 															?>
 															</span>
 														</td>
@@ -340,7 +340,7 @@ if (isset($this->orderview))
 															</strong>
 														</td>
 														<td class="no-line text-left">
-															<span id= "tax_amt" ><?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->order_tax, 2), $this->currency);?>
+															<span id= "tax_amt" ><?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->order_tax, 2), $this->currency);?>
 															</span>
 														</td>
 													</tr>
@@ -356,7 +356,7 @@ if (isset($this->orderview))
 													</td>
 													<td class="no-line text-left">
 														<strong>
-															<span id="final_amt_pay" name="final_amt_pay"><?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->amount,2),$this->currency); ?>
+															<span id="final_amt_pay" name="final_amt_pay"><?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->amount,2),$this->currency); ?>
 															</span>
 														</strong>
 													</td>

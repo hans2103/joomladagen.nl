@@ -250,7 +250,7 @@ else
 					</button>
 					<?php
 					}
-					elseif ($this->item->enddate > $this->currentTime && $this->item->isboughtEvent == 1 && $this->showAdobeButton == 0)
+					elseif ($this->item->online_events == 1 && $this->item->enddate > $this->currentTime && $this->item->isboughtEvent == 1 && $this->showAdobeButton == 0)
 					{?>
 						<span class="tool-tip" data-toggle="tooltip" data-placement="top" title="<?php echo JText::sprintf('COM_JT_MEETING_ACCESS',$this->beforeEventStartTime);?>">
 							<button class="btn btn-info btn-lg com_jticketing_button" disabled="disabled"><?php echo JText::_('COM_JTICKETING_MEETING_BUTTON');?></button>
@@ -475,7 +475,14 @@ else
 	</div>
 </div>
 <?php
- $currentDate = JFactory::getDate();
+$currentDate = JFactory::getDate();
+
+// If event is offline then only show location graph condition checked here.
+if ($this->item->online_events == '0')
+{
+	$data = $jteventHelper->getCoordinates($this->item->id, $this->item->venue);
+}
+
 if ($this->item->online_events == '0')
 {
 	$lat = $lat;

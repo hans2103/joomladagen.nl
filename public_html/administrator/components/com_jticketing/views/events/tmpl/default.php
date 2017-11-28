@@ -164,6 +164,10 @@ if (!empty($this->extra_sidebar))
 							<?php echo JHtml::_('grid.sort',  'COM_JTICKETING_EVENTS_FEATURED', 'a.featured', $listDirn, $listOrder); ?>
 						</th>
 
+						<th class='center'>
+							<?php echo JText::_( 'COM_JTICKETING_EVENTS_ATTENDED_USERS' );?>
+						</th>
+
 						<?php if (isset($this->items[0]->id)): ?>
 							<th width="1%" class="nowrap center hidden-phone hidden-tablet">
 								<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
@@ -198,7 +202,13 @@ if (!empty($this->extra_sidebar))
 						$canEdit	= $user->authorise('core.edit',			'com_jticketing');
 						$canCheckin	= $user->authorise('core.manage',		'com_jticketing');
 						$canChange	= $user->authorise('core.edit.state',	'com_jticketing');
-					$link_ticket_types =JRoute::_("index.php?option=com_jticketing&view=events&layout=tickettypes&tmpl=component&id=".$item->id);
+
+						$ticketTypesLink =JRoute::_("index.php?option=com_jticketing&view=events&layout=tickettypes&tmpl=component&id=".$item->id);
+						$eventAttendeedLink =JRoute::_("index.php?option=com_jticketing&view=attendee_list&filter[events]=".$item->id ."&filter[attended_status]=1");
+						$eventNotAttendeedLink =JRoute::_("index.php?option=com_jticketing&view=attendee_list&filter[events]=".$item->id ."&filter[attended_status]=2");
+
+						$jtEventHelper = new JteventHelper;
+						$buyersCount = $jtEventHelper->getBuyersCount($item->id);
 						?>
 
 						<tr class="row<?php echo $i % 2; ?>">
@@ -256,7 +266,7 @@ if (!empty($this->extra_sidebar))
 -->
 						<td class="hidden-phone">
 
-								<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="<?php echo $link_ticket_types; ?>" class="modal">
+								<a rel="{handler: 'iframe', size: {x: 600, y: 600}}" href="<?php echo $ticketTypesLink; ?>" class="modal">
 									<span class="editlinktip hasTip" title="<?php echo JText::_('COM_JTICKETING_VIEW_TICKET_TYPES');?>" ><?php echo JText::_('COM_JTICKETING_VIEW_TICKET_TYPES');?></span>
 								</a>
 						</td>
@@ -296,7 +306,7 @@ if (!empty($this->extra_sidebar))
 							{
 								if ($item->venue != "0")
 								{
-									echo $item->name . " : " . JText::_('COM_JTICKETING_BILLIN_ADDR') .  "- " . $item->address . ", " . $item->city . ", " . $item->region . ", " . $item->coutryName . ", " . JText::_('COM_JTICKETING_FORM_LBL_VENUE_ZIPCODE') . " - " . $item->zipcode;
+									echo $item->name . "- " . $item->address;
 								}
 								else
 								{
@@ -325,6 +335,16 @@ if (!empty($this->extra_sidebar))
 								}
 								?>
 								<i class="icon-<?php echo $featuredClass;?>"></i>
+							</a>
+						</td>
+
+						<td class="hidden-phone">
+							<a href="<?php echo $eventAttendeedLink; ?>">
+								<span class="editlinktip hasTip" title="<?php echo JText::_('COM_JTICKETING_EVENT_ATTENDEED_LIST');?>" > <?php echo $item->attended_count;?> </span>
+							</a>
+							<?php echo " / ";?>
+							<a href="<?php echo $eventNotAttendeedLink; ?>">
+								<span class="editlinktip hasTip" title="<?php echo JText::_('COM_JTICKETING_EVENT_ENROLLED_LIST');?>" > <?php echo $buyersCount; ?> </span>
 							</a>
 						</td>
 

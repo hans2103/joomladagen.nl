@@ -191,4 +191,42 @@ class JTicketingControllerEvent extends JControllerForm
 		$model->delete($mediaId);
 		echo new JResponseJson(1, JText::_('COM_JTICKETING_MEDIA_FILE_DELETED'));
 	}
+
+	/**
+	 * Get Rounded value
+	 *
+	 * @return JSON
+	 *
+	 * @since   2.0
+	 */
+	public function getRoundedValue()
+	{
+		$jticketingMainHelper = new jticketingmainhelper;
+		$price = $this->input->get('price', 'float');
+
+		$roundedValue = $jticketingMainHelper->getRoundedPrice($price);
+
+		echo new JResponseJson($roundedValue);
+	}
+
+	/**
+	 * Check email of vendor
+	 *
+	 * @return JSON
+	 *
+	 * @since   2.0
+	 */
+	public function checkUserEmail()
+	{
+		$userId = $this->input->get('user', '0', 'INT');
+		$JticketingOrdersHelper = new JticketingOrdersHelper;
+		$checkGatewayDetails  = $JticketingOrdersHelper->checkGatewayDetails($userId);
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorTable = JTable::getInstance('Vendor', 'TjvendorsTable', array());
+		$vendorTable->load(array('user_id' => $userId));
+		$data['vendor_id'] = $vendorTable->vendor_id;
+		$data['check'] = $checkGatewayDetails;
+		echo json_encode($data);
+		jexit();
+	}
 }

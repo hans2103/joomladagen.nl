@@ -798,6 +798,7 @@ div.jt-pin-data:hover {
 .jticketing-wrapper .subform-repeatable-group .controls .chzn.single{width:200px !important;}
 .jticketing-wrapper .subform-repeatable-group .controls .chzn-container{width:200px !important;}
 .jticketing-wrapper .subform-repeatable-wrapper span{font: normal normal normal 14px/1 FontAwesome;}
+.jticketing-wrapper .subform-repeatable-wrapper span.input-group-addon{width:0%;}
 .jticketing-wrapper .subform-repeatable-wrapper span.icon-plus:before {content: "\f067"; font-family: "FontAwesome" !important;}
 .jticketing-wrapper .subform-repeatable-wrapper span.icon-minus:before {content: "\f068"; font-family: "FontAwesome" !important;}
 .jticketing-wrapper .field-calendar span.icon-calendar:before {content: "\f073"; font-family: "FontAwesome" !important;}

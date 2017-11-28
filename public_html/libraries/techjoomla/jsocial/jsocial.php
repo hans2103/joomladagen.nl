@@ -204,5 +204,15 @@ interface JSocial
 	 */
 	public function advPushActivity($streamOption);
 
-
+	/**
+	 * The function to update the custom fields
+	 *
+	 * @param   ARRAY   $fieldsArray  Custom field array
+	 * @param   OBJECT  $userId       User Id
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function addUserFields($fieldsArray, $userId);
 }

@@ -26,9 +26,9 @@ UID:<?php echo md5(uniqid(mt_rand(), true));?>
 
 DTSTAMP:<?php echo gmdate('Ymd').'T'. gmdate('His');?>Z
 
-DTSTART:<?php echo JFactory::getDate($event->startdate)->format('Ymd\THis', true);?>
+DTSTART:<?php echo JHtml::date($event->startdate, 'Ymd\THis', true);?>
 
-DTEND:<?php echo  JFactory::getDate($event->enddate)->format('Ymd\THis', true);?>
+DTEND:<?php  echo  JHtml::date($event->enddate, 'Ymd\THis', true);?>
 
 SUMMARY:<?php echo $event->title;?>
 

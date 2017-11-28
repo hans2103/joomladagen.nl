@@ -74,32 +74,38 @@ class PlgCommunityaddFields extends CApplications
 	{
 		$app = JFactory::getApplication();
 		$site = $app->isSite();
+		$this->loadJTclasses();
 
-		if ($site)
+		if ($form_name == 'createEvent')
 		{
-			$document   = JFactory::getDocument();
-			$document->addStyleSheet(JUri::root(true) . '/media/com_jticketing/css/jticketing.css');
+			if ($site)
+			{
+				$document   = JFactory::getDocument();
+				$document->addStyleSheet(JUri::root(true) . '/media/com_jticketing/css/jticketing.css');
+				$addfields_js = JUri::root() . 'plugins/community/addfields/js/addfields.js';
+				$document->addScript($addfields_js);
+			}
+
+			if (!$this->validateIntegration())
+			{
+				return false;
+			}
+
+			$html = $this->getCustomFields();
+			$obj = new CFormElement;
+			$obj->position = 'after';
+			$obj->html = '';
+			$elements = array();
+
+			foreach ($html as $singleHtml)
+			{
+				$obj->html .= $singleHtml;
+			}
+
+			$elements[] = $obj;
+
+			return $elements;
 		}
-
-		if (!$this->validateIntegration())
-		{
-			return false;
-		}
-
-		$html = $this->getCustomFields();
-		$obj = new CFormElement;
-		$obj->position = 'after';
-		$obj->html = '';
-		$elements = array();
-
-		foreach ($html as $singleHtml)
-		{
-			$obj->html .= $singleHtml;
-		}
-
-		$elements[] = $obj;
-
-		return $elements;
 	}
 
 	/**
@@ -180,6 +186,22 @@ class PlgCommunityaddFields extends CApplications
 			JLoader::register('jteventHelper', $jteventHelperPath);
 			JLoader::load('jteventHelper');
 		}
+
+		$jticketingOrdersHelper = JPATH_ROOT . '/components/com_jticketing/helpers/order.php';
+
+		if (!class_exists('JTicketingOrdersHelper'))
+		{
+			JLoader::register('JTicketingOrdersHelper', $jticketingOrdersHelper);
+			JLoader::load('JTicketingOrdersHelper');
+		}
+
+		$jticketingCommonHelper = JPATH_ROOT . '/components/com_jticketing/helpers/common.php';
+
+		if (!class_exists('JticketingCommonHelper'))
+		{
+			JLoader::register('JticketingCommonHelper', $jticketingCommonHelper);
+			JLoader::load('JticketingCommonHelper');
+		}
 	}
 
 	/**
@@ -223,24 +245,43 @@ class PlgCommunityaddFields extends CApplications
 		<?php
 		}
 
+		$userId = JFactory::getUser()->id;
+		$jticketingOrdersHelper = new JTicketingOrdersHelper;
+		$jticketingCommonHelper = new JticketingCommonHelper;
+		$emailCheck = $jticketingOrdersHelper->checkGatewayDetails($userId);
+		$vendor_id = $jticketingCommonHelper->checkVendor();
+		$params = JComponentHelper::getParams('com_jticketing');
+		$handle_transactions = $params->get('handle_transactions');
+		$adaptivePayment = $params->get('gateways');
+
+		if ($emailCheck == "true" && ($handle_transactions == 1 || in_array('adaptive_paypal', $adaptivePayment)))
+		{
+			$link = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client=com_jticketing';
+
+			$warningMessage = '<div id="tjcover"><div class="alert alert-warning">' . JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG1') . '
+				<a href="' . JRoute::_($link . '&vendor_id=' . $vendor_id, false) . '" target="_blank">
+				' . JText::_('COM_JTICKETING_VENDOR_FORM_LINK') . '</a>' . JText::_('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2') . '</div></div>';
+		}
+
 		$customFields = array();
-		$customFields['ticket_title'] = '<legend>' . JText::_('COM_JTICKETING_JSEVENT_TICKET_TYPES') . '</legend>';
+		$customFields['warning_message'] = $warningMessage;
+		$customFields['ticket_title'] = '<div id="customFields"><legend>' . JText::_('COM_JTICKETING_JSEVENT_TICKET_TYPES') . '</legend>';
 		$customTicketFields = $jticketingfrontendhelper->getCustomFieldTypes('ticketFields', $event_id, 'com_community');
 		$customFields['ticketFields'] = '<div class="jticketing-wrapper">
 			<div class="jticketing_params_container">
 				<div>' . $customTicketFields . '</div>
 			</div>
-		</div>';
+		</div></div>';
 
 		if ($attendeeCheckoutConfig == 1)
 		{
 			$customAttendeeFields = $jticketingfrontendhelper->getCustomFieldTypes('attendeeFields', $event_id, 'com_community');
 			$customFields['attendee_title'] = '<legend>' . JText::_('COM_JTICKETING_JSEVENT_ATTENDEE_FIELDS') . '</legend>';
-			$customFields['attendeeFields'] = '<div class="jticketing-wrapper">
+			$customFields['attendeeFields'] = '<div id="customFields"><div class="jticketing-wrapper">
 		<div class="jticketing_params_container">
 					<div>' . $customAttendeeFields . '</div>
 				</div>
-			</div>';
+			</div></div>';
 		}
 
 		return $customFields;

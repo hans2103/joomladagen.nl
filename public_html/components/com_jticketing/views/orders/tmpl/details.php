@@ -292,8 +292,8 @@ if (isset($orderBlocks))
 								<td class="jtitem_num" ><?php echo $i++;?></td>
 								<td class="jtitem_name" ><?php echo $order->order_item_name;?></td>
 								<td class="jtitem_qty" ><?php echo $order->ticketcount;?></td>
-								<td class="jtitem_price" <?php echo $priceColStyle;  ?>><span><?php echo $helperobj->getFromattedPrice( number_format(($order->price),2),$this->currency);?></span></td>
-								<td class="jtitem_tprice" <?php echo $priceColStyle;  ?>><span><?php $totalprice = $order->price * $order->ticketcount;echo $helperobj->getFromattedPrice(number_format($totalprice,2),$this->currency); ?></span></td>
+								<td class="jtitem_price" <?php echo $priceColStyle;  ?>><span><?php echo $helperobj->getFormattedPrice( number_format(($order->price),2),$this->currency);?></span></td>
+								<td class="jtitem_tprice" <?php echo $priceColStyle;  ?>><span><?php $totalprice = $order->price * $order->ticketcount;echo $helperobj->getFormattedPrice(number_format($totalprice,2),$this->currency); ?></span></td>
 							<?php $tprice = $totalprice + $tprice; ?>
 							</tr>
 							<?php
@@ -311,7 +311,7 @@ if (isset($orderBlocks))
 							}?>
 							<td colspan="<?php echo $col;?>" > </td>
 							<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_PRODUCT_TOTAL'); ?></strong></td>
-							<td class="jtitem_tprice" <?php echo $priceColStyle;  ?>><span id= "cop_discount" ><?php echo $helperobj->getFromattedPrice( number_format($tprice,2),$this->currency); ?></span></td>
+							<td class="jtitem_tprice" <?php echo $priceColStyle;  ?>><span id= "cop_discount" ><?php echo $helperobj->getFormattedPrice( number_format($tprice,2),$this->currency); ?></span></td>
 						</tr>
 						<!--discount price -->
 						<?php
@@ -325,7 +325,7 @@ if (isset($orderBlocks))
 										<td colspan="<?php echo $col;?>" > </td>
 										<td class="jtitem_tprice_label" align="left"><strong><?php echo sprintf(JText::_('COM_JTICKETING_PRODUCT_DISCOUNT'),$this->orderinfo->coupon_code); ?></strong></td>
 										<td class="jtitem_tprice" <?php echo $priceColStyle;  ?>><span id= "coupon_discount" >
-										<?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->coupon_discount,2),$this->currency);
+										<?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->coupon_discount,2),$this->currency);
 										?>
 										</span></td>
 									</tr>
@@ -335,7 +335,7 @@ if (isset($orderBlocks))
 										<td  class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_NET_AMT_PAY');?></strong></td>
 										<td class="jtitem_tprice" <?php echo $priceColStyle; ?> ><span id= "total_dis_cop" >
 										<?php
-											echo $helperobj->getFromattedPrice(number_format($totalAmountAfterDisc, 2), $this->currency);
+											echo $helperobj->getFormattedPrice(number_format($totalAmountAfterDisc, 2), $this->currency);
 										?></span></td>
 									</tr>
 								<?php
@@ -349,7 +349,7 @@ if (isset($orderBlocks))
 								<tr>
 									<td colspan="<?php echo $col;?>" > </td>
 									<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::sprintf('TAX_AMOOUNT',$taxArr['percent']).""; ; ?></strong></td>
-									<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "tax_amt" ><?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->order_tax,2),$this->currency); ?></span></td>
+									<td class="jtitem_tprice" <?php echo $priceColStyle;?>><span id= "tax_amt" ><?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->order_tax,2),$this->currency); ?></span></td>
 								</tr>
 								<?php
 							}
@@ -357,7 +357,7 @@ if (isset($orderBlocks))
 						<tr>
 							<td colspan="<?php echo $col;?>" > </td>
 							<td class="jtitem_tprice_label" align="left"><strong><?php echo JText::_('COM_JTICKETING_ORDER_TOTAL'); ?></strong></td>
-							<td class="jtitem_tprice" <?php echo $priceColStyle;?>><strong><span id="final_amt_pay"	name="final_amt_pay"><?php echo $helperobj->getFromattedPrice(number_format($this->orderinfo->amount,2),$this->currency); ?></span></td>
+							<td class="jtitem_tprice" <?php echo $priceColStyle;?>><strong><span id="final_amt_pay"	name="final_amt_pay"><?php echo $helperobj->getFormattedPrice(number_format($this->orderinfo->amount,2),$this->currency); ?></span></td>
 						</tr>
 						<?php
 						if ($this->orderinfo->amount<=0 and empty($this->orderview))

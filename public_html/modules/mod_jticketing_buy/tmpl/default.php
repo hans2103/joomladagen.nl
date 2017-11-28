@@ -303,7 +303,7 @@ if ($valid == "yes")
 									}
 									else
 									{
-										echo $jticketingMainHelper->getFromattedPrice(number_format(($type->price), 2), $currency);
+										echo $jticketingMainHelper->getFormattedPrice(number_format(($type->price), 2), $currency);
 									}
 									?>
 								</div>

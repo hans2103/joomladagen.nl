@@ -153,7 +153,7 @@ if(empty($this->Data))
 							</td>
 
 							<td align="center">
-								<?php  echo $jticketingmainhelper->getFromattedPrice( number_format(($data->amount),2),$currency);?>
+								<?php  echo $jticketingmainhelper->getFormattedPrice( number_format(($data->amount),2),$currency);?>
 							</td>
 							<td align="center">
 								<?php 	if(!empty($this->user_amount_map[$data->user_id]))
@@ -180,13 +180,13 @@ if(empty($this->Data))
 								<td align="right" colspan="7"><div class="jtright"><?php echo JText::_( 'SUBTOTAL'); ?></div></td>
 								<td  colspan="2">
 									<?php $subtotalamount = $jticketingmainhelper->getsubtotalamount();
-									echo $jticketingmainhelper->getFromattedPrice( number_format(($subtotalamount),2),$currency);?>
+									echo $jticketingmainhelper->getFormattedPrice( number_format(($subtotalamount),2),$currency);?>
 								</td>
 							</tr>
 
 							<tr>
 							<td align="right" colspan="7"><div class="jtright"><?php echo JText::_( 'PAID'); ?></div></td>
-							<td colspan="2" ><?php  echo $jticketingmainhelper->getFromattedPrice( number_format(($totalpaidamount),2),$currency);?></td>
+							<td colspan="2" ><?php  echo $jticketingmainhelper->getFormattedPrice( number_format(($totalpaidamount),2),$currency);?></td>
 							</tr>
 
 							<tr>
@@ -195,9 +195,9 @@ if(empty($this->Data))
 										$balanceamt1=$subtotalamount-$totalpaidamount;
 										$balanceamt=number_format($balanceamt1, 2, '.', '');
 									if($balanceamt=='-0.00')
-										echo $jticketingmainhelper->getFromattedPrice( number_format((0.00),2),$currency);
+										echo $jticketingmainhelper->getFormattedPrice( number_format((0.00),2),$currency);
 									else
-										echo $jticketingmainhelper->getFromattedPrice( number_format(($balanceamt1),2),$currency);?>
+										echo $jticketingmainhelper->getFormattedPrice( number_format(($balanceamt1),2),$currency);?>
 								</td>
 							</tr>
 

@@ -17,7 +17,6 @@ JHtml::_('behavior.keepalive');
 
 // Import CSS
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_jlike/css/form.css');
 $document->addScript(JUri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
 
 $input = JFactory::getApplication()->input;

@@ -2,8 +2,8 @@
 <extension method="upgrade" type="module" client="site" version="3.0">
 	<name>Jticketing Event Calendar</name>
 	<author>Techjoomla</author>
-	<creationDate>26th Jul 2017</creationDate>
-   <version>2.0.4</version>
+	<creationDate>17th Nov 2017</creationDate>
+   <version>2.0.10</version>
 	<copyright>Techjoomla. All Rights Reserved.</copyright>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>http://www.techjoomla.com</authorUrl>

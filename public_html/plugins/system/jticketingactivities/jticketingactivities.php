@@ -64,7 +64,10 @@ class PlgSystemJticketingActivities extends JPlugin
 	 */
 	public function postActivity($data)
 	{
-		if (!empty($data))
+		$jinput    = JFactory::getApplication()->input;
+		$componentName = $jinput->post->get('option');
+
+		if ($componentName == 'com_jticketing' && !empty($data))
 		{
 			$result = $this->PlgSystemJticketingActivitiesHelper->postActivity($data);
 

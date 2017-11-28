@@ -104,7 +104,7 @@ foreach($this->orderitems AS $key => $oitem)
 													<?php if ($field->js_function) echo $field->js_function; ?>
 													class = "<?php if ($field->required) echo "required"; echo $field->validation_class;?>"
 													name = "attendee_field[<?php echo $i; ?>][<?php echo  $field->id; ?>]"
-													placeholder = "<?php if (isset($field->placehoder)) $field->placehoder; else  echo $field->label ?>"
+													placeholder = "<?php if (isset($field->placehoder)) $field->placehoder; else  echo JText::_($field->label) ?>"
 													value = "<?php if (isset($finalOrderItemsValue[$oitem->attendee_id][$field->name])) echo htmlspecialchars($finalOrderItemsValue[$oitem->attendee_id][$field->name], ENT_COMPAT, 'UTF-8');?>">
 												<?php
 											break;

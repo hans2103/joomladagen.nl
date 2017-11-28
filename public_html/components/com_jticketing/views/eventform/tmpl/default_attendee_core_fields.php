@@ -26,7 +26,7 @@
 					?>
 					<tr class="row<?php echo $i % 2; ?>">
 							<td >
-								<?php echo htmlspecialchars($item->label, ENT_COMPAT, 'UTF-8'); ?>
+								<?php echo htmlspecialchars(JText::_($item->label), ENT_COMPAT, 'UTF-8'); ?>
 							</td>
 							<td >
 								<?php echo $item->type; ?>

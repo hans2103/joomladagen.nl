@@ -49,9 +49,13 @@ if ($mainframe->isAdmin())
 	var enableOnlineVenues = '<?php echo $this->enableOnlineVenues;?>';
 	var selectedVenue = '<?php echo $this->item->venue;?>';
 	var jticketing_baseurl = "<?php echo JUri::root(); ?>";
+	var handle_transactions = "<?php echo $this->com_params->get('handle_transactions'); ?>";
+	var array_check = "<?php echo $this->arra_check; ?>";
 	jtAdmin.event.initEventJs();
+	validation.positiveNumber();
 </script>
-
+<div id="warning_message">
+</div>
 <form action="<?php echo JRoute::_('index.php?option=com_jticketing&layout=edit&id=' . (int) $this->item->id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 	<div class="form-horizontal">
@@ -75,7 +79,7 @@ if ($mainframe->isAdmin())
 						echo JHtml::_('bootstrap.endAccordion');
 					echo JHtml::_('bootstrap.endTab');
 					// TJ-Field Additional fields for Event
-					if ($this->form_extra_fields)
+					if ($this->form_extra)
 					{
 						echo JHtml::_('bootstrap.addTab', 'myTab', 'extrafields', JText::_('COM_JTICKETING_EVENT_TAB_EXTRA_FIELDS', true));
 

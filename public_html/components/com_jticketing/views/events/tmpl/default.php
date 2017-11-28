@@ -13,7 +13,8 @@ JHtml::_('bootstrap.tooltip');
 
 $document               = JFactory::getDocument();
 $document->addScript(JUri::root(true) . '/media/com_jticketing/js/jticketing.js');
-
+require_once JPATH_ADMINISTRATOR . '/components/com_jticketing/helpers/jticketing.php';
+$canDo = JticketingHelper::getActions();
 
 // Import helper for declaring language constant
 JLoader::import('Jticketingmainhelper', JUri::root() . 'components/com_jticketing/helpers/main.php');
@@ -64,6 +65,8 @@ $params = JComponentHelper::getParams('com_jticketing');
 			<div class="col-xs-12 col-md-9 ">
 				<form action="" method="post" name="eventsForm" id="eventsForm">
 					<ul class="pull-right list-inline">
+						<?php
+						if ($canDo->get("core.create")): ?>
 						<li>
 							<?php
 								$launch_event_url = JRoute::_('index.php?option=com_jticketing&view=eventform&Itemid=' . $this->create_event_itemid);
@@ -75,6 +78,7 @@ $params = JComponentHelper::getParams('com_jticketing');
 						</li>
 						<li>|</li>
 						<?php
+						endif;
 						if ($this->params->get('show_search_filter'))
 						{
 						?>

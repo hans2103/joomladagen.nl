@@ -347,22 +347,26 @@ class JticketingModelEventForm extends JModelAdmin
 				$ticketTypes = $data['tickettypes'];
 				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_jticketing/models', 'tickettypes');
 				$ticketTypesModel = JModelLegacy::getInstance('Tickettypes', 'JticketingModel');
-				$tickets = array();
-				$ticketFieldIds = $jticketingfrontendhelper->getTicketTypeFields($xrefId->id);
+				$existingTicketTypes = $ticketTypesModel->getTicketTypes($xrefId->id);
 
-				if ($ticketFieldIds)
-				{
-					foreach ($ticketFieldIds as $ticketId)
-					{
-						$deleteTicketField = $ticketTypesModel->delete($ticketId['id']);
-					}
-				}
+				$tickets = array();
+				$newTicketTypes = array();
+				$existingId = array();
+				$validCount = 0;
+				$existingCount = 0;
 
 				foreach ($ticketTypes as $ticketType)
 				{
-					$tickets['id'] = '';
-					$tickets['count'] = $ticketType['available'];
+					if (!empty($ticketType['id']))
+					{
+						$tickets['id'] = $ticketType['id'];
+					}
+					else
+					{
+						$tickets['id'] = '';
+					}
 
+					$tickets['count'] = $ticketType['available'];
 					$tickets['title'] = $ticketType['title'];
 					$tickets['desc'] = $ticketType['desc'];
 					$tickets['unlimited_seats'] = $ticketType['unlimited_seats'];
@@ -370,46 +374,124 @@ class JticketingModelEventForm extends JModelAdmin
 					$tickets['state'] = $ticketType['state'];
 					$tickets['price'] = $ticketType['price'];
 
-					$tickets['access'] = $ticketType['access'];
+					if ($com_params->get('show_access_level') == 0)
+					{
+						$tickets['access'] = $com_params->get('default_accesslevels', '1');
+					}
+					else
+					{
+						$tickets['access'] = $ticketType['access'];
+					}
+
 					$tickets['eventid'] = $xrefId->id;
 					$ticketTypesModel->save($tickets);
 				}
 
-					$attendeeFieldModel = JModelLegacy::getInstance('Attendeefields', 'JTicketingModel');
-					$attendeeCoreFieldModel = JModelLegacy::getInstance('Attendeecorefields', 'JTicketingModel');
-					$attendeeFieldIds = $attendeeCoreFieldModel->getAttendeeFields($xrefId->id);
+				foreach ($existingTicketTypes as $existingTicketType)
+				{
+					$existingId[$existingCount] = $existingTicketType['id'];
+					$existingCount++;
 
-					if ($attendeeFieldIds)
+					foreach ($ticketTypes as $ticketType)
 					{
-						foreach ($attendeeFieldIds as $attendeeId)
+						if ($ticketType['id'] == $existingTicketType['id'])
 						{
-							$deleteAttendeeField = $attendeeFieldModel->delete($attendeeId['id']);
+							$newTicketTypes[$validCount] = $ticketType['id'];
+							$validCount++;
 						}
 					}
+				}
+
+				$invalidTicketTypeIds = array_diff($existingId, $newTicketTypes);
+
+				foreach ($invalidTicketTypeIds as $invalidId)
+				{
+					// Make a check if this particular ticket type has any orders against it.
+					$ticketOrder = $ticketTypesModel->checkOrderExistsTicketType($invalidId);
+
+					if (empty($ticketOrder))
+					{
+						$ticketTypesModel->delete($invalidId);
+					}
+					else
+					{
+						$app->enqueueMessage(JText::_('COM_JTICKETING_EVENT_TICKET_TYPES_DELETE_ERROR'), 'warning');
+
+						return false;
+					}
+				}
 
 				if ($this->collect_attendee_info_checkout == 1)
 				{
 					// Save Attendee fields
 					$attendeeFields = $data['attendeefields'];
 					$attendeeFieldsModel = JModelLegacy::getInstance('Attendeefields', 'JticketingModel');
+					$attendeeCoreFieldsModel = JModelLegacy::getInstance('AttendeeCoreFields', 'JticketingModel');
+					$existingAttendeeFields = $attendeeCoreFieldsModel->getAttendeeFields($xrefId->id);
+					$attendeeFieldsArray = array();
+					$validAttendeeField = array();
+					$existingId = array();
+					$validCount = 0;
+					$existingCount = 0;
 
 					foreach ($attendeeFields as $attendeeField)
 					{
-						$attendeeData['id'] = '';
-
-						$attendeeData['label'] = $attendeeField['label'];
-						$attendeeData['type'] = $attendeeField['type'];
-						$attendeeData['default_selected_option'] = $attendeeField['default_selected_option'];
-						$attendeeData['required'] = $attendeeField['required'];
-						$attendeeData['eventid'] = $xrefId->id;
-						$attendeeData['state'] = 1;
-
-						if (!empty($attendeeData['label']))
+						if (!empty($attendeeField['id']))
 						{
-							$string = strtolower($attendeeData['label']);
+							$attendeeFieldsArray['id'] = $attendeeField['id'];
+						}
+						else
+						{
+							$attendeeFieldsArray['id'] = '';
+						}
+
+						$attendeeFieldsArray['label'] = $attendeeField['label'];
+						$attendeeFieldsArray['type'] = $attendeeField['type'];
+						$attendeeFieldsArray['core'] = 0;
+						$attendeeFieldsArray['default_selected_option'] = $attendeeField['default_selected_option'];
+						$attendeeFieldsArray['required'] = $attendeeField['required'];
+						$attendeeFieldsArray['eventid'] = $xrefId->id;
+						$attendeeFieldsArray['state'] = 1;
+
+						if (!empty($attendeeFieldsArray['label']))
+						{
+							$string = strtolower($attendeeFields['label']);
 							$string = str_replace(' ', '_', $string);
-							$attendeeData['name'] = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
-							$return = $attendeeFieldsModel->save($attendeeData);
+							$attendeeFieldsArray['name'] = preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+							$return = $attendeeFieldsModel->save($attendeeFieldsArray);
+						}
+					}
+
+					foreach ($existingAttendeeFields as $existingAttendeeField)
+					{
+						$existingId[$existingCount] = $existingAttendeeField['id'];
+						$existingCount++;
+
+						foreach ($attendeeFields as $attendeeField)
+						{
+							if ($attendeeField['id'] == $existingAttendeeField['id'])
+							{
+								$validAttendeeField[$validCount] = $attendeeField['id'];
+								$validCount++;
+							}
+						}
+					}
+
+					$invalidAttendeeFieldIds = array_diff($existingId, $validAttendeeField);
+
+					foreach ($invalidAttendeeFieldIds as $invalidId)
+					{
+						$attendeeFieldCheck = $attendeeFieldsModel->checkAttendeeFieldValue($invalidId);
+
+						if (empty($attendeeFieldCheck))
+						{
+							$attendeeFieldsModel->delete($invalidId);
+						}
+						else
+						{
+							$app->enqueueMessage(JText::_('COM_JTICKETING_EVENT_ATENDEE_FIELDS_DELETE_ERROR'), 'warning');
+
+							return false;
 						}
 					}
 				}

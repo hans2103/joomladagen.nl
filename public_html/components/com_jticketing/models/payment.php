@@ -220,7 +220,10 @@ class JticketingModelpayment extends JModelLegacy
 		$vars->cancel_return = JURI::root() . substr(JRoute::_($cancel_return, false), strlen(JURI::base(true)) + 1);
 		$url                 = JURI::root() . "index.php?option=com_jticketing&task=payment.processpayment" . $guest_email;
 		$url .= "&processor=" . $pg_plugin . "&order_id=" . $pass_data->order_id;
-		$vars->url           = $vars->notify_url = JRoute::_($url, false);
+		$vars->url           = JRoute::_($url, false);
+		$vars->notify_url = JURI::root() . "index.php?option=com_jticketing&task=payment.notify&order_id="
+. $pass_data->order_id . $guest_email . "&processor=" . $pg_plugin;
+
 		$vars->currency_code = $pass_data->currency;
 		$vars->comment       = $pass_data->customer_note;
 		$vars->amount        = $pass_data->order_amt;
@@ -494,94 +497,118 @@ class JticketingModelpayment extends JModelLegacy
 			$plugin_payment_method = $post['plugin_payment_method'];
 		}
 
-		$vars = $this->getPaymentVars($pg_plugin, $order_id);
 		$dispatcher     = JDispatcher::getInstance();
 		$post['client'] = 'jticketing';
 		JPluginHelper::importPlugin('payment', $pg_plugin);
-		$data = $dispatcher->trigger('onTP_Processpayment', array($post, $vars));
+		$vars = $this->getPaymentVars($pg_plugin, $order_id);
+
+		try
+		{
+			$data = $dispatcher->trigger('onTP_Processpayment', array($post, $vars));
+		}
+		catch (Exception $e)
+		{
+			http_response_code(400);
+			echo new JResponseJson($e);
+		}
+
 		$data = $data[0];
 
-		// $res  = @$this->storelog($pg_plugin, $data);
-
-		$jticketingmainhelper = new jticketingmainhelper;
-		$orderItemid          = $jticketingmainhelper->getItemId('index.php?option=com_jticketing&view=orders');
-		$chkoutItemid         = $jticketingmainhelper->getItemId('index.php?option=com_jticketing&view=order');
-
-		// Get order id
-		if (empty($order_id))
+		if ($data)
 		{
-			// Here we get order_id in Format JT_JKJKJK_0012
-			$order_id = $data['order_id'];
+			try
+			{
+				// $res  = @$this->storelog($pg_plugin, $data);
+
+				$jticketingmainhelper = new jticketingmainhelper;
+				$orderItemid          = $jticketingmainhelper->getItemId('index.php?option=com_jticketing&view=orders');
+				$chkoutItemid         = $jticketingmainhelper->getItemId('index.php?option=com_jticketing&view=order');
+
+				// Get order id
+				if (empty($order_id))
+				{
+					// Here we get order_id in Format JT_JKJKJK_0012
+					$order_id = $data['order_id'];
+				}
+
+				// Get order_id in format 12
+				$id = $jticketingmainhelper->getIDFromOrderID($order_id);
+
+				// Start for guest checkout
+				$query = "SELECT ou.user_id,ou.user_email
+				FROM #__jticketing_users as ou
+				WHERE ou.address_type='BT' AND ou.order_id=" . $id;
+				$this->_db->setQuery($query);
+				$user_detail = $this->_db->loadObject();
+				$params      = JComponentHelper::getParams('com_jticketing');
+				$guest_email = "";
+
+				if (!$user_detail->user_id && $params->get('allow_buy_guest'))
+				{
+					$guest_email = "&email=" . md5($user_detail->user_email);
+				}
+
+				$data['processor'] = $pg_plugin;
+				$data['status']    = trim($data['status']);
+				$query             = "SELECT o.amount
+						FROM #__jticketing_order  as o
+						where o.id=" . $id;
+				$this->_db->setQuery($query);
+				$order_amount          = $this->_db->loadResult();
+				$return_resp['status'] = '0';
+
+				if ($order_amount == 0)
+				{
+					$data['order_id']       = $id;
+					$data['total_paid_amt'] = 0;
+					$data['processor']      = $pg_plugin;
+					$data['status']         = 'C';
+				}
+
+				if (($data['status'] == 'C' && $order_amount == $data['total_paid_amt']) or ($data['status'] == 'C' && $order_amount == 0))
+				{
+					$data['status']        = 'C';
+					$return_resp['status'] = '1';
+				}
+				elseif ($order_amount != $data['total_paid_amt'] and $data['processor'] != 'adaptive_paypal')
+				{
+					$data['status']        = 'E';
+					$return_resp['status'] = '0';
+				}
+				elseif (empty($data['status']))
+				{
+					$data['status']        = 'P';
+					$return_resp['status'] = '0';
+				}
+
+				if ($data['status'] != 'C' && !empty($data['error']))
+				{
+					$return_resp['msg'] = $data['error']['code'] . " " . $data['error']['desc'];
+				}
+
+				$this->updateOrder($id, $user_detail->user_id, $data, $return_resp);
+
+				// Clear order session
+				$session->set('JT_orderid', '');
+				$session->set('JT_fee', '');
+				$return = "index.php?option=com_jticketing&view=orders&layout=order";
+				$return .= $guest_email . "&orderid=" . ($order_id) . "&processor={$pg_plugin}&Itemid=" . $orderItemid;
+				$return_resp['return'] = JUri::root() . substr(JRoute::_($return, false), strlen(JUri::base(true)) + 1);
+
+				// Trigger After Process Payment
+				$dispatcher = JDispatcher::getInstance();
+				JPluginHelper::importPlugin('system');
+				$result = $dispatcher->trigger('jt_OnAfterProcessPayment', array($data, $order_id, $pg_plugin));
+			}
+			catch (Exception $e)
+			{
+				throw new Exception($e->getMessage());
+			}
 		}
-
-		// Get order_id in format 12
-		$id = $jticketingmainhelper->getIDFromOrderID($order_id);
-
-		// Start for guest checkout
-		$query = "SELECT ou.user_id,ou.user_email
-		FROM #__jticketing_users as ou
-		WHERE ou.address_type='BT' AND ou.order_id=" . $id;
-		$this->_db->setQuery($query);
-		$user_detail = $this->_db->loadObject();
-		$params      = JComponentHelper::getParams('com_jticketing');
-		$guest_email = "";
-
-		if (!$user_detail->user_id && $params->get('allow_buy_guest'))
+		else
 		{
-			$guest_email = "&email=" . md5($user_detail->user_email);
+			$return_resp['msg'] = JText::_('COM_JTICKETING_ORDER_ERROR');
 		}
-
-		$data['processor'] = $pg_plugin;
-		$data['status']    = trim($data['status']);
-		$query             = "SELECT o.amount
-				FROM #__jticketing_order  as o
-				where o.id=" . $id;
-		$this->_db->setQuery($query);
-		$order_amount          = $this->_db->loadResult();
-		$return_resp['status'] = '0';
-
-		if ($order_amount == 0)
-		{
-			$data['order_id']       = $id;
-			$data['total_paid_amt'] = 0;
-			$data['processor']      = $pg_plugin;
-			$data['status']         = 'C';
-		}
-
-		if (($data['status'] == 'C' && $order_amount == $data['total_paid_amt']) or ($data['status'] == 'C' && $order_amount == 0))
-		{
-			$data['status']        = 'C';
-			$return_resp['status'] = '1';
-		}
-		elseif ($order_amount != $data['total_paid_amt'] and $data['processor'] != 'adaptive_paypal')
-		{
-			$data['status']        = 'E';
-			$return_resp['status'] = '0';
-		}
-		elseif (empty($data['status']))
-		{
-			$data['status']        = 'P';
-			$return_resp['status'] = '0';
-		}
-
-		if ($data['status'] != 'C' && !empty($data['error']))
-		{
-			$return_resp['msg'] = $data['error']['code'] . " " . $data['error']['desc'];
-		}
-
-		$this->updateOrder($id, $user_detail->user_id, $data, $return_resp);
-
-		// Clear order session
-		$session->set('JT_orderid', '');
-		$session->set('JT_fee', '');
-		$return = "index.php?option=com_jticketing&view=orders&layout=order";
-		$return .= $guest_email . "&orderid=" . ($order_id) . "&processor={$pg_plugin}&Itemid=" . $orderItemid;
-		$return_resp['return'] = JUri::root() . substr(JRoute::_($return, false), strlen(JUri::base(true)) + 1);
-
-		// Trigger After Process Payment
-		$dispatcher = JDispatcher::getInstance();
-		JPluginHelper::importPlugin('system');
-		$result = $dispatcher->trigger('jt_OnAfterProcessPayment', array($data, $order_id, $pg_plugin));
 
 		return $return_resp;
 	}
@@ -736,7 +763,7 @@ class JticketingModelpayment extends JModelLegacy
 			$meeting_url = json_decode($orderinfo['eventinfo']->jt_params);
 			$venueDetails               = $jticketingfrontendhelper->getVenue($orderinfo['eventinfo']->venue);
 			$orderDetails               = $jticketingmainhelper->getOrderDetail($order_id);
-			$randomPassword               = $jticketingmainhelper->rand_str(8);
+			$randomPassword             = $jticketingmainhelper->rand_str(8);
 			$venueParams                = json_decode($venueDetails->params);
 			$venueParams->user_id  = $orderDetails->user_id;
 			$venueParams->name     = $orderDetails->name;
@@ -753,7 +780,7 @@ class JticketingModelpayment extends JModelLegacy
 
 				if (in_array('ticket_email', $email_options))
 				{
-					$email  = JticketingMailHelper::onlineEventNotify($venueParams, $order['eventinfo']);
+					$email  = JticketingMailHelper::onlineEventNotify($id, $venueParams, $order['eventinfo']);
 				}
 			}
 		}
@@ -1408,7 +1435,8 @@ class JticketingModelpayment extends JModelLegacy
 
 			foreach ($adaptiveDetails as $detail)
 			{
-				$receiverList[$index]['receiver'] = $detail['pay_detail'];
+				$adaptiveEmail = json_decode($detail['paypal_detail']);
+				$receiverList[$index]['receiver'] = $adaptiveEmail->payment_email_id;
 
 				// Changed above 2 lines by sagar to make event owner as primary receiver
 				$receiverList[$index]['amount']  = $vars->amount;

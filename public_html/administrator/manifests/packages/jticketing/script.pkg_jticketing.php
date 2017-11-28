@@ -89,7 +89,10 @@ class Pkg_jticketingInstallerScript
 					'plug_tjevents_adobeconnect' => 1,
 				),
 				'tjvideo' => array(
-				'jwplayer' => 1, 'vimeo' => 1)
+				'jwplayer' => 1, 'vimeo' => 1),
+				'search' => array(
+				'jtevents' => 1
+				)
 			),
 
 			'applications' => array(

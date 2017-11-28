@@ -9,6 +9,8 @@
 
 defined('JPATH_BASE') or die;
 jimport('joomla.filesystem.file');
+jimport('techjoomla.common');
+jimport('techjoomla.jsocial.jsocial');
 
 /**
  * Interface to handle Social Extensions
@@ -421,10 +423,20 @@ class JSocialJomsocial implements JSocial
 	 *
 	 * @return ARRAY success 0 or 1
 	 */
-	public function addpoints(JUser $receiver,$options=array())
+	public function addpoints(JUser $receiver, $options = array())
 	{
+		$techjoomlaCommon = new TechjoomlaCommon;
+		$jomSocialVersion = $techjoomlaCommon->getExtensionVersion('component', 'Community');
+
 		CFactory::load('libraries', 'userpoints');
 		CFactory::load('libraries', 'notification');
+
+		// From JS version 4.1 the assign points API was changed
+		if (version_compare($jomSocialVersion, '4.1', 'ge'))
+		{
+			$options['command'] = $options['extension'] . "." . $options['command'];
+		}
+
 		CuserPoints::assignPoint($options['command'], $receiver->id);
 	}
 
@@ -494,5 +506,19 @@ class JSocialJomsocial implements JSocial
 		$member->store();
 
 		return true;
+	}
+
+	/**
+	 * The function to update the custom fields
+	 *
+	 * @param   ARRAY   $fieldsArray  Custom field array
+	 * @param   OBJECT  $userId       User Id
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function addUserFields($fieldsArray, $userId)
+	{
 	}
 }

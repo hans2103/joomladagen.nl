@@ -57,20 +57,40 @@ class JticketingControllerOrder extends jticketingController
 	 */
 	public function applyTax()
 	{
-		$input = JFactory::getApplication()->input;
+		$app        = JFactory::getApplication();
+		$input      = $app->input;
+		$taxDetails = array();
+
+		$jticketingMainHelper = new jticketingmainhelper;
 
 		// Set Required Sessions
 		$post           = $input->post;
-		$totalCalAmt = $input->get('total_calc_amt', '', 'STRING');
+		$totalCalAmt    = $input->get('total_calc_amt', '', 'STRING');
 		$dispatcher     = JDispatcher::getInstance();
 
 		// @TODO:need to check plugim type..
 		JPluginHelper::importPlugin('jticketingtax');
 
 		// Call the plugin and get the result
-		$taxResults = $dispatcher->trigger('addTax', array($totalCalAmt));
-		echo json_encode($taxResults['0']);
-		jexit();
+		$taxResults        = $dispatcher->trigger('addTax', array($totalCalAmt));
+		$taxAmount         = $taxResults[0]->taxvalue;
+		$netAmountAfterTax = $taxAmount + $totalCalAmt;
+
+		// Get rounded ammounts for further calculations
+		$roundedTaxAmount         = $jticketingMainHelper->getRoundedPrice($taxAmount);
+		$roundedNetAmountAfterTax = $jticketingMainHelper->getRoundedPrice($netAmountAfterTax);
+
+		// Get formatted output to display directly
+		$formattedTaxAmount         = $jticketingMainHelper->getFormattedPrice($taxAmount);
+		$formattedNetAmountAfterTax = $jticketingMainHelper->getFormattedPrice($netAmountAfterTax);
+
+		// Collect datat in single array for json
+		$taxDetails['roundedTaxAmount']           = $roundedTaxAmount;
+		$taxDetails['roundedNetAmountAfterTax']   = $roundedNetAmountAfterTax;
+		$taxDetails['formattedTaxAmount']         = $formattedTaxAmount;
+		$taxDetails['formattedNetAmountAfterTax'] = $formattedNetAmountAfterTax;
+
+		echo new JResponseJson($taxDetails);
 	}
 
 	/**
@@ -466,5 +486,38 @@ class JticketingControllerOrder extends jticketingController
 
 		echo json_encode($order);
 		jexit();
+	}
+
+	/**
+	 * Get total Ammount
+	 *
+	 * @return  array
+	 *
+	 * @since  1.0.0
+	 */
+	public function getTotalAmount()
+	{
+		$app        = JFactory::getApplication();
+		$input      = $app->input;
+		$result     = array();
+		$amount     = $input->get('amt', '', 'STRING');
+		$totalPrice = $input->get('totalPrice', '', 'STRING');
+
+		$jticketingMainHelper = new jticketingmainhelper;
+
+		// Get all amount calulation rounded and formatted
+		$roundedAmount   = $jticketingMainHelper->getRoundedPrice($amount);
+		$formattedAmount = $jticketingMainHelper->getFormattedPrice($amount);
+
+		// Get total price of current ticket type
+		$roundedTotalPrice   = $jticketingMainHelper->getRoundedPrice($totalPrice);
+		$formattedTotalPrice = $jticketingMainHelper->getFormattedPrice($totalPrice);
+
+		$result['roundedTotalPrice']   = $roundedTotalPrice;
+		$result['formattedTotalPrice'] = $formattedTotalPrice;
+		$result['rounded_amount']      = $roundedAmount;
+		$result['formatted_amount']    = $formattedAmount;
+
+		echo new JResponseJson($result);
 	}
 }

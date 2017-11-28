@@ -17,8 +17,16 @@ var jtSite =
 
 	venueForm:
 	{
+		/* Google Map autosuggest  for location */
+		initializeGMapSuggest: function ()
+		{
+			input = document.getElementById('jform_address');
+			var autocomplete = new google.maps.places.Autocomplete(input);
+		},
+
 		initVenueFormJs: function()
 		{
+			google.maps.event.addDomListener(window, 'load', jtSite.venueForm.initializeGMapSuggest);
 			jQuery(document).ready(function()
 			{
 				jQuery('input[name="jform[online]').click(function()
@@ -71,6 +79,7 @@ var jtSite =
 				var host_url = jQuery('input[name="jform[host_url]"]:checked').val();
 				var source_sco_id = jQuery('input[name="jform[source_sco_id]"]:checked').val();
 				var onlines = jQuery('input[name="jform[online]"]:checked').val();
+				var onlineProvider  = jQuery('#jformonline_provider').val();
 				if(editId && onlines == "0")
 				{
 					jQuery('#api_username').val('');
@@ -80,7 +89,7 @@ var jtSite =
 				}
 				if (jQuery('input[name="jform[online]"]:checked').val() == 1)
 				{
-					if (!jQuery("#jformonline_provider").val())
+					if (!onlineProvider || onlineProvider == '0')
 					{
  						alert(Joomla.JText._('COM_JTICKETING_VENUE_FORM_ONLINE_PROVIDER'));
 						jQuery('#jformonline_provider').focus();
@@ -625,8 +634,8 @@ var jtSite =
 			{
 				if (eventType == 0)
 				{
-					totalCalcAmt2 = 0;
-					jQuery("input[class='input-small type_ticketcounts']").each(function()
+					var totalCalcAmt2;
+					jQuery("input[class='input-sm type_ticketcounts']").each(function()
 					{
 						totalCalcAmt2 = parseFloat(totalCalcAmt2) + parseFloat(jQuery(this).val())
 					});
@@ -761,18 +770,21 @@ var jtSite =
 		},
 		calTotal: function(available, totalPriceId, count, obj, unlimited, perUserLimit, maxUserPerTicket)
 		{
-			totalCalcAmt2 = 0;
+			totalTicketCount = 0;
 			jQuery("input[class='input-small type_ticketcounts']").each(function()
 			{
-				totalCalcAmt2 = parseInt(totalCalcAmt2) + parseInt(jQuery(this).val())
+				totalTicketCount = parseInt(totalTicketCount) + parseInt(jQuery(this).val())
 			});
+
+
 			/* If entered no of ticket is greater than no of tickets allowed*/
-			if (parseInt(perUserLimit) < parseInt(totalCalcAmt2))
+			if (parseInt(perUserLimit) < parseInt(totalTicketCount))
 			{
 				alert(maxUserPerTicket);
 				obj["value"] = 0;
 				return;
 			}
+
 			/* If entered no of ticket is greater than no of tickets allowed */
 			if ((parseInt(unlimited)!=1))
 			{
@@ -785,17 +797,23 @@ var jtSite =
 			}
 			totalCalcAmt = 0;
 			totalPrice = count * parseFloat(obj['value']);
+
 			if (isNaN(totalPrice))
 			{
 				totalPrice = 0;
 			}
+
 			totalPrice = totalPrice.toFixed(2);
+
+			// Attach unformatted value to html for total amount calculation and then override this with proper format after ajax
 			jQuery("#ticket_total_price" + totalPriceId).html(totalPrice);
 			jQuery("#ticket_total_price_inputbox"+totalPriceId).val(totalPrice);
+
 			jQuery("input[class='totalpriceclass']").each(function()
 			{
 				totalCalcAmt = parseFloat(totalCalcAmt) + parseFloat(jQuery(this).val())
 			});
+
 			var couponEnable = 0;
 			if (parseInt(totalCalcAmt) == 0)
 			{
@@ -814,16 +832,40 @@ var jtSite =
 			{
 				totalCalcAmt = 0;
 			}
-			totalCalcAmt = totalCalcAmt.toFixed(2);
-			jQuery("#total_amt").html(totalCalcAmt);
-			jQuery("#total_amt_inputbox").val(totalCalcAmt);
-			jQuery("#net_amt_pay").html(totalCalcAmt);
-			jQuery("#net_amt_pay_inputbox").val(totalCalcAmt);
-			var allowTaxation = jQuery("#allow_taxation").val();
-			if (allowTaxation == 1)
+
+			// Get formatted ammount
+			jQuery.ajax(
 			{
-				jtSite.order.calculateTax(totalCalcAmt);
-			}
+				url: root_url + "index.php?option=com_jticketing&format=json&task=order.getTotalAmount&tmpl=component&amt=" + totalCalcAmt + "&totalPrice="+totalPrice,
+				type: "POST",
+
+				dataType: "json",
+				success: function(result)
+				{
+					// Total ticket calculation amount
+					formattedAmount = result.data.formatted_amount
+					roundedAmount = result.data.rounded_amount;
+
+					// Currenct ticket type price
+					roundedTotalPrice = result.data.roundedTotalPrice;
+					formattedTotalPrice = result.data.formattedTotalPrice;
+
+					jQuery("#ticket_total_price" + totalPriceId).html(formattedTotalPrice);
+					jQuery("#ticket_total_price_inputbox"+totalPriceId).val(roundedTotalPrice);
+
+					jQuery("#total_amt").html(formattedAmount);
+					jQuery("#total_amt_inputbox").val(roundedAmount);
+					jQuery("#net_amt_pay").html(formattedAmount);
+					jQuery("#net_amt_pay_inputbox").val(roundedAmount);
+					var allowTaxation = jQuery("#allow_taxation").val();
+
+					if (allowTaxation == 1)
+					{
+						jtSite.order.calculateTax(roundedAmount);
+					}
+				}
+			});
+
 		},
 		calculateTax: function(amount)
 		{
@@ -832,33 +874,14 @@ var jtSite =
 				url: root_url + "index.php?option=com_jticketing&format=json&task=order.applytax&tmpl=component&total_calc_amt=" + amount,
 				type: "GET",
 				dataType: "json",
-				success: function(taxData)
+				success: function(result)
 				{
-					if (taxData != null  && parseFloat(taxData.taxvalue) > 0)
-					{
-						jQuery("#order_tax").val(parseFloat(taxData.taxvalue));
-						var taxAmount = jQuery("#order_tax").val();
-						taxAmount = parseFloat(taxAmount)
-						taxAmount = taxAmount.toFixed(2);
-						jQuery("#tax_to_pay").html(taxAmount);
-						jQuery("#tax_to_pay_inputbox").val(taxAmount);
-						var netAmountAfterTax = parseFloat(taxAmount) + parseFloat(amount)
-						netAmountAfterTax = netAmountAfterTax.toFixed(2);
-						jQuery("#net_amt_after_tax").html(netAmountAfterTax);
-						jQuery("#net_amt_after_tax_inputbox").val(netAmountAfterTax);
-						jQuery("#tax_tr").show();
-					}
-					else
-					{
-						jQuery("#order_tax").val(0);
-						jQuery("#tax_to_pay").html(0);
-						jQuery("#tax_to_pay_inputbox").val(0);
-						var netAmountAfterTax = parseFloat(amount)
-						netAmountAfterTax = netAmountAfterTax.toFixed(2);
-						jQuery("#net_amt_after_tax").html(amount);
-						jQuery("#net_amt_after_tax_inputbox").val(amount);
-						jQuery("#tax_tr").hide();
-					}
+					jQuery("#order_tax").val(result.data.roundedTaxAmount);
+					jQuery("#tax_to_pay").html(result.data.formattedTaxAmount);
+					jQuery("#tax_to_pay_inputbox").val(result.data.roundedTaxAmount);
+					jQuery("#net_amt_after_tax").html(result.data.formattedNetAmountAfterTax);
+					jQuery("#net_amt_after_tax_inputbox").val(result.data.roundedNetAmountAfterTax);
+					jQuery("#tax_tr").show();
 				}
 			});
 		},
@@ -1034,7 +1057,7 @@ var jtSite =
 		},
 		gatewayHtml: function(element,orderId)
 		{
-			var prevButtonHtml = '<button id="btnWizardPrev1" onclick="jQuery(\'#MyWizard\').wizard(\'previous\');"	type="button" class="btn  btn-default  btn-prev pull-left" > <i class="icon-arrow-left" ></i>Prev</button>';
+			var prevButtonHtml = '<button id="btnWizardPrev1" onclick="jQuery(\'#MyWizard\').wizard(\'previous\');"	type="button" class="btn  btn-default  btn-prev pull-left" > <i class="icon-arrow-left" ></i>'+Joomla.JText._('COM_JTICKETING_PREV')+'</button>';
 			jQuery.ajax({
 				beforeSend: function()
 				{
@@ -1323,6 +1346,38 @@ var jtSite =
 						jQuery("#existingEvent").hide();
 					}
 				});
+
+				jQuery(document).on('subform-row-add', function(event, row){
+
+					jQuery('.price').change(function(){
+
+						var returnValue = jtSite.eventform.getRoundedValue(this.value);
+
+						if (returnValue)
+						{
+							jQuery(this.id).focus();
+
+							var error_html = '';
+							error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  returnValue;
+							jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+							return false;
+						}
+					});
+				});
+
+				jQuery('.price').change(function(){
+					var returnValue = jtSite.eventform.getRoundedValue(this.value);
+
+					if (returnValue)
+					{
+						jQuery(this.id).focus();
+
+						var error_html = '';
+						error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  returnValue;
+						jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+						return false;
+					}
+				});
 			});
 
 			Joomla.submitbutton = function (task)
@@ -1351,11 +1406,27 @@ var jtSite =
 				var eventBookingEndTime = jtSite.eventform.ConvertTimeformat(eventBookingEndDate, eventBookingEndHours, eventBookingEndMinutes, eventBookingEndAmPm);
 				var compareBookingStartDate = new Date(eventBookingStartTime);
 				var compareBookingEndDate = new Date(eventBookingEndTime);
+				var value = new Array() ;
+
+				jQuery(".price").each(function() {
+					returnValue = jtSite.eventform.getRoundedValue(jQuery(this).val());
+					if (returnValue) {
+						value.push(returnValue);
+					}
+				});
 
 				if(task == "eventform.save")
 				{
-					var description =tinyMCE.get('jform_long_description').getContent()
-						if (compareEndDate <= compareStartDate) {
+						if (value.length != 0)
+						{
+							jQuery(value).each(function(){
+								var error_html = '';
+								error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  value;
+								jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+								return false;
+							});
+						}
+						else if (compareEndDate <= compareStartDate) {
 							var error_html = '';
 							error_html += "<br />" + Joomla.JText._('COM_JTICKETING_FORM_LBL_EVENT_DATE_ERROR');
 							jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
@@ -1388,6 +1459,29 @@ var jtSite =
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
 			}
+		},
+		getRoundedValue: function(value) {
+			var errorMsg = '';
+
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: value,
+					async:false,
+					url: root_url+"index.php?option=com_jticketing&format=json&task=eventform.getRoundedValue&price="+value,
+					success:function(data) {
+
+						if (data.data != value)
+						{
+							roundedPrice = data.data;
+							errorMsg = Joomla.JText._('COM_JTICKETING_VALIDATE_ROUNDED_PRICE').concat(roundedPrice);
+						}
+
+					},
+				});
+
+			return errorMsg;
+
 		},
 		showLocation: function(){
 			var venue = jQuery('#jform_venue').val();
@@ -1582,7 +1676,7 @@ var jtSite =
 						var eventList = data['0']['report-bulk-objects']['row'];
 						if (eventList !== undefined && eventList !== null)
 						{
-							var op = "<option value='abcde' selected='selected'> <?php echo JText::_('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION'); ?> </option>";
+							var op = "<option value='abcde' selected='selected'>" + Joomla.JText._('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION') + "</option>";
 							techjoomla.jQuery("#jform_existing_event").append(op);
 							for(index = 0; index < eventList.length; ++index)
 							{
@@ -1629,7 +1723,7 @@ var jtSite =
 					var eventList = data['0']['report-bulk-objects']['row'];
 					if (eventList !== undefined && eventList !== null)
 					{
-						var op = "<option value='abcde' selected='selected'> <?php echo JText::_('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION'); ?> </option>";
+						var op = "<option value='abcde' selected='selected'>" + Joomla.JText._('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION') + "</option>";
 						jQuery("#jform_existing_event").append(op);
 						for(index = 0; index < eventList.length; ++index)
 						{
@@ -1720,6 +1814,10 @@ var jtAdmin = {
 					{
 						jtAdmin.event.existingEventSelection();
 					});
+					jQuery("#jform_created_by").change(function()
+					{
+						jtAdmin.event.checkUserEmail();
+					});
 					jQuery('input[type=radio][name="jform[venuechoice]"]').on('click', function(){
 					var venuechoicestatus = jQuery('input[type=radio][name="jform[venuechoice]"]:checked').val();
 						if(venuechoicestatus == 'existing')
@@ -1731,6 +1829,39 @@ var jtAdmin = {
 							jQuery("#existingEvent").hide();
 						}
 					});
+
+					jQuery(document).on('subform-row-add', function(event, row){
+
+						jQuery('.price').change(function(){
+
+							var returnValue = jtAdmin.event.getRoundedValue(this.value);
+
+							if (returnValue)
+							{
+								jQuery(this.id).focus();
+
+								var error_html = '';
+								error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  returnValue;
+								jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+								return false;
+							}
+						});
+					});
+
+					jQuery('.price').change(function(){
+						var returnValue = jtAdmin.event.getRoundedValue(this.value);
+
+						if (returnValue)
+						{
+							jQuery(this.id).focus();
+
+							var error_html = '';
+							error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  returnValue;
+							jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+							return false;
+						}
+					});
+
 				});
 				Joomla.submitbutton = function (task)
 				{
@@ -1759,9 +1890,27 @@ var jtAdmin = {
 					var compareBookingStartDate = new Date(eventBookingStartTime);
 					var compareBookingEndDate = new Date(eventBookingEndTime);
 
+					var value = new Array() ;
+
+					jQuery(".price").each(function() {
+						returnValue = jtAdmin.event.getRoundedValue(jQuery(this).val());
+						if (returnValue) {
+							value.push(returnValue);
+						}
+					});
+
 					if(task == "event.save" || task == "event.save2new" || task == "event.apply")
 					{
-						if(compareEndDate <= compareStartDate)
+						if (value.length != 0)
+						{
+							jQuery(value).each(function(){
+								var error_html = '';
+								error_html += Joomla.JText._('COM_JTICKETING_INVALID_FIELD') +  value;
+								jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+								return false;
+							});
+						}
+						else if(compareEndDate <= compareStartDate)
 						{
 							var error_html = '';
 							error_html += "<br />" + Joomla.JText._('COM_JTICKETING_FORM_LBL_EVENT_DATE_ERROR');
@@ -1844,6 +1993,57 @@ var jtAdmin = {
 						jQuery("#jform_location").prop('required',false);
 					}
 				}
+			},
+			checkUserEmail: function() {
+				var user=document.getElementById('jform_created_by_id').value;
+				var userObject = {};
+				userObject["user"] = user;
+				JSON.stringify(userObject) ;
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: userObject,
+					url: "index.php?option=com_jticketing&format=json&task=event.checkUserEmail",
+					success:function(data) {
+						jQuery('#warning_message').empty();
+						if(data.check)
+						{
+							if(array_check == 1 || handle_transactions == 1)
+							{
+								jQuery("#warning_message").html('<div class="alert alert-warning">'
+								+Joomla.JText._('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG1') +
+								'<a href= "index.php?option=com_tjvendors&view=vendor&layout=update&client=com_jticketing&vendor_id=' +data.vendor_id + '" target="_blank">'
+								+Joomla.JText._('COM_JTICKETING_VENDOR_FORM_LINK') + '</a>'
+								+Joomla.JText._('COM_JTICKETING_PAYMENT_DETAILS_ERROR_MSG2'));
+							}
+
+						}
+					},
+				});
+			},
+
+		getRoundedValue: function(value) {
+
+			var errorMsg = '';
+
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: value,
+					async:false,
+					url: "index.php?option=com_jticketing&format=json&task=event.getRoundedValue&price="+value,
+					success:function(data) {
+
+						if (data.data != value)
+						{
+							roundedPrice = data.data;
+							errorMsg = Joomla.JText._('COM_JTICKETING_VALIDATE_ROUNDED_PRICE').concat(roundedPrice);
+						}
+
+					},
+				});
+
+				return errorMsg;
 			},
 			venueDisplay: function() {
 				var radioValue = jQuery("input[name='jform[online_events]']:checked").val();
@@ -1982,7 +2182,7 @@ var jtAdmin = {
 					var eventList = data['0']['report-bulk-objects']['row'];
 					if (eventList !== undefined && eventList !== null)
 					{
-						var op = "<option value='abcde' selected='selected'> <?php echo JText::_('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION'); ?> </option>";
+						var op = "<option value='abcde' selected='selected'>" + Joomla.JText._('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION') + "</option>";
 						jQuery("#jform_existing_event").append(op);
 						for(index = 0; index < eventList.length; ++index)
 						{
@@ -2028,7 +2228,7 @@ var jtAdmin = {
 					var eventList = data['0']['report-bulk-objects']['row'];
 					if (eventList !== undefined && eventList !== null)
 					{
-						var op = "<option value='abcde' selected='selected'> <?php echo JText::_('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION'); ?> </option>";
+						var op = "<option value='abcde' selected='selected'>" + Joomla.JText._('COM_JTICKETING_FORM_SELECT_EXISTING_EVENT_OPTION') + "</option>";
 						jQuery("#jform_existing_event").append(op);
 						for(index = 0; index < eventList.length; ++index)
 						{
@@ -2124,8 +2324,16 @@ var jtAdmin = {
 	},
 	venue:
 	{
+		/* Google Map autosuggest  for location */
+		initializeGMapSuggest: function ()
+		{
+			input = document.getElementById('jform_address');
+			var autocomplete = new google.maps.places.Autocomplete(input);
+		},
+
 		initVenueJs: function()
 		{
+			google.maps.event.addDomListener(window, 'load', jtAdmin.venue.initializeGMapSuggest);
 			jQuery(document).ready(function()
 			{
 				jQuery('input[name="jform[online]').click(function()
@@ -2176,6 +2384,7 @@ var jtAdmin = {
 				var host_url = jQuery('input[name="jform[host_url]"]:checked').val();
 				var source_sco_id = jQuery('input[name="jform[source_sco_id]"]:checked').val();
 				var onlines = jQuery('input[name="jform[online]"]:checked').val();
+				var onlineProvider  = jQuery('#jformonline_provider').val();
 				if(editId && onlines == "0")
 				{
 					jQuery('#api_username').val('');
@@ -2185,7 +2394,7 @@ var jtAdmin = {
 				}
 				if (jQuery('input[name="jform[online]"]:checked').val() == 1)
 				{
-					if (!jQuery('#jformonline_provider').val())
+					if (!onlineProvider || onlineProvider == '0')
 					{
 						error_html = Joomla.JText._('COM_JTICKETING_INVALID_FIELD') + Joomla.JText._('COM_JTICKETING_ONLINE_EVENTS_PROVIDER')
 						jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
@@ -2846,3 +3055,19 @@ var jtCounter = {
 			});
 	}
 };
+
+var validation = {
+
+	positiveNumber : function()
+	{
+		jQuery(window).load(function(){
+		document.formvalidator.setHandler('positive-number', function(value, element) {
+			value = punycode.toASCII(value);
+			var regex = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
+			return regex.test(value);
+			});
+		});
+	}
+
+}
+

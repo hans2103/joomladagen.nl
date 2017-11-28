@@ -31,21 +31,8 @@ class JticketingViewmytickets extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 		$params     = $mainframe->getParams('com_jticketing');
 		$integration = $params->get('integration');
-		$app  = JFactory::getApplication();
-		$user = JFactory::getUser();
 
-		// Validate user login.
-		if (!$user->id)
-		{
-			$msg = JText::_('COM_JTICKETING_MESSAGE_LOGIN_FIRST');
-
-			// Get current url.
-			$current = JUri::getInstance()->toString();
-			$url     = base64_encode($current);
-			$app->redirect(JRoute::_('index.php?option=com_users&view=login&return=' . $url, false), $msg);
-		}
 		// Native Event Manager.
-
 		if ($integration < 1)
 		{
 		?>

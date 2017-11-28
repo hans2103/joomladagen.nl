@@ -26,7 +26,7 @@ class JticketingControllerorders extends JControllerLegacy
 	public function __construct()
 	{
 		parent::__construct();
-
+		JLoader::import('components.com_jticketing.helpers.route', JPATH_SITE);
 		$this->JTRouteHelper = new JTRouteHelper;
 		$this->jticketingmainhelper = new jticketingmainhelper;
 	}
@@ -103,7 +103,7 @@ class JticketingControllerorders extends JControllerLegacy
 					$dispatcher = JDispatcher::getInstance();
 					JPluginHelper::importPlugin('tjevents');
 					$result = $dispatcher->trigger('tj_inviteUsers', array($venueParams));
-					$email  = JticketingMailHelper::onlineEventNotify($venueParams, $order['eventinfo']);
+					$email  = JticketingMailHelper::onlineEventNotify($order_id, $venueParams, $order['eventinfo']);
 				}
 			}
 
@@ -451,16 +451,30 @@ class JticketingControllerorders extends JControllerLegacy
 				$email = JticketingMailHelper::sendmailnotify($orderdata->id, 'afterordermail');
 			}
 
-			echo "To Email===" . $orderdata->email;
+			if ($email['success'])
+			{
+				$obj                    = new StdClass;
+				$obj->id                = $orderdata->id;
+
+				$obj->ticket_email_sent = 1;
+
+				if ($db->updateObject('#__jticketing_order', $obj, 'id'))
+				{
+				}
+
+				echo "==Mailsent Successfully===";
+				echo "<br/>";
+				echo "<br/>";
+				echo "To Email===" . $orderdata->email;
+				echo "<br/>";
+				echo "<br/>";
+			}
 
 			if ($skipuser)
 			{
 				echo "===Skipping since group is==" . implode(",", $groups);
 			}
 
-			echo "==mailsent===" . $email;
-			echo "<br/>";
-			echo "<br/>";
 			$i++;
 		}
 	}
