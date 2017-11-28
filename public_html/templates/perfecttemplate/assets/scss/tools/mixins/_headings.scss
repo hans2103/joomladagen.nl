@@ -1,6 +1,0 @@
-@mixin heading($heading-name) {
-  color: heading($heading-name, color);
-  font-size: heading($heading-name, font-size);
-  font-weight: heading($heading-name, font-weight);
-  line-height: heading($heading-name, line-height);
-}

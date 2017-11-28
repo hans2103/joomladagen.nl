@@ -1,7 +1,0 @@
-@mixin max-width() {
-	max-width: 100%;
-
-	@include breakpoint($site-width) {
-		max-width: $site-width;
-	}
-}
