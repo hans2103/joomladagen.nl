@@ -312,3 +312,13 @@ fieldset,
     max-width: 100px;
   }
 }
+
+
+.view-rsform {
+  .article__item {
+    @include breakpoint($delta) {
+      width: 50%;
+      margin:0 auto;
+    }
+  }
+}
