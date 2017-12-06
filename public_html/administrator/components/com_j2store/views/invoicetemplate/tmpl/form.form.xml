@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+* @com_j2store - J2Store
+* @author    Sasi varna kumar - Weblogicx India http://www.weblogicxindia.com
+* @copyright Copyright (C) 2014 - 19 Weblogicxindia.com. All Rights Reserved.
+* @license - http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+* @Websites: http://j2store.org
+* @Technical Support:  Forum - http://j2store.org/forum/index.html
+ -->
+<form validate="true" serverside_validate="true">
+
+
+  <fieldset name="basic_information"  class="tab-pane active"
+		label="J2STORE_BASIC_OPTIONS"          
+            >
+  
+ <field name="title" type="text"
+			label="J2STORE_INVOICETEMPLATE_TITLE_LABEL"
+			class="input-xlarge"
+			required="true"
+		/>
+		
+<field name="orderstatus_id" type="model"
+		label="J2STORE_EMAILTEMPLATE_ORDERSTATUS"
+		translate="false"
+		model="J2StoreModelOrderstatuses" apply_access="false"
+		key_field="j2store_orderstatus_id" value_field="orderstatus_name"
+	    description="J2STORE_EMAILTEMPLATE_ORDERSTATUS_DESC"
+	>
+	<option value="*">JALL</option>
+	</field>
+
+   <field name="language" type="language" client="administrator" 
+        default="en-GB" label="JFIELD_LANGUAGE_LABEL" description="J2STORE_INVOICETEMPLATE_LANGUAGE_DESC">
+        <option value="*">JALL</option>
+    </field>    
+
+
+    <field name="group_id" type="usergroup"
+        label="J2STORE_INVOICETEMPLATE_GROUPS" description="J2STORE_INVOICETEMPLATE_GROUPS_DESC"
+     >
+    <option value="*">JALL</option>
+	</field>
+
+
+	<field name="paymentmethod" type="model" 
+	       label="J2STORE_INVOICETEMPLATE_PAYMENTMETHODS" 
+	       translate="false"
+	       model="J2StoreModelPayments" apply_access="false"
+	       key_field="element" value_field="name"
+	       description="J2STORE_INVOICETEMPLATE_PAYMENTMETHODS_DESC">
+    <option value="*">JALL</option>
+	</field>
+
+    <field name="enabled" type="list" label="JSTATUS"
+           labelclass=""
+           class="inputbox"
+           filter="intval" size="1" default="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+    </field>
+</fieldset>
+<fieldset name="advanced_information"  class="tab-pane active"
+		label="J2STORE_ADVANCED_SETTINGS"          
+            >
+	<field name="body" type="editor"
+			label="J2STORE_INVOICETEMPLATE_BODY_LABEL"
+			class="input-xlarge"
+			required="true"
+			buttons="true"
+	/>
+
+  </fieldset>
+</form>

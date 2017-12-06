@@ -1083,7 +1083,7 @@ class WFMediaManager extends WFMediaManagerBase
     protected function getThumbName($file)
     {
         $ext = WFUtility::getExtension($file);
-        $string = $this->getParam($this->getName() . '.thumbnail_prefix', 'thumb_$', '', 'string', false);
+        $string = $this->getParam($this->getName() . '.thumbnail_prefix', $this->getParam('editor.thumbnail_prefix', 'thumb_$'));
 
         if (strpos($string, '$') !== false) {
             return str_replace('$', basename($file, '.' . $ext), $string) . '.' . $ext;
@@ -1097,7 +1097,9 @@ class WFMediaManager extends WFMediaManagerBase
         $browser = $this->getFileBrowser();
         $filesystem = $browser->getFileSystem();
 
-        $dir = WFUtility::makePath(dirname($file), $this->getParam($this->getName() . '.thumbnail_folder', 'thumbnails'));
+        $folder = $this->getParam($this->getName() . '.thumbnail_folder', $this->getParam('editor.thumbnail_folder', 'thumbnails'));
+
+        $dir = WFUtility::makePath(dirname($file), $folder);
 
         if ($create && !$filesystem->exists($dir)) {
             $filesystem->createFolder(dirname($dir), basename($dir));

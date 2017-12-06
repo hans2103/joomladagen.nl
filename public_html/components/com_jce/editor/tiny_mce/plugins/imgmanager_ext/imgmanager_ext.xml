@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <install version="2.0" type="plugin" plugin="imgmanager_ext" editable="1" core="0" row="4">
     <name>WF_IMGMANAGER_EXT_TITLE</name>
-    <version>2.6.20</version>
-    <creationDate>02-11-2017</creationDate>
+    <version>2.6.21</version>
+    <creationDate>29-11-2017</creationDate>
     <author>Ryan Demmer</author>
     <authorEmail>info@joomlacontenteditor.net</authorEmail>
     <authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
@@ -250,8 +250,8 @@
             <option value="20">20</option>
             <option value="10">10</option>
         </param>
-        <param name="thumbnail_folder" type="text" default="thumbnails" label="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER" description="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER_DESC"/>
-        <param name="thumbnail_prefix" type="text" default="thumb_" label="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX" description="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX_DESC"/>
+        <param name="thumbnail_folder" type="text" default="" label="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER" description="WF_IMGMANAGER_EXT_THUMBNAIL_FOLDER_DESC"/>
+        <param name="thumbnail_prefix" type="text" default="" label="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX" description="WF_IMGMANAGER_EXT_THUMBNAIL_PREFIX_DESC"/>
     </params>
     <extensions>popups</extensions>
     <languages>

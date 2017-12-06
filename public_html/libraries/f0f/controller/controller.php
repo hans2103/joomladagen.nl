@@ -1033,7 +1033,7 @@ class F0FController extends F0FUtilsObject
 		}
 
 		// Set the layout
-		$view->setLayout(is_null($this->layout) ? 'default' : $this->layout);
+		$view->setLayout(!$this->layout ? 'default' : $this->layout);
 
 		// Display the view
 		$conf = F0FPlatform::getInstance()->getConfig();
@@ -1295,7 +1295,8 @@ class F0FController extends F0FUtilsObject
 
 		// Set the layout to form, if it's not set in the URL
 
-		if (is_null($this->layout))
+		if (!$this->layout)
+
 		{
 			$this->layout = 'form';
 		}
@@ -2186,7 +2187,7 @@ class F0FController extends F0FUtilsObject
 
 		if ($status && ($id != 0))
 		{
-            F0FPlatform::getInstance()->setHeader('Status', '201 Created', true);
+            //F0FPlatform::getInstance()->setHeader('Status', '201 Created', true);
 
 			// Try to check-in the record if it's not a new one
 			$status = $model->checkin();

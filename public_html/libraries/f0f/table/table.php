@@ -1285,20 +1285,32 @@ class F0FTable extends F0FUtilsObject implements JTableInterface
 		}
 		$updateObject = (object)$updateObject;
 
-		// If a primary key exists update the object, otherwise insert it.
-		if ($this->$k)
+		/**
+		 * While the documentation for update/insertObject and execute() say they return a boolean,
+		 * not all of the implemtnations.  Depending on the version of J! and the specific driver,
+		 * they may return a database object, or boolean, or a mix, or toss an exception.  So try/catch,
+		 * and test for false.
+		 */
+		try
 		{
-			$result = $this->_db->updateObject($this->_tbl, $updateObject, $this->_tbl_key, $updateNulls);
+			// If a primary key exists update the object, otherwise insert it.
+			if ($this->$k)
+			{
+				$result = $this->_db->updateObject($this->_tbl, $updateObject, $this->_tbl_key, $updateNulls);
+			}
+			else
+			{
+				$result = $this->_db->insertObject($this->_tbl, $updateObject, $this->_tbl_key);
+			}
+			if ($result === false)
+			{
+				$this->setError($this->_db->getErrorMsg());
+				return false;
+			}
 		}
-		else
+		catch (Exception $e)
 		{
-			$result = $this->_db->insertObject($this->_tbl, $updateObject, $this->_tbl_key);
-		}
-
-		if ($result !== true)
-		{
-			$this->setError($this->_db->getErrorMsg());
-			return false;
+			$this->setError($e->getMessage());
 		}
 
 		$this->bind($updateObject);
