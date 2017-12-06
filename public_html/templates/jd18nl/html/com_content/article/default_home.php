@@ -177,6 +177,25 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
     </div>
 </section>
 
+
+<section class="section">
+    <div class="container">
+        <div class="module module__youtube">
+            <div class="module__header">
+                <p class="module__title module__title--h2">Daarom Joomla!</p>
+            </div>
+            <div class="module__content">
+                <div class="video-container">
+					<?php
+					$url = 'https://www.youtube.com/watch?v=Xe4fcNRjP_Q';
+					echo PWTTemplateHelper::youtube($url);
+					?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section">
     <div class="container">
         <div class="module module__nieuws">
@@ -205,25 +224,25 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
 						// Render module
 						echo JFactory::getDocument()->loadRenderer('module')->render($module);
 						?>
-	                    <?php
-	                    // Module params
-	                    $moduleparams = array(
-		                    'count'            => 1,
-		                    'catid'            => 33,
-		                    'article_ordering' => 'a.created',
-		                    'style'            => 'none',
-		                    'layout'           => 'block',
-		                    'header_tag'       => 'h2'
-	                    );
+						<?php
+						// Module params
+						$moduleparams = array(
+							'count'            => 1,
+							'catid'            => 33,
+							'article_ordering' => 'a.created',
+							'style'            => 'none',
+							'layout'           => 'block',
+							'header_tag'       => 'h2'
+						);
 
-	                    // Load module and add params
-	                    $module            = JModuleHelper::getModule('mod_articles_category');
-	                    $module->showtitle = 0;
-	                    $module->params    = json_encode($moduleparams);
+						// Load module and add params
+						$module            = JModuleHelper::getModule('mod_articles_category');
+						$module->showtitle = 0;
+						$module->params    = json_encode($moduleparams);
 
-	                    // Render module
-	                    echo JFactory::getDocument()->loadRenderer('module')->render($module);
-	                    ?>
+						// Render module
+						echo JFactory::getDocument()->loadRenderer('module')->render($module);
+						?>
                     </div>
                 </div>
             </div>

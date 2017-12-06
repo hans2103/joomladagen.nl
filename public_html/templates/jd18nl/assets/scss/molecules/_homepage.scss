@@ -53,6 +53,15 @@
   }
 }
 
+.module__youtube {
+  @include span(10 of 12, $charlie);
+  @include shift(1 of 12, $charlie);
+
+  .module__header {
+    text-align: center;
+  }
+}
+
 .module__nieuws {
   @include spacing(top, margin, 1);
 
