@@ -294,7 +294,7 @@ class PWTTemplateHelper
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
 
-		if (self::getPageOption() != 'com-j2store')
+		if (self::getPageOption() !== 'com-j2store')
 		{
 			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
 			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
