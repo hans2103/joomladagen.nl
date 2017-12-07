@@ -293,8 +293,12 @@ class PWTTemplateHelper
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
+
+		if (self::getPageOption() != 'com-j2store')
+		{
+			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
+			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
+		}
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/tabs-state.js']);
