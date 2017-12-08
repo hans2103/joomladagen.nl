@@ -265,17 +265,3 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
 		?>
     </div>
 </section>
-
-<div class="block block__gmap"><?php
-	$array = array(
-		'title'      => $this->item->title,
-		'latitude'   => '51.4105738',
-		'longitude'  => '5.4571851',
-		'adres'      => 'High Tech Campus 1b',
-		'postcode'   => '5656 AE',
-		'woonplaats' => 'Eindhoven'
-	);
-
-	echo Jlayouts::render('block-gmap', $array);
-	?>
-</div>
