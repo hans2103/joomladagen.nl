@@ -245,6 +245,21 @@ class PWTTemplateHelper
 	}
 
 	/**
+	 * Method to determine whether the current page is the requested page
+	 *
+	 * @access public
+	 *
+	 * @param null
+	 *
+	 * @return bool
+	 * @since  PerfectSite2.1.0
+	 */
+	static public function isPage($request = 'home')
+	{
+		return self::getPath()[0] == $request;
+	}
+
+	/**
 	 * Remove unwanted CSS
 	 * @since  PerfectSite2.1.0
 	 */
