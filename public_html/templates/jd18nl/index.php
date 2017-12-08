@@ -75,6 +75,23 @@ PWTTemplateHelper::localstorageFont();
     <jdoc:include type="component"/>
 </main>
 
+
+<?php if(PWTTemplateHelper::isHome() | PWTTemplateHelper::isPage('locatie')) : ?>
+<div class="block block__gmap"><?php
+	$array = array(
+		'title'      => $this->item->title,
+		'latitude'   => '51.4105738',
+		'longitude'  => '5.4571851',
+		'adres'      => 'High Tech Campus 1b',
+		'postcode'   => '5656 AE',
+		'woonplaats' => 'Eindhoven'
+	);
+
+	echo Jlayouts::render('block-gmap', $array);
+	?>
+</div>
+<? endif; ?>
+
 <footer class="footer" role="contentinfo">
     <div class="container">
         <div class="footer__content">
