@@ -263,7 +263,7 @@ fieldset,
   }
 
   input[type="radio"] + label {
-    margin: 0 10px;
+
   }
 
   .rsform-block {
@@ -317,7 +317,7 @@ fieldset,
 .view-rsform {
   .article__item {
     @include breakpoint($delta) {
-      width: 50%;
+      width: 65%;
       margin:0 auto;
     }
   }
