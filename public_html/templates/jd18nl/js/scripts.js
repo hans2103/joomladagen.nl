@@ -1,1 +1,946 @@
-!function(a,b){"function"==typeof define&&define.amd?define(b):"object"==typeof exports?module.exports=b:a.apollo=b()}(this,function(){"use strict";var a,b,c,d,e={},f=function(a,b){"[object Array]"!==Object.prototype.toString.call(a)&&(a=a.split(" "));for(var c=0;c<a.length;c++)b(a[c],c)};return"classList"in document.documentElement?(a=function(a,b){return a.classList.contains(b)},b=function(a,b){a.classList.add(b)},c=function(a,b){a.classList.remove(b)},d=function(a,b){a.classList.toggle(b)}):(a=function(a,b){return new RegExp("(^|\\s)"+b+"(\\s|$)").test(a.className)},b=function(b,c){a(b,c)||(b.className+=(b.className?" ":"")+c)},c=function(b,c){a(b,c)&&(b.className=b.className.replace(new RegExp("(^|\\s)*"+c+"(\\s|$)*","g"),""))},d=function(d,e){(a(d,e)?c:b)(d,e)}),e.hasClass=function(b,c){return a(b,c)},e.addClass=function(a,c){f(c,function(c){b(a,c)})},e.removeClass=function(a,b){f(b,function(b){c(a,b)})},e.toggleClass=function(a,b){f(b,function(b){d(a,b)})},e}),function(a,b){"function"==typeof define&&define.amd?define("responsivemenu",b(a)):"object"==typeof exports?module.responsivemenu=b(a):a.responsivemenu=b(a)}(this,function(a){"use strict";function b(a,b,c){for(var d=[];a.parentNode&&a.parentNode!=c;)a=a.parentNode,a.tagName==b&&d.push(a);return d}function c(a,b){var c=document.getElementById(a);if(window.getComputedStyle)var d=document.defaultView.getComputedStyle(c,null).getPropertyValue(b);else if(c.currentStyle)var d=c.currentStyle[b];return d}function d(a){function d(){f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,m=c(a.mobileindicatorid,"z-index"),g.length&&(h=c(a.mobilesubmenuindicatorid,"z-index")),0!=m||apollo.hasClass(f,a.openclass)?1==m&&(apollo.addClass(p,a.hideclass),apollo.removeClass(p,a.toggleclosedclass),apollo.removeClass(f,[a.openclass,a.hideclass]),apollo.addClass(f,a.fullmenuclass),apollo.removeClass(document.body,a.openbodyclass),1==a.absolute&&apollo.hasClass(f,a.absolutemenuclass)&&apollo.removeClass(f,a.absolutemenuclass)):(apollo.removeClass(p,a.hideclass),apollo.removeClass(f,[a.openclass,a.fullmenuclass]),apollo.addClass(f,a.hideclass),apollo.removeClass(document.body,a.openbodyclass),1==a.absolute&&apollo.addClass(f,a.absolutemenuclass)),i&&0==h?l(j,function(b,c){apollo.hasClass(j[c],a.toggleclosedclass)||(apollo.addClass(j[c].parentNode.getElementsByTagName("ul")[0],a.hideclass),apollo.removeClass(j[c],a.hideclass))}):i&&1==h&&l(j,function(b,c){apollo.removeClass(j[c].parentNode.getElementsByTagName("ul")[0],a.hideclass),apollo.addClass(j[c],a.hideclass)})}function e(){if(f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,1==a.sticky){var b=a.wrapper.offsetHeight,c=Math.max(document.documentElement.clientHeight,window.innerHeight||0);if(c<=b&&!apollo.hasClass(document.body,a.bodyoverflowhiddenclass))apollo.addClass(document.body,a.bodyoverflowhiddenclass),apollo.addClass(a.wrapper,a.menuoverflowautoclass);else if(c>b&&(apollo.hasClass(document.body,a.bodyoverflowhiddenclass)&&(apollo.removeClass(document.body,a.bodyoverflowhiddenclass),apollo.removeClass(a.wrapper,a.menuoverflowautoclass)),apollo.hasClass(a.wrapper,a.stickyclass)||apollo.addClass(a.wrapper,a.stickyclass),!apollo.hasClass(f,a.openclass)&&!apollo.hasClass(document.body,a.stickyinitiatedclass))){var d=b.toString()+"px";document.body.setAttribute("style","padding-top:"+d),apollo.addClass(document.body,a.stickyinitiatedclass)}}}f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,apollo.addClass(a.wrapper,a.initiated_class),a.onAfterInit();var g=f.querySelectorAll("li ul");if(g.length){i=!0,j=document.getElementsByClassName(a.subtoggleclass);var h=document.createElement("div");a.wrapper.appendChild(h),h.id=a.mobilesubmenuindicatorid}var k=document.createElement("div");a.wrapper.appendChild(k),k.id=a.mobileindicatorid;var m=0,o=document.createElement(a.toggletype);apollo.addClass(o,[a.toggleclass,a.hideclass]),""==a.before_element&&(a.before_element=a.wrapper.firstChild),a.before_element.parentNode.insertBefore(o,a.before_element);var p=document.getElementsByClassName(a.toggleclass)[0];if(p.innerHTML=a.togglecontent,p.setAttribute("aria-hidden","true"),p.setAttribute("aria-pressed","false"),p.setAttribute("type","button"),i)for(var q=0;q<g.length;q++){var r=document.createElement(a.subtoggletype);apollo.addClass(r,[a.subtoggleclass,a.hideclass]);var s=g[q].parentNode;s.insertBefore(r,s.firstChild),r.innerHTML=a.subtogglecontent,r.setAttribute("aria-hidden","true"),r.setAttribute("aria-pressed","false"),r.setAttribute("type","button"),apollo.addClass(g[q].parentNode,a.parentclass)}window.addEventListener("load",function(){d(),e()},!0),window.addEventListener("resize",function(){d(),e(),n(function(){d(),e()},200)},!0);for(var t=f.getElementsByTagName("a"),q=0;q<t.length;q++)t[q].onblur=function(){for(var b=document.getElementsByClassName("rm-focused"),c=0;c<b.length;c++)apollo.removeClass(b[c],a.focusedclass)},t[q].onfocus=function(){var c=this.parentNode.parentNode.querySelectorAll("li");if(c.length)for(var d=0;d<c.length;d++)apollo.removeClass(c[d],a.focusedclass);var e=b(this,"LI",f);if(e.length)for(var d=0;d<e.length;d++)apollo.addClass(e[d],a.focusedclass)};p.onclick=function(){return f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,apollo.hasClass(f,a.hideclass)?(a.onBeforeToggleOpen(),apollo.removeClass(f,a.hideclass),apollo.addClass(f,a.openclass),apollo.addClass(document.body,a.openbodyclass),apollo.addClass(p,a.toggleclosedclass),apollo.addClass(f,a.animateopenclass),setTimeout(function(){apollo.removeClass(f,a.animateopenclass),a.onAfterToggleOpen()},a.animateduration)):apollo.hasClass(f,a.openclass)&&(f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,a.onBeforeToggleClose(),apollo.addClass(f,a.animatecloseclass),apollo.removeClass(p,a.toggleclosedclass),setTimeout(function(){apollo.removeClass(f,a.animatecloseclass),apollo.removeClass(f,a.openclass),apollo.addClass(f,a.hideclass),apollo.removeClass(document.body,a.openbodyclass),a.onAfterToggleClose()},a.animateduration)),e(),!1},i&&(f=a.wrapper.getElementsByTagName("ul")[0]||a.menu,l(j,function(b,c){var d=j[c],g=d.parentNode.getElementsByTagName("ul")[0];d.onclick=function(){apollo.hasClass(g,a.hideclass)?(a.onBeforeSubToggleOpen(),apollo.addClass(f,a.subanimateopenclass),apollo.addClass(d,a.toggleclosedclass),apollo.removeClass(g,a.hideclass),setTimeout(function(){apollo.removeClass(f,a.subanimateopenclass),a.onAfterSubToggleOpen()},a.subanimateduration)):apollo.hasClass(g,a.hideclass)||(a.onBeforeSubToggleClose(),apollo.addClass(f,a.subanimatecloseclass),apollo.removeClass(d,a.toggleclosedclass),setTimeout(function(){apollo.removeClass(f,a.subanimatecloseclass),apollo.addClass(g,a.hideclass),a.onAfterSubToggleClose()},a.subanimateduration)),e()}}))}var e,f,g={},h=!!document.querySelector&&!!a.addEventListener,i=!1,j=!1,k={menu:"",initiated_class:"rm-initiated",before_element:"",toggletype:"button",toggleclass:"rm-togglebutton",toggleclosedclass:"rm-togglebutton--closed",togglecontent:"menu",subtoggletype:"button",subtoggleclass:"rm-subtoggle",subtogglecontent:"+",sticky:0,absolute:0,hideclass:"rm-closed",openclass:"rm-opened",openbodyclass:"has-opened-menu",focusedclass:"rm-focused",animateopenclass:"is-opening",animatecloseclass:"is-closing",animateduration:0,subanimateopenclass:"is-opening",subanimatecloseclass:"is-closing",subanimateduration:0,parentclass:"rm-parent",fullmenuclass:"rm-fullmenu",absolutemenuclass:"rm-absolutemenu",bodyoverflowhiddenclass:"rm-bodyoverflowhidden",menuoverflowautoclass:"rm-menuoverflowauto",stickyclass:"rm-sticky",stickyinitiatedclass:"rm-sticky-initiated",noresponsivemenuclass:"rm-no-responsive-menu",mobileindicatorid:"rm-mobile-indicator",mobilesubmenuindicatorid:"rm-mobile-submenu-indicator",onAfterInit:function(){},onBeforeToggleOpen:function(){},onAfterToggleOpen:function(){},onBeforeToggleClose:function(){},onAfterToggleClose:function(){},onBeforeSubToggleOpen:function(){},onAfterSubToggleOpen:function(){},onBeforeSubToggleClose:function(){},onAfterSubToggleClose:function(){}},l=function(a,b,c){if("[object Object]"===Object.prototype.toString.call(a))for(var d in a)Object.prototype.hasOwnProperty.call(a,d)&&b.call(c,a[d],d,a);else for(var e=0,f=a.length;e<f;e++)b.call(c,a[e],e,a)},m=function(a,b){var c={};return l(a,function(b,d){c[d]=a[d]}),l(b,function(a,d){c[d]=b[d]}),c},n=function(){var a={};return function(b,c,d){d||(d="Don't call this twice without a uniqueId"),a[d]&&clearTimeout(a[d]),a[d]=setTimeout(b,c)}}();return g.init=function(a){return h?(e=m(k,a||{}),void d(e)):void(document.documentElement.className+=" "+e.noresponsivemenuclass)},g}),function(a,b){"function"==typeof define&&define.amd?define(b):"object"==typeof exports?module.exports=b():a.Blazy=b()}(this,function(){"use strict";function a(a){var c=a._util;c.elements=o(a.options),c.count=c.elements.length,c.destroyed&&(c.destroyed=!1,a.options.container&&s(a.options.container,function(a){q(a,"scroll",c.validateT)}),q(window,"resize",c.saveViewportOffsetT),q(window,"resize",c.validateT),q(window,"scroll",c.validateT)),b(a)}function b(a){for(var b=a._util,d=0;d<b.count;d++){var e=b.elements[d];(c(e,a.options)||m(e,a.options.successClass))&&(a.load(e),b.elements.splice(d,1),b.count--,d--)}0===b.count&&a.destroy()}function c(a,b){var c=a.getBoundingClientRect();if(b.container&&x){var e=a.closest(b.containerClass);if(e){var f=e.getBoundingClientRect();if(d(f,v)){var g=f.top-b.offset,h=f.right+b.offset,i=f.bottom+b.offset,j=f.left-b.offset,k={top:g>v.top?g:v.top,right:h<v.right?h:v.right,bottom:i<v.bottom?i:v.bottom,left:j>v.left?j:v.left};return d(c,k)}return!1}}return d(c,v)}function d(a,b){return a.right>=b.left&&a.bottom>=b.top&&a.left<=b.right&&a.top<=b.bottom}function e(a,b,c){if(!m(a,c.successClass)&&(b||c.loadInvisible||a.offsetWidth>0&&a.offsetHeight>0)){var d=j(a,u)||j(a,c.src);if(d){var e=d.split(c.separator),i=e[w&&e.length>1?1:0],k=j(a,c.srcset),o=l(a,"img"),p=a.parentNode,t=p&&l(p,"picture");if(o||void 0===a.src){var v=new Image,x=function(){c.error&&c.error(a,"invalid"),n(a,c.errorClass),r(v,"error",x),r(v,"load",A)},A=function(){o?t||h(a,i,k):a.style.backgroundImage='url("'+i+'")',f(a,c),r(v,"load",A),r(v,"error",x)};t&&(v=a,s(p.getElementsByTagName("source"),function(a){g(a,z,c.srcset)})),q(v,"error",x),q(v,"load",A),h(v,i,k)}else a.src=i,f(a,c)}else l(a,"video")?(s(a.getElementsByTagName("source"),function(a){g(a,y,c.src)}),a.load(),f(a,c)):(c.error&&c.error(a,"missing"),n(a,c.errorClass))}}function f(a,b){n(a,b.successClass),b.success&&b.success(a),k(a,b.src),k(a,b.srcset),s(b.breakpoints,function(b){k(a,b.src)})}function g(a,b,c){var d=j(a,c);d&&(i(a,b,d),k(a,c))}function h(a,b,c){c&&i(a,z,c),a.src=b}function i(a,b,c){a.setAttribute(b,c)}function j(a,b){return a.getAttribute(b)}function k(a,b){a.removeAttribute(b)}function l(a,b){return a.nodeName.toLowerCase()===b}function m(a,b){return(" "+a.className+" ").indexOf(" "+b+" ")!==-1}function n(a,b){m(a,b)||(a.className+=" "+b)}function o(a){for(var b=[],c=a.root.querySelectorAll(a.selector),d=c.length;d--;b.unshift(c[d]));return b}function p(a){v.bottom=(window.innerHeight||document.documentElement.clientHeight)+a,v.right=(window.innerWidth||document.documentElement.clientWidth)+a}function q(a,b,c){a.attachEvent?a.attachEvent&&a.attachEvent("on"+b,c):a.addEventListener(b,c,{capture:!1,passive:!0})}function r(a,b,c){a.detachEvent?a.detachEvent&&a.detachEvent("on"+b,c):a.removeEventListener(b,c,{capture:!1,passive:!0})}function s(a,b){if(a&&b)for(var c=a.length,d=0;d<c&&b(a[d],d)!==!1;d++);}function t(a,b,c){var d=0;return function(){var e=+new Date;e-d<b||(d=e,a.apply(c,arguments))}}var u,v,w,x,y="src",z="srcset";return function(c){if(!document.querySelectorAll){var d=document.createStyleSheet();document.querySelectorAll=function(a,b,c,e,f){for(f=document.all,b=[],a=a.replace(/\[for\b/gi,"[htmlFor").split(","),c=a.length;c--;){for(d.addRule(a[c],"k:v"),e=f.length;e--;)f[e].currentStyle.k&&b.push(f[e]);d.removeRule(0)}return b}}var f=this,g=f._util={};g.elements=[],g.destroyed=!0,f.options=c||{},f.options.error=f.options.error||!1,f.options.offset=f.options.offset||100,f.options.root=f.options.root||document,f.options.success=f.options.success||!1,f.options.selector=f.options.selector||".b-lazy",f.options.separator=f.options.separator||"|",f.options.containerClass=f.options.container,f.options.container=!!f.options.containerClass&&document.querySelectorAll(f.options.containerClass),f.options.errorClass=f.options.errorClass||"b-error",f.options.breakpoints=f.options.breakpoints||!1,f.options.loadInvisible=f.options.loadInvisible||!1,f.options.successClass=f.options.successClass||"b-loaded",f.options.validateDelay=f.options.validateDelay||25,f.options.saveViewportOffsetDelay=f.options.saveViewportOffsetDelay||50,f.options.srcset=f.options.srcset||"data-srcset",f.options.src=u=f.options.src||"data-src",x=Element.prototype.closest,w=window.devicePixelRatio>1,v={},v.top=0-f.options.offset,v.left=0-f.options.offset,f.revalidate=function(){a(f)},f.load=function(a,b){var c=this.options;a&&void 0===a.length?e(a,b,c):s(a,function(a){e(a,b,c)})},f.destroy=function(){var a=f._util;f.options.container&&s(f.options.container,function(b){r(b,"scroll",a.validateT)}),r(window,"scroll",a.validateT),r(window,"resize",a.validateT),r(window,"resize",a.saveViewportOffsetT),a.count=0,a.elements.length=0,a.destroyed=!0},g.validateT=t(function(){b(f)},f.options.validateDelay,f),g.saveViewportOffsetT=t(function(){p(f.options.offset)},f.options.saveViewportOffsetDelay,f),p(f.options.offset),s(f.options.breakpoints,function(a){if(a.width>=window.screen.width)return u=a.src,!1}),setTimeout(function(){a(f)})}});
+/*! apollo.js v1.7.0 | (c) 2014 @toddmotto | https://github.com/toddmotto/apollo */
+!function(n,t){"function"==typeof define&&define.amd?define(t):"object"==typeof exports?module.exports=t:n.apollo=t()}(this,function(){"use strict";var n,t,s,e,o={},c=function(n,t){"[object Array]"!==Object.prototype.toString.call(n)&&(n=n.split(" "));for(var s=0;s<n.length;s++)t(n[s],s)};return"classList"in document.documentElement?(n=function(n,t){return n.classList.contains(t)},t=function(n,t){n.classList.add(t)},s=function(n,t){n.classList.remove(t)},e=function(n,t){n.classList.toggle(t)}):(n=function(n,t){return new RegExp("(^|\\s)"+t+"(\\s|$)").test(n.className)},t=function(t,s){n(t,s)||(t.className+=(t.className?" ":"")+s)},s=function(t,s){n(t,s)&&(t.className=t.className.replace(new RegExp("(^|\\s)*"+s+"(\\s|$)*","g"),""))},e=function(e,o){(n(e,o)?s:t)(e,o)}),o.hasClass=function(t,s){return n(t,s)},o.addClass=function(n,s){c(s,function(s){t(n,s)})},o.removeClass=function(n,t){c(t,function(t){s(n,t)})},o.toggleClass=function(n,t){c(t,function(t){e(n,t)})},o});
+/**
+ *
+ * Responsive menu
+ * A vanilla JS responsive menu plugin, by Robin Poort - Timble
+ * http://robinpoort.com - http://www.timble.net
+ *
+ * Browser support: IE9+ (IE8 doesn't need a responsive menu since it's not responsive)
+ *
+ * Dependency: apollo JS | https://github.com/toddmotto/apollo
+ * Plugin boilerplate by | http://gomakethings.com/mit/
+ *
+ * Free to use under the MIT License.
+ *
+ */
+
+(function (root, factory) {
+    if ( typeof define === 'function' && define.amd ) {
+        define('responsivemenu', factory(root));
+    } else if ( typeof exports === 'object' ) {
+        module.responsivemenu = factory(root);
+    } else {
+        root.responsivemenu = factory(root);
+    }
+})(this, function (root) {
+
+    'use strict';
+
+    // Variables
+    var exports = {}; // Object for public APIs
+    var supports = !!document.querySelector && !!root.addEventListener; // Feature test
+    var settings; // Plugin settings
+    var menu; // The actual menu item
+    var hasChildren = false;
+    var subtoggles = false;
+
+    // Default settings
+    var defaults = {
+        menu: '',
+        initiated_class: 'rm-initiated',
+        before_element: '',
+        toggletype: 'button',
+        toggleclass: 'rm-togglebutton',
+        toggleclosedclass: 'rm-togglebutton--closed',
+        togglecontent: 'menu',
+        subtoggletype: 'button',
+        subtoggleclass: 'rm-subtoggle',
+        subtogglecontent: '+',
+        sticky: 0,
+        absolute: 0,
+        hideclass: 'rm-closed',
+        openclass: 'rm-opened',
+        openbodyclass: 'has-opened-menu',
+        focusedclass: 'rm-focused',
+        animateopenclass: 'is-opening',
+        animatecloseclass: 'is-closing',
+        animateduration: 0, // (Animated with CSS so set to same duration as CSS value)
+        subanimateopenclass: 'is-opening',
+        subanimatecloseclass: 'is-closing',
+        subanimateduration: 0, // (Animated with CSS so set to same duration as CSS value)
+        parentclass: 'rm-parent',
+        fullmenuclass: 'rm-fullmenu',
+        absolutemenuclass: 'rm-absolutemenu',
+        bodyoverflowhiddenclass: 'rm-bodyoverflowhidden',
+        menuoverflowautoclass: 'rm-menuoverflowauto',
+        stickyclass: 'rm-sticky',
+        stickyinitiatedclass: 'rm-sticky-initiated',
+        noresponsivemenuclass: 'rm-no-responsive-menu',
+        mobileindicatorid: 'rm-mobile-indicator',
+        mobilesubmenuindicatorid: 'rm-mobile-submenu-indicator',
+        onAfterInit: function() {},
+        onBeforeToggleOpen: function() {},
+        onAfterToggleOpen: function() {},
+        onBeforeToggleClose: function() {},
+        onAfterToggleClose: function() {},
+        onBeforeSubToggleOpen: function() {},
+        onAfterSubToggleOpen: function() {},
+        onBeforeSubToggleClose: function() {},
+        onAfterSubToggleClose: function() {}
+    };
+
+    // Methods
+    /**
+     * A simple forEach() implementation for Arrays, Objects and NodeLists
+     * @private
+     * @param {Array|Object|NodeList} collection Collection of items to iterate
+     * @param {Function} callback Callback function for each iteration
+     * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
+     */
+    var forEach = function (collection, callback, scope) {
+        if (Object.prototype.toString.call(collection) === '[object Object]') {
+            for (var prop in collection) {
+                if (Object.prototype.hasOwnProperty.call(collection, prop)) {
+                    callback.call(scope, collection[prop], prop, collection);
+                }
+            }
+        } else {
+            for (var i = 0, len = collection.length; i < len; i++) {
+                callback.call(scope, collection[i], i, collection);
+            }
+        }
+    };
+
+    /**
+     * Merge defaults with user options
+     * @private
+     * @param {Object} defaults Default settings
+     * @param {Object} options User options
+     * @returns {Object} Merged values of defaults and options
+     */
+    var extend = function ( defaults, options ) {
+        var extended = {};
+        forEach(defaults, function (value, prop) {
+            extended[prop] = defaults[prop];
+        });
+        forEach(options, function (value, prop) {
+            extended[prop] = options[prop];
+        });
+        return extended;
+    };
+
+    /**
+     * Remove whitespace from a string
+     * @private
+     * @param {String} string
+     * @returns {String}
+     */
+    var trim = function ( string ) {
+        return string.replace(/^\s+|\s+$/g, '');
+    };
+
+    /**
+     * Convert data-options attribute into an object of key/value pairs
+     * @private
+     * @param {String} options Link-specific options as a data attribute string
+     * @returns {Object}
+     */
+    var getDataOptions = function ( options ) {
+        var settings = {};
+        // Create a key/value pair for each setting
+        if ( options ) {
+            options = options.split(';');
+            options.forEach( function(option) {
+                option = trim(option);
+                if ( option !== '' ) {
+                    option = option.split(':');
+                    settings[option[0]] = trim(option[1]);
+                }
+            });
+        }
+        return settings;
+    };
+
+    /**
+     * Run when window resize is done (after x ms)
+     */
+    var waitForFinalEvent = (function () {
+        var timers = {};
+        return function (callback, ms, uniqueId) {
+            if (!uniqueId) {
+                uniqueId = "Don't call this twice without a uniqueId";
+            }
+            if (timers[uniqueId]) {
+                clearTimeout (timers[uniqueId]);
+            }
+            timers[uniqueId] = setTimeout(callback, ms);
+        };
+    })();
+
+    /**
+     * Get parents
+     */
+    function getParents(element, tag, stop) {
+        var nodes = [];
+        while (element.parentNode && element.parentNode != stop) {
+            element = element.parentNode;
+            if (element.tagName == tag) {
+                nodes.push(element);
+            }
+        }
+        return nodes
+    }
+
+    /**
+     * Get style
+     */
+    function getStyle(el,styleProp)
+    {
+        var x = document.getElementById(el);
+
+        if (window.getComputedStyle)
+        {
+            var y = document.defaultView.getComputedStyle(x,null).getPropertyValue(styleProp);
+        }
+        else if (x.currentStyle)
+        {
+            var y = x.currentStyle[styleProp];
+        }
+
+        return y;
+    }
+
+    // Responsive menu
+    function initialize(settings) {
+
+        menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+        // Add a class when JS is initiated
+        apollo.addClass(settings.wrapper, settings.initiated_class);
+
+        // Function to run after init
+        settings.onAfterInit();
+
+        // See if menu has children
+        var parents = menu.querySelectorAll('li ul');
+        if ( parents.length ) {
+            hasChildren = true;
+            subtoggles = document.getElementsByClassName(settings.subtoggleclass);
+
+            // Create mobile submenu width indicator
+            var mobilesubmenuindicator = document.createElement('div');
+            settings.wrapper.appendChild(mobilesubmenuindicator);
+            mobilesubmenuindicator.id = settings.mobilesubmenuindicatorid;
+            var mobilesubindicatorZindex = 0;
+        }
+
+        // Create mobile width indicator
+        var mobileindicator = document.createElement('div');
+        settings.wrapper.appendChild(mobileindicator);
+        mobileindicator.id = settings.mobileindicatorid;
+        var mobileindicatorZindex = 0;
+
+        // Creating the main toggle button
+        var toggle_element = document.createElement(settings.toggletype);
+        apollo.addClass(toggle_element, [settings.toggleclass, settings.hideclass]);
+        if ( settings.before_element == '' ) { settings.before_element = settings.wrapper.firstChild }
+        settings.before_element.parentNode.insertBefore(toggle_element, settings.before_element);
+        var togglebutton = document.getElementsByClassName(settings.toggleclass)[0];
+        togglebutton.innerHTML = settings.togglecontent;
+        togglebutton.setAttribute('aria-hidden', 'true');
+        togglebutton.setAttribute('aria-pressed', 'false');
+        togglebutton.setAttribute('type', 'button');
+
+        // Subtoggles and parent classes
+        if ( hasChildren ) {
+            for (var i = 0; i < parents.length; i++) {
+                var subtoggle_element = document.createElement(settings.subtoggletype);
+                apollo.addClass(subtoggle_element, [settings.subtoggleclass, settings.hideclass]);
+                var parent = parents[i].parentNode;
+                parent.insertBefore(subtoggle_element, parent.firstChild);
+                subtoggle_element.innerHTML = settings.subtogglecontent;
+                subtoggle_element.setAttribute('aria-hidden', 'true');
+                subtoggle_element.setAttribute('aria-pressed', 'false');
+                subtoggle_element.setAttribute('type', 'button');
+                apollo.addClass(parents[i].parentNode, settings.parentclass);
+            }
+        }
+
+        // Adding classes
+        function classes() {
+
+            menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+            mobileindicatorZindex = getStyle(settings.mobileindicatorid, "z-index");
+
+            if ( parents.length ) {
+                mobilesubmenuindicator = getStyle(settings.mobilesubmenuindicatorid, "z-index");
+            }
+
+            // If wrapper is small and if the menu is not already opened
+            if ( mobileindicatorZindex == 0 && !apollo.hasClass(menu, settings.openclass) ) {
+
+                // Show the toggle button(s)
+                apollo.removeClass(togglebutton, settings.hideclass);
+
+                // Hide the menu
+                apollo.removeClass(menu, [settings.openclass, settings.fullmenuclass]);
+                apollo.addClass(menu, settings.hideclass);
+                apollo.removeClass(document.body, settings.openbodyclass);
+
+                // Make the menu absolute positioned
+                if ( settings.absolute == 1 ) {
+                    apollo.addClass(menu, settings.absolutemenuclass);
+                }
+
+            } else if ( mobileindicatorZindex == 1 ) {
+
+                // Hide the toggle button(s)
+                apollo.addClass(togglebutton, settings.hideclass);
+                apollo.removeClass(togglebutton, settings.toggleclosedclass);
+
+                // Show the menu and remove all classes
+                apollo.removeClass(menu, [settings.openclass, settings.hideclass]);
+                apollo.addClass(menu, settings.fullmenuclass);
+                apollo.removeClass(document.body, settings.openbodyclass);
+
+                // Undo absolute positioning
+                if ( settings.absolute == 1 && apollo.hasClass(menu, settings.absolutemenuclass) ) {
+                    apollo.removeClass(menu, settings.absolutemenuclass);
+                }
+            }
+
+            if ( hasChildren && mobilesubmenuindicator == 0 ) {
+                forEach(subtoggles, function (value, prop) {
+                    if ( !apollo.hasClass(subtoggles[prop], settings.toggleclosedclass) ) {
+                        apollo.addClass(subtoggles[prop].parentNode.getElementsByTagName('ul')[0], settings.hideclass);
+                        apollo.removeClass(subtoggles[prop], settings.hideclass);
+                    }
+                });
+            } else if (hasChildren && mobilesubmenuindicator == 1) {
+                forEach(subtoggles, function(value, prop) {
+                    apollo.removeClass(subtoggles[prop].parentNode.getElementsByTagName('ul')[0], settings.hideclass);
+                    apollo.addClass(subtoggles[prop], settings.hideclass);
+                });
+            }
+        }
+
+        // Sticky menu body height
+        function stickyMenu() {
+
+            menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+            if ( settings.sticky == 1 ) {
+
+                // The current menu and viewport heights
+                var menuheight = settings.wrapper.offsetHeight;
+                var viewportheight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+                // Add the overflow class but only if there is space
+                if ( viewportheight <= menuheight && !apollo.hasClass(document.body, settings.bodyoverflowhiddenclass) ) {
+
+                    apollo.addClass(document.body, settings.bodyoverflowhiddenclass);
+                    apollo.addClass(settings.wrapper, settings.menuoverflowautoclass);
+
+                } else if ( viewportheight > menuheight ) {
+
+                    if ( apollo.hasClass(document.body, settings.bodyoverflowhiddenclass) ) {
+                        apollo.removeClass(document.body, settings.bodyoverflowhiddenclass);
+                        apollo.removeClass(settings.wrapper, settings.menuoverflowautoclass);
+                    }
+
+                    // Make sticky
+                    if ( !apollo.hasClass(settings.wrapper, settings.stickyclass) ) {
+                        apollo.addClass(settings.wrapper, settings.stickyclass);
+                    }
+
+                    // Add padding only if menu is closed or when value is stored
+                    if ( !apollo.hasClass(menu, settings.openclass) && !apollo.hasClass(document.body, settings.stickyinitiatedclass) ) {
+
+                        // Calculate the height
+                        var paddingtop = menuheight.toString() + 'px';
+
+                        // Set the padding on the body
+                        document.body.setAttribute('style', 'padding-top:' + paddingtop);
+                        apollo.addClass(document.body, settings.stickyinitiatedclass);
+                    }
+                }
+            }
+        }
+
+        // Initial load
+        window.addEventListener('load', function() {
+            classes();
+            stickyMenu();
+        }, true);
+
+        // On resize
+        window.addEventListener('resize', function() {
+
+            // Run immediately
+            classes();
+            stickyMenu();
+
+            // Run again after 200 ms for safari OSX when scrollbars are visible and you're resizing to a smaller window
+            waitForFinalEvent(function(){
+                classes();
+                stickyMenu();
+            }, 200);
+
+        }, true);
+
+        // Accessible focus menu
+        var menulinks = menu.getElementsByTagName('a');
+        for (var i = 0; i < menulinks.length; i++) {
+            menulinks[i].onblur = function() {
+                var focusedItems = document.getElementsByClassName('rm-focused');
+                for (var f = 0; f < focusedItems.length; f++) {
+                    apollo.removeClass(focusedItems[f], settings.focusedclass);
+                }
+            };
+            menulinks[i].onfocus = function() {
+                // Remove the class
+                var siblings = this.parentNode.parentNode.querySelectorAll('li');
+                if (siblings.length) {
+                    for (var f = 0; f < siblings.length; f++) {
+                        apollo.removeClass(siblings[f], settings.focusedclass);
+                    }
+                }
+                // Add the class
+                var parent = getParents(this, "LI", menu);
+                if (parent.length) {
+                    for (var f = 0; f < parent.length; f++) {
+                        apollo.addClass(parent[f], settings.focusedclass);
+                    }
+                }
+            };
+        }
+
+        // Clicking the toggle button
+        togglebutton.onclick = function() {
+
+            menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+            // Show the menu
+            if ( apollo.hasClass(menu, settings.hideclass) ) {
+
+                // Function to run before toggling
+                settings.onBeforeToggleOpen();
+
+                // Show the menu
+                apollo.removeClass(menu, settings.hideclass);
+                apollo.addClass(menu, settings.openclass);
+
+                // Add class to body element you could use for styling
+                apollo.addClass(document.body, settings.openbodyclass);
+
+                // Set toggled class to toggle button
+                apollo.addClass(togglebutton, settings.toggleclosedclass);
+
+                // Set and remove animate class after duration
+                apollo.addClass(menu, settings.animateopenclass);
+                setTimeout(function() {
+
+                    // Remove animation class
+                    apollo.removeClass(menu, settings.animateopenclass);
+
+                    // Function to run after toggling
+                    settings.onAfterToggleOpen();
+
+                }, settings.animateduration);
+            }
+
+            // Hide the menu
+            else if ( apollo.hasClass(menu, settings.openclass) ) {
+
+                menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+                // Function to run before toggling
+                settings.onBeforeToggleClose();
+
+                // Properly set animating classes
+                apollo.addClass(menu, settings.animatecloseclass);
+
+                // Remove toggled class to toggle button
+                apollo.removeClass(togglebutton, settings.toggleclosedclass);
+
+                // When animation is done
+                setTimeout(function() {
+
+                    // Remove animate class
+                    apollo.removeClass(menu, settings.animatecloseclass);
+
+                    // Hide the menu
+                    apollo.removeClass(menu, settings.openclass);
+                    apollo.addClass(menu, settings.hideclass);
+
+                    // Remove class from body element you could use for styling
+                    apollo.removeClass(document.body, settings.openbodyclass);
+
+                    // Function to run after toggling
+                    settings.onAfterToggleClose();
+
+                }, settings.animateduration);
+            }
+
+            // Check if the menu still fits
+            stickyMenu();
+
+            return false;
+        };
+
+        // Clicking the sub toggles button
+        if ( hasChildren ) {
+
+            menu = settings.wrapper.getElementsByTagName('ul')[0] || settings.menu;
+
+            forEach(subtoggles, function(value, prop) {
+
+                // Variables
+                var subtoggle = subtoggles[prop];
+                var submenu = subtoggle.parentNode.getElementsByTagName('ul')[0];
+
+                // Click buttons and show submenu
+                subtoggle.onclick = function() {
+
+                    // Open
+                    if ( apollo.hasClass(submenu, settings.hideclass) ) {
+
+                        // Function to run before toggling
+                        settings.onBeforeSubToggleOpen();
+
+                        // Properly set animating classes
+                        apollo.addClass(menu, settings.subanimateopenclass);
+
+                        // Add class to subtoggle button
+                        apollo.addClass(subtoggle, settings.toggleclosedclass);
+
+                        // Show sub menu
+                        apollo.removeClass(submenu, settings.hideclass);
+
+                        setTimeout(function() {
+
+                            // Remove animate class
+                            apollo.removeClass(menu, settings.subanimateopenclass);
+
+                            // Function to run before toggling
+                            settings.onAfterSubToggleOpen();
+
+                        }, settings.subanimateduration);
+                    }
+
+                    // Close
+                    else if ( !apollo.hasClass(submenu, settings.hideclass) ) {
+
+                        // Function to run before toggling
+                        settings.onBeforeSubToggleClose();
+
+                        // Properly set animating classes
+                        apollo.addClass(menu, settings.subanimatecloseclass);
+
+                        // Remove class from subtoggle button
+                        apollo.removeClass(subtoggle, settings.toggleclosedclass);
+
+                        setTimeout(function() {
+
+                            // Remove animate class
+                            apollo.removeClass(menu, settings.subanimatecloseclass);
+
+                            // Set classes
+                            apollo.addClass(submenu, settings.hideclass);
+
+                            // Function to run before toggling
+                            settings.onAfterSubToggleClose();
+
+                        }, settings.subanimateduration);
+
+                    }
+
+                    // Check if the menu still fits
+                    stickyMenu();
+                }
+            });
+        }
+    }
+
+    /**
+     * Initialize Plugin
+     * @public
+     * @param {Object} options User settings
+     */
+    exports.init = function ( options ) {
+        // feature test
+        if ( !supports ) {
+            document.documentElement.className += ' ' + settings.noresponsivemenuclass;
+            return;
+        }
+        settings = extend( defaults, options || {} ); // Merge user options with defaults
+        initialize(settings);
+    };
+
+    // Public APIs
+    return exports;
+
+});
+/*!
+  hey, [be]Lazy.js - v1.8.2 - 2016.10.25
+  A fast, small and dependency free lazy load script (https://github.com/dinbror/blazy)
+  (c) Bjoern Klinggaard - @bklinggaard - http://dinbror.dk/blazy
+*/
+;
+(function(root, blazy) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register bLazy as an anonymous module
+        define(blazy);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = blazy();
+    } else {
+        // Browser globals. Register bLazy on window
+        root.Blazy = blazy();
+    }
+})(this, function() {
+    'use strict';
+
+    //private vars
+    var _source, _viewport, _isRetina, _supportClosest, _attrSrc = 'src', _attrSrcset = 'srcset';
+
+    // constructor
+    return function Blazy(options) {
+        //IE7- fallback for missing querySelectorAll support
+        if (!document.querySelectorAll) {
+            var s = document.createStyleSheet();
+            document.querySelectorAll = function(r, c, i, j, a) {
+                a = document.all, c = [], r = r.replace(/\[for\b/gi, '[htmlFor').split(',');
+                for (i = r.length; i--;) {
+                    s.addRule(r[i], 'k:v');
+                    for (j = a.length; j--;) a[j].currentStyle.k && c.push(a[j]);
+                    s.removeRule(0);
+                }
+                return c;
+            };
+        }
+
+        //options and helper vars
+        var scope = this;
+        var util = scope._util = {};
+        util.elements = [];
+        util.destroyed = true;
+        scope.options = options || {};
+        scope.options.error = scope.options.error || false;
+        scope.options.offset = scope.options.offset || 100;
+        scope.options.root = scope.options.root || document;
+        scope.options.success = scope.options.success || false;
+        scope.options.selector = scope.options.selector || '.b-lazy';
+        scope.options.separator = scope.options.separator || '|';
+        scope.options.containerClass = scope.options.container;
+        scope.options.container = scope.options.containerClass ? document.querySelectorAll(scope.options.containerClass) : false;
+        scope.options.errorClass = scope.options.errorClass || 'b-error';
+        scope.options.breakpoints = scope.options.breakpoints || false;
+        scope.options.loadInvisible = scope.options.loadInvisible || false;
+        scope.options.successClass = scope.options.successClass || 'b-loaded';
+        scope.options.validateDelay = scope.options.validateDelay || 25;
+        scope.options.saveViewportOffsetDelay = scope.options.saveViewportOffsetDelay || 50;
+        scope.options.srcset = scope.options.srcset || 'data-srcset';
+        scope.options.src = _source = scope.options.src || 'data-src';
+        _supportClosest = Element.prototype.closest;
+        _isRetina = window.devicePixelRatio > 1;
+        _viewport = {};
+        _viewport.top = 0 - scope.options.offset;
+        _viewport.left = 0 - scope.options.offset;
+
+
+        /* public functions
+         ************************************/
+        scope.revalidate = function() {
+            initialize(scope);
+        };
+        scope.load = function(elements, force) {
+            var opt = this.options;
+            if (elements && elements.length === undefined) {
+                loadElement(elements, force, opt);
+            } else {
+                each(elements, function(element) {
+                    loadElement(element, force, opt);
+                });
+            }
+        };
+        scope.destroy = function() {            
+            var util = scope._util;
+            if (scope.options.container) {
+                each(scope.options.container, function(object) {
+                    unbindEvent(object, 'scroll', util.validateT);
+                });
+            }
+            unbindEvent(window, 'scroll', util.validateT);
+            unbindEvent(window, 'resize', util.validateT);
+            unbindEvent(window, 'resize', util.saveViewportOffsetT);
+            util.count = 0;
+            util.elements.length = 0;
+            util.destroyed = true;
+        };
+
+        //throttle, ensures that we don't call the functions too often
+        util.validateT = throttle(function() {
+            validate(scope);
+        }, scope.options.validateDelay, scope);
+        util.saveViewportOffsetT = throttle(function() {
+            saveViewportOffset(scope.options.offset);
+        }, scope.options.saveViewportOffsetDelay, scope);
+        saveViewportOffset(scope.options.offset);
+
+        //handle multi-served image src (obsolete)
+        each(scope.options.breakpoints, function(object) {
+            if (object.width >= window.screen.width) {
+                _source = object.src;
+                return false;
+            }
+        });
+
+        // start lazy load
+        setTimeout(function() {
+            initialize(scope);
+        }); // "dom ready" fix
+
+    };
+
+
+    /* Private helper functions
+     ************************************/
+    function initialize(self) {
+        var util = self._util;
+        // First we create an array of elements to lazy load
+        util.elements = toArray(self.options);
+        util.count = util.elements.length;
+        // Then we bind resize and scroll events if not already binded
+        if (util.destroyed) {
+            util.destroyed = false;
+            if (self.options.container) {
+                each(self.options.container, function(object) {
+                    bindEvent(object, 'scroll', util.validateT);
+                });
+            }
+            bindEvent(window, 'resize', util.saveViewportOffsetT);
+            bindEvent(window, 'resize', util.validateT);
+            bindEvent(window, 'scroll', util.validateT);
+        }
+        // And finally, we start to lazy load.
+        validate(self);
+    }
+
+    function validate(self) {
+        var util = self._util;
+        for (var i = 0; i < util.count; i++) {
+            var element = util.elements[i];
+            if (elementInView(element, self.options) || hasClass(element, self.options.successClass)) {
+                self.load(element);
+                util.elements.splice(i, 1);
+                util.count--;
+                i--;
+            }
+        }
+        if (util.count === 0) {
+            self.destroy();
+        }
+    }
+
+    function elementInView(ele, options) {
+        var rect = ele.getBoundingClientRect();
+
+        if(options.container && _supportClosest){
+            // Is element inside a container?
+            var elementContainer = ele.closest(options.containerClass);
+            if(elementContainer){
+                var containerRect = elementContainer.getBoundingClientRect();
+                // Is container in view?
+                if(inView(containerRect, _viewport)){
+                    var top = containerRect.top - options.offset;
+                    var right = containerRect.right + options.offset;
+                    var bottom = containerRect.bottom + options.offset;
+                    var left = containerRect.left - options.offset;
+                    var containerRectWithOffset = {
+                        top: top > _viewport.top ? top : _viewport.top,
+                        right: right < _viewport.right ? right : _viewport.right,
+                        bottom: bottom < _viewport.bottom ? bottom : _viewport.bottom,
+                        left: left > _viewport.left ? left : _viewport.left
+                    };
+                    // Is element in view of container?
+                    return inView(rect, containerRectWithOffset);
+                } else {
+                    return false;
+                }
+            }
+        }      
+        return inView(rect, _viewport);
+    }
+
+    function inView(rect, viewport){
+        // Intersection
+        return rect.right >= viewport.left &&
+               rect.bottom >= viewport.top && 
+               rect.left <= viewport.right && 
+               rect.top <= viewport.bottom;
+    }
+
+    function loadElement(ele, force, options) {
+        // if element is visible, not loaded or forced
+        if (!hasClass(ele, options.successClass) && (force || options.loadInvisible || (ele.offsetWidth > 0 && ele.offsetHeight > 0))) {
+            var dataSrc = getAttr(ele, _source) || getAttr(ele, options.src); // fallback to default 'data-src'
+            if (dataSrc) {
+                var dataSrcSplitted = dataSrc.split(options.separator);
+                var src = dataSrcSplitted[_isRetina && dataSrcSplitted.length > 1 ? 1 : 0];
+                var srcset = getAttr(ele, options.srcset);
+                var isImage = equal(ele, 'img');
+                var parent = ele.parentNode;
+                var isPicture = parent && equal(parent, 'picture');
+                // Image or background image
+                if (isImage || ele.src === undefined) {
+                    var img = new Image();
+                    // using EventListener instead of onerror and onload
+                    // due to bug introduced in chrome v50 
+                    // (https://productforums.google.com/forum/#!topic/chrome/p51Lk7vnP2o)
+                    var onErrorHandler = function() {
+                        if (options.error) options.error(ele, "invalid");
+                        addClass(ele, options.errorClass);
+                        unbindEvent(img, 'error', onErrorHandler);
+                        unbindEvent(img, 'load', onLoadHandler);
+                    };
+                    var onLoadHandler = function() {
+                        // Is element an image
+                        if (isImage) {
+                            if(!isPicture) {
+                                handleSources(ele, src, srcset);
+                            }
+                        // or background-image
+                        } else {
+                            ele.style.backgroundImage = 'url("' + src + '")';
+                        }
+                        itemLoaded(ele, options);
+                        unbindEvent(img, 'load', onLoadHandler);
+                        unbindEvent(img, 'error', onErrorHandler);
+                    };
+                    
+                    // Picture element
+                    if (isPicture) {
+                        img = ele; // Image tag inside picture element wont get preloaded
+                        each(parent.getElementsByTagName('source'), function(source) {
+                            handleSource(source, _attrSrcset, options.srcset);
+                        });
+                    }
+                    bindEvent(img, 'error', onErrorHandler);
+                    bindEvent(img, 'load', onLoadHandler);
+                    handleSources(img, src, srcset); // Preload
+
+                } else { // An item with src like iframe, unity games, simpel video etc
+                    ele.src = src;
+                    itemLoaded(ele, options);
+                }
+            } else {
+                // video with child source
+                if (equal(ele, 'video')) {
+                    each(ele.getElementsByTagName('source'), function(source) {
+                        handleSource(source, _attrSrc, options.src);
+                    });
+                    ele.load();
+                    itemLoaded(ele, options);
+                } else {
+                    if (options.error) options.error(ele, "missing");
+                    addClass(ele, options.errorClass);
+                }
+            }
+        }
+    }
+
+    function itemLoaded(ele, options) {
+        addClass(ele, options.successClass);
+        if (options.success) options.success(ele);
+        // cleanup markup, remove data source attributes
+        removeAttr(ele, options.src);
+        removeAttr(ele, options.srcset);
+        each(options.breakpoints, function(object) {
+            removeAttr(ele, object.src);
+        });
+    }
+
+    function handleSource(ele, attr, dataAttr) {
+        var dataSrc = getAttr(ele, dataAttr);
+        if (dataSrc) {
+            setAttr(ele, attr, dataSrc);
+            removeAttr(ele, dataAttr);
+        }
+    }
+
+    function handleSources(ele, src, srcset){
+        if(srcset) {
+            setAttr(ele, _attrSrcset, srcset); //srcset
+        }
+        ele.src = src; //src 
+    }
+
+    function setAttr(ele, attr, value){
+        ele.setAttribute(attr, value);
+    }
+
+    function getAttr(ele, attr) {
+        return ele.getAttribute(attr);
+    }
+
+    function removeAttr(ele, attr){
+        ele.removeAttribute(attr); 
+    }
+
+    function equal(ele, str) {
+        return ele.nodeName.toLowerCase() === str;
+    }
+
+    function hasClass(ele, className) {
+        return (' ' + ele.className + ' ').indexOf(' ' + className + ' ') !== -1;
+    }
+
+    function addClass(ele, className) {
+        if (!hasClass(ele, className)) {
+            ele.className += ' ' + className;
+        }
+    }
+
+    function toArray(options) {
+        var array = [];
+        var nodelist = (options.root).querySelectorAll(options.selector);
+        for (var i = nodelist.length; i--; array.unshift(nodelist[i])) {}
+        return array;
+    }
+
+    function saveViewportOffset(offset) {
+        _viewport.bottom = (window.innerHeight || document.documentElement.clientHeight) + offset;
+        _viewport.right = (window.innerWidth || document.documentElement.clientWidth) + offset;
+    }
+
+    function bindEvent(ele, type, fn) {
+        if (ele.attachEvent) {
+            ele.attachEvent && ele.attachEvent('on' + type, fn);
+        } else {
+            ele.addEventListener(type, fn, { capture: false, passive: true });
+        }
+    }
+
+    function unbindEvent(ele, type, fn) {
+        if (ele.detachEvent) {
+            ele.detachEvent && ele.detachEvent('on' + type, fn);
+        } else {
+            ele.removeEventListener(type, fn, { capture: false, passive: true });
+        }
+    }
+
+    function each(object, fn) {
+        if (object && fn) {
+            var l = object.length;
+            for (var i = 0; i < l && fn(object[i], i) !== false; i++) {}
+        }
+    }
+
+    function throttle(fn, minDelay, scope) {
+        var lastCall = 0;
+        return function() {
+            var now = +new Date();
+            if (now - lastCall < minDelay) {
+                return;
+            }
+            lastCall = now;
+            fn.apply(scope, arguments);
+        };
+    }
+});
+
