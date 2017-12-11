@@ -2,11 +2,20 @@
 
 }
 
-.banneritem {
-  @include gallery(6, 0 to $alpha--plus);
-  @include gallery(4, $alpha--plus, $defaultProperties: false);
+//.banneritem {
+//  @include gallery(6, 0 to $alpha--plus);
+//  @include gallery(4, $alpha--plus, $defaultProperties: false);
+//
+//  @at-root .module__banners--diamant > & {
+//    @include shift(4 of 12, $alpha--plus);
+//  }
+//}
 
-  @at-root .module__banners--diamant > & {
-    @include shift(4 of 12, $alpha--plus);
+.module__banners--diamant {
+  .grid--1-1-1>.grid__item:nth-child(n),
+  .grid__item {
+    margin-left: auto;
+    margin-right: auto;
+    float:none;
   }
 }

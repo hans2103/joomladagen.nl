@@ -27,7 +27,7 @@ $colors: (
         blue: (
                 base: $color-blue,
                 light: lighten($color-blue, $color-shade-amount),
-                lightest: transparentize(lighten($color-blue, $color-shade-amount), $color-trans-amount),
+                lightest: transparentize(lighten($color-blue, 2.5 * $color-shade-amount), $color-trans-amount),
                 dark: darken($color-blue, $color-shade-amount),
                 trans: transparentize($color-blue, $color-trans-amount)
         ),

@@ -101,3 +101,8 @@
     flex: 1 1 45.5%;
   }
 }
+
+.module__banners {
+  @include spacing(top, margin, 1);
+  @include spacing(bottom, margin, 2);
+}

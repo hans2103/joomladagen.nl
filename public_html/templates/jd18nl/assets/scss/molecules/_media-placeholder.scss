@@ -50,3 +50,7 @@
 .media-placeholder--A4 {
   @include ratio-block(3 by 4);
 }
+
+.media-placeholder--4by2 {
+  @include ratio-block(4 by 2);
+}

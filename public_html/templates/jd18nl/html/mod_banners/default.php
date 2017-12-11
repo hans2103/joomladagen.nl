@@ -10,104 +10,63 @@
 defined('_JEXEC') or die;
 
 JLoader::register('BannerHelper', JPATH_ROOT . '/components/com_banners/helpers/banner.php');
-?>
-<div class="bannergroup<?php echo $moduleclass_sfx; ?>">
-	<?php if ($headerText) : ?>
-		<?php echo $headerText; ?>
-	<?php endif; ?>
 
-	<?php foreach ($list as $item) : ?>
-        <div class="banneritem">
-			<?php $link = JRoute::_('index.php?option=com_banners&task=click&id=' . $item->id); ?>
-			<?php if ($item->type == 1) : ?>
-				<?php // Text based banners ?>
-				<?php echo str_replace(array('{CLICKURL}', '{NAME}'), array($link, $item->name), $item->custombannercode); ?>
-			<?php else : ?>
-				<?php $imageurl = $item->params->get('imageurl'); ?>
-				<?php $width = $item->params->get('width'); ?>
-				<?php $height = $item->params->get('height'); ?>
-				<?php if (BannerHelper::isImage($imageurl)) : ?>
-					<?php // Image based banner ?>
-					<?php $baseurl = strpos($imageurl, 'http') === 0 ? '' : JUri::base(); ?>
-					<?php $alt = $item->params->get('alt'); ?>
-					<?php $alt = $alt ?: $item->name; ?>
-					<?php $alt = $alt ?: JText::_('MOD_BANNERS_BANNER'); ?>
-					<?php if ($item->clickurl) : ?>
-						<?php // Wrap the banner in a link ?>
-						<?php $target = $params->get('target', 1); ?>
-						<?php if ($target == 1) : ?>
-							<?php // Open in a new window ?>
-                            <a
-                                    href="<?php echo $link; ?>" target="_blank" rel="noopener noreferrer"
-                                    title="<?php echo htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8'); ?>">
-                                <img
-                                        src="<?php echo $baseurl . $imageurl; ?>"
-                                        alt="<?php echo $alt;?>"
-									<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-									<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                                />
-                            </a>
-						<?php elseif ($target == 2) : ?>
-							<?php // Open in a popup window ?>
-                            <a
-                                    href="<?php echo $link; ?>" onclick="window.open(this.href, '',
-								'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=550');
-								return false"
-                                    title="<?php echo htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8'); ?>">
-                                <img
-                                        src="<?php echo $baseurl . $imageurl; ?>"
-                                        alt="<?php echo $alt;?>"
-									<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-									<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                                />
-                            </a>
-						<?php else : ?>
-							<?php // Open in parent window ?>
-                            <a
-                                    href="<?php echo $link; ?>"
-                                    title="<?php echo htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8'); ?>">
-                                <img
-                                        src="<?php echo $baseurl . $imageurl; ?>"
-                                        alt="<?php echo $alt;?>"
-									<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-									<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                                />
-                            </a>
-						<?php endif; ?>
-					<?php else : ?>
-						<?php // Just display the image if no link specified ?>
-                        <img
-                                src="<?php echo $baseurl . $imageurl; ?>"
-                                alt="<?php echo $alt;?>"
-							<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-							<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                        />
-					<?php endif; ?>
-				<?php elseif (BannerHelper::isFlash($imageurl)) : ?>
-                    <object
-                            classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-                            codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
-						<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-						<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                    >
-                        <param name="movie" value="<?php echo $imageurl; ?>" />
-                        <embed
-                                src="<?php echo $imageurl; ?>"
-                                loop="false"
-                                pluginspage="http://www.macromedia.com/go/get/flashplayer"
-                                type="application/x-shockwave-flash"
-							<?php if (!empty($width)) echo ' width="' . $width . '"';?>
-							<?php if (!empty($height)) echo ' height="' . $height . '"';?>
-                        />
-                    </object>
-				<?php endif; ?>
-			<?php endif; ?>
-        </div>
-	<?php endforeach; ?>
+echo '<div class="grid grid--1-1-1">';
+foreach ($list as $item) :
+	echo '<div class="grid__item">';
+	$link = JRoute::_('index.php?option=com_banners&task=click&id=' . $item->id);
+	if ($item->type == 1) :
+		// Text based banners
+		echo str_replace(array('{CLICKURL}', '{NAME}'), array($link, $item->name), $item->custombannercode);
+	else :
+		$imageurl = $item->params->get('imageurl');
+		if (BannerHelper::isImage($imageurl)) :
+			echo '<div class="article__image">';
+			echo '<div class="media-placeholder media-placeholder--4by2">';
 
-	<?php if ($footerText) : ?>
-        <div class="bannerfooter">
-			<?php echo $footerText; ?>
-        </div>
-	<?php endif; ?>
-</div>
+			// Image based banner
+			$baseurl = strpos($imageurl, 'http') === 0 ? '' : JUri::base();
+			$alt     = $item->params->get('alt');
+			$alt     = $alt ?: $item->name;
+			$alt     = $alt ?: JText::_('MOD_BANNERS_BANNER');
+			if ($item->clickurl) :
+				// Wrap the banner in a link
+				$target = $params->get('target', 1);
+				$img    = JLayouts::render('template.image', array('img' => $baseurl . $imageurl, 'alt' => $alt));
+				if ($target == 1) :
+					// Open in a new window
+					$array = array(
+						'target' => '_blank',
+						'rel'    => 'noopener noreferrer',
+						'title'  => htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8')
+					);
+				elseif ($target == 2) :
+					// Open in a popup window
+					$array = array(
+						'onclick' => 'window.open(this.href, \'\', \'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=550\');return false',
+						'title'   => htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8')
+					);
+				else :
+					// Open in parent window
+					$array = array(
+						'title' => htmlspecialchars($item->name, ENT_QUOTES, 'UTF-8')
+					);
+				endif;
+				echo JHtml::_('link', $link, $img, $array);
+			else :
+				// Just display the image if no link specified
+				echo JLayouts::render('template.image', array('img' => $baseurl . $imageurl, 'alt' => $alt));
+			endif;
+			echo '</div>';
+			echo '</div>';
+		endif;
+	endif;
+	echo '</div >';
+endforeach;
+
+if ($footerText) :
+	echo '<div class="bannerfooter" >';
+	echo $footerText;
+	echo '</div >';
+endif;
+echo '</div >';
