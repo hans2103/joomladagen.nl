@@ -25,7 +25,7 @@ foreach ($list as $item) :
 			echo '<div class="media-placeholder media-placeholder--4by2">';
 
 			// Image based banner
-			$baseurl = strpos($imageurl, 'http') === 0 ? '' : JUri::base();
+			$baseurl = ''; //strpos($imageurl, 'http') === 0 ? '' : JUri::base();
 			$alt     = $item->params->get('alt');
 			$alt     = $alt ?: $item->name;
 			$alt     = $alt ?: JText::_('MOD_BANNERS_BANNER');
