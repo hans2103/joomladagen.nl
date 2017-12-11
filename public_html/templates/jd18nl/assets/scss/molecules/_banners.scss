@@ -1,0 +1,12 @@
+.bannergroup {
+
+}
+
+.banneritem {
+  @include gallery(6, 0 to $alpha--plus);
+  @include gallery(4, $alpha--plus, $defaultProperties: false);
+
+  @at-root .module__banners--diamant > & {
+    @include shift(4 of 12, $alpha--plus);
+  }
+}
