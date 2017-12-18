@@ -13,7 +13,7 @@
   .form-input {
     -webkit-appearance: none;
     background: white;
-    border: none;
+    border: 1px solid color(blue, dark);
     height: 40px;
     width: 100%;
     padding: $spacing-s 12px;
@@ -21,13 +21,13 @@
   }
 }
 
-.form__nvml-menu {
+.form__pwt-menu {
   @include reset;
   display: flex;
   justify-content:space-between;
   flex-wrap: wrap;
 
-  color: white;
+  //color: white;
   font-size: $font-size-s;
   @include spacing(top, padding, 0.5);
 

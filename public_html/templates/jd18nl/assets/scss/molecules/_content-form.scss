@@ -2,7 +2,7 @@
 .content__profile-edit {
   @include spacing(top, margin, 1, $menu);
   @include spacing(bottom, margin, 1, $menu);
-  background-color: color(blue, light);
+  //background-color: color(blue, light);
   @include spacing(all, padding, 2);
 
   p,
