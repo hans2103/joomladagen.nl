@@ -1,9 +1,11 @@
 .option-com-j2store {
-  .bs2 {
-    > .row-fluid {
-      @include container;
-    }
+  .bs2,
+  .j2store {
+    @include container;
+    @include spacing(top, padding, 1);
+    @include spacing(bottom, padding, 1);
 
+    .row,
     .row-fluid {
       @include spacing(bottom, margin, 1);
       @include clearfix;
@@ -59,6 +61,11 @@
 
     .btn {
       @include button;
+    }
+
+    .table {
+      width: 100%;
+      @include spacing(bottom, margin, 1);
     }
 
   }
