@@ -7,7 +7,7 @@
 //
 // Styleguide molecules.button
 
-.button {
+@mixin button() {
   @include button-structure($vertical-align: false);
   background: color(green, base);
   color: white;
@@ -49,9 +49,17 @@
   }
 }
 
-.button--large {
+@mixin button--large() {
   font-size: $font-size;
   padding: 10px $spacing-m 6px;
+}
+
+.button {
+  @include button;
+}
+
+.button--large {
+  @include button--large;
 }
 
 .is-android-chrome {
