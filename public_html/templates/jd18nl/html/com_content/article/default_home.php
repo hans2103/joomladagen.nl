@@ -112,8 +112,8 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
             </div>
             <div class="numbers">
                 <div class="numbers__item">
-                    <span class="numbers__item-head">271</span>
-                    <div class="numbers__item-label">deelnemers</div>
+                    <span class="numbers__item-head">1,5 uur</span>
+                    <div class="numbers__item-label">Amsterdam Centraal</div>
                 </div>
                 <div class="numbers__item">
                     <span class="numbers__item-head">42</span>
@@ -262,72 +262,5 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
 			echo JModuleHelper::renderModule($modules[0], $attribs);
 		}
 		?>
-    </div>
-</section>
-
-<section class="section section--accent section--sponsors">
-    <div class="container">
-	    <?php
-	    // Module params
-	    $params = array(
-	        'catid'           => 14,
-		    'style'           => 'tpl',
-		    'moduleclass_sfx' => ' module__banners module__banners--diamant',
-		    'count'           => 1,
-	        'header_tag'       => 'h2 module__title--center',
-
-	    );
-
-	    // Load module and add params
-	    $module            = JModuleHelper::getModule('mod_banners');
-	    $module->title     = "Diamant sponsor";
-	    $module->showtitle = 1;
-	    $module->params    = json_encode($params);
-
-	    // Render module
-	    echo JFactory::getDocument()->loadRenderer('module')->render($module);
-	    ?>
-    </div>
-    <div class="container">
-	    <?php
-	    // Module params
-	    $params = array(
-		    'catid'           => 3,
-		    'style'           => 'tpl',
-		    'moduleclass_sfx' => ' module__banners',
-		    'count'           => 3,
-		    'header_tag'       => 'h2 module__title--center'
-	    );
-
-	    // Load module and add params
-	    $module            = JModuleHelper::getModule('mod_banners');
-	    $module->title     = "Gouden sponsor";
-	    $module->showtitle = 1;
-	    $module->params    = json_encode($params);
-
-	    // Render module
-	    echo JFactory::getDocument()->loadRenderer('module')->render($module);
-	    ?>
-    </div>
-    <div class="container">
-	    <?php
-	    // Module params
-	    $params = array(
-		    'catid'           => 15,
-		    'style'           => 'tpl',
-		    'moduleclass_sfx' => ' module__banners',
-		    'count'           => 6,
-		    'header_tag'       => 'h2 module__title--center'
-	    );
-
-	    // Load module and add params
-	    $module            = JModuleHelper::getModule('mod_banners');
-	    $module->title     = "Zilveren sponsor";
-	    $module->showtitle = 1;
-	    $module->params    = json_encode($params);
-
-	    // Render module
-	    echo JFactory::getDocument()->loadRenderer('module')->render($module);
-	    ?>
     </div>
 </section>

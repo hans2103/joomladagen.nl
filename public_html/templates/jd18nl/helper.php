@@ -256,7 +256,7 @@ class PWTTemplateHelper
 	 */
 	static public function isPage($request = 'home')
 	{
-		return self::getPath()[0] == $request;
+		return JURI::getInstance()->getPath() == $request;
 	}
 
 	/**
