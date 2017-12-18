@@ -1,0 +1,34 @@
+.message__wrapper {
+  @include spacing(top, padding, 0.5);
+  @include spacing(bottom, padding, 0.5);
+  @include spacing(bottom, margin, 1);
+
+  animation-name: fade-in;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+
+
+  background-color: color(message, success);
+  color: white;
+}
+
+.message__wrapper--error {
+  background-color: color(message, error);
+  color: color(text);
+}
+
+.message__wrapper--notice,
+.message__wrapper--warning {
+  background-color: color(message, warning);
+  color: color(text);
+}
+
+.message__wrapper--focus {
+  background-color: color(message, focus);
+  color: white;
+}
+
+@keyframes fade-in {
+  0%   {opacity: 0;}
+  100%  {opacity: 1;}
+}

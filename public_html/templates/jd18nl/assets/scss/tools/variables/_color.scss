@@ -51,5 +51,11 @@ $colors: (
                 pinterest: #d8545d,
                 twitter: #70c2e9,
                 youtube: rgba(229, 45, 39, 1)
+        ),
+        message: (
+                error:$color-red,
+                success:$color-green,
+                warning:$color-orange,
+                focus:$color-blue
         )
 );
