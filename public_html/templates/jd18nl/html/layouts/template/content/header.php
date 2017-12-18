@@ -48,7 +48,7 @@ if (isset($displayData['breadcrumbs']) && $displayData['breadcrumbs'] == false)
     </div>
 </header>
 
-
+<?php echo JLayouts::render('template.message');
 
 
 
