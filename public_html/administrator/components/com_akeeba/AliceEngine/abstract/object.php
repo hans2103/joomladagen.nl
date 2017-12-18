@@ -16,7 +16,7 @@ defined('AKEEBAENGINE') or die();
  * The base class of Akeeba Engine objects. Allows for error and warnings logging
  * and propagation. Largely based on the Joomla! 1.5 JObject class.
  */
-abstract class AliceAbstractObject extends \Akeeba\Engine\Base\Object
+abstract class AliceAbstractObject extends \Akeeba\Engine\Base\BaseObject
 {
 	/**
 	 * Public constructor, makes sure we are instanciated only by the factory class

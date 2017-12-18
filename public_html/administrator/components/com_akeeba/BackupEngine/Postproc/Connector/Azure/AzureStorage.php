@@ -162,6 +162,13 @@ class AzureStorage
 	protected $_proxyCredentials = '';
 
 	/**
+	 * Should I use SSL (HTTPS) to communicate to Windows Azure?
+	 *
+	 * @var  bool
+	 */
+	protected $useSSL = true;
+
+	/**
 	 * Creates a new AzureStorage instance
 	 *
 	 * @param string                 $host            Storage host name
@@ -236,19 +243,42 @@ class AzureStorage
 	}
 
 	/**
+	 * Set the connection SSL preference
+	 *
+	 * @param  boolean  $useSSL  True to use HTTPS
+	 */
+	public function setSSL($useSSL)
+	{
+		$this->useSSL = $useSSL ? true : false;
+	}
+
+
+	public function isSSL()
+	{
+		return $this->useSSL;
+	}
+
+	/**
 	 * Get base URL for creating requests
 	 *
 	 * @return string
 	 */
 	public function getBaseUrl()
 	{
+		$schema = 'http://';
+
+		if ($this->isSSL())
+		{
+			$schema = 'https://';
+		}
+
 		if ($this->_usePathStyleUri)
 		{
-			return 'http://' . $this->_host . '/' . $this->_accountName;
+			return $schema . $this->_host . '/' . $this->_accountName;
 		}
 		else
 		{
-			return 'http://' . $this->_accountName . '.' . $this->_host;
+			return $schema . $this->_accountName . '.' . $this->_host;
 		}
 	}
 

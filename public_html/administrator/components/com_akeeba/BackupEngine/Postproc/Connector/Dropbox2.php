@@ -225,7 +225,7 @@ class Dropbox2
 	 */
 	public function delete($path, $failOnError = true)
 	{
-		$relativeUrl = 'files/delete';
+		$relativeUrl = 'files/delete_v2';
 		$path = $this->normalizePath($path);
 
 		$params = array(
@@ -288,13 +288,18 @@ class Dropbox2
 	 *
 	 * @see     https://www.dropbox.com/developers/documentation/http#documentation-sharing-create_shared_link
 	 */
-	public function getSharedUrl($path)
+	public function getSharedUrl($path, $expires = null)
 	{
-		$relativeUrl = 'sharing/create_shared_link';
+		$relativeUrl = 'sharing/create_shared_link_with_settings';
 		$path = $this->normalizePath($path);
 
-		$params = array(
-			'path' => $path
+		$settings      = array(
+			'requested_visibility' => 'public'
+		);
+
+		$params        = array(
+			'path' => $path,
+			'settings' => $settings
 		);
 		$paramsForPost = json_encode($params);
 
@@ -397,7 +402,7 @@ class Dropbox2
 	 */
 	public function uploadPart($sessionId, $localFile, $from = 0, $length = 10485760)
 	{
-		$relativeUrl = 'files/upload_session/append';
+		$relativeUrl = 'files/upload_session/append_v2';
 
 		clearstatcache();
 		$totalSize = filesize($localFile);
@@ -411,8 +416,11 @@ class Dropbox2
 		$contentLength = $to - $from + 1;
 
 		$params = array(
-			'session_id' => $sessionId,
-			'offset'     => $from,
+			'cursor' => array(
+				'session_id' => $sessionId,
+				'offset'     => $from,
+			),
+			'close' => false
 		);
 		$paramsForPost = json_encode($params);
 
@@ -550,9 +558,10 @@ class Dropbox2
 		}
 
 		// We have to create a new folder $folder in parent folder $parentPath.
-		$relativeUrl = 'files/create_folder';
+		$relativeUrl = 'files/create_folder_v2';
 		$params = array(
-			'path' => $path
+			'path' => $path,
+			'autorename' => false,
 		);
 		$paramsForPost = json_encode($params);
 
