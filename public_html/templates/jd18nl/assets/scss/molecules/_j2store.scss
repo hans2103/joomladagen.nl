@@ -1,0 +1,65 @@
+.option-com-j2store {
+  .bs2 {
+    > .row-fluid {
+      @include container;
+    }
+
+    .row-fluid {
+      @include spacing(bottom, margin, 1);
+      @include clearfix;
+    }
+
+    .span1 {
+      @include span(1 of 12);
+    }
+
+    .span2 {
+      @include span(2 of 12);
+    }
+
+    .span3 {
+      @include span(3 of 12);
+    }
+
+    .span4 {
+      @include span(4 of 12);
+    }
+
+    .span5 {
+      @include span(5 of 12);
+    }
+
+    .span6 {
+      @include span(6 of 12);
+    }
+
+    .span7 {
+      @include span(7 of 12);
+    }
+
+    .span8 {
+      @include span(8 of 12);
+    }
+
+    .span9 {
+      @include span(9 of 12);
+    }
+
+    .span10 {
+      @include span(10 of 12);
+    }
+
+    .span11 {
+      @include span(11 of 12);
+    }
+
+    .span12 {
+      @include span(12 of 12);
+    }
+
+    .btn {
+      @include button;
+    }
+
+  }
+}

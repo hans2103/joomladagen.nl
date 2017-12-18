@@ -1,0 +1,37 @@
+.form__pwt {
+  .form-label {
+    @include visually-hidden();
+  }
+
+  .button {
+    display: block;
+    box-shadow: none;
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .form-input {
+    -webkit-appearance: none;
+    background: white;
+    border: none;
+    height: 40px;
+    width: 100%;
+    padding: $spacing-s 12px;
+    line-height: 24px;
+  }
+}
+
+.form__nvml-menu {
+  @include reset;
+  display: flex;
+  justify-content:space-between;
+  flex-wrap: wrap;
+
+  color: white;
+  font-size: $font-size-s;
+  @include spacing(top, padding, 0.5);
+
+  &:last-child {
+    @include spacing(bottom, margin, -1);
+  }
+}

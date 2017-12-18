@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         },
         browsersync : {
             port : '5666', //NVML
-            proxy: 'joomladagen.dev',
+            proxy: 'joomladagen.test',
             open: false
         }
     };
