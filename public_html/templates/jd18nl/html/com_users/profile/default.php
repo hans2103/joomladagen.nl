@@ -1,0 +1,32 @@
+<?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  com_users
+ *
+ * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+defined('_JEXEC') or die;
+
+$this->template = JFactory::getApplication()->getTemplate();
+require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
+require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+
+$title       = $this->escape($this->params->get('page_heading'));
+$description = $this->params->get('login_description');
+echo JLayouts::render('template.content.header', array('title' => $title, 'intro' => $description));
+
+?>
+<section class="section__wrapper">
+    <div class="container container--shift">
+        <div class="content content--shift content__profile">
+			<?php if (JFactory::getUser()->id == $this->data->id) : ?>
+                <?php echo JHtml::_('link', JRoute::_('index.php?option=com_users&task=profile.edit&user_id=' . (int) $this->data->id), JText::_('COM_USERS_EDIT_PROFILE'), array('class' => 'button')); ?>
+			<?php endif; ?>
+			<?php echo $this->loadTemplate('core'); ?>
+			<?php echo $this->loadTemplate('params'); ?>
+			<?php echo $this->loadTemplate('custom'); ?>
+        </div>
+    </div>
+</section>
