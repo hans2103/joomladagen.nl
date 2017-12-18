@@ -371,6 +371,7 @@ class Davclient
 			// Automatically follow redirects
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_MAXREDIRS      => 5,
+			CURLOPT_CAINFO         => AKEEBA_CACERT_PEM,
 		);
 
 		if ($this->verifyPeer !== null)

@@ -410,6 +410,9 @@ HTML;
 		 */
 		$this->directory = trim($this->directory, '/');
 
+		// Remove any leading/trailing slash. They will produce an invalid path in Dropbox
+		$this->directory = trim($this->directory);
+
 		// If the directory is not empty then it's not the Dropbox root, therefore I must restore the leading slash.
 		if (!empty($this->directory))
 		{

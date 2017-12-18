@@ -250,7 +250,7 @@ class Amazons3 extends Base
 		}
 		catch (\Exception $e)
 		{
-			$this->setError($e->getCode() . ' :: ' . $e->getMessage());
+			$this->setWarning($e->getCode() . ' :: ' . $e->getMessage());
 
 			return false;
 		}

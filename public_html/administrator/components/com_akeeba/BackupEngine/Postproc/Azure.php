@@ -31,10 +31,11 @@ class Azure extends Base
 		// Retrieve engine configuration data
 		$config = Factory::getConfiguration();
 
-		$account = trim($config->get('engine.postproc.azure.account', ''));
-		$key = trim($config->get('engine.postproc.azure.key', ''));
-		$container = $config->get('engine.postproc.azure.container', 0);
-		$directory = $config->get('volatile.postproc.directory', null);
+		$account 	= trim($config->get('engine.postproc.azure.account', ''));
+		$key 		= trim($config->get('engine.postproc.azure.key', ''));
+		$container 	= $config->get('engine.postproc.azure.container', 0);
+		$useSSL		= $config->get('engine.postproc.azure.usessl', 1);
+		$directory 	= $config->get('volatile.postproc.directory', null);
 
 		if (empty($directory))
 		{

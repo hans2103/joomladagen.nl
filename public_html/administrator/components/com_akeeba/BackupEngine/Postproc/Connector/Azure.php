@@ -521,7 +521,7 @@ class Azure extends AzureStorage
 	/**
 	 * Get error message from Response
 	 *
-	 * @param   Response  $response          Response
+	 * @param   Response  $rawResponse       Response
 	 * @param   string    $alternativeError  Alternative error message
 	 *
 	 * @return  string
