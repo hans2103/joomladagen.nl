@@ -186,7 +186,7 @@ class plgJ2StorePayment_paypal extends J2StorePaymentPlugin
 		for($i=0; $i < count($line_items); $i++) {
 			$postFieldsItems['L_PAYMENTREQUEST_0_NAME'.$i] = $line_items[$i]['name'];
 //			$postFieldsItems['L_PAYMENTREQUEST_0_NUMBER'.$i] = urlencode($i);
-			$postFieldsItems['L_PAYMENTREQUEST_0_AMT'.$i] = urlencode($line_items[$i]['amount'] * $line_items[$i]['quantity']);
+			$postFieldsItems['L_PAYMENTREQUEST_0_AMT'.$i] = urlencode($line_items[$i]['amount']);
 			$postFieldsItems['L_PAYMENTREQUEST_0_QTY'.$i] = urlencode($line_items[$i]['quantity']);
 
 			$itemTotalValue += $line_items[$i]['amount'] * $line_items[$i]['quantity'];
@@ -1151,6 +1151,8 @@ class plgJ2StorePayment_paypal extends J2StorePaymentPlugin
 	 * Get subscriptions based on order id
 	 * */
 	protected function getSubscriptionByOrderId($order_id){
+		$is_enabled = JPluginHelper::isEnabled('j2store', 'app_subscriptionproduct');
+		if(!$is_enabled) return array();
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 		$query->select('*');
