@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="settings">
+		<field name="id" type="hidden" class="readonly" readonly="true"  />
+
+		<field name="psp"
+			label="COM_JDIDEALGATEWAY_PROFILE_PSP_LABEL"
+			description="COM_JDIDEALGATEWAY_PROFILE_PSP_DESC"
+			type="list"
+			required="false"
+			default=""
+			size="1"
+			class="input-xlarge advancedSelect"
+			onchange="document.adminForm.task.value='profile.change'; document.adminForm.submit();">
+			<option value="">COM_JDIDEALGATEWAY_NO_IDEAL_ACTIVE</option>
+			<option value="advanced">COM_JDIDEALGATEWAY_IDEAL_ADVANCED</option>
+			<option value="ing-lite">COM_JDIDEALGATEWAY_IDEAL_LITE_ING</option>
+			<option value="abn-lite">COM_JDIDEALGATEWAY_IDEAL_LITE_ABN</option>
+			<option value="abn-internetkassa">COM_JDIDEALGATEWAY_IDEAL_INTERNETKASSA_ABN</option>
+			<option value="rabo-omnikassa">COM_JDIDEALGATEWAY_IDEAL_OMNIKASSA_RABO</option>
+			<option value="onlinekassa">COM_JDIDEALGATEWAY_IDEAL_ONLINEKASSA_RABO</option>
+			<option value="kassacompleet">COM_JDIDEALGATEWAY_IDEAL_KASSACOMPLEET</option>
+			<option value="mollie">COM_JDIDEALGATEWAY_IDEAL_MOLLIE</option>
+			<option value="targetpay">COM_JDIDEALGATEWAY_IDEAL_TARGETPAY</option>
+			<option value="sisow">COM_JDIDEALGATEWAY_IDEAL_SISOW</option>
+			<option value="ogone">COM_JDIDEALGATEWAY_IDEAL_OGONE</option>
+			<option value="buckaroo">COM_JDIDEALGATEWAY_IDEAL_BUCKAROO</option>
+			<option value="ems">COM_JDIDEALGATEWAY_IDEAL_EMS</option>
+		</field>
+
+		<field name="name"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_PROFILE_NAME_LABEL"
+			   description="COM_JDIDEALGATEWAY_PROFILE_NAME_DESC"
+			   class="input-xlarge"
+			   required="true"
+			   default=""/>
+
+		<field name="alias"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_PROFILE_ALIAS_LABEL"
+			   description="COM_JDIDEALGATEWAY_PROFILE_ALIAS_DESC"
+			   required="true"
+			   default=""/>
+	</fieldset>
+</form>

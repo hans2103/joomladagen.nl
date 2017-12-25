@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="mollie">
+
+		<field name="psp-spacer" type="spacer" label="COM_JDIDEALGATEWAY_SPACER_PSP" />
+
+		<field name="partner_id"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_MOLLIE_PARTNER_ID_LABEL"
+			   description="COM_JDIDEALGATEWAY_MOLLIE_PARTNER_ID_DESC"
+			   required="true"
+			   size="25"
+			   labelclass="config"/>
+
+		<field name="profile_key"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_MOLLIE_PROFILE_KEY_LABEL"
+			   description="COM_JDIDEALGATEWAY_MOLLIE_PROFILE_KEY_DESC"
+			   required="true"
+			   class="input-xxlarge"
+			   labelclass="config"/>
+
+		<field name="description"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_MOLLIE_DESCRIPTION_LABEL"
+			   description="COM_JDIDEALGATEWAY_MOLLIE_DESCRIPTION_DESC"
+			   required="true"
+			   size="30"
+			   labelclass="config"/>
+
+		<field name="redirect"
+			   type="jdideal.waitoptions"
+			   label="COM_JDIDEALGATEWAY_WAIT_TIME_MOLLIE_LABEL"
+			   description="COM_JDIDEALGATEWAY_WAIT_TIME_MOLLIE_DESC"
+			   required="true"
+			   size="1"
+			   class="advancedSelect"
+			   labelclass="config"/>
+
+		<field name="payment"
+			   type="list"
+			   label="COM_JDIDEALGATEWAY_MOLLIE_PAYMENT_LABEL"
+			   description="COM_JDIDEALGATEWAY_MOLLIE_PAYMENT_DESC"
+			   required="true"
+			   default="all"
+			   multiple="true"
+			   labelclass="config"
+			   class="advancedSelect"
+			   size="7">
+			<option value="all">COM_JDIDEALGATEWAY_ALL</option>
+			<option value="ideal">COM_JDIDEALGATWAY_PAYMENT_METHOD_IDEAL</option>
+			<option value="creditcard">COM_JDIDEALGATWAY_PAYMENT_METHOD_CREDITCARD</option>
+			<option value="mistercash">COM_JDIDEALGATWAY_PAYMENT_METHOD_BANCONTACT</option>
+			<option value="sofort">COM_JDIDEALGATWAY_PAYMENT_METHOD_SOFORT</option>
+			<option value="paypal">COM_JDIDEALGATWAY_PAYMENT_METHOD_PAYPAL</option>
+			<option value="paysafecard">COM_JDIDEALGATWAY_PAYMENT_METHOD_PAYSAFECARD</option>
+			<option value="banktransfer">COM_JDIDEALGATWAY_PAYMENT_METHOD_BANKTRANSFER</option>
+			<option value="bitcoin">COM_JDIDEALGATWAY_PAYMENT_METHOD_BITCOIN</option>
+			<option value="kbc">COM_JDIDEALGATWAY_PAYMENT_METHOD_KBC</option>
+			<option value="belfius">COM_JDIDEALGATWAY_PAYMENT_METHOD_BELFIUS</option>
+			<option value="podiumcadeaukaart">COM_JDIDEALGATWAY_PAYMENT_METHOD_PODIUM</option>
+			<option value="giftcard">COM_JDIDEALGATWAY_PAYMENT_METHOD_GIFTCARD</option>
+		</field>
+
+		<field name="subpayment"
+			   type="radio"
+			   label="COM_JDIDEALGATEWAY_MOLLIE_SUBPAYMENT_LABEL"
+			   description="COM_JDIDEALGATEWAY_MOLLIE_SUBPAYMENT_DESC"
+			   required="true"
+			   default="1"
+			   class="btn-group btn-group-yesno"
+			   labelclass="config">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="status-spacer" type="spacer" label="COM_JDIDEALGATEWAY_SPACER_STATUS" />
+
+		<field name="pendingStatus"
+			   type="jdideal.status"
+			   label="COM_JDIDEALGATEWAY_STATUS_PENDING_LABEL"
+			   description="COM_JDIDEALGATEWAY_STATUS_PENDING_DESC"
+			   required="false"
+			   size="1"
+			   default="P"
+			   class="advancedSelect"
+			   labelclass="config" />
+
+		<field name="verifiedStatus"
+			   type="jdideal.status"
+			   label="COM_JDIDEALGATEWAY_STATUS_SUCCESS_LABEL"
+			   description="COM_JDIDEALGATEWAY_STATUS_SUCCESS_DESC"
+			   required="false"
+			   size="1"
+			   default="C"
+			   class="advancedSelect"
+			   labelclass="config" />
+
+		<field name="cancelledStatus"
+			   type="jdideal.status"
+			   label="COM_JDIDEALGATEWAY_STATUS_CANCELLED_LABEL"
+			   description="COM_JDIDEALGATEWAY_STATUS_CANCELLED_DESC"
+			   required="false"
+			   size="1"
+			   default="X"
+			   class="advancedSelect"
+			   labelclass="config" />
+
+		<field name="openStatus"
+			   type="jdideal.status"
+			   label="COM_JDIDEALGATEWAY_STATUS_OPEN_LABEL"
+			   description="COM_JDIDEALGATEWAY_STATUS_OPEN_DESC"
+			   required="false"
+			   size="1"
+			   default="P"
+			   class="advancedSelect"
+			   labelclass="config" />
+	</fieldset>
+</form>

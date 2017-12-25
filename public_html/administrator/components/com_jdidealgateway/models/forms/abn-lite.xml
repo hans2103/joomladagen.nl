@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="abn-lite">
+
+		<field name="psp-spacer" type="spacer" label="COM_JDIDEALGATEWAY_SPACER_PSP" />
+
+		<field name="testmode"
+			   type="radio"
+			   label="COM_JDIDEALGATEWAY_TEST_MODE_LABEL"
+			   description="COM_JDIDEALGATEWAY_TEST_MODE_DESC"
+			   required="true"
+			   default="1"
+			   class="btn-group btn-group-yesno"
+			   labelclass="config">
+			<option value="1" onclick="setTestserver(this.value); return false;">JYES</option>
+			<option value="0" onclick="setTestserver(this.value); return false;">JNO</option>
+		</field>
+
+		<field name="merchantId"
+			type="text"
+			label="COM_JDIDEALGATEWAY_ABN_LITE_MERCHANT_ID_LABEL"
+			description="COM_JDIDEALGATEWAY_ABN_LITE_MERCHANT_ID_DESC"
+			required="true"
+			size="25"
+			labelclass="config" />
+
+		<field name="description"
+			type="text"
+			label="COM_JDIDEALGATEWAY_ADVANCED_DESCRIPTION_LABEL"
+			description="COM_JDIDEALGATEWAY_ADVANCED_DESCRIPTION_DESC"
+			required="true"
+			size="50"
+			labelclass="config" />
+
+		<field name="language"
+			type="text"
+			label="COM_JDIDEALGATEWAY_ABN_LITE_LANGUAGE_LABEL"
+			description="COM_JDIDEALGATEWAY_ABN_LITE_LANGUAGE_DESC"
+			required="true"
+			size="25"
+			default="NL_NL"
+			labelclass="config" />
+
+		<field name="currency"
+			type="text"
+			label="COM_JDIDEALGATEWAY_ABN_LITE_CURRENCY_LABEL"
+			description="COM_JDIDEALGATEWAY_ABN_LITE_CURRENCY_DESC"
+			required="true"
+			size="25"
+			default="EUR"
+			labelclass="config" />
+
+		<field name="redirect"
+			   type="jdideal.waitoptions"
+			   label="COM_JDIDEALGATEWAY_WAIT_TIME_LABEL"
+			   description="COM_JDIDEALGATEWAY_WAIT_TIME_DESC"
+			   required="true"
+			   size="1"
+			   class="advancedSelect"
+			   labelclass="config" />
+	</fieldset>
+</form>

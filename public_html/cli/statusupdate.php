@@ -3,9 +3,9 @@
  * @package    JDiDEAL
  *
  * @author     Roland Dalmulder <contact@jdideal.nl>
- * @copyright  Copyright (C) 2009 - 2014 RolandD Cyber Produksi. All rights reserved.
+ * @copyright  Copyright (C) 2009 - 2017 RolandD Cyber Produksi. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
- * @link       http://www.jdideal.nl
+ * @link       https://jdideal.nl
  */
 
 /**
@@ -112,53 +112,103 @@ class Statusupdate extends JApplicationCli
 		{
 			$this->out(JText::_('COM_JDIDEALGATEWAY_START_SCRIPT'));
 
-			require_once JPATH_ADMINISTRATOR . '/components/com_jdidealgateway/helpers/jdidealgateway.php';
-			$jdideal = new JdIdealgatewayHelper;
-			$jinput = JFactory::getApplication()->input;
+			// Register our namespace
+			JLoader::registerNamespace('Jdideal', JPATH_LIBRARIES);
+
+			/** @var Jdideal\Gateway $jdideal */
+			$jdideal = new Jdideal\Gateway;
 			$host = $this->input->getString('host', '');
 
 			$cids = $this->loadTransactions();
 
 			$this->out(JText::sprintf('COM_JDIDEALGATEWAY_PROCESS_TRANSACTIONS', count($cids)));
 
+			// Need to set the processed status to 0, to make sure they get processed again
+			if (count($cids) > 0)
+			{
+				$this->setProcessedStatus($cids);
+			}
+
 			// Loop through all IDs and call the notify script
 			foreach ($cids as $cid)
 			{
-				$url = false;
-
-				// Load the details
-				$details = $jdideal->getDetails($cid);
-
-				// Construct the URL
-				switch ($jdideal->ideal)
+				try
 				{
-					case 'advanced':
-						$url = $host . 'components/com_jdidealgateway/models/notify.php?trxid=' . $details->trans . '&ec=' . $details->id;
-						break;
-				}
+					$url = false;
 
-				if ($url)
-				{
-					$this->out(JText::sprintf('COM_JDIDEALGATEWAY_PROCESS_URL', $url));
+					// Load the details
+					$details = $jdideal->getDetails($cid);
 
-					$ch = curl_init();
-					$timeout = 5;
-					curl_setopt($ch, CURLOPT_URL, $url);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+					$this->out(JText::_('COM_JDIDEALGATEWAY_ORDERID') . $details->order_id);
+					$this->out(JText::_('COM_JDIDEALGATEWAY_ORDERNUMBER') . $details->order_number);
 
-					$res = curl_exec($ch);
-
-					if ($res === false)
+					// Construct the URL
+					switch ($jdideal->psp)
 					{
-						$jinput->set('logid', $details->id);
-						$jdideal->log('Curl error: ' . curl_error($ch));
-						$this->out(curl_error($ch));
+						case 'advanced':
+							$url = $host . 'cli/notify.php?trxid=' . $details->trans . '&ec=' . $details->id;
+							break;
+						case 'buckaroo':
+							$url = $host . 'cli/notify.php?transactionId=' . $details->trans . '&add_logid=' . $details->id;
+							break;
+						case 'kassacompleet':
+							$url = $host . 'cli/notify.php?order_id=' . $details->trans;
+							break;
+						case 'mollie':
+							if (!$details->paymentId)
+							{
+								throw new InvalidArgumentException(JText::_('COM_JDIDEALGATEWAY_MISSING_PAYMENT_ID'));
+							}
+
+							$url = $host . 'cli/notify.php?transaction_id=' . $details->trans . '&id=' . $details->paymentId;
+							break;
+						case 'onlinekassa':
+							if (!$details->paymentId)
+							{
+								throw new InvalidArgumentException(JText::_('COM_JDIDEALGATEWAY_MISSING_PAYMENT_ID'));
+							}
+
+							$url = $host . 'cli/notify.php?' . $details->paymentId;
+							break;
+						case 'sisow':
+							$url = $host . 'cli/notify.php?trxid=' . $details->trans . '&callback=1';
+							break;
+						case 'targetpay':
+							$url = $host . 'cli/notify.php?trxid=' . $details->trans;
+							break;
 					}
 
-					curl_close($ch);
+					if ($url)
+					{
+						try
+						{
+							$this->out(JText::sprintf('COM_JDIDEALGATEWAY_PROCESS_URL', $url));
+
+							$http = JHttpFactory::getHttp(null, array('curl', 'stream'));
+
+							/** @var JHttpResponse $response */
+							$response = $http->get($url);
+
+							$message = JText::_('COM_JDIDEALGATEWAY_CHECKED_TRANSACTION_OK');
+
+							if (500 === $response->code)
+							{
+								$message = JText::sprintf('COM_JDIDEALGATEWAY_CHECKED_TRANSACTION_ERROR', $response->body);
+							}
+						}
+						catch (Exception $e)
+						{
+							$jdideal->log($e->getMessage(), $details->id);
+							$message = $e->getMessage();
+						}
+					}
 				}
+				catch (Exception $e)
+				{
+					$message = $e->getMessage();
+				}
+
+				$this->out($message);
 			}
 
 			// Set the last runtime
@@ -174,29 +224,15 @@ class Statusupdate extends JApplicationCli
 	 * @return  array  List of IDs to check.
 	 *
 	 * @since   3.1
+	 *
+	 * @throws  RuntimeException
 	 */
 	private function loadTransactions()
 	{
-		$db = JFactory::getDbo();
-
 		// Find last run time
-		$query = $db->getQuery(true)
-			->select($db->quoteName('ideal') . ',' . $db->quoteName('payment_extrainfo'))
-			->from($db->quoteName('#__jdidealgateway_config'))
-			->where($db->quoteName('published') . ' = 1');
-		$db->setQuery($query);
-		$config = $db->loadObject();
+		$configuration = JComponentHelper::getParams('com_jdidealgateway');
 
-		if (!empty($config))
-		{
-			$configuration = new JRegistry($config->payment_extrainfo);
-
-			$lastrun = $configuration->get('lastrun', '1970-01-01 00:00:00');
-		}
-		else
-		{
-			$lastrun = '1970-01-01 00:00:00';
-		}
+		$lastrun = $configuration->get('lastrun', '1970-01-01 00:00:00');
 
 		// Check if we need to override lastrun
 		$lastruncli = $this->input->getString('lastrun', false);
@@ -206,16 +242,62 @@ class Statusupdate extends JApplicationCli
 			$lastrun = $lastruncli;
 		}
 
+		$this->out('Last run date ' . $lastrun);
+
+		// Get any extra results to check
+		$statuses = explode(',', $this->input->getString('status', ''));
+
 		// Load the transactions
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true)
 			->select($db->quoteName('id'))
 			->from($db->quoteName('#__jdidealgateway_logs'))
-			->where($db->quoteName('result') . ' IS NULL')
 			->where('LENGTH(' . $db->quoteName('trans') . ') > 0')
 			->where($db->quoteName('date_added') . ' > ' . $db->quote($lastrun));
+
+		// Add the extra statuses
+		if (is_array($statuses))
+		{
+			$where = '(' . $db->quoteName('result') . ' IS NULL';
+
+			foreach ($statuses as $status)
+			{
+				$where .= ' OR ' . $db->quoteName('result') . ' = ' . $db->quote($status);
+			}
+
+			$where .= ')';
+
+			$query->where($where);
+		}
+		else
+		{
+			$query->where($db->quoteName('result') . ' IS NULL');
+		}
+
 		$db->setQuery($query);
 
 		return $db->loadColumn();
+	}
+
+	/**
+	 * Set the processed status to 0 to make sure they get updated again.
+	 *
+	 * @param   array  $cids  The IDs of the transactions to reset the processd status for
+	 *
+	 * @return  void.
+	 *
+	 * @since   3.1
+	 *
+	 * @throws  RuntimeException
+	 */
+	private function setProcessedStatus($cids)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+			->update($db->quoteName('#__jdidealgateway_logs'))
+			->set($db->quoteName('processed') . ' = 0')
+			->where($db->quoteName('id') . ' IN (' . implode(',', $cids) . ')');
+		$db->setQuery($query)->execute();
 	}
 
 	/**
@@ -224,30 +306,21 @@ class Statusupdate extends JApplicationCli
 	 * @return  void.
 	 *
 	 * @since   3.1
+	 *
+	 * @throws  RuntimeException
 	 */
 	private function setRuntime()
 	{
+		$configuration = JComponentHelper::getParams('com_jdidealgateway');
+		$configuration->set('lastrun', JFactory::getDate()->toSql());
+
 		$db = JFactory::getDbo();
-
-		// Find last run time
 		$query = $db->getQuery(true)
-			->select($db->quoteName('ideal') . ',' . $db->quoteName('payment_extrainfo'))
-			->from($db->quoteName('#__jdidealgateway_config'))
-			->where($db->quoteName('published') . ' = 1');
-		$db->setQuery($query);
-		$config = $db->loadObject();
-
-		if (!empty($config))
-		{
-			$configuration = new JRegistry($config->payment_extrainfo);
-			$configuration->set('lastrun', JFactory::getDate()->toSql());
-
-			$query = $db->getQuery(true)
-				->update($db->quoteName('#__jdidealgateway_config'))
-				->set($db->quoteName('payment_extrainfo') . ' = ' . $db->quote($configuration->toString()))
-				->where($db->quoteName('published') . ' = 1');
-			$db->setQuery($query)->execute();
-		}
+			->update($db->quoteName('#__extensions'))
+			->set($db->quoteName('params') . ' = ' . $db->quote($configuration->toString()))
+			->where($db->quoteName('type') . ' = ' . $db->quote('component'))
+			->where($db->quoteName('element') . ' = ' . $db->quote('com_jdidealgateway'));
+		$db->setQuery($query)->execute();
 	}
 }
 

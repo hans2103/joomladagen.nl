@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="package" version="3.5" method="upgrade">
+    <name>JD iDEAL Gateway</name>
+    <packagename>jdidealgateway</packagename>
+    <creationDate>28 November 2017</creationDate>
+    <author>RolandD Cyber Produksi</author>
+    <authorEmail>contact@jdideal.nl</authorEmail>
+    <authorUrl>https://jdideal.nl/</authorUrl>
+    <copyright>Copyright (C) 2009 - @year@ RolandD Cyber Produksi. All rights reserved.</copyright>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+    <version>4.8.0</version>
+    <description>JD iDEAL Gateway Package</description>
+
+    <files folder="packages">
+        <file type="component" id="com_jdidealgateway">com_jdidealgateway_4.8.0.zip</file>
+        <file type="plugin" group="editors-xtd" id="jdidealpaymentbutton">plg_editors-xtd_jdidealpaymentbutton_4.8.0.zip</file>
+        <file type="plugin" group="system" id="jdidealpaymentlink">plg_system_jdidealpaymentlink_4.8.0.zip</file>
+    </files>
+
+    <updateservers>
+        <server type="extension" priority="1" name="JD iDEAL Gateway">https://jdideal.nl/updates/jdidealgateway.xml</server>
+    </updateservers>
+</extension>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="emails" label="COM_JDIDEALGATEWAY_MAILS_LABEL" description="COM_JDIDEALGATEWAY_MAILS_DESC">
+		<field name="status_mismatch"
+			   type="radio"
+			   default="0"
+			   class="btn-group"
+			   label="COM_JDIDEALGATEWAY_MAIL_STATUS_MISMATCH_LABEL"
+			   description="COM_JDIDEALGATEWAY_MAIL_STATUS_MISMATCH_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="admin_order_payment"
+			   type="radio"
+			   default="0"
+			   class="btn-group"
+			   label="COM_JDIDEALGATEWAY_MAIL_ADMIN_ORDER_PAYMENT_LABEL"
+			   description="COM_JDIDEALGATEWAY_MAIL_ADMIN_ORDER_PAYMENT_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="admin_status_failed"
+			   type="radio"
+			   default="0"
+			   class="btn-group"
+			   label="COM_JDIDEALGATEWAY_MAIL_ADMIN_PAYMENT_FAILED_LABEL"
+			   description="COM_JDIDEALGATEWAY_MAIL_ADMIN_PAYMENT_FAILED_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="inform_email"
+			   type="radio"
+			   default="0"
+			   class="btn-group"
+			   label="COM_JDIDEALGATEWAY_MAIL_INFORM_EMAIL_STATUS_LABEL"
+			   description="COM_JDIDEALGATEWAY_MAIL_INFORM_EMAIL_STATUS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="jdidealgateway_emailto"
+			   type="text"
+			   label="COM_JDIDEALGATEWAY_JDIDEAL_EMAILTO_LABEL"
+			   description="COM_JDIDEALGATEWAY_JDIDEAL_EMAILTO_DESC"
+			   class="input-xxlarge"/>
+		<field name="customer_change_status"
+			   type="radio"
+			   default="0"
+			   class="btn-group"
+			   label="COM_JDIDEALGATEWAY_MAIL_CUSTOMER_CHANGE_STATUS_LABEL"
+			   description="COM_JDIDEALGATEWAY_MAIL_CUSTOMER_CHANGE_STATUS_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+	</fieldset>
+	<fieldset name="update" label="COM_JDIDEALGATEWAY_UPDATE_LABEL">
+		<field name="downloadid"
+			   type="password"
+			   default=""
+			   size="100"
+			   class="input-xxlarge"
+			   label="COM_JDIDEALGATEWAY_DOWNLOAD_LABEL" description="COM_JDIDEALGATEWAY_DOWNLOAD_DESC"/>
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules"
+			   type="rules"
+			   label="JCONFIG_PERMISSIONS_LABEL"
+			   validate="rules"
+			   filter="rules"
+			   component="com_jdidealgateway"
+			   section="component">
+		</field>
+	</fieldset>
+</config>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="component" version="3.5" method="upgrade">
+	<name>COM_JDIDEALGATEWAY</name>
+	<creationDate>28 November 2017</creationDate>
+	<author>RolandD Cyber Produksi</author>
+	<authorEmail>contact@jdideal.nl</authorEmail>
+	<authorUrl>https://jdideal.nl/</authorUrl>
+	<copyright>Copyright (C) 2009 - 2017 RolandD Cyber Produksi. All rights reserved.</copyright>
+	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>4.8.0</version>
+	<description>COM_JDIDEALGATEWAY_XML_DESCRIPTION</description>
+
+	<!-- Scripts to run on installation -->
+	<scriptfile>script.php</scriptfile>
+
+	<!-- Runs on install -->
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install/install.sql</file>
+		</sql>
+	</install>
+
+	<!-- Runs on update -->
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/update</schemapath>
+		</schemas>
+	</update>
+
+	<!-- Core files site -->
+	<files folder="components/com_jdidealgateway">
+		<filename>controller.php</filename>
+		<filename>jdidealgateway.php</filename>
+		<folder>controllers</folder>
+		<folder>language</folder>
+		<folder>layouts</folder>
+		<folder>models</folder>
+		<folder>views</folder>
+	</files>
+
+	<!-- Copy media files -->
+	<media folder="media/com_jdidealgateway" destination="com_jdidealgateway">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+
+	<administration>
+		<!-- Menu entries -->
+		<menu view="jdidealgateway">COM_JDIDEALGATEWAY</menu>
+		<submenu>
+			<menu view="jdidealgateway">COM_JDIDEALGATEWAY_DASHBOARD</menu>
+			<menu view="logs">COM_JDIDEALGATEWAY_LOGS</menu>
+			<menu view="profiles">COM_JDIDEALGATEWAY_PROFILES</menu>
+			<menu view="messages">COM_JDIDEALGATEWAY_MESSAGES</menu>
+			<menu view="emails">COM_JDIDEALGATEWAY_EMAILS</menu>
+			<menu view="pays">COM_JDIDEALGATEWAY_PAYMENTS</menu>
+		</submenu>
+
+		<!-- Core files admin -->
+		<files folder="administrator/components/com_jdidealgateway">
+			<filename>access.xml</filename>
+			<filename>changelog.txt</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>jdidealgateway.php</filename>
+			<filename>LICENSE.txt</filename>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>layouts</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>views</folder>
+		</files>
+	</administration>
+</extension>
