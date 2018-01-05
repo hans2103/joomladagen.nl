@@ -1,6 +1,7 @@
 # Joomla System Files (i.e. cache, etc.) #
 /public_html/administrator/cache
 /public_html/administrator/tmp
+/public_html/administrator/logs
 /public_html/cache
 #/public_html/images
 /public_html/logs
