@@ -8,6 +8,7 @@
 .numbers {
   @include reset;
   display: flex;
+  flex-wrap:wrap;
   justify-content: space-between;
   @include spacing(top, padding, 0.5);
   @include spacing(bottom, padding, 0.5);
@@ -20,6 +21,24 @@
   & + & {
     @include spacing(left, margin, 0.5);
   }
+
+  &:first-child {
+    flex-basis: 100%;
+    @include flexbox($charlie) {
+      flex-basis: auto;
+    }
+  }
+
+  @include breakpoint(0, $charlie) {
+    &:nth-child(2) {
+      margin-left: auto;
+    }
+
+    &:last-of-type {
+      margin-right: auto;
+    }
+  }
+
 }
 
 .numbers__item-head,
