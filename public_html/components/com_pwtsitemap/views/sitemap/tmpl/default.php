@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -20,7 +20,7 @@ $level = 1;
 			<h1><?php echo $this->escape($this->params->get('page_title')); ?></h1>
 		</div>
 	<?php endif; ?>
-	<ul>
+	<ul class="sitemap-list">
 		<?php foreach ($this->sitemap as $sitemap) : ?>
 			<?php foreach ($sitemap as $item) : ?>
 				<?php if ($level > $item->level) : ?>
@@ -30,12 +30,17 @@ $level = 1;
 				<?php endif; ?>
 
 				<?php if ($level < $item->level): ?>
-					<ul>
+					<ul class="sitemap-list sitemap-list-child level-<?php echo $item->level;?>">
 				<?php else: ?>
 					</li>
 				<?php endif; ?>
 
-				<li><a href="<?php echo $item->link; ?>"><?php echo $item->title; ?></a>
+                <li class="sitemap-item level-<?php echo $item->level;?>">
+                <?php if ($item->type == 'link'): ?>
+                    <a href="<?php echo $item->link; ?>"><?php echo $item->title; ?></a>
+                <?php else: ?>
+	                <?php echo $item->title; ?>
+                <?php endif; ?>
 
 				<?php $level = $item->level; ?>
 			<?php endforeach; ?>

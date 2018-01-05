@@ -2,12 +2,12 @@
 <extension version="3.8" type="plugin" group="system" method="upgrade">
     <name>PLG_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>17 November 2017</creationDate>
+    <creationDate>13 December 2017</creationDate>
     <copyright>Copyright (C) 2016 - 2017 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>PLG_PWTSEO_XML_DESCRIPTION</description>
 
 	<files>
@@ -102,7 +102,43 @@
                         filter="intval"
                         default="30" />
 			</fieldset>
+            <fieldset name="advanced">
+                <field name="spacer_1" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_TITLE_LABEL" />
 
+                <field
+                        name="count_min_title"
+                        type="number"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_DESC"
+                        filter="intval"
+                        default="40" />
+
+                <field
+                        name="count_max_title"
+                        type="number"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_DESC"
+                        filter="intval"
+                        default="50" />
+
+                <field name="spacer_2" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_METADESC_LABEL" />
+
+                <field
+                        name="count_min_metadesc"
+                        type="number"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_DESC"
+                        filter="intval"
+                        default="100" />
+
+                <field
+                        name="count_max_metadesc"
+                        type="number"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_DESC"
+                        filter="intval"
+                        default="150" />
+            </fieldset>
 		</fields>
 	</config>
 </extension>

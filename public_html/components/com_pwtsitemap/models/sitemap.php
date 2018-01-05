@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -60,7 +60,7 @@ class PwtSitemapModelSitemap extends JModelItem
 	/**
 	 * Constructor
 	 *
-	 * @param  array  $config
+	 * @param  array $config
 	 *
 	 * @since  1.0.0
 	 */
@@ -69,9 +69,9 @@ class PwtSitemapModelSitemap extends JModelItem
 		$this->app         = JFactory::getApplication();
 		$this->jDispatcher = JEventDispatcher::getInstance();
 
-		$this->format      = $this->app->input->getCmd('format', 'html');
-		$this->type        = 'default';
-		$this->sitemap     = new PwtSitemap($this->format);
+		$this->format  = $this->app->input->getCmd('format', 'html');
+		$this->type    = 'default';
+		$this->sitemap = new PwtSitemap($this->format);
 
 		parent::__construct($config);
 	}
@@ -120,7 +120,7 @@ class PwtSitemapModelSitemap extends JModelItem
 			}
 
 			// Convert menu item to a PwtSitemap item
-			$menuitem->link             = $menuitem->link . '&Itemid=' . $menuitem->id;
+			$menuitem->link             = ($menuitem->type == 'component') ? 'index.php?Itemid=' . $menuitem->id : null;
 			$menuitem->addtohtmlsitemap = $menuitem->params->get('addtohtmlsitemap', 1);
 			$menuitem->addtoxmlsitemap  = $menuitem->params->get('addtoxmlsitemap', 1);
 
