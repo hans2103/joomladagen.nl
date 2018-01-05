@@ -26,7 +26,7 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">
-        <div class="content content--shift content__form content__form--reset">
+        <div class="content content--small content__form content__form--reset">
 
             <form id="user-registration" action="<?php echo JRoute::_('index.php?option=com_users&task=reset.request'); ?>" method="post" class="form-validate form__pwt">
 				<?php foreach ($this->form->getFieldsets() as $fieldset) : ?>

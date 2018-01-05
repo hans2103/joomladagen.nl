@@ -20,7 +20,7 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">
-        <div class="content content--shift content__profile">
+        <div class="content content--small content__profile">
 			<?php if (JFactory::getUser()->id == $this->data->id) : ?>
                 <?php echo JHtml::_('link', JRoute::_('index.php?option=com_users&task=profile.edit&user_id=' . (int) $this->data->id), JText::_('COM_USERS_EDIT_PROFILE'), array('class' => 'button')); ?>
 			<?php endif; ?>

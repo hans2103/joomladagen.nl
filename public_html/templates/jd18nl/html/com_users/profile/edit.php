@@ -31,7 +31,7 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">
-        <div class="content content--shift content__profile content__profile-edit">
+        <div class="content content--small content__profile content__profile-edit">
             <script type="text/javascript">
                 Joomla.twoFactorMethodChange = function (e) {
                     var selectedPane = 'com_users_twofactor_' + jQuery('#jform_twofactor_method').val();

@@ -22,3 +22,9 @@
     @include svg-background($icon--shopping-cart, #ffffff, 2 * $spacing-s);
   }
 }
+
+.fa-trash-o {
+  @include pseudo(before) {
+    @include svg-background($icon--trash, color(text), 2 * $spacing-s);
+  }
+}

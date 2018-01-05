@@ -26,7 +26,7 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">
-        <div class="content content--shift content__form content__form--registration">
+        <div class="content content--small content__form content__form--registration">
 
             <form id="member-registration" action="<?php echo JRoute::_('index.php?option=com_users&task=registration.register'); ?>" method="post" class="form-validate form__pwt" enctype="multipart/form-data">
 				<?php // Iterate through the form fieldsets and display each one. ?>

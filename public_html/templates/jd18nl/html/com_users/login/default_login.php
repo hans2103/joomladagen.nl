@@ -22,8 +22,8 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 
 ?>
 <section class="section__wrapper">
-    <div class="container container--shift">
-        <div class="content content--shift content__form content__form--login">
+    <div class="container">
+        <div class="content content--small content__form content__form--login">
             <form action="<?php echo JRoute::_('index.php?option=com_users&task=user.login'); ?>" method="post"
                   class="form-validate form__pwt">
 
