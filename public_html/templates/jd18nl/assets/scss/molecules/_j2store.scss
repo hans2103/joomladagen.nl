@@ -107,7 +107,6 @@
 
 .minicart {
   font-size: 14px;
-  padding: 4px 0 6px;
   @include spacing(left, padding, 0.5);
   @include spacing(right, padding, 1);
   @include spacing(left, margin, 0.5);
