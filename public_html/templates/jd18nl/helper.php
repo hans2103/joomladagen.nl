@@ -311,8 +311,8 @@ class PWTTemplateHelper
 
 		if (self::getPageOption() !== 'com-j2store')
 		{
-			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
-			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
+//			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
+//			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
 		}
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);

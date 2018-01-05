@@ -26,7 +26,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 			?>
             <div class="media-placeholder <?php echo $mediaPlaceholderSize; ?>">
 				<?php $src = $displayData['image']; ?>
-				<?php $alt = $images->image_intro_alt ? $images->image_intro_alt : ''; ?>
+				<?php $alt = '' /*$images->image_intro_alt ? $images->image_intro_alt : ''*/; ?>
 				<?php echo JLayouts::render('template.image', array('img' => $src, 'alt' => $alt)); ?>
             </div>
         </a>
