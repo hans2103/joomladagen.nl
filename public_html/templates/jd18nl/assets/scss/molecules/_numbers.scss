@@ -22,8 +22,12 @@
   }
 }
 
-.numbers__item-head  {
-  display: block;
+.numbers__item-head,
+.numbers__item-label {
+  display: inline-block;
+}
+
+.numbers__item-head {
   font-size: 1.1rem;
   font-weight: $weight-bold;
 }

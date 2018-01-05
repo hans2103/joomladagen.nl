@@ -46,6 +46,9 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
         <div class="numbers__wrapper">
             <div class="numbers" id="clockdiv">
                 <div class="numbers__item">
+                    <div class="numbers__item-head">Zo lang nog tot de JoomlaDagen 2018: </div>
+                </div>
+                <div class="numbers__item">
                     <span class="numbers__item-head days"></span>
                     <div class="numbers__item-label">dagen</div>
                 </div>
