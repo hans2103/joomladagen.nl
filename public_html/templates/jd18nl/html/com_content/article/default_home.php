@@ -110,24 +110,6 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
                     initializeClock('clockdiv', deadline);
                 </script>
             </div>
-            <div class="numbers">
-                <div class="numbers__item">
-                    <span class="numbers__item-head">1,5 uur</span>
-                    <div class="numbers__item-label">Amsterdam Centraal</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head">42</span>
-                    <div class="numbers__item-label">sprekers</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head">54</span>
-                    <div class="numbers__item-label">presentaties</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head">175</span>
-                    <div class="numbers__item-label">overnachtingen</div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
