@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -13,8 +13,10 @@ use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die;
 
-JLoader::register('ContentHelperRoute',  JPATH_SITE . '/components/com_content/helpers/route.php');
-JLoader::register('ContentAssociationsHelper', JPATH_ROOT . '/administrator/components/com_content/helpers/associations.php');
+JLoader::register('ContentHelperRoute', JPATH_SITE . '/components/com_content/helpers/route.php');
+JLoader::register('ContentHelperQuery', JPATH_SITE . '/components/com_content/helpers/query.php');
+JLoader::register('ContentAssociationsHelper', JPATH_ADMINISTRATOR . '/components/com_content/helpers/associations.php');
+JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_content/models', 'ContentModel');
 
 /**
  * PWT Sitemap Content Plugin
@@ -39,9 +41,9 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 	/**
 	 * Run for every menuitem passed
 	 *
-	 * @param   JMenuItem  $item          Menu items
-	 * @param   string     $format        Sitemap format that is rendered
-	 * @param   string     $sitemap_type  Type of sitemap that is generated
+	 * @param   JMenuItem $item         Menu items
+	 * @param   string    $format       Sitemap format that is rendered
+	 * @param   string    $sitemap_type Type of sitemap that is generated
 	 *
 	 * @return  array
 	 *
@@ -60,13 +62,12 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 			$iMaxLevel  = (int) $item->params->get('maxLevel', -1);
 			$categories = JCategories::getInstance('Content');
 			$category   = $categories->get($item->query['id']);
-			$children   = $category->getChildren(true);
+			$children   = ($category) ? $category->getChildren(true) : null;
 
 			$aCatId   = [];
 			$aCatId[] = $item->query['id'];
 
-			array_walk($children, function ($a) use (&$aCatId, &$iMaxLevel)
-			{
+			if ($children) array_walk($children, function ($a) use (&$aCatId, &$iMaxLevel) {
 				if ($iMaxLevel === -1 || $a->level <= $iMaxLevel + 1)
 				{
 					$aCatId[] = $a->id;
@@ -74,7 +75,7 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 			});
 
 			// Get articles of all categories
-			$articles = $this->getArticles($aCatId, $item->language);
+			$articles = $this->getArticles($aCatId, $item->language, $item->params);
 
 			foreach ($articles as $article)
 			{
@@ -114,13 +115,13 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 		switch ($sitemap_type)
 		{
 			case "multilanguage":
-				$sitemapItem = new PwtMultilanguageSitemapItem($article->title, $link, $item->level + 1, $modified);
+				$sitemapItem               = new PwtMultilanguageSitemapItem($article->title, $link, $item->level + 1, $modified);
 				$sitemapItem->associations = $this->getAssociatedArticles($article);
 
 				return $sitemapItem;
 				break;
 			case "image":
-				$sitemapItem = new PwtSitemapImageItem($article->title, $link, $item->level + 1, $modified);
+				$sitemapItem         = new PwtSitemapImageItem($article->title, $link, $item->level + 1, $modified);
 				$sitemapItem->images = $this->getArticleImages($article);
 
 				return $sitemapItem;
@@ -140,32 +141,28 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 	 *
 	 * @since   1.0.0
 	 */
-	private function getArticles($categories, $language)
+	private function getArticles($categories, $language, $params)
 	{
-		// Get database connection
-		$query = $this->db->getQuery(true);
+		// Get ordering from menu
+		$articleOrderby   = $params->get('orderby_sec', 'rdate');
+		$articleOrderDate = $params->get('order_date');
+		$secondary        = ContentHelperQuery::orderbySecondary($articleOrderby, $articleOrderDate);
 
-		// Build query
-		$query
-			->select(
-				$this->db->qn(
-					array(
-						'id', 'title', 'alias', 'catid', 'language', 'modified', 'metadata', 'images'
-					)
-				)
-			)
-			->from($this->db->quoteName('#__content'))
-			->where($this->db->quoteName('access') . ' = 1')
-			->where($this->db->quoteName('catid') . ' IN (' . implode(', ', $categories) . ')')
-			->where($this->db->quoteName('language') . ' IN (' . $this->db->quote($language) . ', ' . $this->db->quote("*") . ')')
-			->where($this->db->quoteName('state') . ' = 1')
-			->order($this->db->quoteName('title'));
+		// Get an instance of the generic articles model
+		$articles = JModelLegacy::getInstance('Articles', 'ContentModel', array('ignore_request' => true));
 
-		// Send query
-		$this->db->setQuery($query);
+		$articles->setState('params', $params);
+		$articles->setState('filter.published', 1);
+		$articles->setState('filter.access', 1);
+		$articles->setState('filter.language', $language);
+		$articles->setState('filter.category_id', $categories);
+		$articles->setState('list.start', 0);
+		$articles->setState('list.limit', 0);
+		$articles->setState('list.ordering', $secondary . ', a.created DESC');
+		$articles->setState('list.direction', '');
 
 		// Get results
-		return $this->db->loadObjectList();
+		return $articles->getItems();
 	}
 
 	/**
@@ -179,11 +176,11 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 	 */
 	private function getAssociatedArticles($article)
 	{
-		$helper = new ContentAssociationsHelper();
+		$helper       = new ContentAssociationsHelper();
 		$associations = $helper->getAssociations('article', $article->id);
 
 		// Map associations to Article objects
-		$associations = array_map(function($value) use ($helper) {
+		$associations = array_map(function ($value) use ($helper) {
 			return $helper->getItem('article', explode(':', $value->id)[0]);
 		}, $associations);
 
@@ -196,15 +193,24 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 		return $associations;
 	}
 
+	/**
+	 * Get the images of an article
+	 *
+	 * @param $article stdClass  Article
+	 *
+	 * @return array
+	 *
+	 * @since version
+	 */
 	private function getArticleImages($article)
 	{
-		$images = [];
+		$images        = [];
 		$articleImages = json_decode($article->images);
 
 		if (!empty($articleImages->image_intro))
 		{
-			$image = new stdClass();
-			$image->url = PwtSitemapUrlHelper::getURL('/' . $articleImages->image_intro);
+			$image          = new stdClass();
+			$image->url     = PwtSitemapUrlHelper::getURL('/' . $articleImages->image_intro);
 			$image->caption = (!empty($articleImages->image_intro_caption)) ? $articleImages->image_intro_caption : $articleImages->image_intro_alt;
 
 			$images[] = $image;
@@ -212,8 +218,8 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 
 		if (!empty($articleImages->image_fulltext))
 		{
-			$image = new stdClass();
-			$image->url = PwtSitemapUrlHelper::getURL('/' . $articleImages->image_fulltext);
+			$image          = new stdClass();
+			$image->url     = PwtSitemapUrlHelper::getURL('/' . $articleImages->image_fulltext);
 			$image->caption = (!empty($articleImages->image_fulltext_caption)) ? $articleImages->image_fulltext_caption : $articleImages->image_fulltext_alt;
 
 			$images[] = $image;

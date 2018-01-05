@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -68,8 +68,8 @@ abstract class PwtSitemapPlugin extends JPlugin
 	/**
 	 * Constructor.
 	 *
-	 * @param  object  $subject
-	 * @param  array   $config
+	 * @param  object $subject
+	 * @param  array  $config
 	 *
 	 * @since  1.0.0
 	 */
@@ -104,8 +104,8 @@ abstract class PwtSitemapPlugin extends JPlugin
 	/**
 	 * Adds additional fields to the user editing form
 	 *
-	 * @param   JForm  $form  The form to be altered.
-	 * @param   mixed  $data  The associated data for the form.
+	 * @param   JForm $form The form to be altered.
+	 * @param   mixed $data The associated data for the form.
 	 *
 	 * @return  boolean
 	 *
@@ -155,9 +155,9 @@ abstract class PwtSitemapPlugin extends JPlugin
 	}
 
 	/**
-	 * Check the display format against the parameters and the plugin parameters to determ if we can skip the item or not
+	 * Check the display format against the parameters and the plugin parameters to determine if we can skip the item or not
 	 *
-	 * @param   StdClass  $item  Sitemap item
+	 * @param   StdClass $item Sitemap item
 	 *
 	 * @return  bool
 	 *
@@ -167,7 +167,7 @@ abstract class PwtSitemapPlugin extends JPlugin
 	{
 		if ($format == 'html' && $item->params->get('add' . $this->component_name . 'tohtmlsitemap', 1) || $format == 'xml' && $item->params->get('add' . $this->component_name . 'toxmlsitemap', 1))
 		{
-			if ($item->query['option'] == $this->component && in_array($item->query['view'], $this->views))
+			if (isset($item->query['option']) && $item->query['option'] == $this->component && in_array($item->query['view'], $this->views))
 			{
 				return true;
 			}

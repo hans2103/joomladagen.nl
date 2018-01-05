@@ -136,6 +136,28 @@ class PlgSystemPWTSEO extends JPlugin
 	}
 
 	/**
+	 * Once the user is logged in, we want to check for the robots setting in global config.
+	 *
+	 * @param   array $options Array holding options
+	 *
+	 * @return  boolean  True on success
+	 *
+	 * @since   1.0.1
+	 */
+	public function onUserAfterLogin($options)
+	{
+		if ($this->app->isClient('administrator'))
+		{
+			if (JFactory::getUser()->authorise('core.admin') && JFactory::getConfig()->get('robots') === 'noindex, nofollow')
+			{
+				$this->app->enqueueMessage(JText::_('PLG_SYSTEM_PWTSEO_ERROR_NOINDEX_NOFOLLOW'), 'warning');
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Alters the form that is loaded
 	 *
 	 * @param   JForm  $form Object to be displayed. Use the $form->getName() method to check whether this is the form you want to work with.
@@ -167,11 +189,18 @@ class PlgSystemPWTSEO extends JPlugin
 			JHtml::script('plg_system_pwtseo/pwtseo.min.js', array('version' => 'auto', 'relative' => true));
 			JHtml::stylesheet('plg_system_pwtseo/pwtseo.css', array('version' => 'auto', 'relative' => true));
 
+			$iMinTitle    = (int) $this->params->get('count_min_title', 40);
+			$iMaxTitle    = (int) $this->params->get('count_max_title', 50);
+			$iMinMetadesc = (int) $this->params->get('count_min_metadesc', 100);
+			$iMaxMetadesc = (int) $this->params->get('count_max_metadesc', 150);
+
 			// All parameters required by the JS
 			JFactory::getDocument()->addScriptOptions('PWTSeoConfig',
 				array(
-					'max_title_length'                               => (int) $this->params->get('max_title_length', 50),
-					'max_descr_length'                               => (int) $this->params->get('max_descr_length', 50),
+					'min_title_length'                               => $iMinTitle,
+					'max_title_length'                               => $iMaxTitle,
+					'min_metadesc_length'                            => $iMinMetadesc,
+					'max_metadesc_length'                            => $iMaxMetadesc,
 					'min_focus_length'                               => (int) $this->params->get('min_focus_length', 3),
 					'baseurl'                                        => JUri::root(),
 					'ajaxurl'                                        => JUri::base(true) . '/index.php?option=com_ajax&format=json',
@@ -181,9 +210,21 @@ class PlgSystemPWTSEO extends JPlugin
 					'requirements_page_title_good'                   => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_GOOD'),
 					'requirements_page_title_bad'                    => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_BAD'),
 					'requirements_meta_description_none'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_NONE'),
-					'requirements_meta_description_too_short_bad'    => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_BAD'),
-					'requirements_meta_description_too_short_medium' => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_MEDIUM'),
-					'requirements_meta_description_too_long_medium'  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_LONG_MEDIUM'),
+					'requirements_meta_description_too_short_bad'    => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_BAD',
+						$iMinMetadesc,
+						$iMaxMetadesc
+					),
+					'requirements_meta_description_too_short_medium' => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_MEDIUM',
+						$iMinMetadesc,
+						$iMaxMetadesc
+					),
+					'requirements_meta_description_too_long_medium'  => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_LONG_MEDIUM',
+						$iMinMetadesc,
+						$iMaxMetadesc
+					),
 					'requirements_meta_description_medium'           => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_MEDIUM'),
 					'requirements_meta_description_good'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_GOOD'),
 					'requirements_images_none'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_NONE'),
@@ -210,11 +251,31 @@ class PlgSystemPWTSEO extends JPlugin
 					'requirements_length_bad'                        => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_BAD'),
 					'requirements_length_medium'                     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_MEDIUM'),
 					'requirements_length_good'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_GOOD'),
-					'requirements_page_title_length_too_few_bad'     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_BAD'),
-					'requirements_page_title_length_too_much_bad'    => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_BAD'),
-					'requirements_page_title_length_too_few_medium'  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_MEDIUM'),
-					'requirements_page_title_length_too_much_medium' => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_MEDIUM'),
-					'requirements_page_title_length_good'            => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_GOOD'),
+					'requirements_page_title_length_too_few_bad'     => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_BAD',
+						$iMinTitle,
+						$iMaxTitle
+					),
+					'requirements_page_title_length_too_much_bad'    => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_BAD',
+						$iMinTitle,
+						$iMaxTitle
+					),
+					'requirements_page_title_length_too_few_medium'  => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_MEDIUM',
+						$iMinTitle,
+						$iMaxTitle
+					),
+					'requirements_page_title_length_too_much_medium' => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_MEDIUM',
+						$iMinTitle,
+						$iMaxTitle
+					),
+					'requirements_page_title_length_good'            => JText::sprintf(
+						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_GOOD',
+						$iMinTitle,
+						$iMaxTitle
+					),
 					'requirements_in_url_bad'                        => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_BAD'),
 					'requirements_in_url_good'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_GOOD'),
 					'requirements_not_used_loading'                  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_LOADING'),
@@ -223,6 +284,12 @@ class PlgSystemPWTSEO extends JPlugin
 					'requirements_not_used_bad'                      => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_BAD'),
 					'requirements_robots_reachable_good'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_GOOD'),
 					'requirements_robots_reachable_bad'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_BAD'),
+					'requirements_article_title_unique_none'         => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_NONE'),
+					'requirements_article_title_unique_good'         => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_GOOD'),
+					'requirements_article_title_unique_bad'          => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTCILE_TITLE_UNIQUE_BAD'),
+					'requirements_metadesc_unique_none'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_NONE'),
+					'requirements_metadesc_unique_good'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_GOOD'),
+					'requirements_metadesc_unique_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
 					'polling_interval'                               => (int) $this->params->get('poll_interval', 1) ?: 1,
 					'show_counters'                                  => (int) $this->params->get('show_counters', 1),
 					'found_resulting_page'                           => JText::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE')
@@ -243,7 +310,7 @@ class PlgSystemPWTSEO extends JPlugin
 	 *
 	 * @since   1.0
 	 */
-	public function onContentPrepareData($context, &$data)
+	public function onContentPrepareData($context, $data)
 	{
 		// We only work on articles for now
 		if (in_array($context, $this->aAllowedContext) && is_object($data) && !$this->app->isSite())
@@ -453,7 +520,18 @@ class PlgSystemPWTSEO extends JPlugin
 
 				if (strlen($aSEO['page_title']) && $aSEO['override_page_title'] === '1')
 				{
-					JFactory::getDocument()->setTitle($aSEO['page_title']);
+					$title = $aSEO['page_title'];
+
+					if ($this->app->get('sitename_pagetitles', 0) == 1)
+					{
+						$title = JText::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
+					}
+					elseif ($this->app->get('sitename_pagetitles', 0) == 2)
+					{
+						$title = JText::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
+					}
+
+					JFactory::getDocument()->setTitle($title);
 				}
 
 				if ($this->params->get('advanced_mode'))
@@ -648,10 +726,102 @@ class PlgSystemPWTSEO extends JPlugin
 			= substr(JUri::root(), 0, -1) .
 			JRoute::_(ContentHelperRoute::getArticleRoute((int) $aData['id'], (int) $aData['catid']), false);
 
-		$aResponse['reachable']        = $this->isReachable($aResponse['url']);
-		$aResponse['count']            = $this->findUsages($aData['seo']['focus_word'], (int) $aData['id']);
+		$aResponse['reachable'] = $this->isReachable($aResponse['url']);
+		$aResponse['count']     = $this->findUsages($aData['seo']['focus_word'], (int) $aData['id']);
+
+		$aResponse['page_title_unique']    = $this->isTitleUnique($aData['title']);
+		$aResponse['page_metadesc_unique'] = $this->isMetaDescriptionUnique($aData['metadesc']);
 
 		return (object) $aResponse;
+	}
+
+	/**
+	 * Function that checks the database to see how many times a given word is used
+	 *
+	 * @param   string $sWord The word to check
+	 * @param   int    $iPK   The id of the content item, this is needed to exclude current article from the count
+	 *
+	 * @return  int The amount of times the focus word is used
+	 *
+	 * @since   1.0
+	 */
+	protected function findUsages($sWord, $iPK)
+	{
+		$q     = $this->db->getQuery(true);
+		$sWord = JFilterInput::getInstance()->clean($sWord);
+
+		$q
+			->select('COUNT(*)')
+			->from($this->db->qn('#__plg_pwtseo', 'a'))
+			->where('LOWER(a.`focus_word`) = ' . $this->db->quote(strtolower($sWord)))
+			->where('context_id != ' . $iPK);
+
+		try
+		{
+			return (int) $this->db->setQuery($q)->loadResult();
+		}
+		catch (Exception $e)
+		{
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Function to check if given title is unique across articles. For now we only check com_content
+	 *
+	 * @param   string $sTitle The title to check
+	 *
+	 * @return  bool True if title is found only once, false otherwise
+	 *
+	 * @since   1.0.1
+	 */
+	protected function isTitleUnique($sTitle)
+	{
+		$q = $this->db->getQuery(true);
+
+		$q
+			->select('COUNT(*)')
+			->from($this->db->quoteName('#__content', 'content'))
+			->where('LOWER(' . $this->db->quoteName('content.title') . ') = ' . $this->db->quote(strtolower($sTitle)));
+
+		try
+		{
+			return (int) $this->db->setQuery($q)->loadResult() <= 1;
+		}
+		catch (Exception $e)
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Function to check if given meta description is unique across articles. For now we only check com_content
+	 *
+	 * @param   string $sDescription The meta description to check
+	 *
+	 * @return  bool True if the description is found only once, false otherwise
+	 *
+	 * @since   1.0.1
+	 */
+	protected function isMetaDescriptionUnique($sDescription)
+	{
+		$q = $this->db->getQuery(true);
+
+		// TODO: Include the adv options, someone could have put a description there which is reasonable to check
+		$q
+			->select('COUNT(*)')
+			->from($this->db->quoteName('#__content', 'content'))
+			->where('LOWER(' . $this->db->quoteName('content.metadesc') . ') = ' . $this->db->quote(strtolower($sDescription)));
+
+		try
+		{
+			return (int) $this->db->setQuery($q)->loadResult() <= 1;
+		}
+		catch (Exception $e)
+		{
+			return true;
+		}
 	}
 
 	/**
@@ -699,37 +869,5 @@ class PlgSystemPWTSEO extends JPlugin
 		}
 
 		return $aReturn;
-	}
-
-	/**
-	 * Function that checks the database to see how many times a given word is used
-	 *
-	 * @param   string $sWord The word to check
-	 * @param   int    $iPK   The id of the content item, this is needed to exclude current article from the count
-	 *
-	 * @return  int The amount of times the focus word is used
-	 *
-	 * @since   1.0
-	 */
-	protected function findUsages($sWord, $iPK)
-	{
-		$q     = $this->db->getQuery(true);
-		$sWord = JFilterInput::getInstance()->clean($sWord);
-
-		$q
-			->select('COUNT(*)')
-			->from($this->db->qn('#__plg_pwtseo', 'a'))
-			->where('LOWER(a.`focus_word`) = ' . $this->db->quote(strtolower($sWord)))
-			->where('context_id != ' . $iPK);
-
-		try
-		{
-			return (int) $this->db->setQuery($q)->loadResult();
-		}
-		catch (Exception $e)
-		{
-		}
-
-		return 0;
 	}
 }

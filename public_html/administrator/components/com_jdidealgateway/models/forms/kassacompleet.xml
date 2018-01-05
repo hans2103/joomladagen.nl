@@ -42,6 +42,7 @@
 			<option value="all">COM_JDIDEALGATEWAY_ALL</option>
 			<option value="ideal">COM_JDIDEALGATWAY_PAYMENT_METHOD_IDEAL</option>
 			<option value="credit-card">COM_JDIDEALGATWAY_PAYMENT_METHOD_CREDITCARD</option>
+			<option value="paypal">COM_JDIDEALGATWAY_PAYMENT_METHOD_PAYPAL</option>
 			<option value="bank-transfer">COM_JDIDEALGATWAY_PAYMENT_METHOD_BANKTRANSFER</option>
 			<option value="rembours">COM_JDIDEALGATWAY_PAYMENT_METHOD_CASHONDELIVERY</option>
 		</field>

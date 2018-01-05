@@ -199,7 +199,6 @@ class Ems
 
 		// Get the date and time of transaction
 		$data->transactionDateTime = \JHtml::_('date', $jdideal->get('date_added'), 'Y:m:d-H:i:s', $data->timezone);
-		//$data->transactionDateTime = \JDate::getInstance($jdideal->get('date_added'), $data->timezone)->format('Y:m:d-H:i:s', true);
 
 		// Get the currency
 		$data->currency = $jdideal->get('currency', 978);
@@ -215,7 +214,6 @@ class Ems
 		$data->paymentMethod = $jdideal->get('payment');
 
 		$jdideal->log(\JText::sprintf('COM_JDIDEAL_SELECTED_CARD', $data->paymentMethod), $data->logid);
-		$jdideal->log('TransactionDateTime ' . $data->transactionDateTime, $data->logid);
 
 		return $data;
 	}

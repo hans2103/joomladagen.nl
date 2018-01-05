@@ -62,7 +62,7 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
         <div class="pwt-section pwt-section--border-top">
             <p>
                 <strong>
-                <?php echo JText::sprintf('COM_PWTSEO_VERSION', '</strong>1.0.0'); ?>
+                <?php echo JText::sprintf('COM_PWTSEO_VERSION', '</strong>1.0.1'); ?>
             </p>
         </div>
 

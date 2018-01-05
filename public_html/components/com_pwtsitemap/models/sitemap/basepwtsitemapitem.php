@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -58,12 +58,20 @@ abstract class BasePwtSitemapItem
 	public $context;
 
 	/**
+	 * Type of the sitemap item (placeholder or link)
+	 *
+	 * @var    string
+	 * @since  1.0.1
+	 */
+	public $type;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param  string  $title     Title
-	 * @param  string  $link      URL
-	 * @param  int     $level     Level
-	 * @param  mixed   $modified  Modification date
+	 * @param  string $title    Title
+	 * @param  string $link     URL
+	 * @param  int    $level    Level
+	 * @param  mixed  $modified Modification date
 	 *
 	 * @since  1.0.0
 	 */
@@ -72,6 +80,7 @@ abstract class BasePwtSitemapItem
 		$this->title = $title;
 		$this->link  = PwtSitemapUrlHelper::getURL($link);
 		$this->level = $level;
+		$this->type  = ($link) ? 'link' : 'placeholder';
 
 		if (!empty($modified) && $modified != JDatabaseDriver::getInstance()->getNullDate() && $modified != '1001-01-01 00:00')
 		{

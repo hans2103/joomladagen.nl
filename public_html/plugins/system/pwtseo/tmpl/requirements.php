@@ -98,6 +98,16 @@ defined('_JEXEC') or die;
                 :plugin-config="pluginConfig"
                 :page="page"
                 v-on:score-change="calculateTotalScore"></test-result-body-keyword-density>
+        <test-result-article-title-unique
+                :local-config="localConfig"
+                :plugin-config="pluginConfig"
+                :page="page"
+                v-on:score-change="calculateTotalScore"></test-result-article-title-unique>
+        <test-result-page-metadesc-unique
+                :local-config="localConfig"
+                :plugin-config="pluginConfig"
+                :page="page"
+                v-on:score-change="calculateTotalScore"></test-result-page-metadesc-unique>
 
     </div>
 </div>

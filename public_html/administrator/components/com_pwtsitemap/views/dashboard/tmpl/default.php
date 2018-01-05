@@ -3,7 +3,7 @@
  * @package    Pwtsitemap
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -26,7 +26,7 @@ HTMLHelper::_('stylesheet', 'com_pwtsitemap/pwtsitemap.css', array('relative' =>
 		<div class="pwt-section pwt-section--border-bottom">
 			<div class="pwt-flag-object">
 				<div class="pwt-flag-object__aside">
-					<?php echo HTMLHelper::_('image', 'com_pwtsitemap/PWT-sitemap.png', 'PWT Sitemap', array('width' => 160), true); ?>
+					<?php echo HTMLHelper::_('image', 'com_pwtsitemap/PWT-Sitemap.png', 'PWT Sitemap', array('width' => 160), true); ?>
 				</div>
 				<div class="pwt-flag-object__body">
 					<p class="pwt-heading"><?php echo Text::_('COM_PWTSITEMAP_ABOUT_PWTSITEMAP_HEADER'); ?></p>
@@ -43,7 +43,7 @@ HTMLHelper::_('stylesheet', 'com_pwtsitemap/pwtsitemap.css', array('relative' =>
 		</div>
 
 		<div class="pwt-section pwt-section--border-top">
-			<p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_VERSION', '</strong>1.0.0'); ?></p>
+			<p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_VERSION', '</strong>1.0.1'); ?></p>
 		</div>
 
 	</div><!-- .pwt-content -->

@@ -19,7 +19,6 @@ require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
 $title       = $this->escape($this->params->get('page_heading'));
 echo JLayouts::render('template.content.header', array('title' => $title));
-
 ?>
 <div itemscope itemtype="https://schema.org/BreadCrumbList" class="j2store-product-list bs2"   data-link="<?php echo JRoute::_($this->active_menu->link.'&Itemid='.$this->active_menu->id);?>">
 
@@ -119,6 +118,30 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 									</div>
 								<?php endif; ?>
 							<?php // endif; ?>
+							<script>
+									(function ($) {
+										$(document).on('change','#j2store-addtocart-form-<?php echo $this->product->j2store_product_id;?> input[name="product_qty"]',function(){
+												qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
+										});
+
+										function qtyBasedTextBox(product_id) {
+											(function($){
+												var qty = $('#j2store-addtocart-form-'+product_id+' input[name="product_qty"]').val();
+
+												// Hide the options
+												$('#j2store-addtocart-form-'+product_id+' .option').hide();
+
+												// Show the options
+												for (var i = 1; i <= qty; i++) {
+													$('#j2store-addtocart-form-'+product_id+' .showOption' + i).show();
+												}
+											})(jQuery);
+
+										}
+										qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
+									})(jQuery);
+
+							</script>
 						<?php endforeach;?>
 
 

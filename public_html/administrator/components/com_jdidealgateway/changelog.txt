@@ -2,7 +2,7 @@ JD iDEAL Gateway
 Author: RolandD Cyber Produksi (contact@jdideal.nl)
 Website: https://jdideal.nl/
 Version: 4.8.0
-Date: 28 November 2017
+Date: 31 December 2017
 
 Legenda:
 + Toegevoegd
@@ -11,6 +11,11 @@ Legenda:
 / Aangepast
 
 Changelog
+Versie 4.8.1 [ ]
+* Betaalmethode wordt niet doorgestuurd als het op direct doorsturen staat
++ PayPal toegevoegd aan ING Kassacompleet
+/ Update van HikaShop plugin geeft fatale fout tijdens Joomla update
+
 Versie 4.8.0 [ 2017-11-28 ]
 * Doorsturen met vooraf ingestelde bankkeuze
 + SEF URL voor de afrekenpagina
