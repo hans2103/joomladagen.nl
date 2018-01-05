@@ -123,6 +123,10 @@ JHtml::stylesheet('com_jdidealgateway/payment.css', null, true);
 						}
 					}
 				}
+				elseif (array_key_exists('payments', $output) && array_key_exists(0, $output['payments']))
+				{
+					echo '<input type="hidden" name="payment" value="' . $output['payments'][0]->value . '">';
+				}
 				?>
 			</div>
 			<div class="clr"></div>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="j2store" method="upgrade">
+    <name>Bundle Products</name>
+    <version>1.3</version>
+    <creationDate>MAY 2017</creationDate>
+    <author>Alagesan</author>
+    <authorEmail>supports@j2store.org</authorEmail>
+    <authorUrl>http://www.j2store.org</authorUrl>
+    <copyright>2017 Flycart Technologies LLP</copyright>
+    <license>GNU General Public License v3 or later</license>
+    <description>This app allows to create bundle product type for J2Store.</description>
+    <scriptfile>script.app_bundleproduct.php</scriptfile>
+    <files>
+        <filename plugin="app_bundleproduct">app_bundleproduct.php</filename>
+        <folder>app_bundleproduct</folder>
+        <filename>index.html</filename>
+    </files>
+    <languages>
+        <language tag="en-GB">languages/en-GB.plg_j2store_app_bundleproduct.ini</language>
+    </languages>
+    <config>
+        <fields name="params">
+            <fieldset name="basic" label="j2store_basic_settings">
+                <field name="bundleproduct_note" type="customnotice"
+                       label="j2store_app_bundleproduct_custom_note"
+                       addfieldpath="/administrator/components/com_j2store/models/fields"
+                />
+                <field name="manage_stock_based_on" type="radio" default="1" label="j2store_app_bundleproduct_manage_stock_based_on">
+                    <option value="0">J2STORE_BUNDLEPRODUCT_INVENTRY_IN_BUNDLE_SUBPRODUCTS</option>
+                    <option value="1">J2STORE_BUNDLEPRODUCT_INVENTRY_IN_BUNDLE_LEVEL</option>
+                </field>
+            </fieldset>
+        </fields>
+    </config>
+</extension>

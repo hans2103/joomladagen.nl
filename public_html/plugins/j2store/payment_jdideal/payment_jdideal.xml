@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" method="upgrade" group="j2store">
 	<name>PLG_J2STORE_JDIDEAL_TITLE</name>
-	<creationDate>28 November 2017</creationDate>
+	<creationDate>31 December 2017</creationDate>
 	<author>RolandD Cyber Produksi</author>
 	<authorEmail>contact@jdideal.nl</authorEmail>
 	<authorUrl>https://jdideal.nl</authorUrl>

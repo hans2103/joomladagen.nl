@@ -45,7 +45,7 @@ class Kassacompleet
 	private $jinput;
 
 	/**
-	 * Array with return data from Mollie
+	 * Array with return data from Kassacompleet
 	 *
 	 * @var    array
 	 * @since  4.0
@@ -94,6 +94,7 @@ class Kassacompleet
 		return array(
 			'ideal' => \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_IDEAL'),
 			'credit-card' => \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_CREDITCARD'),
+			'paypal' => \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_PAYPAL'),
 			'bank-transfer' => \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_BANKTRANSFER'),
 			'rembours' => \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_CASHONDELIVERY'),
 		);
@@ -142,6 +143,9 @@ class Kassacompleet
 				case 'credit-card':
 					$output['payments'][] = \JHtml::_('select.option', 'credit-card', \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_CREDITCARD'));
 					break;
+				case 'paypal':
+					$output['payments'][] = \JHtml::_('select.option', 'paypal', \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_PAYPAL'));
+					break;
 				case 'bank-transfer':
 					$output['payments'][] = \JHtml::_('select.option', 'bank-transfer', \JText::_('COM_JDIDEALGATWAY_PAYMENT_METHOD_BANKTRANSFER'));
 					break;
@@ -169,8 +173,6 @@ class Kassacompleet
 		}
 
 		$output['redirect'] = $jdideal->get('redirect', 'wait');
-
-		$jdideal->log(\JText::sprintf('COM_JDIDEAL_SELECTED_CARD', reset($selected)), $data->logid);
 
 		return $output;
 	}
@@ -228,7 +230,7 @@ class Kassacompleet
 	}
 
 	/**
-	 * Send payment to Mollie.
+	 * Send payment to Kassacompleet.
 	 *
 	 * @param   Gateway  $jdideal  An instance of \Jdideal\Gateway.
 	 *
@@ -273,6 +275,7 @@ class Kassacompleet
 
 			// Load the chosen payment method
 			$paymentMethod = $this->jinput->get('payment');
+			$jdideal->log(\JText::sprintf('COM_JDIDEAL_SELECTED_CARD', $paymentMethod), $logId);
 
 			// Create the payload
 			$payload                                                     = new \stdClass;

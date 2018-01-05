@@ -2,7 +2,7 @@
 <extension type="package" version="3.5" method="upgrade">
     <name>JD iDEAL Gateway</name>
     <packagename>jdidealgateway</packagename>
-    <creationDate>28 November 2017</creationDate>
+    <creationDate>31 December 2017</creationDate>
     <author>RolandD Cyber Produksi</author>
     <authorEmail>contact@jdideal.nl</authorEmail>
     <authorUrl>https://jdideal.nl/</authorUrl>

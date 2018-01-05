@@ -34,5 +34,29 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 	<?php echo $this->loadTemplate($this->product->product_type); ?>
 	<?php echo J2Store::plugin ()->eventWithHtml ( 'AfterProductDisplay', array($this->product,$this) )?>
 	<?php echo J2Store::modules()->loadposition('j2store-single-product-bottom'); ?>
+  	<script>
+	    (function ($) {
+			$(document).on('change', '#j2store-addtocart-form-<?php echo $this->product->j2store_product_id;?> input[name="product_qty"]', function () {
+				qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
+			});
+
+			function qtyBasedTextBox(product_id) {
+				(function ($) {
+					var qty = $('#j2store-addtocart-form-' + product_id + ' input[name="product_qty"]').val();
+					// Hide the options
+					$('#j2store-addtocart-form-'+product_id+' .option').hide();
+
+					// Show the options
+					for (var i = 1; i <= qty; i++) {
+						$('#j2store-addtocart-form-'+product_id+' .showOption' + i).show();
+					}
+				})(jQuery);
+
+			}
+
+			qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
+	    })(jQuery);
+
+	</script>
 </div>
 
