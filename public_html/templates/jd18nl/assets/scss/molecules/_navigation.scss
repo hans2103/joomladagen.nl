@@ -181,7 +181,7 @@
   z-index: 1;
   //right: 8px;
   //top: 4px;
-  background: white;
+  background: transparent;
   border: none;
   padding: 0 $spacing-s;
   border-radius: 4px;
@@ -296,4 +296,8 @@
       text-decoration: underline;
     }
   }
+}
+
+.toggle-text {
+  @include visually-hidden();
 }

@@ -1,0 +1,13 @@
+@mixin svg-background($svg, $fill-color: black, $width: 24, $height: false, $viewboxWidth: 24, $viewboxHeight: false, $background-position: center, $background-repeat: no-repeat) {
+  @if $height == false {
+    $height: $width;
+  }
+  @if $viewboxHeight == false {
+    $viewboxHeight: $viewboxWidth;
+  }
+  $icon: svg-factory($svg, $fill-color, $width, $viewboxWidth);
+
+  background-image: url(svg-encode($icon));
+  background-position: $background-position;
+  background-repeat: $background-repeat;
+}

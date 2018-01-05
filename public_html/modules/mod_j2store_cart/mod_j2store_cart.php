@@ -63,7 +63,7 @@ if(typeof(j2store.jQuery) == 'undefined') {
 })(j2store.jQuery);
 		";
 $document->addScriptDeclaration($script);
-$document->addStyleSheet(JUri::root().'modules/mod_j2store_cart/css/j2store_cart.css');
+//$document->addStyleSheet(JUri::root().'modules/mod_j2store_cart/css/j2store_cart.css');
 $list = modJ2StoreCartHelper::getItems();
 
 //this is required only if the layout is detail cart on homver

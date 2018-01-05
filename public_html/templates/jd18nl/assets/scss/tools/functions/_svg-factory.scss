@@ -1,0 +1,10 @@
+// Add your SVG code here:
+@function svg-factory($svg, $fill-color: black, $width: 24, $height: false, $viewboxWidth: 24, $viewboxHeight: false) {
+  @if $height == false {
+    $height: $width;
+  }
+  @if $viewboxHeight == false {
+    $viewboxHeight: $viewboxWidth;
+  }
+  @return '<svg xmlns="http://www.w3.org/2000/svg" width="#{$width}" height="#{$height}" viewBox="0 0 #{$viewboxWidth} #{$viewboxHeight}"><path fill="' + $fill-color + '" ' + $svg + '/></svg>';
+}

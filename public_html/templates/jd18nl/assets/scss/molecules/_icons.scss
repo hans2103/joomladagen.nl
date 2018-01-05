@@ -1,0 +1,24 @@
+.fa {
+  padding-left: $spacing-l;
+
+  @include pseudo(before) {
+    height: $spacing-m;
+    width: $spacing-m;
+    left: 0;
+    top: 0;
+    @include transition(all);
+  }
+
+  span {
+    @include visually-hidden;
+    @include breakpoint(900px) {
+      @include visually-shown;
+    }
+  }
+}
+
+.fa-shoppingcart {
+  @include pseudo(before) {
+    @include svg-background($icon--shopping-cart, #ffffff, 2 * $spacing-s);
+  }
+}

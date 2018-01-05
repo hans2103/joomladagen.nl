@@ -59,12 +59,17 @@ PWTTemplateHelper::localstorageFont();
 				<?php echo JHtml::_('link', $url, $text); ?>
             </div>
 
-
 			<?php if ($this->countModules('mainmenu')) : ?>
                 <div class="navigation">
                     <nav class="navigation-container" role="navigation" aria-label="Hoofdmenu">
                         <jdoc:include type="modules" name="mainmenu" style="none"/>
                     </nav>
+                </div>
+			<?php endif; ?>
+
+			<?php if ($this->countModules('minicart')) : ?>
+                <div class="minicart">
+                    <jdoc:include type="modules" name="minicart" style="none"/>
                 </div>
 			<?php endif; ?>
         </div>
@@ -75,88 +80,88 @@ PWTTemplateHelper::localstorageFont();
     <jdoc:include type="component"/>
 </main>
 
-<?php if(PWTTemplateHelper::isHome() | PWTTemplateHelper::isPage('/sponsors/sponsor-informatie')) : ?>
+<?php if (PWTTemplateHelper::isHome() | PWTTemplateHelper::isPage('/sponsors/sponsor-informatie')) : ?>
     <section class="section section--accent section--sponsors">
         <div class="container">
-            <?php
-            // Module params
-            $params = array(
-                'catid'           => 14,
-                'style'           => 'tpl',
-                'moduleclass_sfx' => ' module__banners module__banners--diamant',
-                'count'           => 1,
-                'header_tag'       => 'h2 module__title--center',
+			<?php
+			// Module params
+			$params = array(
+				'catid'           => 14,
+				'style'           => 'tpl',
+				'moduleclass_sfx' => ' module__banners module__banners--diamant',
+				'count'           => 1,
+				'header_tag'      => 'h2 module__title--center',
 
-            );
+			);
 
-            // Load module and add params
-            $module            = JModuleHelper::getModule('mod_banners');
-            $module->title     = "Diamant sponsor";
-            $module->showtitle = 1;
-            $module->params    = json_encode($params);
+			// Load module and add params
+			$module            = JModuleHelper::getModule('mod_banners');
+			$module->title     = "Diamant sponsor";
+			$module->showtitle = 1;
+			$module->params    = json_encode($params);
 
-            // Render module
-            echo JFactory::getDocument()->loadRenderer('module')->render($module);
-            ?>
+			// Render module
+			echo JFactory::getDocument()->loadRenderer('module')->render($module);
+			?>
         </div>
         <div class="container">
-            <?php
-            // Module params
-            $params = array(
-                'catid'           => 3,
-                'style'           => 'tpl',
-                'moduleclass_sfx' => ' module__banners',
-                'count'           => 3,
-                'header_tag'       => 'h2 module__title--center'
-            );
+			<?php
+			// Module params
+			$params = array(
+				'catid'           => 3,
+				'style'           => 'tpl',
+				'moduleclass_sfx' => ' module__banners',
+				'count'           => 3,
+				'header_tag'      => 'h2 module__title--center'
+			);
 
-            // Load module and add params
-            $module            = JModuleHelper::getModule('mod_banners');
-            $module->title     = "Gouden sponsor";
-            $module->showtitle = 1;
-            $module->params    = json_encode($params);
+			// Load module and add params
+			$module            = JModuleHelper::getModule('mod_banners');
+			$module->title     = "Gouden sponsor";
+			$module->showtitle = 1;
+			$module->params    = json_encode($params);
 
-            // Render module
-            echo JFactory::getDocument()->loadRenderer('module')->render($module);
-            ?>
+			// Render module
+			echo JFactory::getDocument()->loadRenderer('module')->render($module);
+			?>
         </div>
         <div class="container">
-            <?php
-            // Module params
-            $params = array(
-                'catid'           => 15,
-                'style'           => 'tpl',
-                'moduleclass_sfx' => ' module__banners',
-                'count'           => 6,
-                'header_tag'       => 'h2 module__title--center'
-            );
+			<?php
+			// Module params
+			$params = array(
+				'catid'           => 15,
+				'style'           => 'tpl',
+				'moduleclass_sfx' => ' module__banners',
+				'count'           => 6,
+				'header_tag'      => 'h2 module__title--center'
+			);
 
-            // Load module and add params
-            $module            = JModuleHelper::getModule('mod_banners');
-            $module->title     = "Zilveren sponsor";
-            $module->showtitle = 1;
-            $module->params    = json_encode($params);
+			// Load module and add params
+			$module            = JModuleHelper::getModule('mod_banners');
+			$module->title     = "Zilveren sponsor";
+			$module->showtitle = 1;
+			$module->params    = json_encode($params);
 
-            // Render module
-            echo JFactory::getDocument()->loadRenderer('module')->render($module);
-            ?>
+			// Render module
+			echo JFactory::getDocument()->loadRenderer('module')->render($module);
+			?>
         </div>
     </section>
 <?php endif; ?>
 
-<?php if(PWTTemplateHelper::isHome() | PWTTemplateHelper::isPage('/locatie')) : ?>
+<?php if (PWTTemplateHelper::isHome() | PWTTemplateHelper::isPage('/locatie')) : ?>
     <div class="block block__gmap"><?php
-        $array = array(
-            'title'      => $this->title,
-            'latitude'   => '51.4105738',
-            'longitude'  => '5.4571851',
-            'adres'      => 'High Tech Campus 1b',
-            'postcode'   => '5656 AE',
-            'woonplaats' => 'Eindhoven'
-        );
+		$array = array(
+			'title'      => $this->title,
+			'latitude'   => '51.4105738',
+			'longitude'  => '5.4571851',
+			'adres'      => 'High Tech Campus 1b',
+			'postcode'   => '5656 AE',
+			'woonplaats' => 'Eindhoven'
+		);
 
-        echo Jlayouts::render('block-gmap', $array);
-        ?>
+		echo Jlayouts::render('block-gmap', $array);
+		?>
     </div>
 <?php endif; ?>
 
@@ -173,7 +178,7 @@ PWTTemplateHelper::localstorageFont();
         <div class="copyright__content">
             <jdoc:include type="modules" name="copyright" style="none"/>
             <p class="copyright__text">&copy; Copyright 2005<?php echo(date('Y') != 2005 ? ' - ' . date('Y') : ''); ?>
-                <?php echo PWTTemplateHelper::getSitename(); ?></p>
+				<?php echo PWTTemplateHelper::getSitename(); ?></p>
         </div>
     </div>
 </div>
@@ -195,7 +200,7 @@ PWTTemplateHelper::localstorageFont();
 <?php
 if (PWTTemplateHelper::isDevelopment())
 {
-    include_once JPATH_THEMES . '/' . $this->template . '/grid.php';
+	include_once JPATH_THEMES . '/' . $this->template . '/grid.php';
 }
 ?>
 
