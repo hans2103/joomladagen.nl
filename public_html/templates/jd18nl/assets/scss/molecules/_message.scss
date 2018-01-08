@@ -12,6 +12,10 @@
   color: white;
 }
 
+.message__wrapper--none {
+  @include visually-hidden()
+}
+
 .message__wrapper--error {
   background-color: color(message, error);
   color: color(text);
