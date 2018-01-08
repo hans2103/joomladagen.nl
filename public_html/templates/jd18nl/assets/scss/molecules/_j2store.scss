@@ -5,60 +5,62 @@
     @include spacing(top, padding, 1);
     @include spacing(bottom, padding, 1);
 
-    .row,
-    .row-fluid {
-      @include spacing(bottom, margin, 1);
-      @include clearfix;
-    }
+    @include breakpoint($charlie) {
+      .row,
+      .row-fluid {
+        @include spacing(bottom, margin, 1);
+        @include clearfix;
+      }
 
-    .span1 {
-      @include span(1 of 12);
-    }
+      .span1 {
+        @include span(1 of 12);
+      }
 
-    .span2 {
-      @include span(2 of 12);
-    }
+      .span2 {
+        @include span(2 of 12);
+      }
 
-    .span3 {
-      @include span(3 of 12);
-    }
+      .span3 {
+        @include span(3 of 12);
+      }
 
-    .span4 {
-      @include span(4 of 12);
-    }
+      .span4 {
+        @include span(4 of 12);
+      }
 
-    .span5 {
-      @include span(5 of 12);
-    }
+      .span5 {
+        @include span(5 of 12);
+      }
 
-    .span6 {
-      @include span(6 of 12);
-    }
+      .span6 {
+        @include span(6 of 12);
+      }
 
-    .span7 {
-      @include span(7 of 12);
-    }
+      .span7 {
+        @include span(7 of 12);
+      }
 
-    .span8 {
-      @include span(8 of 12);
-    }
+      .span8 {
+        @include span(8 of 12);
+      }
 
-    .span9 {
-      @include span(9 of 12);
-    }
+      .span9 {
+        @include span(9 of 12);
+      }
 
-    .span10 {
-      @include span(10 of 12);
-    }
+      .span10 {
+        @include span(10 of 12);
+      }
 
-    .span11 {
-      @include span(11 of 12);
-    }
+      .span11 {
+        @include span(11 of 12);
+      }
 
-    .span12 {
-      @include span(12 of 12);
-    }
+      .span12 {
+        @include span(12 of 12);
+      }
 
+    }
     .btn {
       @include button;
     }
@@ -69,9 +71,58 @@
     }
 
   }
+
+  // Form section is used to wrap .form-group
+  .form {
+    @include spacing(bottom, margin, $lastchildnone: true);
+
+    // Lighter fields for disabled fields
+    [disabled] {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  // Form group is used to wrap label and input pairs
+  .form__group {
+    @include content-block;
+  }
+
+  .form__label,
+  .form__input {
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .form__label {
+    display: inline-block;
+    padding-bottom: $spacing-s;
+  }
+
+  .form__input {
+    width: 100%;
+    padding: $spacing-xs $spacing-s;
+    border: $illusion-form-border-width solid;
+    line-height: $line-height + $spacing-xs;
+
+    &:focus {
+      outline: 3px solid $color-focus;
+      outline-offset: 0;
+    }
+  }
+
+  // Allow a qualifying element, remove rounded corners from inputs and textareas
+  input.form__input,
+  textarea.form__input {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  // Set a height for select elements
+  select {
+    height: $line-height + ($spacing-xs * 4);
+  }
 }
-
-
 
 .j2store-cart-item-box {
   background: #fff none repeat scroll 0 0;
@@ -104,7 +155,6 @@
   width: 58%;
 }
 
-
 .minicart {
   font-size: 14px;
   @include spacing(left, padding, 0.5);
@@ -132,22 +182,19 @@
   width: 20px;
 }
 
-
 ul.j2store-cart-list {
   /*  max-height: 350px;
    overflow-x: auto; */
   padding: 10px 15px 0;
 }
 
-
-.j2store-cart-item-box  li.cartitems {
+.j2store-cart-item-box li.cartitems {
   border-bottom: 1px solid #eee;
   display: inline-block;
   margin: 5px 0 10px;
   padding-bottom: 10px;
   width: 100%;
 }
-
 
 .cartitems .product-image {
   float: left;
@@ -156,10 +203,11 @@ ul.j2store-cart-list {
   width: 60px;
 }
 
-.item-product-details{
+.item-product-details {
   position: relative;
   float: right;
 }
+
 .j2store-cart-item-box .j2store-cart-nav {
   margin: 0;
   overflow: hidden;

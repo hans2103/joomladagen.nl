@@ -13,8 +13,8 @@ $this->template = JFactory::getApplication()->getTemplate();
 require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
-switch (true)
-{
+	switch (true)
+	{
 	case PWTTemplateHelper::isHome():
 		echo $this->loadTemplate('home');
 		break;
