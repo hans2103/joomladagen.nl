@@ -65,6 +65,10 @@
       @include button;
     }
 
+    .btn-small {
+      @include button--small;
+    }
+
     .table {
       width: 100%;
       @include spacing(bottom, margin, 1);
@@ -212,4 +216,9 @@ ul.j2store-cart-list {
   margin: 0;
   overflow: hidden;
   padding: 0 15px 15px;
+}
+
+
+.j2store-view-back-button {
+  @include spacing(bottom, margin, 1);
 }

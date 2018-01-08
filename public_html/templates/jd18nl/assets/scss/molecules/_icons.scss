@@ -17,6 +17,12 @@
   }
 }
 
+.fa-chevron-left {
+  @include pseudo(before) {
+    @include svg-background($icon--chevron-left, #ffffff, 2 * $spacing-s);
+  }
+}
+
 .fa-shoppingcart {
   @include pseudo(before) {
     @include svg-background($icon--shopping-cart, #ffffff, 2 * $spacing-s);

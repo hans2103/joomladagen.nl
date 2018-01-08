@@ -49,6 +49,11 @@
   }
 }
 
+@mixin button--small() {
+  font-size: $font-size;
+  padding: $spacing-xs $spacing-s;
+}
+
 @mixin button--large() {
   font-size: $font-size;
   padding: 10px $spacing-m 6px;
