@@ -9,7 +9,7 @@ foreach ($messageQueue as $message)
 	?>
     <div class="message__wrapper message__wrapper--<?php echo $message['type']; ?>">
         <div class="container container--shift">
-            <div class="content content--shift">
+            <div class="content content--small">
 				<?php echo $message['message']; ?>
             </div>
         </div>

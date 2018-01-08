@@ -20,7 +20,7 @@ echo JLayouts::render('template.content.header', array('title' => $title, 'intro
 ?>
 <section class="section__wrapper">
     <div class="container container--shift">
-        <div class="content content--shift content__form content__form--registration-complete">
+        <div class="content content--small content__form content__form--registration-complete">
             <p>Registratie verzonden</p>
         </div>
     </div>

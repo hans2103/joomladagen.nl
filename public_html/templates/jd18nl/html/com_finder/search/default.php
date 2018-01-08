@@ -24,7 +24,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 <?php if ($this->params->get('show_search_form', 1)) : ?>
     <section class="section__wrapper">
         <div class="container">
-            <div class="content content--search">
+            <div class="content content--small content--search">
 				<?php echo $this->loadTemplate('form'); ?>
             </div>
         </div>
@@ -35,7 +35,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 <?php if ($this->query->search === true) : ?>
     <section class="section__wrapper">
         <div class="container">
-            <div class="content content--search-results">
+            <div class="content content--small">
 				<?php echo $this->loadTemplate('results'); ?>
             </div>
         </div>
