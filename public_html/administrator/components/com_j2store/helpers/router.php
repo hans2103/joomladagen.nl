@@ -182,7 +182,7 @@ class J2StoreRouterHelper
 		}
 		return $menu;
 	}
-	
+
 	public static function findProductMenu($qoptions) {
 
 		$menus =JMenu::getInstance('site');
@@ -357,7 +357,7 @@ class J2StoreRouterHelper
 	 * @param $segment mixed Either ID or a string containing the ID
 	 * @return mixed Product ID or false on finding none
      */
-	public static function getArticleByAlias($segment) {
+	public static function getArticleByAlias($segment, $categories = array()) {
 		$explode_results = explode(':', $segment);
 		$article = new stdClass();
 		if(isset($explode_results[0]) && is_numeric($explode_results[0])) {
@@ -371,7 +371,7 @@ class J2StoreRouterHelper
 			}
 		}
 		//new router. Load article by alias
-		$article = J2Store::article()->getArticleByAlias($segment);
+		$article = J2Store::article()->getArticleByAlias($segment, $categories);
 
 		if(isset($article->id)) {
 			$product = F0FTable::getAnInstance('Product', 'J2StoreTable');

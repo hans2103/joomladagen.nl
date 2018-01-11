@@ -26,9 +26,9 @@ class J2StoreViewCarts extends F0FViewHtml
 		{
 			return;
 		}
-		
+
 		$country_id = $this->input->getInt('country_id');
-		
+
 		if (isset($country_id)) {
 			$session->set('billing_country_id', $country_id, 'j2store');
 			$session->set('shipping_country_id', $country_id, 'j2store');
@@ -37,7 +37,7 @@ class J2StoreViewCarts extends F0FViewHtml
 		} else {
 			$country_id = $this->store->get('country_id');
 		}
-		
+
 		$zone_id = $this->input->getInt('zone_id');
 		if (isset($zone_id)) {
 			$session->set('billing_zone_id', $zone_id, 'j2store');
@@ -47,9 +47,9 @@ class J2StoreViewCarts extends F0FViewHtml
 		} else {
 			$zone_id = $this->store->get('zone_id');
 		}
-		
+
 		$postcode = $this->input->getString('postcode');
-		
+
 		if (isset($postcode )) {
 			$session->set('shipping_postcode', $postcode, 'j2store');
 		} elseif ($session->has('shipping_postcode', 'j2store')) {
@@ -66,14 +66,14 @@ class J2StoreViewCarts extends F0FViewHtml
 		$this->country_id = $country_id;
 		$this->zone_id = $zone_id;
 		$this->postcode = $postcode;
-		
-		if($params->get('hide_shipping_untill_address_selection', 1) == 0) {			
+
+		if($params->get('hide_shipping_untill_address_selection', 1) == 0) {
 			$session->set('billing_country_id', $country_id, 'j2store');
 			$session->set('shipping_country_id', $country_id, 'j2store');
 			$session->set('billing_zone_id', $zone_id, 'j2store');
 			$session->set('shipping_zone_id', $zone_id, 'j2store');
 			$session->set('shipping_postcode', $postcode, 'j2store');
-			$session->set('force_calculate_shipping', 1, 'j2store');			
+			$session->set('force_calculate_shipping', 1, 'j2store');
 		}
 
 		// Load the model
@@ -86,10 +86,10 @@ class J2StoreViewCarts extends F0FViewHtml
 				$app->redirect ( $cart_empty_redirect_url );
 			}
 		}
-		
+
 		//plugin trigger
 		$this->before_display_cart = '';
-		$before_results = J2Store::plugin()->event('BeforeDisplayCart', array( $items) );
+		$before_results = J2Store::plugin()->event('BeforeDisplayCart', array( &$items) );
 		foreach ($before_results  as $result) {
 			$this->before_display_cart .= $result;
 		}
@@ -116,7 +116,7 @@ class J2StoreViewCarts extends F0FViewHtml
 		$this->order = $order;
 
 		$this->items = $order->getItems();
-		
+
 		foreach($this->items as $item) {
 			if(isset($item->orderitemattributes) && count($item->orderitemattributes)) {
 				foreach($item->orderitemattributes as &$attribute) {
@@ -124,7 +124,7 @@ class J2StoreViewCarts extends F0FViewHtml
 						unset($table);
 						$table = F0FTable::getInstance('Upload', 'J2StoreTable');
 						if($table->load(array('mangled_name'=>$attribute->orderitemattribute_value))) {
-							$attribute->orderitemattribute_value = $table->original_name; 
+							$attribute->orderitemattribute_value = $table->original_name;
 						}
 					}
 				}
@@ -133,9 +133,9 @@ class J2StoreViewCarts extends F0FViewHtml
 
 		$this->taxes = $order->getOrderTaxrates();
 		$this->shipping = $order->getOrderShippingRate();
-		$this->coupons = $order->getOrderCoupons();		
+		$this->coupons = $order->getOrderCoupons();
 		$this->vouchers = $order->getOrderVouchers();
-	
+
 		$this->taxModel = F0FModel::getTmpInstance('TaxProfiles', 'J2StoreModel');
 
 		//do we have shipping methods
@@ -145,12 +145,12 @@ class J2StoreViewCarts extends F0FViewHtml
 
 		$this->checkout_url = $model->getCheckoutUrl();
 		$this->continue_shopping_url = $model->getContinueShoppingUrl();
-		
+
 		$this->after_display_cart = '';
 		$results = J2Store::plugin()->event('AfterDisplayCart', array( $order) );
 		foreach ($results as $result) {
 			$this->after_display_cart .= $result;
-		} 
+		}
 		// Pass page params on frontend only
 		if (F0FPlatform::getInstance()->isFrontend())
 		{

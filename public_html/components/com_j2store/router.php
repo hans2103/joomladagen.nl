@@ -186,7 +186,7 @@ class J2StoreRouter extends JComponentRouterBase {
 						$segments [] = $task;
 					}
 				} else {
-					// sometimes we need task					
+					// sometimes we need task
 					if (isset ( $mTask ) && ! empty ( $mTask ) && $mView != 'checkout') {
 						$segments [] = $mTask;
 					} elseif (isset ( $qoptions ['task'] ) && $mView != 'checkout') {
@@ -315,7 +315,7 @@ class J2StoreRouter extends JComponentRouterBase {
 					}
 
 				} else {
-					
+
 					if (isset ( $mId )) {
 
 						//we have an id. That indicates a product detail view. Set the task to view
@@ -463,7 +463,7 @@ class J2StoreRouter extends JComponentRouterBase {
 						$vars['task'] = $segments [0];
 					}elseif (isset ( $segments [0] ) && $segments[0] != 'view' ) {
 						$vars ['task'] = 'view';
-						$vars ['id'] = J2StoreRouterHelper::getArticleByAlias($segments [0]);
+						$vars ['id'] = J2StoreRouterHelper::getArticleByAlias($segments [0], $menu->query['catid']);
 
 					}elseif(isset($segments[0]) && $segments[0] == 'view') {
 						//old routing pattern. Re-route correct
