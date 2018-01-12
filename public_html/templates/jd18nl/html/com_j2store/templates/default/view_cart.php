@@ -18,11 +18,27 @@ if(!empty($this->product->addtocart_text)) {
 }
 
 $show = J2Store::product ()->validateVariableProduct($this->product);
+$message = JText::_('J2STORE_ITEM_ADDED_TO_CART');
+
+if ($this->params->get('list_enable_quickview',0) && JFactory::getApplication()->input->getString('tmpl') =='component') :
+	$message .= ' <a href="' . $this->product->checkout_link . '" class="j2store-checkout-link" target="_top">';
+else :
+	$message .= ' <a href="' . $this->product->checkout_link . '" class="j2store-checkout-link">';
+endif;
+	$message .= JText::_('J2STORE_CHECKOUT') . '</a>';
 
 Factory::getDocument()->addScriptDeclaration(<<<JS
 		jQuery(document).ready(function(){
-			jQuery('body').on('after_adding_to_cart', function(param1, param2, param3) {
+			jQuery('body').on('after_adding_to_cart', function(element, data, type) {
 				// Add our own logic here, like rendering a message
+				if (type.success === 1) {
+					jQuery('div.message__wrapper div.content').html('{$message}');
+					jQuery('div.message__wrapper').removeClass('message__wrapper--none');
+				}
+				else {
+					jQuery('div.message__wrapper div.content').html('Er was een probleem om het product toe te voegen. Probeer het nogmaals.');
+					jQuery('div.message__wrapper').removeClass('message__wrapper--none').addClass('message__wrapper--error');
+				}
 			});
 		});
 JS
@@ -30,21 +46,6 @@ JS
 ?>
 	<?php echo J2Store::plugin()->eventWithHtml('BeforeAddToCartButton', array($this->product, J2Store::utilities()->getContext('view_cart'))); ?>
 	<?php if($show): ?>
-		<div class="cart-action-complete" style="display:none;">
-				<p class="text-success">
-					<?php echo JText::_('J2STORE_ITEM_ADDED_TO_CART');?>
-						<?php if($this->params->get('list_enable_quickview',0) && JFactory::getApplication()->input->getString('tmpl') =='component'):?>
-						<a href="<?php echo $this->product->checkout_link; ?>" class="j2store-checkout-link" target="_top">
-					<?php else:?>
-						<a href="<?php echo $this->product->checkout_link; ?>" class="j2store-checkout-link">
-					<?php endif;?>
-						<?php echo JText::_('J2STORE_CHECKOUT'); ?>
-					</a>
-				</p>
-		</div>
-
-
-
 		<div id="add-to-cart-<?php echo $this->product->j2store_product_id; ?>" class="j2store-add-to-cart">
 
 		<?php echo J2Store::product()->displayQuantity('com_j2store.product.default', $this->product, $this->params, array( 'class'=>'input-mini form-control ' ) ); ?>
