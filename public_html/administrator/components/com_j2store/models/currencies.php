@@ -49,7 +49,7 @@ class J2StoreModelCurrencies extends F0FModel {
 	public function updateCurrencies($force = false) {
 		if (extension_loaded('curl')) {
 			$store = J2Store::config();
-			
+			$store_currency = $store->get('config_currency');
 			//sanity check
 			if($store->get('config_currency_auto', 1) != 1) return;
 
@@ -59,7 +59,7 @@ class J2StoreModelCurrencies extends F0FModel {
 			$query = $db->getQuery(true);
 			$query->update('#__j2store_currencies')->set('currency_value ='.$db->q('1.00000'))
 			->set('modified_on='.$db->q(date('Y-m-d H:i:s')))
-			->where('currency_code='.$db->q($store->get('config_currency')));
+			->where('currency_code='.$db->q($store_currency));
 			$db->setQuery($query);
 			try {
 				$db->execute();
@@ -70,7 +70,7 @@ class J2StoreModelCurrencies extends F0FModel {
 			
 			$query = $db->getQuery(true);
 
-			$query->select('*')->from('#__j2store_currencies')->where('currency_code !='.$db->q($store->get('config_currency')));
+			$query->select('*')->from('#__j2store_currencies')->where('currency_code !='.$db->q($store_currency));
 
 			if($force) {
 				$nullDate = JFactory::getDbo( )->getNullDate( );
@@ -78,38 +78,10 @@ class J2StoreModelCurrencies extends F0FModel {
 			}
 			$db->setQuery($query);
 			$rows = $db->loadAssocList();
-			foreach ($rows as $result) {
-				$data[] = $store->get('config_currency') . $result['currency_code'] . '=X';
-			}
-
-			$curl = curl_init();
-
-			curl_setopt($curl, CURLOPT_URL, 'http://download.finance.yahoo.com/d/quotes.csv?s=' . implode(',', $data) . '&f=sl1&e=.csv');
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-			$content = curl_exec($curl);
-
-			curl_close($curl);
-
-			$lines = explode("\n", trim($content));
-
-			foreach ($lines as $line) {
-				$currency = JString::substr($line, 4, 3);
-				$value = JString::substr($line, 11, 6);
-
-				if ((float)$value) {
-					$query = $db->getQuery(true);
-					$query->update('#__j2store_currencies')->set('currency_value ='.$db->q((float)$value))
-					->set('modified_on='.$db->q(date('Y-m-d H:i:s')))
-					->where('currency_code='.$db->q($currency));
-					$db->setQuery($query);
-					$db->query();
-				}
-			}		
-			
+			J2Store::plugin()->event('UpdateCurrencies',array($rows, $force));
 		}
 	}
-	
+
 	public function create_currency_by_code($code, $symbol) {
 		//no records found. Dumb default data
 		$item = F0FTable::getAnInstance('Currency', 'J2StoreTable');

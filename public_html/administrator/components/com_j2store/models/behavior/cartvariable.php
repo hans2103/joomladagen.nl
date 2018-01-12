@@ -53,6 +53,16 @@ class J2StoreModelCartsBehaviorCartVariable extends F0FModelBehavior {
 				if($variant->j2store_variant_id != $variant_id || $variant->product_id != $product->j2store_product_id) {
 					$errors['error']['general'] = JText::_('J2STORE_VARIANT_NOT_FOUND');
 				}
+
+				//double check if the chosen variant is correct. We cannot trust the javascript alone.
+				$verify_variant = $productHelper->getVariantByOptions($options, $product->j2store_product_id);
+				if($verify_variant->j2store_variant_id != $variant_id) {
+					//somehow we got the wrong variant. Use the variant by options because that is always correct.
+					$variant = $verify_variant;
+				}
+				if($variant === false) {
+					$errors['error']['general'] = JText::_('J2STORE_VARIANT_NOT_FOUND');
+				}
 				
 			} else {
 				//variant id not found. fall back

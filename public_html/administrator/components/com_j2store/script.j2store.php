@@ -138,6 +138,7 @@ class Com_J2storeInstallerScript extends F0FUtilsInstallscript{
 							 							'report_itemised' 			=> 	1,
 							 							'app_localization_data' 	=> 	1,
 							 							'app_diagnostics'			=> 	1,
+                                                        'app_currencyupdater'		=> 	1
 							 						)
 						)
 					);

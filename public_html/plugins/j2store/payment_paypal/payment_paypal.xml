@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="2.5" type="plugin" group="j2store" method="upgrade">
     <name>Paypal Standard for J2Store</name>
-    <version>3.15</version>
-    <creationDate>August 2017</creationDate>
+    <version>3.17</version>
+    <creationDate>NOV 2017</creationDate>
     <author>J2Store</author>
     <authorEmail>support@j2store.org</authorEmail>
     <authorUrl>http://www.j2store.org</authorUrl>
     <copyright>2017 Weblogicx India Private Limited</copyright>
     <license>GNU General Public License v3 or later versions</license>
     <description>J2STORE_PAYPAL_PLUGINDESC</description>
-    <scriptfile>script.payment_paypal.php</scriptfile>
     <files>
         <filename plugin="payment_paypal">payment_paypal.php</filename>
         <filename>paypalv2.php</filename>
@@ -52,6 +51,8 @@
                 <field name="sandbox_api_username" type="text" size="50" default="" label="j2store_paypal_sandbox_api_username" description="j2store_paypal_sandbox_api_username_desc"/>
                 <field name="sandbox_api_password" type="text" size="50" default="" label="j2store_paypal_sandbox_api_password" description="j2store_paypal_sandbox_api_password_desc"/>
                 <field name="sandbox_api_signature" type="text" size="50" default="" label="j2store_paypal_sandbox_api_signature" description="j2store_paypal_sandbox_api_signature_desc"/>
+                <field name="check_data" type="credensial" addfieldpath="/plugins/j2store/payment_paypal/payment_paypal/fields"
+                       label="j2store_paypal_check_btn"/>
 
                 <field name="paypal_note_recurring" type="customnotice" addfieldpath="/administrator/components/com_j2store/models/fields"
                        label="j2store_paypal_custom_note_recurring"/>

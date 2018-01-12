@@ -708,7 +708,8 @@ class plgJ2StorePayment_sagepay extends J2StorePaymentPlugin
             if (empty($errors))
             {
         		$return['success']  = JText::_($this->params->get('onafterpayment', ''));
-        		$return['redirect'] = JRoute::_('index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type='.$this->_element.'&paction=display');
+                $return_url = $this->getReturnUrl();
+                $json ['redirect'] = JRoute::_($return_url);//JRoute::_('index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type='.$this->_element.'&paction=display');
 
             } else {
             	$error = count($errors) ? implode("\n", $errors) : '';

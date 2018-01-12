@@ -97,7 +97,7 @@ $title = $params->get('cart_module_title', '');
 												<span class="cart-item-options">
 												<?php foreach ($item->orderitemattributes as $attribute): ?>
 													<small>
-													- <?php echo JText::_($attribute->orderitemattribute_name); ?> : <?php echo $attribute->orderitemattribute_value; ?>
+													- <?php echo JText::_($attribute->orderitemattribute_name); ?> : <?php echo JText::_($attribute->orderitemattribute_value); ?>
 													</small>
 													<br />
 												<?php endforeach;?>
@@ -111,7 +111,7 @@ $title = $params->get('cart_module_title', '');
 						<?php if( $params->get('enable_checkout') ||  $params->get('enable_view_cart') ):?>
 							<div class="j2store-cart-nav">
 								<?php if($params->get('enable_checkout')):?>
-									<a class="btn btn-success btn-large"  href="<?php echo $checkout_url;?>">
+									<a class="btn btn-success btn-large"  href="<?php echo JRoute::_('index.php?option=com_j2store&view=checkout');?>">
 										<?php echo JText::_('J2STORE_CHECKOUT'); ?>
 									</a>
 								<?php endif;?>

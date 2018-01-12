@@ -177,7 +177,7 @@ JHtml::_('behavior.modal');
 									<?php echo J2Html::media($prefix.'[params][variant_main_image]' ,$variant_main_image,array('id'=>'variant_main_image'.$this->variant->j2store_variant_id ,'image_id'=>'input-variant-main-image'.$this->variant->j2store_variant_id));?>
 									<input id="variant_thum_<?php echo $this->variant->j2store_variant_id;?>" type="checkbox"
 										   name="<?php echo $prefix.'[params][is_main_as_thum]';?>"
-										<?php echo (isset($is_main_as_thum) && $is_main_as_thum) ? 'checked="checked"' : ''; ?> />
+										<?php echo (isset($is_main_as_thum) && $is_main_as_thum) ? 'checked="checked"' : '';?> value="1" />
 									<?php echo JText::_('J2STORE_PRODUCT_IS_MAIN_IMAGE_AS_THUM'); ?>
 								</div>
 							</div>

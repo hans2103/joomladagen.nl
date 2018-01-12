@@ -2097,7 +2097,7 @@ class J2StoreTableOrder extends F0FTable
 	public function has_status ( $status )
 	{
 		$result = ( ( is_array ( $status ) && in_array ( $this->get_status (), $status ) ) || $this->get_status () === $status ) ? true : false;
-		J2Store::plugin ()->event ( 'OrderHasStatus', array( $result, $this, &$status ) );
+		J2Store::plugin ()->event ( 'OrderHasStatus', array( &$result, $this, &$status ) );
 		return $result;
 	}
 
@@ -2467,10 +2467,12 @@ class J2StoreTableOrder extends F0FTable
 					if ( $table->load ( array( 'mangled_name' => $attribute->orderitemattribute_value ) ) ) {
 						$attribute_value = $table->original_name;
 					}
+
 				} else {
 					$attribute_value = JText::_ ( $attribute->orderitemattribute_value );
 				}
-				$html .= '<small>'.JText::_( $attribute->orderitemattribute_name ).' : '.$attribute_value.'</small><br />';
+				$html .= $this->get_formatted_lineitem_attribute_value($attribute, $attribute_value);
+				//$html .= '<small>'.JText::_( $attribute->orderitemattribute_name ).' : '.$attribute_value.'</small><br />';
 				if(JFactory::getApplication()->isAdmin() && $attribute->orderitemattribute_type=='file' && JFactory::getApplication()->input->getString('task')!='printOrder'){
 					$html .= '<a target="_blank" class="btn btn-primary"';
 					$html .= 'href="'.JRoute::_("index.php?option=com_j2store&view=orders&task=download&ftoken=".$attribute->orderitemattribute_value).'"';
@@ -2484,6 +2486,30 @@ class J2StoreTableOrder extends F0FTable
 		}
 		J2Store::plugin ()->event ( 'LineItemName', array($item,&$html) );
 		return $html;
+	}
+
+	public function get_formatted_lineitem_attribute_value($attribute, $attribute_value)
+	{
+
+		$search = array( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+
+		$replace = array( 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine' );
+
+		$attribute_class = str_replace( $search, $replace, $attribute_value );
+
+		$html = '<small>';
+		$html .= '<span class"item-option item-option-name" ' . $attribute_class . '>';
+		$html .= JText::_( $attribute->orderitemattribute_name );
+		$html .= ' : ';
+		$html .= '<span class="item-option item-option-value ' . $attribute_class . '">' . $attribute_value . '</span>';
+		$html .= '</span>';
+
+		$html .= '</small>';
+		$html .= '<br />';
+		J2Store::plugin()->event( 'GetFormattedLineItemAttributeValue', array( $attribute, $attribute_value, &$html ) );
+
+		return $html;
+
 	}
 
 	

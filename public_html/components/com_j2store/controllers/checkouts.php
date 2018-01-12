@@ -108,7 +108,7 @@ class J2StoreControllerCheckouts extends F0FController
 		$view->assign('showShipping', $showShipping);
 
 		//trigger on before checkout event
-		J2Store::plugin()->event('BeforeCheckout', array($order));
+		J2Store::plugin()->event('BeforeCheckout', array($order,&$view));
 
 		// Display without caching
 		$view->display();

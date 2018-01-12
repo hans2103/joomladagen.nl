@@ -403,4 +403,23 @@ class J2StorePaymentPlugin extends J2StorePluginBase
 		return $status;
 	}
 
+	/**
+     * Return url for payment gateway
+	*/
+	public function getReturnUrl(){
+        $menus = JMenu::getInstance('site');
+        $url = 'index.php?option=com_j2store&view=checkout&task=confirmPayment&layout=postpayment&orderpayment_type='.$this->_element.'&paction=display';
+        foreach ($menus->getMenu() as $menu){
+            if(isset($menu->type) && isset($menu->component) && isset($menu->query['option']) &&
+                isset($menu->query['view']) && isset($menu->query['layout']) && isset($menu->query['task'])
+                && $menu->type == 'component' && $menu->component == 'com_j2store'
+                && $menu->query['option'] == 'com_j2store' && $menu->query['view'] == 'checkout'
+                && $menu->query['layout'] == 'postpayment' && $menu->query['task'] == 'confirmPayment'){
+                $url = 'index.php?option=com_j2store&view=checkout&task=confirmPayment&layout=postpayment&orderpayment_type='.$this->_element.'&paction=display&Itemid='.$menu->id;
+                break;
+            }
+        }
+        return $url;
+    }
+
 }

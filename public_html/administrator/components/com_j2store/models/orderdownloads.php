@@ -33,9 +33,9 @@ class J2StoreModelOrderdownloads extends F0FModel {
 		$query->select($this->_db->qn('#__j2store_orders.token'));
 
 		$query->join('INNER', '#__j2store_orders ON #__j2store_orders.order_id=#__j2store_orderdownloads.order_id');
-		$query->where($this->_db->qn('#__j2store_orders.order_state_id').' = '.$this->_db->q('1'));
 
-
+		$valid_statuses = $this->getValidOrderStatuses();
+		$query->where($this->_db->qn('#__j2store_orders.order_state_id').' IN ( '.implode(',', $valid_statuses).' )');
 
 		if(!empty($email)) {
 			$query->where($this->_db->qn('#__j2store_orderdownloads.user_email').' = '.$this->_db->q($email));
@@ -81,7 +81,7 @@ class J2StoreModelOrderdownloads extends F0FModel {
 
 	public function setDownloads($order, $override_status=false) {
 		if($override_status) {
-			if($order->order_state_id != 1) return;
+			if(!$this->isStatusValid($order->order_state_id)) return;
 		}
 
 		$model = $this->getModel ();
@@ -130,33 +130,8 @@ class J2StoreModelOrderdownloads extends F0FModel {
 	}
 
 	public function resetDownloadLimit($order,$override_status = false){
-        if($override_status) {
-            if($order->order_state_id != 1) return;
-        }
-
-        $model = $this->getModel ();
-        $downloads = $model->order_id ( $order->order_id )->email($order->user_email)->getList ();
-
-        foreach ( $downloads as $download ) {
-
-            unset($table);
-            $table = F0FTable::getAnInstance('Orderdownload', 'J2StoreTable')->getClone();
-
-            if ($table->load($download->j2store_orderdownload_id)) {
-				//just re-set the limit count.
-                $table->limit_count = 0;
-                $table->store ();
-                //add a note
-                if($order instanceof J2StoreTableOrder) {
-                    $order->add_history(JText::_('J2STORE_DOWNLOAD_LIMIT_HAS_BEEN_RESET'));
-                }
-            }
-        }
-    }
-
-	public function resetDownloads($order, $override_status=false) {
 		if($override_status) {
-			if($order->order_state_id != 1) return;
+			if(!$this->isStatusValid($order->order_state_id)) return;
 		}
 
 		$model = $this->getModel ();
@@ -164,39 +139,64 @@ class J2StoreModelOrderdownloads extends F0FModel {
 
 		foreach ( $downloads as $download ) {
 
-				unset($table);
-				$table = F0FTable::getAnInstance ( 'Orderdownload', 'J2StoreTable' )->getClone();
+			unset($table);
+			$table = F0FTable::getAnInstance('Orderdownload', 'J2StoreTable')->getClone();
 
-				if ($table->load ( $download->j2store_orderdownload_id )) {
+			if ($table->load($download->j2store_orderdownload_id)) {
+				//just re-set the limit count.
+				$table->limit_count = 0;
+				$table->store ();
+				//add a note
+				if($order instanceof J2StoreTableOrder) {
+					$order->add_history(JText::_('J2STORE_DOWNLOAD_LIMIT_HAS_BEEN_RESET'));
+				}
+			}
+		}
+	}
 
-					$tz = JFactory::getConfig ()->get ( 'offset' );
-					$date = JFactory::getDate ( 'now', $tz );
-					$table->access_granted = $date->toSql ( true );
+	public function resetDownloads($order, $override_status=false) {
+		if($override_status) {
+			if(!$this->isStatusValid($order->order_state_id)) return;
+		}
 
-					$product = F0FTable::getAnInstance ( 'Product', 'J2StoreTable' )->getClone();
-					$product->load ( $table->product_id );
-					if (! empty ( $product->params )) {
-						$registry = new JRegistry;
-						$registry->loadString ($product->params );
-						$expires = $registry->get ( 'download_expiry', '' );
+		$model = $this->getModel ();
+		$downloads = $model->order_id ( $order->order_id )->email($order->user_email)->getList ();
 
-						if (! empty ( $expires )) {
-							$days = ( int ) $expires;
-							if ($days)
-								$access_expires = JFactory::getDate ( "+" . $days . " days", $tz )->toSql ( true );
-						}
-					}
-					if (isset ( $access_expires )) {
-						$table->access_expires = $access_expires;
-					} else {
-						$table->access_expires = JFactory::getDbo ()->getNullDate ();
-					}
-					$table->store ();
-					//add a note
-					if($order instanceof J2StoreTableOrder) {
-						$order->add_history(JText::_('J2STORE_DOWNLOAD_EXPIRY_HAS_BEEN_RESET'));
+		foreach ( $downloads as $download ) {
+
+			unset($table);
+			$table = F0FTable::getAnInstance ( 'Orderdownload', 'J2StoreTable' )->getClone();
+
+			if ($table->load ( $download->j2store_orderdownload_id )) {
+
+				$tz = JFactory::getConfig ()->get ( 'offset' );
+				$date = JFactory::getDate ( 'now', $tz );
+				$table->access_granted = $date->toSql ( true );
+
+				$product = F0FTable::getAnInstance ( 'Product', 'J2StoreTable' )->getClone();
+				$product->load ( $table->product_id );
+				if (! empty ( $product->params )) {
+					$registry = new JRegistry;
+					$registry->loadString ($product->params );
+					$expires = $registry->get ( 'download_expiry', '' );
+
+					if (! empty ( $expires )) {
+						$days = ( int ) $expires;
+						if ($days)
+							$access_expires = JFactory::getDate ( "+" . $days . " days", $tz )->toSql ( true );
 					}
 				}
+				if (isset ( $access_expires )) {
+					$table->access_expires = $access_expires;
+				} else {
+					$table->access_expires = JFactory::getDbo ()->getNullDate ();
+				}
+				$table->store ();
+				//add a note
+				if($order instanceof J2StoreTableOrder) {
+					$order->add_history(JText::_('J2STORE_DOWNLOAD_EXPIRY_HAS_BEEN_RESET'));
+				}
+			}
 
 		}
 	}
@@ -246,7 +246,7 @@ class J2StoreModelOrderdownloads extends F0FModel {
 		}
 
 		//order state id is confirmed
-		if($orderdownload->order_state_id != 1) {
+		if(!$this->isStatusValid($orderdownload->order_state_id)) {
 			$this->setError(JText::_('J2STORE_DOWNLOAD_ERROR_ORDER_NOT_CONFIRMED'));
 			return false;
 		}
@@ -448,5 +448,22 @@ class J2StoreModelOrderdownloads extends F0FModel {
 		$productfile->download_total = $productfile->download_total +1;
 		$productfile->store();
 
+	}
+
+	public function getValidOrderStatuses()
+	{
+		$statuses = array( 1 );
+		J2Store::plugin()->event('GetValidOrderStatuses', array(&$statuses));
+		return $statuses;
+	}
+
+	public function isStatusValid($status)
+	{
+		if ( in_array( $status, $this->getValidOrderStatuses() ) )
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

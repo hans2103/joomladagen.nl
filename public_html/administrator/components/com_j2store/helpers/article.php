@@ -24,8 +24,8 @@ class J2Article {
 
 		return self::$instance;
 	}
-	
-	
+
+
 
 	/**
 	 *
@@ -51,13 +51,13 @@ class J2Article {
 		{
 			return $html;
 		}
-	
+
 		$item->title = JFilterOutput::ampReplace($item->title);
-	
+
 		$item->text = '';
-	
+
 		$item->text = $item->introtext . chr(13).chr(13) . $item->fulltext;
-	
+
 		$limitstart	= JRequest::getVar('limitstart', 0, '', 'int');
 		$params		=$mainframe->getParams('com_content');
 		$prepare_content = J2Store::config()->get('prepare_content', 0);
@@ -65,14 +65,14 @@ class J2Article {
 			$html .= JHtml::_('content.prepare', $item->text);
 		}else {
 			$html .= $item->text;
-		}	
-	
+		}
+
 		return $html;
 	}
-	
+
 	public function getArticle($id) {
 		static $sets;
-	
+
 		if ( !is_array( $sets ) )
 		{
 			$sets = array( );
@@ -116,8 +116,8 @@ class J2Article {
 		$alias = $db->loadResult();
 		return $alias;
 	}
-	
-	public function getArticleByAlias($alias) {
+
+	public function getArticleByAlias($alias, $categories = array()) {
 		static $sets;
 
 		if ( !is_array( $sets ) )
@@ -147,6 +147,11 @@ class J2Article {
 				if($tag != '*' && !empty( $tag ) ){
 					$query->where($db->quoteName('language') . ' IN (' . $db->quote($tag) .','.$db->quote ( '*' ).' )');
 				}
+
+				if ($categories)
+                {
+                    $query->where($db->quoteName('catid') . ' IN (' . implode(',', $categories) . ')');
+                }
 			}
 			$db->setQuery($query);
 			try {
@@ -154,7 +159,7 @@ class J2Article {
 			}catch(Exception $e) {
 				$sets[$alias] = new stdClass();
 			}
-			
+
 		}
 		return $sets[$alias];
 	}
@@ -195,12 +200,12 @@ class J2Article {
 		}
 		return $content_id;
 	}
-	
+
 	public function getAssociatedArticle($id) {
-	
+
 		$associated_id =0;
 		require_once JPATH_SITE . '/components/com_content/helpers/route.php';
-	
+
 		require_once(JPATH_SITE.'/components/com_content/helpers/association.php');
 		$result = ContentHelperAssociation::getAssociations($id, 'article');
 		$tag = JFactory::getLanguage()->getTag();
@@ -212,19 +217,19 @@ class J2Article {
 			}
 			$associated_id = (int) $splits[0];
 		}
-	
+
 		if(isset($associated_id) && $associated_id) {
 			$id = $associated_id;
 		}
 		return $id;
 	}
-	
+
 	public function getCategoryById($id) {
 		if (! is_numeric ( $id ) || empty ( $id ))
 			return new stdClass();
-		
+
 		static $csets;
-		
+
 		if (! is_array ( $csets )) {
 			$csets = array ();
 		}
@@ -235,8 +240,8 @@ class J2Article {
 			$db->setQuery ( $query );
 			$csets [$id] = $db->loadObject ();
 		}
-		
+
 		return $csets [$id];
 	}
-	
-}	
+
+}

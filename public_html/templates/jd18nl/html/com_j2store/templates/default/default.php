@@ -129,7 +129,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 												var qty = $('#j2store-addtocart-form-'+product_id+' input[name="product_qty"]').val();
 
 												// Hide the options
-												$('#j2store-addtocart-form-'+product_id+' .option').hide();
+                                                $('#j2store-addtocart-form-'+product_id+' [class*="showOption"]').hide();
 
 												// Show the options
 												for (var i = 1; i <= qty; i++) {

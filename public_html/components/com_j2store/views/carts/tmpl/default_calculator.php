@@ -89,7 +89,7 @@ j2store.jQuery('input[name=\'next\']').bind('click', function() {
 	 $(document).on('click', '#button-quote', function() {
 		 var values = $('#shipping-estimate-form').serializeArray();
 		 $.ajax({
-				url:'index.php?option=com_j2store&view=carts&task=estimate',
+				url:'<?php echo JRoute::_('index.php'); ?>',
 				type: 'get',
 				data: values,
 				dataType: 'json',
@@ -121,13 +121,14 @@ j2store.jQuery('input[name=\'next\']').bind('click', function() {
  })(j2store.jQuery);
 
 (function($) {
-$('select[name=\'country_id\']').bind('change', function() {
+$('#shipping-estimate-form select[name=\'country_id\']').bind('change', function() {
 	$.ajax({
-		url:'index.php?option=com_j2store&view=carts&task=getCountry&country_id=' + this.value,
+		url:'<?php echo JRoute::_('index.php'); ?>',
 		type: 'get',
+		data: 'option=com_j2store&view=carts&task=getCountry&country_id=' + this.value,
 		dataType: 'json',
 		beforeSend: function() {
-			$('select[name=\'country_id\']').after('<span class="wait">&nbsp;<img src="<?php echo JUri::root(true); ?>/media/j2store/images/loader.gif" alt="" /></span>');
+			$('#shipping-estimate-form select[name=\'country_id\']').after('<span class="wait">&nbsp;<img src="<?php echo JUri::root(true); ?>/media/j2store/images/loader.gif" alt="" /></span>');
 		},
 		complete: function() {
 			$('.wait').remove();
@@ -150,7 +151,7 @@ $('select[name=\'country_id\']').bind('change', function() {
 				html += '<option value="0" selected="selected"><?php echo JText::_('J2STORE_CHECKOUT_ZONE_NONE'); ?></option>';
 			}
 
-			$('select[name=\'zone_id\']').html(html);
+			$('#shipping-estimate-form select[name=\'zone_id\']').html(html);
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -158,7 +159,7 @@ $('select[name=\'country_id\']').bind('change', function() {
 	});
 });
 
-$('select[name=\'country_id\']').trigger('change');
+$('#shipping-estimate-form select[name=\'country_id\']').trigger('change');
 
 })(j2store.jQuery);
 //--></script>
