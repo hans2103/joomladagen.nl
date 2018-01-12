@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0" type="plugin" group="j2store" method="upgrade">
     <name>Discount Rules</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <creationDate>JAN 2018</creationDate>
     <author>Alagesan</author>
     <authorEmail>supports@j2store.org</authorEmail>

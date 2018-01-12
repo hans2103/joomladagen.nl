@@ -30,7 +30,35 @@ class plgJ2StoreApp_discountrulesInstallerScript {
             return false;
         }
 
+        $db = JFactory::getDbo ();
+        // get the table list
+        $tables = $db->getTableList ();
+        // get prefix
+        $prefix = $db->getPrefix ();
+        if (! in_array ( $prefix . 'j2store_appdiscountmethods', $tables )) {
+            $query = "CREATE TABLE IF NOT EXISTS `#__j2store_appdiscountmethods` (
+			`j2store_appdiscountmethod_id` int(11) NOT NULL AUTO_INCREMENT,
+			`discount_method_name` varchar(255) NOT NULL,
+			`discount_type` varchar(255) NOT NULL,
+			`discount_user_group` varchar(255) NOT NULL,
+			`discount_geozone` varchar(255) NOT NULL,		
+			PRIMARY KEY (`j2store_appdiscountmethod_id`)
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8";
+            $this->_executeQuery ( $query );
+        }
+
         return true;
+    }
+
+    private function _executeQuery($query) {
+        $db = JFactory::getDbo ();
+        $db->setQuery ( $query );
+        try {
+            $db->execute ();
+        } catch ( Exception $e ) {
+            // do nothing. we dont want to fail the install process.
+            echo $e;
+        }
     }
 
 }
