@@ -55,7 +55,7 @@ PWTTemplateHelper::localstorageFont();
             </div>
             <div class="logo--name">
 				<?php $url = JURI::base(); ?>
-				<?php $text = '<span class="logo--brand">Joomla</span>dagen 2018'; ?>
+				<?php $text = '<span class="logo--brand">Joomla</span>Dagen 2018'; ?>
 				<?php echo JHtml::_('link', $url, $text); ?>
             </div>
 
