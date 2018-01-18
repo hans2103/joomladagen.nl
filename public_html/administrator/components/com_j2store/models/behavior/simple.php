@@ -150,10 +150,11 @@ class J2StoreModelProductsBehaviorSimple extends F0FModelBehavior {
 			//just make sure that we do not have a double entry there
 			$images->load(array('product_id'=>$table->j2store_product_id));
 			$images->save($this->_rawData);
-
-			//save product filters
-			F0FTable::getAnInstance('ProductFilter', 'J2StoreTable' )->addFilterToProduct ( $this->_rawData ['productfilter_ids'], $table->j2store_product_id );
-
+            if(isset($this->_rawData ['productfilter_ids'])){
+                //save product filters
+                F0FTable::getAnInstance('ProductFilter', 'J2StoreTable' )->addFilterToProduct ( $this->_rawData ['productfilter_ids'], $table->j2store_product_id );
+            }
+            
 		}
 
 	}

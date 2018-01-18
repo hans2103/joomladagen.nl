@@ -401,7 +401,8 @@ class plgJ2StorePayment_paymill extends J2StorePaymentPlugin
         }
 
         if (empty ( $errors )) {
-            $app->redirect('index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type=' . $this->_element . '&paction=display');
+            $return_url = $this->getReturnUrl();
+            $app->redirect($return_url);
         }else{
             $app->redirect('index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type=' . $this->_element . '&paction=error');
         }

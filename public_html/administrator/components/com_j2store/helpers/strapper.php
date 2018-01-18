@@ -72,6 +72,7 @@ class J2StoreStrapper {
 			self::loadTimepickerScript($document);
 			$document->addScript(JURI::root(true).'/media/j2store/js/j2store.js');
 		}
+        $document->addScript(JURI::root(true).'/media/j2store/js/bootstrap-modal-conflit.js');
 		J2Store::plugin ()->event ( 'AfterAddJS' );
 	}
 

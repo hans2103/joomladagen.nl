@@ -207,7 +207,8 @@ class plgJ2StorePayment_banktransfer extends J2StorePaymentPlugin
 			if ($order->store ()) {
 				$order->empty_cart();
 				$json ['success'] = JText::_ ( $this->params->get ( 'onafterpayment', '' ) );
-				$json ['redirect'] = JRoute::_ ( 'index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type=' . $this->_element . '&paction=display' );
+                $return_url = $this->getReturnUrl();
+                $json ['redirect'] = JRoute::_($return_url);//JRoute::_ ( 'index.php?option=com_j2store&view=checkout&task=confirmPayment&orderpayment_type=' . $this->_element . '&paction=display' );
 			} else {
 				//$html = $this->params->get ( 'onerrorpayment', '' );
 				$json ['error'] = $order->getError ();

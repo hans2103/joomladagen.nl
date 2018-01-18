@@ -32,6 +32,10 @@ if (!JComponentHelper::isEnabled('com_j2store', true))
     return;
 }
 
+if(!class_exists('J2Store')){
+    require_once(JPATH_ADMINISTRATOR.'/components/com_j2store/helpers/j2store.php');
+}
+
 
 class plgUserJ2userregister extends JPlugin
 {
@@ -74,8 +78,9 @@ class plgUserJ2userregister extends JPlugin
         // Check we are manipulating a valid form.
         $name = $form->getName();
 
+        $show_address_fields = $this->params->get('show_address_fields', 1);
 
-        if (in_array($name, array('com_users.registration', 'com_users.user')))
+        if (in_array($name, array('com_users.registration', 'com_users.user')) && $show_address_fields)
         {
 
             //if this is administrator, we need to load a few files
@@ -114,14 +119,14 @@ class plgUserJ2userregister extends JPlugin
         $userId	= \Joomla\Utilities\ArrayHelper::getValue ( $data, 'id', 0, 'int' );
         //JArrayHelper::getValue($data, 'id', 0, 'int');
         $app = JFactory::getApplication();
+        $show_address_fields = $this->params->get('show_address_fields', 1);
         $j2store_fields = $app->input->get ( 'j2reg',array(),"ARRAY" );
-        if ($userId && $result && $isNew && !empty( $j2store_fields ) )
-        {
-            return $this->saveAddress($j2store_fields, $userId, $result);
-        }
-
         $app = JFactory::getApplication();
-        if($app->isAdmin() && $userId && $result && !empty($j2store_fields)) {
+
+        if($app->isAdmin() && $userId && $result && !empty($j2store_fields) && $show_address_fields) {
+            return $this->saveAddress($j2store_fields, $userId, $result);
+        }elseif($app->isSite() && $userId && $result && $isNew && !empty( $j2store_fields ) && $show_address_fields )
+        {
             return $this->saveAddress($j2store_fields, $userId, $result);
         }
 

@@ -214,9 +214,11 @@ class J2StoreModelProductsBehaviorVariable extends F0FModelBehavior {
 
 			//finally run indexes to get the min - max price
 			$this->runIndexes($table);
+            if(isset($this->_rawData ['productfilter_ids'])){
+                //save product filters
+                F0FTable::getAnInstance('ProductFilter', 'J2StoreTable' )->addFilterToProduct ( $this->_rawData ['productfilter_ids'], $table->j2store_product_id );
+            }
 
-			//save product filters
-			F0FTable::getAnInstance('ProductFilter', 'J2StoreTable' )->addFilterToProduct ( $this->_rawData ['productfilter_ids'], $table->j2store_product_id );
 		}
 	}
 
@@ -292,7 +294,7 @@ class J2StoreModelProductsBehaviorVariable extends F0FModelBehavior {
 		try {
 			//first load master variant
 
-			$variant_table = F0FTable::getAnInstance('Variant', 'J2StoreTable');
+			$variant_table = F0FTable::getAnInstance('Variant', 'J2StoreTable')->getClone();
 			$variant_table->load(array('product_id'=>$product->j2store_product_id, 'is_master'=>1));
 			$product->variant = $variant_table;
 
@@ -391,9 +393,9 @@ class J2StoreModelProductsBehaviorVariable extends F0FModelBehavior {
 		$param_data->loadString($product->variant->params);
 		$main_image = $param_data->get('variant_main_image','');
 		$is_main_as_thum = $param_data->get('is_main_as_thum',0);
-		$product->main_image = isset( $main_image ) && !empty( $main_image ) ? $main_image: $product->main_image;
+		$product->main_image = isset( $main_image ) && !empty( $main_image ) ? $main_image: (isset($product->main_image) ? $product->main_image: '');
 		if($is_main_as_thum){
-			$product->thumb_image = isset( $main_image ) && !empty( $main_image ) ? $main_image: $product->thumb_image;
+			$product->thumb_image = isset( $main_image ) && !empty( $main_image ) ? $main_image: (isset($product->thumb_image) ? $product->thumb_image: '');
 		}
 		//only if the product has options and variations
 		if($product->has_options && $product->variants) {

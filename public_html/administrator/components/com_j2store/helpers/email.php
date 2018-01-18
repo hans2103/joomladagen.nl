@@ -485,8 +485,8 @@ class J2Email {
 				'[TOKEN]'				=> $order->token,
 				'[COUPON_CODE]'			=> $coupon_code,
 				'[BANK_TRANSFER_INFORMATION]' => $bank_transfer_info,
-
-				'[ITEMS]'				=> $items
+				'[SHIPPING_TOTAL_WEIGHT]' => $order->getTotalShippingWeight(),
+				'[ITEMS]'				=> $items,
 
 		);
 
@@ -548,11 +548,14 @@ class J2Email {
 		if (! empty ( $row->$field ) && JString::strlen ( $row->$field ) > 0) {
 
 			$custom_fields = $this->getDecodedFields ( $row->$field );
+
 			if (isset ( $custom_fields ) && count ( $custom_fields )) {
 				foreach ( $custom_fields as $namekey => $field ) {
 	
 					if (! property_exists ( $row, $type . '_' . $namekey ) && ! property_exists ( $row, 'user_' . $namekey ) && $namekey != 'country_id' && $namekey != 'zone_id' && $namekey != 'option' && $namekey != 'task' && $namekey != 'view') {
-						
+						if(is_array($field['value'])){
+                            $field['value'] = implode(',',$field['value']);
+                        }
 						$field['value'] = nl2br($field['value']);
 
 						$fields [$namekey] = $field;

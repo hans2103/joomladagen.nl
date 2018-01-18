@@ -33,7 +33,7 @@ $ajax_base_url = JRoute::_('index.php');
     </div>
     <?php } else { ?>
     <div id="billing-address">
-      <div class="checkout-heading"><span><?php echo JText::_('J2STORE_CHECKOUT_BILLING_ADDRESS');; ?></span></div>
+      <div class="checkout-heading"><span><?php echo JText::_('J2STORE_CHECKOUT_BILLING_ADDRESS'); ?></span></div>
       <div class="checkout-content"></div>
     </div>
     <?php } ?>

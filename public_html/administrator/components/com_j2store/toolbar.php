@@ -186,8 +186,8 @@ class J2StoreToolbar extends F0FToolbar
 	{
 		if(J2Store::isPro()) {
 			parent::onBrowse();
-			JToolbarHelper::custom('history','icon icon-list','',JText::_('J2STORE_VOUCHER_HISTORY'));
-			JToolbarHelper::custom('send','icon icon-mail','',JText::_('J2STORE_VOUCHER_SEND'));
+			JToolbarHelper::custom('history','list','',JText::_('J2STORE_VOUCHER_HISTORY'));
+			JToolbarHelper::custom('send','mail','',JText::_('J2STORE_VOUCHER_SEND'));
 		}else {
 			$this->noToolbar();
 		}
