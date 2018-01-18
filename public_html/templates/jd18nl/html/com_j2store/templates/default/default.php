@@ -17,6 +17,18 @@ $this->template = JFactory::getApplication()->getTemplate();
 require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
+// Get the category description
+$categoryId = $this->input->get('catid');
+
+if (is_array($categoryId))
+{
+	$categoryId = reset($categoryId);
+}
+
+$options    = array();
+$categories = JCategories::getInstance('Content', $options);
+$category   = $categories->get($categoryId);
+
 $title       = $this->escape($this->params->get('page_heading'));
 echo JLayouts::render('template.content.header', array('title' => $title));
 ?>
@@ -30,7 +42,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 			<h1> <?php echo $this->escape($this->params->get('page_heading')); ?> </h1>
 		</div>
 	<?php endif; ?>
-
+	<div class="category_description"><?php echo $category->description; ?></div>
 	<div class="row-fluid">
 		<?php
 		//make sure filter is enable
