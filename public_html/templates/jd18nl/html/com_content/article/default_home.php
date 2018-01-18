@@ -121,7 +121,7 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
     <div class="container">
         <div class="content content__payoff">
             <h2><?php echo JLayouts::icon('vernieuwde'); ?>
-                De Joomla dagen 2018</h2>
+                De JoomlaDagen 2018</h2>
             <h3><?php echo $this->item->title; ?></h3>
 			<?php echo $this->item->text; ?>
         </div>
