@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0" type="plugin" group="j2store" method="upgrade">
     <name>Discount Rules</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <creationDate>JAN 2018</creationDate>
     <author>Alagesan</author>
     <authorEmail>supports@j2store.org</authorEmail>
@@ -25,10 +25,6 @@
                 <field name="discount_note" type="customnotice"
                        label="J2STORE_APP_DISCOUNT_RULE_CUSTOM_NOTE"
                        addfieldpath="/administrator/components/com_j2store/models/fields"
-                />
-                <field name="discount_mothods" type="discountmethods"
-                       label="J2STORE_APP_DISCOUNT_RULE_METHODS"
-                       addfieldpath="/plugins/j2store/app_discountrules/app_discountrules/fields"
                 />
             </fieldset>
         </fields>
