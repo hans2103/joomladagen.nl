@@ -16,9 +16,11 @@ if (!empty($list))
 		echo '<div class="grid__item">';
 		$images = json_decode($item->images);
 		$data   = array(
-			'title' => $item->title,
-			'image' => $images->image_intro ,
-			'link'  => $item->link
+			'title'               => $item->title,
+			'image'               => $images->image_intro,
+			'link'                => $item->link,
+			'category_title'      => $item->category_title,
+			'displayCategoryLink' => $item->displayCategoryLink
 		);
 		echo Jlayouts::render('template.content.block-item', $data);
 		echo '</div>';

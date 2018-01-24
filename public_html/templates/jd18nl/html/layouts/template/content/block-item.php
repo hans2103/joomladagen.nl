@@ -39,9 +39,17 @@ require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 	</div>
 	<?php if(isset($displayData['link'])) : ?>
 	<?php $link = $displayData['link']; ?>
-	<?php $text = isset($displayData['linktext']) ? $displayData['linktext'] : 'Lees meer'; ?>
+	<?php $text = isset($displayData['linktext']) ? $displayData['linktext'] : 'Lees artikel'; ?>
 	<div class="block__action">
 		<p class="readmore"><?php echo JHtml::_('link', $link, $text, array('class' => 'readmore__link')); ?></p>
 	</div>
+	<?php endif; ?>
+
+	<?php if(isset($displayData['displayCategoryLink'])) : ?>
+    <div class="block__action">
+	    <?php $link = $displayData['displayCategoryLink']; ?>
+	    <?php $text = isset($displayData['category_title']) ? 'Meer ' . strtolower($displayData['category_title']) : 'Naar overzicht'; ?>
+        <p class="readmore"><?php echo JHtml::_('link', $link, $text, array('class' => 'readmore__link')); ?></p>
+    </div>
 	<?php endif; ?>
 </div>
