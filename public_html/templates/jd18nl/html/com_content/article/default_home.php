@@ -41,89 +41,89 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
     </div>
 </header>
 
-<?php if(false) : ?>
-<div class="section section--blue section__numbers">
-    <div class="container">
-        <div class="numbers__wrapper">
-            <div class="numbers" id="clockdiv">
-                <div class="numbers__item">
-                    <div class="numbers__item-head">Zo lang nog tot de JoomlaDagen 2018: </div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head days"></span>
-                    <div class="numbers__item-label">dagen</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head hours"></span>
-                    <div class="numbers__item-label">uren</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head minutes"></span>
-                    <div class="numbers__item-label">min</div>
-                </div>
-                <div class="numbers__item">
-                    <span class="numbers__item-head seconds"></span>
-                    <div class="numbers__item-label">sec</div>
-                </div>
-                <script>
-                    function getTimeRemaining(endtime) {
-                        var t = Date.parse(endtime) - Date.parse(new Date());
-                        var seconds = Math.floor((t / 1000) % 60);
-                        var minutes = Math.floor((t / 1000 / 60) % 60);
-                        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-                        var days = Math.floor(t / (1000 * 60 * 60 * 24));
-                        return {
-                            'total': t,
-                            'days': days,
-                            'hours': hours,
-                            'minutes': minutes,
-                            'seconds': seconds
-                        };
-                    }
-
-                    function initializeClock(id, endtime) {
-                        var clock = document.getElementById(id);
-                        var daysSpan = clock.querySelector('.days');
-                        var hoursSpan = clock.querySelector('.hours');
-                        var minutesSpan = clock.querySelector('.minutes');
-                        var secondsSpan = clock.querySelector('.seconds');
-
-                        function updateClock() {
-                            var t = getTimeRemaining(endtime);
-
-                            if (t.total <= 0) {
-                                addClass('#' + id, 'hidden');
-                                return;
-                            }
-
-                            daysSpan.innerHTML = t.days;
-                            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
-                            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
-                            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
-
-                            if (t.total <= 0) {
-                                clearInterval(timeinterval);
-                            }
+<?php if (false) : ?>
+    <div class="section section--blue section__numbers">
+        <div class="container">
+            <div class="numbers__wrapper">
+                <div class="numbers" id="clockdiv">
+                    <div class="numbers__item">
+                        <div class="numbers__item-head">Zo lang nog tot de JoomlaDagen 2018:</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head days"></span>
+                        <div class="numbers__item-label">dagen</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head hours"></span>
+                        <div class="numbers__item-label">uren</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head minutes"></span>
+                        <div class="numbers__item-label">min</div>
+                    </div>
+                    <div class="numbers__item">
+                        <span class="numbers__item-head seconds"></span>
+                        <div class="numbers__item-label">sec</div>
+                    </div>
+                    <script>
+                        function getTimeRemaining(endtime) {
+                            var t = Date.parse(endtime) - Date.parse(new Date());
+                            var seconds = Math.floor((t / 1000) % 60);
+                            var minutes = Math.floor((t / 1000 / 60) % 60);
+                            var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+                            var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                            return {
+                                'total': t,
+                                'days': days,
+                                'hours': hours,
+                                'minutes': minutes,
+                                'seconds': seconds
+                            };
                         }
 
-                        updateClock();
-                        var timeinterval = setInterval(updateClock, 1000);
-                    }
+                        function initializeClock(id, endtime) {
+                            var clock = document.getElementById(id);
+                            var daysSpan = clock.querySelector('.days');
+                            var hoursSpan = clock.querySelector('.hours');
+                            var minutesSpan = clock.querySelector('.minutes');
+                            var secondsSpan = clock.querySelector('.seconds');
 
-                    var deadline = new Date('04/13/2018 09:00:00');
-                    initializeClock('clockdiv', deadline);
-                </script>
+                            function updateClock() {
+                                var t = getTimeRemaining(endtime);
+
+                                if (t.total <= 0) {
+                                    addClass('#' + id, 'hidden');
+                                    return;
+                                }
+
+                                daysSpan.innerHTML = t.days;
+                                hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                                minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                                secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                                if (t.total <= 0) {
+                                    clearInterval(timeinterval);
+                                }
+                            }
+
+                            updateClock();
+                            var timeinterval = setInterval(updateClock, 1000);
+                        }
+
+                        var deadline = new Date('04/13/2018 09:00:00');
+                        initializeClock('clockdiv', deadline);
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <?php endif; ?>
 <div class="section section--blue section__numbers">
     <div class="container">
         <div class="numbers__wrapper">
             <div class="numbers" id="clockdiv">
                 <div class="numbers__item">
-                    <div class="numbers__item-head">Zo lang nog tot de ticketverkoop: </div>
+                    <div class="numbers__item-head">Zo lang nog tot de ticketverkoop:</div>
                 </div>
                 <div class="numbers__item">
                     <span class="numbers__item-head days"></span>
@@ -264,47 +264,45 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
                 <p class="module__title module__title--h2">Nieuws</p>
             </div>
             <div class="module__content">
-                <div class="grid--flex grid-2-1">
-                    <div class="grid__item grid--flex grid--1-1-1">
-						<?php
-						// Module params
-						$moduleparams = array(
-							'count'            => 2,
-							'catid'            => 7,
-							'article_ordering' => 'a.ordering',
-							'style'            => 'none',
-							'layout'           => 'block',
-							'header_tag'       => 'h2'
-						);
+                <div class="grid grid--flex grid--1-1-1">
+					<?php
+					// Module params
+					$moduleparams = array(
+						'count'            => 2,
+						'catid'            => 7,
+						'article_ordering' => 'a.ordering',
+						'style'            => 'none',
+						'layout'           => 'block',
+						'header_tag'       => 'h2'
+					);
 
-						// Load module and add params
-						$module            = JModuleHelper::getModule('mod_articles_category');
-						$module->showtitle = 0;
-						$module->params    = json_encode($moduleparams);
+					// Load module and add params
+					$module            = JModuleHelper::getModule('mod_articles_category');
+					$module->showtitle = 0;
+					$module->params    = json_encode($moduleparams);
 
-						// Render module
-						echo JFactory::getDocument()->loadRenderer('module')->render($module);
-						?>
-						<?php
-						// Module params
-						$moduleparams = array(
-							'count'            => 1,
-							'catid'            => 33,
-							'article_ordering' => 'random',
-							'style'            => 'none',
-							'layout'           => 'block',
-							'header_tag'       => 'h2'
-						);
+					// Render module
+					echo JFactory::getDocument()->loadRenderer('module')->render($module);
+					?>
+					<?php
+					// Module params
+					$moduleparams = array(
+						'count'            => 1,
+						'catid'            => 33,
+						'article_ordering' => 'random',
+						'style'            => 'none',
+						'layout'           => 'block',
+						'header_tag'       => 'h2'
+					);
 
-						// Load module and add params
-						$module            = JModuleHelper::getModule('mod_articles_category');
-						$module->showtitle = 0;
-						$module->params    = json_encode($moduleparams);
+					// Load module and add params
+					$module            = JModuleHelper::getModule('mod_articles_category');
+					$module->showtitle = 0;
+					$module->params    = json_encode($moduleparams);
 
-						// Render module
-						echo JFactory::getDocument()->loadRenderer('module')->render($module);
-						?>
-                    </div>
+					// Render module
+					echo JFactory::getDocument()->loadRenderer('module')->render($module);
+					?>
                 </div>
             </div>
         </div>
