@@ -29,20 +29,19 @@ $options    = array();
 $categories = JCategories::getInstance('Content', $options);
 $category   = $categories->get($categoryId);
 
-$title       = $this->escape($this->params->get('page_heading'));
-echo JLayouts::render('template.content.header', array('title' => $title));
+$array = array(
+	'title' => JHtml::_('content.prepare', $this->params->get('page_heading')),
+	'intro' => (($category->description) ? $category->description : '')
+);
+
+echo JLayouts::render('template.content.header', $array);
+
 ?>
 <div itemscope itemtype="https://schema.org/BreadCrumbList" class="j2store-product-list bs2"   data-link="<?php echo JRoute::_($this->active_menu->link.'&Itemid='.$this->active_menu->id);?>">
 
 	<?php echo J2Store::plugin()->eventWithHtml('BeforeViewProductListDisplay',array($this->products));?>
 
 	<?php echo J2Store::modules()->loadposition('j2store-product-list-top'); ?>
-	<?php if ($this->params->get('show_page_heading')) : ?>
-		<div class="page-header">
-			<h1> <?php echo $this->escape($this->params->get('page_heading')); ?> </h1>
-		</div>
-	<?php endif; ?>
-	<div class="category_description"><?php echo $category->description; ?></div>
 	<div class="row-fluid">
 		<?php
 		//make sure filter is enable
