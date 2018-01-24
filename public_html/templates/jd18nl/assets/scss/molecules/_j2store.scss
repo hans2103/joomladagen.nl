@@ -221,4 +221,8 @@ ul.j2store-cart-list {
 
 .j2store-view-back-button {
   @include spacing(bottom, margin, 1);
+
+  i {
+    top: 4px;
+  }
 }
