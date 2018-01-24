@@ -35,8 +35,8 @@ $images = json_decode($displayData->images);
 			<?php if ($params->get('show_category')) : ?>
 				<span class="article__category"><?php echo $this->escape($displayData->category_title); ?></span>
 			<?php endif; ?>
-			<?php if ($params->get('show_create_date')) : ?>
-				<?php echo JLayoutHelper::render('template.content.create_date', array('date' => $displayData->created, 'format' => 'DATE_FORMAT_CC1', 'class' => 'article__date')); ?>
+			<?php if ($params->get('show_publish_date')) : ?>
+				<?php echo JLayoutHelper::render('template.content.publish_date', array('date' => $displayData->created, 'format' => 'DATE_FORMAT_CC1', 'class' => 'article__date')); ?>
 			<?php endif; ?>
 		</div>
 
