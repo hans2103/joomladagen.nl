@@ -13,7 +13,7 @@ $this->template = JFactory::getApplication()->getTemplate();
 require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 
 ?>
-<div class="block__item">
+<div class="block__item block__item--flex">
     <?php $link = ''; ?>
 
 	<?php if(isset($displayData['link'])) : ?>

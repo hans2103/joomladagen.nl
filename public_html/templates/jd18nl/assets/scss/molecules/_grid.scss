@@ -15,12 +15,12 @@
   @include clearfix;
   @include spacing(bottom, margin, -1);
   display: block;
-}
 
-.grid--flex {
-  @include clearfix(reset);
-  display: flex;
-  flex-wrap: wrap;
+  &.grid--flex {
+    @include clearfix(reset);
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .grid__item {
@@ -32,6 +32,10 @@
       margin-bottom: 0;
     }
   }
+}
+
+.grid__item--flex {
+  display: flex;
 }
 
 

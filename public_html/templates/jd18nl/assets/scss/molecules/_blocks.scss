@@ -1,0 +1,13 @@
+.block__item--flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.block__action {
+  margin-top: auto;
+  @include spacing(top, padding, 0.5);
+
+  & + & {
+    margin-top: unset;
+  }
+}

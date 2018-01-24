@@ -268,16 +268,17 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
 					<?php
 					// Module params
 					$moduleparams = array(
-						'count'            => 2,
-						'catid'            => 7,
-						'article_ordering' => 'a.ordering',
-						'style'            => 'none',
-						'layout'           => 'block',
-						'header_tag'       => 'h2'
+						'count'                      => 2,
+						'catid'                      => 7,
+						'article_ordering'           => 'publish_up',
+						'article_ordering_direction' => 'DESC',
+						'style'                      => 'none',
+						'layout'                     => 'block',
+						'header_tag'                 => 'h2'
 					);
 
 					// Load module and add params
-					$module            = JModuleHelper::getModule('mod_articles_category');
+					$module = JModuleHelper::getModule('mod_articles_category');
 					$module->showtitle = 0;
 					$module->params    = json_encode($moduleparams);
 

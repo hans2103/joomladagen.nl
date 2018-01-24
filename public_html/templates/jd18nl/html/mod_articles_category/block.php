@@ -13,7 +13,7 @@ if (!empty($list))
 {
 	foreach ($list as $item)
 	{
-		echo '<div class="grid__item">';
+		echo '<div class="grid__item grid__item--flex">';
 		$images = json_decode($item->images);
 		$data   = array(
 			'title'               => $item->title,
