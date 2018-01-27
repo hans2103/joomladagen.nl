@@ -6,9 +6,7 @@ module.exports = function(grunt) {
     require('time-grunt')(grunt);
 
     // load time-grunt and all grunt plugins found in the package.json
-    require('jit-grunt')(grunt, {
-        versioncheck: 'grunt-version-check'
-    });
+    require('jit-grunt')(grunt);
 
     var options = {
         // Project settings
@@ -27,21 +25,28 @@ module.exports = function(grunt) {
     // Load grunt configurations automatically
     var configs = require('load-grunt-configs')(grunt, options);
 
-    // Define the configuration for all the tasks
+    // grunt config
     grunt.initConfig(configs);
 
     // The dev task will be used during development
-    grunt.registerTask('default', [
-        'shell',
-        'copy',
-        'modernizr',
-        'browserSync',
-        'watch'
-    ]);
+    grunt.registerTask('default', ['modernizr', 'browserSync', 'watch']);
 
-    // The js task will be used during development
-    grunt.registerTask('dev', [
-        'watch:concat'
-    ]);
+    // JS only
+    grunt.registerTask('js', ['watch:concat']);
+
+    //
+    // // The dev task will be used during development
+    // grunt.registerTask('default', [
+    //     'shell',
+    //     'copy',
+    //     'modernizr',
+    //     'browserSync',
+    //     'watch'
+    // ]);
+    //
+    // // The js task will be used during development
+    // grunt.registerTask('dev', [
+    //     'watch:concat'
+    // ]);
 
 };

@@ -1,9 +1,9 @@
 'use strict';
 
-// Add vendor prefixed styles
+// Autoprefixer
 module.exports = {
     options: {
-        browsers: ['> 5%', 'last 2 versions', 'ie 11']
+        browsers: ['> 5%', 'last 2 versions']
     },
     files: {
         expand: true,

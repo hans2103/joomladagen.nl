@@ -10,7 +10,7 @@ module.exports = {
             '<%= paths.assets %>/scss/*.scss',
             '<%= paths.assets %>/scss/**/*.scss'
         ],
-        tasks: ['sass', 'cssmin', 'autoprefixer'],
+        tasks: ['sass', 'autoprefixer', 'cssmin'],
         options: {
             interrupt: true,
             atBegin: true

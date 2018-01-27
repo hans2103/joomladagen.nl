@@ -1,12 +1,13 @@
 'use strict';
 
-//
+// SASS
 module.exports = {
-    dist: {
+    site: {
         options: {
             includePaths: [
-                require("node-normalize-scss").includePaths
+                'node_modules'
             ],
+            outputStyle: 'expanded',
             sourceMap: false
         },
         files: {

@@ -1,15 +1,18 @@
 'use strict';
 
-//
+// CSS Minify and clean
 module.exports = {
     options: {
         roundingPrecision: -1,
         sourceMap: false
     },
-    site: {
-        files: {
-            '<%= paths.template %>/css/style.css': '<%= paths.template %>/css/style.css',
-            '<%= paths.template %>/css/font.css': '<%= paths.template %>/css/font.css'
-        }
+    dist: {
+        files: [{
+            expand: true,
+            cwd: '<%= paths.template %>/css',
+            src: ['*.css', '!*.min.css'],
+            dest: '<%= paths.template %>/css',
+            ext: '.min.css'
+        }]
     }
 };
