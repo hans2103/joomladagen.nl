@@ -18,6 +18,8 @@
             <field name="override_page_title" type="hidden" class="js-remove" />
             <field name="expand_og" type="hidden" class="js-remove" />
             <field name="page_title" type="hidden" class="js-remove" />
+            <field name="override_canonical" type="hidden" class="js-remove" />
+            <field name="canonical" type="hidden" class="js-remove" />
             <!-- End fake fields -->
 
             <field

@@ -2,12 +2,12 @@
 <extension version="3.8" type="plugin" group="system" method="upgrade">
     <name>PLG_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>13 December 2017</creationDate>
-    <copyright>Copyright (C) 2016 - 2017 Perfect Web Team</copyright>
+    <creationDate>25 January 2018</creationDate>
+    <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <description>PLG_PWTSEO_XML_DESCRIPTION</description>
 
 	<files>
@@ -41,6 +41,11 @@
             <file charset="utf8" driver="mysql">sql/uninstall.mysql.sql</file>
         </sql>
     </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/</schemapath>
+        </schemas>
+    </update>
 
 	<config>
 		<fields name="params">
@@ -83,6 +88,22 @@
                     type="list"
                     label="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_LABEL"
                     description="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_DESC"
+                    filter="intval"
+                    size="1"
+                    default="1" >
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+                <field
+                    name="set_canonical"
+                    type="list"
+                    label="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_DESC"
                     filter="intval"
                     size="1"
                     default="1" >

@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -17,6 +17,15 @@ defined('_JEXEC') or die;
  */
 class Pkg_PwtSEOInstallerScript
 {
+	/**
+	 * The last version where there was a change to the scoring. This updates the flag_outdated to show the user that the score is outdated
+	 *
+	 * @var   string
+	 *
+	 * @since 1.0.2
+	 */
+	private $lastScoreChange = '1.0.1.0';
+
 	/**
 	 * Method to run before an install/update/uninstall method
 	 *
@@ -84,5 +93,30 @@ class Pkg_PwtSEOInstallerScript
 			);
 
 		$db->setQuery($query)->execute();
+
+		if ($type === 'update')
+		{
+			$query
+				->clear()
+				->select('COUNT(*)')
+				->from($db->quoteName('#__plg_pwtseo', 'seo'))
+				->where('INET_ATON(CONCAT(' . $db->quoteName('version') . ', ".0")) < INET_ATON(' . $db->quote($this->lastScoreChange) . ')');
+
+			$bHasOutdatedScores = $db->setQuery($query)->loadResult();
+
+			if ($bHasOutdatedScores > 0)
+			{
+				$app = JFactory::getApplication();
+				$app->enqueueMessage(JText::sprintf('COM_PWTSEO_OUTDATED_SCORES'), 'warning');
+
+				$query
+					->clear()
+					->update($db->quoteName('#__plg_pwtseo', 'seo'))
+					->set($db->quoteName('flag_outdated') . ' = 1')
+					->where('INET_ATON(CONCAT(' . $db->quoteName('version') . ', ".0")) < INET_ATON(' . $db->quote($this->lastScoreChange) . ')');
+
+				$db->setQuery($query)->execute();
+			}
+		}
 	}
 }

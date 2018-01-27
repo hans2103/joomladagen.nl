@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     FOF
- * @copyright   2010-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license     GNU GPL version 2 or later
  */
 
@@ -667,7 +667,7 @@ abstract class FEFHelperSelect
 			$attribs = ArrayHelper::toString($attribs);
 		}
 
-		$id_text = $idtag ?: $name;
+		$id_text = empty($idtag) ? $name : $idtag;
 
 		$html = '';
 

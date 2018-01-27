@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <install version="2.0" type="plugin" plugin="imgmanager_ext" editable="1" core="0" row="4">
     <name>WF_IMGMANAGER_EXT_TITLE</name>
-    <version>2.6.23</version>
-    <creationDate>07-12-2017</creationDate>
+    <version>2.6.24</version>
+    <creationDate>24-01-2018</creationDate>
     <author>Ryan Demmer</author>
     <authorEmail>info@joomlacontenteditor.net</authorEmail>
     <authorUrl>http://www.joomlacontenteditor.net/</authorUrl>
-    <copyright>Copyright (C) 2006 - 2017 Ryan Demmer. All rights reserved</copyright>
+    <copyright>Copyright (C) 2006 - 2018 Ryan Demmer. All rights reserved</copyright>
     <license>GNU/GPL Version 2 or later - http://www.gnu.org/licenses/gpl-2.0.html</license>
     <description>WF_IMGMANAGER_EXT_DESC</description>
     <icon>imgmanager_ext</icon>
@@ -152,6 +152,10 @@
             <option value="0">WF_OPTION_NO</option>
         </param>
         <param name="tabs_advanced" type="radio" default="1" label="WF_IMGMANAGER_PARAM_TAB_ADVANCED" description="WF_IMGMANAGER_PARAM_TAB_ADVANCED_DESC">
+            <option value="1">WF_OPTION_YES</option>
+            <option value="0">WF_OPTION_NO</option>
+        </param>
+        <param name="tabs_responsive" type="radio" default="1" label="WF_IMGMANAGER_PARAM_TAB_RESPONSIVE" description="WF_IMGMANAGER_PARAM_TAB_RESPONSIVE_DESC">
             <option value="1">WF_OPTION_YES</option>
             <option value="0">WF_OPTION_NO</option>
         </param>

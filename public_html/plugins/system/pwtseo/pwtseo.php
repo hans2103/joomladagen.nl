@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -239,6 +239,7 @@ class PlgSystemPWTSEO extends JPlugin
 					'requirements_subheadings_good'                  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_GOOD'),
 					'requirements_first_paragraph_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_BAD'),
 					'requirements_first_paragraph_good'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_GOOD'),
+					'requirements_density_none'                      => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_NONE'),
 					'requirements_density_too_few_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_FEW_BAD'),
 					'requirements_density_resulting_too_few_bad'     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_FEW_BAD'),
 					'requirements_density_too_much_bad'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_MUCH_BAD'),
@@ -292,7 +293,8 @@ class PlgSystemPWTSEO extends JPlugin
 					'requirements_metadesc_unique_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
 					'polling_interval'                               => (int) $this->params->get('poll_interval', 1) ?: 1,
 					'show_counters'                                  => (int) $this->params->get('show_counters', 1),
-					'found_resulting_page'                           => JText::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE')
+					'found_resulting_page'                           => JText::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE'),
+					'resulting_page_unreachable'                     => JText::_('PLG_SYSTEM_PWTSEO_RESULTING_PAGE_UNREACHABLE')
 				)
 			);
 		}
@@ -360,11 +362,13 @@ class PlgSystemPWTSEO extends JPlugin
 						'pwtseo.adv_open_graph',
 						'pwtseo.override_page_title',
 						'pwtseo.page_title',
-						'pwtseo.expand_og'
+						'pwtseo.expand_og',
+						'pwtseo.override_canonical',
+						'pwtseo.canonical'
 					)
 				)
 			)
-			->from($this->db->qn('#__plg_pwtseo', 'pwtseo'))
+			->from($this->db->quoteName('#__plg_pwtseo', 'pwtseo'))
 			->where('pwtseo.context_id = ' . $iArticleId);
 
 		try
@@ -442,6 +446,14 @@ class PlgSystemPWTSEO extends JPlugin
 			$aSEO['context_id'] = $article->id;
 
 			$oInput = (object) $aSEO;
+
+			$cPlugin = \JPluginHelper::getPlugin('system', 'pwtseo');
+			$extension = \JTable::getInstance('extension');
+			$extension->load($cPlugin->id);
+
+			$rManifest = new \Joomla\Registry\Registry($extension->manifest_cache);
+
+			$oInput->version = $rManifest->get('version');
 
 			$iId = $this->getHasSEOData($article->id);
 
@@ -534,6 +546,28 @@ class PlgSystemPWTSEO extends JPlugin
 					JFactory::getDocument()->setTitle($title);
 				}
 
+				if ($aSEO['override_canonical'])
+				{
+					switch ((int) $aSEO['override_canonical'])
+					{
+						// Self referencing
+						case 2:
+							$this->setCanonical(JUri::getInstance());
+							break;
+						// Custom
+						case 3:
+							$this->setCanonical($aSEO['canonical']);
+							break;
+						// Use plugin settings
+						case 1:
+						default:
+							if ($this->params->get('set_canonical', 1))
+							{
+								$this->setCanonical(JUri::getInstance());
+							}
+					}
+				}
+
 				if ($this->params->get('advanced_mode'))
 				{
 					// Handle repeatable field
@@ -617,7 +651,26 @@ class PlgSystemPWTSEO extends JPlugin
 					}
 				}
 			}
+			else
+			{
+				if ($this->params->get('set_canonical', 1))
+				{
+					$this->setCanonical(JUri::getInstance());
+				}
+			}
 		}
+	}
+
+	/**
+	 * Method to set the canonical url for the current page.
+	 *
+	 * @param   string $sUrl The url to set as canonical
+	 *
+	 * @since   1.0.2
+	 */
+	protected function setCanonical($sUrl)
+	{
+		JFactory::getDocument()->addHeadLink(htmlspecialchars($sUrl), 'canonical');
 	}
 
 	/**
@@ -719,18 +772,60 @@ class PlgSystemPWTSEO extends JPlugin
 
 		$aResponse = array();
 		$aData     = $this->app->input->get('jform', array(), 'array');
+		$iId       = isset($aData['id']) ?
+			(int) $aData['id'] : (int) JUri::getInstance($this->app->input->get('form_url', '', 'raw'))->getQuery(true)['id'];
 
 		require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
 		$aResponse['url']
 			= substr(JUri::root(), 0, -1) .
-			JRoute::_(ContentHelperRoute::getArticleRoute((int) $aData['id'], (int) $aData['catid']), false);
+			JRoute::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']), false);
+
+		// Here we modify the alias and get the route based on the given alias
+		if ($iId > 0)
+		{
+			$db = JFactory::getDbo();
+			$q  = $db->getQuery(true);
+
+			$q
+				->select($db->quoteName('a.alias'))
+				->from($db->quoteName('#__content', 'a'))
+				->where('a.id = ' . $iId);
+
+			try
+			{
+				$sOriginalAlias = $db->setQuery($q)->loadResult();
+				$sModifiedAlias = JFilterOutput::stringURLUnicodeSlug($aData['alias']);
+
+				$oTmpAlias = (object) array(
+					'id'    => $iId,
+					'alias' => $sModifiedAlias
+				);
+
+				$db->updateObject('#__content', $oTmpAlias, array('id'));
+
+				// We need to modify the url to circumvent the caching mechanism of the Router
+				$sUniq = uniqid('pwtseo') . '=1';
+				$aResponse['new_url']
+					= substr(JUri::root(), 0, -1) .
+					JRoute::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']) . '&' . $sUniq, false);
+
+				$aResponse['new_url'] = str_replace(array('?' . $sUniq, $sUniq), '', $aResponse['new_url']);
+
+				// Revert the change
+				$oTmpAlias->alias = $sOriginalAlias;
+				$db->updateObject('#__content', $oTmpAlias, array('id'));
+			}
+			catch (Exception $e)
+			{
+			}
+		}
 
 		$aResponse['reachable'] = $this->isReachable($aResponse['url']);
-		$aResponse['count']     = $this->findUsages($aData['seo']['focus_word'], (int) $aData['id']);
+		$aResponse['count']     = $this->findUsages($aData['seo']['focus_word'], $iId);
 
 		$aResponse['page_title_unique']    = $this->isTitleUnique($aData['title']);
-		$aResponse['page_metadesc_unique'] = $this->isMetaDescriptionUnique($aData['metadesc']);
+		$aResponse['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
 
 		return (object) $aResponse;
 	}

@@ -2,12 +2,12 @@
 <extension version="3.8" type="component" method="upgrade">
     <name>COM_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>13 December 2017</creationDate>
-    <copyright>Copyright (C) 2016 - 2017 Perfect Web Team</copyright>
+    <creationDate>25 January 2018</creationDate>
+    <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <description>COM_PWTSEO_XML_DESCRIPTION</description>
 
     <!-- Runs on install -->
@@ -52,6 +52,7 @@
             <folder>models</folder>
             <folder>sql</folder>
             <folder>views</folder>
+            <folder>controllers</folder>
         </files>
     </administration>
 </extension>

@@ -3,6 +3,39 @@
     <fields name="seo">
 
         <fieldset name="advanced_og">
+            <field type="spacer" name="canonical_word_spacer" hr="true" />
+
+            <field
+                    name="override_canonical"
+                    type="list"
+                    label="PLG_SYSTEM_PWTSEO_FORM_OVERRIDE_CANONICAL_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_FORM_OVERRIDE_CANONICAL_DESC"
+                    class=""
+                    filter="intval"
+                    size="1"
+                    default="1" >
+                <option value="1">
+                    PLG_SYSTEM_PWTSEO_FORM_PLUGIN_SETTINGS_LABEL
+                </option>
+                <option value="0">
+                    JNONE
+                </option>
+                <option value="2">
+                    PLG_SYSTEM_PWTSEO_FORM_CANONICAL_SELF_LABEL
+                </option>
+                <option value="3">
+                    PLG_SYSTEM_PWTSEO_FORM_CANONICAL_CUSTOM_LABEL
+                </option>
+            </field>
+
+            <field
+                    type="url"
+                    name="canonical"
+                    label="PLG_SYSTEM_PWTSEO_FORM_CANONICAL_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_FORM_CANONICAL_DESC"
+                    showon="override_canonical:3"
+            />
+
             <field type="spacer" name="adv_open_graph_spacer" class="pwtseo__opengraph" label="PLG_SYSTEM_PWTSEO_FORM_SPACER_OPENGRAPH" />
 
             <field name="adv_open_graph"

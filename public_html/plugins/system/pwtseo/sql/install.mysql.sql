@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS `#__plg_pwtseo` (
   `override_page_title` TINYINT(1) DEFAULT 0,
   `expand_og` TINYINT(1) DEFAULT 0,
   `page_title` VARCHAR(255) NOT NULL DEFAULT '',
+  `override_canonical` TINYINT(1) DEFAULT 0,
+  `canonical` VARCHAR(255) NOT NULL DEFAULT '',
+  `version` VARCHAR(25) NOT NULL DEFAULT '1.0.2',
+  `flag_outdated` TINYINT(1) DEFAULT 0,
 
   PRIMARY KEY (`id`)
 );

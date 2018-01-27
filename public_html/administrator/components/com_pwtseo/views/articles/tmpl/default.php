@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -107,9 +107,13 @@ JHtml::_('formbehavior.chosen', 'select');
                         </td>
                         <td class="">
 							<?php if ($item->pwtseo_score): ?>
-                                <span class="seoscore seoscore-<?php echo $scoreClass ?>">
-		                            <?php echo $item->pwtseo_score; ?>
+                                <span class="seoscore seoscore-<?php echo $scoreClass ?>"
+                                <?php if ($item->flag_outdated): ?> title="<?php echo JText::_('COM_PWTSEO_FLAGS_OUTDATED_LABEL') ?>" <?php endif; ?>>
+		                            <?php echo $item->pwtseo_score ?>
                                 </span>
+                                <?php if ($item->flag_outdated): ?>
+                                    *
+                                    <?php endif; ?>
 							<?php endif; ?>
                         </td>
                         <td>
@@ -122,6 +126,17 @@ JHtml::_('formbehavior.chosen', 'select');
 				<?php endforeach; ?>
                 </tbody>
             </table>
+            <?php if ($user->authorise('core.edit', 'com_content')) : ?>
+                <?php echo JHtml::_(
+                    'bootstrap.renderModal',
+                    'collapseModal',
+                    array(
+                        'title'  => JText::_('COM_PWTSEO_BATCH_OPTIONS'),
+                        'footer' => $this->loadTemplate('batch_footer'),
+                    ),
+                    $this->loadTemplate('batch_body')
+                ); ?>
+            <?php endif; ?>
 		<?php endif; ?>
     </div>
     <input type="hidden" name="task" value=""/>
