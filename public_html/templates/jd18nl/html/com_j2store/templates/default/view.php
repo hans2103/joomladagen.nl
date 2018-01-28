@@ -46,8 +46,8 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 
                         function qtyBasedTextBox(product_id) {
                             (function ($) {
-                                var qty = $('#j2store-addtocart-form-' + product_id + ' input[name="product_qty"]').val();
-                                var field = '';
+                                var qty = $('#j2store-addtocart-form-' + product_id + ' input[name="product_qty"]').val(),
+                                    field = '';
 
                                 // Hide the options
                                 $('#j2store-addtocart-form-' + product_id + ' [class*="showOption"]').hide().find('input').removeClass('required').prop('required', '').prop('aria-required', 'false');
@@ -65,22 +65,6 @@ echo JLayouts::render('template.content.header', array('title' => $title));
                             })(jQuery);
 
                         }
-
-                        // Check for required name fields
-                        $('.j2store-cart-button').on('click', function (event) {
-	                        var error = false;
-                            $('.naam.bezoeker').each(function (index, item) {
-	                            if ($(item).is(':visible') && $(item).val() === '') {
-	                                $(item).addClass('rsform-error');
-	                                error = true;
-	                            }
-                            });
-
-	                        if (error) {
-	                            event.preventDefault();
-	                            return false;
-                            }
-	                    });
 
                         qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
                     })(jQuery);

@@ -309,13 +309,13 @@ class PWTTemplateHelper
 		HTMLHelper::_('bootstrap.tooltip');
 
 		// Unset unwanted JavaScript
-		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-core.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
 
 		if (self::getPageOption() !== 'com-j2store')
 		{
+			unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-core.js']);
+			unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-more.js']);
 //			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery.min.js']);
 //			unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-noconflict.js']);
 		}
