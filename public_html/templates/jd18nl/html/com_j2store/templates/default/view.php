@@ -29,7 +29,7 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 				<?php echo J2Store::modules()->loadposition('j2store-single-product-top'); ?>
 				<?php if ($this->params->get('item_show_back_to', 0) && isset($this->back_link) && !empty($this->back_link)): ?>
                     <div class="j2store-view-back-button">
-                        <a href="<?php echo $this->back_link; ?>"
+                        <a href="<?php echo $this->back_link; ?>#tickets"
                            class="j2store-product-back-btn btn btn-small btn-info">
                             <i class="fa fa-chevron-left"> </i> <?php echo JText::_('J2STORE_PRODUCT_BACK_TO') . ' ' . $this->back_link_title; ?>
                         </a>
