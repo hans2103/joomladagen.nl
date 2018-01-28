@@ -14,6 +14,15 @@ $messages_above_profile_html = J2Store::plugin()->eventWithHtml('AddMessagesToMy
 // get j2Store Params to determine which bootstrap version we're using - Waseem Sadiq (waseem@bulletprooftemplates.com)
 $J2gridRow = ($this->params->get('bootstrap_version', 2) == 2) ? 'row-fluid' : 'row';
 $J2gridCol = ($this->params->get('bootstrap_version', 2) == 2) ? 'span' : 'col-md-';
+$this->template = JFactory::getApplication()->getTemplate();
+require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
+require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
+
+$array = array(
+	'title' => JText::_('J2STORE_MYPROFILE')
+);
+
+echo JLayouts::render('template.content.header', $array);
 ?>
 <?php if ($this->params->get('show_logout_myprofile', 0)): ?>
 	<?php
@@ -42,7 +51,6 @@ $J2gridCol = ($this->params->get('bootstrap_version', 2) == 2) ? 'span' : 'col-m
         <div class="article__item article__item--shift">
             <div class="j2store">
                 <div class="j2store-order j2store-myprofile">
-                    <h3><?php echo JText::_('J2STORE_MYPROFILE') ?></h3>
 					<?php if ($messages_above_profile_html != '')
 					{
 						?>
