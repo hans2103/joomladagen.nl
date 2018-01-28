@@ -74,7 +74,8 @@
       @include spacing(bottom, margin, 1);
     }
 
-    &.checkout {
+    &.checkout,
+    &.address--edit{
       label {
         width: 40%;
 

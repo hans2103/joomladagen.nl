@@ -135,10 +135,10 @@ class J2StorePopup {
 		}
 
 
-
 		if(JFactory::getApplication()->isSite()){
 			$id = (!empty($options['id'])) ? $options['id'] : '';
-			$class = "zoom";
+			$class = "zoom ";
+			$class .= (!empty($options['class'])) ? $options['class'] : '';
 			$html	= "<a class=\"modal\" href=\"$url\" rel=\"$handler\" >\n";
 			$html 	.= "<span class=\"".$class."\" id=\"".$id."\" >\n";
 			$html   .= "$text\n";

@@ -3291,6 +3291,32 @@ fieldset:last-child,
   background-repeat: no-repeat;
 }
 
+.fa-list-alt {
+  position: relative;
+}
+
+.fa-list-alt:before {
+  position: absolute;
+  content: " ";
+  display: block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16px' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%230a192e' d='M21.8 3c0.4 0 0.8 0.3 0.8 0.8l0 16.5c0 0.4-0.3 0.8-0.7 0.8l-19.5 0c-0.4 0-0.7-0.3-0.7-0.7l0-16.5c0-0.4 0.3-0.7 0.8-0.7l19.5 0m0-1.5l-19.5 0c-1.2 0-2.2 1-2.2 2.3l0 16.5c0 1.2 1 2.3 2.3 2.3l19.5 0c1.2 0 2.3-1 2.3-2.2l0-16.5c0-1.2-1-2.2-2.2-2.2Zm-15.7 4.5c-0.8 0-1.5 0.7-1.5 1.5 0 0.8 0.7 1.5 1.5 1.5 0.8 0 1.5-0.7 1.5-1.5 0-0.8-0.7-1.5-1.5-1.5Zm0 4.5c-0.8 0-1.5 0.7-1.5 1.5 0 0.8 0.7 1.5 1.5 1.5 0.8 0 1.5-0.7 1.5-1.5 0-0.8-0.7-1.5-1.5-1.5Zm0 4.5c-0.8 0-1.5 0.7-1.5 1.5 0 0.8 0.7 1.5 1.5 1.5 0.8 0 1.5-0.7 1.5-1.5 0-0.8-0.7-1.5-1.5-1.5Zm13.5-6.9l0-1.1c0-0.2-0.1-0.3-0.3-0.3l-9.9 0c-0.2 0-0.3 0.1-0.3 0.3l0 1.1c0 0.2 0.1 0.3 0.3 0.3l9.9 0c0.2 0 0.3-0.1 0.3-0.3Zm0 4.5l0-1.1c0-0.2-0.1-0.3-0.3-0.3l-9.9 0c-0.2 0-0.3 0.1-0.3 0.3l0 1.1c0 0.2 0.1 0.3 0.3 0.3l9.9 0c0.2 0 0.3-0.1 0.3-0.3Zm0 4.5l0-1.1c0-0.2-0.1-0.3-0.3-0.3l-9.9 0c-0.2 0-0.3 0.1-0.3 0.3l0 1.1c0 0.2 0.1 0.3 0.3 0.3l9.9 0c0.2 0 0.3-0.1 0.3-0.3Z'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.fa-print {
+  position: relative;
+}
+
+.fa-print:before {
+  position: absolute;
+  content: " ";
+  display: block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16px' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%230a192e' d='M19.5 9l0-5.2c0-0.3-0.1-0.6-0.3-0.8l-2.7-2.7c-0.2-0.2-0.5-0.3-0.8-0.3l-10 0c-0.6 0-1.1 0.5-1.1 1.1l0 7.9c-2.5 0-4.5 2-4.5 4.5l0 6.4c0 0.6 0.5 1.1 1.1 1.1l3.4 0 0 1.9c0 0.6 0.5 1.1 1.1 1.1l12.8 0c0.6 0 1.1-0.5 1.1-1.1l0-1.9 3.4 0c0.6 0 1.1-0.5 1.1-1.1l0-6.4c0-2.5-2-4.5-4.5-4.5Zm-13.5-7.5l9.5 0 2.5 2.5 0 8 -12 0 0-10.5Zm12 21l-12 0 0-4.5 12 0 0 4.5Zm4.5-3l-3 0 0-1.9c0-0.6-0.5-1.1-1.1-1.1l-12.7 0c-0.6 0-1.1 0.5-1.1 1.1l0 1.9 -3 0 0-6c0-1.7 1.3-3 3-3l0 1.9c0 0.6 0.5 1.1 1.1 1.1l12.8 0c0.6 0 1.1-0.5 1.1-1.1l0-1.9c1.7 0 3 1.3 3 3l0 6Zm-1.3-5.2c0 0.5-0.4 0.9-0.9 0.9 -0.5 0-0.9-0.4-0.9-0.9 0-0.5 0.4-0.9 0.9-0.9 0.5 0 0.9 0.4 0.9 0.9Z'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .fa-shoppingcart {
   position: relative;
 }
@@ -3901,20 +3927,25 @@ fieldset:last-child,
   }
 }
 
-.option-com-j2store .bs2.checkout label,
-.option-com-j2store .j2store.checkout label {
+.option-com-j2store .bs2.checkout label, .option-com-j2store .bs2.address--edit label,
+.option-com-j2store .j2store.checkout label,
+.option-com-j2store .j2store.address--edit label {
   width: 40%;
 }
 
 .option-com-j2store .bs2.checkout label + input,
-.option-com-j2store .bs2.checkout label + select,
+.option-com-j2store .bs2.checkout label + select, .option-com-j2store .bs2.address--edit label + input,
+.option-com-j2store .bs2.address--edit label + select,
 .option-com-j2store .j2store.checkout label + input,
-.option-com-j2store .j2store.checkout label + select {
+.option-com-j2store .j2store.checkout label + select,
+.option-com-j2store .j2store.address--edit label + input,
+.option-com-j2store .j2store.address--edit label + select {
   float: right;
 }
 
-.option-com-j2store .bs2.checkout select,
-.option-com-j2store .j2store.checkout select {
+.option-com-j2store .bs2.checkout select, .option-com-j2store .bs2.address--edit select,
+.option-com-j2store .j2store.checkout select,
+.option-com-j2store .j2store.address--edit select {
   height: unset;
 }
 

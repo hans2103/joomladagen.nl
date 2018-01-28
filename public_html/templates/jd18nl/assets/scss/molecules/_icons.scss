@@ -23,6 +23,18 @@
   }
 }
 
+.fa-list-alt {
+  @include pseudo(before) {
+    @include svg-background($icon--list-alt, color(text), 2 * $spacing-s);
+  }
+}
+
+.fa-print {
+  @include pseudo(before) {
+    @include svg-background($icon--print, color(text), 2 * $spacing-s);
+  }
+}
+
 .fa-shoppingcart {
   @include pseudo(before) {
     @include svg-background($icon--shopping-cart, #ffffff, 2 * $spacing-s);
