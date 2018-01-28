@@ -46,7 +46,7 @@ if (isset($this->addresses) && count($this->addresses) > 0) : ?>
 	</p>
 
 <?php endif;  ?>
-<div id="billing-new" style="display: <?php echo ($this->addresses ? 'none' : 'block'); ?>;">
+<div id="billing-new" style="display: <?php echo ($this->addresses ? 'none' : 'block'); ?>;" class="form__pwt">
 
 
 	<?php
@@ -77,7 +77,7 @@ if (isset($this->addresses) && count($this->addresses) > 0) : ?>
 		};
 
 		if(property_exists($this->address, $fieldName) && $fieldName != 'email') {
-			$html = str_replace('['.$fieldName.']',$this->fieldsClass->getFormatedDisplay($oneExtraField,$value, $fieldName,false, $options = '', $test = false, $allFields, $allValues = null).'</br />',$html);
+			$html = str_replace('['.$fieldName.']','<div class="form-group">' . $this->fieldsClass->getFormatedDisplay($oneExtraField,$value, $fieldName,false, $options = '', $test = false, $allFields, $allValues = null).'</div>',$html);
 		}
 		?>
 	<?php endforeach; ?>
@@ -110,8 +110,9 @@ if (isset($this->addresses) && count($this->addresses) > 0) : ?>
 					$onWhat='onchange'; if($oneExtraField->field_type=='radio') $onWhat='onclick';
 					//echo $this->fieldsClass->display($oneExtraField,@$this->address->$fieldName,$fieldName,false);
 					if(property_exists($this->address, $fieldName)) {
+					    $uhtml .= '<div class="form-group">';
 						$uhtml .= $this->fieldsClass->getFormatedDisplay($oneExtraField,$this->address->$fieldName, $fieldName,false, $options = '', $test = false, $allFields, $allValues = null);
-						$uhtml .='<br />';
+						$uhtml .='</div>';
 					}
 					?>
 				<?php endforeach; ?>

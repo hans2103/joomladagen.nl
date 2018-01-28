@@ -92,7 +92,7 @@ echo JLayouts::render('template.content.header', $array);
 						<?php if (property_exists($this->address, $fieldName)):
 							if (($fieldName != 'email'))
 							{
-								$html = str_replace('[' . $fieldName . ']', $this->fieldClass->getFormatedDisplay($oneExtraField, $this->address->$fieldName, $fieldName, false, $options = '', $test = false, $allFields, $allValues = null).'</br>', $html);
+								$html = str_replace('[' . $fieldName . ']', '<div class="form-group">' . $this->fieldClass->getFormatedDisplay($oneExtraField, $this->address->$fieldName, $fieldName, false, $options = '', $test = false, $allFields, $allValues = null).'</div>', $html);
 							}
 
 							?>

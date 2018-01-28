@@ -3935,12 +3935,16 @@ fieldset:last-child,
 }
 
 .option-com-j2store .bs2.checkout label + input,
-.option-com-j2store .bs2.checkout label + select, .option-com-j2store .bs2.address--edit label + input,
+.option-com-j2store .bs2.checkout label + select,
+.option-com-j2store .bs2.checkout label + #zone_id_container, .option-com-j2store .bs2.address--edit label + input,
 .option-com-j2store .bs2.address--edit label + select,
+.option-com-j2store .bs2.address--edit label + #zone_id_container,
 .option-com-j2store .j2store.checkout label + input,
 .option-com-j2store .j2store.checkout label + select,
+.option-com-j2store .j2store.checkout label + #zone_id_container,
 .option-com-j2store .j2store.address--edit label + input,
-.option-com-j2store .j2store.address--edit label + select {
+.option-com-j2store .j2store.address--edit label + select,
+.option-com-j2store .j2store.address--edit label + #zone_id_container {
   float: right;
 }
 

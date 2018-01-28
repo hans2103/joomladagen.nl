@@ -80,7 +80,8 @@
         width: 40%;
 
         + input,
-        + select {
+        + select,
+        + #zone_id_container {
           float: right;
         }
       }
