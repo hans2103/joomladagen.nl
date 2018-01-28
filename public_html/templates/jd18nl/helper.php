@@ -7,11 +7,16 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Environment\Browser;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
+
 class PWTTemplateHelper
 {
 	static public function template()
 	{
-		return JFactory::getApplication()->getTemplate();
+		return Factory::getApplication()->getTemplate();
 	}
 
 	/**
@@ -27,7 +32,7 @@ class PWTTemplateHelper
 	 */
 	static public function setGenerator($generator)
 	{
-		JFactory::getDocument()->setGenerator($generator);
+		Factory::getDocument()->setGenerator($generator);
 	}
 
 	/**
@@ -37,8 +42,8 @@ class PWTTemplateHelper
 	 */
 	static public function setMetadata()
 	{
-		$doc    = JFactory::getDocument();
-		$config = JFactory::getConfig();
+		$doc    = Factory::getDocument();
+		$config = Factory::getConfig();
 
 		$doc->setCharset('utf-8');
 		$doc->setMetaData('X-UA-Compatible', 'IE=edge', true);
@@ -57,7 +62,7 @@ class PWTTemplateHelper
 	 */
 	static public function setFavicon()
 	{
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		$doc->addHeadLink('templates/' . self::template() . '/images/favicon.ico', 'shortcut icon', 'rel', array('type' => 'image/ico'));
 		$doc->addHeadLink('templates/' . self::template() . '/images/favicon.png', 'shortcut icon', 'rel', array('type' => 'image/png'));
@@ -71,7 +76,7 @@ class PWTTemplateHelper
 	 */
 	static public function getItemId()
 	{
-		return JFactory::getApplication()->input->getInt('Itemid');
+		return Factory::getApplication()->input->getInt('Itemid');
 	}
 
 	/**
@@ -81,7 +86,7 @@ class PWTTemplateHelper
 	 */
 	static public function getSitename()
 	{
-		return JFactory::getConfig()->get('sitename');
+		return Factory::getConfig()->get('sitename');
 	}
 
 	/**
@@ -95,7 +100,7 @@ class PWTTemplateHelper
 	 */
 	static public function isDevelopment($name = '[dev]')
 	{
-		return boolval(strpos(JFactory::getConfig()->get('sitename'), $name));
+		return boolval(strpos(Factory::getConfig()->get('sitename'), $name));
 	}
 
 	/**
@@ -110,7 +115,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPath($output = 'array')
 	{
-		$uri  = JURI::getInstance();
+		$uri  = URI::getInstance();
 		$path = $uri->getPath();
 		$path = preg_replace('/^\//', '', $path);
 		if ($output == 'array')
@@ -131,7 +136,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPageClass()
 	{
-		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
+		$activeMenu = Factory::getApplication()->getMenu()->getActive();
 		$pageclass  = ($activeMenu) ? $activeMenu->params->get('pageclass_sfx', '') : '';
 
 		return $pageclass;
@@ -145,7 +150,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPageOption()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		return str_replace('_', '-', $input->getCmd('option', ''));
 	}
@@ -158,7 +163,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPageView()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		return str_replace('_', '-', $input->getCmd('view', ''));
 	}
@@ -171,7 +176,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPageLayout()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		return str_replace(self::template(), '', $input->getCmd('layout', ''));
 	}
@@ -184,7 +189,7 @@ class PWTTemplateHelper
 	 */
 	static public function getPageTask()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		return str_replace('_', '', $input->getCmd('task', ''));
 	}
@@ -197,7 +202,7 @@ class PWTTemplateHelper
 	 */
 	static public function getParam($param)
 	{
-		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
+		$activeMenu = Factory::getApplication()->getMenu()->getActive();
 		$parameter  = ($activeMenu) ? $activeMenu->params->get($param, 1) : '';
 		return $parameter;
 	}
@@ -238,7 +243,7 @@ class PWTTemplateHelper
 	static public function isHome()
 	{
 		// Fetch the active menu-item
-		$activeMenu = JFactory::getApplication()->getMenu()->getActive();
+		$activeMenu = Factory::getApplication()->getMenu()->getActive();
 
 		// Return whether this active menu-item is home or not
 		return (boolean) ($activeMenu) ? $activeMenu->home : false;
@@ -256,7 +261,7 @@ class PWTTemplateHelper
 	 */
 	static public function isPage($request = 'home')
 	{
-		return JURI::getInstance()->getPath() == $request;
+		return URI::getInstance()->getPath() == $request;
 	}
 
 	/**
@@ -265,7 +270,7 @@ class PWTTemplateHelper
 	 */
 	static public function unloadCss()
 	{
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		$unset_css = array('com_finder', 'com_rsform');
 		foreach ($doc->_styleSheets as $name => $style)
@@ -286,7 +291,7 @@ class PWTTemplateHelper
 	 */
 	static public function loadCss()
 	{
-		JHtml::_('stylesheet', 'templates/' . self::template() . '/css/style.min.css', array('version' => 'auto'));
+		HTMLHelper::_('stylesheet', 'templates/' . self::template() . '/css/style.min.css', array('version' => 'auto'));
 	}
 
 	/**
@@ -295,13 +300,13 @@ class PWTTemplateHelper
 	 */
 	static public function unloadJs()
 	{
-		$doc = JFactory::getDocument();
+		$doc = Factory::getDocument();
 
 		// Call JavaScript to be able to unset it correctly
-		JHtml::_('behavior.framework');
-		JHtml::_('bootstrap.framework');
-		JHtml::_('jquery.framework');
-		JHtml::_('bootstrap.tooltip');
+		HTMLHelper::_('behavior.framework');
+		HTMLHelper::_('bootstrap.framework');
+		HTMLHelper::_('jquery.framework');
+		HTMLHelper::_('bootstrap.tooltip');
 
 		// Unset unwanted JavaScript
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/mootools-core.js']);
@@ -340,8 +345,8 @@ class PWTTemplateHelper
 	 */
 	static public function loadJs()
 	{
-		JHtml::_('script', 'templates/' . self::template() . '/js/modernizr.js', array('version' => 'auto'));
-		JHtml::_('script', 'templates/' . self::template() . '/js/scripts.js', array('version' => 'auto'));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/modernizr.js', array('version' => 'auto'));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/scripts.js', array('version' => 'auto'));
 	}
 
 
@@ -354,7 +359,7 @@ class PWTTemplateHelper
 	{
 		// Keep whitespace below for nicer source code
 		$javascript = "    !function(){\"use strict\";function e(e,t,n){e.addEventListener?e.addEventListener(t,n,!1):e.attachEvent&&e.attachEvent(\"on\"+t,n)}function t(e){return window.localStorage&&localStorage.font_css_cache&&localStorage.font_css_cache_file===e}function n(){if(window.localStorage&&window.XMLHttpRequest)if(t(o))c(localStorage.font_css_cache);else{var n=new XMLHttpRequest;n.open(\"GET\",o,!0),e(n,\"load\",function(){4===n.readyState&&(c(n.responseText),localStorage.font_css_cache=n.responseText,localStorage.font_css_cache_file=o)}),n.send()}else{var a=document.createElement(\"link\");a.href=o,a.rel=\"stylesheet\",a.type=\"text/css\",document.getElementsByTagName(\"head\")[0].appendChild(a),document.cookie=\"font_css_cache\"}}function c(e){var t=document.createElement(\"style\");t.innerHTML=e,document.getElementsByTagName(\"head\")[0].appendChild(t)}var o=\"/templates/".self::template()."/css/font.min.css\";window.localStorage&&localStorage.font_css_cache||document.cookie.indexOf(\"font_css_cache\")>-1?n():e(window,\"load\",n)}();";
-		JFactory::getDocument()->addScriptDeclaration($javascript);
+		Factory::getDocument()->addScriptDeclaration($javascript);
 	}
 
 
@@ -365,8 +370,8 @@ class PWTTemplateHelper
 	 */
 	static public function ajaxSVG()
 	{
-		$javascript = "var ajax=new XMLHttpRequest;ajax.open(\"GET\",\"" . JURI::Base() . "templates/" . self::template() . "/icons/icons.svg\",!0),ajax.send(),ajax.onload=function(a){var b=document.createElement(\"div\");b.className='svg-sprite';b.innerHTML=ajax.responseText,document.body.insertBefore(b,document.body.childNodes[0])};";
-		JFactory::getDocument()->addScriptDeclaration($javascript);
+		$javascript = "var ajax=new XMLHttpRequest;ajax.open(\"GET\",\"" . URI::Base() . "templates/" . self::template() . "/icons/icons.svg\",!0),ajax.send(),ajax.onload=function(a){var b=document.createElement(\"div\");b.className='svg-sprite';b.innerHTML=ajax.responseText,document.body.insertBefore(b,document.body.childNodes[0])};";
+		Factory::getDocument()->addScriptDeclaration($javascript);
 	}
 
 
@@ -382,8 +387,8 @@ class PWTTemplateHelper
 	 */
 	static public function isBrowser($shortname = 'ie6')
 	{
-		jimport('joomla.environment.browser');
-		$browser = JBrowser::getInstance();
+		\JLoader::import('joomla.environment.browser');
+		$browser = Browser::getInstance();
 
 		switch ($shortname)
 		{
@@ -430,7 +435,7 @@ class PWTTemplateHelper
 	 */
 	static public function getAnalytics($analytics = null, $analyticsId = null)
 	{
-		$doc        = JFactory::getDocument();
+		$doc        = Factory::getDocument();
 		$bodyScript = '';
 
 		if (!$analyticsId)
@@ -535,7 +540,7 @@ fbq('track', 'PageView');
 	static public function renderHelixTitle()
 	{
 
-		$menuitem = JFactory::getApplication()->getMenu()->getActive(); // get the active item
+		$menuitem = Factory::getApplication()->getMenu()->getActive(); // get the active item
 
 		if (!$menuitem)
 		{
@@ -564,7 +569,7 @@ fbq('track', 'PageView');
 
 		if ($page_title_bg_image)
 		{
-			$style .= 'background-image: url(' . JURI::root(true) . '/' . $page_title_bg_image . ');';
+			$style .= 'background-image: url(' . URI::root(true) . '/' . $page_title_bg_image . ');';
 		}
 
 		if ($style)
