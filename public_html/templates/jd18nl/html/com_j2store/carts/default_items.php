@@ -83,16 +83,12 @@ defined('_JEXEC') or die;
 				<?php echo J2Store::plugin()->eventWithHtml('AfterDisplayLineItemTitle', array($item, $this->order, &$this->params));?>
 			</td>
 
-			<?php if($this->params->get('show_qty_field', 1)) : ?>
-				<td>
-					<?php echo J2Store::product()->displayQuantity('com_j2store.carts', $item, $this->params, array( 'class'=>'input-mini ' ) ); ?>
-					<a class="j2store-remove remove-icon" href="<?php echo JRoute::_('index.php?option=com_j2store&view=carts&task=remove&cartitem_id='.$item->cartitem_id); ?>">
-						<i class="fa fa-trash-o"></i>
-					</a>
-				</td>
-			<?php else: ?>
-				<?php echo J2Store::product()->displayQuantity('com_j2store.carts', $item, $this->params, array( 'class'=>'input-mini ' ) ); ?>
-			<?php endif; ?>
+			<td>
+				<div class="product-qty"><?php echo (int) $item->orderitem_quantity; ?></div>
+				<a class="j2store-remove remove-icon" href="<?php echo JRoute::_('index.php?option=com_j2store&view=carts&task=remove&cartitem_id='.$item->cartitem_id); ?>">
+					<i class="fa fa-trash-o"></i>
+				</a>
+			</td>
 
 			<?php if(isset($this->taxes) && count($this->taxes) && $this->params->get('show_item_tax', 0)): ?>
 				<td><?php 	echo $this->currency->format($item->orderitem_tax);	?></td>
