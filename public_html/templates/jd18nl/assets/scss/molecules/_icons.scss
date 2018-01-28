@@ -44,5 +44,6 @@
 .fa-trash-o {
   @include pseudo(before) {
     @include svg-background($icon--trash, color(text), 2 * $spacing-s);
+    top: 2px;
   }
 }
