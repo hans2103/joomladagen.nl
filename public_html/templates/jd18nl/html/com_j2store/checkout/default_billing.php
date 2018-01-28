@@ -69,9 +69,9 @@ if (isset($this->addresses) && count($this->addresses) > 0) : ?>
 	<?php foreach ($this->fields as $fieldName => $oneExtraField): ?>
 		<?php
 		$onWhat='onchange'; if($oneExtraField->field_type=='radio') $onWhat='onclick';
-		$value = (int) $this->address->$fieldName;
+		$value = $this->address->$fieldName;
 
-		if ($value === 223)
+		if ((int) $value === 223)
 		{
 			$value = 150;
 		};
