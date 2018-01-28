@@ -74,6 +74,27 @@
       @include spacing(bottom, margin, 1);
     }
 
+    &.checkout {
+      label {
+        width: 40%;
+      }
+
+      input,
+      select {
+        float: right;
+      }
+
+      select {
+        height: unset;
+      }
+    }
+
+  }
+
+  h2, h3 {
+    color: currentColor;
+    font-size: 1.2rem;
+    line-height: 1.2;
   }
 
   // Form section is used to wrap .form-group
@@ -126,6 +147,7 @@
   select {
     height: $line-height + ($spacing-xs * 4);
   }
+
 }
 
 .j2store-cart-item-box {
@@ -220,7 +242,6 @@ ul.j2store-cart-list {
   padding: 0 15px 15px;
 }
 
-
 .j2store-view-back-button {
   @include spacing(bottom, margin, 1);
 
@@ -233,4 +254,8 @@ ul.j2store-cart-list {
   .j2store-single-product {
     text-align: center;
   }
+}
+
+.cart-estimator-discount-block {
+  margin-top: 0;
 }
