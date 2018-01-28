@@ -188,6 +188,11 @@
   @include spacing(right, padding, 1);
   @include spacing(left, margin, 0.5);
   text-transform: none;
+  display: flex;
+
+  .custom {
+    @include spacing(right, margin, 0.5);
+  }
 
   a {
     text-decoration: none;

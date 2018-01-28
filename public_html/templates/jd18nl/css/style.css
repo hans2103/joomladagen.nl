@@ -4067,6 +4067,9 @@ fieldset:last-child,
   padding-right: 16px;
   margin-left: 8px;
   text-transform: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 @media screen and (min-width: 560px) {
@@ -4102,6 +4105,22 @@ fieldset:last-child,
 @media screen and (min-width: 1024px) {
   .minicart {
     margin-left: 16px;
+  }
+}
+
+.minicart .custom {
+  margin-right: 8px;
+}
+
+@media screen and (min-width: 560px) {
+  .minicart .custom {
+    margin-right: 12px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .minicart .custom {
+    margin-right: 16px;
   }
 }
 
