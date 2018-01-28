@@ -39,7 +39,7 @@ echo JLayouts::render('template.content.header', $array);
 ?>
 <section class="section__wrapper">
     <div class="container">
-        <div class="article__item article__item--shift">
+        <div class="article__item article__item--shift" id="tickets">
             <div itemscope itemtype="https://schema.org/BreadCrumbList" class="j2store-product-list bs2"
                  data-link="<?php echo JRoute::_($this->active_menu->link . '&Itemid=' . $this->active_menu->id); ?>">
 
