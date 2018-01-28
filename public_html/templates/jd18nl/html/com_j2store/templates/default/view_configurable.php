@@ -11,16 +11,14 @@ defined('_JEXEC') or die;
 ?>
 <div itemscope itemtype="https://schema.org/Product" class="product-<?php echo $this->product->j2store_product_id; ?> <?php echo $this->product->product_type; ?>-product">
 	<div class="row-fluid">
-        <?php if(false) :?>
 		<div class="span6">
 			<?php $images = $this->loadTemplate('images');
-			J2Store::plugin()->event('BeforeDisplayImages', array(&$images, $this, 'com_j2store.products.view.default'));
-			echo $images;
+				J2Store::plugin()->event('BeforeDisplayImages', array(&$images, $this, 'com_j2store.products.view.default'));
+				echo $images;
 			?>
 		</div>
-        <?php endif; ?>
 
-		<div class="span8">
+		<div class="span6">
 			<?php echo $this->loadTemplate('title'); ?>
 			<?php if(isset($this->product->source->event->afterDisplayTitle)) : ?>
 				<?php echo $this->product->source->event->afterDisplayTitle; ?>
@@ -59,11 +57,13 @@ defined('_JEXEC') or die;
 					data-product_type="<?php echo $this->product->product_type; ?>"
 					enctype="multipart/form-data">
 
-				<?php echo $this->loadTemplate('options'); ?>
+				<?php echo $this->loadTemplate('configurableoptions'); ?>
 				<?php echo $this->loadTemplate('cart'); ?>
 
 			</form>
+
 			<?php endif; ?>
+
 		</div>
 	</div>
 
