@@ -77,11 +77,11 @@
     &.checkout {
       label {
         width: 40%;
-      }
 
-      input,
-      select {
-        float: right;
+        + input,
+        + select {
+          float: right;
+        }
       }
 
       select {

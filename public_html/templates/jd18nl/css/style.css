@@ -3906,10 +3906,10 @@ fieldset:last-child,
   width: 40%;
 }
 
-.option-com-j2store .bs2.checkout input,
-.option-com-j2store .bs2.checkout select,
-.option-com-j2store .j2store.checkout input,
-.option-com-j2store .j2store.checkout select {
+.option-com-j2store .bs2.checkout label + input,
+.option-com-j2store .bs2.checkout label + select,
+.option-com-j2store .j2store.checkout label + input,
+.option-com-j2store .j2store.checkout label + select {
   float: right;
 }
 
