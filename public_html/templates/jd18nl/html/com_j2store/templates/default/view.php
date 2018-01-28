@@ -47,12 +47,20 @@ echo JLayouts::render('template.content.header', array('title' => $title));
                         function qtyBasedTextBox(product_id) {
                             (function ($) {
                                 var qty = $('#j2store-addtocart-form-' + product_id + ' input[name="product_qty"]').val();
+                                var field = '';
+
                                 // Hide the options
-                                $('#j2store-addtocart-form-' + product_id + ' [class*="showOption"]').hide();
+                                $('#j2store-addtocart-form-' + product_id + ' [class*="showOption"]').hide().find('input').removeClass('required').prop('required', '').prop('aria-required', 'false');
 
                                 // Show the options
                                 for (var i = 1; i <= qty; i++) {
-                                    $('#j2store-addtocart-form-' + product_id + ' .showOption' + i).show();
+                                    field = $('#j2store-addtocart-form-' + product_id + ' .showOption' + i);
+
+                                    if (field.closest('.naam.bezoeker')) {
+                                        field.closest('.naam.bezoeker').find('input').addClass('required').prop('required', 'required').prop('aria-required', 'true');
+                                    }
+
+                                    field.show()
                                 }
                             })(jQuery);
 
