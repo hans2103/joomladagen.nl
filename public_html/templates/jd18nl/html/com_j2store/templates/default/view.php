@@ -58,6 +58,22 @@ echo JLayouts::render('template.content.header', array('title' => $title));
 
                         }
 
+                        // Check for required name fields
+                        $('.j2store-cart-button').on('click', function (event) {
+	                        var error = false;
+                            $('.naam.bezoeker').each(function (index, item) {
+	                            if ($(item).is(':visible') && $(item).val() === '') {
+	                                $(item).addClass('rsform-error');
+	                                error = true;
+	                            }
+                            });
+
+	                        if (error) {
+	                            event.preventDefault();
+	                            return false;
+                            }
+	                    });
+
                         qtyBasedTextBox('<?php echo $this->product->j2store_product_id;?>');
                     })(jQuery);
 
