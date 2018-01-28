@@ -135,7 +135,7 @@ JHtml::stylesheet('com_jdidealgateway/payment.css', null, true);
 					echo JHtml::link(
 						$root,
 						JText::_('COM_JDIDEALGATEWAY_GO_TO_CASH_REGISTER'),
-						'onclick="document.idealform' . $data->logid . '.submit(); return false;"'
+						'class="button btn btn-primary" onclick="document.idealform' . $data->logid . '.submit(); return false;"'
 					);
 				?>
 			</div>
