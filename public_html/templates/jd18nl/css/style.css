@@ -4028,6 +4028,11 @@ fieldset:last-child,
   border-radius: 0;
 }
 
+.option-com-j2store [type=checkbox],
+.option-com-j2store [type=radio] {
+  margin-left: 4px;
+}
+
 .option-com-j2store select {
   height: 44px;
 }

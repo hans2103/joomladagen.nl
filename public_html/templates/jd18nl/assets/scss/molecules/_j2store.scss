@@ -145,6 +145,11 @@
     border-radius: 0;
   }
 
+  [type=checkbox],
+  [type=radio] {
+    margin-left: $spacing-xs;
+  }
+
   // Set a height for select elements
   select {
     height: $line-height + ($spacing-xs * 4);
