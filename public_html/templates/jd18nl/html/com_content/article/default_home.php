@@ -41,7 +41,7 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
     </div>
 </header>
 
-<?php if (false) : ?>
+
     <div class="section section--blue section__numbers">
         <div class="container">
             <div class="numbers__wrapper">
@@ -117,7 +117,8 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
             </div>
         </div>
     </div>
-<?php endif; ?>
+
+<?php if (false) : ?>
 <div class="section section--blue section__numbers">
     <div class="container">
         <div class="numbers__wrapper">
@@ -193,6 +194,7 @@ $description = ($this->item->introtext) ? $this->item->introtext : '';
         </div>
     </div>
 </div>
+<?php endif; ?>
 
 <section class="section">
     <div class="container">
