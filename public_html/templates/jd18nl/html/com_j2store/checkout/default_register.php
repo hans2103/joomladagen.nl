@@ -44,10 +44,17 @@ $J2gridCol = ($this->params->get('bootstrap_version', 2) == 2) ? 'span' : 'col-m
 		}
 		$onWhat = 'onchange';
 		if ($oneExtraField->field_type == 'radio') $onWhat = 'onclick';
-		//echo $this->fieldsClass->display($oneExtraField,@$this->address->$fieldName,$fieldName,false);
+
+		$value = $this->address->$fieldName;
+
+		if ((int) $value === 223)
+		{
+			$value = 150;
+		};
+
 		if (property_exists($this->address, $fieldName))
 		{
-			$html = str_replace('[' . $fieldName . ']', $this->fieldsClass->getFormatedDisplay($oneExtraField, $this->address->$fieldName, $fieldName, false, $options = '', $test = false, $allFields, $allValues = null) . '</br>', $html);
+			$html = str_replace('[' . $fieldName . ']', '<div class="form-group">' . $this->fieldsClass->getFormatedDisplay($oneExtraField, $value, $fieldName, false, $options = '', $test = false, $allFields, $allValues = null) . '</div>', $html);
 		}
 		?>
 	<?php endforeach; ?>
@@ -73,7 +80,7 @@ $J2gridCol = ($this->params->get('bootstrap_version', 2) == 2) ? 'span' : 'col-m
 
 	$confirm_password = '<div class="form-group">';
 	$confirm_password .= ' <label id="confirm-lbl" for="confirm" class="form-label required">' . JText::_('J2STORE_CHECKOUT_CONFIRM_PASSWORD') . '<span class="star">&nbsp;*</span></label>';
-	$confirm_password .= ' <input type="confirm" name="confirm" id="confirm" value="" class="form-input validate-confirm required" size="25" placeholder="' . JText::_('J2STORE_CHECKOUT_CONFIRM_PASSWORD') . '" required="" aria-required="true">';
+	$confirm_password .= ' <input type="password" name="confirm" id="confirm" value="" class="form-input validate-confirm required" size="25" placeholder="' . JText::_('J2STORE_CHECKOUT_CONFIRM_PASSWORD') . '" required="" aria-required="true">';
 	$confirm_password .= '</div>';
     $html = str_replace('[confirm_password]', $confirm_password, $html);
 

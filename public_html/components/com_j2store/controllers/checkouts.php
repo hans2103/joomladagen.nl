@@ -331,8 +331,8 @@ class J2StoreControllerCheckouts extends F0FController
 					'email' =>  $app->input->getString('email'),
 					'name' => $app->input->getString('first_name').' '.$app->input->getString('last_name'),
 					'username' =>  $app->input->getString('email'),
-					'password' => $app->input->getString('password'),
-					'password2'=> $app->input->getString('confirm')
+					'password' => $app->input->getRaw('password'),
+					'password2'=> $app->input->getRaw('confirm')
 			);
 			$msg = '';
 			$user = $userHelper->createNewUser($details, $msg);
