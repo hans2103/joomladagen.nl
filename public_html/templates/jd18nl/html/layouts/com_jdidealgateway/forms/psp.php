@@ -130,6 +130,7 @@ JHtml::stylesheet('com_jdidealgateway/payment.css', null, true);
 				?>
 			</div>
 			<div class="clr"></div>
+			<br />
 			<div id="paybox_button">
 				<?php
 					echo JHtml::link(
