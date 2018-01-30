@@ -47,3 +47,6 @@ Desktop.ini
 /.vagrant
 /puphpet
 
+# J2Store invoices
+/public_html/media/j2store/invoices/
+
