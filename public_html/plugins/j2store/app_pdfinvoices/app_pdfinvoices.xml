@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="j2store" method="upgrade">
+	<name>PDF Invoices</name>
+	<version>1.14</version>
+	<creationDate>MAY 2017</creationDate>
+	<author>Ramesh Elamathi</author>
+	<authorEmail>supports@j2store.org</authorEmail>
+	<authorUrl>http://www.j2store.org</authorUrl>
+	<copyright>2017 Weblogicx India</copyright>
+	<license>GNU General Public License v2</license>
+	<description>J2STORE_APP_PDFINVOICES_DESCRIPTION</description>
+	<scriptfile>script.app_pdfinvoices.php</scriptfile>
+	<files>
+		<filename plugin="app_pdfinvoices">app_pdfinvoices.php</filename>
+		<folder>app_pdfinvoices</folder>
+		<filename>index.html</filename>
+	</files>
+	
+	 <languages>
+        <language tag="en-GB">languages/en-GB.plg_j2store_app_pdfinvoices.ini</language>        
+    </languages>
+
+	<config>
+	
+	<fields name="params" >
+  	  <fieldset name="basic" label="j2store_basic_settings" addfieldpath="/administrator/components/com_j2store/models/fields">
+  	  <field name="file_prefix" type="text" default="invoice" label="j2store_invoice_file_prefix" description="j2store_invoice_file_prefix_desc" />
+  	  <field name="orderstatuses" type="orderstatuslist" multiple="true" label="j2store_invoice_order_status" description="j2store_invoice_order_status_desc" />
+  	  <field name="attachment" type="filelist" default="" label="J2STORE_INVOICE_FILE_ATTACHMENTS" description="j2store_invoice_file_attachment_desc"  multiple="true"
+		     directory="media/j2store"   filter="(.*?)\.(pdf)" exclude="" stripext="" hide_default="true" 
+     />
+      <field class="input-xlarge" name="attach_invoice_to" type="list" default="1" label="j2store_invoice_send_attachment_to_field_label" description="j2store_invoice_send_attachment_to_field_desc" >
+	 	<option value="0">J2STORE_APP_PADFINVOICE_INVOICE_TO_NONE</option>
+	 	<option value="1">J2STORE_APP_PADFINVOICE_INVOICE_TO_BOTH_ADMINISTRATOR_AND_CUSTOMER</option>
+	 	<option value="2">J2STORE_APP_PADFINVOICE_INVOICE_TO_CUSTOMER_ONLY</option>
+	 	<option value="3">J2STORE_APP_PADFINVOICE_INVOICE_TO_ADMINISTRATOR_ONLY</option>	 
+	 </field>
+
+	<field name="font_family" type="editor" editor="codemirror|none"  label="j2store_invoice_font_family" description="j2store_invoice_font_family_desc"/>
+
+	 
+	 <field name="custom_css" type="textarea" 
+				rows="10" cols="10" label="J2STORE_PRODUCT_CUSTOM_CSS" description="J2STORE_PRODUCT_CUSTOM_CSS_DESC" filter="safehtml"  />
+	 
+	 <field name="show_download_option" type="list" default="0" label="j2store_pdf_invoice_show_download_option_label" description="j2store_pdf_invoice_show_download_option_desc" >
+		 <option value="0">JNO</option>
+		 <option value="1">JYES</option>
+	 </field>
+	</fieldset>
+  </fields>	
+</config>	
+</extension>
