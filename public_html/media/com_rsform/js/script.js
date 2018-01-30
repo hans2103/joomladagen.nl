@@ -1194,7 +1194,7 @@ RSFormPro.Ajax = {
 					for (j = 0; j < submitElement.length; j++) {
 						submitElement[j].setAttribute('data-disableonsubmit','1');
 					}
-					RSFormPro.Ajax.validate(form, undefined, ' . json_encode($validationParams) . ');
+					RSFormPro.Ajax.validate(form, undefined, validationParams);
 				}));
 			}
 		}
