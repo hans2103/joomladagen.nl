@@ -214,7 +214,7 @@ class RSFormProFieldBirthDay extends RSFormProFieldSelectList
 		}
 		
 		// Must add an onchange event when we don't allow incorrect dates eg. 31 feb
-		if (($this->processing == 'm' || $this->processing == 'y') && ($this->hasAllFields && $this->getProperty('VALIDATION_ALLOW_INCORRECT_DATE', 'YES'))) {
+		if (($this->processing == 'm' || $this->processing == 'y') && ($this->hasAllFields && !$this->getProperty('VALIDATION_ALLOW_INCORRECT_DATE', 'YES'))) {
 			if (!isset($attr['onchange'])) {
 				$attr['onchange'] = '';
 			} else {

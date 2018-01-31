@@ -105,8 +105,10 @@ $this->loadTemplate('grid_modal_body'));
 
 <script>
 jQuery(function($) {
+	<?php if (!$this->hasLegacyLayout) { ?>
 	// Let's save the JSON first if we've added new elements
 	RSFormPro.Grid.toJson();
+	<?php } ?>
 
 	$('#gridlayoutdiv').on('formtabs.shown', function() {
 		if (!RSFormPro.Grid.initialized && jQuery('.rsfp-grid-row').width() != 98)

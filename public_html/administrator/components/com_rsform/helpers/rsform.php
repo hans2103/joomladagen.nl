@@ -1564,7 +1564,7 @@ class RSFormProHelper
 		if (!empty($pages))
 		{
 			$total_pages 	  = count($pages)+1;
-			$step			  = floor(100/$total_pages);
+			$step			  = round(100/$total_pages, 2);
 			$replace_progress = array('{page}', '{total}', '{percent}');
 			$with_progress 	  = array(1, $total_pages, $step*1);
 
