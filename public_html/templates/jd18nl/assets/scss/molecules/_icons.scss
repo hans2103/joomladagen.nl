@@ -23,9 +23,21 @@
   }
 }
 
+.fa-download-alt {
+  @include pseudo(before) {
+    @include svg-background($icon--download, color(text), 2 * $spacing-s);
+  }
+}
+
 .fa-list-alt {
   @include pseudo(before) {
     @include svg-background($icon--list-alt, color(text), 2 * $spacing-s);
+  }
+}
+
+.fa-pdf {
+  @include pseudo(before) {
+    @include svg-background($icon--pdf, color(text), 2 * $spacing-s);
   }
 }
 
