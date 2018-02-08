@@ -1789,7 +1789,8 @@ final class bfTools
             }
 
             $newConfig = $config->toString('PHP', array(
-                'class' => 'JConfig'
+                'class' => 'JConfig',
+                'closingtag' => false
             ));
 
             // On some occasions, Joomla! 1.6 ignores the configuration and
@@ -2379,7 +2380,7 @@ final class bfTools
 
             if (function_exists('mysql_connect')) {
 
-                if (!@mysql_select_db($db)) {
+                if (!@mysql_select_db($db, $link)) {
                     $msg->msg = trim(mysql_error() . ' Mysql User exists, but has no access to the database');
                     $msg->result = 'error';
                     if ($internal === TRUE) {
@@ -2390,7 +2391,7 @@ final class bfTools
 
             } else {
 
-                if (!@mysqli_select_db($db)) {
+                if (!@mysqli_select_db($link, $db)) {
                     $msg->msg = trim(mysqli_error() . ' Mysql User exists, but has no access to the database');
                     $msg->result = 'error';
                     if ($internal === TRUE) {
@@ -2588,6 +2589,8 @@ final class bfTools
 
         $app = JFactory::getApplication('Myjoomla');
 
+        // Load system plugins to give better support for commercial plugins
+        JPluginHelper::importPlugin( 'system' );
 
         // init reply to myJoomla.com
         $result = array();

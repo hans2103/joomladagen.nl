@@ -75,6 +75,18 @@ if (class_exists('JApplicationCms')) {
             return $this->_redirectDetails;
         }
 
+        /**
+         * Return the current state of the language filter.
+         *
+         * @return	boolean
+         *
+         * @since	3.2
+         */
+        public function getLanguageFilter()
+        {
+            return false;
+        }
+
     }
 
 } else if (class_exists('JApplication')) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -334,7 +334,7 @@ class S3Import extends Model
 			if ($part == -1)
 			{
 				// Currently downloaded size
-				$session->set('s3import.donesize', 0, 'com_akeeba');
+				$this->container->platform->setSessionVar('s3import.donesize', 0, 'com_akeeba');
 
 				// Init
 				$part = 0;
@@ -438,9 +438,9 @@ class S3Import extends Model
 			{
 				clearstatcache();
 				$filesize = (int)@filesize($temp_file);
-				$total    = $session->get('s3import.donesize', 0, 'com_akeeba');
+				$total    = $this->container->platform->getSessionVar('s3import.donesize', 0, 'com_akeeba');
 				$total += $filesize;
-				$session->set('s3import.donesize', $total, 'com_akeeba');
+				$this->container->platform->setSessionVar('s3import.donesize', $total, 'com_akeeba');
 			}
 
 			// Successful download, or have to move to the next part.
@@ -489,8 +489,8 @@ class S3Import extends Model
 		// Pass the id, part, frag in the request so that the view can grab it
 		$this->setState('part', $part);
 		$this->setState('frag', $frag);
-		$session->set('s3import.part', $part, 'com_akeeba');
-		$session->set('s3import.frag', $frag, 'com_akeeba');
+		$this->container->platform->setSessionVar('s3import.part', $part, 'com_akeeba');
+		$this->container->platform->setSessionVar('s3import.frag', $frag, 'com_akeeba');
 
 		if ($part >= $totalparts)
 		{

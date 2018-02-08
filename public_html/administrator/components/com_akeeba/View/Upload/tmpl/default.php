@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -30,6 +30,8 @@ $this->getContainer()->template->addJSInline($js);
 	<input type="hidden" name="frag" value="0" />
 </form>
 
-<p class="well">
-	<?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_START'); ?>
-</p>
+<div class="akeeba-panel--information">
+    <p>
+        <?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_START'); ?>
+    </p>
+</div>

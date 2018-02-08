@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -50,8 +50,8 @@ class RemoteFiles extends Model
 				'label' => JText::_('COM_AKEEBA_REMOTEFILES_FETCH'),
 				'link'  => "index.php?option=com_akeeba&view=RemoteFiles&task=dltoserver&tmpl=component&id={$stat['id']}&part=-1",
 				'type'  => 'button',
-				'icon'  => 'icon-download icon-white',
-				'class' => 'btn-large btn-primary',
+				'icon'  => 'akion-android-download',
+				'class' => 'akeeba-btn--large--primary',
 			);
 			$actions[] = $action;
 		}
@@ -64,8 +64,8 @@ class RemoteFiles extends Model
 				'label' => JText::_('COM_AKEEBA_REMOTEFILES_DELETE'),
 				'link'  => "index.php?option=com_akeeba&view=RemoteFiles&task=delete&tmpl=component&id={$stat['id']}&part=-1",
 				'type'  => 'button',
-				'icon'  => 'icon-trash icon-white',
-				'class' => 'btn-danger',
+				'icon'  => 'akion-trash-a',
+				'class' => 'akeeba-btn--red',
 			);
 			$actions[] = $action;
 		}
@@ -85,7 +85,7 @@ class RemoteFiles extends Model
 					'link'  => "index.php?option=com_akeeba&view=RemoteFiles&task=dlfromremote&id={$stat['id']}&part=$i",
 					'type'  => 'link',
 					'class' => '',
-					'icon'  => 'icon-download',
+					'icon'  => 'akion-ios-download',
 				);
 				$actions[] = $action;
 			}

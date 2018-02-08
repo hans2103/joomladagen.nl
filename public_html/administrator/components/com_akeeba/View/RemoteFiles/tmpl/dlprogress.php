@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -10,11 +10,11 @@ defined('_JEXEC') or die();
 
 /** @var  \Akeeba\Backup\Admin\View\RemoteFiles\Html  $this */
 ?>
-<div id="backup-percentage" class="progress">
-	<div id="progressbar-inner" class="bar" style="width: <?php echo $this->percent ?>%"></div>
+<div id="backup-percentage" class="akeeba-progress">
+	<div id="progressbar-inner" class="akeeba-progress-fill" style="width: <?php echo $this->percent ?>%"></div>
 </div>
 
-<div class="well">
+<div class="akeeba-panel--information">
 	<?php echo \JText::sprintf('COM_AKEEBA_REMOTEFILES_LBL_DOWNLOADEDSOFAR', $this->done, $this->total, $this->percent); ?>
 </div>
 

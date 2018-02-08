@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AdminTools
- * @copyright 2010-2017 Akeeba Ltd / Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -106,6 +106,21 @@ class WAFBlacklistedRequests extends DataModel
 		if ($content = $this->getState('fquery_content'))
 		{
 			$query->where($db->qn('query_content') . ' LIKE ' . $db->q($db->escape($content), false));
+		}
+
+		if ($application = $this->getState('application'))
+		{
+			if ($application != 'both')
+			{
+				$query->where($db->qn('application').' = '.$db->q($application));
+			}
+		}
+
+		$enabled = $this->getState('enabled', '');
+
+		if ($enabled != '')
+		{
+			$query->where($db->qn('enabled').' = '.$db->q($enabled));
 		}
 
 		if (!$overrideLimits)

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -26,6 +26,8 @@ JS;
 $this->getContainer()->template->addJSInline($js);
 
 ?>
-<div class="alert alert-success">
-<?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_DONE'); ?>
+<div class="akeeba-panel--success">
+    <p>
+        <?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_DONE'); ?>
+    </p>
 </div>

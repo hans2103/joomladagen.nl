@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -9,8 +9,10 @@
 defined('_JEXEC') or die();
 
 ?>
-<div class="alert alert-error">
-	<h4><?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_FAILED'); ?></h4>
+<div class="akeeba-panel--failure">
+	<h3>
+        <?php echo \JText::_('COM_AKEEBA_TRANSFER_MSG_FAILED'); ?>
+    </h3>
 	<p>
 		<?php echo $this->escape($this->errorMessage); ?>
 

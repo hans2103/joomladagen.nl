@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -36,12 +36,12 @@ $this->getContainer()->template->addJSInline($js);
 	<input type="hidden" name="frag" value="<?php echo (int)$this->frag; ?>" />
 </form>
 
-<?php if($this->frag == 0): ?>
-<p class="well">
-	<?php echo \JText::sprintf('COM_AKEEBA_TRANSFER_MSG_UPLOADINGPART', $this->part+1, $this->parts); ?>
-</p>
-<?php else: ?>
-<p class="well">
-	<?php echo \JText::sprintf('COM_AKEEBA_TRANSFER_MSG_UPLOADINGFRAG', $this->part+1, $this->parts); ?>
-</p>
-<?php endif; ?>
+<div class="akeeba-panel--information">
+    <p>
+	    <?php if($this->frag == 0): ?>
+		    <?php echo \JText::sprintf('COM_AKEEBA_TRANSFER_MSG_UPLOADINGPART', $this->part+1, $this->parts); ?>
+	    <?php else: ?>
+		    <?php echo \JText::sprintf('COM_AKEEBA_TRANSFER_MSG_UPLOADINGFRAG', $this->part+1, $this->parts); ?>
+	    <?php endif; ?>
+    </p>
+</div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   AkeebaBackup
- * @copyright Copyright (c)2006-2017 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2006-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -32,33 +32,33 @@ if(!class_exists('AkeebaHelperEscape')) JLoader::import('helpers.escape', JPATH_
 <?php echo $this->loadAnyTemplate('admin:com_akeeba/CommonTemplates/FolderBrowser'); ?>
 <?php echo $this->loadAnyTemplate('admin:com_akeeba/CommonTemplates/ProfileName'); ?>
 
-<fieldset>
+<div class="akeeba-container--primary">
 	<div id="ak_list_container">
-		<table id="ak_list_table" class="table table-striped">
+		<table id="ak_list_table" class="akeeba-table--striped--dynamic-line-editor">
 			<thead>
 				<tr>
 					<!-- Delete -->
-					<td width="50px">&nbsp;</td>
+					<th width="50px">&nbsp;</th>
 					<!-- Edit -->
-					<td width="100px">&nbsp;</td>
+					<th width="100px">&nbsp;</th>
 					<!-- Directory path -->
-					<td>
+					<th>
 						<span rel="popover" data-original-title="<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_DIRECTORY'); ?>"
 							  data-content="<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_DIRECTORY_HELP'); ?>">
 							<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_DIRECTORY'); ?>
 						</span>
-					</td>
+					</th>
 					<!-- Directory path -->
-					<td>
+					<th>
 						<span rel="popover" data-original-title="<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_VINCLUDEDIR'); ?>"
 							  data-content="<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_VINCLUDEDIR_HELP'); ?>">
 							<?php echo \JText::_('COM_AKEEBA_INCLUDEFOLDER_LABEL_VINCLUDEDIR'); ?>
 						</span>
-					</td>
+					</th>
 				</tr>
 			</thead>
 			<tbody id="ak_list_contents">
 			</tbody>
 		</table>
 	</div>
-</fieldset>
+</div>

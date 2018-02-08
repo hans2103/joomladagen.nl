@@ -73,10 +73,12 @@ try {
             break;
     }
 
+    $method = 'F';
     // Attempt to download using file_get_contents - quickest and easiest and works well on *most* servers!!
     $upgradeFileContent = file_get_contents($upgradeFile);
 
     if (!$upgradeFileContent) {
+        $method = 'C';
 
         $ch = curl_init();
 
@@ -91,7 +93,7 @@ try {
 
         // Did we succeed in getting something?????
         if (!$upgradeFileContent) {
-
+            $method = 'CV';
             /**
              * ** CRAPPY SERVER ALERT ** CRAPPY SERVER ALERT ** CRAPPY SERVER ALERT ** CRAPPY SERVER ALERT **
              *
@@ -115,9 +117,10 @@ try {
 
     // Remember: The upgrade file DOESN'T contain any security keys! This is a good thing!
 
-    // Save the Zip File
+    // Save the Zip File - first removing any existing file
+    @unlink('upgrade.zip');
     if (!file_put_contents('upgrade.zip', $upgradeFileContent)) {
-        throw new Exception('Could not auto upgrade (save upgrade file failed) - you need to install a new connector manually');
+        throw new Exception('Could not auto upgrade (save upgrade file failed) - you need to install a new connector manually (Debug: '.$method.'|'.is_writable('.').'|'.file_exists('upgrade.zip').'|'.strlen($upgradeFileContent).')');
     }
 
     // Load the Zip file

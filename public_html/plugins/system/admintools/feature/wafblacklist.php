@@ -1,10 +1,11 @@
 <?php
 /**
  * @package   AdminTools
- * @copyright Copyright (c)2010-2017 Nicholas K. Dionysopoulos
+ * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
+use FOF30\Container\Container;
 use FOF30\Input\Input;
 
 defined('_JEXEC') or die;
@@ -102,6 +103,9 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 			return;
 		}
 
+		// Let me see if I am a backend application
+		$isBackend = Container::getInstance('com_admintools')->platform->isBackend();
+
 		// I can't use JInput since it will fetch data from cookies, too.
 		$inputSources = array('get', 'post');
 
@@ -110,6 +114,31 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 
 		foreach ($rules as $rule)
 		{
+			if (!isset($rule->application))
+			{
+				$rule->application = '';
+			}
+
+			// Am I in the correct side of the application?
+			switch ($rule->application)
+			{
+				case 'site':
+					if ($isBackend)
+					{
+						continue;
+					}
+
+					break;
+
+				case 'admin':
+					if (!$isBackend)
+					{
+						continue;
+					}
+
+					break;
+			}
+
 			/**
 			 * Make sure the view/task matches.
 			 *
