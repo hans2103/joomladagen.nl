@@ -8,75 +8,96 @@
  * @link        https://stichtingsympathy.nl
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+
 defined('_JEXEC') or die;
 
 $params = JComponentHelper::getParams('com_conference');
+
+$this->template = Factory::getApplication()->getTemplate();
+require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
+
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers');
+
+$array = array(
+	'title' => $this->escape($this->item->title)
+);
+
+echo JLayouts::render('template.content.header', $array);
 ?>
-<div class="conference">
-	<div class="row-fluid">
-		<h1><?php echo $this->escape($this->item->title)?></h1>
-	</div>
-	<div class="well well-small spreker">
-		<div class="row-fluid">
-			<div class="span4">
-				<span class="thumbnail">
-					<?php if($this->item->image):?>
-						<img src="<?php echo $this->item->image?>">
-					<?php else:?>
-						<img src="http://placehold.it/200x200">
-					<?php endif;?>
-				</span>
-				<div class="speakersocial">
-					<?php if(($this->item->twitter) && ($params->get('twitter'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://twitter.com/<?php echo $this->item->twitter?>">
-							<span class="icon conference-twitter"></span> <?php echo $this->item->twitter?>
-						</a>
-					<?php endif;?>
-					<?php if(($this->item->facebook) && ($params->get('facebook'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://facebook.com/<?php echo $this->item->facebook?>">
-							<span class="icon conference-facebook"></span> <?php echo $this->item->facebook?>
-						</a>
-					<?php endif;?>
-					<?php if(($this->item->googleplus) && ($params->get('googleplus'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://plus.google.com/<?php echo $this->item->googleplus?>">
-							<span class="icon conference-google-plus"></span> <?php echo $this->item->title?>
-						</a>
-					<?php endif;?>
-					<?php if(($this->item->linkedin) && ($params->get('linkedin'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://www.linkedin.com/in/<?php echo $this->item->linkedin?>">
-							<span class="icon conference-linkedin"></span> <?php echo $this->item->linkedin?>
-						</a>
-					<?php endif;?>
-					<?php if(($this->item->website) && ($params->get('twitter'))):?>
-						<a class="btn btn-small btn-block" target="_blank" href="http://<?php echo $this->item->website?>">
-							<span class="icon conference-earth"></span> <?php echo $this->item->website?>
-						</a>
-					<?php endif;?>
-				</div>
-			</div>
-			<div class="span8">
-				<?php echo ($this->item->bio)?>
-				<?php if ($this->item->sessions):?>
-				<h4><?php echo JText::_('COM_CONFERENCE_TITLE_SESSIONS')?></h4>
-				<table class="table table-striped">
-				<tbody>
-					<?php foreach ($this->item->sessions as $session):?>
-					<tr>
-						<td>
-							<?php if ($session->listview): ?>
-		                  	<a href="<?php echo JRoute::_('index.php?option=com_conference&view=session&id=' . $session->conference_session_id)?>">
-		                  		<?php echo($session->title)?>
-		                  	</a>
-		                  <?php else :?>
-		                  	<?php echo($session->title)?>
-		                  <?php endif;?>
-						</td>
-					</tr>
-					<?php endforeach;?>
-				</tbody>
-				</table>
-				<?php endif;?>
-			</div>
-		</div>
-	</div>
-</div>
+<section class="section__wrapper">
+    <div class="container">
+        <div class="article__item">
+            <div class="article__image">
+                <div class="media-placeholder media-placeholder--1by1">
+					<?php $src = $this->item->image ? $this->item->image : 'http://placehold.it/200x200'; ?>
+					<?php $alt = 'foto van spreker ' . $this->escape($this->item->title); ?>
+					<?php echo JLayouts::render('template.image', array('img' => $src, 'alt' => $alt)); ?>
+                </div>
+            </div>
+            <div class="article__body">
+
+				<?php echo($this->item->bio) ?>
+
+
+                <div class="article__social">
+					<?php
+					if (($this->item->twitter) && ($params->get('twitter'))):
+						$src  = 'https://twitter.com/' . $this->item->twitter;
+						$text = '<span class="icon conference-twitter"></span>' . $this->item->twitter;
+						echo HTMLHelper::_('link', $src, $text);
+					endif;
+
+					if (($this->item->facebook) && ($params->get('facebook'))):
+						$src  = 'https://facebook.com/' . $this->item->facebook;
+						$text = '<span class="icon conference-facebook"></span>' . $this->item->facebook;
+						echo HTMLHelper::_('link', $src, $text);
+					endif;
+
+					if (($this->item->googleplus) && ($params->get('googleplus'))):
+						$src  = 'https://plus.google.com/' . $this->item->googleplus;
+						$text = '<span class="icon conference-google-plus"></span>' . $this->item->title;
+						echo HTMLHelper::_('link', $src, $text);
+					endif;
+
+					if (($this->item->linkedin) && ($params->get('linkedin'))):
+						$src  = 'https://www.linkedin.com/in/' . $this->item->linkedin;
+						$text = '<span class="icon conference-linkedin"></span>' . $this->item->linkedin;
+						echo HTMLHelper::_('link', $src, $text);
+					endif;
+
+					if (($this->item->website) && ($params->get('website'))):
+						$src  = 'http://' . $this->item->website;
+						$text = '<span class="icon conference-earth"></span>' . $this->item->website;
+						echo HTMLHelper::_('link', $src, $text);
+					endif;
+					?>
+                </div>
+
+				<?php if ($this->item->sessions): ?>
+                    <h2><?php echo JText::_('COM_CONFERENCE_TITLE_SESSIONS') ?></h2>
+                    <table class="table table-striped">
+                        <tbody>
+						<?php foreach ($this->item->sessions as $session): ?>
+                            <tr>
+                                <td>
+									<?php if ($session->listview): ?>
+                                        <a href="<?php echo JRoute::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id) ?>">
+											<?php echo($session->title) ?>
+                                        </a>
+									<?php else : ?>
+										<?php echo($session->title) ?>
+									<?php endif; ?>
+                                </td>
+                            </tr>
+						<?php endforeach; ?>
+                        </tbody>
+                    </table>
+				<?php endif; ?>
+            </div>
+        </div>
+    </div>
+</section>
