@@ -1,4 +1,12 @@
 <?php die() ?>
+Admin Tools 5.0.1
+================================================================================
++ Warn users if either FOF or FEF is not installed
+# [MEDIUM] Removed two detection rules which trigger a bug in older versions of PHP
+# [LOW] Regression: "Repair & Optimize tables" button was linking to "Temp and log directory check" page
+# [LOW] Fixed deleting a record from Auto IP Blocking History
+# [LOW] Fixed integration between 404 Shield feature and com_redirect
+
 Admin Tools 5.0.0
 ================================================================================
 + Purge Sessions now uses the Joomla! API to garbage collect expired sessions before forcibly truncating the sessions table.

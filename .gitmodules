@@ -1,6 +1,3 @@
-[submodule "conference"]
-	path = conference
-	url = git@github.com:stichtingsympathy/conference.git
 [submodule "stubs"]
 	path = stubs
 	url = git@github.com:perfectwebteam/stubs.git

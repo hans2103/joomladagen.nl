@@ -134,7 +134,15 @@ class AtsystemFeatureShield404 extends AtsystemFeatureAbstract
 			static::$exceptionHandler->logAndAutoban('404shield');
 		}
 
-		JErrorPage::render($error);
+		// Proxy to the previous exception handler if available, otherwise just render the error page
+		if (self::$previousExceptionHandler)
+		{
+			call_user_func_array(self::$previousExceptionHandler, array($error));
+		}
+		else
+		{
+			JErrorPage::render($error);
+		}
 	}
 
 	/**

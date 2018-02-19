@@ -990,12 +990,12 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v2.0.5</h2>
+		<h2>Changelog v2.0.6</h2>
 		<ul class="version-history">
-            <li><span class="version-fixed">Fix</span> AJAX validation did not enclose rows in the correct error classes due to a mistype.</li>
-            <li><span class="version-fixed">Fix</span> Progress bar did not advance when the form had more than 100 pages.</li>
-            <li><span class="version-fixed">Fix</span> Birthday Field's 'Allow Incorrect Dates' option was inversed (setting it to No now disallows incorrect dates).</li>
-            <li><span class="version-fixed">Fix</span> Ordering was reset when using a 'Legacy' layout and adding / removing fields.</li>
+            <li><span class="version-fixed">Fix</span> Restore now ignores invalid characters in the XML backup files.</li>
+            <li><span class="version-fixed">Fix</span> Restoring a backup did not carry over the PDF filename and 'Can delete' permissions.</li>
+            <li><span class="version-fixed">Fix</span> Some parts of {if} scripting weren't working in the Directory Details Layout.</li>
+            <li><span class="version-fixed">Fix</span> There was a missing space when adding the error classes (if the field already had a user supplied class).</li>
 		</ul>
 		<a class="btn btn-large btn-primary" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="btn" href="https://www.rsjoomla.com/support/documentation/rsform-pro.html" target="_blank">Read the RSForm! Pro User Guide</a>

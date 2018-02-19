@@ -76,7 +76,7 @@ echo $this->loadAnyTemplate('admin:com_admintools/ControlPanel/plugin_warning');
 				$until  = Html::localisedDate($row->until, 'Y-m-d H:i:s T', false)
 				?>
 				<tr>
-					<td><?php echo \JHtml::_('grid.id', ++$i, $row->ip); ?></td>
+					<td><?php echo \JHtml::_('grid.id', ++$i, $row->id); ?></td>
 					<td>
 						<?php echo $ip ?>
 					</td>
