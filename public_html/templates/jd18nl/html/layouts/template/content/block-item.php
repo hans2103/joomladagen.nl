@@ -22,7 +22,7 @@ require_once JPATH_THEMES . '/' . $this->template . '/helper.php';
 	<?php if (isset($displayData['image'])) : ?>
         <a href="<?php echo $link;?>" class="block__image">
 			<?php
-			$mediaPlaceholderSize = isset($displayData->image_ratio) ? $displayData->image_ratio: 'media-placeholder--16by9';
+			$mediaPlaceholderSize = isset($displayData['image_ratio']) ? $displayData['image_ratio']: 'media-placeholder--16by9';
 			?>
             <div class="media-placeholder <?php echo $mediaPlaceholderSize; ?>">
 				<?php $src = $displayData['image']; ?>
