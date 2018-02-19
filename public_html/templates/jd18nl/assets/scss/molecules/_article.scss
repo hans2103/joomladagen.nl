@@ -94,7 +94,8 @@
   }
 }
 
-.view-article {
+.view-article,
+.view-speaker {
   .article__item {
     .article__image {
       @include span(8 of 12, 0 to $menu);
@@ -133,4 +134,14 @@
       display: block;
     }
   }
+}
+
+.article__social {
+  @include spacing(top, margin, 0.5);
+  @include spacing(bottom, margin, 0.5);
+
+  a + a  {
+    @include spacing(left, margin, 0.5);
+  }
+
 }
