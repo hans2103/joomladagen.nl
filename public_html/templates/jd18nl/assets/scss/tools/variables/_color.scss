@@ -59,3 +59,17 @@ $colors: (
                 focus:$color-blue
         )
 );
+
+
+$gray-light: color(gray, light);
+$brand-primary: color(text);
+$brand-success:color(green, light) ;
+$brand-info: color(blue, light);
+$brand-warning: color(orange, light);
+$brand-danger: color(red, light);
+
+//** Background color for `<body>`.
+$body-bg:               #fff !default;
+
+//** Text muted color
+$text-muted:                  $gray-light !default;
