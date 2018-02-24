@@ -970,7 +970,8 @@ td, th {
 }
 
 .view-article .article__item .article__image,
-.view-speaker .article__item .article__image {
+.view-speaker .article__item .article__image,
+.view-session .article__item .article__image {
   width: calc((100% - 8px) / 1.5);
   margin-left: calc(16px);
   float: left;
@@ -980,18 +981,21 @@ td, th {
 }
 
 .view-article .article__item .article__image:first-child,
-.view-speaker .article__item .article__image:first-child {
+.view-speaker .article__item .article__image:first-child,
+.view-session .article__item .article__image:first-child {
   margin-left: 0;
 }
 
 .view-article .article__item .article__image:last-child,
-.view-speaker .article__item .article__image:last-child {
+.view-speaker .article__item .article__image:last-child,
+.view-session .article__item .article__image:last-child {
   margin-right: -1px;
 }
 
 @media screen and (min-width: 560px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     width: calc((100% - 12px) / 1.5);
     margin-left: calc(24px);
   }
@@ -999,7 +1003,8 @@ td, th {
 
 @media screen and (min-width: 768px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     width: calc((100% - 72px) / 4);
     margin-left: calc(24px);
   }
@@ -1007,7 +1012,8 @@ td, th {
 
 @media screen and (min-width: 1024px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     width: calc((100% - 96px) / 4);
     margin-left: calc(32px);
   }
@@ -1015,14 +1021,16 @@ td, th {
 
 @media screen and (min-width: 560px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     left: calc(((100% - 120px) / 6) + 24px);
   }
 }
 
 @media screen and (min-width: 768px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     left: auto;
     position: relative;
   }
@@ -1030,66 +1038,77 @@ td, th {
 
 @media screen and (min-width: 1024px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     left: auto;
   }
 }
 
 @media screen and (min-width: 560px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     margin-bottom: 24px;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .view-article .article__item .article__image,
-  .view-speaker .article__item .article__image {
+  .view-speaker .article__item .article__image,
+  .view-session .article__item .article__image {
     margin-bottom: 32px;
   }
 }
 
 .view-article .article__item .article__body,
-.view-speaker .article__item .article__body {
+.view-speaker .article__item .article__body,
+.view-session .article__item .article__body {
   width: calc((100% - 0px) / 1);
   margin-left: calc(16px);
   float: left;
 }
 
 .view-article .article__item .article__body:nth-child(1n),
-.view-speaker .article__item .article__body:nth-child(1n) {
+.view-speaker .article__item .article__body:nth-child(1n),
+.view-session .article__item .article__body:nth-child(1n) {
   margin-right: -1px;
 }
 
 .view-article .article__item .article__body:nth-child(1n+1),
-.view-speaker .article__item .article__body:nth-child(1n+1) {
+.view-speaker .article__item .article__body:nth-child(1n+1),
+.view-session .article__item .article__body:nth-child(1n+1) {
   margin-left: 0;
   clear: left;
 }
 
 .view-article .article__item .article__body:first-child,
-.view-speaker .article__item .article__body:first-child {
+.view-speaker .article__item .article__body:first-child,
+.view-session .article__item .article__body:first-child {
   margin-left: 0;
 }
 
 @media screen and (min-width: 560px) {
   .view-article .article__item .article__body,
-  .view-speaker .article__item .article__body {
+  .view-speaker .article__item .article__body,
+  .view-session .article__item .article__body {
     width: calc((100% - 0px) / 1);
     margin-left: calc(24px);
   }
   .view-article .article__item .article__body:nth-child(n),
-  .view-speaker .article__item .article__body:nth-child(n) {
+  .view-speaker .article__item .article__body:nth-child(n),
+  .view-session .article__item .article__body:nth-child(n) {
     clear: none;
     margin-left: calc(24px);
     margin-right: 0;
   }
   .view-article .article__item .article__body:nth-child(1n),
-  .view-speaker .article__item .article__body:nth-child(1n) {
+  .view-speaker .article__item .article__body:nth-child(1n),
+  .view-session .article__item .article__body:nth-child(1n) {
     margin-right: -1px;
   }
   .view-article .article__item .article__body:nth-child(1n+1),
-  .view-speaker .article__item .article__body:nth-child(1n+1) {
+  .view-speaker .article__item .article__body:nth-child(1n+1),
+  .view-session .article__item .article__body:nth-child(1n+1) {
     margin-left: 0;
     clear: left;
   }
@@ -1097,22 +1116,26 @@ td, th {
 
 @media screen and (min-width: 768px) {
   .view-article .article__item .article__body,
-  .view-speaker .article__item .article__body {
+  .view-speaker .article__item .article__body,
+  .view-session .article__item .article__body {
     width: calc((100% - 8px) / 1.3333333333);
     margin-left: calc(24px);
   }
   .view-article .article__item .article__body:nth-child(n),
-  .view-speaker .article__item .article__body:nth-child(n) {
+  .view-speaker .article__item .article__body:nth-child(n),
+  .view-session .article__item .article__body:nth-child(n) {
     clear: none;
     margin-left: calc(24px);
     margin-right: 0;
   }
   .view-article .article__item .article__body:nth-child(2n),
-  .view-speaker .article__item .article__body:nth-child(2n) {
+  .view-speaker .article__item .article__body:nth-child(2n),
+  .view-session .article__item .article__body:nth-child(2n) {
     margin-right: -1px;
   }
   .view-article .article__item .article__body:nth-child(2n+1),
-  .view-speaker .article__item .article__body:nth-child(2n+1) {
+  .view-speaker .article__item .article__body:nth-child(2n+1),
+  .view-session .article__item .article__body:nth-child(2n+1) {
     margin-left: 0;
     clear: left;
   }
@@ -1120,22 +1143,26 @@ td, th {
 
 @media screen and (min-width: 1024px) {
   .view-article .article__item .article__body,
-  .view-speaker .article__item .article__body {
+  .view-speaker .article__item .article__body,
+  .view-session .article__item .article__body {
     width: calc((100% - 10.6666666667px) / 1.3333333333);
     margin-left: calc(32px);
   }
   .view-article .article__item .article__body:nth-child(n),
-  .view-speaker .article__item .article__body:nth-child(n) {
+  .view-speaker .article__item .article__body:nth-child(n),
+  .view-session .article__item .article__body:nth-child(n) {
     clear: none;
     margin-left: calc(32px);
     margin-right: 0;
   }
   .view-article .article__item .article__body:nth-child(2n),
-  .view-speaker .article__item .article__body:nth-child(2n) {
+  .view-speaker .article__item .article__body:nth-child(2n),
+  .view-session .article__item .article__body:nth-child(2n) {
     margin-right: -1px;
   }
   .view-article .article__item .article__body:nth-child(2n+1),
-  .view-speaker .article__item .article__body:nth-child(2n+1) {
+  .view-speaker .article__item .article__body:nth-child(2n+1),
+  .view-session .article__item .article__body:nth-child(2n+1) {
     margin-left: 0;
     clear: left;
   }
@@ -1216,6 +1243,17 @@ td, th {
   .article__social a + a {
     margin-left: 16px;
   }
+}
+
+.article__meta {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .module__banners--diamant .grid--1-1-1 > .grid__item:nth-child(n),
