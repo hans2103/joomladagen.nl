@@ -78,6 +78,10 @@
 .article__info {
   font-size: $font-size-m;
   color: color(grey, light);
+
+  .article__meta-item + .article__meta-item {
+      @include spacing(left, margin, 0.5);
+  }
 }
 
 .article__title-link {

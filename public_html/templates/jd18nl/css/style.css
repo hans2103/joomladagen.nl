@@ -937,6 +937,22 @@ td, th {
   color: #bcbcbc;
 }
 
+.article__info .article__meta-item + .article__meta-item {
+  margin-left: 8px;
+}
+
+@media screen and (min-width: 560px) {
+  .article__info .article__meta-item + .article__meta-item {
+    margin-left: 12px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .article__info .article__meta-item + .article__meta-item {
+    margin-left: 16px;
+  }
+}
+
 .article__title-link {
   text-decoration: none;
 }
