@@ -32,39 +32,44 @@ echo JLayouts::render('template.content.header', $array);
     <div class="container container--shift">
 		<?php if (!empty($this->items)) : ?>
             <div class="article__item grid grid--flex grid--1-1-1-1">
-	            <?php foreach ($this->items as $key => $item) : ?>
-                    <?php if($item->level) : ?>
+				<?php foreach ($this->items as $key => $item) : ?>
+					<?php if ($item->level) : ?>
 
-                    <article class="grid__item">
-                            <div class="article__info">
-					            <?php
-                                if ($item->level): ?>
-                                    <span class="article__meta-item label <?php echo $item->level_label ?>">
-						                <?php echo $item->level ?>
-					                </span><?php
-                                endif;
-
-					            if(!empty($item->speakers))
-					            {
-                                    foreach ($item->speakers as $speaker)
-                                    {
-	                                    echo '<span class="article__meta-item">' . Text::_(trim($speaker->title)) . '</span>';
-                                    }
-					            }
-					            ?>
-
-                            </div>
+                        <article class="grid__item">
 
                             <div class="article__title">
                                 <p><strong><?php
-						            $url  = Route::_('index.php?option=com_conference&view=sessions&id=' . $item->conference_session_id);
-						            $text = Text::_($this->escape($item->title));
-						            echo HTMLHelper::_('link', $url, $text);
-						            ?></strong></p>
+										$text = Text::_($this->escape($item->title));
+										if ($item->listview) :
+											$url = Route::_('index.php?option=com_conference&view=sessions&id=' . $item->conference_session_id);
+											echo HTMLHelper::_('link', $url, $text);
+										endif;
+										if (!$item->listview) :
+											echo Text::_($text);
+										endif;
+										?></strong></p>
                             </div>
-                    </article>
-                <?php endif; ?>
-	            <?php endforeach; ?>
+                            <div class="article__info">
+								<?php
+								if ($item->level): ?>
+                                <span class="article__meta-item label <?php echo $item->level_label ?>">
+									<?php echo $item->level ?>
+                                    </span><?php
+								endif;
+
+								if (!empty($item->speakers))
+								{
+									foreach ($item->speakers as $speaker)
+									{
+										echo '<span class="article__meta-item">' . Text::_(trim($speaker->title)) . '</span>';
+									}
+								}
+								?>
+
+                            </div>
+                        </article>
+					<?php endif; ?>
+				<?php endforeach; ?>
             </div>
 		<?php endif; ?>
 
