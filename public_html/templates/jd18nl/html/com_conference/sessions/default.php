@@ -56,11 +56,11 @@ echo JLayouts::render('template.content.header', $array);
                             </div>
 
                             <div class="article__title">
-                                <h2><?php
+                                <p><strong><?php
 						            $url  = Route::_('index.php?option=com_conference&view=sessions&id=' . $item->conference_session_id);
 						            $text = Text::_($this->escape($item->title));
 						            echo HTMLHelper::_('link', $url, $text);
-						            ?></h2>
+						            ?></strong></p>
                             </div>
                     </article>
                 <?php endif; ?>
