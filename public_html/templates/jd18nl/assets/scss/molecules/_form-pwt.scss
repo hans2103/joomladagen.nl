@@ -19,6 +19,57 @@
     padding: $spacing-s 12px;
     line-height: 24px;
   }
+
+  // Form section is used to wrap .form-group
+  .form {
+    @include spacing(bottom, margin, $lastchildnone: true);
+
+    // Lighter fields for disabled fields
+    [disabled] {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  // Form group is used to wrap label and input pairs
+  .form__group {
+    @include content-block;
+  }
+
+  .form__label,
+  .form__input {
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .form__label {
+    display: inline-block;
+    padding-bottom: $spacing-s;
+  }
+
+  .form__input {
+    width: 100%;
+    padding: $spacing-xs $spacing-s;
+    border: $illusion-form-border-width solid;
+    line-height: $line-height + $spacing-xs;
+
+    &:focus {
+      outline: 3px solid $color-focus;
+      outline-offset: 0;
+    }
+  }
+
+  // Allow a qualifying element, remove rounded corners from inputs and textareas
+  input.form__input,
+  textarea.form__input {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+
+  // Set a height for select elements
+  select {
+    height: $line-height + ($spacing-xs * 4);
+  }
 }
 
 .form__pwt-menu {

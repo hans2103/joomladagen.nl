@@ -21,7 +21,7 @@ HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
 
 $returnUrl = base64_encode(Uri::root() . Route::_('index.php?option=com_conference&view=profile', false));
-$params = JComponentHelper::getParams('com_conference');
+$params    = JComponentHelper::getParams('com_conference');
 
 Factory::getDocument()->addScriptDeclaration("
         Joomla.submitbutton = function(task)
@@ -50,7 +50,7 @@ echo JLayouts::render('template.content.header', $array);
 <section class="section__wrapper">
     <div class="container">
         <div class="article__item">
-            <form name="speakerForm" id="speakerForm" class="form form-horizontal form-validate"
+            <form name="speakerForm" id="speakerForm" class="form form-horizontal form-validate form__pwt"
                   action="<?php echo Route::_('index.php?option=com_conference&task=speaker.edit&id=' . $this->form->getValue('conference_speaker_id')); ?>"
                   method="post" enctype="multipart/form-data">
 				<?php
@@ -59,119 +59,110 @@ echo JLayouts::render('template.content.header', $array);
 					'view'  => 'speaker'
 				));
 				?>
-                <div class="well well-small">
-                    <!-- Start row -->
-                    <div class="row-fluid">
-                        <!-- Start left -->
-                        <div class="span12">
-							<?php echo $this->form->renderField('title'); ?>
+				<?php echo $this->form->renderField('title'); ?>
 
-							<?php if (!Factory::getUser()->id): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('email'); ?>
-                                    </div>
-                                    <div class="controls">
-										<?php echo $this->form->getInput('email'); ?>
-                                        <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_EMAIL_DESC') ?></span>
-                                    </div>
-                                </div>
-							<?php endif; ?>
+				<?php if (!Factory::getUser()->id): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('email'); ?>
+                        </div>
+						<?php echo $this->form->getInput('email'); ?>
+                        <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_EMAIL_DESC') ?></span>
+                    </div>
+				<?php endif; ?>
 
-                            <div class="control-group">
-                                <div class="control-label">
-									<?php echo $this->form->getLabel('speakernotes'); ?>
-                                </div>
-                                <div class="controls">
-									<?php echo $this->form->getInput('speakernotes'); ?>
-                                    <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_NOTES_DESC') ?></span>
-                                </div>
-                            </div>
-                            <hr>
-							<?php if ($params->get('twitter', 1)): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('twitter'); ?>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="input-prepend">
-                                            <span class="add-on">@</span>
-											<?php echo $this->form->getInput('twitter'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-							<?php endif; ?>
-							<?php if ($params->get('facebook', 1)): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('facebook'); ?>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="input-prepend">
-                                            <span class="add-on">https://www.facebook.com/</span>
-											<?php echo $this->form->getInput('facebook'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-							<?php endif; ?>
-							<?php if ($params->get('googleplus', 1)): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('googleplus'); ?>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="input-prepend">
-                                            <span class="add-on">https://plus.google.com/</span>
-											<?php echo $this->form->getInput('googleplus'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-							<?php endif; ?>
-							<?php if ($params->get('linkedin', 1)): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('linkedin'); ?>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="input-prepend">
-                                            <span class="add-on">https://www.linkedin.com/in/</span>
-											<?php echo $this->form->getInput('linkedin'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-							<?php endif; ?>
-							<?php if ($params->get('website', 1)): ?>
-                                <div class="control-group">
-                                    <div class="control-label">
-										<?php echo $this->form->getLabel('website'); ?>
-                                    </div>
-                                    <div class="controls">
-                                        <div class="input-prepend">
-                                            <span class="add-on">https://</span>
-											<?php echo $this->form->getInput('website'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-							<?php endif; ?>
-                            <hr>
-							<?php echo $this->form->renderField('bio'); ?>
-                            <hr>
-                            <div class="control-group">
-                                <div class="control-label">
-									<?php echo $this->form->getLabel('image'); ?>
-                                </div>
-                                <div class="controls">
-									<?php echo $this->form->getInput('image'); ?>
-                                    <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_IMAGE_DESC') ?></span>
-                                </div>
+                <div class="form__group">
+                    <div class="form__label">
+						<?php echo $this->form->getLabel('speakernotes'); ?>
+                    </div>
+					<?php echo $this->form->getInput('speakernotes'); ?>
+                    <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_NOTES_DESC') ?></span>
+                </div>
+
+                <hr>
+
+				<?php if ($params->get('twitter', 1)): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('twitter'); ?>
+                        </div>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">@</span>
+								<?php echo $this->form->getInput('twitter'); ?>
                             </div>
                         </div>
+                    </div>
+				<?php endif; ?>
+				<?php if ($params->get('facebook', 1)): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('facebook'); ?>
+                        </div>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">https://www.facebook.com/</span>
+								<?php echo $this->form->getInput('facebook'); ?>
+                            </div>
+                        </div>
+                    </div>
+				<?php endif; ?>
+				<?php if ($params->get('googleplus', 1)): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('googleplus'); ?>
+                        </div>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">https://plus.google.com/</span>
+								<?php echo $this->form->getInput('googleplus'); ?>
+                            </div>
+                        </div>
+                    </div>
+				<?php endif; ?>
+				<?php if ($params->get('linkedin', 1)): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('linkedin'); ?>
+                        </div>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">https://www.linkedin.com/in/</span>
+								<?php echo $this->form->getInput('linkedin'); ?>
+                            </div>
+                        </div>
+                    </div>
+				<?php endif; ?>
+				<?php if ($params->get('website', 1)): ?>
+                    <div class="form__group">
+                        <div class="form__label">
+							<?php echo $this->form->getLabel('website'); ?>
+                        </div>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">https://</span>
+								<?php echo $this->form->getInput('website'); ?>
+                            </div>
+                        </div>
+                    </div>
+				<?php endif; ?>
+                <hr>
+				<?php echo $this->form->renderField('bio'); ?>
+                <hr>
+                <div class="form__group">
+                    <div class="form__label">
+						<?php echo $this->form->getLabel('image'); ?>
+                    </div>
+                    <div class="controls">
+						<?php echo $this->form->getInput('image'); ?>
+                        <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_IMAGE_DESC') ?></span>
                     </div>
                 </div>
 
                 <input type="hidden" name="task" value=""/>
-                <input type="hidden" name="conference_speaker_id" value="<?php echo $this->form->getValue('conference_speaker_id'); ?>"/>
-                <input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />
+                <input type="hidden" name="conference_speaker_id"
+                       value="<?php echo $this->form->getValue('conference_speaker_id'); ?>"/>
+                <input type="hidden" name="return" value="<?php echo $returnUrl; ?>"/>
 				<?php echo $this->form->renderField('conference_speaker_id'); ?>
 				<?php echo $this->form->renderField('enabled'); ?>
 				<?php echo HTMLHelper::_('form.token'); ?>
