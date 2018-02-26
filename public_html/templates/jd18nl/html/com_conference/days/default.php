@@ -46,7 +46,10 @@ echo JLayouts::render('template.content.header', $array);
 											<?php
 											if (!empty($this->rooms)):
 												foreach ($this->rooms as $room):
-													echo '<th width="' . (90 / count($this->rooms)) . '%">' . $room->title . '</th>';
+													echo '<th width="' . (90 / count($this->rooms)) . '%">';
+													echo $room->title . '<br>';
+													echo '<small>' . $room->subtitle . '</small>';
+													echo '</th>';
 												endforeach;
 											endif;
 											?>
