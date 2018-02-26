@@ -5356,23 +5356,27 @@ ul.j2store-cart-list {
   padding: 0 15px 15px;
 }
 
-.j2store-view-back-button {
+.j2store-view-back-button,
+.button--back {
   margin-bottom: 16px;
 }
 
 @media screen and (min-width: 560px) {
-  .j2store-view-back-button {
+  .j2store-view-back-button,
+  .button--back {
     margin-bottom: 24px;
   }
 }
 
 @media screen and (min-width: 1024px) {
-  .j2store-view-back-button {
+  .j2store-view-back-button,
+  .button--back {
     margin-bottom: 32px;
   }
 }
 
-.j2store-view-back-button i {
+.j2store-view-back-button i,
+.button--back i {
   top: 4px;
 }
 
