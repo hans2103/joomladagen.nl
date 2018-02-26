@@ -92,7 +92,11 @@ echo JLayouts::render('template.content.header', $array);
                                                                                 <span class="icon-grid-view" rel="tooltip"
                                                                                       data-original-title="<?php echo Text::_('COM_CONFERENCE_SLIDES_AVAILABLE') ?>"></span>
 								                                            <?php endif; ?>
-                                                                            <a href="<?php echo Route::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id) ?>"><?php echo $session->title ?></a>
+                                                                            <?php
+                                                                                $url  = Route::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id);
+                                                                                $text = $session->title;
+                                                                                echo HTMLHelper::_('link', $url, $text);
+                                                                            ?>
 							                                            <?php else: ?>
 								                                            <?php echo $session->title ?>
 							                                            <?php endif; ?>
@@ -111,7 +115,7 @@ echo JLayouts::render('template.content.header', $array);
 							                                            {
 								                                            if ($speaker->enabled)
 								                                            {
-									                                            $sessionspeakers[] = '<span class="icon-user"></span> <a href="index.php?option=com_conference&view=speakers&id=' . $speaker->conference_speaker_id . '">' . trim($speaker->title) . '</a>';
+									                                            $sessionspeakers[] = '<span class="icon-user"></span> <a href="index.php?option=com_conference&view=speaker&conference_speaker_id=' . $speaker->conference_speaker_id . '">' . trim($speaker->title) . '</a>';
 								                                            }
 								                                            else
 								                                            {

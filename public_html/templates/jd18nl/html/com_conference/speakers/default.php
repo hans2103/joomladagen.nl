@@ -39,7 +39,7 @@ echo JLayouts::render('template.content.header', $array);
                         $data   = array(
                             'title'               => $item->title,
                             'image'               => $item->image ? $item->image : 'http://placehold.it/200x200',
-                            'link'                => Route::_('index.php?option=com_conference&view=speakers&id=' . $item->conference_speaker_id),
+                            'link'                => Route::_('index.php?option=com_conference&view=speaker&conference_speaker_id=' . $item->conference_speaker_id),
                             'image_ratio'         => 'media-placeholder--1by1',
                             'linktext'            => 'meer info'
                         );
