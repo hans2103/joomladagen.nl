@@ -123,7 +123,7 @@ echo JLayouts::render('template.content.header', $array);
 
 																				if ($speaker->enabled)
 																				{
-																					$url               = Route::_('index.php?option=com_conference&view=speakers&id=' . $speaker->conference_speaker_id);
+																					$url               = Route::_('index.php?option=com_conference&view=speaker&conference_speaker_id=' . $speaker->conference_speaker_id);
 																					$sessionspeakers[] = '<span class="icon-user"></span> ' . HTMLHelper::_('link', $url, $text);
 																				}
 
