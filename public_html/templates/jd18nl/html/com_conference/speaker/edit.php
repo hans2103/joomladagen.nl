@@ -13,12 +13,14 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::_('behavior.formvalidator');
 
+$returnUrl = base64_encode(Uri::root() . Route::_('index.php?option=com_conference&view=profile', false));
 $params = JComponentHelper::getParams('com_conference');
 
 Factory::getDocument()->addScriptDeclaration("
@@ -168,10 +170,8 @@ echo JLayouts::render('template.content.header', $array);
                 </div>
 
                 <input type="hidden" name="task" value=""/>
-                <input type="hidden" name="conference_speaker_id"
-                       value="<?php echo $this->form->getValue('conference_speaker_id'); ?>"/>
-                <input type="hidden" name="return"
-                       value="<?php echo Factory::getApplication()->input->get('return', '', 'base64'); ?>"/>
+                <input type="hidden" name="conference_speaker_id" value="<?php echo $this->form->getValue('conference_speaker_id'); ?>"/>
+                <input type="hidden" name="return" value="<?php echo $returnUrl; ?>" />
 				<?php echo $this->form->renderField('conference_speaker_id'); ?>
 				<?php echo $this->form->renderField('enabled'); ?>
 				<?php echo HTMLHelper::_('form.token'); ?>

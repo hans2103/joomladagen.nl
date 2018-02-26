@@ -96,6 +96,7 @@ echo JLayouts::render('template.content.header', $array);
                     </div>
                 </div>
                 <input type="hidden" name="task" value=""/>
+                <input type="hidden" name="conference_session_id" value="<?php echo $this->form->getValue('conference_session_id'); ?>" />
                 <input type="hidden" name="return" value="<?php echo $returnUrl; ?>"/>
 				<?php echo $this->form->renderField('conference_session_id'); ?>
 				<?php echo $this->form->renderField('enabled'); ?>

@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
 $params         = ComponentHelper::getParams('com_conference');
 $this->item     = $this->profile;
 $returnUrl      = base64_encode(Uri::root() . Route::_('index.php?option=com_conference&view=profile', false));
-$editprofileURL = 'index.php?option=com_conference&conference_speaker_id=' . $this->item->conference_speaker_id . '&return=' . $returnUrl;
+$editprofileURL = 'index.php?option=com_conference&conference_speaker_id=' . $this->item->conference_speaker_id;
 $task           = '&task=speaker.edit';
 
 // @todo Check if we need to entertain the add task
@@ -99,7 +99,7 @@ echo JLayouts::render('template.content.header', $array);
                     <h2><?php echo JText::_('COM_CONFERENCE_TITLE_SESSIONS') ?></h2>
 					<?php
 					if ($this->canDo->get('core.create')) :
-						$url  = Route::_('index.php?option=com_conference&view=sessions&task=edit&layout=edit');
+						$url  = Route::_('index.php?option=com_conference&task=session.add&layout=edit');
 						$text = '<span class="icon-plus"></span> ' . Text::_('COM_CONFERENCE_MY_ADD_SESSION');
 						echo HTMLHelper::_('link', $url, $text);
 					endif;
@@ -140,7 +140,7 @@ echo JLayouts::render('template.content.header', $array);
                                     <td>
 										<?php
 										if ($this->canDo->get('core.edit.own')) :
-											$url  = Route::_('index.php?option=com_conference&view=sessions&task=edit&layout=edit&id=' . $session->conference_session_id);
+											$url  = Route::_('index.php?option=com_conference&task=session.edit&layout=edit&conference_session_id='.$session->conference_session_id);
 											$text = $session->title;
 											echo HTMLHelper::_('link', $url, $text);
 										else :
