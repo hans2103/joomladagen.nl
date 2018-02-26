@@ -38,108 +38,119 @@ echo JLayouts::render('template.content.header', $array);
                             <a class="tab-button" href="#"><?php echo $item->title; ?></a>
                             <div class="tab-content">
                                 <div class="table-responsive">
-                                <table class="table table-bordered table-striped">
-                                    <thead class="hidden-phone">
-                                    <tr>
-                                        <th width="10%"></th>
-		                                <?php if (!empty($this->rooms)): ?>
-                                            <?php foreach ($this->rooms as $room): ?>
-                                                <th width="<?php echo(90 / count($this->rooms)); ?>%"><?php echo $room->title ?></th>
-		                                    <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tr>
-                                    </thead>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="hidden-phone">
+                                        <tr>
+                                            <th width="10%"></th>
+											<?php
+											if (!empty($this->rooms)):
+												foreach ($this->rooms as $room):
+													echo '<th width="' . (90 / count($this->rooms)) . '%">' . $room->title . '</th>';
+												endforeach;
+											endif;
+											?>
+                                        </tr>
+                                        </thead>
 
-                                    <tbody>
-	                                <?php if (!empty($item->slots)): ?>
-		                                <?php foreach ($item->slots as $slot) : ?>
-                                            <?php if ($slot->general): ?>
-                                                <tr class="info">
-                                                    <td><?php echo HTMLHelper::_('date', $slot->start_time, 'H:i'); ?></td>
-                                                    <td colspan="<?php echo(count($this->rooms)); ?>">
-                                                        <?php if (isset($this->sessions[$slot->conference_slot_id][$this->generalRoom])) : ?>
-                                                            <?php $session = $this->sessions[$slot->conference_slot_id][$this->generalRoom]; ?>
-                                                            <?php if ($session->listview): ?>
-                                                                <?php echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=session&id=' . $session->conference_session_id), $session->title); ?>
-                                                            <?php else: ?>
-                                                                <?php echo $session->title ?>
-                                                            <?php endif; ?>
-                                                        <?php endif; ?>
-                                                    </td>
-                                                </tr>
-                                            <?php endif; ?>
+                                        <tbody>
+										<?php if (!empty($item->slots)): ?>
+											<?php foreach ($item->slots as $slot) : ?>
+												<?php if ($slot->general): ?>
+                                                    <tr class="info">
+                                                        <td><?php echo HTMLHelper::_('date', $slot->start_time, 'H:i'); ?></td>
+                                                        <td colspan="<?php echo(count($this->rooms)); ?>">
+															<?php if (isset($this->sessions[$slot->conference_slot_id][$this->generalRoom])) : ?>
+																<?php $session = $this->sessions[$slot->conference_slot_id][$this->generalRoom]; ?>
+																<?php if ($session->listview): ?>
+																	<?php echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=session&id=' . $session->conference_session_id), $session->title); ?>
+																<?php else: ?>
+																	<?php echo $session->title ?>
+																<?php endif; ?>
+															<?php endif; ?>
+                                                        </td>
+                                                    </tr>
+												<?php endif; ?>
 
-	                                        <?php if (!$slot->general): ?>
-                                                <tr>
-                                                    <td><?php echo HTMLHelper::_('date', $slot->start_time, 'H:i'); ?></td>
-		                                            <?php if (!empty($this->rooms)): ?>
-	                                                    <?php foreach ($this->rooms as $room): ?>
-				                                            <?php if (isset($this->sessions[$slot->conference_slot_id][$room->conference_room_id])) : ?>
-                                                                <td>
-						                                            <?php $session = $this->sessions[$slot->conference_slot_id][$room->conference_room_id]; ?>
-                                                                    <span class="visible-phone roomname">
+												<?php if (!$slot->general): ?>
+                                                    <tr>
+                                                        <td><?php echo HTMLHelper::_('date', $slot->start_time, 'H:i'); ?></td>
+														<?php if (!empty($this->rooms)): ?>
+															<?php foreach ($this->rooms as $room): ?>
+																<?php if (isset($this->sessions[$slot->conference_slot_id][$room->conference_room_id])) : ?>
+                                                                    <td>
+																		<?php $session = $this->sessions[$slot->conference_slot_id][$room->conference_room_id]; ?>
+                                                                        <span class="visible-phone roomname">
                                                                     <?php echo $room->title ?>
                                                                     </span>
-						                                            <?php if ($session->level): ?>
-                                                                        <?php
-							                                            $class = 'label ' . $session->level_label;
-                                                                        echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=levels'), $session->level, array('class' => $class));
-                                                                        ?>
-						                                            <?php endif; ?>
-                                                                    <div class="session">
-							                                            <?php if ($session->listview): ?>
-								                                            <?php if ($session->slides): ?>
-                                                                                <span class="icon-grid-view" rel="tooltip"
-                                                                                      data-original-title="<?php echo Text::_('COM_CONFERENCE_SLIDES_AVAILABLE') ?>"></span>
-								                                            <?php endif; ?>
-                                                                            <?php
-                                                                                $url  = Route::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id);
-                                                                                $text = $session->title;
-                                                                                echo HTMLHelper::_('link', $url, $text);
-                                                                            ?>
-							                                            <?php else: ?>
-								                                            <?php echo $session->title ?>
-							                                            <?php endif; ?>
+																		<?php if ($session->level): ?>
+																			<?php
+																			$url   = Route::_('index.php?option=com_conference&view=levels');
+																			$text  = $session->level;
+																			$class = 'label ' . $session->level_label;
+																			echo HTMLHelper::_('link', $url, $text, array('class' => $class));
+																			?>
+																		<?php endif; ?>
+                                                                        <div class="session">
+																			<?php
+																			if ($session->listview):
+																				if ($session->slides):
+																					echo '<span class="icon-grid-view" rel="tooltip" data-original-title="' . Text::_('COM_CONFERENCE_SLIDES_AVAILABLE') . '"></span>';
+																				endif;
+																				$url  = Route::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id);
+																				$text = $session->title;
+																				echo HTMLHelper::_('link', $url, $text);
+																			else:
+																				echo $session->title;
+																			endif;
 
-							                                            <?php if ($params->get('language', 0)): ?>
-								                                            <?php if ($session->language == 'en'): ?>
-                                                                                <img class="lang" src="media/mod_languages/images/<?php echo($session->language) ?>.gif"/>
-								                                            <?php endif; ?>
-							                                            <?php endif; ?>
-                                                                    </div>
-						                                            <?php if ($session->speakers): ?>
-							                                            <?php
-							                                            $sessionspeakers = array();
-
-							                                            foreach ($session->speakers as $speaker)
-							                                            {
-								                                            if ($speaker->enabled)
-								                                            {
-									                                            $sessionspeakers[] = '<span class="icon-user"></span> <a href="index.php?option=com_conference&view=speaker&conference_speaker_id=' . $speaker->conference_speaker_id . '">' . trim($speaker->title) . '</a>';
-								                                            }
-								                                            else
-								                                            {
-									                                            $sessionspeakers[] = '<span class="icon-user"></span> ' . trim($speaker->title);
-								                                            }
-							                                            }
-							                                            ?>
-                                                                        <div class="speaker">
-                                                                            <small><?php echo implode('<br/> ', $sessionspeakers); ?></small>
+																			if ($params->get('language', 0)):
+																				if ($session->language == 'en'):
+																					$src   = 'media/mod_languages/images/' . $session->language . '.gif';
+																					$alt   = 'language flag';
+																					$class = 'lang';
+																					echo ' ' . HTMLHelper::_('image', $src, $alt, array('class' => $class));
+																				endif;
+																			endif;
+																			?>
                                                                         </div>
-						                                            <?php endif; ?>
-                                                                </td>
-				                                            <?php else: ?>
-                                                                <td class="hidden-phone"></td>
-				                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    <?php endif; ?>
-                                                </tr>
-                                            <?php endif;?>
+																		<?php
+																		if ($session->speakers):
+																			$sessionspeakers = array();
 
-		                                <?php endforeach; ?>
-	                                <?php endif; ?>
-                                    </tbody>
-                                </table>
+																			foreach ($session->speakers as $speaker)
+																			{
+																				$text = trim($speaker->title);
+
+																				if ($speaker->enabled)
+																				{
+																					$url               = Route::_('index.php?option=com_conference&view=speakers&id=' . $speaker->conference_speaker_id);
+																					$sessionspeakers[] = '<span class="icon-user"></span> ' . HTMLHelper::_('link', $url, $text);
+																				}
+
+																				if (!$speaker->enabled)
+																				{
+																					$sessionspeakers[] = '<span class="icon-user"></span> ' . $text;
+																				}
+																			}
+
+																			echo '<div class="speaker">';
+																			echo '  <small>' . implode('<br/> ', $sessionspeakers) . '</small>';
+																			echo '</div>';
+																		endif;
+																		?>
+                                                                    </td>
+																<?php else: ?>
+                                                                    <td class="hidden-phone"></td>
+																<?php endif; ?>
+															<?php endforeach; ?>
+														<?php endif; ?>
+                                                    </tr>
+												<?php endif; ?>
+
+											<?php endforeach; ?>
+										<?php endif; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
