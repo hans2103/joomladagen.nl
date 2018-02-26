@@ -100,7 +100,8 @@
 
 .view-article,
 .view-speaker,
-.view-session {
+.view-session,
+.view-profile {
   .article__item {
     .article__image {
       @include span(8 of 12, 0 to $menu);
