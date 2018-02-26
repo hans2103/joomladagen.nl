@@ -254,7 +254,8 @@ ul.j2store-cart-list {
   padding: 0 15px 15px;
 }
 
-.j2store-view-back-button {
+.j2store-view-back-button,
+.button--back {
   @include spacing(bottom, margin, 1);
 
   i {

@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 
 $params = JComponentHelper::getParams('com_conference');
 
@@ -36,6 +37,11 @@ echo JLayouts::render('template.content.header', $array);
     <div class="container">
         <div class="article__item">
             <div class="article__image">
+                <p><?php
+                $url  = Route::_('index.php?option=com_conference&view=days');
+                $text =  '<i class="fa fa-chevron-left"> </i> ' . Text::_('TPL_LINK_BACK2PROGRAM_LABEL');
+                echo HTMLHelper::_('link', $url, $text, array('class' => 'button button--back'));
+                ?></p>
 	            <?php
                     if ($this->item->conference_speaker_id):
 		            foreach($this->item->speakers as $speaker):
@@ -82,11 +88,11 @@ echo JLayouts::render('template.content.header', $array);
 	                endif;
 
 	                if($this->item->conference_slot_id):
-	                    echo HTMLHelper::_('link', JRoute::_('index.php?option=com_conference&view=days'), '<span>' . $this->item->slot . '</span>', array('class'=>'article__meta-item'));
+	                    echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=days'), '<span>' . $this->item->slot . '</span>', array('class'=>'article__meta-item'));
 	                endif;
 
 	                if($this->item->conference_level_id):
-	                    echo HTMLHelper::_('link', JRoute::_('index.php?option=com_conference&view=levels'), '<span>' . $this->item->level->title . '</span>', array('class'=>'article__meta-item'));
+	                    echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=levels'), '<span>' . $this->item->level->title . '</span>', array('class'=>'article__meta-item'));
 	                endif;
 
 	                if (($params->get('language',0)) && ($this->item->language)):

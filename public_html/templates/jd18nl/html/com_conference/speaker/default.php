@@ -10,6 +10,8 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 
 defined('_JEXEC') or die;
 
@@ -30,6 +32,11 @@ echo JLayouts::render('template.content.header', $array);
     <div class="container">
         <div class="article__item">
             <div class="article__image">
+                <p><?php
+		            $url  = Route::_('index.php?option=com_conference&view=days');
+		            $text =  '<i class="fa fa-chevron-left"> </i> ' . Text::_('TPL_LINK_BACK2PROGRAM_LABEL');
+		            echo HTMLHelper::_('link', $url, $text, array('class' => 'button button--back'));
+		            ?></p>
                 <div class="media-placeholder media-placeholder--1by1">
 					<?php $src = $this->item->image ? $this->item->image : 'http://placehold.it/200x200'; ?>
 					<?php $alt = 'foto van spreker ' . $this->escape($this->item->title); ?>
