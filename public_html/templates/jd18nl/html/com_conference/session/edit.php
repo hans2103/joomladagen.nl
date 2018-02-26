@@ -71,9 +71,13 @@ echo JLayouts::render('template.content.header', $array);
                                 </label>
                                 <div class="controls">
 									<?php echo $this->form->getInput('conference_level_id'); ?>
-                                    <span class="help-block"><a
-                                                href="<?php echo JRoute::_('index.php?option=com_conference&view=levels') ?>"><?php echo JText::_('COM_CONFERENCE_FIELD_LEVEL_DESC'); ?></a></span>
-
+                                    <span class="help-block">
+                                        <?php
+                                        $url  = Route::_('index.php?option=com_conference&view=levels');
+                                        $text = Text::_('COM_CONFERENCE_FIELD_LEVEL_DESC');
+                                        echo HTMLHelper::_('link', $url, $text);
+                                        ?>
+                                    </span>
                                 </div>
                             </div>
 							<?php if ($params->get('language', 0)): ?>
@@ -88,7 +92,7 @@ echo JLayouts::render('template.content.header', $array);
                                 </label>
                                 <div class="controls">
 									<?php echo $this->form->getInput('slides'); ?>
-                                    <span class="help-block"><?php echo JText::_('COM_CONFERENCE_FIELD_SLIDES_DESC') ?></span>
+                                    <span class="help-block"><?php echo Text::_('COM_CONFERENCE_FIELD_SLIDES_DESC') ?></span>
                                 </div>
                             </div>
                         </div>

@@ -27,6 +27,8 @@ $array = array(
 );
 
 echo JLayouts::render('template.content.header', $array);
+
+var_dump($this);
 ?>
 <section class="section__wrapper">
     <div class="container">
