@@ -103,6 +103,7 @@ echo JLayouts::render('template.content.header', $array);
 						$text = '<span class="icon-plus"></span> ' . Text::_('COM_CONFERENCE_MY_ADD_SESSION');
 						echo HTMLHelper::_('link', $url, $text);
 					endif;
+
 					?>
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -112,8 +113,7 @@ echo JLayouts::render('template.content.header', $array);
                                 <th width="25%"><?php echo Text::_('COM_CONFERENCE_FIELD_SLOT') ?></th>
                                 <th><?php echo Text::_('COM_CONFERENCE_FIELD_TITLE') ?></th>
                                 <th width="10%" class="center"><?php echo Text::_('COM_CONFERENCE_FIELD_LEVEL') ?></th>
-                                <th width="10%"
-                                    class="center"><?php echo Text::_('COM_CONFERENCE_FIELD_DESCRIPTION') ?></th>
+                                <th width="10%" class="center"><?php echo Text::_('COM_CONFERENCE_FIELD_DESCRIPTION') ?></th>
                                 <th width="10%" class="center"><?php echo Text::_('COM_CONFERENCE_FIELD_SLIDES') ?></th>
                             </tr>
                             </thead>

@@ -6,6 +6,11 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 JHTML::_('behavior.modal');
 $this->params                = J2Store::config();
 $plugin_title_html           = J2Store::plugin()->eventWithHtml('AddMyProfileTab');
@@ -62,6 +67,25 @@ echo JLayouts::render('template.content.header', $array);
 						<?php
 					} ?>
                     <div class="tabs">
+	                    <?php
+	                    $user    = Factory::getUser();
+	                    $groups  = $user->get('groups');
+	                    $allowed = array('2', '8'); // sprekers, super user
+
+	                    if(array_intersect($groups, $allowed))
+	                    {
+	                        ?>
+                            <div class="tab">
+                                <a class="tab-button" href="#"><?php echo Text::_('TPL_LINK_SPREKERS_LABEL'); ?></a>
+                                <div class="tab-content"><?php
+                                    $url  = '/mijn-sprekerspagina';
+                                    $text = Text::_('TPL_LINK_SPREKERSPAGINA_LABEL');
+                                    echo HTMLHelper::_('link', $url, $text);
+                                ?></div>
+                            </div>
+                            <?php
+	                    }
+	                    ?>
                         <div class="tab">
                             <a class="tab-button" href="#"><?php echo JText::_('J2STORE_MYPROFILE_ORDERS'); ?></a>
                             <div class="tab-content">
