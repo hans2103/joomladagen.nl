@@ -310,7 +310,12 @@ class PWTTemplateHelper
 
 		// Unset unwanted JavaScript
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/caption.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
+
+		if(self::getPageOption() !== 'com-conference' && self::getPageLayout() !== 'edit')
+		{
+			unset($doc->_scripts[$doc->baseurl . '/media/system/js/core.js']);
+			unset($doc->_scripts[$doc->baseurl . '/media/system/js/validate.js']);
+		}
 
 		if (self::getPageOption() !== 'com-j2store')
 		{
@@ -322,7 +327,6 @@ class PWTTemplateHelper
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/jquery-migrate.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/jui/js/bootstrap.min.js']);
 		unset($doc->_scripts[$doc->baseurl . '/media/system/js/tabs-state.js']);
-		unset($doc->_scripts[$doc->baseurl . '/media/system/js/validate.js']);
 
 		if (isset($doc->_script['text/javascript']))
 		{
