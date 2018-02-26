@@ -23,12 +23,11 @@ require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers');
 
 $array = array(
-	'title' => Text::_('COM_CONFERENCE_DAYS_TITLE')
+	'title' => Text::_('COM_CONFERENCE_DAYS_TITLE'),
+	'intro' => (($this->items[0]->description) ? $this->items[0]->description : '')
 );
 
 echo JLayouts::render('template.content.header', $array);
-
-var_dump($this);
 ?>
 <section class="section__wrapper">
     <div class="container">
