@@ -53,6 +53,12 @@ echo JLayouts::render('template.content.header', $array);
                 </div>
             </div>
             <div class="article__body">
+				<p><?php
+				$url  = Route::_($editprofileURL);
+				$text = '<span class="icon-pencil"></span> ' . Text::_('COM_CONFERENCE_MY_EDIT_PROFILE');
+				echo HTMLHelper::_('link', $src, $text);
+				?></p>
+
 				<?php echo($this->item->bio) ?>
 
                 <div class="article__social">
@@ -94,7 +100,7 @@ echo JLayouts::render('template.content.header', $array);
 					<?php
 					if ($this->canDo->get('core.create')) :
 						$url  = Route::_('index.php?option=com_conference&view=session&task=edit&layout=edit');
-						$text = Text::_('COM_CONFERENCE_MY_ADD_SESSION');
+						$text = '<span class="icon-plus"></span> ' . Text::_('COM_CONFERENCE_MY_ADD_SESSION');
 						echo HTMLHelper::_('link', $url, $text);
 					endif;
 					?>
@@ -147,14 +153,16 @@ echo JLayouts::render('template.content.header', $array);
                                     </td>
                                     <td class="center">
 										<?php if ($session->description): ?>
-                                            <span class="badge badge-success"><span class="icon-checkmark"></span></span>
+                                            <span class="badge badge-success"><span
+                                                        class="icon-checkmark"></span></span>
 										<?php else: ?>
                                             <span class="badge badge-important"><span class="icon-delete"></span></span>
 										<?php endif; ?>
                                     </td>
                                     <td class="center">
 										<?php if ($session->slides): ?>
-                                            <span class="badge badge-success"><span class="icon-checkmark"></span></span>
+                                            <span class="badge badge-success"><span
+                                                        class="icon-checkmark"></span></span>
 										<?php else: ?>
                                             <span class="badge badge-important"><span class="icon-delete"></span></span>
 										<?php endif; ?>
@@ -169,40 +177,3 @@ echo JLayouts::render('template.content.header', $array);
         </div>
     </div>
 </section>
-
-<?php $profile = $this->item; ?>
-<div class="conference my">
-    <div class="row-fluid">
-        <div class="span12">
-            <h1 class="pull-left">
-				<?php echo $profile->title ? $profile->title : Factory::getUser()->name; ?>
-            </h1>
-            <a class="btn pull-right " href="<?php echo Route::_($editprofileURL) ?>">
-                <span class="icon-pencil"></span> <?php echo Text::_('COM_CONFERENCE_MY_EDIT_PROFILE') ?>
-            </a>
-        </div>
-    </div>
-
-	<?php if ($this->item->conference_speaker_id) : ?>
-        <div class="row-fluid">
-            <div class="span12">
-                <h2 class="pull-left"><?php echo Text::_('COM_CONFERENCE_TITLE_SESSIONS') ?></h2>
-				<?php if ($this->canDo->get('core.create')) : ?>
-                    <a class="btn pull-right btn-success"
-                       href="<?php echo Route::_('index.php?option=com_conference&view=session&task=edit&layout=edit') ?>">
-                        <span class="icon-plus"></span> <?php echo Text::_('COM_CONFERENCE_MY_ADD_SESSION') ?>
-                    </a>
-				<?php endif; ?>
-            </div>
-        </div>
-        <div class="well well-small">
-            <table class="table table-striped">
-
-                <tbody>
-
-
-                </tbody>
-            </table>
-        </div>
-	<?php endif; ?>
-</div>
