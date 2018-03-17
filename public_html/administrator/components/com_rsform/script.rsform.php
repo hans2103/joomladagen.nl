@@ -990,12 +990,9 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v2.0.6</h2>
+		<h2>Changelog v2.0.8</h2>
 		<ul class="version-history">
-            <li><span class="version-fixed">Fix</span> Restore now ignores invalid characters in the XML backup files.</li>
-            <li><span class="version-fixed">Fix</span> Restoring a backup did not carry over the PDF filename and 'Can delete' permissions.</li>
-            <li><span class="version-fixed">Fix</span> Some parts of {if} scripting weren't working in the Directory Details Layout.</li>
-            <li><span class="version-fixed">Fix</span> There was a missing space when adding the error classes (if the field already had a user supplied class).</li>
+            <li><span class="version-fixed">Fix</span> Multiple Products (Payment Plugin) were not working with Conditional Fields.</li>
 		</ul>
 		<a class="btn btn-large btn-primary" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="btn" href="https://www.rsjoomla.com/support/documentation/rsform-pro.html" target="_blank">Read the RSForm! Pro User Guide</a>

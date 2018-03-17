@@ -79,6 +79,19 @@ defined('_JEXEC') or die;
 
 <div class="akeeba-form-group">
     <label
+            for="404shield_enable"
+            rel="akeeba-sticky-tooltip"
+            data-original-title="<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_404SHIELD_ENABLE'); ?>"
+            data-content="<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_404SHIELD_ENABLE_TIP'); ?>">
+		<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_404SHIELD_ENABLE'); ?>
+    </label>
+
+	<?php echo \JHtml::_('FEFHelper.select.booleanswitch', '404shield_enable', $this->wafconfig['404shield_enable']); ?>
+</div>
+
+
+<div class="akeeba-form-group">
+    <label
            for="404shield"
            rel="akeeba-sticky-tooltip"
            data-original-title="<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_404SHIELD'); ?>"

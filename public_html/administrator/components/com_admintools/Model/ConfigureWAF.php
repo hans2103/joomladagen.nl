@@ -95,6 +95,7 @@ class ConfigureWAF extends Model
 		'criticalfiles'             => 0,
 		'superuserslist'            => 0,
 		'consolewarn'				=> 1,
+		'404shield_enable'			=> 1,
 		'404shield'					=> "wp-admin.php\nwp-login.php\nwp-content/*\nwp-admin/*",
 		'emailphpexceptions'		=> ''
 	);

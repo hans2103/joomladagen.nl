@@ -24,6 +24,7 @@ use RuntimeException;
  * @property   string  $query_type
  * @property   string  $query_content
  * @property   string  $verb
+ * @property   string  $application
  *
  * @method  $this  fverb() fverb(string $v)
  * @method  $this  foption() foption(string $v)

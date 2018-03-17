@@ -1,4 +1,11 @@
 <?php die();?>
+Akeeba Backup 6.0.1
+================================================================================
++ Warn the user if either FOF or FEF is not installed
++ While importing backup archives, they are now sorted alphabetically
+# [HIGH] Site Transfer Wizard: browser-specific BUTTON element behavior prevents using this feature in Firefox
+# [LOW] Inadvertent space between domain and path in the Schedule page
+
 Akeeba Backup 6.0.0
 ================================================================================
 # [LOW] Fixed warning message during the installation due to missing folders

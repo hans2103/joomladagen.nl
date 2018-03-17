@@ -30,7 +30,7 @@ defined('_JEXEC') or die();
                     <input type="text" id="akeeba-transfer-url" placeholder="http://www.example.com"
                            value="<?php echo $this->escape($this->newSiteUrl); ?>">
                     <span class="akeeba-input-group-btn">
-                        <button onclick="akeeba.Transfer.onUrlChange(true);" class="akeeba-btn--inverse" id="akeeba-transfer-btn-url">
+                        <button onclick="akeeba.Transfer.onUrlChange(true); return false;" class="akeeba-btn--inverse" id="akeeba-transfer-btn-url">
 		                    <?php echo \JText::_('COM_AKEEBA_TRANSFER_ERR_NEWURL_BTN'); ?>
                         </button>
                     </span>

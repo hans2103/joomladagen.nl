@@ -29,7 +29,7 @@ class AtsystemFeatureShield404 extends AtsystemFeatureAbstract
 		static::$blockedUrls = $this->cparams->getValue('404shield', '');
 		static::$exceptionHandler = $this->exceptionsHandler;
 
-		return (static::$blockedUrls!= '');
+		return ($this->cparams->getValue('404shield_enable', 1));
 	}
 
 	public function onAfterInitialise()

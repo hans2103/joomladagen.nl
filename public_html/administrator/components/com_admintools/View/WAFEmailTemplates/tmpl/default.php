@@ -104,7 +104,7 @@ $this->getContainer()->template->addJSInline($js);
 						</a>
 					</td>
 					<td>
-						<?php echo JHTML::_('jgrid.published', $row->enabled, $row->admintools_waftemplate_id, '', $enabled, 'cb')?>
+						<?php echo JHTML::_('jgrid.published', $row->enabled, $i, '', $enabled, 'cb')?>
 					</td>
 					<td>
 						<?php echo Html::language($row->language); ?>

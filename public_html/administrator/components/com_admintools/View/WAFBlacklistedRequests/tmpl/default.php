@@ -186,7 +186,7 @@ echo $this->loadAnyTemplate('admin:com_admintools/ControlPanel/plugin_warning');
                         </a>
                     </td>
                     <td>
-						<?php echo JHTML::_('jgrid.published', $row->enabled, $row->id, '', $enabled, 'cb')?>
+						<?php echo JHTML::_('jgrid.published', $row->enabled, $i, '', $enabled, 'cb')?>
                     </td>
 				</tr>
 			<?php

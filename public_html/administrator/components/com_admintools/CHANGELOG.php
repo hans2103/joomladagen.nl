@@ -1,4 +1,14 @@
 <?php die() ?>
+Admin Tools 5.0.2
+================================================================================
+# [HIGH] .htaccess Maker causes 500 error on Apache 2.4 if mod_filter is not loaded and you enable the "Automatically compress static resources" feature
+# [MEDIUM] WAF Blacklist rules were always applied, regardless if we were in the backend or the frontend
+# [MEDIUM] Fixed Console Warn feature causing issues with RTL languages
+# [LOW] The charts overflow their container and the legend is illegible
+# [LOW] Fixed record editing in WAF Blacklist feature
+# [LOW] Fixed toggling published status in list views in WAF Blacklist and WAF Templates pages
+# [LOW] Feature 404 Shield was always enabled
+
 Admin Tools 5.0.1
 ================================================================================
 + Warn users if either FOF or FEF is not installed

@@ -10,17 +10,20 @@ defined('_JEXEC') or die('Restricted access');
 class RsformModelDirectory extends JModelLegacy
 {
     protected $fields;
+    protected $_db;
+    protected $_app;
+    public $params;
 
     /**
      *    Main constructor
      */
     public function __construct($config = array())
     {
-        $this->_app = JFactory::getApplication();
-        $this->_db = JFactory::getDbo();
-        $this->params = $this->_app->getParams('com_rsform');
-        $this->itemid = $this->getItemid();
-        $this->context = 'com_rsform.directory' . $this->itemid;
+        $this->_app     = JFactory::getApplication();
+        $this->_db      = JFactory::getDbo();
+        $this->params   = $this->_app->getParams('com_rsform');
+        $this->itemid   = $this->getItemid();
+        $this->context  = 'com_rsform.directory' . $this->itemid;
 
         // Check for a valid form
         if (!$this->isValid()) {
