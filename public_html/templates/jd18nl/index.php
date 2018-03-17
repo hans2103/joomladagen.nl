@@ -84,24 +84,24 @@ PWTTemplateHelper::localstorageFont();
     <section class="section section--accent section--sponsors">
         <div class="container">
 			<?php
-			// Module params
-			$params = array(
-				'catid'           => 14,
-				'style'           => 'tpl',
-				'moduleclass_sfx' => ' module__banners module__banners--diamant',
-				'count'           => 1,
-				'header_tag'      => 'h2 module__title--center',
-
-			);
-
-			// Load module and add params
-			$module            = JModuleHelper::getModule('mod_banners');
-			$module->title     = "Diamant sponsor";
-			$module->showtitle = 1;
-			$module->params    = json_encode($params);
-
-			// Render module
-			echo JFactory::getDocument()->loadRenderer('module')->render($module);
+//			// Module params
+//			$params = array(
+//				'catid'           => 14,
+//				'style'           => 'tpl',
+//				'moduleclass_sfx' => ' module__banners module__banners--diamant',
+//				'count'           => 1,
+//				'header_tag'      => 'h2 module__title--center',
+//
+//			);
+//
+//			// Load module and add params
+//			$module            = JModuleHelper::getModule('mod_banners');
+//			$module->title     = "Diamant sponsor";
+//			$module->showtitle = 1;
+//			$module->params    = json_encode($params);
+//
+//			// Render module
+//			echo JFactory::getDocument()->loadRenderer('module')->render($module);
 			?>
         </div>
         <div class="container">
