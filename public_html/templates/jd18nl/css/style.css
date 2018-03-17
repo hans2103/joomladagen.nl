@@ -3476,6 +3476,39 @@ input.search-query {
   }
 }
 
+.module__dagopzet .module__logo {
+  float: left;
+  display: inline-block;
+  width: 12vw;
+  margin-top: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  margin-left: 8px;
+}
+
+@media screen and (min-width: 560px) {
+  .module__dagopzet .module__logo {
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .module__dagopzet .module__logo {
+    margin-top: 16px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    margin-left: 16px;
+  }
+}
+
+.module__dagopzet .module__logo svg {
+  width: 100%;
+  height: auto;
+}
+
 .module__dagopzet img {
   width: 12vw;
   margin-top: 8px;

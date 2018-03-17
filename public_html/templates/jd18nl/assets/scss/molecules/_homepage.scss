@@ -47,6 +47,18 @@
     }
   }
 
+  .module__logo {
+    float: left;
+    display: inline-block;
+    width: 12vw;
+    @include spacing(all, margin, 0.5);
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
   img {
     width: 12vw;
     @include spacing(all, margin, 0.5);
