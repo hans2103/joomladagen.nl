@@ -13,6 +13,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
@@ -30,11 +31,11 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 <div id="j-sidebar-container" class="span2">
 	<?php echo $this->sidebar; ?>
 </div>
-<form action="<?php echo Route::_('index.php?option=com_pwtseo&view=articles'); ?>" method="post" name="adminForm"
+<form action="<?php echo Route::_('index.php?option=com_pwtseo&view=customs'); ?>" method="post" name="adminForm"
       id="adminForm">
     <div id="j-main-container" class="span10">
 		<?php
-		echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this)); ?>
+		echo LayoutHelper::render('joomla.searchtools.default', array('view' => $this));?>
 		<?php if (empty($this->items)) : ?>
             <div class="alert alert-no-items">
 				<?php echo Text::_('JGLOBAL_NO_MATCHING_RESULTS'); ?>
@@ -46,33 +47,23 @@ HTMLHelper::_('formbehavior.chosen', 'select');
                     <th width="1%" class="center">
 						<?php echo HTMLHelper::_('grid.checkall'); ?>
                     </th>
-                    <th width="1%" class="nowrap center">
-						<?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'article.state', $listDirn, $listOrder); ?>
-                    </th>
-                    <th width="50%">
-						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_TITLE', 'article.title', $listDirn, $listOrder); ?>
-                    </th>
-                    <th width="10%" class="nowrap hidden-phone">
-						<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'article.language', $listDirn, $listOrder); ?>
+                    <th width="60%">
+						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_URL', 'item.title', $listDirn, $listOrder); ?>
                     </th>
                     <th width="17%">
-						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_FOCUSWORD', 'seo.focus_word', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_FOCUSWORD', 'item.focus_word', $listDirn, $listOrder); ?>
                     </th>
                     <th width="5%" class="nowrap hidden-phone">
-						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_SCORE', 'seo.pwtseo_score', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_SCORE', 'item.pwtseo_score', $listDirn, $listOrder); ?>
                     </th>
-                    <th width="17%">
-						<?php echo HTMLHelper::_('searchtools.sort', 'COM_PWTSEO_HEADING_PUBLISH_UP', 'article.publish_up', $listDirn, $listOrder); ?>
-                    </th>
-
                     <th width="2%" class="nowrap hidden-phone">
-						<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'article.id', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'item.id', $listDirn, $listOrder); ?>
                     </th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                    <td colspan="8">
+                    <td colspan="5">
 						<?php echo $this->pagination->getListFooter(); ?>
                     </td>
                 </tr>
@@ -80,39 +71,24 @@ HTMLHelper::_('formbehavior.chosen', 'select');
                 <tbody>
 				<?php foreach ($this->items as $i => $item) :
 					$ordering = ($listOrder == 'ordering');
-					$canEdit = $user->authorise('core.edit', 'com_content');
-					$canCheckin = $user->authorise('core.manage', 'com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
-					$return = base64_encode('index.php?option=com_pwtseo&view=articles');
+					$canEdit = $user->authorise('core.edit', 'com_pwtseo');
 					$scoreClass = $item->pwtseo_score < 40 ? 0 : ($item->pwtseo_score < 75 ? 1 : 2);
+
+					$sUrl = rtrim(Uri::root(), '/') . $this->escape($item->url);
 					?>
                     <tr>
                         <td class="center">
 							<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
                         </td>
-                        <td>
-							<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'articles.', false, 'cb', $item->publish_up, $item->publish_down); ?>
-                        </td>
                         <td class="nowrap has-context">
                             <div class="pull-left">
-								<?php if ($item->checked_out) : ?>
-									<?php echo HTMLHelper::_('jgrid.checkedout', $i, '', $item->checked_out_time); ?>
-								<?php endif; ?>
 								<?php if ($canEdit) : ?>
-                                    <a href="<?php echo Route::_('index.php?option=com_content&task=article.edit&id=' . (int) $item->id . '&return=' . $return); ?>">
-										<?php echo $this->escape($item->title); ?></a>
+                                    <a href="<?php echo Route::_('index.php?option=com_pwtseo&task=custom.edit&id=' . (int) $item->id); ?>">
+										<?php echo $sUrl; ?></a>
 								<?php else : ?>
-									<?php echo $this->escape($item->title); ?>
+									<?php echo $sUrl; ?>
 								<?php endif; ?>
-                                <span class="small break-word">
-									<?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias)); ?>
-								</span>
-                                <div class="small">
-									<?php echo $this->escape($item->cat_title); ?>
-                                </div>
                             </div>
-                        </td>
-                        <td class="small hidden-phone">
-							<?php echo LayoutHelper::render('joomla.content.language', $item); ?>
                         </td>
                         <td>
 							<?php echo $this->escape($item->focus_word); ?>
@@ -128,9 +104,6 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 								<?php endif; ?>
 							<?php endif; ?>
                         </td>
-                        <td>
-							<?php echo HTMLHelper::_('date', $item->publish_up, Text::_('DATE_FORMAT_LC4')); ?>
-                        </td>
                         <td class="hidden-phone">
 							<?php echo $item->id; ?>
                         </td>
@@ -138,17 +111,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 				<?php endforeach; ?>
                 </tbody>
             </table>
-			<?php if ($user->authorise('core.edit', 'com_content')) : ?>
-				<?php echo HTMLHelper::_(
-					'bootstrap.renderModal',
-					'collapseModal',
-					array(
-						'title'  => Text::_('COM_PWTSEO_BATCH_OPTIONS'),
-						'footer' => $this->loadTemplate('batch_footer'),
-					),
-					$this->loadTemplate('batch_body')
-				); ?>
-			<?php endif; ?>
+
 		<?php endif; ?>
     </div>
     <input type="hidden" name="task" value=""/>

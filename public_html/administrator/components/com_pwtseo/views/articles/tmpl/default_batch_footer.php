@@ -1,17 +1,21 @@
 <?php
 /**
- * @package     Joomla.Administrator
- * @subpackage  com_content
+ * @package    Pwtseo
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Perfect Web Team <extensions@perfectwebteam.com>
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ * @link       https://extensions.perfectwebteam.com
  */
+
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 
 ?>
 <a class="btn" type="button" onclick="document.getElementById('batch-category-id').value='';document.getElementById('batch-access').value='';document.getElementById('batch-language-id').value='';document.getElementById('batch-user-id').value='';document.getElementById('batch-tag-id').value=''" data-dismiss="modal">
-	<?php echo JText::_('JCANCEL'); ?>
+	<?php echo Text::_('JCANCEL'); ?>
 </a>
 <button class="btn btn-success" type="submit" onclick="Joomla.submitbutton('article.batch');">
-	<?php echo JText::_('JGLOBAL_BATCH_PROCESS'); ?>
+	<?php echo Text::_('JGLOBAL_BATCH_PROCESS'); ?>
 </button>

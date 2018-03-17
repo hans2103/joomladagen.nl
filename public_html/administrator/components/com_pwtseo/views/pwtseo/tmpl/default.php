@@ -8,7 +8,10 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
@@ -25,19 +28,19 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
         <div class="pwt-section pwt-section--border-bottom">
             <div class="pwt-flag-object">
                 <div class="pwt-flag-object__aside">
-					<?php echo JHtml::_('image', 'com_pwtseo/PWT-seo.png', 'PWT Image', array('width' => 160), true); ?>
+					<?php echo HTMLHelper::_('image', 'com_pwtseo/PWT-seo.png', 'PWT Image', array('width' => 160), true); ?>
                 </div>
                 <div class="pwt-flag-object__body">
                     <p class="pwt-heading">
-						<?php echo JText::_('COM_PWTSEO_ABOUT_PWTSEO_HEADER'); ?>
+						<?php echo Text::_('COM_PWTSEO_ABOUT_PWTSEO_HEADER'); ?>
                     </p>
                     <p>
-						<?php echo JText::_('COM_PWTSEO_ABOUT_PWTSEO_DESCRIPTION'); ?>
+						<?php echo Text::_('COM_PWTSEO_ABOUT_PWTSEO_DESCRIPTION'); ?>
                     </p>
                     <p>
                         <a href="https://extensions.perfectwebteam.com/pwt-seo"
                            target="_blank">
-							<?php echo JText::_('COM_PWTSEO_ABOUT_PWTSEO_WEBSITE'); ?>
+							<?php echo Text::_('COM_PWTSEO_ABOUT_PWTSEO_WEBSITE'); ?>
                         </a>
                     </p>
                 </div>
@@ -47,14 +50,14 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
         <div class="pwt-section">
             <div>
                 <a class="pwt-button pwt-button--primary"
-                   href="<?php echo JUri::Base(); ?>index.php?option=com_plugins&view=plugins&filter[search]=PWT+SEO">
-					<?php echo JText::_('COM_PWTSEO_ABOUT_PLUGIN_SETTINGS'); ?>
+                   href="<?php echo Uri::Base(); ?>index.php?option=com_plugins&view=plugins&filter[search]=PWT+SEO">
+					<?php echo Text::_('COM_PWTSEO_ABOUT_PLUGIN_SETTINGS'); ?>
                 </a>
                 -
                 <a class="pwt-button pwt-button--primary"
                    target="_blank"
                    href="https://extensions.perfectwebteam.com/pwt-seo/documentation">
-					<?php echo JText::_('COM_PWTSEO_DOCUMENTATION_LINK'); ?>
+					<?php echo Text::_('COM_PWTSEO_DOCUMENTATION_LINK'); ?>
                 </a>
             </div>
         </div>
@@ -62,17 +65,21 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
         <div class="pwt-section pwt-section--border-top">
             <p>
                 <strong>
-					<?php echo JText::_('COM_PWTSEO_SEF_ENABLED_LABEL'); ?>
+	                <?php echo Text::sprintf('COM_PWTSEO_VERSION', '</strong>1.1.0'); ?>
+            </p>
+            <p>
+                <strong>
+					<?php echo Text::_('COM_PWTSEO_SEF_ENABLED_LABEL'); ?>
                 </strong>
-				<?php echo JFactory::getConfig()->get('sef', 0) === '1' ? JText::_('JYES') : JText::_('JNO') ?>
+				<?php echo Factory::getConfig()->get('sef', 0) === '1' ? Text::_('JYES') : Text::_('JNO') ?>
             </p>
 
             <?php if ($this->bHasSitemap !== null) : ?>
                 <p>
                     <strong>
-			            <?php echo JText::_('COM_PWTSEO_HAS_SITEMAP_LABEL'); ?>
+			            <?php echo Text::_('COM_PWTSEO_HAS_SITEMAP_LABEL'); ?>
                     </strong>
-		            <?php echo $this->bHasSitemap === true ? JText::_('JYES') : JText::_('JNO') ?>
+		            <?php echo $this->bHasSitemap === true ? Text::_('JYES') : Text::_('JNO') ?>
                 </p>
             <?php endif; ?>
 
@@ -80,12 +87,12 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
                 <div class="">
                     <p>
                         <strong>
-							<?php echo JText::_('COM_PWTSEO_GOOGLE_SITEMAPS_LABEL'); ?>
+							<?php echo Text::_('COM_PWTSEO_GOOGLE_SITEMAPS_LABEL'); ?>
                         </strong>
                     </p>
 					<?php if (!$this->aSitemaps): ?>
                         <span class="error">
-                            <?php echo JText::_('JNO'); ?>
+                            <?php echo Text::_('JNO'); ?>
                         </span>
 					<?php endif; ?>
                 </div>
@@ -99,10 +106,10 @@ HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, '
                                 </div>
                                 <div class="pwt-flag-object__body">
                                     <div>
-										<?php echo JText::sprintf('COM_PWTSEO_SITEMAP_WARNINGS_LABEL', $oSitemap->warnings); ?>
+										<?php echo Text::sprintf('COM_PWTSEO_SITEMAP_WARNINGS_LABEL', $oSitemap->warnings); ?>
                                     </div>
                                     <div>
-										<?php echo JText::sprintf('COM_PWTSEO_SITEMAP_ERRORS_LABEL', $oSitemap->errors); ?>
+										<?php echo Text::sprintf('COM_PWTSEO_SITEMAP_ERRORS_LABEL', $oSitemap->errors); ?>
                                     </div>
                                 </div>
                             </div>

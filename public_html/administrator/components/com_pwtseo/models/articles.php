@@ -8,9 +8,12 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\Utilities\ArrayHelper;
+
 defined('_JEXEC') or die;
 
-class PWTSEOModelArticles extends JModelList
+class PWTSEOModelArticles extends ListModel
 {
 	/**
 	 * Constructor.
@@ -35,6 +38,8 @@ class PWTSEOModelArticles extends JModelList
 				'article.publish_up',
 				'article.publish_down',
 				'article.hits',
+				'article.id',
+				'article.language',
 				'seo.pwtseo_score',
 				'seo.focus_word',
 				'published',
@@ -76,10 +81,13 @@ class PWTSEOModelArticles extends JModelList
 							'article.checked_out_time',
 							'article.alias',
 							'article.state',
+							'article.language',
 							'category.title',
 							'seo.focus_word',
 							'seo.pwtseo_score',
-							'seo.flag_outdated'
+							'seo.flag_outdated',
+							'language.title',
+							'language.image'
 						),
 						array(
 							'id',
@@ -91,16 +99,20 @@ class PWTSEOModelArticles extends JModelList
 							'checked_out_time',
 							'alias',
 							'state',
+							'language',
 							'cat_title',
 							'focus_word',
 							'pwtseo_score',
-							'flag_outdated'
+							'flag_outdated',
+							'language_title',
+							'language_image'
 						)
 					)
 				)
 			)
 			->from($db->quoteName('#__content', 'article'))
 			->leftJoin($db->quoteName('#__plg_pwtseo', 'seo') . ' ON seo.context_id = article.id')
+			->leftJoin($db->quoteName('#__languages', 'language') . ' ON language.lang_code = article.language')
 			->leftJoin($db->quoteName('#__categories', 'category') . ' ON category.id = article.catid');
 
 		$search = $this->getState('filter.search');

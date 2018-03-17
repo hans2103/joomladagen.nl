@@ -10,6 +10,9 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
 /**
@@ -18,12 +21,13 @@ use Joomla\Registry\Registry;
  *
  * @since  1.0
  */
-class JFormFieldPWTSeo extends JFormField
+class JFormFieldPWTSeo extends FormField
 {
 	/**
 	 * A Registry object holding the parameters for the plugin
 	 *
 	 * @var    Registry
+	 *
 	 * @since  1.0
 	 */
 	private $params;
@@ -37,7 +41,7 @@ class JFormFieldPWTSeo extends JFormField
 	 */
 	public function __construct($form = null)
 	{
-		$this->params = new Joomla\Registry\Registry(JPluginHelper::getPlugin('system', 'pwtseo')->params);
+		$this->params = new Registry(PluginHelper::getPlugin('system', 'pwtseo')->params);
 
 		parent::__construct($form);
 	}
@@ -46,6 +50,7 @@ class JFormFieldPWTSeo extends JFormField
 	 * Get the label of the PWTSeo Field. We abuse this to create our own layout.
 	 *
 	 * @return string The label - the left side of the panel
+	 *
 	 * @since 1.0
 	 */
 	protected function getLabel()
@@ -57,23 +62,44 @@ class JFormFieldPWTSeo extends JFormField
 	 * Get the html/view of the input field. We abuse this to create our own layout.
 	 *
 	 * @return string The input - the right side of the panel
+	 *
 	 * @since 1.0
 	 */
 	protected function getInput()
 	{
 		ob_start();
 
-		/**
-		if ($this->params->get('show_mobile_serp', 0))
-		{
-			echo $this->form->renderFieldset('mobile-serp');
-		}
-		*/
-
 		include JPATH_PLUGINS . '/system/pwtseo/tmpl/serp.php';
 
+		// By loading another form model, we can trigger the onContentPrepareForm on our actual seo instead of the original
+		$form = new Form('com_pwtseo');
 
+		$form->loadFile(JPATH_PLUGINS . '/system/pwtseo/form/form.xml', false);
 		$this->form->loadFile(JPATH_PLUGINS . '/system/pwtseo/form/form.xml', false);
+
+		$dispatcher = JEventDispatcher::getInstance();
+		$dispatcher->trigger('onContentPrepareForm', array(&$form, array()));
+
+		// Now we update the original form with all our fields
+		$fieldsets = $form->getFieldsets();
+
+		foreach ($fieldsets as $set)
+		{
+			$fields = $form->getFieldset($set->name);
+
+			/** @var FormField $field */
+			foreach ($fields as $field)
+			{
+				if (method_exists($field, 'getAttribute') === false)
+				{
+					continue;
+				}
+
+				$xml = $form->getFieldXml($field->getAttribute('name'), 'seo');
+
+				$this->form->setField($xml, '', true, $set->name);
+			}
+		}
 
 		echo $this->form->renderFieldset('left-side');
 
@@ -85,8 +111,6 @@ class JFormFieldPWTSeo extends JFormField
 		{
 			echo $this->form->renderFieldset('basic_og');
 		}
-
-		echo $this->form->renderFieldset('right-side');
 
 		include JPATH_PLUGINS . '/system/pwtseo/tmpl/requirements.php';
 

@@ -12,7 +12,14 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
@@ -22,7 +29,7 @@ use Joomla\Registry\Registry;
  *
  * @since  1.0
  */
-class PlgSystemPWTSEO extends JPlugin
+class PlgSystemPWTSEO extends CMSPlugin
 {
 	/**
 	 * @var JDatabaseDriver
@@ -31,7 +38,7 @@ class PlgSystemPWTSEO extends JPlugin
 	protected $db;
 
 	/**
-	 * @var JApplicationWeb
+	 * @var JApplication
 	 * @since 1.0
 	 */
 	protected $app;
@@ -50,7 +57,7 @@ class PlgSystemPWTSEO extends JPlugin
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $aAllowedContext = array('com_content.article');
+	private $aAllowedContext = array('com_content.article', 'com_pwtseo.custom');
 
 	/**
 	 * @var    String  base update url, to decide whether to process the event or not
@@ -148,9 +155,9 @@ class PlgSystemPWTSEO extends JPlugin
 	{
 		if ($this->app->isClient('administrator'))
 		{
-			if (JFactory::getUser()->authorise('core.admin') && JFactory::getConfig()->get('robots') === 'noindex, nofollow')
+			if (Factory::getUser()->authorise('core.admin') && Factory::getConfig()->get('robots') === 'noindex, nofollow')
 			{
-				$this->app->enqueueMessage(JText::_('PLG_SYSTEM_PWTSEO_ERROR_NOINDEX_NOFOLLOW'), 'warning');
+				$this->app->enqueueMessage(Text::_('PLG_SYSTEM_PWTSEO_ERROR_NOINDEX_NOFOLLOW'), 'warning');
 			}
 		}
 
@@ -169,13 +176,14 @@ class PlgSystemPWTSEO extends JPlugin
 	 */
 	public function onContentPrepareForm($form, $data)
 	{
-		if (!($form instanceof JForm))
+		if (!($form instanceof Form))
 		{
 			return false;
 		}
 
 		if (in_array($form->getName(), $this->aAllowedContext))
 		{
+			HTMLHelper::_('jquery.framework');
 			$form->loadFile(JPATH_PLUGINS . '/system/pwtseo/form/' . $form->getName() . '.xml', false);
 
 			/**
@@ -183,118 +191,131 @@ class PlgSystemPWTSEO extends JPlugin
 			 * TODO: mind the 'Toggle Editor' button
 			 */
 
-			JHtml::script('plg_system_pwtseo/vue.min.js', array('version' => 'auto', 'relative' => true));
-			JHtml::script('plg_system_pwtseo/lodash.min.js', array('version' => 'auto', 'relative' => true));
+			HTMLHelper::script('plg_system_pwtseo/vue.min.js', array('version' => 'auto', 'relative' => true));
+			HTMLHelper::script('plg_system_pwtseo/lodash.min.js', array('version' => 'auto', 'relative' => true));
 
-			JHtml::script('plg_system_pwtseo/pwtseo.min.js', array('version' => 'auto', 'relative' => true));
-			JHtml::stylesheet('plg_system_pwtseo/pwtseo.css', array('version' => 'auto', 'relative' => true));
+			HTMLHelper::script('plg_system_pwtseo/pwtseo.min.js', array('version' => 'auto', 'relative' => true));
+			HTMLHelper::stylesheet('plg_system_pwtseo/pwtseo.css', array('version' => 'auto', 'relative' => true));
 
 			$iMinTitle    = (int) $this->params->get('count_min_title', 40);
 			$iMaxTitle    = (int) $this->params->get('count_max_title', 50);
 			$iMinMetadesc = (int) $this->params->get('count_min_metadesc', 100);
 			$iMaxMetadesc = (int) $this->params->get('count_max_metadesc', 150);
 
+			// Filter the most common terms for the word counter
+			$language = new Language(isset($data->language) && $data->language !== '*' ? $data->language : null);
+
+			$aWordsFilter = array(
+				'common' => $language->getIgnoredSearchWords(),
+				'lower'  => $language->getLowerLimitSearchWord(),
+				'upper'  => $language->getUpperLimitSearchWord()
+			);
+
 			// All parameters required by the JS
-			JFactory::getDocument()->addScriptOptions('PWTSeoConfig',
+			Factory::getDocument()->addScriptOptions('PWTSeoConfig',
 				array(
+					'context'                                        => $form->getName(),
 					'min_title_length'                               => $iMinTitle,
 					'max_title_length'                               => $iMaxTitle,
 					'min_metadesc_length'                            => $iMinMetadesc,
 					'max_metadesc_length'                            => $iMaxMetadesc,
 					'min_focus_length'                               => (int) $this->params->get('min_focus_length', 3),
-					'baseurl'                                        => JUri::root(),
-					'ajaxurl'                                        => JUri::base(true) . '/index.php?option=com_ajax&format=json',
-					'frontajaxurl'                                   => JUri::root() . 'index.php?option=com_ajax&format=json',
-					'requirements_article_title_good'                => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_GOOD'),
-					'requirements_article_title_bad'                 => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_BAD'),
-					'requirements_page_title_good'                   => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_GOOD'),
-					'requirements_page_title_bad'                    => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_BAD'),
-					'requirements_meta_description_none'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_NONE'),
-					'requirements_meta_description_too_short_bad'    => JText::sprintf(
+					'baseurl'                                        => Uri::root(),
+					'ajaxurl'                                        => Uri::base(true) . '/index.php?option=com_ajax&format=json',
+					'frontajaxurl'                                   => Uri::root() . 'index.php?option=com_ajax&format=json',
+					'requirements_article_title_good'                => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_GOOD'),
+					'requirements_article_title_bad'                 => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_BAD'),
+					'requirements_page_title_good'                   => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_GOOD'),
+					'requirements_page_title_bad'                    => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_BAD'),
+					'requirements_meta_description_none'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_NONE'),
+					'requirements_meta_description_too_short_bad'    => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_BAD',
 						$iMinMetadesc,
 						$iMaxMetadesc
 					),
-					'requirements_meta_description_too_short_medium' => JText::sprintf(
+					'requirements_meta_description_too_short_medium' => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_SHORT_MEDIUM',
 						$iMinMetadesc,
 						$iMaxMetadesc
 					),
-					'requirements_meta_description_too_long_medium'  => JText::sprintf(
+					'requirements_meta_description_too_long_medium'  => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_TOO_LONG_MEDIUM',
 						$iMinMetadesc,
 						$iMaxMetadesc
 					),
-					'requirements_meta_description_medium'           => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_MEDIUM'),
-					'requirements_meta_description_good'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_GOOD'),
-					'requirements_images_none'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_NONE'),
-					'requirements_images_bad'                        => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_BAD'),
-					'requirements_images_good'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_GOOD'),
-					'requirements_images_resulting_none'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_NONE'),
-					'requirements_images_resulting_bad'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_BAD'),
-					'requirements_images_resulting_good'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_GOOD'),
-					'requirements_subheadings_none'                  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_NONE'),
-					'requirements_subheadings_bad'                   => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_BAD'),
-					'requirements_subheadings_medium'                => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_MEDIUM'),
-					'requirements_subheadings_good'                  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_GOOD'),
-					'requirements_first_paragraph_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_BAD'),
-					'requirements_first_paragraph_good'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_GOOD'),
-					'requirements_density_none'                      => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_NONE'),
-					'requirements_density_too_few_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_FEW_BAD'),
-					'requirements_density_resulting_too_few_bad'     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_FEW_BAD'),
-					'requirements_density_too_much_bad'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_MUCH_BAD'),
-					'requirements_density_resulting_too_much_bad'    => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_MUCH_BAD'),
-					'requirements_density_too_few_medium'            => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_FEW_MEDIUM'),
-					'requirements_density_resulting_too_few_medium'  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_FEW_MEDIUM'),
-					'requirements_density_too_much_medium'           => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_MUCH_MEDIUM'),
-					'requirements_density_good'                      => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_GOOD'),
-					'requirements_density_resulting_good'            => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_GOOD'),
-					'requirements_length_bad'                        => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_BAD'),
-					'requirements_length_medium'                     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_MEDIUM'),
-					'requirements_length_good'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_GOOD'),
-					'requirements_page_title_length_too_few_bad'     => JText::sprintf(
+					'requirements_meta_description_medium'           => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_MEDIUM'),
+					'requirements_meta_description_good'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_META_DESCRIPTION_GOOD'),
+					'requirements_images_none'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_NONE'),
+					'requirements_images_bad'                        => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_BAD'),
+					'requirements_images_good'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_GOOD'),
+					'requirements_images_resulting_none'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_NONE'),
+					'requirements_images_resulting_bad'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_BAD'),
+					'requirements_images_resulting_good'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_GOOD'),
+					'requirements_subheadings_none'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_NONE'),
+					'requirements_subheadings_bad'                   => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_BAD'),
+					'requirements_subheadings_medium'                => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_MEDIUM'),
+					'requirements_subheadings_good'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_SUBHEADINGS_GOOD'),
+					'requirements_first_paragraph_bad'               => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_BAD'),
+					'requirements_first_paragraph_good'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_FIRST_PARAGRAPH_GOOD'),
+					'requirements_density_none'                      => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_NONE'),
+					'requirements_density_too_few_bad'               => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_FEW_BAD'),
+					'requirements_density_resulting_too_few_bad'     => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_FEW_BAD'),
+					'requirements_density_too_much_bad'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_MUCH_BAD'),
+					'requirements_density_resulting_too_much_bad'    => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_MUCH_BAD'),
+					'requirements_density_too_few_medium'            => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_FEW_MEDIUM'),
+					'requirements_density_resulting_too_few_medium'  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_TOO_FEW_MEDIUM'),
+					'requirements_density_too_much_medium'           => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_TOO_MUCH_MEDIUM'),
+					'requirements_density_good'                      => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_GOOD'),
+					'requirements_density_resulting_good'            => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_DENSITY_RESULTING_GOOD'),
+					'requirements_length_bad'                        => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_BAD'),
+					'requirements_length_medium'                     => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_MEDIUM'),
+					'requirements_length_good'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_LENGTH_GOOD'),
+					'requirements_page_title_length_too_few_bad'     => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_BAD',
 						$iMinTitle,
 						$iMaxTitle
 					),
-					'requirements_page_title_length_too_much_bad'    => JText::sprintf(
+					'requirements_page_title_length_too_much_bad'    => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_BAD',
 						$iMinTitle,
 						$iMaxTitle
 					),
-					'requirements_page_title_length_too_few_medium'  => JText::sprintf(
+					'requirements_page_title_length_too_few_medium'  => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_FEW_MEDIUM',
 						$iMinTitle,
 						$iMaxTitle
 					),
-					'requirements_page_title_length_too_much_medium' => JText::sprintf(
+					'requirements_page_title_length_too_much_medium' => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_TOO_MUCH_MEDIUM',
 						$iMinTitle,
 						$iMaxTitle
 					),
-					'requirements_page_title_length_good'            => JText::sprintf(
+					'requirements_page_title_length_good'            => Text::sprintf(
 						'PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_LENGTH_GOOD',
 						$iMinTitle,
 						$iMaxTitle
 					),
-					'requirements_in_url_bad'                        => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_BAD'),
-					'requirements_in_url_good'                       => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_GOOD'),
-					'requirements_not_used_loading'                  => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_LOADING'),
-					'requirements_not_used_good'                     => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_GOOD'),
-					'requirements_not_used_medium'                   => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_MEDIUM'),
-					'requirements_not_used_bad'                      => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_BAD'),
-					'requirements_robots_reachable_good'             => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_GOOD'),
-					'requirements_robots_reachable_bad'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_BAD'),
-					'requirements_article_title_unique_none'         => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_NONE'),
-					'requirements_article_title_unique_good'         => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_GOOD'),
-					'requirements_article_title_unique_bad'          => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTCILE_TITLE_UNIQUE_BAD'),
-					'requirements_metadesc_unique_none'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_NONE'),
-					'requirements_metadesc_unique_good'              => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_GOOD'),
-					'requirements_metadesc_unique_bad'               => JText::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
+					'requirements_in_url_bad'                        => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_BAD'),
+					'requirements_in_url_good'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IN_URL_GOOD'),
+					'requirements_not_used_loading'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_LOADING'),
+					'requirements_not_used_good'                     => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_GOOD'),
+					'requirements_not_used_medium'                   => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_MEDIUM'),
+					'requirements_not_used_bad'                      => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_NOT_USED_BAD'),
+					'requirements_robots_reachable_good'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_GOOD'),
+					'requirements_robots_reachable_bad'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ROBOTS_REACHABLE_BAD'),
+					'requirements_article_title_unique_none'         => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_NONE'),
+					'requirements_article_title_unique_good'         => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_UNIQUE_GOOD'),
+					'requirements_article_title_unique_bad'          => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTCILE_TITLE_UNIQUE_BAD'),
+					'requirements_metadesc_unique_none'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_NONE'),
+					'requirements_metadesc_unique_good'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_GOOD'),
+					'requirements_metadesc_unique_bad'               => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
+					'information_most_common_words'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_INFORMATION_COMMON_WORDS'),
 					'polling_interval'                               => (int) $this->params->get('poll_interval', 1) ?: 1,
 					'show_counters'                                  => (int) $this->params->get('show_counters', 1),
-					'found_resulting_page'                           => JText::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE'),
-					'resulting_page_unreachable'                     => JText::_('PLG_SYSTEM_PWTSEO_RESULTING_PAGE_UNREACHABLE')
+					'found_resulting_page'                           => Text::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE'),
+					'resulting_page_unreachable'                     => Text::_('PLG_SYSTEM_PWTSEO_RESULTING_PAGE_UNREACHABLE'),
+					'error_invalid_url'                              => Text::_('PLG_SYSTEM_PWTSEO_ERROR_INVALID_URL'),
+					'words_filter'                                   => $aWordsFilter
 				)
 			);
 		}
@@ -329,22 +350,23 @@ class PlgSystemPWTSEO extends JPlugin
 	}
 
 	/**
-	 * Get record based on com_content.article id
+	 * Get record based on given value with key
 	 *
-	 * @param   int   $iArticleId The id of the article
-	 * @param   array $aKeys      Optional array with keys to request
+	 * @param   string $sValue   The value to look for
+	 * @param   string $sKey     The key of the column
+	 * @param   string $sContext The context of the item
 	 *
 	 * @return  array the record or empty if not found
 	 *
 	 * @since   1.0
 	 */
-	private function getSEOData($iArticleId, $aKeys = array())
+	private function getSEOData($sValue, $sKey = 'context_id', $sContext = 'com_content.article')
 	{
 		$q = $this->db->getQuery(true);
 
 		$q
 			->select(
-				count($aKeys) ? $aKeys : $this->db->quoteName(
+				$this->db->quoteName(
 					array(
 						'pwtseo.context',
 						'pwtseo.context_id',
@@ -369,7 +391,8 @@ class PlgSystemPWTSEO extends JPlugin
 				)
 			)
 			->from($this->db->quoteName('#__plg_pwtseo', 'pwtseo'))
-			->where('pwtseo.context_id = ' . $iArticleId);
+			->where($this->db->quoteName('pwtseo.' . $sKey) . ' = ' . $this->db->quote($sValue))
+			->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($sContext));
 
 		try
 		{
@@ -385,10 +408,10 @@ class PlgSystemPWTSEO extends JPlugin
 	/**
 	 * When previewing an article, set the values we got from the form
 	 *
-	 * @param   string                    $context The context of the current page
-	 * @param   Object                    $article The article that is prepared
-	 * @param   \Joomla\Registry\Registry $params  Any parameters
-	 * @param   string                    $page    The name of the page
+	 * @param   string   $context The context of the current page
+	 * @param   Object   $article The article that is prepared
+	 * @param   Registry $params  Any parameters
+	 * @param   string   $page    The name of the page
 	 *
 	 * @return  void
 	 *
@@ -396,7 +419,7 @@ class PlgSystemPWTSEO extends JPlugin
 	 */
 	public function onContentPrepare($context, &$article, &$params, $page)
 	{
-		if ($this->app->isSite() && $this->app->input->getInt('pwtseo_preview', 0))
+		if ($this->app->isClient('site') && $this->app->input->getInt('pwtseo_preview', 0))
 		{
 			$aForm = $this->app->input->post->get('jform', '', 'raw');
 
@@ -420,7 +443,10 @@ class PlgSystemPWTSEO extends JPlugin
 			}
 
 			// Some don't overlap, so we have to do it manually
-			$article->text = $aForm['articletext'];
+			if (isset($aForm['articletext']) && $aForm['articletext'])
+			{
+				$article->text = $aForm['articletext'];
+			}
 		}
 	}
 
@@ -437,9 +463,10 @@ class PlgSystemPWTSEO extends JPlugin
 	 */
 	public function onContentAfterSave($context, $article, $isNew)
 	{
-		if (in_array($context, $this->aAllowedContext))
+		// Do not process internal items
+		if (in_array($context, $this->aAllowedContext) && strpos($context, 'com_pwtseo') === false)
 		{
-			$jFilter = JFilterInput::getInstance();
+			$jFilter = InputFilter::getInstance();
 			$aSEO    = $this->app->input->post->get('jform', array(), 'array')['seo'];
 
 			array_walk($aSEO, array($jFilter, 'clean'));
@@ -447,13 +474,8 @@ class PlgSystemPWTSEO extends JPlugin
 
 			$oInput = (object) $aSEO;
 
-			$cPlugin = \JPluginHelper::getPlugin('system', 'pwtseo');
-			$extension = \JTable::getInstance('extension');
-			$extension->load($cPlugin->id);
-
-			$rManifest = new \Joomla\Registry\Registry($extension->manifest_cache);
-
-			$oInput->version = $rManifest->get('version');
+			$oInput->version = '1.1.0';
+			$oInput->context = $context;
 
 			$iId = $this->getHasSEOData($article->id);
 
@@ -475,20 +497,23 @@ class PlgSystemPWTSEO extends JPlugin
 	/**
 	 * Find record id based on com_content.article id
 	 *
-	 * @param   int $iArticleId The id of the article
+	 * @param   string $sValue   The value to look for
+	 * @param   string $sKey     The key of the column
+	 * @param   string $sContext The context of the item
 	 *
 	 * @return  integer|null the ID of the record or null if nothing found
 	 *
 	 * @since   1.0
 	 */
-	private function getHasSEOData($iArticleId)
+	private function getHasSEOData($sValue, $sKey = 'context_id', $sContext = 'com_content.article')
 	{
 		$q = $this->db->getQuery(true);
 
 		$q
 			->select('id')
 			->from($this->db->quoteName('#__plg_pwtseo', 'seodata'))
-			->where('seodata.context_id = ' . $iArticleId);
+			->where($this->db->quoteName('seodata.' . $sKey) . ' = ' . $this->db->quote($sValue))
+			->where($this->db->quoteName('seodata.context') . ' = ' . $this->db->quote($sContext));
 
 		try
 		{
@@ -510,24 +535,27 @@ class PlgSystemPWTSEO extends JPlugin
 	 */
 	public function onBeforeRender()
 	{
-		if ($this->app->input->getCmd('option', '') === 'com_content'
-			&& $this->app->input->getCmd('view', '') === 'article'
-			&& $this->app->isSite()
-		)
+		$input = $this->app->input;
+
+		if ($this->app->isSite())
 		{
-			$iArticleId = $this->app->input->getInt('id');
-			$iSEOId     = $this->getHasSEOData($iArticleId);
-			$bPreview   = $this->app->input->getBool('pwtseo_preview', false);
+			$sId      = $input->getInt('id');
+			$sKey     = 'context_id';
+			$sContext = $input->getCmd('context', $input->getCmd('option') . '.' . $input->getCmd('view'));
+
+			$iSEOId   = $this->getHasSEOData($sId, $sKey, $sContext) ?:
+				$this->getHasSEOData(JUri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
+			$bPreview = $input->getBool('pwtseo_preview', false);
 
 			if ($iSEOId > 0 || $bPreview)
 			{
 				if ($bPreview)
 				{
-					$aSEO = $this->app->input->post->get('jform', '', 'raw')['seo'];
+					$aSEO = $input->post->get('jform', '', 'raw')['seo'];
 				}
 				else
 				{
-					$aSEO = $this->getSEOData($iArticleId);
+					$aSEO = $this->getSEOData($sId, $sKey, $sContext) ?: $this->getSEOData(JUri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
 				}
 
 				if (strlen($aSEO['page_title']) && $aSEO['override_page_title'] === '1')
@@ -536,23 +564,23 @@ class PlgSystemPWTSEO extends JPlugin
 
 					if ($this->app->get('sitename_pagetitles', 0) == 1)
 					{
-						$title = JText::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
+						$title = Text::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
 					}
 					elseif ($this->app->get('sitename_pagetitles', 0) == 2)
 					{
-						$title = JText::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
+						$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
 					}
 
-					JFactory::getDocument()->setTitle($title);
+					Factory::getDocument()->setTitle($title);
 				}
 
-				if ($aSEO['override_canonical'])
+				if (isset($aSEO['override_canonical']) && $aSEO['override_canonical'])
 				{
 					switch ((int) $aSEO['override_canonical'])
 					{
 						// Self referencing
 						case 2:
-							$this->setCanonical(JUri::getInstance());
+							$this->setCanonical(Uri::getInstance());
 							break;
 						// Custom
 						case 3:
@@ -563,7 +591,7 @@ class PlgSystemPWTSEO extends JPlugin
 						default:
 							if ($this->params->get('set_canonical', 1))
 							{
-								$this->setCanonical(JUri::getInstance());
+								$this->setCanonical(Uri::getInstance());
 							}
 					}
 				}
@@ -579,7 +607,7 @@ class PlgSystemPWTSEO extends JPlugin
 
 						foreach ($aKeys as $iKey)
 						{
-							JFactory::getDocument()->addCustomTag(
+							Factory::getDocument()->addCustomTag(
 								'<meta property="' . $aAdvancedFields->og_title[$iKey] . '" content="' . $aAdvancedFields->og_content[$iKey] . '" >'
 							);
 						}
@@ -589,64 +617,64 @@ class PlgSystemPWTSEO extends JPlugin
 				{
 					if (strlen($aSEO['facebook_title']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="og:title" content="' . $aSEO['facebook_title'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'og:title', $aSEO['facebook_title'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['facebook_description']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="og:description" content="' . $aSEO['facebook_description'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'og:description', $aSEO['facebook_description'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['facebook_image']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="og:image" content="' . $aSEO['facebook_image'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'og:image', Uri::base() . $aSEO['facebook_image'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['twitter_title']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="twitter:title" content="' . $aSEO['twitter_title'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'twitter:title', $aSEO['twitter_title'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['twitter_description']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="twitter:description" content="' . $aSEO['twitter_description'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'twitter:description', $aSEO['twitter_description'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['twitter_image']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="twitter:image" content="' . $aSEO['twitter_image'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'twitter:image', Uri::base() . $aSEO['twitter_image'], 'property'
 						);
 					}
 
 					if (strlen($aSEO['google_title']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="google:title" content="' . $aSEO['google_title'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'google:title', $aSEO['google_title']
 						);
 					}
 
 					if (strlen($aSEO['google_description']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="google:description" content="' . $aSEO['google_description'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'google:description', $aSEO['google_description']
 						);
 					}
 
 					if (strlen($aSEO['google_image']))
 					{
-						JFactory::getDocument()->addCustomTag(
-							'<meta property="google:image" content="' . $aSEO['google_image'] . '" >'
+						Factory::getDocument()->setMetaData(
+							'google:image', Uri::base() . $aSEO['google_image']
 						);
 					}
 				}
@@ -655,7 +683,7 @@ class PlgSystemPWTSEO extends JPlugin
 			{
 				if ($this->params->get('set_canonical', 1))
 				{
-					$this->setCanonical(JUri::getInstance());
+					$this->setCanonical(Uri::getInstance());
 				}
 			}
 		}
@@ -666,11 +694,13 @@ class PlgSystemPWTSEO extends JPlugin
 	 *
 	 * @param   string $sUrl The url to set as canonical
 	 *
+	 * @return  void
+	 *
 	 * @since   1.0.2
 	 */
 	protected function setCanonical($sUrl)
 	{
-		JFactory::getDocument()->addHeadLink(htmlspecialchars($sUrl), 'canonical');
+		Factory::getDocument()->setMetaData('canonical', htmlspecialchars($sUrl));
 	}
 
 	/**
@@ -690,7 +720,7 @@ class PlgSystemPWTSEO extends JPlugin
 		$aResponse  = array('count' => 0);
 		$sFocusWord = $this->app->input->getCmd('focusword', '');
 		$iArticleId = $this->app->input->getInt('id', '');
-		$uUrl       = $this->app->input->get('url', '', 'raw');
+		$uUrl       = $this->app->input->get('url', '', 'html');
 
 		$q = $this->db->getQuery(true);
 
@@ -735,7 +765,7 @@ class PlgSystemPWTSEO extends JPlugin
 
 		$aRobots = file($sRobots, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$i       = count($aRobots);
-		$sDomain = rtrim(JUri::root(), '/');
+		$sDomain = rtrim(Uri::root(), '/');
 
 		while ($i--)
 		{
@@ -773,18 +803,18 @@ class PlgSystemPWTSEO extends JPlugin
 		$aResponse = array();
 		$aData     = $this->app->input->get('jform', array(), 'array');
 		$iId       = isset($aData['id']) ?
-			(int) $aData['id'] : (int) JUri::getInstance($this->app->input->get('form_url', '', 'raw'))->getQuery(true)['id'];
+			(int) $aData['id'] : (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
 
 		require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
 		$aResponse['url']
-			= substr(JUri::root(), 0, -1) .
-			JRoute::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']), false);
+			= substr(Uri::root(), 0, -1) .
+			Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']), false);
 
 		// Here we modify the alias and get the route based on the given alias
 		if ($iId > 0)
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 			$q  = $db->getQuery(true);
 
 			$q
@@ -795,7 +825,7 @@ class PlgSystemPWTSEO extends JPlugin
 			try
 			{
 				$sOriginalAlias = $db->setQuery($q)->loadResult();
-				$sModifiedAlias = JFilterOutput::stringURLUnicodeSlug($aData['alias']);
+				$sModifiedAlias = OutputFilter::stringURLUnicodeSlug($aData['alias']);
 
 				$oTmpAlias = (object) array(
 					'id'    => $iId,
@@ -807,8 +837,8 @@ class PlgSystemPWTSEO extends JPlugin
 				// We need to modify the url to circumvent the caching mechanism of the Router
 				$sUniq = uniqid('pwtseo') . '=1';
 				$aResponse['new_url']
-					= substr(JUri::root(), 0, -1) .
-					JRoute::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']) . '&' . $sUniq, false);
+				       = substr(Uri::root(), 0, -1) .
+					Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']) . '&' . $sUniq, false);
 
 				$aResponse['new_url'] = str_replace(array('?' . $sUniq, $sUniq), '', $aResponse['new_url']);
 
@@ -843,7 +873,7 @@ class PlgSystemPWTSEO extends JPlugin
 	protected function findUsages($sWord, $iPK)
 	{
 		$q     = $this->db->getQuery(true);
-		$sWord = JFilterInput::getInstance()->clean($sWord);
+		$sWord = InputFilter::getInstance()->clean($sWord);
 
 		$q
 			->select('COUNT(*)')

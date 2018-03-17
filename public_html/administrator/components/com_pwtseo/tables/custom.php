@@ -8,24 +8,26 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Table\Table;
 
 defined('_JEXEC') or die;
 
 /**
- * PWT SEO controller.
+ * URL table
  *
- * @package     Pwtseo
- *
- * @since       1.0
+ * @since  1.1.0
  */
-class PWTSEOController extends BaseController
+class PWTSEOTableCustom extends Table
 {
 	/**
-	 * The default view for the display method.
+	 * Constructor
 	 *
-	 * @var    string
-	 * @since  1.0
+	 * @param   JDatabaseDriver $db Database driver object.
+	 *
+	 * @since   1.1.0
 	 */
-	protected $default_view = 'pwtseo';
+	public function __construct(JDatabaseDriver $db)
+	{
+		parent::__construct('#__plg_pwtseo', 'id', $db);
+	}
 }

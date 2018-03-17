@@ -8,34 +8,34 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\HtmlView;
-use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Pagination\Pagination;
 
 defined('_JEXEC') or die;
 
 /**
- * Articles view. This gives an overview of the SEO score for articles and provides a link to the article edit page to improve the score.
+ * Customs view. Displays a list of custom URL's
  *
- * @since    1.0
+ * @since    1.1.0
  */
-class PWTSEOViewArticles extends HtmlView
+class PWTSEOViewCustoms extends HtmlView
 {
 	/**
-	 * A list of articles. This list includes all articles regardless of score or SEO keyword.
+	 * A list of items.
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  1.1.0
 	 */
 	protected $items;
 
 	/**
-	 * The JForm filter object.
+	 * The Form filter object.
 	 *
-	 * @var    JForm
-	 * @since  1.0
+	 * @var    Form
+	 * @since  1.1.0
 	 */
 	public $filterForm;
 
@@ -43,7 +43,7 @@ class PWTSEOViewArticles extends HtmlView
 	 * List of active filters.
 	 *
 	 * @var    array
-	 * @since  1.0
+	 * @since  1.1.0
 	 */
 	public $activeFilters;
 
@@ -51,15 +51,15 @@ class PWTSEOViewArticles extends HtmlView
 	 * The model state.
 	 *
 	 * @var    object
-	 * @since  1.0
+	 * @since  1.1.0
 	 */
 	protected $state;
 
 	/**
 	 * Pagination class.
 	 *
-	 * @var    JPagination
-	 * @since  1.0
+	 * @var    Pagination
+	 * @since  1.1.0
 	 */
 	protected $pagination;
 
@@ -67,7 +67,7 @@ class PWTSEOViewArticles extends HtmlView
 	 * The sidebar to show
 	 *
 	 * @var    string
-	 * @since  1.0
+	 * @since  1.1.0
 	 */
 	protected $sidebar;
 
@@ -78,8 +78,7 @@ class PWTSEOViewArticles extends HtmlView
 	 *
 	 * @return  mixed  A string if successful, otherwise a JError object.
 	 *
-	 * @see     fetch()
-	 * @since   1.0
+	 * @since   1.1.0
 	 */
 	public function display($tpl = null)
 	{
@@ -92,7 +91,7 @@ class PWTSEOViewArticles extends HtmlView
 
 		$this->toolbar();
 
-		PWTSEOHelper::addSubmenu('articles');
+		PWTSEOHelper::addSubmenu('customs');
 		$this->sidebar = JHtmlSidebar::render();
 
 		return parent::display($tpl);
@@ -103,28 +102,31 @@ class PWTSEOViewArticles extends HtmlView
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   1.1.0
 	 */
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PWTSEO_ARTICLES_HEADER'), 'bars');
-		$user  = Factory::getUser();
+		JToolBarHelper::title(Text::_('COM_PWTSEO_CUSTOMS_HEADER'), 'bars');
 
-		// Get the toolbar object instance
-		$bar = Toolbar::getInstance('toolbar');
+		$canDo = ContentHelper::getActions('com_pwtseo');
 
-		if ($user->authorise('core.edit', 'com_content'))
+		if ($canDo->get('core.create'))
 		{
-			$title = Text::_('JTOOLBAR_BATCH');
+			JToolbarHelper::addNew('custom.add');
+		}
 
-			$layout = new FileLayout('joomla.toolbar.batch');
+		if ($canDo->get('core.edit'))
+		{
+			JToolbarHelper::editList('custom.edit');
+		}
 
-			$dhtml = $layout->render(array('title' => $title));
-			$bar->appendButton('Custom', $dhtml, 'batch');
+		if ($canDo->get('core.delete'))
+		{
+			JToolbarHelper::trash('customs.delete');
 		}
 
 		// Options button.
-		if (Factory::getUser()->authorise('core.admin', 'com_pwtseo'))
+		if ($canDo->get('core.admin'))
 		{
 			JToolBarHelper::preferences('com_pwtseo');
 		}

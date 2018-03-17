@@ -8,6 +8,8 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 
 /**
@@ -29,15 +31,21 @@ class PWTSEOHelper
 	public static function addSubmenu($vName)
 	{
 		JHtmlSidebar::addEntry(
-			JText::_('COM_PWTSEO_DASHBOARD_LABEL'),
+			Text::_('COM_PWTSEO_DASHBOARD_LABEL'),
 			'index.php?option=com_pwtseo',
 			$vName == 'pwtseo'
 		);
 
 		JHtmlSidebar::addEntry(
-			JText::_('COM_PWTSEO_ARTICLES_LABEL'),
+			Text::_('COM_PWTSEO_ARTICLES_LABEL'),
 			'index.php?option=com_pwtseo&view=articles',
 			$vName == 'articles'
+		);
+
+		JHtmlSidebar::addEntry(
+			Text::_('COM_PWTSEO_CUSTOM_LABEL'),
+			'index.php?option=com_pwtseo&view=customs',
+			$vName == 'customs'
 		);
 	}
 
@@ -53,7 +61,7 @@ class PWTSEOHelper
 	public static function getContextLabel($sContext)
 	{
 		$aArr = array(
-			'com_content.article' => JText::_('COM_PWTSEO_CONTEXT_CONTENT_ARTICLES_LABEL')
+			'com_content.article' => Text::_('COM_PWTSEO_CONTEXT_CONTENT_ARTICLES_LABEL')
 		);
 
 		return isset($aArr[$sContext]) ? $aArr[$sContext] : '';
