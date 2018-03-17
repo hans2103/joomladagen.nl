@@ -8,6 +8,14 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use \Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Menu\AbstractMenu;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Uri\Uri;
+
 defined('_JEXEC') or die;
 
 /**
@@ -15,7 +23,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.0
  */
-class PWTSEOViewPWTSEO extends JViewLegacy
+class PWTSEOViewPWTSEO extends HtmlView
 {
 	/**
 	 * If we have also PWT Sitemap installed, we add a check if there is a menu-item
@@ -51,14 +59,14 @@ class PWTSEOViewPWTSEO extends JViewLegacy
 
 		$this->addToolbar();
 
-		$params = JComponentHelper::getParams('com_pwtseo');
+		$params = ComponentHelper::getParams('com_pwtseo');
 
 		if ($params->get('clientid') && $params->get('clientsecret'))
 		{
 			try
 			{
 				$oAuth = new \JGoogleAuthOauth2;
-				$oURI  = JUri::getInstance();
+				$oURI  = Uri::getInstance();
 
 				$oAuth->setOption('clientid', trim($params->get('clientid')));
 				$oAuth->setOption('clientsecret', trim($params->get('clientsecret')));
@@ -91,20 +99,20 @@ class PWTSEOViewPWTSEO extends JViewLegacy
 			}
 			catch (Exception $e)
 			{
-				JFactory::getApplication()->enqueueMessage(
-					JText::sprintf('COM_PWTSEO_ERRORS_OAUTH_ERROR', $e->getMessage()),
+				Factory::getApplication()->enqueueMessage(
+					Text::sprintf('COM_PWTSEO_ERRORS_OAUTH_ERROR', $e->getMessage()),
 					'error'
 				);
 			}
 		}
 
-		$bHasPWTSitemap = (bool) JComponentHelper::isInstalled('com_pwtsitemap');
+		$bHasPWTSitemap = (bool) ComponentHelper::isInstalled('com_pwtsitemap');
 
 		if ($bHasPWTSitemap)
 		{
 			// Using JMenu covers unpublished menu-items. Due to complexity, we ignore access setting.
 			$this->bHasSitemap
-				= (bool) JMenu::getInstance('site')->getItems(
+				= (bool) AbstractMenu::getInstance('site')->getItems(
 					array(
 						'link'
 					),
@@ -128,9 +136,9 @@ class PWTSEOViewPWTSEO extends JViewLegacy
 	 */
 	private function addToolbar()
 	{
-		$canDo = JHelperContent::getActions('com_pwtseo');
+		$canDo = ContentHelper::getActions('com_pwtseo');
 
-		JToolbarHelper::title(JText::_('COM_PWTSEO_PWTSEO'), 'bars');
+		JToolbarHelper::title(Text::_('COM_PWTSEO_PWTSEO'), 'bars');
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{

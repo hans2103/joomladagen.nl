@@ -8,11 +8,22 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Access\Exception\NotAllowed;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 defined('_JEXEC') or die;
+
+// Access check.
+if (!Factory::getUser()->authorise('core.manage', 'com_pwtseo'))
+{
+	throw new NotAllowed(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+}
 
 JLoader::register('PWTSEOHelper', __DIR__ . '/helpers/pwtseo.php');
 
 // Execute the task
-$controller = JControllerLegacy::getInstance('pwtseo');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance('pwtseo');
+$controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

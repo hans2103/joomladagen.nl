@@ -8,11 +8,13 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 ?>
 
 <div class="pseo-serp-wrapper">
-    <h2 class="pseo-heading"><?php echo JText::_('PLG_SYSTEM_PWTSEO_LABELS_SERP') ?></h2>
+    <h2 class="pseo-heading"><?php echo Text::_('PLG_SYSTEM_PWTSEO_LABELS_SERP') ?></h2>
     <div class="pseo-serp">
         <div class="pseo-serp__title js-serp-title">{{ page.pagetitle | truncate({length: 70}) }}</div>
         <div class="pseo-serp__url js-serp-ext-url">{{ page.new_url }}</div>

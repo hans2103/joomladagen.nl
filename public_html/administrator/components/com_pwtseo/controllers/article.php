@@ -10,19 +10,23 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 
 /**
  * The article controller
  *
  * @since  1.0.2
  */
-class PWTSEOControllerArticle extends JControllerForm
+class PWTSEOControllerArticle extends FormController
 {
 	/**
 	 * Method to run batch operations.
-	 *
-	 * @param   object  $model  The model.
 	 *
 	 * @return  boolean   True if successful, false otherwise and internal error is set.
 	 *
@@ -30,19 +34,19 @@ class PWTSEOControllerArticle extends JControllerForm
 	 */
 	public function batch()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$filter = JFilterInput::getInstance();
+		$filter = InputFilter::getInstance();
 
 		/** @var ContentModelArticle $model */
-		JModelLegacy::addIncludePath(JPATH_ROOT . '/administrator/components/com_content/models');
-		$model = JModelLegacy::getInstance('Article', 'ContentModel', array());
+		BaseDatabaseModel::addIncludePath(JPATH_ROOT . '/administrator/components/com_content/models');
+		$model = BaseDatabaseModel::getInstance('Article', 'ContentModel', array());
 
 		$vars = $this->input->post->get('batch', array(), 'array');
 		$cid  = $this->input->post->get('cid', array(), 'array');
 
 		$data = array('metadesc' => $filter->clean($vars['metadesc'], 'HTML'));
-		
+
 		$errors = false;
 
 		foreach ($cid as $id)
@@ -62,16 +66,16 @@ class PWTSEOControllerArticle extends JControllerForm
 			if (!$model->save($data))
 			{
 				$errors = true;
-				JFactory::getApplication()->enqueueMessage(JText::_sprintf('COM_PWT_ERRORS_FAILED_TO_SAVE_METADESC', $id));
+				Factory::getApplication()->enqueueMessage(Text::sprintf('COM_PWT_ERRORS_FAILED_TO_SAVE_METADESC', $id));
 			}
 		}
 
 		if (!$errors)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_PWT_BATCH_APPLIED_METADESC'));
+			Factory::getApplication()->enqueueMessage(Text::_('COM_PWT_BATCH_APPLIED_METADESC'));
 		}
-		
-		$this->setRedirect(JRoute::_('index.php?option=com_pwtseo&view=articles' . $this->getRedirectToListAppend(), false));
+
+		$this->setRedirect(Route::_('index.php?option=com_pwtseo&view=articles' . $this->getRedirectToListAppend(), false));
 
 		return true;
 	}

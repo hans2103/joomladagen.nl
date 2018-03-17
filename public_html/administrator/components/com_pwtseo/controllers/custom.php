@@ -8,24 +8,15 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\MVC\Controller\FormController;
 
 defined('_JEXEC') or die;
 
 /**
- * PWT SEO controller.
+ * Custom URL controller class
  *
- * @package     Pwtseo
- *
- * @since       1.0
+ * @since  1.1.0
  */
-class PWTSEOController extends BaseController
+class PWTSEOControllerCustom extends FormController
 {
-	/**
-	 * The default view for the display method.
-	 *
-	 * @var    string
-	 * @since  1.0
-	 */
-	protected $default_view = 'pwtseo';
 }

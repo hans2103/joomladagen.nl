@@ -8,6 +8,9 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 
 /**
@@ -24,7 +27,7 @@ class Pkg_PwtSEOInstallerScript
 	 *
 	 * @since 1.0.2
 	 */
-	private $lastScoreChange = '1.0.1.0';
+	private $lastScoreChange = '1.1.0.0';
 
 	/**
 	 * Method to run before an install/update/uninstall method
@@ -44,8 +47,8 @@ class Pkg_PwtSEOInstallerScript
 		// Check if the PHP version is correct
 		if (version_compare(phpversion(), '5.6', '<') === true)
 		{
-			$app = JFactory::getApplication();
-			$app->enqueueMessage(JText::sprintf('COM_PWTSEO_PHP_VERSION_ERROR', phpversion()), 'error');
+			$app = Factory::getApplication();
+			$app->enqueueMessage(Text::sprintf('COM_PWTSEO_PHP_VERSION_ERROR', phpversion()), 'error');
 
 			return false;
 		}
@@ -55,8 +58,8 @@ class Pkg_PwtSEOInstallerScript
 
 		if (version_compare($version->getShortVersion(), '3.8', '<') === true)
 		{
-			$app = JFactory::getApplication();
-			$app->enqueueMessage(JText::sprintf('COM_PWTSEO_JOOMLA_VERSION_ERROR', $version->getShortVersion()), 'error');
+			$app = Factory::getApplication();
+			$app->enqueueMessage(Text::sprintf('COM_PWTSEO_JOOMLA_VERSION_ERROR', $version->getShortVersion()), 'error');
 
 			return false;
 		}
@@ -78,7 +81,7 @@ class Pkg_PwtSEOInstallerScript
 	 */
 	public function postflight($type, $parent)
 	{
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		$query
@@ -102,20 +105,26 @@ class Pkg_PwtSEOInstallerScript
 				->from($db->quoteName('#__plg_pwtseo', 'seo'))
 				->where('INET_ATON(CONCAT(' . $db->quoteName('version') . ', ".0")) < INET_ATON(' . $db->quote($this->lastScoreChange) . ')');
 
-			$bHasOutdatedScores = $db->setQuery($query)->loadResult();
-
-			if ($bHasOutdatedScores > 0)
+			try
 			{
-				$app = JFactory::getApplication();
-				$app->enqueueMessage(JText::sprintf('COM_PWTSEO_OUTDATED_SCORES'), 'warning');
+				$bHasOutdatedScores = $db->setQuery($query)->loadResult();
 
-				$query
-					->clear()
-					->update($db->quoteName('#__plg_pwtseo', 'seo'))
-					->set($db->quoteName('flag_outdated') . ' = 1')
-					->where('INET_ATON(CONCAT(' . $db->quoteName('version') . ', ".0")) < INET_ATON(' . $db->quote($this->lastScoreChange) . ')');
+				if ($bHasOutdatedScores > 0)
+				{
+					$app = Factory::getApplication();
+					$app->enqueueMessage(Text::sprintf('COM_PWTSEO_OUTDATED_SCORES'), 'warning');
 
-				$db->setQuery($query)->execute();
+					$query
+						->clear()
+						->update($db->quoteName('#__plg_pwtseo', 'seo'))
+						->set($db->quoteName('flag_outdated') . ' = 1')
+						->where('INET_ATON(CONCAT(' . $db->quoteName('version') . ', ".0")) < INET_ATON(' . $db->quote($this->lastScoreChange) . ')');
+
+					$db->setQuery($query)->execute();
+				}
+			}
+			catch (Exception $e)
+			{
 			}
 		}
 	}

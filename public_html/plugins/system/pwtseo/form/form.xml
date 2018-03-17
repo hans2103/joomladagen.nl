@@ -196,10 +196,13 @@
             <field
                     type="text"
                     name="page_title"
+                    class="pseo-override-title"
                     label="PLG_SYSTEM_PWTSEO_FORM_TITLE_LABEL"
                     description="PLG_SYSTEM_PWTSEO_FORM_TITLE_DESC"
                     showon="override_page_title:1"
             />
+
+            <field type="hidden" name="flag_outdated" value="0" />
         </fieldset>
     </fields>
 </form>
