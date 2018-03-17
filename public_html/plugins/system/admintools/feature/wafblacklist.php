@@ -120,12 +120,14 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 			}
 
 			// Am I in the correct side of the application?
+			// Please note: continue and break have the same meaning inside a switch statement, so we have to
+			// continue 2 to break the current switch AND move on the next item of the array
 			switch ($rule->application)
 			{
 				case 'site':
 					if ($isBackend)
 					{
-						continue;
+						continue 2;
 					}
 
 					break;
@@ -133,7 +135,7 @@ class AtsystemFeatureWafblacklist extends AtsystemFeatureAbstract
 				case 'admin':
 					if (!$isBackend)
 					{
-						continue;
+						continue 2;
 					}
 
 					break;

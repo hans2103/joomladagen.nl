@@ -81,6 +81,9 @@ class Discover extends Model
 			}
 		}
 
+		// Finally sort the resulting array for easier reading
+		sort($ret);
+
 		return $ret;
 	}
 

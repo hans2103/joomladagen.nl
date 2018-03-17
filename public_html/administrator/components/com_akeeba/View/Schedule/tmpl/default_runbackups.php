@@ -203,8 +203,7 @@ defined('_JEXEC') or die();
 					<?php echo \JText::_('COM_AKEEBA_SCHEDULE_LBL_FRONTEND_WEBCRON_URL'); ?>
                 </td>
                 <td>
-					<?php echo $this->escape($this->croninfo->info->root_url); ?>
-                    /<?php echo $this->escape($this->croninfo->frontend->path); ?>
+					<?php echo $this->escape($this->croninfo->info->root_url); ?>/<?php echo $this->escape($this->croninfo->frontend->path); ?>
 
                 </td>
             </tr>
@@ -253,8 +252,7 @@ defined('_JEXEC') or die();
         <p>
 			<?php echo \JText::_('COM_AKEEBA_SCHEDULE_LBL_FRONTEND_WGET'); ?>
             <code>
-                wget --max-redirect=10000 "<?php echo $this->escape($this->croninfo->info->root_url); ?>
-                /<?php echo $this->escape($this->croninfo->frontend->path); ?>" -O - 1>/dev/null 2>/dev/null
+                wget --max-redirect=10000 "<?php echo $this->escape($this->croninfo->info->root_url); ?>/<?php echo $this->escape($this->croninfo->frontend->path); ?>" -O - 1>/dev/null 2>/dev/null
             </code>
         </p>
 
@@ -263,8 +261,7 @@ defined('_JEXEC') or die();
         <p>
 			<?php echo \JText::_('COM_AKEEBA_SCHEDULE_LBL_FRONTEND_CURL'); ?>
             <code>
-                curl -L --max-redirs 1000 -v "<?php echo $this->escape($this->croninfo->info->root_url); ?>
-                /<?php echo $this->escape($this->croninfo->frontend->path); ?>" 1>/dev/null 2>/dev/null
+                curl -L --max-redirs 1000 -v "<?php echo $this->escape($this->croninfo->info->root_url); ?>/<?php echo $this->escape($this->croninfo->frontend->path); ?>" 1>/dev/null 2>/dev/null
             </code>
         </p>
 
@@ -276,8 +273,7 @@ defined('_JEXEC') or die();
         <pre>
 &lt;?php
     $curl_handle=curl_init();
-    curl_setopt($curl_handle, CURLOPT_URL, '<?php echo $this->escape($this->croninfo->info->root_url); ?>
-            /<?php echo $this->escape($this->croninfo->frontend->path); ?>');
+    curl_setopt($curl_handle, CURLOPT_URL, '<?php echo $this->escape($this->croninfo->info->root_url); ?>/<?php echo $this->escape($this->croninfo->frontend->path); ?>');
     curl_setopt($curl_handle,CURLOPT_FOLLOWLOCATION, TRUE);
     curl_setopt($curl_handle,CURLOPT_MAXREDIRS, 10000);
     curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER, 1);
