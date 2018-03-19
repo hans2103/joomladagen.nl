@@ -9,7 +9,9 @@
 
 defined('_JEXEC') or die;
 
-$this->template = JFactory::getApplication()->getTemplate();
+use Joomla\CMS\Factory;
+
+$this->template = Factory::getApplication()->getTemplate();
 require_once JPATH_THEMES . '/' . $this->template . '/html/layouts/render.php';
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers');
@@ -26,65 +28,33 @@ echo JLayouts::render('template.content.header', $array);
         <div class="content">
 			<?php if (!empty($this->items)) : ?>
                 <div class="tabs">
-					<?php foreach ($this->items as $key => &$item) : ?>
-                        <div class="tab">
-                            <a class="tab-button" href="#"><?php echo $item->title; ?></a>
-                            <div class="tab-content">
-								<?php echo $item->introtext; ?>
-                            </div>
-                        </div>
+                    <div role="tablist" aria-label="Programma">
+		                <?php foreach ($this->items as $key => &$item) : ?>
+			                <?php $item->alias = str_replace(' ', '-', strtolower($item->title)); ?>
+                            <button role="tab"
+                                    aria-selected="<?php echo $key == 0 ? 'true' : 'false'; ?>"
+                                    aria-controls="<?php echo $item->alias; ?>-tab"
+                                    id="<?php echo $item->alias; ?>"
+				                <?php echo $key != 0 ? ' tabindex="-1"' : ''; ?>>
+				                <?php echo $item->title; ?>
+                            </button>
+		                <?php endforeach; ?>
+                    </div>
+
+	                <?php foreach ($this->items as $key => &$item) : ?>
+                    <div    tabindex="0"
+                            role="tabpanel"
+                            id="<?php echo $item->alias; ?>-tab"
+                            aria-labelledby="<?php echo $item->alias; ?>"
+    		                <?php echo $key == 0 ? '' : 'hidden'; ?>>
+							<?php echo $item->introtext; ?>
+                    </div>
 					<?php endforeach; ?>
                 </div>
 			<?php endif; ?>
         </div>
     </div>
 </section>
-
-<script>
-    (function () {
-        'use strict'
-
-        let tabsClass = 'tabs'
-        let tabClass = 'tab'
-        let tabButtonClass = 'tab-button'
-        let activeClass = 'active'
-
-        /* Activates the chosen tab and deactivates the rest */
-        function activateTab(chosenTabElement) {
-            let tabList = chosenTabElement.parentNode.querySelectorAll('.' + tabClass)
-            for (let i = 0; i < tabList.length; i++) {
-                let tabElement = tabList[i]
-                if (tabElement.isEqualNode(chosenTabElement)) {
-                    tabElement.classList.add(activeClass)
-                } else {
-                    tabElement.classList.remove(activeClass)
-                }
-            }
-        }
-
-        /* Initialize each tabbed container */
-        let tabbedContainers = document.body.querySelectorAll('.' + tabsClass)
-        for (let i = 0; i < tabbedContainers.length; i++) {
-            let tabbedContainer = tabbedContainers[i]
-
-            /* List of tabs for this tabbed container */
-            let tabList = tabbedContainer.querySelectorAll('.' + tabClass)
-
-            /* Make the first tab active when the page loads */
-            activateTab(tabList[0])
-
-            /* Activate a tab when you click its button */
-            for (let i = 0; i < tabList.length; i++) {
-                let tabElement = tabList[i]
-                let tabButton = tabElement.querySelector('.' + tabButtonClass)
-                tabButton.addEventListener('click', function (event) {
-                    event.preventDefault()
-                    activateTab(event.target.parentNode)
-                })
-            }
-
-        }
-
-    })()
-
+<script type="text/javascript">
+    var tabs = new Tabs();
 </script>

@@ -4369,6 +4369,10 @@ supports-color@^4.0.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
 
+tabs@hans2103/tabs#1.1.0:
+  version "1.0.0"
+  resolved "https://codeload.github.com/hans2103/tabs/tar.gz/5de077a693ac7dc48bf97f6cb45fd69bce0422ce"
+
 tar-pack@^3.4.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/tar-pack/-/tar-pack-3.4.1.tgz#e1dbc03a9b9d3ba07e896ad027317eb679a10a1f"
