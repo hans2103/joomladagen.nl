@@ -77,7 +77,7 @@ echo JLayouts::render('template.content.header', $array);
 	                $sessionspeakers = array();
 	                foreach($this->item->speakers as $speaker) :
 		                if($speaker->enabled):
-		                    echo HTMLHelper::_('link', 'index.php?option=com_conference&view=speaker&id=' . $speaker->conference_speaker_id, trim($speaker->title), array('class'=>'article__meta-item'));
+		                    echo HTMLHelper::_('link', 'index.php?option=com_conference&view=speakers&id=' . $speaker->conference_speaker_id, trim($speaker->title), array('class'=>'article__meta-item'));
 		                else:
 		                    echo '<span class="article__meta-item">' . Text::_(trim($speaker->title)) . '</span>';
 		                endif;
