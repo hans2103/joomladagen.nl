@@ -1,0 +1,424 @@
+/* Control panel */
+#cpanel {
+   display: block;
+   float: left;
+}
+
+.cpanel_button {
+   display: block;
+   float:left;
+}
+
+.template_header {
+	background-color: #CFCFCF;
+	margin-bottom: 0em;
+}
+.longtext {
+	width: 45em;
+}
+.delimiter {
+	width: 1.2em;
+}
+.thumbs {
+	width: 3em;
+}
+
+br {
+	clear: left;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#subtitle {
+	/*color: #146295;*/
+	font-size: 1.128em;
+	font-weight: bold;
+	display: inline-block;
+	width: 100%;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #dfdfdf;
+	vertical-align: top;
+}
+
+/* Hides from IE-mac \ */
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
+
+.debug {
+	display: none;
+	border-bottom: 1px dashed #000000;
+	padding: 0.2em;
+	margin-bottom: 0.3em;
+}
+
+.sqlerror, .error {
+	font-size: 14px;
+	color: #FF0000;
+}
+
+IMG {
+	border: none;
+}
+
+.smallprint {
+	font-size: 10px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+#filterbox {
+	margin: 0.2em;
+}
+
+.akeeba-bootstrap #filterbox input[type="checkbox"]
+{
+	margin-top: -3px;
+}
+
+#templatesettings {
+	display: block;
+	float: left;
+	width: 50%;
+}
+
+#systemlimits {
+	display: block;
+	float: right;
+	width: 50%;
+}
+
+#templateconfig {
+	display: block;
+}
+
+.templateconfig-active {
+	background-color: #CECECE;
+	border: 0.2em ridge #000000;
+}
+
+#templateconfig #templateconfig-header {
+	display: block;
+	margin-top: 1.5em;
+	font-size: 120%;
+}
+
+#templateconfig #templateconfig-content {
+	display: block;
+	text-align: left;
+	margin-top: 3.5em;
+	margin-left: 2em;
+}
+
+#templateconfig #templateconfig-content .submit, #templateconfig-steps .submit {
+	border: 0.2em ridge #000000;
+	background: transparent;
+}
+
+#configurator #import_tab,
+#configurator #export_tab,
+#configurator #images_tab,
+#configurator #email_tab {
+	display: none;
+}
+.msgtitle {
+	margin-right:0.4em;
+	padding-right: 0.4em;
+	border-right: 0.2em solid #CECECE;
+}
+.msgtitle a {
+	cursor: pointer;
+}
+
+.showexportoption {
+	cursor: pointer;
+}
+
+.userfilename {
+	text-align: center;
+	font-size: 1.5em;
+	padding: 0.5em;
+	border: 1px solid #EFEFE0;
+}
+.column_header_input {
+	width: 15em;
+}
+
+#importcontinue {
+	color: #FF0000;
+	float: right;
+	display: block;
+	font-size: 16px;
+	padding: 0.2em;
+}
+
+.replaceinput {
+	width: 200px;
+}
+
+#error_file {
+	margin: 5px;
+}
+
+.writable {
+	color: #008000;
+}
+
+.not_writable {
+	color: #FF0000;
+}
+
+/* Export page */
+#set_export {
+	font-size: 16px;
+}
+#selected_export {
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.selectcol {
+	width: 5px;
+}
+
+#importtypes, #exporttypes {
+	display: block;
+	position: left;
+	float: left;
+}
+
+.isprimary {
+	color: #FF0000;
+}
+
+fieldset fieldset, fieldset {
+	position: relative;
+	overflow: visible;
+}
+
+div.edittemplatefield {
+	background: url("../images/csvi_edit_16.png") no-repeat scroll 0 6px transparent;
+    color: #146295;
+    font-size: 1.364em;
+    font-weight: bold;
+    margin-left: 10px;
+    padding-left: 30px;
+    padding-top: 4px;
+}
+
+.reorder {
+	float: none;
+}
+.addfield {
+	cursor: pointer;
+}
+
+/* Analyzer */
+.data_table {
+	border-collapse: collapse;
+}
+
+.data_table thead {
+	background-position: left bottom;
+	background-repeat: repeat-x;
+	border-bottom: 2px solid #3E8CBC;
+	color: #333333;
+	font-size: 18px;
+	font-weight: bold;
+	height: 25px;
+	padding-bottom: 6px;
+	padding-top: 8px;
+	table-layout: fixed;
+	text-align: center;
+}
+
+.data_table tbody td {
+	border-right: 1px solid #FF0000;
+	border-bottom: 1px solid #CECECE;
+	/* border: 2px solid #FFFFFF; */
+	margin: 2px;
+	padding: 6px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.notice {
+	color: #385439;
+}
+
+.top {
+	font-size: 12px;
+}
+
+#menulist {
+	border-bottom: 1px solid;
+	font-size: 16px;
+	margin-bottom: 5px;
+}
+#menulist li {
+	display: inline;
+}
+
+.fields li {
+	list-style: decimal;
+	margin-left: 15px;
+}
+
+/* Joomla 3 compatibility */
+fieldset li, ol#property-values li {
+  list-style: none outside none;
+  margin: 0;
+  padding: 5px;
+}
+
+.clr {
+  clear: both;
+  height: 0;
+  overflow: hidden;
+}
+
+div.toolbar-list {
+  float: right;
+  padding: 0;
+  text-align: right;
+}
+
+div.toolbar-list li {
+     color: #666666;
+     float: left;
+     height: 48px;
+     list-style: none outside none;
+     padding: 1px 1px 3px 4px;
+     text-align: center;
+}
+
+div.toolbar-list span {
+     display: block;
+     float: none;
+     height: 32px;
+     margin: 0px auto;
+     width: 32px;
+}
+
+div.toolbar-list li {
+     color: #666666;
+     list-style: none outside none;
+     text-align: center;
+}
+.settings {
+  background-color: #FFFFFF;
+  padding: 5px 17px 17px;
+}
+
+.order input {
+	width: 25px;
+}
+#dialog-form #template_name {
+	width: 275px;
+}
+#optionfield
+{
+	margin-top: 10px;
+}
+#optionfield #alert {
+	display: none;
+}
+
+/* Hide the operations on the maintenance page */
+#maintenance #operation {
+	display: none;
+}
+
+.akeeba-bootstrap table td.center {
+	text-align: center;
+}
+
+.active-step
+{
+	color: #1592C4;
+	font-weight: bold;
+	font-size: 14px;
+	padding: 10px;
+}
+
+.inactive-step
+{
+	color: #8296CE;
+	font-weight: bold;
+	padding: 5px;
+}
+
+/* Fix the chosen selectors from disappearing */
+.akeeba-bootstrap .tab-content
+{
+	overflow: visible;
+}
+
+#toolbar #toolbar-flash, #toolbar #toolbar-puzzle
+{
+	float: right;
+}
+
+.advancedUser
+{
+	display: none;
+}
+
+/* Quick Add */
+#availablefieldsModal .checkbox input[type="checkbox"]
+{
+	margin-top: 2px;
+	margin-left: 1px;
+}
+
+#availablefieldsModal .checkbox
+{
+	padding-top: 3px;
+}
+
+/* Wizard */
+.step_explanation h3
+{
+	color: #8093B3;
+}
+
+.step_explanation
+{
+	margin: 5px;
+	padding: 5px;
+}
+
+.step_info
+{
+	margin-bottom: 5px;
+}
+
+/* Help arrow */
+.help-arrow
+{
+	float: right;
+}
+.help-arrow div:first-child
+{
+	text-align: center;
+}
+
+.form-horizontal .cron-block
+{
+	margin-bottom: 0;
+	font-style: italic;
+	display: block;
+}
+
+div.modal-body {
+	padding: 10px;
+}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form cron="false">
+	<fieldset name="templatefield">
+		<field name="csvi_templatefield_id"
+			type="hidden"
+			emptylabel="true" />
+
+		<field name="csvi_template_id"
+			type="hidden"
+			emptylabel="true"/>
+
+		<field name="table_name"
+		       type="csvi.exportcustomtables"
+		       size="1"
+		       idfield="csvi_template_id"
+		       onchange="Csvi.loadCustomAvailableFields();"
+		       class="advancedSelect input-xxlarge">
+				<option value="">COM_CSVI_SELECT_TABLE</option>
+		</field>
+
+		<field name="field_name"
+			type="csviavailablefields"
+			size="1"
+			required="true"
+			idfield="csvi_template_id"
+			class="advancedSelect" />
+
+		<field name="column_header"
+			type="text"
+			class="input-normal"
+			required="false" />
+
+		<field name="default_value"
+			type="text"
+			class="input-normal"
+			required="false" />
+
+		<field name="rules"
+			type="csvirulelist"
+			size="10"
+			required="false"
+			class="advancedSelect"
+			multiple="true"
+			action="export"
+			default="">
+			<option value="">COM_CSVI_DONT_USE</option>
+		</field>
+
+		<field name="cdata"
+			type="radio"
+			size="1"
+			required="false"
+			class="btn-group btn-group-yesno"
+			default="1">
+			<option value="1">COM_CSVI_YES</option>
+			<option value="0">COM_CSVI_NO</option>
+		</field>
+
+		<field name="ordering"
+			type="text"
+			class="input-mini"
+			size="6"
+			default="0" />
+
+		<field name="enabled"
+			   type="radio"
+			   description="COM_CSVI_TEMPLATEFIELD_EXPORT_ENABLED"
+			   size="1"
+			   required="false"
+			   class="btn-group btn-group-yesno"
+			   default="1">
+			<option value="1">COM_CSVI_YES</option>
+			<option value="0">COM_CSVI_NO</option>
+		</field>
+
+		<field name="field_date_format"
+		       type="text"
+		       class="input-normal"
+		       required="false" />
+	</fieldset>
+</form>

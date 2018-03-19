@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="file">
+			<field name="auto_detect_delimiters"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="field_delimiter"
+			       type="text"
+			       class="input-mini"
+			       maxlength="1"
+			       default=","/>
+
+			<field name="text_enclosure"
+			       type="text"
+			       class="input-mini"
+			       maxlength="1"
+			       default=""/>
+
+			<field name="use_file_extension"
+			       type="list"
+			       size="1"
+			       class="input-medium advancedSelect"
+			       advancedUser="1"
+			       default="">
+				<option value="">COM_CSVI_TAKE_FROM_FILE</option>
+				<option value="csv">CSV</option>
+				<option value="xml">XML</option>
+				<option value="xls">XLS</option>
+				<option value="odt">ODT</option>
+			</field>
+
+			<field name="im_mac"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="use_column_headers"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="add_extra_fields"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       advancedUser="1"
+			       default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="skip_first_line"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="overwrite_existing_data"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       advancedUser="1"
+			       default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="ignore_non_exist"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       advancedUser="1"
+			       default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="xml_record_name"
+			       type="text"
+			       class="input-large"/>
+		</fieldset>
+
+	</fields>
+</form>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension version="1.0" type="plugin" group="csviaddon" method="upgrade">
+	<name>PLG_CSVIADDON_CONTACT_TITLE</name>
+	<creationDate>18 January 2018</creationDate>
+	<author>RolandD Cyber Produksi</author>
+	<authorEmail>contact@csvimproved.com</authorEmail>
+	<authorUrl>https://csvimproved.com/</authorUrl>
+	<copyright>Copyright (C) 2006 - 2018 RolandD Cyber Produksi. All rights reserved.</copyright>
+	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>7.4.1</version>
+	<description>PLG_CSVIADDON_CONTACT_DESCRIPTION</description>
+
+	<scriptfile>script.php</scriptfile>
+
+	<files>
+		<filename plugin="contact">contact.php</filename>
+		<folder>com_contact</folder>
+		<folder>language</folder>
+	</files>
+
+</extension>

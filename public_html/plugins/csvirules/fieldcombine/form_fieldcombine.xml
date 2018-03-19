@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="pluginform">
+		<fieldset name="fieldcombine">
+			<field name="source"
+				   type="textarea"
+				   rows="5"
+				   required="true"
+				   class="input-xxlarge"
+				   filter="raw" />
+
+			<field name="target"
+				   type="text"
+				   required="true"
+				   class="input-normal" />
+
+			<field name="combine_character"
+				   type="text"
+				   required="false"
+				   class="input-mini" />
+
+			<field name="combine_empty"
+			       type="list"
+			       default="0"
+			       class="input-small advancedSelect">
+				<option value="0">COM_CSVI_NO</option>
+				<option value="1">COM_CSVI_YES</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

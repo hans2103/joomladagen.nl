@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="customexport_fields">
+			<field name="groupbyfields"
+				   type="repeatable"
+				   icon="list">
+				<fieldset hidden="true" repeat="true">
+					<field name="groupby_table_name"
+					       type="csvi.exportcustomtables"
+					       size="1"
+					       idfield="csvi_template_id"
+					       onchange="Csvi.loadCustomAvailableFields(this, 'groupby');"
+					       class="advancedSelect">
+						<option value="">COM_CSVI_SELECT_TABLE</option>
+					</field>
+					<field name="groupby_field_name"
+					       type="csviavailablefields"
+					       size="1"
+					       required="true"
+					       idfield="csvi_template_id"
+					       class="advancedSelect" />
+				</fieldset>
+			</field>
+			<field name="sortfields"
+				   type="repeatable"
+				   icon="list">
+				<fieldset hidden="true" repeat="true">
+					<field name="sortby_table_name"
+					       type="csvi.exportcustomtables"
+					       size="1"
+					       idfield="csvi_template_id"
+					       onchange="Csvi.loadCustomAvailableFields(this, 'sortby');"
+					       class="advancedSelect">
+						<option value="">COM_CSVI_SELECT_TABLE</option>
+					</field>
+					<field name="sortby_field_name"
+					       type="csviavailablefields"
+					       size="1"
+					       required="true"
+					       idfield="csvi_template_id"
+					       class="advancedSelect" />
+				</fieldset>
+			</field>
+		</fieldset>
+	</fields>
+</form>

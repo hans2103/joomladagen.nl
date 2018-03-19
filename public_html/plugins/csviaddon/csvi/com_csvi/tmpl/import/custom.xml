@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="custom">
+			<field name="custom_table"
+				type="csvicustomtables"
+				size="1"
+				class="advancedSelect"
+				default="">
+			</field>
+			<field name="import_based_on"
+			       type="text"
+			       class="input-xlarge"
+			       hint="COM_CSVI_JFORM_IMPORT_BASED_EMPTY_TEXT"
+			       default="">
+			</field>
+			<field name="delete_table_records"
+			       type="list"
+			       size="1"
+			       default="0"
+			       class="input-small advancedSelect">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

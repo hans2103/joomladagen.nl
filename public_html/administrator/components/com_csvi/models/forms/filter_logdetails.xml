@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+				name="search"
+				type="text"
+				hint="JSEARCH_FILTER"
+		/>
+
+		<field
+				name="action"
+				type="csvi.logdetailsactiontypes"
+				class="advancedSelect"
+				onchange="this.form.submit();"
+				>
+			<option value="">COM_CSVI_SELECT_ACTION</option>
+		</field>
+
+		<field
+				name="result"
+				type="csvi.logdetailsresults"
+				class="advancedSelect"
+				onchange="this.form.submit();"
+		>
+			<option value="">COM_CSVI_SELECT_RESULT</option>
+		</field>
+	</fields>
+
+	<fields name="list">
+		<field
+				name="limit"
+				type="limitbox"
+				class="input-mini advancedSelect"
+				default="25"
+				onchange="this.form.submit();"
+		/>
+
+		<field
+				name="fullordering"
+				type="hidden"
+		/>
+	</fields>
+</form>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="orderitem">
+			<field name="orderstatus"
+				type="Csvij2store.Orderstatus"
+				multiple="true"
+				size="7"
+				class="input-xxlarge advancedSelect"
+				default="">
+			</field>
+		</fieldset>
+	</fields>
+</form>

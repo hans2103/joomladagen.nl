@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="site">
+		<field name="hostname" type="text" default="" required="true" class="required" label="COM_CSVI_HOSTNAME_LABEL" description ="COM_CSVI_HOSTNAME_DESC"/>
+		<field name="extraHelp" type="radio" class="btn-group btn-group-yesno" default="1" label="COM_CSVI_EXTRAHELP_LABEL" description ="COM_CSVI_EXTRAHELP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="addoninstallcheck" type="radio" class="btn-group btn-group-yesno" default="1" label="COM_CSVI_ADDONINSTALLCHECK_LABEL" description ="COM_CSVI_ADDONINSTALLCHECK_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="log_max" type="text" default="25" class="input-mini" label="COM_CSVI_JFORM_LOG_MAX_LABEL" description ="COM_CSVI_JFORM_LOG_MAX_DESC"/>
+	</fieldset>
+	<fieldset name="google">
+		<field name="gb_title" type="text" default="" label="COM_CSVI_GB_TITLE_LABEL" description ="COM_CSVI_GB_TITLE_DESC" />
+		<field name="gb_link" type="text" default="" label="COM_CSVI_GB_LINK_LABEL" description ="COM_CSVI_GB_LINK_DESC" />
+		<field name="gb_description" type="textarea" rows="10" cols="50" default="" label="COM_CSVI_GB_DESCRIPTION_LABEL" description ="COM_CSVI_GB_DESCRIPTION_DESC"  />
+	</fieldset>
+	<fieldset name="yandex">
+		<field name="ya_name" type="text" default="" label="COM_CSVI_YA_NAME_LABEL" description ="COM_CSVI_YA_NAME_DESC" />
+		<field name="ya_company" type="text" default="" label="COM_CSVI_YA_COMPANY_LABEL" description ="COM_CSVI_YA_COMPANY_DESC" />
+		<field name="ya_link" type="text" default="" label="COM_CSVI_YA_LINK_LABEL" description ="COM_CSVI_YA_LINK_DESC" />
+		<field name="ya_delivery_cost" type="text" default="" label="COM_CSVI_YA_DELIVERY_COST_LABEL" description ="COM_CSVI_YA_DELIVERY_COST_DESC" />
+		<field name="ya_currency" type="text" default="RUR" label="COM_CSVI_YA_CURRENCY_LABEL" description ="COM_CSVI_YA_CURRENCY_DESC" />
+		<field name="ya_currency_rate" type="text" default="1" label="COM_CSVI_YA_CURRENCY_RATE_LABEL" description ="COM_CSVI_YA_CURRENCY_RATE_DESC" />
+		<field name="ya_currency_plus" type="text" default="0" label="COM_CSVI_YA_CURRENCY_PLUS_LABEL" description ="COM_CSVI_YA_CURRENCY_PLUS_DESC" />
+	</fieldset>
+	<fieldset name="icecat" addfieldpath="/administrator/components/com_csvi/models/fields">
+		<field name="ice_username" type="text" default="" label="COM_CSVI_JFORM_ICE_USERNAME_LABEL" description ="COM_CSVI_JFORM_ICE_USERNAME_DESC" />
+		<field name="ice_password" type="password" default="" label="COM_CSVI_JFORM_ICE_PASSWORD_LABEL" description ="COM_CSVI_JFORM_ICE_PASSWORD_DESC" />
+		<field name="ice_advanced" type="radio" class="btn-group btn-group-yesno" default="0" label="COM_CSVI_JFORM_ICE_ADVANCED_LABEL" description ="COM_CSVI_JFORM_ICE_ADVANCED_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="ice_lang" type="list" class="input-xlarge" default="INT" label="COM_CSVI_JFORM_ICE_LANG_LABEL" description ="COM_CSVI_JFORM_ICE_LANG_DESC">
+			<option value="INT">COM_CSVI_JFORM_ICE_INT</option>
+			<option value="EN">COM_CSVI_JFORM_ICE_EN</option>
+			<option value="US">COM_CSVI_JFORM_ICE_US</option>
+			<option value="BG">COM_CSVI_JFORM_ICE_BG</option>
+			<option value="CA">COM_CSVI_JFORM_ICE_CA</option>
+			<option value="ZH">COM_CSVI_JFORM_ICE_ZH</option>
+			<option value="HR">COM_CSVI_JFORM_ICE_HR</option>
+			<option value="CZ">COM_CSVI_JFORM_ICE_CZ</option>
+			<option value="DK">COM_CSVI_JFORM_ICE_DK</option>
+			<option value="NL">COM_CSVI_JFORM_ICE_NL</option>
+			<option value="FI">COM_CSVI_JFORM_ICE_FI</option>
+			<option value="FR">COM_CSVI_JFORM_ICE_FR</option>
+			<option value="KA">COM_CSVI_JFORM_ICE_KA</option>
+			<option value="DE">COM_CSVI_JFORM_ICE_DE</option>
+			<option value="HU">COM_CSVI_JFORM_ICE_HU</option>
+			<option value="IT">COM_CSVI_JFORM_ICE_IT</option>
+			<option value="JA">COM_CSVI_JFORM_ICE_JA</option>
+			<option value="NO">COM_CSVI_JFORM_ICE_NO</option>
+			<option value="PL">COM_CSVI_JFORM_ICE_PL</option>
+			<option value="PT">COM_CSVI_JFORM_ICE_PT</option>
+			<option value="RO">COM_CSVI_JFORM_ICE_RO</option>
+			<option value="RU">COM_CSVI_JFORM_ICE_RU</option>
+			<option value="SR">COM_CSVI_JFORM_ICE_SR</option>
+			<option value="ES">COM_CSVI_JFORM_ICE_ES</option>
+			<option value="SE">COM_CSVI_JFORM_ICE_SE</option>
+			<option value="TR">COM_CSVI_JFORM_ICE_TR</option>
+			<option value="UK">COM_CSVI_JFORM_ICE_UK</option>
+		</field>
+		<field name="ice_index" type="text" class="input-xxlarge" default="http://data.icecat.biz/export/freexml.int/INT/files.index.csv" label="COM_CSVI_JFORM_ICE_INDEX_LABEL" description ="COM_CSVI_JFORM_ICE_INDEX_DESC" />
+		<field name="ice_supplier" type="text" class="input-xxlarge" default="http://data.icecat.biz/export/freexml.int/INT/supplier_mapping.xml" label="COM_CSVI_JFORM_ICE_SUPPLIER_LABEL" description ="COM_CSVI_JFORM_ICE_SUPPLIER_DESC" />
+		<field name="ice_stats" type="CsviIcecatStats"/>
+	</fieldset>
+	<fieldset name="update">
+		<field name="downloadid" type="text" default="" size="50" label="COM_CSVI_DOWNLOAD_LABEL" description ="COM_CSVI_DOWNLOAD_DESC" />
+	</fieldset>
+	<fieldset name="site">
+		<field name="hostname" type="text" default="" required="true" class="required" label="COM_CSVI_HOSTNAME_LABEL" description ="COM_CSVI_HOSTNAME_DESC"/>
+		<field name="extraHelp" type="radio" class="btn-group btn-group-yesno" default="1" label="COM_CSVI_EXTRAHELP_LABEL" description ="COM_CSVI_EXTRAHELP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="log_max" type="text" default="25" class="input-mini" label="COM_CSVI_JFORM_LOG_MAX_LABEL" description ="COM_CSVI_JFORM_LOG_MAX_DESC"/>
+	</fieldset>
+	<fieldset name="google">
+		<field name="gb_title" type="text" default="" label="COM_CSVI_GB_TITLE_LABEL" description ="COM_CSVI_GB_TITLE_DESC" />
+		<field name="gb_link" type="text" default="" label="COM_CSVI_GB_LINK_LABEL" description ="COM_CSVI_GB_LINK_DESC" />
+		<field name="gb_description" type="textarea" rows="10" cols="50" default="" label="COM_CSVI_GB_DESCRIPTION_LABEL" description ="COM_CSVI_GB_DESCRIPTION_DESC"  />
+	</fieldset>
+	<fieldset name="yandex">
+		<field name="ya_name" type="text" default="" label="COM_CSVI_YA_NAME_LABEL" description ="COM_CSVI_YA_NAME_DESC" />
+		<field name="ya_company" type="text" default="" label="COM_CSVI_YA_COMPANY_LABEL" description ="COM_CSVI_YA_COMPANY_DESC" />
+		<field name="ya_link" type="text" default="" label="COM_CSVI_YA_LINK_LABEL" description ="COM_CSVI_YA_LINK_DESC" />
+		<field name="ya_delivery_cost" type="text" default="" label="COM_CSVI_YA_DELIVERY_COST_LABEL" description ="COM_CSVI_YA_DELIVERY_COST_DESC" />
+		<field name="ya_currency" type="text" default="RUR" label="COM_CSVI_YA_CURRENCY_LABEL" description ="COM_CSVI_YA_CURRENCY_DESC" />
+		<field name="ya_currency_rate" type="text" default="1" label="COM_CSVI_YA_CURRENCY_RATE_LABEL" description ="COM_CSVI_YA_CURRENCY_RATE_DESC" />
+		<field name="ya_currency_plus" type="text" default="0" label="COM_CSVI_YA_CURRENCY_PLUS_LABEL" description ="COM_CSVI_YA_CURRENCY_PLUS_DESC" />
+	</fieldset>
+	<fieldset name="icecat" addfieldpath="/administrator/components/com_csvi/models/fields">
+		<field name="ice_username" type="text" default="" label="COM_CSVI_JFORM_ICE_USERNAME_LABEL" description ="COM_CSVI_JFORM_ICE_USERNAME_DESC" />
+		<field name="ice_password" type="password" default="" label="COM_CSVI_JFORM_ICE_PASSWORD_LABEL" description ="COM_CSVI_JFORM_ICE_PASSWORD_DESC" />
+		<field name="ice_advanced" type="radio" class="btn-group btn-group-yesno" default="0" label="COM_CSVI_JFORM_ICE_ADVANCED_LABEL" description ="COM_CSVI_JFORM_ICE_ADVANCED_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="ice_lang" type="list" class="input-xlarge" default="INT" label="COM_CSVI_JFORM_ICE_LANG_LABEL" description ="COM_CSVI_JFORM_ICE_LANG_DESC">
+			<option value="INT">COM_CSVI_JFORM_ICE_INT</option>
+			<option value="EN">COM_CSVI_JFORM_ICE_EN</option>
+			<option value="US">COM_CSVI_JFORM_ICE_US</option>
+			<option value="BG">COM_CSVI_JFORM_ICE_BG</option>
+			<option value="CA">COM_CSVI_JFORM_ICE_CA</option>
+			<option value="ZH">COM_CSVI_JFORM_ICE_ZH</option>
+			<option value="HR">COM_CSVI_JFORM_ICE_HR</option>
+			<option value="CZ">COM_CSVI_JFORM_ICE_CZ</option>
+			<option value="DK">COM_CSVI_JFORM_ICE_DK</option>
+			<option value="NL">COM_CSVI_JFORM_ICE_NL</option>
+			<option value="FI">COM_CSVI_JFORM_ICE_FI</option>
+			<option value="FR">COM_CSVI_JFORM_ICE_FR</option>
+			<option value="KA">COM_CSVI_JFORM_ICE_KA</option>
+			<option value="DE">COM_CSVI_JFORM_ICE_DE</option>
+			<option value="HU">COM_CSVI_JFORM_ICE_HU</option>
+			<option value="IT">COM_CSVI_JFORM_ICE_IT</option>
+			<option value="JA">COM_CSVI_JFORM_ICE_JA</option>
+			<option value="NO">COM_CSVI_JFORM_ICE_NO</option>
+			<option value="PL">COM_CSVI_JFORM_ICE_PL</option>
+			<option value="PT">COM_CSVI_JFORM_ICE_PT</option>
+			<option value="RO">COM_CSVI_JFORM_ICE_RO</option>
+			<option value="RU">COM_CSVI_JFORM_ICE_RU</option>
+			<option value="SR">COM_CSVI_JFORM_ICE_SR</option>
+			<option value="ES">COM_CSVI_JFORM_ICE_ES</option>
+			<option value="SE">COM_CSVI_JFORM_ICE_SE</option>
+			<option value="TR">COM_CSVI_JFORM_ICE_TR</option>
+			<option value="UK">COM_CSVI_JFORM_ICE_UK</option>
+		</field>
+		<field name="ice_index" type="text" class="input-xxlarge" default="http://data.icecat.biz/export/freexml.int/INT/files.index.csv" label="COM_CSVI_JFORM_ICE_INDEX_LABEL" description ="COM_CSVI_JFORM_ICE_INDEX_DESC" />
+		<field name="ice_supplier" type="text" class="input-xxlarge" default="http://data.icecat.biz/export/freexml.int/INT/supplier_mapping.xml" label="COM_CSVI_JFORM_ICE_SUPPLIER_LABEL" description ="COM_CSVI_JFORM_ICE_SUPPLIER_DESC" />
+		<field name="ice_stats" type="CsviIcecatStats"/>
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules"
+			   type="rules"
+			   label="JCONFIG_PERMISSIONS_LABEL"
+			   validate="rules"
+			   filter="rules"
+			   component="com_csvi"
+			   section="component">
+		</field>
+	</fieldset>
+</config>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="conditionvalue"
+	          width="10%"
+	          title="COM_CSVI_PLUGINFORM_CONDITIONVALUE_TITLE">
+
+		<field name="condition"
+		       type="list"
+		       size="1"
+			   hidden="true"
+		       required="true"
+		       class="advancedSelect"
+		       default="equalto">
+			<option value="equalto">COM_CSVI_PLUGINFORM_CONDITIONAL_EQUALTO</option>
+			<option value="greaterthan">COM_CSVI_PLUGINFORM_CONDITIONAL_GREATERTHAN</option>
+			<option value="lessthan">COM_CSVI_PLUGINFORM_CONDITIONAL_LESSTHAN</option>
+			<option value="empty">COM_CSVI_PLUGINFORM_CONDITIONAL_EMPTY</option>
+		</field>
+	</fieldset>
+	<fieldset name="comparevalue"
+			  width="10%"
+			title="COM_CSVI_PLUGINFORM_COMPAREVALUE_TITLE">
+		<field name="comparevalue"
+		       type="text"
+			   hidden="true"
+		       required="true"
+		       class="input-normal"/>
+	</fieldset>
+
+	<fieldset name="replacewith"
+	          width="10%"
+	          title="COM_CSVI_PLUGINFORM_REPLACEWITH_TITLE">
+
+		<field name="replace"
+			   type="list"
+			   size="1"
+			   hidden="true"
+			   required="true"
+			   class="replaceOption advancedSelect"
+			   onchange="showReplaceField(this)"
+			   default="fieldvalue">
+			<option value="fieldvalue">COM_CSVI_PLUGINFORM_CONDITIONAL_FIELDVALUE</option>
+			<option value="value">COM_CSVI_PLUGINFORM_CONDITIONAL_VALUE</option>
+		</field>
+	</fieldset>
+	<fieldset name="replacement"
+			  width="10%"
+			title="COM_CSVI_PLUGINFORM_REPLACEMENT_TITLE">
+		<field name="replacement"
+		       type="text"
+			   hidden="true"
+		       required="true"
+		       class="input-normal"/>
+	</fieldset>
+</form>

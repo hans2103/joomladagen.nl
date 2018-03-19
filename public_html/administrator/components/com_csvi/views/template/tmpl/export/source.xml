@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="file">
+			<field name="exportto"
+			       type="list"
+			       size="4"
+			       default="todownload"
+			       multiple="true"
+			       class="advancedSelect"
+			       onchange="Csvi.showExportSource(this.value)">
+				<option value="todownload">COM_CSVI_EXPORT_TO_DOWNLOAD_LABEL</option>
+				<option value="tofile">COM_CSVI_EXPORT_TO_LOCAL_LABEL</option>
+				<option value="toftp">COM_CSVI_EXPORT_TO_FTP_LABEL</option>
+				<option value="toemail">COM_CSVI_EXPORT_EMAIL_FILE_LABEL</option>
+				<option value="todatabase">COM_CSVI_EXPORT_ANOTHER_DATABASE_LABEL</option>
+			</field>
+			<field name="output_empty_file"
+			       type="list"
+				   size="1"
+			       class="input-small advancedSelect"
+				   advancedUser="1"
+			       default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+		<fieldset name="localfield"
+		          label="COM_CSVI_EXPORT_TO_LOCAL_LABEL">
+			<field name="localpath"
+			       type="text"
+			       class="input-xxlarge exportlocalpath"/>
+		</fieldset>
+		<fieldset name="ftpfield"
+		          label="COM_CSVI_EXPORT_TO_FTP_LABEL">
+			<field name="ftphost"
+			       type="text"
+			       class="input-xxlarge"/>
+
+			<field name="ftpport"
+			       type="text"
+			       class="input-mini"/>
+
+			<field name="sftp"
+				   type="radio"
+				   default="0"
+				   class="btn-group btn-group-yesno"
+			>
+				<option value="0">No</option>
+				<option value="1">Yes</option>
+			</field>
+
+			<field name="ftpusername"
+			       type="text"/>
+
+			<field name="ftppass"
+			       type="password"/>
+
+			<field name="ftproot"
+			       type="text"
+			       class="input-xxlarge"/>
+
+			<field name="ftpfile"
+			       type="text"
+			       class="input-xlarge"/>
+
+			<field name="testftp"
+			       type="csvi.button"
+			       onclick="Csvi.testFtp('export'); return false;"
+			       text="COM_CSVI_TESTFTP_BUTTON"
+			       emptylabel="1"
+			       emptydescription="1"/>
+		</fieldset>
+		<fieldset name="emailfield"
+		          label="COM_CSVI_EXPORT_EMAIL_FILE_LABEL">
+			<field name="export_email_addresses"
+			       type="textarea"
+			       cols="50"
+			       rows="3"/>
+
+			<field name="export_email_addresses_cc"
+			       type="textarea"
+			       cols="50"
+			       rows="3"/>
+
+			<field name="export_email_addresses_bcc"
+			       type="textarea"
+			       cols="50"
+			       rows="3"/>
+
+			<field name="export_email_subject"
+			       type="text"
+			       class="input-xxlarge"/>
+
+			<field name="export_email_body"
+			       type="editor"
+			       height="350"
+			       filter="safehtml"/>
+		</fieldset>
+		<fieldset name="databasefield"
+		          label="COM_CSVI_EXPORT_ANOTHER_DATABASE_LABEL">
+			<field name="database_username"
+			       type="text"
+			       class="input-large"
+			/>
+
+			<field name="database_password"
+			       type="text"
+			       class="input-large"
+			/>
+
+			<field name="database_host"
+			       type="text"
+			       class="input-large"
+			/>
+
+			<field name="database_portno"
+			       type="text"
+			       hint="3306"
+			       class="input-large"/>
+
+			<field name="database_name"
+			       type="text"
+			       class="input-large"/>
+
+			<field name="database_table"
+			       type="text"
+			       class="input-large"/>
+
+			<field name="primary_key_source"
+			       type="csvi.templatefields"
+			       class="input-large advancedSelect"
+			       default="id"/>
+
+			<field name="primary_key_target"
+			       type="text"
+			       class="input-large"
+			       default="id"/>
+
+			<field name="create_new_columns"
+			       type="list"
+			       size="1"
+			       class="input-small advancedSelect"
+			       default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="testdbconnection"
+			       type="csvi.button"
+			       onclick="Csvi.testConnection('export'); return false;"
+			       text="COM_CSVI_TEST_DATABASE_CONNECTION_BUTTON"
+			       emptylabel="1"
+			       emptydescription="1"/>
+		</fieldset>
+	</fields>
+</form>

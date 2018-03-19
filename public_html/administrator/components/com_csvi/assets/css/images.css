@@ -1,0 +1,32 @@
+/* 32 pixels */
+.icon-32-list { background-image: url(../images/csvi_fields_32.png); }
+.icon-32-zoom-in { background-image: url(../images/csvi_log_details_32.png); }
+.icon-32-health { background-image: url(../images/csvi_analyzer_32.png); }
+.icon-32-arrow-left, .icon-32-cancel
+{
+	background-image: url(../images/csvi_cancel_32.png);
+}
+.icon-32-arrow-right { background-image: url(../images/csvi_continue_32.png); }
+.icon-32-eye-open, .icon-32-play
+{
+	background-image: url(../images/csvi_process_32.png);
+}
+.icon-32-download { background-image: url(../images/csvi_export_32.png); }
+
+/* 48 pixels */
+.icon-48-folder { background-image: url(../images/csvi_template_48.png); }
+.icon-48-list { background-image: url(../images/csvi_fields_48.png); }
+.icon-48-upload { background-image: url(../images/csvi_import_48.png); }
+.icon-48-download { background-image: url(../images/csvi_export_48.png); }
+.icon-48-tools { background-image: url(../images/csvi_maintenance_48.png); }
+.icon-48-clock { background-image: url(../images/csvi_log_48.png); }
+.icon-48-info { background-image: url(../images/csvi_about_48.png); }
+.icon-48-grid-view-2 { background-image: url(../images/csvi_av_fields_48.png); }
+.icon-48-lamp { background-image: url(../images/csvi_log_details_48.png); }
+.icon-48-csvi, .icon-48-list-view, .icon-48-cube, .icon-48-cogs
+{
+	background-image: url(../images/csvi_logo_48.png);
+}
+.icon-48-wrench { background-image: url(../images/csvi_settings_48.png); }
+.icon-48-health { background-image: url(../images/csvi_analyzer_48.png); }
+.icon-48-shuffle { background-image: url(../images/csvi_order_48.png); }

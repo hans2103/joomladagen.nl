@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="file">
+			<field name="export_filename"
+				   type="text"
+				   size="40" />
+
+			<field name="export_file"
+				   type="list"
+				   size="1"
+				   default="csv"
+				   class="input-small advancedSelect"
+				   onchange="Csvi.loadExportSites(jQuery(this).val(), '');">
+				<option value="csv">CSV</option>
+				<option value="xml">XML</option>
+				<option value="html">HTML</option>
+			</field>
+
+			<field name="export_site"
+				   type="list"
+				   size="1"
+				   class="input-medium advancedSelect"
+				   default="">
+			</field>
+
+			<field name="field_delimiter"
+				   type="text"
+				   size="2"
+				   maxlength="1"
+				   class="input-mini"
+				   default="," />
+
+			<field name="text_enclosure"
+				   type="text"
+				   size="2"
+				   class="input-mini"
+				   maxlength="1"
+				   default=""/>
+
+			<field name="include_column_headers"
+				   type="list"
+				   size="1"
+				   class="input-small advancedSelect"
+				   default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="signature"
+				   type="list"
+				   size="1"
+				   class="input-small advancedSelect"
+				   default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="publish_state"
+				   type="list"
+				   size="1"
+				   class="input-medium advancedSelect"
+				   default="">
+				<option value="">COM_CSVI_ALL_STATES</option>
+				<option value="1">COM_CSVI_PUBLISHED</option>
+				<option value="0">COM_CSVI_UNPUBLISHED</option>
+			</field>
+
+			<field name="recordstart"
+				   type="text"
+				   size="5" />
+
+			<field name="recordend"
+				   type="text"
+				   size="5" />
+
+			<field name="export_date_format"
+				   type="text"
+				   size="15"
+				   default="d/m/Y H:i:s" />
+		</fieldset>
+	</fields>
+</form>

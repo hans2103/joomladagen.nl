@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_CSVI_IMPORT_FRONTEND" option="COM_CSVI_IMPORT_FRONTEND_OPTION">
+		<message>
+			<![CDATA[COM_CSVI_IMPORT_FRONTEND_DESC_MENU]]>
+		</message>
+	</layout>
+
+	<fields name="request">
+		<!-- Basic options. -->
+		<fieldset name="request"
+			addfieldpath="/administrator/components/com_csvi/models/fields">
+
+			<field name="csvi_template_id"
+				type="CsviTemplates"
+				description="COM_CSVI_SELECT_TEMPLATE_DESC"
+				label="COM_CSVI_SELECT_TEMPLATE"
+				size="1"
+				required="true"
+				format="raw"
+				action="import"
+			/>
+
+			<field name="key"
+				   type="text"
+				   description="COM_CSVI_SECRET_DESC"
+				   label="COM_CSVI_SECRET_LABEL"
+				   required="true"
+				   maxlength="25" />
+
+			<field name="task"
+				   type="hidden"
+				   default="import"/>
+		</fieldset>
+	</fields>
+</metadata>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="customtable" >
+			<field name="custom_table"
+				   type="subform"
+				   formsource="/plugins/csviaddon/csvi/com_csvi/tmpl/export/custom_subform.xml"
+				   multiple="true"
+				   groupByFieldset="true"
+				   value="1"
+				   min="1"
+				   max="10"
+				   emptylabel="true"
+				   buttons= "add,remove"
+				   layout="customtable.csvirepeatable-table">
+			</field>
+		</fieldset>
+	</fields>
+</form>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="user">
+			<field name="user_state"
+				size="1"
+				type="list"
+				class="advancedSelect">
+				<option value="*">COM_CSVI_DONT_USE</option>
+				<option value="0">JENABLED</option>
+				<option value="1">JDISABLED</option>
+			</field>
+
+			<field name="user_active"
+				size="1"
+				type="list"
+				class="advancedSelect">
+				<option value="*">COM_CSVI_DONT_USE</option>
+				<option value="0">COM_CSVI_USERS_ACTIVATED</option>
+				<option value="1">COM_CSVI_USERS_UNACTIVATED</option>
+			</field>
+
+			<field name="user_group"
+				size="10"
+				type="CsviUserGroups"
+				class="advancedSelect"
+				multiple="true">
+				<option value="*">COM_CSVI_DONT_USE</option>
+			</field>
+
+			<field name="user_range"
+				size="1"
+				type="list"
+				class="advancedSelect">
+				<option value="*">COM_CSVI_DONT_USE</option>
+				<option value="today">COM_CSVI_USER_RANGE_TODAY</option>
+				<option value="past_week">COM_CSVI_USER_RANGE_PAST_WEEK</option>
+				<option value="past_1month">COM_CSVI_USER_RANGE_PAST_1MONTH</option>
+				<option value="past_3month">COM_CSVI_USER_RANGE_PAST_3MONTH</option>
+				<option value="past_6month">COM_CSVI_USER_RANGE_PAST_6MONTH</option>
+				<option value="past_year">COM_CSVI_USER_RANGE_PAST_YEAR</option>
+				<option value="post_year">COM_CSVI_USER_RANGE_POST_YEAR</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

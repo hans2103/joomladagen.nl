@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form cron="false">
+	<fieldset name="details" label="COM_CSVI_TEMPLATE_DETAILS" class="span6">
+		<field name="template_name"
+				type="text"
+				class="input-xlarge"/>
+
+		<field name="enabled"
+				type="list"
+				size="1"
+				class="input-small advancedSelect"
+				default="1">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+		<field name="ordering"
+				label="JFIELD_ORDERING_LABEL"
+				description="JFIELD_ORDERING_DESC"
+				class="input-mini"
+				type="text" />
+
+		<field name="log"
+			   type="list"
+			   size="1"
+			   class="input-small advancedSelect"
+			   default="1">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="frontend"
+			   type="list"
+			   size="1"
+			   class="input-small advancedSelect"
+			   default="0">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="csvi_template_id"
+			   type="text"
+			   class="readonly input-small"
+			   readonly="true" />
+
+		<field name="secret"
+			   type="text"
+				maxlength="25" />
+
+		<field name="advanced"
+			   type="hidden" />
+	</fieldset>
+	<fields name="jform">
+		<fieldset name="operations" label="COM_CSVI_TEMPLATE_OPERATIONS" class="span6">
+			<field name="action"
+				type="list"
+				size="1"
+				default="import"
+				onchange="Csvi.loadTasks();Csvi.loadOverrides();"
+				class="input-small advancedSelect">
+					<option value="import">COM_CSVI_IMPORT</option>
+					<option value="export">COM_CSVI_EXPORT</option>
+			</field>
+
+			<field name="component"
+				   type="CsviComponents"
+				   size="1"
+				   default=""
+				   onchange="Csvi.loadTasks();Csvi.loadOverrides();"
+				   class="input-large advancedSelect">
+				<option value="">COM_CSVI_SELECT_COMPONENT</option>
+			</field>
+
+			<field name="operation"
+				type="CsviOperations"
+				size="1"
+				default=""
+				class="input-large advancedSelect">
+					<option value="">COM_CSVI_SELECT_OPERATION</option>
+			</field>
+
+			<field name="override"
+			       type="CsviOverride"
+			       size="1"
+			       default=""
+			       advancedUser="1"
+			       class="input-large advancedSelect">
+				<option value="">COM_CSVI_DONT_USE</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

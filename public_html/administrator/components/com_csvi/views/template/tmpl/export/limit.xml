@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="limit">
+			<field name="use_system_limits"
+				   type="list"
+				   size="1"
+				   class="input-small advancedSelect"
+				   default="0"
+				   onchange="Csvi.showFields(this.value, '.system-limit');">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="max_execution_time"
+				   type="text"
+				   class="input-mini system-limit" />
+
+			<field name="memory_limit"
+				   type="text"
+				   class="input-mini system-limit" />
+		</fieldset>
+	</fields>
+</form>

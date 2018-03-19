@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="general">
+			<field name="splitorderline"
+				type="list"
+				size="1"
+				class="input-small advancedSelect"
+				advancedUser="1"
+				default="0">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+		<fieldset name="order">
+			<field name="ordernostart"
+				type="text"
+				class="input-small" />
+
+			<field name="ordernoend"
+				type="text"
+				class="input-small" />
+
+			<field name="orderlist"
+				type="text"
+				class="input-xxlarge" />
+
+			<field name="orderdaterange"
+				type="list"
+				translate="true"
+				multiple="false"
+				class="advancedSelect"
+				default="">
+				<option value="">COM_CSVI_DONT_USE</option>
+				<option value="lastrun">COM_CSVI_DATE_LASTRUN</option>
+				<option value="yesterday">COM_CSVI_DATE_YESTERDAY</option>
+				<option value="thisweek">COM_CSVI_DATE_THIS_WEEK</option>
+				<option value="lastweek">COM_CSVI_DATE_LAST_WEEK</option>
+				<option value="lastweek">COM_CSVI_DATE_LAST_WEEK</option>
+				<option value="thismonth">COM_CSVI_DATE_THIS_MONTH</option>
+				<option value="lastmonth">COM_CSVI_DATE_LAST_MONTH</option>
+				<option value="thisquarter">COM_CSVI_DATE_THIS_QUARTER</option>
+				<option value="lastquarter">COM_CSVI_DATE_LAST_QUARTER</option>
+				<option value="thisyear">COM_CSVI_DATE_THIS_YEAR</option>
+				<option value="lastyear">COM_CSVI_DATE_LAST_YEAR</option>
+			</field>
+
+			<field name="orderdatestart"
+				type="calendar"
+				format="%d-%m-%Y %H:%M:%S"
+				class="input-medium"
+				filter="none"/>
+
+			<field name="orderdateend"
+				type="calendar"
+				format="%d-%m-%Y %H:%M:%S"
+				class="input-medium"
+				filter="none"/>
+
+			<field name="ordermdatestart"
+				type="calendar"
+				format="%d-%m-%Y %H:%M:%S"
+				class="input-medium"
+			    filter="none"/>
+
+			<field name="ordermdateend"
+				type="calendar"
+				format="%d-%m-%Y %H:%M:%S"
+				class="input-medium"
+				filter="none"/>
+
+			<field name="orderstatus"
+				type="Csvij2store.Orderstatus"
+				multiple="true"
+				size="7"
+				class="input-xxlarge advancedSelect"
+				default="">
+			</field>
+
+			<field name="ordercurrency"
+			    type="Csvij2store.Ordercurrencies"
+				multiple="true"
+				class="advancedSelect"
+				default="">
+				<option value="">COM_CSVI_DONT_USE</option>
+			</field>
+
+			<field name="orderpricestart"
+				type="text"
+				class="input-mini" />
+
+			<field name="orderpriceend"
+				type="text"
+				class="input-mini" />
+		</fieldset>
+	</fields>
+</form>

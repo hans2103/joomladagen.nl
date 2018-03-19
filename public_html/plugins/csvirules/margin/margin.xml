@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.3" type="plugin" group="csvirules" method="upgrade">
+	<name>CSVI Margin rule</name>
+	<creationDate>18 January 2018</creationDate>
+	<author>RolandD Cyber Produksi</author>
+	<authorEmail>contact@csvimproved.com</authorEmail>
+	<authorUrl>https://csvimproved.com/</authorUrl>
+	<copyright>Copyright (C) 2006 - 2018 RolandD Cyber Produksi. All rights reserved.</copyright>
+	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>7.4.1</version>
+	<description>Add margin to a field</description>
+
+	<files>
+		<filename plugin="margin">margin.php</filename>
+		<filename>form_margin.xml</filename>
+	</files>
+
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.plg_csvirules_margin.ini</language>
+	</languages>
+
+</extension>

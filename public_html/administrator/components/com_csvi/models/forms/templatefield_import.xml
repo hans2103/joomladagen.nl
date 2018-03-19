@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form cron="false">
+	<fieldset name="templatefield">
+		<field name="csvi_templatefield_id"
+			type="hidden"
+			emptylabel="true" />
+
+		<field name="csvi_template_id"
+			type="hidden"
+			emptylabel="true"/>
+
+		<field name="fromdatabase"
+		       type="hidden"
+		       emptylabel="true" />
+
+		<field name="field_name"
+			type="csviavailablefields"
+			size="1"
+			required="true"
+			idfield="csvi_template_id"
+			class="advancedSelect" />
+
+		<field name="source_field"
+		       type="csvi.databasetablefields"
+		       class="input-large advancedSelect" />
+
+		<field name="xml_node"
+		       type="text"
+		       class="input-xxlarge" />
+
+		<field name="default_value"
+			type="text"
+			required="false"
+			class="input-normal" />
+
+		<field name="rules"
+			type="csvirulelist"
+			size="10"
+			required="false"
+			class="advancedSelect"
+			multiple="true"
+			action="import"
+			default="">
+			<option value="">COM_CSVI_DONT_USE</option>
+		</field>
+
+		<field name="ordering"
+			type="text"
+			class="input-mini"
+			size="6"
+			default="0" />
+	</fieldset>
+</form>

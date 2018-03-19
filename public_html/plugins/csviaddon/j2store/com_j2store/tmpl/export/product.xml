@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="jform">
+		<fieldset name="product">
+			<field name="visibility"
+			       type="list"
+			       size="1"
+			       class="input-medium advancedSelect"
+			       default="">
+				<option value="">COM_CSVI_ALL_STATES</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+
+			<field name="product_type"
+			       type="list"
+			       size="1"
+			       default=""
+			       class="input-medium advancedSelect">
+				<option value="">COM_CSVI_ALL_STATES</option>
+				<option value="simple">COM_CSVI_PRODUCTTYPE_SIMPLE</option>
+				<option value="variable">COM_CSVI_PRODUCTTYPE_VARIABLE</option>
+				<option value="configurable">COM_CSVI_PRODUCTTYPE_CONFIGURABLE</option>
+				<option value="downloadable">COM_CSVI_PRODUCTTYPE_DOWNLOADABLE</option>
+			</field>
+
+			<field name="manufacturers"
+			       type="Csvij2store.Manufacturer"
+			       size="7"
+			       multiple="true"
+			       class="advancedSelect"
+			       default="none">
+				<option value="none">COM_CSVI_ALL_MANUFACTURERS</option>
+			</field>
+
+			<field name="taxprofile"
+			       type="Csvij2store.Taxprofile"
+			       size="7"
+			       multiple="true"
+			       class="advancedSelect"
+			       default="none">
+				<option value="none">COM_CSVI_ALL_TAXPROFILES</option>
+			</field>
+
+			<field name="incl_productskufilter"
+			       type="list"
+			       default="1"
+			       class="input-small advancedSelect">
+				<option value="1">COM_CSVI_SKU_INCLUDE</option>
+				<option value="0">COM_CSVI_SKU_EXCLUDE</option>
+			</field>
+
+			<field name="productskufilter"
+			       type="textarea"
+			       rows="5"
+			       class="input-xlarge" />
+		</fieldset>
+	</fields>
+</form>

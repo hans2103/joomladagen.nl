@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field
+                name="search"
+                type="text"
+                hint="JSEARCH_FILTER"
+        />
+
+        <field name="component"
+               type="csvicomponents"
+               size="1"
+               default=""
+               class="advancedSelect"
+               onchange="this.form.submit();">
+            <option value="">COM_CSVI_FILTER_COMPONENT</option>
+        </field>
+
+        <field name="action"
+               type="list"
+               size="1"
+               default=""
+               class="advancedSelect"
+               onchange="this.form.submit();">
+            <option value="">COM_CSVI_FILTER_ACTION</option>
+            <option value="import">COM_CSVI_IMPORT</option>
+            <option value="export">COM_CSVI_EXPORT</option>
+        </field>
+    </fields>
+
+    <fields name="list">
+        <field
+                name="limit"
+                type="limitbox"
+                class="input-mini advancedSelect"
+                default="25"
+                onchange="this.form.submit();"
+        />
+
+        <field
+                name="fullordering"
+                type="hidden"
+        />
+    </fields>
+</form>

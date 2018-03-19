@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form cron="false">
+	<fieldset name="map">
+		<field name="csvi_map_id"
+		       type="hidden" />
+
+		<field name="title"
+			type="text"
+			required="true"
+			label="COM_CSVI_MAP_TITLE_LABEL"
+			description="COM_CSVI_MAP_TITLE_DESC"
+			labelclass="control-label"
+			class="input-xlarge" />
+
+		<field name="mapfile"
+			   type="file"
+			   required="false"
+			   label="COM_CSVI_MAP_MAPFILE_LABEL"
+			   description="COM_CSVI_MAP_MAPFILE_DESC"
+			   class="input-xlarge"
+			   labelclass="control-label"/>
+
+		<field name="auto_detect_delimiters"
+			type="list"
+			size="1"
+			label="COM_CSVI_AUTO_DELIMITER_LABEL"
+			description="COM_CSVI_AUTO_DELIMITER_DESC"
+			labelclass="control-label"
+			class="input-small advancedSelect"
+			default="1">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="field_delimiter"
+			   type="text"
+			   size="2"
+			   label="COM_CSVI_FIELD_DELIMITER_LABEL"
+			   description="COM_CSVI_FIELD_DELIMITER_DESC"
+			   labelclass="control-label"
+			   default=","
+			   class="input-mini"
+			   maxlength="1" />
+
+		<field name="text_enclosure"
+			   type="text"
+			   size="2"
+			   label="COM_CSVI_TEXT_ENCLOSURE_LABEL"
+			   description="COM_CSVI_TEXT_ENCLOSURE_DESC"
+			   labelclass="control-label"
+			   default='"'
+			   class="input-mini"
+			   maxlength="1" />
+
+		<field name="im_mac"
+		       type="list"
+		       size="1"
+		       class="input-small advancedSelect"
+		       default="0">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="action"
+			   type="list"
+			   label="COM_CSVI_MAP_ACTION_LABEL"
+			   description="COM_CSVI_MAP_ACTION_DESC"
+			   size="1"
+			   default="import"
+			   class="advancedSelect"
+			   labelclass="control-label"
+			   onchange="Csvi.loadTasks();">
+			<option value="import">COM_CSVI_IMPORT</option>
+			<option value="export">COM_CSVI_EXPORT</option>
+		</field>
+
+		<field name="component"
+			   type="CsviComponents"
+			   label="COM_CSVI_MAP_COMPONENT_LABEL"
+			   description="COM_CSVI_MAP_COMPONENT_DESC"
+			   size="1"
+			   default=""
+			   class="advancedSelect"
+			   labelclass="control-label"
+			   onchange="Csvi.loadTasks();">>
+			<option value="">COM_CSVI_SELECT_COMPONENT</option>
+		</field>
+
+		<field name="operation"
+			   type="CsviOperations"
+			   label="COM_CSVI_MAP_OPERATION_LABEL"
+			   description="COM_CSVI_MAP_OPERATION_DESC"
+			   size="1"
+			   default=""
+			   class="advancedSelect"
+			   labelclass="control-label">
+			<option value="">COM_CSVI_SELECT_OPERATION</option>
+		</field>
+
+		<field name="ordering"
+		   type="text"
+		   label="JFIELD_ORDERING_LABEL"
+		   description="JFIELD_ORDERING_DESC"
+		   class="input-mini"
+		   labelclass="control-label"
+		   default="0" />
+	</fieldset>
+</form>
