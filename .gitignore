@@ -50,3 +50,5 @@ Desktop.ini
 # J2Store invoices
 /public_html/media/j2store/invoices/
 
+
+public_html/\.myjoomla\.configuration\.php\.md5
