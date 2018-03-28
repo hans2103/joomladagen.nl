@@ -83,7 +83,7 @@ class PlgSystemSocialmetatags extends JPlugin
 		$title       = htmlspecialchars(str_replace($this->app->getCfg('sitename') . ' - ', '', $title));
 
 		// Get Plugin info
-		$basicimage = $this->params->get('basicimage');
+		$basicimage = JUri::base() . $this->params->get('basicimage');
 		$fbAdmin    = $this->params->get('fbadmin');
 		$fbAppid    = $this->params->get('fbappid');
 		$ogtype     = 'business.business';
