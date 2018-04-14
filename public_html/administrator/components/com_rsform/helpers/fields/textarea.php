@@ -54,6 +54,8 @@ class RSFormProFieldTextarea extends RSFormProField
 		$rows 			= $this->getProperty('ROWS', 5);
 		$editor 		= $this->getProperty('WYSIWYG', 'NO');
 		$placeholder 	= $this->getProperty('PLACEHOLDER', '');
+		$count 			= $this->getProperty('SHOW_CHAR_COUNT', 'NO');
+		$maxlength		= (int) $this->getProperty('MAXSIZE', 0);
 		$attr			= $this->getAttributes();
 		$additional 	= '';
 		
@@ -95,6 +97,15 @@ class RSFormProFieldTextarea extends RSFormProField
 		// Name & id
 		$html .= ' name="'.$this->escape($name).'"'.
 				 ' id="'.$this->escape($id).'"';
+
+		if ($maxlength)
+		{
+			$html .= ' maxlength="' . $this->escape($maxlength) . '"';
+		}
+		if ($count)
+		{
+			$html .= ' oninput="RSFormPro.showCounter(this, ' . $this->componentId . ')"';
+		}
 		// Additional HTML
 		$html .= $additional;
 		$html .= '>';
@@ -105,7 +116,17 @@ class RSFormProFieldTextarea extends RSFormProField
 		// Close the tag
 		$html .= '</textarea>';
 		
+		if ($count)
+		{
+			$this->addCounter($html, $maxlength);
+		}
+		
 		return $html;
+	}
+	
+	protected function addCounter(&$html, $maxlength = 0)
+	{
+		$html .= '<p id="rsfp-counter-' . $this->componentId . '">0' . ($maxlength > 0 ? '/' . $maxlength : '') . '</p>';
 	}
 	
 	// @desc Overridden here because we need to make sure VALIDATIONRULE is not 'password'
