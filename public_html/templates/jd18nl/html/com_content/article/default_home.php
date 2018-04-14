@@ -50,11 +50,11 @@ switch (true)
 		echo $this->loadTemplate('counter-tickets');
 		break;
 
-	case true:
+	case false:
 		echo $this->loadTemplate('counter-earlybird');
 		break;
 
-	case false:
+	case true:
 		echo $this->loadTemplate('counter-jdnl');
 		break;
 }

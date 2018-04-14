@@ -626,11 +626,6 @@ class com_rsformInstallerScript
 			$app->enqueueMessage('Please upgrade to at least Joomla! 3.7.0 before continuing!', 'error');
 			return false;
 		}
-		
-		if (version_compare(PHP_VERSION, '5.3.10', '<'))
-		{
-			$app->enqueueMessage('Your PHP version is too old ('.PHP_VERSION.'). Even though RSForm! Pro will work, we cannot guarantee this version of PHP will be fully supported. Please consider updating to a newer version of PHP.', 'warning');
-		}
 
 		// Flag to check if we should set 'Load Layout Framework' to 'Yes' for 'Responsive' layout forms now that front.css is missing responsive declarations
 		if ($type == 'update' && !file_exists(JPATH_ADMINISTRATOR.'/components/com_rsform/helpers/formlayouts/responsive.php'))
@@ -990,9 +985,17 @@ class com_rsformInstallerScript
 			<?php } ?>
 			<?php } ?>
 		<?php } ?>
-		<h2>Changelog v2.0.8</h2>
+		<h2>Changelog v2.0.9</h2>
 		<ul class="version-history">
-            <li><span class="version-fixed">Fix</span> Multiple Products (Payment Plugin) were not working with Conditional Fields.</li>
+            <li><span class="version-new">New</span> Character counter for 'Textarea' fields.</li>
+            <li><span class="version-new">New</span> Can now set a 'Max Size' for 'Textarea' fields.</li>
+            <li><span class="version-upgraded">Upg</span> First field that fails validation will now be focused automatically.</li>
+            <li><span class="version-upgraded">Upg</span> Now using Joomla!'s CodeMirror plugin for syntax highlighting.</li>
+            <li><span class="version-upgraded">Upg</span> UIkit updated to 3.0.0 beta 40.</li>
+            <li><span class="version-fixed">Fix</span> Range Slider was not triggering calculations.</li>
+            <li><span class="version-fixed">Fix</span> When specifying a custom 'Action' for the form, it ended up being double-escaped.</li>
+            <li><span class="version-fixed">Fix</span> When conditions overlapped a Javascript loop would freeze the browser when values were being reset.</li>
+            <li><span class="version-fixed">Fix</span> Google Maps field threw a PHP Fatal Error when using a Bootstrap 4 layout.</li>
 		</ul>
 		<a class="btn btn-large btn-primary" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="btn" href="https://www.rsjoomla.com/support/documentation/rsform-pro.html" target="_blank">Read the RSForm! Pro User Guide</a>

@@ -81,7 +81,7 @@ echo JLayouts::render('template.content.header', $array);
 														<?php if (isset($this->sessions[$slot->conference_slot_id][$this->generalRoom])) : ?>
 															<?php $session = $this->sessions[$slot->conference_slot_id][$this->generalRoom]; ?>
 															<?php if ($session->listview): ?>
-																<?php echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=session&id=' . $session->conference_session_id), $session->title); ?>
+																<?php echo HTMLHelper::_('link', Route::_('index.php?option=com_conference&view=sessions&id=' . $session->conference_session_id), $session->title); ?>
 															<?php else: ?>
 																<?php echo $session->title ?>
 															<?php endif; ?>

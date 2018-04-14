@@ -58,17 +58,21 @@ $tickets   = array();
 $diets     = array();
 $diners    = array();
 $workshops = array();
+$emails    = array();
 
 // Group the records on the SKU
 foreach ($records as $index => $record)
 {
 	// Get the customer name
 	$query = $db->getQuery(true)
-		->select($db->quoteName('name'))
+		->select($db->quoteName(array('name', 'email')))
 		->from($db->quoteName('#__users'))
 		->where($db->quoteName('id') . ' = ' . (int) $record->created_by);
 	$db->setQuery($query);
-	$record->name = $db->loadResult();
+$nameDetails = $db->loadObject();
+	$record->name = $nameDetails->name;
+	$record->email = $nameDetails->email;
+$emails[] = $record->email;
 
 	switch ($record->orderitem_sku)
 	{
@@ -153,7 +157,7 @@ foreach ($records as $index => $record)
 		case 'Workshop_A':
 			if (stristr($record->orderitem_name, 'phpstorm'))
 			{
-				$workshops['phpstorm']['names'][] = $record->name;
+$workshops['phpstorm']['names'][] = $record->name  . ' - ' . $record->email;
 
 				if (!array_key_exists('price', $workshops['phpstorm']))
 				{
@@ -166,7 +170,7 @@ foreach ($records as $index => $record)
 			}
 			elseif (stristr($record->orderitem_name, 'fabrik'))
 			{
-				$workshops['fabrik']['names'][] = $record->name;
+				$workshops['fabrik']['names'][] = $record->name . ' - ' . $record->email;
 
 				if (!array_key_exists('price', $workshops['fabrik']))
 				{
@@ -179,7 +183,7 @@ foreach ($records as $index => $record)
 			}
 			elseif (stristr($record->orderitem_name, 'rsform'))
 			{
-				$workshops['rsform']['names'][] = $record->name;
+				$workshops['rsform']['names'][] = $record->name . ' - ' . $record->email;
 
 				if (!array_key_exists('price', $workshops['rsform']))
 				{
@@ -192,7 +196,7 @@ foreach ($records as $index => $record)
 			}
 			elseif (stristr($record->orderitem_name, 'joomla'))
 			{
-				$workshops['joomla']['names'][] = $record->name;
+				$workshops['joomla']['names'][] = $record->name . ' - ' . $record->email;
 
 				if (!array_key_exists('price', $workshops['joomla']))
 				{
@@ -364,3 +368,4 @@ wie er komen voor een workshop.</div>
 	</tbody>
 </table>
 <?php endforeach;
+

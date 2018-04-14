@@ -11,8 +11,6 @@ class RsformViewForms extends JViewLegacy
 {
 	public function display($tpl = null)
 	{
-		RSFormProHelper::loadCodeMirror();
-
 		JToolbarHelper::title('RSForm! Pro','rsform');
 
 		$layout = $this->getLayout();
