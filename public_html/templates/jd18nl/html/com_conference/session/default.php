@@ -62,13 +62,17 @@ echo JLayouts::render('template.content.header', $array);
 
 	            <?php if ($this->item->slides) : ?>
                     <div class="article__slides">
+                        <div class="media-placeholder">
 			            <?php echo $this->item->slides; ?>
+                        </div>
                     </div>
 	            <?php endif; ?>
 
                 <?php if ($this->item->video) : ?>
                     <div class="article__video">
+                        <div class="video-container">
 			            <?php echo $this->item->video; ?>
+                        </div>
                     </div>
 	            <?php endif; ?>
 
