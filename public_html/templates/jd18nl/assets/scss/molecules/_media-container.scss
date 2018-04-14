@@ -1,0 +1,22 @@
+// Media container
+//
+// Container to keep media items such as videos responsive. Block is based on 16:9 ratio
+//
+// Markup:
+// <div class="media-container">
+//     <iframe width="800" height="450" src="https://www.youtube.com/embed/k751_cwCE6Y?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+// </div>
+//
+// Styleguide molecules.mediacontainer
+
+.media-container {
+  position: relative;
+  @include ratio-block;
+  @include spacing(bottom, margin);
+
+  iframe {
+    @include coverall;
+    width: 100%;
+    height: 100%;
+  }
+}

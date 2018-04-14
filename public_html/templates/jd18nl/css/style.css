@@ -5835,6 +5835,47 @@ a.label:hover, a.label:focus, a.badge:hover, a.badge:focus {
   border: none;
 }
 
+.media-container {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.media-container:before {
+  display: block;
+  float: left;
+  content: " ";
+  padding-top: 56.25%;
+}
+
+.media-container:after {
+  content: " ";
+  clear: left;
+  display: table;
+}
+
+@media screen and (min-width: 560px) {
+  .media-container {
+    margin-bottom: 24px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .media-container {
+    margin-bottom: 32px;
+  }
+}
+
+.media-container iframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .video-container {
   position: relative;
   overflow: hidden;
