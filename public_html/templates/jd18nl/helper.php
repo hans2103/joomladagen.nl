@@ -291,7 +291,7 @@ class PWTTemplateHelper
 	 */
 	static public function loadCss()
 	{
-		HTMLHelper::_('stylesheet', 'templates/' . self::template() . '/css/style.min.css', array('version' => 'auto'));
+		HTMLHelper::_('stylesheet', 'style.min.css', ['version' => 'auto', 'relative' => true]);
 	}
 
 	/**
