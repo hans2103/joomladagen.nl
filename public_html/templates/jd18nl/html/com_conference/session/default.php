@@ -62,7 +62,7 @@ echo JLayouts::render('template.content.header', $array);
 
 	            <?php if ($this->item->slides) : ?>
                     <div class="article__slides">
-                        <div class="media-containerr">
+                        <div class="media-container">
 			            <?php echo $this->item->slides; ?>
                         </div>
                     </div>
