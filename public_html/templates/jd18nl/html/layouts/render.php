@@ -5,12 +5,14 @@
  * @license		GNU General Public License version 3 or later
  */
 // No direct access.
+use Joomla\CMS\Factory;
+
 defined('_JEXEC') or die;
 class Jlayouts
 {
 	public static function render($type, $data = '')
 	{
-		$template = JFactory::getApplication()->getTemplate();
+		$template = Factory::getApplication()->getTemplate();
 		$jlayout = new JLayoutFile($type, JPATH_THEMES . '/' . $template . '/html/layouts/template');
 		
 		return $jlayout->render($data);
@@ -18,7 +20,7 @@ class Jlayouts
 	
 	public static function icon($type)
 	{
-		$template = JFactory::getApplication()->getTemplate();
+		$template = Factory::getApplication()->getTemplate();
 		include(JPATH_THEMES . '/' . $template . '/icons/' . $type . '.svg');
 	}
 }
