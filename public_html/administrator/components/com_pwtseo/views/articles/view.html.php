@@ -107,7 +107,7 @@ class PWTSEOViewArticles extends HtmlView
 	 */
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PWTSEO_ARTICLES_HEADER'), 'bars');
+		JToolBarHelper::title(Text::_('COM_PWTSEO_ARTICLES_HEADER'), 'pwtseo');
 		$user  = Factory::getUser();
 
 		// Get the toolbar object instance

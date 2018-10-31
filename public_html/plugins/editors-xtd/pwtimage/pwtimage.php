@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -43,60 +43,63 @@ class PlgButtonPwtimage extends CMSPlugin
 	public function onDisplay($name)
 	{
 		$js = "
-		function select_pwtimage_article(path, alt, caption, gallery)
+		function select_pwtimage_article(path, alt, caption)
 		{
 			if (path)
 			{	
 				var tag = '{image';
 				
-				if (parseInt(gallery) == 1)
-				{
-					var tags = [];
-					tag = '{gallery ';
-					
-					var images = path.split('|');
-					images.forEach(function(image) {
-						var items = image.split(',');
-						tags.push('path=\"' + items[0] + '\" alt=\"' + items[1] + '\" caption=\"' + items[2] + '\"');
-					});
-					
-					tag += tags.join('|');
+				tag += ' path=\"' + path + '\"';
+				
+				if (alt) {
+					tag += ' alt=\"' + alt + '\"';
 				}
-				else
-				{
-					tag += ' path=\"' + path + '\"';
-					
-					if (alt) {
-						tag += ' alt=\"' + alt + '\"';
-					}
-					
-					if (caption) {
-						tag += ' caption=\"' + caption + '\"';
-					}
+				
+				if (caption) {
+					tag += ' caption=\"' + caption + '\"';
 				}
 				
 				tag = tag + '}';
-				
+
 				jInsertEditorText(tag, '" . $name . "');
 			}
 			jModalClose();
 		}";
 
+		if ($this->params->get('injecttype', 0))
+		{
+			$js = "
+			function select_pwtimage_article(path, alt, caption)
+			{
+				if (path)
+				{	
+					var tag = '<img';
+					
+					tag += ' src=\"' + path + '\"';
+					
+					if (alt) {
+						tag += ' alt=\"' + alt + '\"';
+					}
+					
+					tag = tag + ' />';
+	
+					jInsertEditorText(tag, '" . $name . "');
+				}
+				jModalClose();
+			}";
+		}
+
 		Factory::getDocument()->addScriptDeclaration($js);
 
 		HTMLHelper::_('behavior.modal');
+		HTMLHelper::_('stylesheet', 'com_pwtimage/pwtimage.min.css', array('relative' => true, 'version' => 'auto'));
 
-		// Load the plugin parameters
-		$showFolder  = (int) $this->params->get('showFolder', 0) === 1 ? 'true' : 'false';
-		$showTools   = (int) $this->params->get('showTools', 1) === 1 ? 'true' : 'false';
-		$showGallery = (int) $this->params->get('showGallery', 0) === 1 ? 'true' : 'false';
-		$showHelp    = (int) $this->params->get('showHelp', 1) === 1 ? 'true' : 'false';
+		$link = 'index.php?option=com_pwtimage&amp;view=image&amp;tmpl=component&amp;wysiwyg=1';
 
-		$link = 'index.php?option=com_pwtimage&amp;view=image&amp;tmpl=component&amp;wysiwyg=1&amp;' .
-			'showFolder=' . $showFolder . '&amp;' .
-			'showGallery=' . $showGallery . '&amp;' .
-			'showTools=' . $showTools . '&amp;' .
-			'showHelp=' . $showHelp;
+		if ($origin = $this->params->get('origin'))
+		{
+			$link .= '&settings=' . base64_encode(json_encode(array('origin' => $origin)));
+		}
 
 		$button          = new CMSObject;
 		$button->modal   = true;
@@ -132,7 +135,6 @@ class PlgButtonPwtimage extends CMSPlugin
 				var interval = setInterval(function() {
 					i++;
 					var window = document.getElementById("sbox-window");
-					console.log(window.length);
 					if (window) {
 						window.classList.add("pwt-custom-modal-styling");
 						clearInterval(interval);

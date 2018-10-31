@@ -90,7 +90,7 @@ class PWTSEOViewCustom extends HtmlView
 		$isNew = ($this->item->id == 0);
 		$canDo = ContentHelper::getActions('com_pwtseo');
 
-		JToolbarHelper::title(Text::_('COM_PWTSEO_CUSTOM_ANALYSE'), 'chart');
+		JToolbarHelper::title(Text::_('COM_PWTSEO_CUSTOM_ANALYSE'), 'pwtseo');
 
 		// If not checked out, can save the item.
 		if ($canDo->get('core.edit'))

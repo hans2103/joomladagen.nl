@@ -54,7 +54,7 @@
       <csvi_template_id></csvi_template_id>
       <tags></tags>
     </settings>
-    <template_name>Example Joomla Module export</template_name>
+    <template_name>Example Joomla Module Export</template_name>
     <advanced>0</advanced>
     <action>export</action>
     <frontend>0</frontend>
@@ -226,7 +226,7 @@
       <csvi_template_id></csvi_template_id>
       <tags></tags>
     </settings>
-    <template_name>Example Joomla Module import</template_name>
+    <template_name>Example Joomla Module Import</template_name>
     <advanced>0</advanced>
     <action>import</action>
     <frontend>0</frontend>

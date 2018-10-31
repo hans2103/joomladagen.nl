@@ -53,8 +53,18 @@ if ($this->extraHelp)
 <input type="hidden" name="step" id="step" value="<?php echo ++$this->step; ?>" />
 <input type="hidden" name="id" value="<?php echo $this->item->csvi_template_id; ?>" />
 
+<?php
+$layout = new JLayoutFile('csvi.modal');
+echo $layout->render(
+	array(
+		'modal-header'  => JText::_('COM_CSVI_INFORMATION'),
+		'modal-body'    => JText::_('COM_CSVI_SELECT_OPERATION_TO_PROCEED'),
+		'cancel-button' => false
+	)
+);
+?>
+
 <script type="text/javascript">
-	var token = '<?php echo JSession::getFormToken(); ?>';
 	jQuery(document).ready(function ()
 	{
 		// Turn off the help texts
@@ -64,12 +74,12 @@ if ($this->extraHelp)
 		Csvi.showFields(jQuery('#jform_use_system_limits').val(), '.system-limit');
 
 		// Export settings
-		if ('<?php echo $this->action; ?>' == 'export' && <?php echo $this->item->csvi_template_id ?: 0; ?> > 0)
+		if ('<?php echo $this->action; ?>' === 'export' && <?php echo $this->item->csvi_template_id ?: 0; ?> > 0)
 		{
 
 		}
 		// Import settings
-		else if ('<?php echo $this->action; ?>' == 'import' && <?php echo ($this->item->csvi_template_id) ? $this->item->csvi_template_id : 0; ?> > 0)
+		else if ('<?php echo $this->action; ?>' === 'import' && <?php echo ($this->item->csvi_template_id) ? $this->item->csvi_template_id : 0; ?> > 0)
 		{
 			// Hide/show the image fields
 			Csvi.showFields(jQuery('#jform_process_image').val(), '.hidden-image #full_image #thumb_image #watermark_image');
@@ -77,9 +87,9 @@ if ($this->extraHelp)
 	});
 
 	Joomla.submitbutton = function(task) {
-		if (task == 'hidetips')
+		if (task === 'hidetips')
 		{
-			if (document.adminForm.task.value == 'hidetips')
+			if (document.adminForm.task.value === 'hidetips')
 			{
 				jQuery('.help-block').hide();
 				document.adminForm.task.value = '';
@@ -95,16 +105,35 @@ if ($this->extraHelp)
 		else
 		{
 			// Reset the steps if the user wants to edit the template itself
-			if (task == 'template.edit')
+			if (task === 'template.edit')
 			{
 				document.adminForm.step.value = 0;
 			}
 
-			var form = document.getElementById('adminForm');
+			var submitForm = true;
 
-			if (document.formvalidator.isValid(form))
-			{
-				Joomla.submitform(task, form);
+			if (document.getElementById("jform_operation") && task !== 'template.cancel') {
+				var selected = document.getElementById("jform_operation");
+				var selectedValue = selected.options[selected.selectedIndex].value;
+
+				if (selectedValue === '0') {
+					jQuery('#csviModal').modal('show');
+
+					submitForm = false;
+
+					jQuery('.ok-btn').on('click', function(e) {
+						e.preventDefault();
+						jQuery('#csviModal').modal('hide');
+					});
+				}
+			}
+
+			if (submitForm) {
+				var form = document.getElementById('adminForm');
+
+				if (document.formvalidator.isValid(form)) {
+					Joomla.submitform(task, form);
+				}
 			}
 		}
 	}

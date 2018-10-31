@@ -72,7 +72,7 @@ define('JPATH_COMPONENT_SITE', JPATH_ROOT . '/components/com_csvi');
 define('JPATH_COMPONENT_ADMINISTRATOR', JPATH_ADMINISTRATOR . '/components/com_csvi');
 
 // Define our version number
-define('CSVI_VERSION', '7.4.1');
+define('CSVI_VERSION', '7.6.1');
 
 // Define the tmp folder
 $config = JFactory::getConfig();
@@ -83,6 +83,7 @@ define('CSVIPATH_DEBUG', JPath::clean($config->get('log_path'), '/'));
 // Setup the autoloader
 JLoader::registerPrefix('Csvi', JPATH_ADMINISTRATOR . '/components/com_csvi', true);
 JLoader::registerPrefix('Rantai', JPATH_ADMINISTRATOR . '/components/com_csvi/rantai', true);
+JLoader::registerNamespace('phpseclib', JPATH_ADMINISTRATOR . '/components/com_csvi/assets/phpseclib/phpseclib', false, false, 'psr4');
 
 // Load the default classes
 require_once JPATH_ADMINISTRATOR . '/components/com_csvi/controllers/default.php';

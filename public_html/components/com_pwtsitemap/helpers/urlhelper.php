@@ -10,6 +10,9 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+
 /**
  * URLHelper class
  *
@@ -18,7 +21,7 @@ defined('_JEXEC') or die;
 class PwtSitemapUrlHelper
 {
 	/**
-	 * Static method to route a url to a SEF Url. It also decides if the url should  me with https or not
+	 * Static method to route a url to a SEF Url. It also decides if the url should be with https or not
 	 *
 	 * @param   string $url Url to route
 	 *
@@ -28,6 +31,16 @@ class PwtSitemapUrlHelper
 	 */
 	public static function getURL($url)
 	{
-		return substr(JUri::base(), 0, -1) . JRoute::_($url, true);
+		// Parse URL for scheme
+		$parsedUrl = parse_url($url);
+
+		// Leave external links as provided
+		if (isset($parsedUrl['scheme']) && (($parsedUrl['scheme'] === 'https' || $parsedUrl['scheme'] === 'http' || strpos($url, 'www') === 0)))
+		{
+			return $url;
+		}
+
+		// Lets Route the internal URL
+		return Uri::getInstance(Uri::base())->toString(array('scheme', 'host')) . Route::_($url);
 	}
 }

@@ -12,13 +12,6 @@ require_once dirname(__FILE__).'/config.php';
 require_once dirname(__FILE__).'/version.php';
 require_once dirname(__FILE__).'/assets.php';
 
-// Product info
-if (!defined('_RSFORM_REVISION')) {
-	$version = new RSFormProVersion();
-
-	define('_RSFORM_REVISION', $version->revision);
-}
-
 JTable::addIncludePath(JPATH_ADMINISTRATOR.'/components/com_rsform/tables');
 
 // Let's run some workarounds
@@ -260,8 +253,15 @@ class RSFormProHelper
 
 		if (empty($form) || !$form->Published)
 		{
-			$mainframe->enqueueMessage(JText::sprintf('RSFP_FORM_DOES_NOT_EXIST', $formId), 'warning');
-			return false;
+			if ($is_module)
+			{
+				$mainframe->enqueueMessage(JText::sprintf('RSFP_FORM_DOES_NOT_EXIST', $formId), 'warning');
+				return false;
+			}
+			else
+			{
+				return JError::raiseError(404, JText::sprintf('RSFP_FORM_DOES_NOT_EXIST', $formId));
+			}
 		}
 
 		// Check form access level
@@ -684,8 +684,11 @@ class RSFormProHelper
 
 	public static function explode($value)
 	{
-		$value = str_replace(array("\r\n", "\r"), "\n", $value);
-		$value = explode("\n", $value);
+		if (!is_array($value))
+		{
+			$value = str_replace(array("\r\n", "\r"), "\n", $value);
+			$value = explode("\n", $value);
+		}
 
 		return $value;
 	}
@@ -1229,23 +1232,31 @@ class RSFormProHelper
 		$val = $db->q($val);
 	}
 
-	public static function componentExists($formId, $componentTypeId)
+	public static function componentExists($formId, $componentTypeId, $published = 1)
 	{
 		$formId = (int) $formId;
-		$db = JFactory::getDbo();
+		$db     = JFactory::getDbo();
 
-		if (is_array($componentTypeId))
-		{
+        if (is_array($componentTypeId))
+        {
             $componentTypeId = array_map('intval', $componentTypeId);
-            $db->setQuery("SELECT ComponentId FROM #__rsform_components WHERE ComponentTypeId IN (".implode(',', $componentTypeId).") AND FormId='".$formId."' AND Published='1'");
-		}
-		else
-		{
-			$componentTypeId = (int) $componentTypeId;
-			$db->setQuery("SELECT ComponentId FROM #__rsform_components WHERE ComponentTypeId='".$componentTypeId."' AND FormId='".$formId."' AND Published='1'");
-		}
+        }
+        else
+        {
+            $componentTypeId = array((int) $componentTypeId);
+        }
 
-		return $db->loadColumn();
+        $query = $db->getQuery(true)
+            ->select($db->qn('ComponentId'))
+            ->from($db->qn('#__rsform_components'))
+            ->where($db->qn('ComponentTypeId') . ' IN (' . implode(',', $componentTypeId) . ')')
+            ->where($db->qn('FormId') . ' = ' . $db->q($formId));
+        if ($published)
+        {
+            $query->where($db->qn('Published') . ' = ' . $db->q(1));
+        }
+
+        return $db->setQuery($query)->loadColumn();
 	}
 
 	public static function cleanCache()
@@ -2148,15 +2159,18 @@ class RSFormProHelper
 
 			if (!$form->Keepdata)
 			{
-				$db->setQuery("DELETE FROM #__rsform_submission_values WHERE SubmissionId = ".(int) $SubmissionId." ");
-				$db->execute();
-				$db->setQuery("DELETE FROM #__rsform_submissions WHERE SubmissionId = ".(int) $SubmissionId." ");
-				$db->execute();
+			    require_once JPATH_ADMINISTRATOR . '/components/com_rsform/helpers/submissions.php';
+
+			    RSFormProSubmissionsHelper::deleteSubmissions($SubmissionId);
 			}
 
-			if (!$form->KeepIP) {
-				$db->setQuery("UPDATE #__rsform_submissions SET UserIp = '--' WHERE SubmissionId = ".(int) $SubmissionId." ");
-				$db->execute();
+			if (!$form->KeepIP)
+			{
+			    $query = $db->getQuery(true)
+                    ->update($db->qn('#__rsform_submissions'))
+                    ->set($db->qn('UserIp') . ' = ' . $db->q('0.0.0.0'))
+                    ->where($db->qn('SubmissionId') . ' = ' . $db->q($SubmissionId));
+			    $db->setQuery($query)->execute();
 			}
 
 			if ($silentPost && !empty($silentPost->url) && $silentPost->url != 'http://')
@@ -2672,25 +2686,26 @@ class RSFormProHelper
 				
 				// check the calendar field if is required
 				if (($typeId == RSFORM_FIELD_CALENDAR || $typeId == RSFORM_FIELD_JQUERY_CALENDAR) && strlen(trim($post['form'][$data['NAME']]))) {
-					$selectedDate = $post['form'][$data['NAME']];
+				    if (!isset($data['VALIDATIONDATE']) || $data['VALIDATIONDATE'] == 'YES') {
+                        $selectedDate = $post['form'][$data['NAME']];
 
-					if (JFactory::getLanguage()->getTag() != 'en-GB')
-					{
-						require_once JPATH_ADMINISTRATOR.'/components/com_rsform/helpers/calendar.php';
-						
-						$selectedDate = RSFormProCalendar::fixValue($selectedDate, $data['DATEFORMAT']);
-					}
+                        if (JFactory::getLanguage()->getTag() != 'en-GB') {
+                            require_once JPATH_ADMINISTRATOR . '/components/com_rsform/helpers/calendar.php';
 
-					$validDate = JFactory::getDate()->createFromFormat($data['DATEFORMAT'], $selectedDate);
+                            $selectedDate = RSFormProCalendar::fixValue($selectedDate, $data['DATEFORMAT']);
+                        }
 
-					if ($validDate) {
-						$validDate = $validDate->format($data['DATEFORMAT']);
-					}
+                        $validDate = JFactory::getDate()->createFromFormat($data['DATEFORMAT'], $selectedDate);
 
-					if ($validDate != $selectedDate) {
-						$invalid[] = $data['componentId'];
-						continue;
-					}
+                        if ($validDate) {
+                            $validDate = $validDate->format($data['DATEFORMAT']);
+                        }
+
+                        if ($validDate != $selectedDate) {
+                            $invalid[] = $data['componentId'];
+                            continue;
+                        }
+                    }
 				}
 
 				if ($runValidations && isset($validations[$validationRule]) && !call_user_func(array($validationClass, $validationRule), $post['form'][$data['NAME']], isset($data['VALIDATIONEXTRA']) ? $data['VALIDATIONEXTRA'] : '', $data)) {
@@ -2991,6 +3006,13 @@ class RSFormProHelper
 		static $cache = array();
 
 		if (!isset($cache[$formId])) {
+		    $excludedFields = array(
+                RSFORM_FIELD_BUTTON,
+                RSFORM_FIELD_CAPTCHA,
+                RSFORM_FIELD_SUBMITBUTTON,
+                RSFORM_FIELD_PAGEBREAK
+            );
+
 			$query = $db->getQuery(true);
 			$query->select($db->qn('p.PropertyValue','FieldName'))
 				->select($db->qn('p.ComponentId','FieldId'))
@@ -2999,7 +3021,7 @@ class RSFormProHelper
 				->join('left', $db->qn('#__rsform_properties','p').' ON '.$db->qn('c.ComponentId').' = '.$db->qn('p.ComponentId'))
 				->where($db->qn('c.FormId').'='.$db->q($formId))
 				->where($db->qn('p.PropertyName').' = '.$db->q('NAME'))
-				->where($db->qn('c.ComponentTypeId').' NOT IN (7,8,10,12,13,41)')
+				->where($db->qn('c.ComponentTypeId').' NOT IN (' . implode(',', $excludedFields) . ')')
 				->where($db->qn('c.Published').'='.$db->q(1))
 				->order($db->qn('c.Order').' '.$db->escape('asc'));
 			$db->setQuery($query);
@@ -3057,7 +3079,7 @@ class RSFormProHelper
 
 			foreach ($allFields as $field) {
 				// Hidden fields don't have a caption
-				if (in_array($field->FieldType, array(RSFORM_FIELD_HIDDEN, RSFORM_FIELD_TICKET))) {
+				if (in_array($field->FieldType, array(RSFORM_FIELD_HIDDEN, RSFORM_FIELD_TICKET, RSFORM_FIELD_FREETEXT))) {
 					$field->FieldCaption = $field->FieldName;
 				}
 
@@ -3331,7 +3353,8 @@ class RSFormProHelper
 
 				// skip this field for now, no need to edit it
 				case 'freeText':
-					continue 2;
+				    $new_field[0] = '';
+				    $new_field[1] = RSFormProHelper::isCode($data['TEXT']);
 					break;
 
 				default:

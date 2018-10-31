@@ -37,8 +37,8 @@ class PlgPwtSitemapContact extends PwtSitemapPlugin
 	/**
 	 * Run for every menuitem passed
 	 *
-	 * @param   StdClass $item    Menu items
-	 * @param   string    $format  Sitemap format that is rendered
+	 * @param   StdClass $item   Menu items
+	 * @param   string   $format Sitemap format that is rendered
 	 *
 	 * @return  array
 	 *
@@ -77,7 +77,7 @@ class PlgPwtSitemapContact extends PwtSitemapPlugin
 	/**
 	 * Get all contacts from a category
 	 *
-	 * @param   int  $id  Category id
+	 * @param   int $id Category id
 	 *
 	 * @return  mixed  stdClass on success, false otherwise
 	 *

@@ -11,8 +11,6 @@
 
 namespace content\com_content\model\export;
 
-use Nette\Neon\Exception;
-
 defined('_JEXEC') or die;
 
 /**
@@ -39,6 +37,14 @@ class Content extends \CsviModelExports
 	 * @since  7.2.0
 	 */
 	private $customFields = array();
+
+	/**
+	 * The Joomla content helper
+	 *
+	 * @var    \Com_ContentHelperCom_Content
+	 * @since  6.0
+	 */
+	protected $helper;
 
 	/**
 	 * Export the data.
@@ -281,6 +287,21 @@ class Content extends \CsviModelExports
 
 			if ($categories && $categories[0] != '*')
 			{
+				if ($this->template->get('incl_subcategory', false))
+				{
+					$subCategories = array();
+
+					foreach ($categories as $categoryId)
+					{
+						$subCategories = $this->helper->getSubCategoryIds($categoryId);
+					}
+
+					if ($subCategories)
+					{
+						$categories = array_merge($subCategories, $categories);
+					}
+				}
+
 				$query->where($this->db->quoteName('catid') . " IN ('" . implode("','", $categories) . "')");
 			}
 

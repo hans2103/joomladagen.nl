@@ -11,7 +11,7 @@
 
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
-use phpseclib\Net\Sftp;
+use phpseclib\Net\SFTP;
 
 defined('_JEXEC') or die;
 
@@ -533,7 +533,7 @@ class CsviModelTemplate extends JModelAdmin
 
 		try
 		{
-			$sftp = new Sftp($ftphost, $ftpport);
+			$sftp = new SFTP($ftphost, $ftpport);
 
 			if (!$sftp->login($ftpusername, $ftppass))
 			{
@@ -552,12 +552,12 @@ class CsviModelTemplate extends JModelAdmin
 
 					if (!is_array($files))
 					{
-						throw new CsviException(JText::sprintf('COM_CSVI_FTP_NO_FILES_FOUND', $ftp->pwd()));
+						throw new CsviException(JText::sprintf('COM_CSVI_FTP_NO_FILES_FOUND', $sftp->pwd()));
 					}
 
 					if (!in_array($ftpfile, $files, true))
 					{
-						throw new CsviException(JText::sprintf('COM_CSVI_FTP_FILE_NOT_FOUND', $ftpfile, $ftp->pwd()));
+						throw new CsviException(JText::sprintf('COM_CSVI_FTP_FILE_NOT_FOUND', $ftpfile, $sftp->pwd()));
 					}
 				}
 			}

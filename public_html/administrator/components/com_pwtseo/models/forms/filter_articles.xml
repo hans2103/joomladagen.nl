@@ -4,8 +4,7 @@
         <field
                 name="search"
                 type="text"
-                label="COM_PWTSEO_FILTER_SEARCH_LABEL"
-                description="COM_PWTSEO_FILTER_SEARCH_DESC"
+                label=""
                 hint="JSEARCH_FILTER"
         />
         <field

@@ -36,7 +36,7 @@ class PwtSitemapViewItems extends JViewLegacy
 	/**
 	 * Display the view
 	 *
-	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
 	 *
 	 * @return  void
 	 *
@@ -49,7 +49,7 @@ class PwtSitemapViewItems extends JViewLegacy
 		// Access check.
 		if (!JFactory::getUser()->authorise('core.manage', 'com_pwtsitemap'))
 		{
-			throw new Exception( JText::_('JERROR_ALERTNOAUTHOR'), 404);
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 		}
 
 		// Add submenus
@@ -82,7 +82,7 @@ class PwtSitemapViewItems extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_PWTSITEMAP'). ": " . JText::_('COM_PWTSITEMAP_TITLE_ITEMS'), 'tree');
+		JToolBarHelper::title(JText::_('COM_PWTSITEMAP_TITLE_ITEMS'), 'pwtsitemap');
 
 		$title = JText::_('JTOOLBAR_BATCH');
 

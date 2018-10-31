@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_SITE . '/components/com_tags/helpers/route.php';
+
 /**
  * PWT Sitemap Tag Plugin
  *
@@ -34,8 +35,8 @@ class PlgPwtSitemapTag extends PwtSitemapPlugin
 	/**
 	 * Run for every menuitem passed
 	 *
-	 * @param   StdClass  $item    Menu items
-	 * @param   string    $format  Sitemap format that is rendered
+	 * @param   StdClass $item   Menu items
+	 * @param   string   $format Sitemap format that is rendered
 	 *
 	 * @return  array
 	 *
@@ -69,9 +70,9 @@ class PlgPwtSitemapTag extends PwtSitemapPlugin
 	/**
 	 * Get all tagged items
 	 *
-	 * @param   array   $aId              Tag ids
-	 * @param   string  $language         Language id
-	 * @param   bool    $include_subtags  Include subtags
+	 * @param   array  $aId             Tag ids
+	 * @param   string $language        Language id
+	 * @param   bool   $include_subtags Include subtags
 	 *
 	 * @return  stdClass
 	 *
@@ -86,7 +87,7 @@ class PlgPwtSitemapTag extends PwtSitemapPlugin
 		$tagModel->setState('tag.id', implode(',', $aId));
 
 		// Set Tag Model parameters
-		$tagModelParams = new stdClass();
+		$tagModelParams                   = new stdClass();
 		$tagModelParams->include_children = $include_subtags;
 		$tagModel->setState('params', new \Joomla\Registry\Registry($tagModelParams));
 

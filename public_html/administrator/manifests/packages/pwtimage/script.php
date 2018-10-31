@@ -3,11 +3,13 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Version;
@@ -77,7 +79,7 @@ class Pkg_PwtimageInstallerScript
 		$db  = Factory::getDbo();
 
 		// Enable the plugins
-		$plugins = array('editors-xtd', 'system');
+		$plugins = array('editors-xtd', 'system', 'fields');
 
 		$query = $db->getQuery(true)
 			->update($db->quoteName('#__extensions'))
@@ -114,6 +116,84 @@ class Pkg_PwtimageInstallerScript
 		$app->enqueueMessage(Text::_('PKG_PWTIMAGE_PLUGINS_ENABLED'));
 
 		return true;
+	}
+
+	/**
+	 * Method to run during an update. This actually belongs in the component script.php but putting this code there
+	 * doesn't do anything. Sounds like a bug to me.
+	 *
+	 * @param   object  $parent  The class calling this method.
+	 *
+	 * @return  bool  True on success | False on failure.
+	 *
+	 * @since   1.1.0
+	 */
+	public function update($parent)
+	{
+		// Check if there are any settings to migrate. We do this by checking if the user has any profiles stored
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select($db->quoteName('id'))
+			->from($db->quoteName('#__pwtimage_profiles'));
+		$db->setQuery($query, 0, 1);
+
+		$profileId = $db->loadResult();
+
+		if ($profileId)
+		{
+			return true;
+		}
+
+		// There is no profile found, so let's convert any existing settings
+		$params = ComponentHelper::getParams('com_pwtimage');
+
+		// Set the width to the new format
+		$widths = explode("\r\n", $params->get('imageWidth'));
+		$newWidths = array();
+
+		foreach ($widths as $index => $width)
+		{
+			$newWidths['width' . $index]['width'] = $width;
+		}
+
+		$params->set('width', $newWidths);
+
+		// Set that all media fields are converted
+		$params->set('allMediaFields', '1');
+
+		// Insert the parameters into the profile
+		$query->clear()
+			->insert($db->quoteName('#__pwtimage_profiles'))
+			->columns(
+				$db->quoteName(
+					array(
+						'name',
+						'settings',
+						'ordering',
+						'published',
+						'created',
+						'created_by'
+					)
+				)
+			)
+			->values(
+				$db->quote('Default profile') . ',' .
+				$db->quote(json_encode($params->jsonSerialize())) . ',' .
+				'1,' .
+				'1,' .
+				$db->quote((new Date)->toSql()) . ',' .
+				(int) Factory::getUser()->id
+			);
+		$db->setQuery($query)->execute();
+
+		$profileId = $db->insertid();
+
+		// Add the extension to all to keep the current behaviour
+		$query->clear()
+			->insert($db->quoteName('#__pwtimage_extensions'))
+			->columns($db->quoteName(array('profile_id', 'path')))
+			->values($profileId . ',' . $db->quote('all'));
+		$db->setQuery($query)->execute();
 	}
 
 	/**

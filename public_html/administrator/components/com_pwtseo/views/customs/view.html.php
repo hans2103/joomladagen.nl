@@ -106,7 +106,7 @@ class PWTSEOViewCustoms extends HtmlView
 	 */
 	private function toolbar()
 	{
-		JToolBarHelper::title(Text::_('COM_PWTSEO_CUSTOMS_HEADER'), 'bars');
+		JToolBarHelper::title(Text::_('COM_PWTSEO_CUSTOMS_HEADER'), 'pwtseo');
 
 		$canDo = ContentHelper::getActions('com_pwtseo');
 

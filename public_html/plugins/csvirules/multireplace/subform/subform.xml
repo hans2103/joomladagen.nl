@@ -19,6 +19,7 @@
 			<option value="addbefore" class="addvalue">COM_CSVI_PLUGINFORM_REPLACEMENT_FUNCTIONS_ADDBEFORE</option>
 			<option value="addafter" class="addvalue">COM_CSVI_PLUGINFORM_REPLACEMENT_FUNCTIONS_ADDAFTER</option>
 			<option value="date" class="date">COM_CSVI_PLUGINFORM_REPLACEMENT_FUNCTIONS_DATE</option>
+			<option value="customdate" class="customdateformat">COM_CSVI_PLUGINFORM_REPLACEMENT_FUNCTIONS_CUSTOM_DATEFORMAT</option>
 		</field>
 	</fieldset>
 
@@ -119,5 +120,11 @@
 			   class="input-large"
 			   labelclass="date"/>
 
+		<field name="customDateFormat"
+		       type="text"
+		       label="COM_CSVI_PLUGINFORM_DATEFORMAT_LABEL"
+		       required="false"
+		       class="input-small"
+		       labelclass="customdateformat"/>
 	</fieldset>
 </form>

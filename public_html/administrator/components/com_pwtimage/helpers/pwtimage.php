@@ -3,63 +3,217 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die;
 
 /**
  * PWT Image component helper.
  *
- * @since  1.0
+ * @since  1.0.0
  */
 class PwtimageHelper extends ContentHelper
 {
 	/**
-	 * Configure the Linkbar.
+	 * A list to map specific paths to other paths. This is to ensure discrepancies between xml files are ignored.
 	 *
-	 * @param   string  $vName  The name of the active view.
+	 * @var   array
+	 * @since 1.3.0
+	 */
+	static private $synonyms = array(
+		'com_content.images.image-intro.image_intro'   => 'com_content.images.image_intro',
+		'com_content.images.image-full.image_fulltext' => 'com_content.images.image_fulltext'
+	);
+
+	/**
+	 * The profile settings
+	 *
+	 * @var    Registry
+	 * @since  1.1.0
+	 */
+	private $settings;
+
+	/**
+	 * Construct the helper.
+	 *
+	 * @param   string $origin The breadcrumb path to load the profile for
+	 *
+	 * @since   1.1.0
+	 */
+	public function __construct($origin = 'all')
+	{
+		$this->loadProfile(isset($this->synonyms[$origin]) ? $this->synonyms[$origin] : $origin);
+	}
+
+	/**
+	 * Load the profile to apply to the media fields.
+	 *
+	 * @param   string $origin The breadcrumb path to load the profile for
 	 *
 	 * @return  void
 	 *
-	 * @since   1.6
+	 * @since   1.1.0
+	 */
+	private function loadProfile($origin = 'all')
+	{
+		$profileId  = false;
+		$useProfile = false;
+
+		if (strstr($origin, ':'))
+		{
+			list($profileId, $origin) = explode(':', $origin);
+
+			// If there is no origin we have a profile with no extensions selected, so request profile directly
+			if (empty($origin))
+			{
+				$useProfile = true;
+			}
+		}
+
+		if (!$profileId && empty($origin))
+		{
+			$origin = 'all';
+		}
+
+		$db = Factory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select($db->quoteName(array('profiles.settings', 'extensions.path')))
+			->from($db->quoteName('#__pwtimage_profiles', 'profiles'))
+			->leftJoin(
+				$db->quoteName('#__pwtimage_extensions', 'extensions')
+				. ' ON ' . $db->quoteName('extensions.profile_id') . ' = ' . $db->quoteName('profiles.id')
+			)
+			->where($db->quoteName('profiles.published') . ' = 1');
+
+		if ($origin)
+		{
+			$query->where($db->quoteName('extensions.path') . ' IN (' . $db->quote($origin) . ',' . $db->quote('all') . ')');
+		}
+
+		if ($profileId)
+		{
+			$field = 'extensions.profile_id';
+
+			// Check if we need to request the profile directly
+			if ($useProfile)
+			{
+				$field = 'profiles.id';
+			}
+
+			$query
+				->where($db->quoteName($field) . ' = ' . (int) $profileId)
+				->group($db->quoteName($field));
+		}
+
+		$settings       = $db->setQuery($query)->loadObjectList('path');
+		$this->settings = new Registry;
+
+		if ((count($settings) > 0 && $origin) || $useProfile)
+		{
+			if (isset($settings[$origin]))
+			{
+				$settings = array($settings[$origin]);
+			}
+			elseif (isset($settings['all']))
+			{
+				$settings = array($settings['all']);
+			}
+
+			$this->settings = (new Registry(array_shift($settings)->settings));
+		}
+
+		// Check if the user is part of the selected user group
+		$user       = Factory::getUser();
+		$userGroups = $this->getSetting('usergroups', array());
+		$hasAccess  = array_intersect($user->groups, $userGroups);
+
+		if (empty($hasAccess))
+		{
+			$this->settings = new Registry;
+		}
+	}
+
+	/**
+	 * Return the requested setting.
+	 *
+	 * @param   string $setting The setting name to get the value for
+	 * @param   string $default The default value to use
+	 *
+	 * @return  mixed  The requested setting.
+	 *
+	 * @since   1.1.0
+	 */
+	public function getSetting($setting, $default = '')
+	{
+		return $this->settings->get($setting, $default);
+	}
+
+	/**
+	 * Configure the Linkbar.
+	 *
+	 * @param   string $vName The name of the active view.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0.0
 	 */
 	public static function addSubmenu($vName)
 	{
 		JHtmlSidebar::addEntry(
-			Text::_('COM_PWTIMAGE_SUBMENU_PWTIMAGE'),
-			'index.php?option=com_pwtimage&view=pwtimage',
-			$vName == 'pwtimage'
+			Text::_('COM_PWTIMAGE_SUBMENU_DASHBOARD'),
+			'index.php?option=com_pwtimage&view=dashboard',
+			$vName == 'dashboard'
 		);
+
+		JHtmlSidebar::addEntry(
+			Text::_('COM_PWTIMAGE_SUBMENU_PROFILES'),
+			'index.php?option=com_pwtimage&view=profiles',
+			$vName == 'profiles'
+		);
+	}
+
+	/**
+	 * Returns a potential mapped origin for a given origin.
+	 *
+	 * @param   string $origin The origin
+	 *
+	 * @return  string Either a synonym for the given origin or the origin itself
+	 *
+	 * @since   1.3.0
+	 */
+	public static function getSysonymForOrigin($origin)
+	{
+		return isset(self::$synonyms[$origin]) ? self::$synonyms[$origin] : $origin;
 	}
 
 	/**
 	 * Retrieve the image folder.
 	 *
-	 * @param   bool    $base        Set to return only the base folder, not the subfolders.
-	 * @param   string  $sourcePath  The source folder where to store the image.
-	 * @param   string  $subPath     The subfolder where to store the image.
+	 * @param   bool   $base       Set to return only the base folder, not the subfolders.
+	 * @param   string $sourcePath The source folder where to store the image.
+	 * @param   string $subPath    The subfolder where to store the image.
 	 *
 	 * @return  string  The name of the image folder prefixed and suffixed with /.
 	 *
-	 * @since   1.0
+	 * @since   1.0.0
 	 */
 	public function getImageFolder($base = false, $sourcePath = null, $subPath = null)
 	{
 		jimport('joomla.filesystem.folder');
 
 		// Get the settings
-		$params     = ComponentHelper::getParams('com_pwtimage');
-		$sourcePath = strlen($sourcePath) > 0 ? $sourcePath : $params->get('sourcePath', '/images');
-		$subPath    = strlen($subPath) > 0 ? $subPath : $params->get('subPath', '{year}/{month}');
+		$sourcePath = strlen($sourcePath) > 0 ? $sourcePath : $this->settings->get('sourcePath', '/images');
+		$subPath    = strlen($subPath) > 0 ? $subPath : $this->settings->get('subPath');
 
 		// Construct the source path
 		if (substr($sourcePath, 0, 1) !== '/')
@@ -79,13 +233,15 @@ class PwtimageHelper extends ContentHelper
 		$imageFolder = $sourcePath . $subPath;
 
 		// Check | try to create thumbnail folder
+		$mode = intval($this->getSetting('chmod', 0755), 8);
+
 		if (!JFolder::exists(JPATH_SITE . $imageFolder))
 		{
-			JFolder::create(JPATH_SITE . $imageFolder, 0755);
+			JFolder::create(JPATH_SITE . $imageFolder, $mode);
 		}
 		else
 		{
-			@chmod(JPATH_SITE . $imageFolder, 0755);
+			@chmod(JPATH_SITE . $imageFolder, $mode);
 		}
 
 		return $base ? $sourcePath : $imageFolder;
@@ -94,31 +250,18 @@ class PwtimageHelper extends ContentHelper
 	/**
 	 * Do a placeholder replacement.
 	 *
-	 * @param   string  $subPath  The path to replace the variables in
+	 * @param   string $subPath The path to replace the variables in
 	 *
 	 * @return  string  The replaced string.
 	 *
-	 * @since   1.0
+	 * @since   1.0.0
 	 */
 	public function replaceVariables($subPath)
 	{
-
-		$find    = array('{year}', '{month}', '{Y}', '{m}');
-		$replace = array(date('Y'), date('m'), date('Y'), date('m'));
+		$find    = array('{year}', '{month}', '{day}', '{Y}', '{m}', '{d}', '{W}');
+		$replace = array(date('Y'), date('m'), date('d'), date('Y'), date('m'), date('d'), date('W'));
 
 		return str_replace($find, $replace, $subPath);
-	}
-
-	/**
-	 * Get the filename format.
-	 *
-	 * @return  string  The filename formate.
-	 *
-	 * @since   1.0
-	 */
-	public function getFilenameFormat()
-	{
-		return ComponentHelper::getParams('com_pwtimage')->get('filenameFormat', '{d}_{random}_{name}');
 	}
 
 	/**
@@ -128,7 +271,7 @@ class PwtimageHelper extends ContentHelper
 	 *
 	 * @return  int  The maximum allowed upload size.
 	 *
-	 * @since   1.0
+	 * @since   1.0.0
 	 */
 	public function fileUploadMaxSize()
 	{
@@ -155,11 +298,11 @@ class PwtimageHelper extends ContentHelper
 	/**
 	 * Parse the size of an image.
 	 *
-	 * @param   string  $size  The size to parse
+	 * @param   string $size The size to parse
 	 *
 	 * @return  float  The rounded value.
 	 *
-	 * @since   1.0
+	 * @since   1.0.0
 	 */
 	private function parseSize($size)
 	{
@@ -183,7 +326,7 @@ class PwtimageHelper extends ContentHelper
 	 *
 	 * @return  string  A string with a token name and value.
 	 *
-	 * @since   1.2.0
+	 * @since   1.0.0
 	 *
 	 * @throws  Exception
 	 */
@@ -199,5 +342,17 @@ class PwtimageHelper extends ContentHelper
 		}
 
 		return $tokenName . ':' . $tokenValue;
+	}
+
+	/**
+	 * Return the profile settings.
+	 *
+	 * @return  array  The profile settings.
+	 *
+	 * @since   1.1.0
+	 */
+	public function getSettings()
+	{
+		return $this->settings->toArray();
 	}
 }

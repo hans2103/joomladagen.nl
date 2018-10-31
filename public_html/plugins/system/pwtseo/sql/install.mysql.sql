@@ -20,8 +20,10 @@ CREATE TABLE IF NOT EXISTS `#__plg_pwtseo` (
   `page_title` VARCHAR(255) NOT NULL DEFAULT '',
   `override_canonical` TINYINT(1) DEFAULT 0,
   `canonical` VARCHAR(255) NOT NULL DEFAULT '',
-  `version` VARCHAR(25) NOT NULL DEFAULT '1.1.0',
+  `version` VARCHAR(25) NOT NULL DEFAULT '1.2.1',
   `flag_outdated` TINYINT(1) DEFAULT 0,
-
+  `articletitleselector` VARCHAR(255) DEFAULT '' NOT NULL,
+  `twitter_card` VARCHAR(20) DEFAULT '' NOT NULL,
+  `twitter_site_username` VARCHAR(150) DEFAULT '' NOT NULL,
   PRIMARY KEY (`id`)
 );

@@ -10,10 +10,14 @@
 
 use Joomla\CMS\Access\Exception\NotAllowed;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 defined('_JEXEC') or die;
+
+// Add stylesheet
+HTMLHelper::_('stylesheet', 'com_pwtseo/pwtseo.css', array('relative' => true, 'version' => 'auto'));
 
 // Access check.
 if (!Factory::getUser()->authorise('core.manage', 'com_pwtseo'))

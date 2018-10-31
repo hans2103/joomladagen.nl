@@ -11,15 +11,17 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Router\Router;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
@@ -52,12 +54,12 @@ class PlgSystemPWTSEO extends CMSPlugin
 	protected $autoloadLanguage = true;
 
 	/**
-	 * Array to hold all the contexts in which our plugin works, for now only articles
+	 * Array to hold all the contexts in which our plugin works
 	 *
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $aAllowedContext = array('com_content.article', 'com_pwtseo.custom');
+	private $aAllowedContext = array('com_content.article', 'com_pwtseo.custom', 'com_menus.item');
 
 	/**
 	 * @var    String  base update url, to decide whether to process the event or not
@@ -128,13 +130,8 @@ class PlgSystemPWTSEO extends CMSPlugin
 			$url       .= $separator . 'key=' . $downloadId;
 		}
 
-		// Get the clean domain
-		$domain = '';
-
-		if (preg_match('/\w+\..{2,3}(?:\..{2,3})?(?:$|(?=\/))/i', Uri::base(), $matches) === 1)
-		{
-			$domain = $matches[0];
-		}
+		// Get the domain for this site
+		$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
 
 		// Append domain
 		$url .= '&domain=' . $domain;
@@ -181,6 +178,12 @@ class PlgSystemPWTSEO extends CMSPlugin
 			return false;
 		}
 
+		// Setup values that are used by our field
+		if ($form->getName() === 'com_pwtseo')
+		{
+			$form->setValue('articletitleselector', 'pwtseo', $this->params->get('articletitleselector', ''));
+		}
+
 		if (in_array($form->getName(), $this->aAllowedContext))
 		{
 			HTMLHelper::_('jquery.framework');
@@ -199,17 +202,45 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 			$iMinTitle    = (int) $this->params->get('count_min_title', 40);
 			$iMaxTitle    = (int) $this->params->get('count_max_title', 50);
-			$iMinMetadesc = (int) $this->params->get('count_min_metadesc', 100);
-			$iMaxMetadesc = (int) $this->params->get('count_max_metadesc', 150);
+			$iMinMetadesc = (int) $this->params->get('count_min_metadesc', 275);
+			$iMaxMetadesc = (int) $this->params->get('count_max_metadesc', 325);
 
-			// Filter the most common terms for the word counter
-			$language = new Language(isset($data->language) && $data->language !== '*' ? $data->language : null);
+			$aWordsFilter = array();
 
-			$aWordsFilter = array(
-				'common' => $language->getIgnoredSearchWords(),
-				'lower'  => $language->getLowerLimitSearchWord(),
-				'upper'  => $language->getUpperLimitSearchWord()
-			);
+			$language        = Factory::getLanguage();
+			$currentLanguage = $language->getTag();
+			$langs           = LanguageHelper::getContentLanguages(true, false);
+
+			foreach ($langs as $lang)
+			{
+				$sWords   = $this->params->get('blacklist_' . $lang->lang_code, '');
+				$sDefault = '';
+
+				// Load the new language which takes precedence over default and check that it has the key.
+				if ($language->load('plg_system_pwtseo', JPATH_PLUGINS . '/system/pwtseo', $lang->lang_code, true, false)
+					&& $language->hasKey('PLG_SYSTEM_PWTSEO_DEFAULT_BLACKLISTED'))
+				{
+					$sDefault = Text::_('PLG_SYSTEM_PWTSEO_DEFAULT_BLACKLISTED');
+				}
+
+				// If nothing has been saved in the plugin, use the default values
+				if (!$sWords && $sDefault !== 'PLG_SYSTEM_PWTSEO_DEFAULT_BLACKLISTED')
+				{
+					$sWords = $sDefault;
+				}
+
+				$aWordsFilter[$lang->lang_code]
+					= array_values(
+					array_filter(
+						array_map(
+							'trim',
+							explode(',', $sWords)
+						)
+					)
+				);
+			}
+
+			Factory::getLanguage()->load('plg_system_pwtseo', JPATH_PLUGINS . '/system/pwtseo', $currentLanguage, true);
 
 			// All parameters required by the JS
 			Factory::getDocument()->addScriptOptions('PWTSeoConfig',
@@ -223,6 +254,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'baseurl'                                        => Uri::root(),
 					'ajaxurl'                                        => Uri::base(true) . '/index.php?option=com_ajax&format=json',
 					'frontajaxurl'                                   => Uri::root() . 'index.php?option=com_ajax&format=json',
+					'domain'                                         => Uri::getInstance()->toString(array('scheme', 'host', 'port')),
 					'requirements_article_title_good'                => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_GOOD'),
 					'requirements_article_title_bad'                 => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_ARTICLE_TITLE_BAD'),
 					'requirements_page_title_good'                   => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_PAGE_TITLE_GOOD'),
@@ -310,24 +342,55 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'requirements_metadesc_unique_good'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_GOOD'),
 					'requirements_metadesc_unique_bad'               => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
 					'information_most_common_words'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_INFORMATION_COMMON_WORDS'),
-					'polling_interval'                               => (int) $this->params->get('poll_interval', 1) ?: 1,
+					'information_most_common_blocked_words'          => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_INFORMATION_COMMON_BLACKLISTED_WORDS'),
 					'show_counters'                                  => (int) $this->params->get('show_counters', 1),
 					'found_resulting_page'                           => Text::_('PLG_SYSTEM_PWTSEO_FOUND_RESULTING_PAGE'),
 					'resulting_page_unreachable'                     => Text::_('PLG_SYSTEM_PWTSEO_RESULTING_PAGE_UNREACHABLE'),
 					'error_invalid_url'                              => Text::_('PLG_SYSTEM_PWTSEO_ERROR_INVALID_URL'),
-					'words_filter'                                   => $aWordsFilter
+					'words_filter'                                   => $aWordsFilter,
+					'editor_type'                                    => Factory::getUser()->getParam('editor', Factory::getConfig()->get('editor', 'tinymce'))
 				)
 			);
+		}
+
+		// When we editing the plugin settings
+		if ($form->getField('plg_system_pwtseo', 'params'))
+		{
+			$language        = Factory::getLanguage();
+			$currentLanguage = $language->getName();
+			$langs           = LanguageHelper::getContentLanguages(true, false);
+
+			// Load the language file for each installed content language
+			foreach ($langs as $lang)
+			{
+				$form->loadFile(JPATH_PLUGINS . '/system/pwtseo/form/lang.xml');
+
+				$form->setFieldAttribute('spacer', 'label', $lang->lang_code, 'params');
+				$form->setFieldAttribute('spacer', 'name', 'spacer_' . $lang->lang_code, 'params');
+				$form->setFieldAttribute('blacklist', 'name', 'blacklist_' . $lang->lang_code, 'params');
+
+				// Load the new language which takes precedence over default and check that it has the key.
+				if ($language->load('plg_system_pwtseo', JPATH_PLUGINS . '/system/pwtseo', $lang->lang_code, true, false)
+					&& $language->hasKey('PLG_SYSTEM_PWTSEO_DEFAULT_BLACKLISTED'))
+				{
+					$form->setFieldAttribute('blacklist_' . $lang->lang_code, 'default', Text::_('PLG_SYSTEM_PWTSEO_DEFAULT_BLACKLISTED'), 'params');
+				}
+
+			}
+
+			// Return to original language
+			Factory::getLanguage()->load('plg_system_pwtseo', JPATH_PLUGINS . '/system/pwtseo', $currentLanguage, true);
 		}
 
 		return true;
 	}
 
 	/**
-	 * Alters the loaded data that is injected into the form
+	 * Alters the loaded data that is injected into the form. When we are given an object we don't need the reference
+	 * but when we are given an array we *do* need it.
 	 *
-	 * @param   string   $context Context of the content being passed to the plugin
-	 * @param   stdClass $data    Object containing the data for the form
+	 * @param   string $context Context of the content being passed to the plugin
+	 * @param   mixed  $data    Array|Object containing the data for the form
 	 *
 	 * @return  bool True if method succeeds.
 	 *
@@ -335,14 +398,27 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 */
 	public function onContentPrepareData($context, $data)
 	{
-		// We only work on articles for now
-		if (in_array($context, $this->aAllowedContext) && is_object($data) && !$this->app->isSite())
+		if (in_array($context, $this->aAllowedContext) && !$this->app->isSite())
 		{
-			$iId = isset($data->id) ? $data->id : 0;
-
-			if ($iId > 0)
+			// Com_menus gives us an array, while com_content gives us an object
+			if (is_object($data))
 			{
-				$data->seo = $this->getSEOData($iId);
+				$iId = isset($data->id) ? $data->id : 0;
+
+				if ($iId > 0)
+				{
+					$data->pwtseo = $this->getSEOData($iId, 'context_id', $context);
+				}
+			}
+
+			if (is_array($data))
+			{
+				$iId = isset($data['id']) ? $data['id'] : 0;
+
+				if ($iId > 0)
+				{
+					$data['pwtseo'] = (array) $this->getSEOData($iId, 'context_id', $context);
+				}
 			}
 		}
 
@@ -356,7 +432,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 * @param   string $sKey     The key of the column
 	 * @param   string $sContext The context of the item
 	 *
-	 * @return  array the record or empty if not found
+	 * @return  object the record or empty if not found
 	 *
 	 * @since   1.0
 	 */
@@ -386,23 +462,27 @@ class PlgSystemPWTSEO extends CMSPlugin
 						'pwtseo.page_title',
 						'pwtseo.expand_og',
 						'pwtseo.override_canonical',
-						'pwtseo.canonical'
+						'pwtseo.canonical',
+						'pwtseo.articletitleselector',
+						'pwtseo.twitter_card',
+						'pwtseo.twitter_site_username'
 					)
 				)
 			)
 			->from($this->db->quoteName('#__plg_pwtseo', 'pwtseo'))
 			->where($this->db->quoteName('pwtseo.' . $sKey) . ' = ' . $this->db->quote($sValue))
-			->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($sContext));
+			->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($sContext))
+			->where($this->db->quoteName('pwtseo.focus_word') . ' <> ""');
 
 		try
 		{
-			return (array) $this->db->setQuery($q)->loadObject();
+			return $this->db->setQuery($q)->loadObject();
 		}
 		catch (Exception $e)
 		{
 		}
 
-		return array();
+		return new stdClass;
 	}
 
 	/**
@@ -445,7 +525,24 @@ class PlgSystemPWTSEO extends CMSPlugin
 			// Some don't overlap, so we have to do it manually
 			if (isset($aForm['articletext']) && $aForm['articletext'])
 			{
-				$article->text = $aForm['articletext'];
+				$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+				$tagPos  = preg_match($pattern, $aForm['articletext']);
+
+				if ($tagPos == 0)
+				{
+					$article->introtext = $aForm['articletext'];
+					$article->fulltext  = '';
+				}
+				else
+				{
+					list ($article->introtext, $article->fulltext) = preg_split($pattern, $aForm['articletext'], 2);
+				}
+			}
+
+			// If we are checking from the menu item
+			if (isset($aForm['params']['menu-meta_description']) && $aForm['params']['menu-meta_description'])
+			{
+				$article->metadesc = $aForm['params']['menu-meta_description'];
 			}
 		}
 	}
@@ -467,17 +564,24 @@ class PlgSystemPWTSEO extends CMSPlugin
 		if (in_array($context, $this->aAllowedContext) && strpos($context, 'com_pwtseo') === false)
 		{
 			$jFilter = InputFilter::getInstance();
-			$aSEO    = $this->app->input->post->get('jform', array(), 'array')['seo'];
+			$aSEO    = $this->app->input->post->get('jform', array(), 'array')['pwtseo'];
 
 			array_walk($aSEO, array($jFilter, 'clean'));
 			$aSEO['context_id'] = $article->id;
 
+			// We store the link so we can recognize it in the frontend
+			if ($context === 'com_menus.item')
+			{
+				$aSEO['url'] = $article->link;
+			}
+
 			$oInput = (object) $aSEO;
 
-			$oInput->version = '1.1.0';
+			// Replace any version modifiers when inserting
+			$oInput->version = preg_replace('/-\w+/', '', '1.2.1');
 			$oInput->context = $context;
 
-			$iId = $this->getHasSEOData($article->id);
+			$iId = $this->getHasSEOData($article->id, 'context_id', $context);
 
 			if ($iId)
 			{
@@ -536,42 +640,47 @@ class PlgSystemPWTSEO extends CMSPlugin
 	public function onBeforeRender()
 	{
 		$input = $this->app->input;
+		$doc   = Factory::getDocument();
 
-		if ($this->app->isSite())
+		if ($this->app->isSite() && $doc instanceof HtmlDocument)
 		{
-			$sId      = $input->getInt('id');
-			$sKey     = 'context_id';
+			$sId      = (int) $input->getInt('id');
 			$sContext = $input->getCmd('context', $input->getCmd('option') . '.' . $input->getCmd('view'));
 
-			$iSEOId   = $this->getHasSEOData($sId, $sKey, $sContext) ?:
-				$this->getHasSEOData(JUri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
+			// First we try original context
+			$aSEO = (array) $this->getSEOData($sId, 'context_id', $sContext);
+
+			// Try menu-items
+			if (!$aSEO)
+			{
+				// Check for link, which is new way, make sure we have b/c so check for path aswell
+				$link = Factory::getApplication()->getMenu()->getActive()->link;
+				$aSEO = (array) $this->getSEOData($link, 'url', 'com_menus.item');
+
+				if (!$aSEO)
+				{
+					$aSEO = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_menus.item');
+				}
+			}
+
+			// Finally maybe custom url
+			if (!$aSEO)
+			{
+				$aSEO = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
+			}
+
 			$bPreview = $input->getBool('pwtseo_preview', false);
 
-			if ($iSEOId > 0 || $bPreview)
+			if ($aSEO || $bPreview)
 			{
 				if ($bPreview)
 				{
-					$aSEO = $input->post->get('jform', '', 'raw')['seo'];
-				}
-				else
-				{
-					$aSEO = $this->getSEOData($sId, $sKey, $sContext) ?: $this->getSEOData(JUri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
+					$aSEO = (array) $input->post->get('jform', '', 'raw')['pwtseo'];
 				}
 
 				if (strlen($aSEO['page_title']) && $aSEO['override_page_title'] === '1')
 				{
-					$title = $aSEO['page_title'];
-
-					if ($this->app->get('sitename_pagetitles', 0) == 1)
-					{
-						$title = Text::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
-					}
-					elseif ($this->app->get('sitename_pagetitles', 0) == 2)
-					{
-						$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
-					}
-
-					Factory::getDocument()->setTitle($title);
+					$doc->setTitle($this->getFullTitle($aSEO['page_title']));
 				}
 
 				if (isset($aSEO['override_canonical']) && $aSEO['override_canonical'])
@@ -596,9 +705,9 @@ class PlgSystemPWTSEO extends CMSPlugin
 					}
 				}
 
-				if ($this->params->get('advanced_mode'))
+				// Handle repeatable field
+				if (isset($aSEO['adv_open_graph']))
 				{
-					// Handle repeatable field
 					$aAdvancedFields = json_decode($aSEO['adv_open_graph']);
 
 					if ($aAdvancedFields && isset($aAdvancedFields->og_title))
@@ -607,77 +716,90 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 						foreach ($aKeys as $iKey)
 						{
-							Factory::getDocument()->addCustomTag(
+							$doc->addCustomTag(
 								'<meta property="' . $aAdvancedFields->og_title[$iKey] . '" content="' . $aAdvancedFields->og_content[$iKey] . '" >'
 							);
 						}
 					}
 				}
-				else
+
+				if (strlen($aSEO['facebook_title']))
 				{
-					if (strlen($aSEO['facebook_title']))
-					{
-						Factory::getDocument()->setMetaData(
-							'og:title', $aSEO['facebook_title'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['facebook_description']))
-					{
-						Factory::getDocument()->setMetaData(
-							'og:description', $aSEO['facebook_description'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['facebook_image']))
-					{
-						Factory::getDocument()->setMetaData(
-							'og:image', Uri::base() . $aSEO['facebook_image'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['twitter_title']))
-					{
-						Factory::getDocument()->setMetaData(
-							'twitter:title', $aSEO['twitter_title'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['twitter_description']))
-					{
-						Factory::getDocument()->setMetaData(
-							'twitter:description', $aSEO['twitter_description'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['twitter_image']))
-					{
-						Factory::getDocument()->setMetaData(
-							'twitter:image', Uri::base() . $aSEO['twitter_image'], 'property'
-						);
-					}
-
-					if (strlen($aSEO['google_title']))
-					{
-						Factory::getDocument()->setMetaData(
-							'google:title', $aSEO['google_title']
-						);
-					}
-
-					if (strlen($aSEO['google_description']))
-					{
-						Factory::getDocument()->setMetaData(
-							'google:description', $aSEO['google_description']
-						);
-					}
-
-					if (strlen($aSEO['google_image']))
-					{
-						Factory::getDocument()->setMetaData(
-							'google:image', Uri::base() . $aSEO['google_image']
-						);
-					}
+					$doc->setMetaData(
+						'og:title', $aSEO['facebook_title'], 'property'
+					);
 				}
+
+				if (strlen($aSEO['facebook_description']))
+				{
+					$doc->setMetaData(
+						'og:description', $aSEO['facebook_description'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['facebook_image']))
+				{
+					$doc->setMetaData(
+						'og:image', Uri::base() . $aSEO['facebook_image'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['twitter_title']))
+				{
+					$doc->setMetaData(
+						'twitter:title', $aSEO['twitter_title'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['twitter_description']))
+				{
+					$doc->setMetaData(
+						'twitter:description', $aSEO['twitter_description'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['twitter_image']))
+				{
+					$doc->setMetaData(
+						'twitter:image', Uri::base() . $aSEO['twitter_image'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['twitter_card']))
+				{
+					$doc->setMetaData(
+						'twitter:card', $aSEO['twitter_card'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['twitter_site_username']))
+				{
+					$doc->setMetaData(
+						'twitter:site', $aSEO['twitter_site_username'], 'property'
+					);
+				}
+
+				if (strlen($aSEO['google_title']))
+				{
+					$doc->setMetaData(
+						'google:title', $aSEO['google_title']
+					);
+				}
+
+				if (strlen($aSEO['google_description']))
+				{
+					$doc->setMetaData(
+						'google:description', $aSEO['google_description']
+					);
+				}
+
+				if (strlen($aSEO['google_image']))
+				{
+					$doc->setMetaData(
+						'google:image', Uri::base() . $aSEO['google_image']
+					);
+				}
+
 			}
 			else
 			{
@@ -687,6 +809,29 @@ class PlgSystemPWTSEO extends CMSPlugin
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns the full page title, with either prefix or suffix
+	 *
+	 * @param   string $title The title to process
+	 *
+	 * @return  string The full page title
+	 *
+	 * @since   1.2.1
+	 */
+	protected function getFullTitle($title)
+	{
+		if ($this->app->get('sitename_pagetitles', 0) == 1)
+		{
+			$title = Text::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
+		}
+		elseif ($this->app->get('sitename_pagetitles', 0) == 2)
+		{
+			$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
+		}
+
+		return $title;
 	}
 
 	/**
@@ -700,7 +845,24 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 */
 	protected function setCanonical($sUrl)
 	{
-		Factory::getDocument()->setMetaData('canonical', htmlspecialchars($sUrl));
+		/** @var HtmlDocument $doc */
+		$doc = Factory::getApplication()->getDocument();
+
+		// We might get a OpenSearchDocument, which doesn't have headlinks
+		if (method_exists($doc, 'addHeadLink'))
+		{
+			// Remove the tag if it already exists
+			foreach ($doc->_links as $linkUrl => $link)
+			{
+				if (isset($link['relation']) && $link['relation'] === 'canonical')
+				{
+					unset($doc->_links[$linkUrl]);
+					break;
+				}
+			}
+
+			$doc->addHeadLink(htmlspecialchars($sUrl), 'canonical');
+		}
 	}
 
 	/**
@@ -787,6 +949,52 @@ class PlgSystemPWTSEO extends CMSPlugin
 	}
 
 	/**
+	 * Anything we need to do after initialising:
+	 *  - We need to ensure the correct language is set (meaning the language in the article)
+	 *
+	 * @return  void
+	 *
+	 * @since   1.2.1
+	 */
+	public function onAfterInitialise()
+	{
+		// We can recognize our calls by 'pwtseo_preview' in the request
+		if ($this->app->input->get('pwtseo_preview', false) === '1')
+		{
+			$router = $this->app->getRouter();
+
+			$router->attachBuildRule(array($this, 'preprocessBuildRule'), JRouter::PROCESS_BEFORE);
+		}
+	}
+
+	/**
+	 * Pre-process the URI to ensure the correct language is set for further components.
+	 *
+	 * @param   Router $router JRouter object.
+	 * @param   Uri    $uri    JUri object.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.2.1
+	 */
+	public function preprocessBuildRule(&$router, &$uri)
+	{
+		$lang = $this->app->input->get('lang');
+
+		// If set to all, we resort to default. It will be empty if site is not multi-lingual
+		if ($lang === '*')
+		{
+			$lang = Factory::getLanguage()->getDefault();
+		}
+
+		// Override the language with the one provided in the form, or use default
+		if ($lang)
+		{
+			$uri->setVar('lang', $lang);
+		}
+	}
+
+	/**
 	 * The resulting page is retrieved here and processed for the backend
 	 *
 	 * @return  object
@@ -802,62 +1010,113 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 		$aResponse = array();
 		$aData     = $this->app->input->get('jform', array(), 'array');
-		$iId       = isset($aData['id']) ?
-			(int) $aData['id'] : (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
+
+		$iStep = !$this->app->input->getInt('find_unique', 0) ? 1 : 2;
+
+		switch ($this->app->input->get('context'))
+		{
+			case 'com_content.article':
+				$aResponse = $this->processArticle($aData, $iStep);
+				break;
+			case 'com_pwtseo.custom':
+				$aResponse = $this->processCustom($aData, $iStep);
+				break;
+			case 'com_menus.item':
+				$aResponse = $this->processMenuItem($aData, $iStep);
+				break;
+		}
+
+		return (object) $aResponse;
+	}
+
+	/**
+	 * Process an content article. Depending on the step, different data is returned because we process data in two seperate steps.
+	 *
+	 * @param   array $aData The request data
+	 * @param   int   $iStep The step to get the data for
+	 *
+	 * @return  array The array with data required for the processing
+	 *
+	 * @since   1.2.0
+	 */
+	protected function processArticle($aData, $iStep = 1)
+	{
+		$aArr = array();
+		$iId  = isset($aData['id']) && $aData['id'] ? (int) $aData['id'] : 0;
 
 		require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
-		$aResponse['url']
-			= substr(Uri::root(), 0, -1) .
-			Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']), false);
-
-		// Here we modify the alias and get the route based on the given alias
-		if ($iId > 0)
+		if ($iStep === 1)
 		{
-			$db = Factory::getDbo();
-			$q  = $db->getQuery(true);
+			$aArr['url'] = Uri::root(
+				true,
+				str_replace(
+					'%2F',
+					'/',
+					rawurlencode(
+						urldecode(
+							Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid'], $aData['language']))
+						)
+					)
+				)
+			);
 
-			$q
-				->select($db->quoteName('a.alias'))
-				->from($db->quoteName('#__content', 'a'))
-				->where('a.id = ' . $iId);
+			$aArr['reachable'] = $this->isReachable($aArr['url']);
+			$aArr['count']     = $this->findUsages($aData['pwtseo']['focus_word'], $iId);
+		}
 
-			try
+		if ($iStep === 2)
+		{
+			$aArr['page_title_unique']    = $this->isTitleUnique($aData['title'], $iId);
+			$aArr['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
+
+			// Here we modify the alias and get the route based on the given alias
+			if ($iId > 0)
 			{
-				$sOriginalAlias = $db->setQuery($q)->loadResult();
-				$sModifiedAlias = OutputFilter::stringURLUnicodeSlug($aData['alias']);
+				$db = Factory::getDbo();
+				$q  = $db->getQuery(true);
 
-				$oTmpAlias = (object) array(
-					'id'    => $iId,
-					'alias' => $sModifiedAlias
-				);
+				$q
+					->select($db->quoteName('a.alias'))
+					->from($db->quoteName('#__content', 'a'))
+					->where('a.id = ' . $iId);
 
-				$db->updateObject('#__content', $oTmpAlias, array('id'));
+				try
+				{
+					$sOriginalAlias = $db->setQuery($q)->loadResult();
+					$sModifiedAlias = OutputFilter::stringURLUnicodeSlug($aData['alias']);
 
-				// We need to modify the url to circumvent the caching mechanism of the Router
-				$sUniq = uniqid('pwtseo') . '=1';
-				$aResponse['new_url']
-				       = substr(Uri::root(), 0, -1) .
-					Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid']) . '&' . $sUniq, false);
+					$oTmpAlias = (object) array(
+						'id'    => $iId,
+						'alias' => $sModifiedAlias
+					);
 
-				$aResponse['new_url'] = str_replace(array('?' . $sUniq, $sUniq), '', $aResponse['new_url']);
+					$db->updateObject('#__content', $oTmpAlias, array('id'));
 
-				// Revert the change
-				$oTmpAlias->alias = $sOriginalAlias;
-				$db->updateObject('#__content', $oTmpAlias, array('id'));
-			}
-			catch (Exception $e)
-			{
+					$aArr['new_url'] = Uri::root(
+						true,
+						str_replace(
+							'%2F',
+							'/',
+							rawurlencode(
+								urldecode(
+									Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid'], $aData['language']))
+								)
+							)
+						)
+					);
+
+					// Revert the change
+					$oTmpAlias->alias = $sOriginalAlias;
+					$db->updateObject('#__content', $oTmpAlias, array('id'));
+				}
+				catch (Exception $e)
+				{
+				}
 			}
 		}
 
-		$aResponse['reachable'] = $this->isReachable($aResponse['url']);
-		$aResponse['count']     = $this->findUsages($aData['seo']['focus_word'], $iId);
-
-		$aResponse['page_title_unique']    = $this->isTitleUnique($aData['title']);
-		$aResponse['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
-
-		return (object) $aResponse;
+		return $aArr;
 	}
 
 	/**
@@ -896,12 +1155,13 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 * Function to check if given title is unique across articles. For now we only check com_content
 	 *
 	 * @param   string $sTitle The title to check
+	 * @param   int    $iId    The id of the article to ignore
 	 *
 	 * @return  bool True if title is found only once, false otherwise
 	 *
 	 * @since   1.0.1
 	 */
-	protected function isTitleUnique($sTitle)
+	protected function isTitleUnique($sTitle, $iId = 0)
 	{
 		$q = $this->db->getQuery(true);
 
@@ -910,9 +1170,15 @@ class PlgSystemPWTSEO extends CMSPlugin
 			->from($this->db->quoteName('#__content', 'content'))
 			->where('LOWER(' . $this->db->quoteName('content.title') . ') = ' . $this->db->quote(strtolower($sTitle)));
 
+		if ($iId)
+		{
+			$q->where($this->db->quoteName('id') . ' != ' . $iId);
+		}
+
 		try
 		{
-			return (int) $this->db->setQuery($q)->loadResult() <= 1;
+			// If article to ignore is provided, we don't want to find any result. Otherwise we assume the 1 found is current article
+			return (int) $this->db->setQuery($q)->loadResult() <= ($iId ? 0 : 1);
 		}
 		catch (Exception $e)
 		{
@@ -933,15 +1199,35 @@ class PlgSystemPWTSEO extends CMSPlugin
 	{
 		$q = $this->db->getQuery(true);
 
-		// TODO: Include the adv options, someone could have put a description there which is reasonable to check
 		$q
 			->select('COUNT(*)')
 			->from($this->db->quoteName('#__content', 'content'))
 			->where('LOWER(' . $this->db->quoteName('content.metadesc') . ') = ' . $this->db->quote(strtolower($sDescription)));
 
+		// Handle JoomSEF
+		if (ComponentHelper::isEnabled('com_sef'))
+		{
+			$q
+				->clear()
+				->select('COUNT(*)')
+				->from($this->db->quoteName('#__sefurls', 'content'))
+				->where('LOWER(' . $this->db->quoteName('content.metadesc') . ') = ' . $this->db->quote(strtolower($sDescription)));
+		}
+
+		// Handle sh404SEF
+		if (ComponentHelper::isEnabled('com_sh404sef'))
+		{
+			$q
+				->clear()
+				->select('COUNT(*)')
+				->from($this->db->quoteName('#__content', 'content'))
+				->where('LOWER(' . $this->db->quoteName('content.metadesc') . ') = ' . $this->db->quote(strtolower($sDescription)));
+		}
+
 		try
 		{
-			return (int) $this->db->setQuery($q)->loadResult() <= 1;
+			// Regardless of where we look, if we find it more then once there's a duplicate
+			return $this->db->setQuery($q)->loadResult() <= 1;
 		}
 		catch (Exception $e)
 		{
@@ -950,49 +1236,87 @@ class PlgSystemPWTSEO extends CMSPlugin
 	}
 
 	/**
-	 * Retrieve the values of given tags for the document
+	 * Process an custom url. Depending on the step, different data is returned because we process data in two seperate steps.
 	 *
-	 * @param   DOMDocument $oDoc  The document which holds the tags
-	 * @param   array       $aTag  An array of tags to search through
-	 * @param   array       $aKeys The keys to get from the tags
+	 * @param   array $aData The request data
+	 * @param   int   $iStep The step to get the data for
 	 *
-	 * @return  array
+	 * @return  array The array with data required for the processing
 	 *
-	 * @since   1.0
+	 * @since   1.2.0
 	 */
-	private function getTagValuesByKeys(DOMDocument $oDoc, $aTag, $aKeys = array())
+	protected function processCustom($aData, $iStep = 1)
 	{
-		$aReturn = array();
+		$aArr = array();
+		$iId  = (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
 
-		foreach ((array) $aTag as $sTag)
+		if ($iStep === 2)
 		{
-			/** @var DOMNodeList $aNodeList */
-			$aNodeList = $oDoc->getElementsByTagName($sTag);
+			$aArr['page_title_unique']    = $this->isTitleUnique($aData['title'], $iId);
+			$aArr['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
+			$aArr['new_url']              = Uri::root(true, $aData['url']);
 
-			/** @var DOMNode $oNode */
-			foreach ($aNodeList as $oNode)
-			{
-				$aTmp = array();
-
-				array_walk(
-					$aKeys,
-					function ($sKey) use (&$aTmp, $oNode)
-					{
-						if (isset($oNode->{$sKey}))
-						{
-							$aTmp[$sKey] = (string) $oNode->{$sKey};
-						}
-						else
-						{
-							$aTmp[$sKey] = (string) $oNode->getAttribute($sKey);
-						}
-					}
-				);
-
-				$aReturn[] = $aTmp;
-			}
+			$count         = $this->findUsages($aData['pwtseo']['focus_word'], $iId);
+			$aArr['count'] = $count > 1 ? $count - 1 : 0;
 		}
 
-		return $aReturn;
+		return $aArr;
+	}
+
+	/**
+	 * Process a menu item. Depending on the step, different data is returned because we process data in two seperate steps.
+	 *
+	 * @param   array $aData The request data
+	 * @param   int   $iStep The step to get the data for
+	 *
+	 * @return  array The array with data required for the processing
+	 *
+	 * @since   1.2.0
+	 */
+	protected function processMenuItem($aData, $iStep = 1)
+	{
+		$aArr = array();
+		$iId  = (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
+
+		if ($iStep === 1)
+		{
+			// We have to decode/encode to support Hebrew and similar languages
+			$aArr['url'] = Uri::root(
+				true,
+				str_replace(
+					'%2F',
+					'/',
+					rawurlencode(
+						urldecode(
+							Route::_('index.php?Itemid=' . $aData['id'])
+						)
+					)
+				)
+			);
+
+
+			$aArr['reachable'] = $this->isReachable($aArr['url']);
+			$aArr['count']     = $this->findUsages($aData['pwtseo']['focus_word'], $iId);
+		}
+
+		if ($iStep === 2)
+		{
+			$aArr['page_title_unique']    = $this->isTitleUnique($aData['title'], $iId);
+			$aArr['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
+			$aArr['new_url']              = Uri::root(
+				true,
+				str_replace(
+					'%2F',
+					'/',
+					rawurlencode(
+						urldecode(
+							Route::_('index.php?Itemid=' . $aData['id'])
+						)
+					)
+				)
+			);
+		}
+
+		return $aArr;
 	}
 }

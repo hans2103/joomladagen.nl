@@ -92,10 +92,10 @@ HTMLHelper::_('formbehavior.chosen', 'select');
                         <td>
 							<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'articles.', false, 'cb', $item->publish_up, $item->publish_down); ?>
                         </td>
-                        <td class="nowrap has-context">
+                        <td class="has-context">
                             <div class="pull-left">
 								<?php if ($item->checked_out) : ?>
-									<?php echo HTMLHelper::_('jgrid.checkedout', $i, '', $item->checked_out_time); ?>
+									<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time); ?>
 								<?php endif; ?>
 								<?php if ($canEdit) : ?>
                                     <a href="<?php echo Route::_('index.php?option=com_content&task=article.edit&id=' . (int) $item->id . '&return=' . $return); ?>">

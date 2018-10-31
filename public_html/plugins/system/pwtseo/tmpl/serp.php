@@ -18,6 +18,6 @@ defined('_JEXEC') or die;
     <div class="pseo-serp">
         <div class="pseo-serp__title js-serp-title">{{ page.pagetitle | truncate({length: 70}) }}</div>
         <div class="pseo-serp__url js-serp-ext-url">{{ page.new_url }}</div>
-        <div class="pseo-serp__description js-serp-description">{{ page.metadesc | truncate({length: 150}) }}</div>
+        <div class="pseo-serp__description js-serp-description">{{ page.metadesc | truncate({length: 300}) }}</div>
     </div>
 </div>

@@ -1358,6 +1358,7 @@ class Com_CsviMaintenance
 		jimport('joomla.filesystem.folder');
 		jimport('joomla.filesystem.file');
 		$userExistingRules = $input->get('useexistingrules', 1);
+		$enableDebugLog = $input->get('enablelog', 0);
 
 		if (empty($filename))
 		{
@@ -1409,7 +1410,7 @@ class Com_CsviMaintenance
 				$templateTable->set('action', $template['action']);
 				$templateTable->set('frontend', $template['frontend']);
 				$templateTable->set('secret', $template['secret']);
-				$templateTable->set('log', $template['log']);
+				$templateTable->set('log', ($enableDebugLog) ? $enableDebugLog : $template['log']);
 				$templateTable->set('lastrun', $template['lastrun']);
 				$templateTable->set('enabled', $template['enabled']);
 				$templateTable->set('ordering', $template['ordering']);
@@ -1823,7 +1824,7 @@ class Com_CsviMaintenance
 				if ($loadIndex && $loadRemoteIndex)
 				{
 					// ICEcat index file
-					$icecat_url = $settings->get('ice_index', 'http://data.icecat.biz/export/freexml.int/INT/files.index.csv');
+					$icecat_url = $settings->get('ice_index', 'https://data.icecat.biz/export/freexml.int/INT/files.index.csv');
 
 					if ($icecat_gzip)
 					{
@@ -1845,7 +1846,7 @@ class Com_CsviMaintenance
 				if ($loadSupplier && $loadRemoteSupplier)
 				{
 					// Load the manufacturer data
-					$icecat_mf = $settings->get('ice_supplier', 'http://data.icecat.biz/export/freexml.int/INT/supplier_mapping.xml');
+					$icecat_mf = $settings->get('ice_supplier', 'https://data.icecat.biz/export/freexml.int/INT/supplier_mapping.xml');
 
 					if ($icecat_gzip)
 					{
@@ -2177,7 +2178,9 @@ class Com_CsviMaintenance
 					. $this->db->quoteName('high_pic_height') . ','
 					. $this->db->quoteName('m_supplier_id') . ','
 					. $this->db->quoteName('m_supplier_name') . ','
-					. $this->db->quoteName('ean_upc_is_approved')
+					. $this->db->quoteName('ean_upc_is_approved') . ','
+					. $this->db->quoteName('Limited') . ','
+					. $this->db->quoteName('Date_Added')
 				);
 
 			if (($handle = fopen($icecat_index_file, "r")) !== false)
@@ -2193,7 +2196,7 @@ class Com_CsviMaintenance
 				{
 					if ($row < $records)
 					{
-						$data = fgetcsv($handle, 2048, "\t");
+						$data = fgetcsv($handle, 4096, "\t");
 
 						if ($data)
 						{
@@ -2314,6 +2317,7 @@ class Com_CsviMaintenance
 			'csvi_templatefields',
 			'csvi_templatefields_rules',
 			'csvi_templates',
+			'csvi_templates_rules',
 			'csvi_template_fields_combine',
 			'csvi_template_fields_replacement'
 		);
@@ -2359,38 +2363,42 @@ class Com_CsviMaintenance
 		// Get a list of example templates to install
 		$components = $this->csvihelper->getComponents();
 		jimport('joomla.filesystem.file');
+		$selectedComponents = $input->get('addons', '', 'array');
 
 		foreach ($components as $component)
 		{
-			// Process all extra available fields
-			$extension = substr($component->value, 4);
-			$filename  = JPATH_PLUGINS . '/csviaddon/' . $extension . '/' . $component->value . '/install/templates.xml';
-
-			if (JFile::exists($filename))
+			if (in_array($component->value, $selectedComponents))
 			{
-				// Check if the component is installed
-				if (substr($component->value, 0, 4) == 'com_')
-				{
-					$query = $this->db->getQuery(true)
-						->select($this->db->quoteName('extension_id'))
-						->from($this->db->quoteName('#__extensions'))
-						->where($this->db->quoteName('element') . ' = ' . $this->db->quote($component->value));
-					$this->db->setQuery($query);
-					$ext_id = $this->db->loadResult();
-				}
-				else
-				{
-					$ext_id = true;
-				}
+				// Process all extra available fields
+				$extension = substr($component->value, 4);
+				$filename  = JPATH_PLUGINS . '/csviaddon/' . $extension . '/' . $component->value . '/install/templates.xml';
 
-				if ($ext_id)
+				if (JFile::exists($filename))
 				{
-					$this->log->add('Processing template file ' . $filename);
-
-					// Install the templates
-					if ($this->restoreTemplates($input, 0, $filename))
+					// Check if the component is installed
+					if (substr($component->value, 0, 4) == 'com_')
 					{
-						$this->log->addStats('added', JText::sprintf('COM_CSVI_ADDED_EXAMPLE_TEMPLATEFILE', JText::_('COM_CSVI_' . $component->value)));
+						$query = $this->db->getQuery(true)
+							->select($this->db->quoteName('extension_id'))
+							->from($this->db->quoteName('#__extensions'))
+							->where($this->db->quoteName('element') . ' = ' . $this->db->quote($component->value));
+						$this->db->setQuery($query);
+						$ext_id = $this->db->loadResult();
+					}
+					else
+					{
+						$ext_id = true;
+					}
+
+					if ($ext_id)
+					{
+						$this->log->add('Processing template file ' . $filename);
+
+						// Install the templates
+						if ($this->restoreTemplates($input, 0, $filename))
+						{
+							$this->log->addStats('added', JText::sprintf('COM_CSVI_ADDED_EXAMPLE_TEMPLATEFILE', JText::_('COM_CSVI_' . $component->value)));
+						}
 					}
 				}
 			}

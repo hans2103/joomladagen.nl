@@ -3,12 +3,11 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Layout\FileLayout;
@@ -39,22 +38,8 @@ class PwtimageFormFieldCanvas extends FormField
 	 */
 	protected function getInput()
 	{
-		// Load the component parameters
-		$parameters = ComponentHelper::getParams('com_pwtimage');
-
 		// Setup variables for display.
-		$html        = array();
-
-		$ratio       = !isset($this->element['ratio']) ? '' : (string) $this->element['ratio'];
-		$width       = !isset($this->element['width']) ? '400' : (string) $this->element['width'];
-		$sourcePath  = !isset($this->element['sourcePath']) ? $parameters->get('sourcePath', '/images') : (string) $this->element['sourcePath'];
-		$subPath     = !isset($this->element['subPath']) ? $parameters->get('subPath', '{year}/{month}') : (string) $this->element['subPath'];
-		$showFolder  = !isset($this->element['showFolder']) ? $parameters->get('showFolder', false) : ((string) $this->element['showFolder'] === 'false' ? false : true);
-		$showTools   = !isset($this->element['showTools']) ? $parameters->get('showTools', true) : ((string) $this->element['showTools'] === 'false' ? false : true);
-		$activePage  = !isset($this->element['activePage']) ? 'upload' : (string) $this->element['activePage'];
-		$multiple    = !isset($this->element['multiple']) ? false : ((string) $this->element['multiple'] === 'false' ? false : true);
-		$showGallery = !isset($this->element['showGallery']) ? $parameters->get('showGallery', false) : ((string) $this->element['showGallery'] === 'false' ? false : true);
-		$showHelp    = !isset($this->element['showHelp']) ? $parameters->get('showHelp', true) : ((string) $this->element['showHelp'] === 'false' ? false : true);
+		$html = array();
 
 		if (!is_array($this->value))
 		{
@@ -77,22 +62,108 @@ class PwtimageFormFieldCanvas extends FormField
 			// Set the actions
 			$canDo = ContentHelper::getActions('com_pwtimage');
 
-			// Set the PWT Image data
+			// Set the PWT Image basic data
 			$data = array(
 				'id'           => (string) $modalId,
-				'ratio'        => $ratio,
-				'width'        => $width,
-				'sourcePath'   => $sourcePath,
-				'subPath'      => $subPath,
-				'showFolder'   => $showFolder,
-				'showTools'    => $showTools,
-				'activePage'   => $activePage,
 				'imagePreview' => $value,
-				'multiple'     => $multiple,
-				'showGallery'  => $showGallery,
-				'showHelp'     => $showHelp,
 				'canDo'        => $canDo
 			);
+
+			// Add the options
+			if (isset($this->element['ratio']))
+			{
+				$data['ratio'] = (string) $this->element['ratio'];
+			}
+
+			if (isset($this->element['freeRatio']))
+			{
+				$data['freeRatio'] = (string) $this->element['freeRatio'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['keepOriginal']))
+			{
+				$data['keepOriginal'] = (string) $this->element['keepOriginal'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['width']))
+			{
+				$data['width'] = (string) $this->element['width'];
+			}
+
+			if (isset($this->element['sourcePath']))
+			{
+				$data['sourcePath'] = (string) $this->element['sourcePath'];
+			}
+
+			if (isset($this->element['subPath']))
+			{
+				$data['subPath'] = (string) $this->element['subPath'];
+			}
+
+			if (isset($this->element['showUpload']))
+			{
+				$data['showUpload'] = (string) $this->element['showUpload'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showFolder']))
+			{
+				$data['showFolder'] = (string) $this->element['showFolder'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showSavePath']))
+			{
+				$data['showSavePath'] = (string) $this->element['showSavePath'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showSavePathSelect']))
+			{
+				$data['showSavePathSelect'] = (string) $this->element['showSavePathSelect'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['toCanvas']))
+			{
+				$data['toCanvas'] = (string) $this->element['toCanvas'] === 'true' ? true : false;
+			}
+
+			if (isset($this->element['showRotationTools']))
+			{
+				$data['showRotationTools'] = (string) $this->element['showRotationTools'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showFlippingTools']))
+			{
+				$data['showFlippingTools'] = (string) $this->element['showFlippingTools'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showZoomTools']))
+			{
+				$data['showZoomTools'] = (string) $this->element['showZoomTools'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['activePage']))
+			{
+				$data['activePage'] = (string) $this->element['activePage'];
+			}
+
+			if (isset($this->element['multiple']))
+			{
+				$data['multiple'] = (string) $this->element['multiple'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['showHelp']))
+			{
+				$data['showHelp'] = (string) $this->element['showHelp'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['viewMode']))
+			{
+				$data['viewMode'] = (int) $this->element['viewMode'];
+			}
+
+			if (isset($this->element['backgroundColor']))
+			{
+				$data['backgroundColor'] = (string) $this->element['backgroundColor'];
+			}
 
 			// Render PWT Image
 			$html[] = $cropperLayout->render($data);

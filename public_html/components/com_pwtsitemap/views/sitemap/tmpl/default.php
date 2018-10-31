@@ -14,13 +14,18 @@ defined('_JEXEC') or die;
 $level = 1;
 ?>
 
-<div class="pwtsitemap">
+<div class="pwtsitemap<?php echo $this->pageclass_sfx; ?>">
 	<?php if ($this->params->get('show_page_heading')) : ?>
 		<div class="page-header">
 			<h1><?php echo $this->escape($this->params->get('page_title')); ?></h1>
 		</div>
 	<?php endif; ?>
-	<ul class="sitemap-list">
+
+	<?php if ($this->params->get('introtext')): ?>
+		<p class="sitemap-intro"><?php echo $this->params->get('introtext'); ?></p>
+	<?php endif; ?>
+
+    <ul class="sitemap-list">
 		<?php foreach ($this->sitemap as $sitemap) : ?>
 			<?php foreach ($sitemap as $item) : ?>
 				<?php if ($level > $item->level) : ?>

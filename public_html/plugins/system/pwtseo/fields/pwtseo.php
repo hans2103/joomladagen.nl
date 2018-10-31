@@ -10,6 +10,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -80,6 +81,13 @@ class JFormFieldPWTSeo extends FormField
 		$dispatcher = JEventDispatcher::getInstance();
 		$dispatcher->trigger('onContentPrepareForm', array(&$form, array()));
 
+		if (ComponentHelper::isEnabled('com_pwtimage') && $this->params->get('enable_pwtimage', 1))
+		{
+			$form->setFieldAttribute('facebook_image', 'type', 'pwtimage.image', 'pwtseo');
+			$form->setFieldAttribute('twitter_image', 'type', 'pwtimage.image', 'pwtseo');
+			$form->setFieldAttribute('google_image', 'type', 'pwtimage.image', 'pwtseo');
+		}
+
 		// Now we update the original form with all our fields
 		$fieldsets = $form->getFieldsets();
 
@@ -95,21 +103,26 @@ class JFormFieldPWTSeo extends FormField
 					continue;
 				}
 
-				$xml = $form->getFieldXml($field->getAttribute('name'), 'seo');
+				$xml = $form->getFieldXml($field->getAttribute('name'), 'pwtseo');
 
-				$this->form->setField($xml, '', true, $set->name);
+				if ($xml)
+				{
+					$this->form->setField($xml, '', true, $set->name);
+				}
 			}
 		}
 
 		echo $this->form->renderFieldset('left-side');
+		echo $this->form->renderFieldset('basic_og');
 
 		if ($this->params->get('advanced_mode'))
 		{
+			if (!$this->form->getValue('articletitleselector', 'pwtseo'))
+			{
+				$this->form->setValue('articletitleselector', 'pwtseo', $form->getValue('articletitleselector', 'pwtseo'));
+			}
+
 			echo $this->form->renderFieldset('advanced_og');
-		}
-		else
-		{
-			echo $this->form->renderFieldset('basic_og');
 		}
 
 		include JPATH_PLUGINS . '/system/pwtseo/tmpl/requirements.php';

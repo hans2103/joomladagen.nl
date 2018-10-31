@@ -2,15 +2,15 @@
 <extension version="3.8" type="plugin" group="system" method="upgrade">
     <name>PLG_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>15 March 2018</creationDate>
+    <creationDate>27 July 2018</creationDate>
     <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
     <description>PLG_PWTSEO_XML_DESCRIPTION</description>
 
-	<files>
+    <files>
         <folder>fields</folder>
         <folder>form</folder>
         <folder>language</folder>
@@ -47,10 +47,14 @@
         </schemas>
     </update>
 
-	<config>
-		<fields name="params">
+    <config>
+        <fields name="params">
 
-			<fieldset name="basic">
+            <fieldset name="basic">
+                <field
+                        type="hidden"
+                        name="plg_system_pwtseo"
+                />
                 <field
                         name="advanced_mode"
                         type="list"
@@ -58,7 +62,7 @@
                         description="PLG_SYSTEM_PWTSEO_PARAMS_ADVANCED_DESC"
                         filter="intval"
                         size="1"
-                        default="0" >
+                        default="0">
                     <option value="1">
                         JYES
                     </option>
@@ -84,47 +88,58 @@
                 </field>-->
 
                 <field
-                    name="show_counters"
-                    type="list"
-                    label="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_LABEL"
-                    description="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_DESC"
-                    filter="intval"
-                    size="1"
-                    default="1" >
-                    <option value="1">
-                        JYES
-                    </option>
-                    <option value="0">
-                        JNO
-                    </option>
-                </field>
-
-                <field
-                    name="set_canonical"
-                    type="list"
-                    label="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_LABEL"
-                    description="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_DESC"
-                    filter="intval"
-                    size="1"
-                    default="1" >
-                    <option value="1">
-                        JYES
-                    </option>
-                    <option value="0">
-                        JNO
-                    </option>
-                </field>
-
-                <field
-                        name="poll_interval"
-                        type="number"
-                        label="PLG_SYSTEM_PWTSEO_PARAMS_POLL_INTERVAL_LABEL"
-                        description="PLG_SYSTEM_PWTSEO_PARAMS_POLL_INTERVAL_DESC"
+                        name="show_counters"
+                        type="list"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_COUNTERS_DESC"
                         filter="intval"
-                        default="30" />
-			</fieldset>
+                        size="1"
+                        default="1">
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+                <field
+                        name="set_canonical"
+                        type="list"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_DESC"
+                        filter="intval"
+                        size="1"
+                        default="1">
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+                <field name="basic_spacer_1" type="spacer" hr="true"/>
+
+                <field
+                        name="enable_pwtimage"
+                        type="list"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_ENABLE_PWTIMAGE_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_ENABLE_PWTIMAGE_DESC"
+                        filter="intval"
+                        size="1"
+                        default="1">
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+            </fieldset>
             <fieldset name="advanced">
-                <field name="spacer_1" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_TITLE_LABEL" />
+                <field name="spacer_1" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_TITLE_LABEL"/>
 
                 <field
                         name="count_min_title"
@@ -132,7 +147,7 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_DESC"
                         filter="intval"
-                        default="40" />
+                        default="40"/>
 
                 <field
                         name="count_max_title"
@@ -140,9 +155,9 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_DESC"
                         filter="intval"
-                        default="50" />
+                        default="50"/>
 
-                <field name="spacer_2" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_METADESC_LABEL" />
+                <field name="spacer_2" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_METADESC_LABEL"/>
 
                 <field
                         name="count_min_metadesc"
@@ -150,7 +165,8 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_DESC"
                         filter="intval"
-                        default="100" />
+                        default="100"
+                />
 
                 <field
                         name="count_max_metadesc"
@@ -158,8 +174,24 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_DESC"
                         filter="intval"
-                        default="150" />
+                        default="150"
+                />
+
+                <field name="spacer_3" type="spacer"
+                       label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_ARTICLETITLESELECTOR_LABEL"/>
+
+                <field
+                        name="articletitleselector"
+                        type="text"
+                        label="PLG_SYSTEM_PWTSEO_FORM_ARTICLE_TITLE_SELECTOR_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_FORM_ARTICLE_TITLE_SELECTOR_DESC"
+                        default=""
+                />
+
             </fieldset>
-		</fields>
-	</config>
+            <fieldset name="lang">
+            </fieldset>
+
+        </fields>
+    </config>
 </extension>

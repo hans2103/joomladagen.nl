@@ -74,7 +74,7 @@ class PwtSitemapViewDashboard extends JViewLegacy
 	 */
 	private function toolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_PWTSITEMAP'). ": " . JText::_('COM_PWTSITEMAP_TITLE_DASHBOARD'), 'tree');
+		JToolBarHelper::title( JText::_('COM_PWTSITEMAP_TITLE_DASHBOARD'), 'pwtsitemap');
 
 		JToolbarHelper::preferences('com_pwtsitemap');
 	}

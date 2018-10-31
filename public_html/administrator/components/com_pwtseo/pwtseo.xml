@@ -2,12 +2,12 @@
 <extension version="3.8" type="component" method="upgrade">
     <name>COM_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>15 March 2018</creationDate>
+    <creationDate>27 July 2018</creationDate>
     <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
     <description>COM_PWTSEO_XML_DESCRIPTION</description>
 
     <!-- Runs on install -->
@@ -40,6 +40,7 @@
             -->
             <menu view="articles" link="option=com_pwtseo&amp;view=articles">COM_PWTSEO_MENU_ARTICLES_LABEL</menu>
             <menu view="customs" link="option=com_pwtseo&amp;view=customs">COM_PWTSEO_MENU_CUSTOMS_LABEL</menu>
+            <menu view="customs" link="option=com_pwtseo&amp;view=menus">COM_PWTSEO_MENU_MENUS_LABEL</menu>
         </submenu>
 
         <!-- Core files -->

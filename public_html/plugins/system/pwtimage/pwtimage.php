@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die;
 
@@ -33,6 +34,30 @@ class PlgSystemPwtimage extends CMSPlugin
 	 * @since  1.0
 	 */
 	protected $app;
+
+	/**
+	 * Database driver
+	 *
+	 * @var    JDatabaseDriverMysqli
+	 * @since  1.1.0
+	 */
+	protected $db;
+
+	/**
+	 * List of extension fields to convert
+	 *
+	 * @var    array
+	 * @since  1.1.0
+	 */
+	private $extensions = array();
+
+	/**
+	 * Holds the current group the fields belong to
+	 *
+	 * @var    string
+	 * @since  1.1.0
+	 */
+	private $fieldGroup = '';
 
 	/**
 	 * @var    String  base update url, to decide whether to process the event or not
@@ -53,7 +78,47 @@ class PlgSystemPwtimage extends CMSPlugin
 	 *
 	 * @since  1.0.0
 	 */
-	private $extensiontitle = 'PWT Image';
+	private $extensionTitle = 'PWT Image';
+
+	/**
+	 * Constructor
+	 *
+	 * @param   object  $subject  The object to observe
+	 * @param   array   $config   An optional associative array of configuration settings.
+	 *                            Recognized key values include 'name', 'group', 'params', 'language'
+	 *                            (this list is not meant to be comprehensive).
+	 *
+	 * @since   1.0
+	 */
+	public function __construct(&$subject, array $config = array())
+	{
+		parent::__construct($subject, $config);
+	}
+
+	/**
+	 * Load the list of extensions to apply to the media fields.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.1.0
+	 */
+	private function loadExtensions()
+	{
+		$db = $this->db;
+
+		// Load all the profiles
+		$query = $db->getQuery(true)
+			->select($db->quoteName('extensions.path'))
+			->from($db->quoteName('#__pwtimage_extensions', 'extensions'))
+			->leftJoin(
+				$db->quoteName('#__pwtimage_profiles', 'profiles')
+				. ' ON ' . $db->quoteName('profiles.id') . ' = ' . $db->quoteName('extensions.profile_id')
+			)
+			->where($db->quoteName('profiles.published') . ' = 1');
+		$db->setQuery($query);
+
+		$this->extensions = $db->loadColumn();
+	}
 
 	/**
 	 * Event method that runs on content preparation
@@ -77,53 +142,245 @@ class PlgSystemPwtimage extends CMSPlugin
 			return false;
 		}
 
+		// Check if we have any extensions to replace
+		$this->loadExtensions();
+
+		if (empty($this->extensions))
+		{
+			return true;
+		}
+
 		// Set that field path is not yet set
 		$fieldPath = false;
 
-		// Run through the form to find any media fields
-		/** @var SimpleXMLElement $item */
-		foreach ($form->getXml() as $item)
+		// Build the extension identifier
+		$identifier   = array();
+		$option       = $this->app->input->get('option');
+		$all          = in_array('all', $this->extensions);
+
+		// Check if we are in com_modules
+		if ($option === 'com_modules')
 		{
-			// Find the fields
-			if (isset($item->fieldset))
+			$option = $this->getModuleName($this->app->input->get('id'));
+		}
+		elseif ($option === 'com_config')
+		{
+			$option = $this->app->input->get('component');
+		}
+
+		// Set the main identifier
+		$identifier[] = $option;
+
+		// Run through the form to find any media fields
+		foreach ($form->getXml() as $set => $item)
+		{
+			// Find the fields for this item
+			$fieldCollection = $this->findFields($item, $set);
+
+			// Check to see if we have any fields
+			if (!$fieldCollection)
 			{
-				$fields = $item->xpath('fieldset/field');
-			}
-			elseif (isset($item->field))
-			{
-				$fields = $item->xpath('field');
-			}
-			else
-			{
-				$fields = $item;
+				continue;
 			}
 
 			/** @var SimpleXMLElement $field */
-			foreach ($fields as $field)
+			foreach ($fieldCollection as $groupName => $fields)
 			{
-				// Check if we have a media type field
-				if (!((string) $field->attributes()->type === 'media'))
+				switch ($fields['path'])
 				{
-					continue;
+					case 'fieldset/fields':
+					case 'fieldset':
+						$name = (string) $item->attributes()->name;
+
+						if (!$this->fieldGroup && $name)
+						{
+							$this->fieldGroup = $name;
+						}
+
+						if (!$name)
+						{
+							$name = (string) $item->fieldset->attributes()->name;
+						}
+
+						$identifier[] = $name;
+						break;
+					case 'fields/fieldset':
+					case 'fields':
+						$this->fieldGroup = (string) $item->fields->attributes()->name;
+						$identifier[]     = $this->fieldGroup;
+						break;
+					case 'field':
+						$this->fieldGroup = $groupName;
+						break;
 				}
 
-				$form->setFieldAttribute((string) $field->attributes()->name, 'type', 'pwtimage.image', (string) $item->attributes()->name);
-
-				if (!$fieldPath)
+				foreach ($fields['fields'] as $field)
 				{
-					$form->setFieldAttribute(
-						(string) $field->attributes()->name,
-						'addfieldpath',
-						'components/com_pwtimage/models/fields',
-						(string) $item->attributes()->name
-					);
+					$attributes = $field->attributes();
 
-					$fieldPath = true;
+					// Check if we have a media type field
+					if (!((string) $attributes->type === 'media') && !((string) $attributes->type === 'pwtimage.image'))
+					{
+						continue;
+					}
+
+					// Build
+					if ($groupName)
+					{
+						$identifier[] = $groupName;
+					}
+					elseif ($set === 'fieldset')
+					{
+						$identifier[] = (string) $item->attributes()->name;
+					}
+
+					// Set the field name
+					$identifier[] = (string) $field->attributes()->name;
+
+					/**
+                     * If we in com_content, and we have a profile for a specific category, load that one instead.
+                     * With a fallback to general com_content
+                     */
+					if ($option === 'com_content')
+                    {
+                        // Depending on the alignment of celestial bodies (ugh) data can be either array or object
+                        $isArray = is_array($data);
+
+                        $data = (object) $data;
+
+                        if (isset($data->catid) && $data->catid > 0)
+                        {
+                            if (in_array(implode('.', $identifier) . '.' . $data->catid, $this->extensions))
+                            {
+                                $identifier[] = $data->catid;
+                            }
+                        }
+
+                        $data = $isArray ? (array) $data : $data;
+                    }
+
+					// If there is a profile that applies to all fields or if the identifier is matched we set the field
+					if ($all || in_array(implode('.', $identifier), $this->extensions))
+					{
+						$form->setFieldAttribute(
+							(string) $attributes->name,
+							'type',
+							'pwtimage.image',
+							$this->fieldGroup
+						);
+
+						$form->setFieldAttribute(
+							(string) $attributes->name,
+							'origin',
+							(implode('.', $identifier) ?: 'all'),
+							$this->fieldGroup
+						);
+
+						if (!$fieldPath)
+						{
+							$form->setFieldAttribute(
+								(string) $attributes->name,
+								'addfieldpath',
+								'components/com_pwtimage/models/fields',
+								$this->fieldGroup
+							);
+
+							$fieldPath = true;
+						}
+					}
+
+					// Clean the identifier list back to component
+					$identifier = array(reset($identifier));
 				}
+
+				// Clean the identifier list back to component
+				$identifier = array(reset($identifier));
 			}
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get the fields from the different XPaths.
+	 *
+	 * @param   SimpleXMLElement  $item  The item to check for paths
+	 * @param   string            $set   The parent group name
+	 *
+	 * @return  array  List of fields.
+	 *
+	 * @since   1.1.0
+	 */
+	private function findFields($item, $set)
+	{
+		$fieldCollection = array();
+		$paths  = array(
+			'fieldset/fields',
+			'fields/fieldset',
+			'fieldset',
+			'fields',
+		);
+
+		// First find the groups
+		foreach ($paths as $index => $path)
+		{
+			$groups = $item->xpath($path);
+
+			if ($groups)
+			{
+				foreach ($groups as $group)
+				{
+					$groupName = (string) $group->attributes()->name;
+
+					$fieldCollection[$groupName]['path']   = $path;
+					$fieldCollection[$groupName]['fields'] = $group->xpath('field');
+				}
+
+				break;
+			}
+		}
+
+		// Second find the fields
+		if (empty($fieldCollection))
+		{
+			$fields = $item->xpath('field');
+
+			if ($fields)
+			{
+				$groupName = '';
+
+				if ($set !== 'fieldset')
+				{
+					$groupName = (string) $item->attributes()->name;
+				}
+
+				$fieldCollection[$groupName]['path']   = 'field';
+				$fieldCollection[$groupName]['fields'] = $fields;
+			}
+		}
+
+		return $fieldCollection;
+	}
+
+	/**
+	 * Find the real module name.
+	 *
+	 * @param   int  $moduleId  The ID of the module
+	 *
+	 * @return  string  The module name.
+	 *
+	 * @since   1.1.0
+	 */
+	private function getModuleName($moduleId)
+	{
+		$db = $this->db;
+		$query = $db->getQuery(true)
+			->select($db->quoteName('module'))
+			->from($db->quoteName('#__modules'))
+			->where($db->quoteName('id') . ' = ' . (int) $moduleId);
+		$db->setQuery($query);
+
+		return $db->loadResult();
 	}
 
 	/**
@@ -136,7 +393,10 @@ class PlgSystemPwtimage extends CMSPlugin
 	public function onAfterRender()
 	{
 		// Only run on frontend, do not run when we are in AJAX mode
-		if ($this->app->isClient('administrator') || $this->app->input->get('format') === 'json')
+		if ($this->app->isClient('administrator')
+			|| $this->app->input->get('format') === 'json'
+			|| ($this->app->input->get('layout') === 'edit')
+		)
 		{
 			return;
 		}
@@ -236,7 +496,7 @@ class PlgSystemPwtimage extends CMSPlugin
 							'caption' => $caption
 						);
 
-						$layout = new FileLayout('image', JPATH_SITE . '/components/com_pwtimage/layouts');
+						$layout = new FileLayout('image', null, array('debug' => JDEBUG, 'component' => 'com_pwtimage'));
 						$embed  = $layout->render($data);
 
 						$text = str_replace($matches[0][$i], $embed, $text);
@@ -271,39 +531,40 @@ class PlgSystemPwtimage extends CMSPlugin
 		$jLanguage->load('com_pwtimage', JPATH_ADMINISTRATOR . '/components/com_pwtimage/', 'en-GB', true, true);
 		$jLanguage->load('com_pwtimage', JPATH_ADMINISTRATOR . '/components/com_pwtimage/', null, true, false);
 
-		// Get the Download ID from component params
-		$downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
+        // Append key to url if not set yet
+        if (strpos($url, 'key') == false)
+        {
+            // Get the Download ID from component params
+            $downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
 
-		// Set Download ID first
-		if (empty($downloadId))
-		{
-			Factory::getApplication()->enqueueMessage(
-				Text::sprintf('COM_PWTIMAGE_DOWNLOAD_ID_REQUIRED',
-					$this->extension,
-					$this->extensiontitle
-				),
-				'error'
-			);
+            // Check if Download ID is set
+            if (empty($downloadId))
+            {
+                Factory::getApplication()->enqueueMessage(
+                    Text::sprintf('COM_PWTIMAGE_DOWNLOAD_ID_REQUIRED',
+                        $this->extension,
+                        $this->extensionTitle
+                    ),
+                    'error'
+                );
 
-			return true;
-		}
-		// Append the Download ID
-		else
-		{
-			$separator = strpos($url, '?') !== false ? '&' : '?';
-			$url       .= $separator . 'key=' . $downloadId;
-		}
+                return true;
+            }
 
-		// Get the clean domain
-		$domain = '';
+            // Append the Download ID from component options
+            $separator = strpos($url, '?') !== false ? '&' : '?';
+            $url       .= $separator . 'key=' . $downloadId;
+        }
 
-		if (preg_match('/\w+\..{2,3}(?:\..{2,3})?(?:$|(?=\/))/i', Uri::base(), $matches) === 1)
-		{
-			$domain = $matches[0];
-		}
+        // Append domain to url if not set yet
+        if (strpos($url, 'domain') == false)
+        {
+            // Get the domain for this site
+            $domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
 
-		// Append domain
-		$url .= '&domain=' . $domain;
+            // Append domain
+            $url .= '&domain=' . $domain;
+        }
 
 		return true;
 	}

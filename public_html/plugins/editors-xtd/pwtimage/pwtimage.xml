@@ -2,12 +2,12 @@
 <extension version="3.8" type="plugin" group="editors-xtd" method="upgrade">
     <name>PLG_PWTIMAGE</name>
     <author>Perfect Web Team</author>
-    <creationDate>17 November 2017</creationDate>
-    <copyright>Copyright (C) 2016 - 2017 Perfect Web Team</copyright>
+    <creationDate>20 October 2018</creationDate>
+    <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.0.0</version>
+    <version>1.3.0</version>
     <description>PLG_PWTIMAGE_XML_DESCRIPTION</description>
 
     <scriptfile>script.php</scriptfile>
@@ -19,53 +19,23 @@
 
     <config>
         <fields name="params">
-            <fieldset name="basic">
+            <fieldset name="basic" addfieldpath="components/com_pwtimage/models/fields">
                 <field
-                        name="showFolder"
-                        type="radio"
-                        label="PLG_PWTIMAGE_CONFIG_SHOWFOLDER_LABEL"
-                        description="PLG_PWTIMAGE_CONFIG_SHOWFOLDER_DESC"
-                        default="0"
-                        class="btn-group btn-group-yesno"
-                >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
+                        name="origin"
+                        type="pwtimage.profile"
+                        label="PLG_PWTIMAGE_XML_ORIGIN"
+                        description="PLG_PWTIMAGE_XML_ORIGIN_DESC"
+                />
 
                 <field
-                        name="showTools"
-                        type="radio"
-                        label="PLG_PWTIMAGE_FIELD_SHOWTOOLS_LABEL"
-                        description="PLG_PWTIMAGE_FIELD_SHOWTOOLS_DESC"
-                        default="1"
-                        class="btn-group btn-group-yesno"
-                >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
-<!--
-                <field
-                        name="showGallery"
-                        type="radio"
-                        label="PLG_PWTIMAGE_FIELD_GALLERY_LABEL"
-                        description="PLG_PWTIMAGE_FIELD_GALLERY_DESC"
+                        name="injecttype"
+                        type="list"
+                        label="PLG_PWTIMAGE_XML_TAGORIMAGE"
+                        description="PLG_PWTIMAGE_XML_TAGORIMAGE_DESC"
                         default="0"
-                        class="btn-group btn-group-yesno"
                 >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
-                </field>
--->
-                <field
-                        name="showHelp"
-                        type="radio"
-                        label="PLG_PWTIMAGE_FIELD_SHOWHELP_LABEL"
-                        description="PLG_PWTIMAGE_FIELD_SHOWHELP_DESC"
-                        default="1"
-                        class="btn-group btn-group-yesno"
-                >
-                    <option value="1">JYES</option>
-                    <option value="0">JNO</option>
+                    <option value="0">PLG_PWTIMAGE_XML_TAG</option>
+                    <option value="1">PLG_PWTIMAGE_XML_IMAGE</option>
                 </field>
             </fieldset>
         </fields>

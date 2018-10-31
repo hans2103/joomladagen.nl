@@ -86,9 +86,9 @@ class PWTSEOModelCustom extends AdminModel
 	 */
 	public function save($data)
 	{
-		if (isset($data['seo']))
+		if (isset($data['pwtseo']))
 		{
-			$data = array_merge($data, $data['seo']);
+			$data = array_merge($data, $data['pwtseo']);
 
 			// Due to form constraints, we have the wrong name on the field
 			$data['pwtseo_score'] = $data['seo_pwtseo_score'];
@@ -120,7 +120,7 @@ class PWTSEOModelCustom extends AdminModel
 
 		$uri = new Uri($url);
 
-		return rtrim($uri->getPath() ?: '/', '/');
+		return $uri->getPath();
 	}
 
 	/**
@@ -129,6 +129,7 @@ class PWTSEOModelCustom extends AdminModel
 	 * @return  mixed  The data for the form.
 	 *
 	 * @since   1.1.0
+	 * @throws  Exception
 	 */
 	protected function loadFormData()
 	{
@@ -142,7 +143,7 @@ class PWTSEOModelCustom extends AdminModel
 			$data = $this->getItem();
 		}
 
-		$data->seo = $data;
+		$data->pwtseo = clone $data;
 
 		return $data;
 	}

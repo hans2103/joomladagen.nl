@@ -1,150 +1,75 @@
 .seoscore {
-  box-sizing: border-box;
-  display: inline-block;
-  padding: 3px 8px;
-  line-height: 1em;
-  font-size: 12px;
-  border-radius: 2px;
-  background: #888;
-  text-align: center;
-  color: white; }
-
+	box-sizing: border-box;
+	display: inline-block;
+	padding: 3px 8px;
+	line-height: 1em;
+	font-size: 12px;
+	border-radius: 2px;
+	background: #888;
+	text-align: center;
+	color: white;
+}
 .seoscore-0 {
-  background-color: #e33f2d; }
-
+	background-color: #e33f2d;
+}
 .seoscore-1 {
-  background-color: #f09200; }
-
+	background-color: #f09200;
+}
 .seoscore-2 {
-  background-color: #1fa74f; }
-
-.pwt-component-section {
-	background: #f9f9f9;
-	border: 1px solid #f3f3f3;
-	padding-top: 16px;
-	padding-right: 16px;
-	padding-bottom: 16px;
-	padding-left: 16px;
+	background-color: #1fa74f;
 }
-
-@media screen and (min-width: 560px) {
-	.pwt-component-section {
-		padding-top: 24px;
-		padding-right: 24px;
-		padding-bottom: 24px;
-		padding-left: 24px;
-	}
+.com_pwtseo header.header {
+	background-image: url('../images/pwt-bg.jpg');
+	background-size: cover;
 }
-
-@media screen and (min-width: 1024px) {
-	.pwt-component-section {
-		padding-top: 32px;
-		padding-right: 32px;
-		padding-bottom: 32px;
-		padding-left: 32px;
-	}
+.com_pwtseo header.header .icon-pwtseo {
+	background-image: url('../images/pwt-seo.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	width: 105px;
+	height: 35px;
+	position: relative;
+	margin-bottom: -10px;
+	margin-right: 5px !important;
 }
-
-/* PWT branding */
-.pwt-section {
-	margin-bottom: 16px;
+.com_pwtseo .pwt-extensions {
+	font-size: 1.05em;
+	line-height: 130%;
 }
-
-.pwt-section:last-child {
+.com_pwtseo .pwt-extensions p:last-child {
 	margin-bottom: 0;
 }
-
-.pwt-section--border-top {
-	border-top: 1px solid #f3f3f3;
+.com_pwtseo .pwt-extensions .pwt-heading {
+	margin: 20px 0 8px;
+	font-size: 1.2em;
+	font-weight: 700;
+}
+.com_pwtseo .pwt-extensions .pwt-section {
+	margin-bottom: 16px;
+}
+.com_pwtseo .pwt-extensions .pwt-section:last-child {
+	margin-bottom: 0;
+}
+.com_pwtseo .pwt-extensions .pwt-section--border-top {
+	border-top: 1px solid #CCC;
 	padding-top: 16px;
 }
-
-.pwt-section--border-bottom {
-	border-bottom: 1px solid #f3f3f3;
-	padding-bottom: 16px;
+.com_pwtseo .pwt-extensions .pwt-extension-logo {
+	max-height: 75px;
 }
-
-/**
- * Button styling
- */
-.pwt-button {
-	-webkit-appearance: none;
-	display: inline-block;
-	vertical-align: middle;
-	cursor: pointer;
-	margin: 0 5px 0 0;
-	border-radius: 4px;
-	line-height: 24px;
-	padding: 3px 16px;
-	background: #f9f9f9;
-	border: 1px solid #c6c6c6;
-	box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
-	transition: background 200ms cubic-bezier(0.195, 0.4, 0.45, 0.785) 0ms;
-	/* Disabled styling */
+.com_pwtseo .pwt-extensions .btn-group-justified {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+	border-collapse: separate;
 }
-
-.pwt-button:last-child {
-	margin-right: 0;
+.com_pwtseo .pwt-extensions .btn-group-justified > .btn,
+.com_pwtseo .pwt-extensions .btn-group-justified > .btn-group {
+	display: table-cell;
+	float: none;
+	width: 1%;
 }
-
-.pwt-button:hover, .pwt-button:focus {
-	background: #e0e0e0;
-	text-decoration: none;
-}
-
-.pwt-button[disabled] {
-	-webkit-filter: grayscale(25%);
-	filter: grayscale(25%);
-	opacity: 0.5;
-	cursor: no-drop;
-}
-
-/* Primary actions */
-.pwt-button--primary {
-	background: #328cdb;
-	color: white;
-	border-color: #2172b9;
-}
-
-.pwt-button--primary:hover, .pwt-button--primary:focus {
-	background: #2172b9;
-	color: white;
-	text-decoration: none;
-}
-
-.pwt-button--primary[disabled]:hover, .pwt-button--primary[disabled]:focus {
-	background: #328cdb;
-	color: white;
-	text-decoration: none;
-}
-
-/**
- * Flag object
- *
- * Using flexbox since this is only for backend / admin area
- */
-.pwt-flag-object {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-}
-
-.pwt-flag-object__aside {
-	-webkit-box-flex: 0;
-	-ms-flex: 0 0 auto;
-	flex: 0 0 auto;
-}
-
-.pwt-flag-object__body {
-	-webkit-box-flex: 1;
-	-ms-flex: 1 1 auto;
-	flex: 1 1 auto;
-	padding-left: 20px;
-}
-
-/* Heading */
-.pwt-heading {
-	margin: 0 0 8px;
-	font-size: 1em;
-	font-weight: 700;
+.com_pwtseo .pwt-extensions .btn-group-justified > .btn .btn,
+.com_pwtseo .pwt-extensions .btn-group-justified > .btn-group .btn {
+	width: 100%;
 }

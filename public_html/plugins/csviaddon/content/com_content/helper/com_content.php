@@ -158,4 +158,52 @@ class Com_ContentHelperCom_Content
 
 		return $this->db->loadResult();
 	}
+
+	/**
+	 * Get the category ID based on it's path.
+	 *
+	 * @param   integer  $categoryId  The id of the parent category
+	 *
+	 * @return  integer  The ID of the category.
+	 *
+	 * @since   7.6.0
+	 */
+	public function getSubCategoryIds($categoryId)
+	{
+		$subCats = $this->getChildren($categoryId);
+
+		if ($subCats)
+		{
+			foreach ((array) $subCats as $subCat)
+			{
+				$newCats = $this->getSubCategoryIds($subCat);
+
+				$subCats = array_merge((array) $subCats, $newCats);
+			}
+		}
+
+		return $subCats;
+	}
+
+	/**
+	 * Get the category IDs of the children.
+	 *
+	 * @param   integer  $catId  The id of the parent category
+	 *
+	 * @return  integer  The IDs of the category.
+	 *
+	 * @since   7.6.0
+	 */
+	private function getChildren($catId)
+	{
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('id'))
+			->from($this->db->quoteName('#__categories'))
+			->where($this->db->quoteName('extension') . ' = ' . $this->db->quote('com_content'))
+			->where($this->db->quoteName('parent_id') . ' = ' . (int) $catId);
+		$this->db->setQuery($query);
+		$categoryId = $this->db->loadColumn();
+
+		return $categoryId;
+	}
 }

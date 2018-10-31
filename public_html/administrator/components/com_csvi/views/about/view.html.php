@@ -77,13 +77,6 @@ class CsviViewAbout extends JViewLegacy
 		// Assign the values
 		$this->folders = $model->getFolderCheck();
 
-		// Get the schema version
-		$this->schemaVersion = $model->getSchemaVersion();
-
-		// Check for database errors
-		$changeSet = $model->getChangeSet();
-		$this->errors = $changeSet->check();
-
 		$this->addToolbar();
 
 		// Render the sidebar

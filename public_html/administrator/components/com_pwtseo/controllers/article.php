@@ -28,11 +28,13 @@ class PWTSEOControllerArticle extends FormController
 	/**
 	 * Method to run batch operations.
 	 *
+	 * @param   BaseDatabaseModel $modelLegacy The model of the component being processed
+	 *
 	 * @return  boolean   True if successful, false otherwise and internal error is set.
 	 *
 	 * @since   1.0.2
 	 */
-	public function batch()
+	public function batch($modelLegacy)
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 

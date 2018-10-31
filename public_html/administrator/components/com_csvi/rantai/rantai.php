@@ -58,9 +58,12 @@ class Import extends JApplicationWeb
 	 */
 	public function __construct()
 	{
+		// Get the base path
+		$root = str_replace('/administrator/components/com_csvi/rantai.php', '', JUri::root());
+
 		// Setup the environment
-		$_SERVER['SCRIPT_NAME'] = '/administrator/index.php';
-		$_SERVER['REQUEST_URI'] = '/administrator/index.php?option=com_csvi';
+		$_SERVER['SCRIPT_NAME'] = $root . '/administrator/index.php';
+		$_SERVER['REQUEST_URI'] = $root . '/administrator/index.php?option=com_csvi';
 
 		// Call the parent __construct method so it bootstraps the application class.
 		parent::__construct();

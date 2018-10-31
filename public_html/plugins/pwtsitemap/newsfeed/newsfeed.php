@@ -37,9 +37,9 @@ class PlgPwtSitemapNewsfeed extends PwtSitemapPlugin
 	/**
 	 * Run for every menuitem passed
 	 *
-	 * @param   StdClass  $item          Menu items
-	 * @param   string    $format        Sitemap format that is rendered
-	 * @param   string    $sitemap_type  Type of the sitemap that is build
+	 * @param   StdClass $item         Menu items
+	 * @param   string   $format       Sitemap format that is rendered
+	 * @param   string   $sitemap_type Type of the sitemap that is build
 	 *
 	 * @return  array
 	 *
@@ -61,7 +61,7 @@ class PlgPwtSitemapNewsfeed extends PwtSitemapPlugin
 
 					if ($sitemap_type == 'multilanguage')
 					{
-						$item = new PwtMultilanguageSitemapItem($newsfeed->name, $link, $item->level +1);
+						$item               = new PwtMultilanguageSitemapItem($newsfeed->name, $link, $item->level + 1);
 						$item->associations = $this->getAssociatedNewesfeeds($newsfeed);
 
 						$sitemap_items[] = $item;
@@ -80,7 +80,7 @@ class PlgPwtSitemapNewsfeed extends PwtSitemapPlugin
 	/**
 	 * Get all newsfeeds from a category
 	 *
-	 * @param   int  $id  Category id
+	 * @param   int $id Category id
 	 *
 	 * @return  mixed  stdClass on success, false otherwise
 	 *
@@ -108,11 +108,11 @@ class PlgPwtSitemapNewsfeed extends PwtSitemapPlugin
 	 */
 	private function getAssociatedNewesfeeds($newsfeed)
 	{
-		$helper = new NewsfeedsAssociationsHelper();
+		$helper       = new NewsfeedsAssociationsHelper();
 		$associations = $helper->getAssociations('newsfeed', $newsfeed->id);
 
 		// Map associations to Article objects
-		$associations = array_map(function($value) use ($helper) {
+		$associations = array_map(function ($value) use ($helper) {
 			return $helper->getItem('newsfeed', explode(':', $value->id)[0]);
 		}, $associations);
 

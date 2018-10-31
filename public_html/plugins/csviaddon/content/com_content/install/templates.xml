@@ -5,88 +5,74 @@
       <action>export</action>
       <component>com_content</component>
       <operation>content</operation>
+      <override></override>
       <exportto>
         <option>todownload</option>
       </exportto>
+      <output_empty_file>1</output_empty_file>
       <localpath></localpath>
       <ftphost></ftphost>
       <ftpport></ftpport>
+      <sftp>0</sftp>
       <ftpusername></ftpusername>
       <ftppass></ftppass>
       <ftproot></ftproot>
       <ftpfile></ftpfile>
+      <export_email_addresses></export_email_addresses>
+      <export_email_addresses_cc></export_email_addresses_cc>
+      <export_email_addresses_bcc></export_email_addresses_bcc>
+      <export_email_subject></export_email_subject>
+      <export_email_body></export_email_body>
+      <database_username></database_username>
+      <database_password></database_password>
+      <database_host></database_host>
+      <database_portno></database_portno>
+      <database_name></database_name>
+      <database_table></database_table>
+      <primary_key_source>title</primary_key_source>
+      <primary_key_target>id</primary_key_target>
+      <create_new_columns>1</create_new_columns>
       <export_filename></export_filename>
       <export_file>csv</export_file>
       <field_delimiter>,</field_delimiter>
       <text_enclosure>"</text_enclosure>
       <include_column_headers>1</include_column_headers>
       <signature>0</signature>
-      <export_frontend>0</export_frontend>
-      <collect_debug_info>0</collect_debug_info>
       <publish_state></publish_state>
       <recordstart></recordstart>
       <recordend></recordend>
-      <groupby>1</groupby>
       <export_date_format>d/m/Y H:i:s</export_date_format>
-      <export_price_format_decimal>2</export_price_format_decimal>
-      <export_price_format_decsep></export_price_format_decsep>
-      <export_price_format_thousep></export_price_format_thousep>
-      <add_currency_to_price>0</add_currency_to_price>
       <header></header>
       <body></body>
       <footer></footer>
-      <export_email_addresses></export_email_addresses>
-      <export_email_addresses_cc></export_email_addresses_cc>
-      <export_email_addresses_bcc></export_email_addresses_bcc>
-      <export_email_subject></export_email_subject>
-      <export_email_body></export_email_body>
+      <content_language>*</content_language>
+      <exportsef>1</exportsef>
+      <cachesefurls>1</cachesefurls>
+      <emptysefcache>0</emptysefcache>
+      <content_categories>
+        <option>*</option>
+      </content_categories>
+      <groupbyfields></groupbyfields>
+      <sortfields></sortfields>
       <use_system_limits>0</use_system_limits>
       <max_execution_time></max_execution_time>
       <memory_limit></memory_limit>
+      <tags></tags>
     </settings>
     <template_name>Example Joomla Content Export</template_name>
     <advanced>0</advanced>
     <action>export</action>
     <frontend>0</frontend>
     <secret></secret>
-    <log>0</log>
+    <log>1</log>
     <lastrun>0000-00-00 00:00:00</lastrun>
     <enabled>1</enabled>
     <ordering>0</ordering>
     <fields>
       <field>
-        <field_name>alias</field_name>
-        <xml_node></xml_node>
-        <column_header></column_header>
-        <default_value></default_value>
-        <enabled>1</enabled>
-        <sort>1</sort>
-        <cdata>2</cdata>
-        <ordering>2</ordering>
-      </field>
-      <field>
-        <field_name>introtext</field_name>
-        <xml_node></xml_node>
-        <column_header></column_header>
-        <default_value></default_value>
-        <enabled>1</enabled>
-        <sort>1</sort>
-        <cdata>2</cdata>
-        <ordering>5</ordering>
-      </field>
-      <field>
-        <field_name>state</field_name>
-        <xml_node></xml_node>
-        <column_header></column_header>
-        <default_value></default_value>
-        <enabled>1</enabled>
-        <sort>1</sort>
-        <cdata>2</cdata>
-        <ordering>4</ordering>
-      </field>
-      <field>
         <field_name>title</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
@@ -95,14 +81,48 @@
         <ordering>1</ordering>
       </field>
       <field>
+        <field_name>alias</field_name>
+        <xml_node></xml_node>
+        <table_name></table_name>
+        <column_header></column_header>
+        <default_value></default_value>
+        <enabled>1</enabled>
+        <sort>1</sort>
+        <cdata>2</cdata>
+        <ordering>2</ordering>
+      </field>
+      <field>
         <field_name>category_path</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
         <sort>1</sort>
         <cdata>2</cdata>
         <ordering>3</ordering>
+      </field>
+      <field>
+        <field_name>state</field_name>
+        <xml_node></xml_node>
+        <table_name></table_name>
+        <column_header></column_header>
+        <default_value></default_value>
+        <enabled>1</enabled>
+        <sort>1</sort>
+        <cdata>2</cdata>
+        <ordering>4</ordering>
+      </field>
+      <field>
+        <field_name>introtext</field_name>
+        <xml_node></xml_node>
+        <table_name></table_name>
+        <column_header></column_header>
+        <default_value></default_value>
+        <enabled>1</enabled>
+        <sort>1</sort>
+        <cdata>2</cdata>
+        <ordering>5</ordering>
       </field>
     </fields>
   </template>
@@ -111,35 +131,52 @@
       <action>import</action>
       <component>com_content</component>
       <operation>content</operation>
+      <override></override>
       <source>fromupload</source>
       <local_csv_file></local_csv_file>
-      <urlfile></urlfile>
+      <delete_file>0</delete_file>
+      <urlfile>http://</urlfile>
+      <urlusername></urlusername>
+      <urlusernamefield>user</urlusernamefield>
+      <urlpass></urlpass>
+      <urlpassfield>password</urlpassfield>
+      <urlmethod>get</urlmethod>
+      <urlcredential>htaccess</urlcredential>
       <ftphost></ftphost>
       <ftpport></ftpport>
+      <sftp>0</sftp>
       <ftpusername></ftpusername>
       <ftppass></ftppass>
       <ftproot></ftproot>
       <ftpfile></ftpfile>
+      <database_username></database_username>
+      <database_password></database_password>
+      <database_host></database_host>
+      <database_portno></database_portno>
+      <database_name></database_name>
+      <database_table></database_table>
       <auto_detect_delimiters>1</auto_detect_delimiters>
       <field_delimiter>,</field_delimiter>
       <text_enclosure>"</text_enclosure>
       <use_file_extension></use_file_extension>
       <im_mac>0</im_mac>
-      <use_column_headers>0</use_column_headers>
+      <use_column_headers>1</use_column_headers>
       <add_extra_fields>0</add_extra_fields>
-      <skip_first_line>1</skip_first_line>
+      <skip_first_line>0</skip_first_line>
       <overwrite_existing_data>1</overwrite_existing_data>
       <ignore_non_exist>0</ignore_non_exist>
-      <skip_default_value>0</skip_default_value>
-      <collect_debug_info>1</collect_debug_info>
       <xml_record_name></xml_record_name>
+      <keepid>0</keepid>
+      <import_nolines>1000</import_nolines>
+      <import_wait>5</import_wait>
       <use_system_limits>0</use_system_limits>
       <max_execution_time></max_execution_time>
       <memory_limit></memory_limit>
       <post_max_size></post_max_size>
       <upload_max_filesize></upload_max_filesize>
+      <tags></tags>
     </settings>
-    <template_name>Example Joomla Content import</template_name>
+    <template_name>Example Joomla Content Import</template_name>
     <advanced>0</advanced>
     <action>import</action>
     <frontend>0</frontend>
@@ -150,8 +187,20 @@
     <ordering>0</ordering>
     <fields>
       <field>
+        <field_name>title</field_name>
+        <xml_node></xml_node>
+        <table_name></table_name>
+        <column_header></column_header>
+        <default_value></default_value>
+        <enabled>1</enabled>
+        <sort>1</sort>
+        <cdata>2</cdata>
+        <ordering>1</ordering>
+      </field>
+      <field>
         <field_name>alias</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
@@ -162,6 +211,7 @@
       <field>
         <field_name>category_path</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
@@ -170,18 +220,9 @@
         <ordering>3</ordering>
       </field>
       <field>
-        <field_name>introtext</field_name>
-        <xml_node></xml_node>
-        <column_header></column_header>
-        <default_value></default_value>
-        <enabled>1</enabled>
-        <sort>1</sort>
-        <cdata>2</cdata>
-        <ordering>5</ordering>
-      </field>
-      <field>
         <field_name>state</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
@@ -190,14 +231,15 @@
         <ordering>4</ordering>
       </field>
       <field>
-        <field_name>title</field_name>
+        <field_name>introtext</field_name>
         <xml_node></xml_node>
+        <table_name></table_name>
         <column_header></column_header>
         <default_value></default_value>
         <enabled>1</enabled>
         <sort>1</sort>
         <cdata>2</cdata>
-        <ordering>1</ordering>
+        <ordering>5</ordering>
       </field>
     </fields>
   </template>

@@ -8,6 +8,7 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 
 defined('_JEXEC') or die;
@@ -47,6 +48,12 @@ class PWTSEOHelper
 			'index.php?option=com_pwtseo&view=customs',
 			$vName == 'customs'
 		);
+
+		JHtmlSidebar::addEntry(
+			Text::_('COM_PWTSEO_MENUS_LABEL'),
+			'index.php?option=com_pwtseo&view=menus',
+			$vName == 'menus'
+		);
 	}
 
 	/**
@@ -65,5 +72,36 @@ class PWTSEOHelper
 		);
 
 		return isset($aArr[$sContext]) ? $aArr[$sContext] : '';
+	}
+
+	/**
+	 * Returns the ID of the PWT SEO plugin on this system
+	 *
+	 * @return  int The ID or 0 on failure
+	 *
+	 * @since   1.2.0
+	 */
+	public static function getPlugin()
+	{
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+
+		$query
+			->select($db->quoteName('extension_id'))
+			->from($db->quoteName('#__extensions'))
+			->where($db->quoteName('client_id') . ' = 0')
+			->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
+			->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
+			->where($db->quoteName('element') . ' = ' . $db->quote('pwtseo'));
+
+		try
+		{
+			return $db->setQuery($query)->loadResult();
+		}
+		catch (Exception $e)
+		{
+		}
+
+		return 0;
 	}
 }

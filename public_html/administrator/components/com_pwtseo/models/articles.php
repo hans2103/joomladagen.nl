@@ -87,7 +87,8 @@ class PWTSEOModelArticles extends ListModel
 							'seo.pwtseo_score',
 							'seo.flag_outdated',
 							'language.title',
-							'language.image'
+							'language.image',
+							'user.name'
 						),
 						array(
 							'id',
@@ -105,7 +106,8 @@ class PWTSEOModelArticles extends ListModel
 							'pwtseo_score',
 							'flag_outdated',
 							'language_title',
-							'language_image'
+							'language_image',
+							'editor'
 						)
 					)
 				)
@@ -113,7 +115,8 @@ class PWTSEOModelArticles extends ListModel
 			->from($db->quoteName('#__content', 'article'))
 			->leftJoin($db->quoteName('#__plg_pwtseo', 'seo') . ' ON seo.context_id = article.id')
 			->leftJoin($db->quoteName('#__languages', 'language') . ' ON language.lang_code = article.language')
-			->leftJoin($db->quoteName('#__categories', 'category') . ' ON category.id = article.catid');
+			->leftJoin($db->quoteName('#__categories', 'category') . ' ON category.id = article.catid')
+			->leftJoin($db->quoteName('#__users', 'user') . ' ON ' . $db->quoteName('user.id') . ' = ' . $db->quoteName('article.checked_out'));
 
 		$search = $this->getState('filter.search');
 

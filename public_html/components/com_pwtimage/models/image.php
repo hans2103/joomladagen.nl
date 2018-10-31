@@ -3,16 +3,16 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
+use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Utilities\ArrayHelper;
 
 defined('_JEXEC') or die;
@@ -35,8 +35,8 @@ class PwtimageModelImage extends FormModel
 	/**
 	 * Get the form.
 	 *
-	 * @param   array    $data      Data for the form.
-	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
+	 * @param   array   $data     Data for the form.
+	 * @param   boolean $loadData True if the form is to load its own data (default case), false if not.
 	 *
 	 * @return  mixed  A JForm object on success | False on failure.
 	 *
@@ -45,53 +45,26 @@ class PwtimageModelImage extends FormModel
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		Form::addFormPath(JPATH_SITE . '/components/com_pwtimage/models/forms');
+		FormHelper::addFormPath(JPATH_SITE . '/components/com_pwtimage/models/forms');
 		$form = $this->loadForm('com_pwtimage.image', 'image', array('control' => 'jform', 'load_data' => $loadData));
-
-		if (0 === count($form))
-		{
-			return false;
-		}
 
 		return $form;
 	}
 
 	/**
-	 * Method to get the data that should be injected in the form.
-	 *
-	 * @return  array  The data for the form..
-	 *
-	 * @since   4.0
-	 *
-	 * @throws  Exception
-	 */
-	protected function loadFormData()
-	{
-		// Check the session for previously entered form data.
-		$data = Factory::getApplication()->getUserState('com_pwtimage.edit.image.data', array());
-
-		if (0 === count($data))
-		{
-			$data = new stdClass;
-		}
-
-		return $data;
-	}
-
-	/**
 	 * Process an uploaded image.
 	 *
-	 * @param   array   $file         The uploaded file data.
-	 * @param   string  $localFile    The uploaded file data.
-	 * @param   string  $targetFile   The name of the target file.
-	 * @param   string  $cropData     A JSON string with cropping details.
-	 * @param   string  $ratio        The ratio to apply to the image.
-	 * @param   integer $width        The maximum width of the image.
-	 * @param   integer $setWidth     The user configured width.
-	 * @param   string  $widthOptions The user configured width.
-	 * @param   string  $sourcePath   The source folder where to store the image.
-	 * @param   string  $subPath      The subfolder where to store the image.
-	 * @param   string  $storeFolder  A user-defined folder to store an uploaded image
+	 * @param   array   $file            The uploaded file data.
+	 * @param   string  $localFile       The uploaded file data.
+	 * @param   string  $targetFile      The name of the target file.
+	 * @param   string  $cropData        A JSON string with cropping details.
+	 * @param   string  $ratio           The ratio to apply to the image.
+	 * @param   integer $widths          The widths to resize the image to.
+	 * @param   boolean $keepOriginal    Set if the original image sizes should be used.
+	 * @param   string  $sourcePath      The source folder where to store the image.
+	 * @param   string  $subPath         The subfolder where to store the image.
+	 * @param   string  $origin          The origin of the field, so the profile can be loaded.
+	 * @param   string  $backgroundColor The background color to use for cropping.
 	 *
 	 * @return  string  The created image.
 	 *
@@ -103,14 +76,22 @@ class PwtimageModelImage extends FormModel
 		$targetFile,
 		$cropData,
 		$ratio,
-		$width,
-		$setWidth = 0,
-		$widthOptions = '',
+		$widths,
+		$keepOriginal = false,
 		$sourcePath = null,
 		$subPath = null,
-		$storeFolder = null
+		$origin = null,
+		$backgroundColor = '#000000'
 	)
 	{
+		// Remove any overlap in folder path
+		$dirname = str_replace($sourcePath, '', dirname($localFile));
+
+		if ($dirname && strpos(JPATH_SITE, $dirname) !== false)
+		{
+			$localFile = str_replace($dirname, '', $localFile);
+		}
+
 		// Check if local file exists
 		if (!file_exists(JPATH_SITE . $localFile))
 		{
@@ -128,26 +109,31 @@ class PwtimageModelImage extends FormModel
 			$file = array('tmp_name' => '');
 		}
 
-		$helper = new PwtimageHelper;
+		$helper = new PwtimageHelper($origin);
 
-		// Construct the base folder
-		$baseFolder  = $sourcePath . '/' . str_replace('../', '', $storeFolder);
+		// Set the memory limit if needed
+		$memoryLimit = $helper->getSetting('memoryLimit', false);
 
-		if ($storeFolder === 'null' || $storeFolder === null)
+		if ($memoryLimit !== false)
 		{
-			$baseFolder = $helper->getImageFolder(false, $sourcePath, $subPath);
+			ini_set('memory_limit', $memoryLimit . 'M');
 		}
+
+		// Get the base folder to work from
+		$baseFolder = $helper->getImageFolder(false, $sourcePath, $subPath);
 
 		// Replace any variables
 		$baseFolder = $helper->replaceVariables($baseFolder);
 
+		$mode = intval($helper->getSetting('chmod', 0755), 8);
+
 		if (!JFolder::exists(JPATH_SITE . $baseFolder))
 		{
-			JFolder::create(JPATH_SITE . $baseFolder, 0755);
+			JFolder::create(JPATH_SITE . $baseFolder, $mode);
 		}
 		else
 		{
-			@chmod(JPATH_SITE . $baseFolder, 0755);
+			@chmod(JPATH_SITE . $baseFolder, $mode);
 		}
 
 		// Get Variables
@@ -166,19 +152,10 @@ class PwtimageModelImage extends FormModel
 		}
 
 		// Filename
-		$filename = $this->formatFilename($file['name'], $helper->getFilenameFormat());
+		$filename = $this->formatFilename($file['name'], '{random}');
 
 		// Path
 		$originalFile = JPath::clean($imageFolder . $filename);
-
-		// Setup the widths
-		$widths = array($width);
-
-		// Check if the user selected one or more sizes for resizing
-		if ($widthOptions !== 'null' && $widthOptions !== null && $widthOptions !== 'undefined')
-		{
-			$widths = explode(',', $widthOptions);
-		}
 
 		// Do the upload if user uploaded a file
 		if (!$localFile && $file['tmp_name'] && !JFile::upload($file['tmp_name'], $originalFile))
@@ -190,6 +167,41 @@ class PwtimageModelImage extends FormModel
 			throw new RuntimeException(Text::_('Upload file error'));
 		}
 
+		if ($keepOriginal)
+		{
+			$filePath = JPath::clean($originalFile);
+
+			return str_replace(JPATH_SITE . '/', '', $filePath);
+		}
+
+		// Get the image details
+		$imageDetails = getimagesize($originalFile);
+
+		// Check if the user selected one or more sizes for resizing
+		if ($widths !== 'null' && $widths !== null && $widths !== 'undefined')
+		{
+			$widths = explode(',', $widths);
+		}
+		else
+		{
+			$widthSettings = $helper->getSetting('width', array());
+			$widths        = array();
+
+			foreach ($widthSettings as $index => $widthSetting)
+			{
+				$widths[] = $widthSetting->width;
+			}
+		}
+
+		$widths = ArrayHelper::toInteger($widths);
+
+		// Make sure we have a width
+		if (empty($widths))
+		{
+			// Get the width from the original file
+			$widths = array($imageDetails[0]);
+		}
+
 		// Extract crop information
 		$cropData = json_decode($cropData);
 
@@ -197,17 +209,47 @@ class PwtimageModelImage extends FormModel
 		$ratio = explode('/', $ratio);
 
 		// Validate the ratios
-		if (empty($ratio[0]))
+		if (empty($ratio[0]) || $ratio[0] === 'NaN')
 		{
 			$ratio[0] = 1;
 		}
 
-		if (!isset($ratio[1]))
+		if (!isset($ratio[1]) || $ratio[1] === 'NaN')
 		{
 			$ratio[1] = 1;
 		}
 
 		$ratio = ArrayHelper::toInteger($ratio, 1);
+
+		// Set default settings if there is no cropping data
+		if (!$cropData)
+		{
+			$cropData         = new stdClass;
+			$cropData->x      = 0;
+			$cropData->y      = 0;
+			$cropData->height = $imageDetails[1];
+			$cropData->width  = $imageDetails[0];
+
+			if ($ratio[0] === $ratio[1])
+			{
+				$cropData->width  = $imageDetails[0];
+				$cropData->height = $imageDetails[0];
+			}
+			elseif ($ratio[0] > $ratio[1])
+			{
+				$cropData->width  = $imageDetails[0];
+				$cropData->height = $imageDetails[0] * ($ratio[1] / $ratio[0]);
+			}
+			else
+			{
+				$cropData->width  = $imageDetails[1] * ($ratio[0] / $ratio[1]);
+				$cropData->height = $imageDetails[1];
+			}
+
+			$cropData->rotate = 0;
+			$cropData->scaleX = 1;
+			$cropData->scaleY = 1;
+		}
 
 		// Create the different size images
 		$filePaths = array();
@@ -220,6 +262,7 @@ class PwtimageModelImage extends FormModel
 			$appendWidth = true;
 		}
 
+		// Generate the images and their widths
 		foreach ($widths as $width)
 		{
 			// Get the target image name
@@ -230,15 +273,16 @@ class PwtimageModelImage extends FormModel
 				$outputName = $targetFile;
 			}
 
+			// Generate filename
+			$filename = $this->formatFilename($outputName, $helper->getSetting('filenameFormat'));
+
+			// Add the width if needed
 			if ($appendWidth)
 			{
-				$ext        = JFile::getExt($outputName);
-				$name       = basename($outputName, '.' . $ext);
-				$outputName = $name . '_' . $width . '.' . $ext;
+				$ext      = JFile::getExt($filename);
+				$name     = basename($filename, '.' . $ext);
+				$filename = $name . '_' . $width . '.' . $ext;
 			}
-
-			// Generate filename
-			$filename = $this->formatFilename($outputName, $helper->getFilenameFormat());
 
 			// Path
 			$filePath = JPath::clean($imageFolder . $filename);
@@ -262,95 +306,47 @@ class PwtimageModelImage extends FormModel
 					break;
 			}
 
-			// Get image size
-			$size = getimagesize($originalFile);
+			if ($sourceImage === false)
+			{
+				JFile::delete($originalFile);
+				throw new RuntimeException(Text::_('COM_PWTIMAGE_CANNOT_READ_SOURCE_FILE'));
+			}
 
-			if ($size[0] < $setWidth && ComponentHelper::getParams('com_pwtimage')->get('checkSize', 1))
+			if ($imageDetails[0] < $width && $helper->getSetting('checkSize', 1))
 			{
 				$this->message = Text::_('COM_PWTIMAGE_NOT_MEET_WIDTH');
 			}
 
-			if (!$cropData)
-			{
-				$cropData = new stdClass;
-				$cropData->x = 0;
-				$cropData->y = 0;
-				$cropData->height = $size[1];
-				$cropData->width  = $size[0];
-
-				if ($ratio[0] !== $ratio[1])
-				{
-					$cropData->width = $ratio[0] / $ratio[1] * (int) $size[1];
-				}
-
-				$cropData->rotate = 0;
-				$cropData->scaleX = 1;
-				$cropData->scaleY = 1;
-			}
-
-			$this->cropImage($sourceImage, $cropData, $size, $width, $ratio, $type, $filePath);
+			$this->cropImage(
+				$sourceImage,
+				$cropData,
+				$imageDetails,
+				$width,
+				$ratio,
+				$type,
+				$filePath,
+				$backgroundColor,
+				$helper->getSetting('dpi', '96')
+			);
 
 			$filePaths[] = str_replace(JPATH_SITE . '/', '', $filePath);
+
+			PluginHelper::importPlugin('pwtimage');
+			$dispatcher = JEventDispatcher::getInstance();
+			$dispatcher->trigger('onAfterResizeImage', array(end($filePaths), $width));
 		}
+
+		// Remove the original file as we are done processing
+		JFile::delete($originalFile);
 
 		return implode(', ', $filePaths);
-	}
-
-
-	/**
-	 * Get the image type of a given file.
-	 *
-	 * @param   string $sFilePath  The path to the file
-	 *
-	 * @return  int The image type.
-	 *
-	 * @since   1.2.0
-	 */
-	private function getMimeType($sFilePath)
-	{
-		// Exif_imagetype requires the file to be at least 12 bytes
-		if (function_exists('exif_imagetype') && filesize($sFilePath) > 11)
-		{
-			$type = exif_imagetype($sFilePath);
-		}
-		else
-		{
-			switch (JFile::getExt($sFilePath))
-			{
-				case 'gif':
-					$type = IMAGETYPE_GIF;
-					break;
-				case 'jpg':
-				case 'jpeg':
-					$type = IMAGETYPE_JPEG;
-					break;
-				default:
-				case 'png':
-					$type = IMAGETYPE_PNG;
-					break;
-			}
-		}
-
-		return $type;
-	}
-
-	/**
-	 * Get the message.
-	 *
-	 * @return  string  The message string.
-	 *
-	 * @since   1.1.0
-	 */
-	public function getMessage()
-	{
-		return $this->message;
 	}
 
 	/**
 	 * Format a given filename.
 	 *
-	 * @param   string  $originalName The original filename of the uploaded file.
-	 * @param   string  $format       The format for the filename.
+	 * @param   string $originalName The original filename of the uploaded file.
+	 * @param   string $format       The format for the filename.
 	 *
 	 * @return  string  The formatted filename.
 	 *
@@ -358,6 +354,12 @@ class PwtimageModelImage extends FormModel
 	 */
 	private function formatFilename($originalName, $format)
 	{
+		// Check if we have a format
+		if (!$format)
+		{
+			return $originalName;
+		}
+
 		// Do some customizing
 		$time = time();
 
@@ -366,7 +368,7 @@ class PwtimageModelImage extends FormModel
 		$filename  = str_replace('{name}', basename($originalName, $extension), $format);
 
 		// Replace random
-		$prefix   = substr(str_shuffle(md5(time())), 0, 2);
+		$prefix   = substr(str_shuffle(md5(time())), 0, 10);
 		$filename = str_replace('{random}', $prefix, $filename);
 
 		// Replace year
@@ -380,6 +382,9 @@ class PwtimageModelImage extends FormModel
 		$filename = str_replace('{month}', date('m', $time), $filename);
 		$filename = str_replace('{F}', date('F', $time), $filename);
 		$filename = str_replace('{n}', date('n', $time), $filename);
+
+		// Replace week
+		$filename = str_replace('{W}', date('d', $time), $filename);
 
 		// Replace day
 		$filename = str_replace('{d}', date('d', $time), $filename);
@@ -399,33 +404,75 @@ class PwtimageModelImage extends FormModel
 		// Replace seconds
 		$filename = str_replace('{s}', date('s', $time), $filename);
 
-		// Add the file extension
-		$filename .= $extension;
-
 		// Clean up the filename so it is a safe name
 		$filename = str_replace(' ', '-', $filename);
 		$filename = JFile::makeSafe($filename);
+
+		// Add the file extension, this must be after makeSafe as it removes dots
+		$filename .= '.' . $extension;
 
 		return $filename;
 	}
 
 	/**
+	 * Get the image type of a given file.
+	 *
+	 * @param   string $sFilePath The path to the file
+	 *
+	 * @return  integer The image type.
+	 *
+	 * @since   1.1.0
+	 */
+	private function getMimeType($sFilePath)
+	{
+		// Exif_imagetype requires the file to be at least 12 bytes
+		if (function_exists('exif_imagetype') && filesize($sFilePath) > 11)
+		{
+			$type = exif_imagetype($sFilePath);
+		}
+		else
+		{
+			switch (strtolower(JFile::getExt($sFilePath)))
+			{
+				case 'gif':
+					$type = IMAGETYPE_GIF;
+					break;
+				case 'jpg':
+				case 'jpeg':
+					$type = IMAGETYPE_JPEG;
+					break;
+				default:
+				case 'png':
+					$type = IMAGETYPE_PNG;
+					break;
+			}
+		}
+
+		return $type;
+	}
+
+	/**
 	 * Crop an image to the desired size.
 	 *
-	 * @param   resource  $sourceImage  The source image from which to generate the cropped image
-	 * @param   object    $cropData     The details of the crop specifications to apply to the image
-	 * @param   array     $size         The original sizes of the source image
-	 * @param   integer   $width        The new width to apply to the cropped image
-	 * @param   array     $ratio        The ratio of the new image
-	 * @param   string    $type         The type of image it is
-	 * @param   string    $filePath     The name of the image to create
+	 * @param   resource $sourceImage     The source image from which to generate the cropped image
+	 * @param   object   $cropData        The details of the crop specifications to apply to the image
+	 * @param   array    $size            The original sizes of the source image
+	 * @param   integer  $width           The new width to apply to the cropped image
+	 * @param   array    $ratio           The ratio of the new image
+	 * @param   string   $type            The type of image it is
+	 * @param   string   $filePath        The name of the image to create
+	 * @param   string   $backgroundColor The hexadecimal value of the background color to use for cropping
+	 * @param   string   $dpi             The dpi for the new image
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0
 	 */
-	private function cropImage($sourceImage, $cropData, $size, $width, $ratio, $type, $filePath)
+	private function cropImage($sourceImage, $cropData, $size, $width, $ratio, $type, $filePath, $backgroundColor, $dpi)
 	{
+		// Get the RGB values for the background color
+		list($red, $green, $blue) = sscanf($backgroundColor, "#%02x%02x%02x");
+
 		// Natural height
 		$originalHeight = $size[1];
 		$originalWidth  = $size[0];
@@ -448,7 +495,7 @@ class PwtimageModelImage extends FormModel
 		if (is_numeric($cropData->rotate) && $cropData->rotate != 0)
 		{
 			// PHP's degrees is opposite to CSS's degrees
-			$newImage = imagerotate($sourceImage, -$cropData->rotate, imagecolorallocatealpha($sourceImage, 0, 0, 0, 127));
+			$newImage = imagerotate($sourceImage, -$cropData->rotate, imagecolorallocatealpha($sourceImage, $red, $green, $blue, 127));
 
 			imagedestroy($sourceImage);
 			$sourceImage = $newImage;
@@ -456,7 +503,7 @@ class PwtimageModelImage extends FormModel
 			$deg = abs($cropData->rotate) % 180;
 			$arc = ($deg > 90 ? (180 - $deg) : $deg) * M_PI / 180;
 
-			$croppedWidth = $originalWidth * cos($arc) + $originalHeight * sin($arc);
+			$croppedWidth  = $originalWidth * cos($arc) + $originalHeight * sin($arc);
 			$croppedHeight = $originalWidth * sin($arc) + $originalHeight * cos($arc);
 
 			// Fix rotated image miss 1px issue when degrees < 0
@@ -464,8 +511,16 @@ class PwtimageModelImage extends FormModel
 			$croppedHeight--;
 		}
 
-		$finalWidth   = $width;
-		$finalHeight  = $ratio[1] / $ratio[0] * (int) $finalWidth;
+		$finalWidth  = $width;
+		$finalHeight = $ratio[1] / $ratio[0] * (int) $finalWidth;
+
+		// If free form is used
+		if ($ratio[0] === 1 && $ratio[1] === 1)
+		{
+			// We resize the cropped height in an equal ratio to how we crop the width
+			$finalHeight = intval($cropData->height / ($cropData->width / $width));
+		}
+
 		$sourceWidth  = 0;
 		$sourceHeight = 0;
 		$destinationX = 0;
@@ -487,7 +542,7 @@ class PwtimageModelImage extends FormModel
 		elseif ($cropData->x <= $croppedWidth)
 		{
 			$destinationX = 0;
-			$sourceWidth = $destinationW = min($cropData->width, $croppedWidth - $cropData->x);
+			$sourceWidth  = $destinationW = min($cropData->width, $croppedWidth - $cropData->x);
 		}
 
 		// Resize height
@@ -508,17 +563,23 @@ class PwtimageModelImage extends FormModel
 		}
 
 		// Scale to destination position and size
-		$scaleratio = $cropData->width / $finalWidth;
+		$scaleratio   = $cropData->width / $finalWidth;
 		$destinationX /= $scaleratio;
 		$destinationY /= $scaleratio;
 		$destinationW /= $scaleratio;
 		$destinationH /= $scaleratio;
 
+		if (!$this->enoughMemory($finalWidth, $finalHeight))
+		{
+			throw new RuntimeException(Text::_('COM_PWTIMAGE_NOT_ENOUGH_MEMORY'));
+		}
+
 		$destinationImage = imagecreatetruecolor($finalWidth, $finalHeight);
 
 		// Add transparent background to destination image
-		imagefill($destinationImage, 0, 0, imagecolorallocatealpha($destinationImage, 0, 0, 0, 127));
+		imagefill($destinationImage, 0, 0, imagecolorallocatealpha($destinationImage, $red, $green, $blue, 127));
 		imagesavealpha($destinationImage, true);
+
 		imagecopyresampled(
 			$destinationImage,
 			$sourceImage,
@@ -531,6 +592,12 @@ class PwtimageModelImage extends FormModel
 			$sourceWidth,
 			$sourceHeight
 		);
+
+		// Since php 7.2
+		if (function_exists('imageresolution') && $dpi > 0)
+		{
+			imageresolution($destinationImage, $dpi);
+		}
 
 		switch ($type)
 		{
@@ -550,5 +617,72 @@ class PwtimageModelImage extends FormModel
 		// Clean up
 		imagedestroy($destinationImage);
 		imagedestroy($sourceImage);
+	}
+
+	/**
+	 * Utility function to determine if there is enough memory left to create image prior to creating image to avoid fatal error.
+	 * Thanks to http://php.net/manual/en/function.imagecreatetruecolor.php#99623
+	 *
+	 * @param   integer $width   The width of the image to create
+	 * @param   integer $height  The height of the image to create
+	 * @param   integer $channel The amount of channels that will be used (rgb is 3)
+	 *
+	 * @return  boolean True if enough memory, false otherwise.
+	 *
+	 * @since   1.1.0
+	 */
+	private function enoughMemory($width, $height, $channel = 3)
+	{
+		$limit = ini_get('memory_limit');
+
+		if (preg_match('/^(\d+)(.)$/', $limit, $matches))
+		{
+			if ($matches[2] === 'M')
+			{
+				// When nnnM -> nnn MB
+				$limit = $matches[1] * 1024 * 1024;
+			}
+			elseif ($matches[2] === 'K')
+			{
+				// When nnnK -> nnn KB
+				$limit = $matches[1] * 1024;
+			}
+		}
+
+		return ($width * $height * $channel * 1.7 < $limit - memory_get_usage());
+	}
+
+	/**
+	 * Get the message.
+	 *
+	 * @return  string  The message string.
+	 *
+	 * @since   1.1.0
+	 */
+	public function getMessage()
+	{
+		return $this->message;
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return  array  The data for the form..
+	 *
+	 * @since   4.0
+	 *
+	 * @throws  Exception
+	 */
+	protected function loadFormData()
+	{
+		// Check the session for previously entered form data.
+		$data = Factory::getApplication()->getUserState('com_pwtimage.edit.image.data', array());
+
+		if (0 === count($data))
+		{
+			$data = new stdClass;
+		}
+
+		return $data;
 	}
 }

@@ -80,7 +80,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
                         <td class="center">
 							<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
                         </td>
-                        <td class="nowrap has-context">
+                        <td class="has-context">
                             <div class="pull-left">
 								<?php if ($canEdit) : ?>
                                     <a href="<?php echo Route::_('index.php?option=com_pwtseo&task=custom.edit&id=' . (int) $item->id); ?>">

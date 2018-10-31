@@ -1,8 +1,8 @@
 CSVI Pro
 Author: RolandD Cyber Produksi (contact@csvimproved.com)
 Website: https://csvimproved.com/
-Version: 7.4.1
-Date: 18 January 2018
+Version: 7.6.1
+Date: 17 April 2018
 
 Legenda:
 + Added
@@ -11,6 +11,64 @@ Legenda:
 / Changed
 
 Changelog
+Version 7.6.1 [ 2018-04-17 ]
+* Fixed index length on table creation
+
+Version 7.6.0 [ 2018-04-17 ]
+* Fixed error on updating available fields
+* Fixed J2Store tasks not setup on installation
+/ Lowered Form2Content available fields threshold
+* Fixed SFTP failing on cron job
+* Fixed missing default values for database fields
++ Added option to select for which component the example templates should be installed
++ Added option to enable debug logging on installation of example templates
++ Added option to include subcategories in Joomla! Content export
+* Fixed the back button throwing a fit after import when running in a subfolder
+* Fixed database index issues on installation
+/ Make the Operation required during new template creation
+* Fixed ICEcat incorrect column count
+* Fixed AwoCoupon export not using new methodology
+* Fixed AwoCoupon import not using new methodology
+* Improved database integrity checks
+
+Version 7.5.1 [ 2018-03-27 ]
+* Fixed example templates revised
+* Fixed export of manufacturer category name in VirtueMart Manufacturer export
+* Fixed installation not working on PHP 5.6 servers
+* Fixed notice when importing an image that does not exist in K2 Item import
+
+Version 7.5.0 [ 2018-03-22 ]
+* Fixed an issue with downloading remote files
+* Fixed user import always skipping new users
+* Fixed custom field default value not exporting in VirtueMart Order Advanced export
+* Fixed shipping full name field throwing errors in VirtueMart Order export
++ Added manufacturer filter for Virtuemart Maintenance remove prices
++ Added brand select option to HikaShop Maintenance empty product prices
++ Added empty product prices for J2Store
+* Fixed Conditional rule plugin not reading 0 as a value
+* Fixed duplicate category error in VirtueMart category import
+* Fixed SFTP namespace casing
+* Fixed customer_note not exported in VirtueMart Order Advanced export
+/ Changed do not update override and product_override_price when empty in VirtueMart Price import
++ Added clean CSVI cache on install of extension
+* Fixed Menu parameter missing when adding a new menu in Joomla Menu import
+/ Changed updated the list of fields that need number formatting in VirtueMart Order export
++ Added product filter import for J2Store
++ Added product filter export for J2Store
+* Fixed new orders not created for guest users in VirtueMart Order import
+* Fixed update title with SKU only for new products in J2Store Product import
++ Added support for custom date format in Multireplace plugin
++ Added J2Store Geo zone rules import
++ Added J2Store Geo zone rules export
+* Fixed HikShop category filter does not include products with product_parent_id
+* Fixed field_combine variable undefined notice
+- Removed incorrect available field in J2Store Order export
++ Added the order state filter on the J2Store Order Item export
++ Added the customer name to J2Store Order Item export
++ Added Unpublish categories before import in VirtueMart Category import
++ Added Custom Fields for All multi-language support
++ Added new database sanity checker
+
 Version 7.4.1 [ 2018-01-18 ]
 * Fixed Form2Content article import using wrong category
 * Fixed missing im_mac field for new installations

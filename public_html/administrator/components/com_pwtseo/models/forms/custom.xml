@@ -15,13 +15,13 @@
         <field
                 name="version"
                 type="hidden"
-                default="1.1.0"
+                default="1.2.1"
         />
 
         <field type="hidden" name="seo_pwtseo_score" default="0" />
     </fieldset>
 
-    <fields name="seo">
+    <fields name="pwtseo">
         <fieldset name="seofieldset"
                   label="PLG_SYSTEM_PWTSEO_FORM_TAB_LABEL"  addfieldpath="/plugins/system/pwtseo/fields">
 
@@ -38,6 +38,8 @@
             <field name="twitter_title" type="hidden" class="js-remove" />
             <field name="twitter_description" type="hidden" class="js-remove" />
             <field name="twitter_image" type="hidden" class="js-remove" />
+            <field name="twitter_card" type="hidden" class="js-remove" />
+            <field name="twitter_site_username" type="hidden" class="js-remove" />
             <field name="google_title" type="hidden" class="js-remove" />
             <field name="google_description" type="hidden" class="js-remove" />
             <field name="google_image" type="hidden" class="js-remove" />
@@ -47,6 +49,7 @@
             <field name="page_title" type="hidden" class="js-remove" />
             <field name="override_canonical" type="hidden" class="js-remove" />
             <field name="canonical" type="hidden" class="js-remove" />
+            <field name="articletitleselector" type="hidden" class="js-remove" />
 
         </fieldset>
     </fields>

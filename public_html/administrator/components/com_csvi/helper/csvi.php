@@ -312,9 +312,11 @@ final class CsviHelperCsvi
 			$errstr = null;
 
 			// Clean up the filename
+			$uri          = JUri::getInstance($documentpath);
 			$dirPath      = dirname($documentpath);
-			$imageName    = rawurlencode(basename($documentpath));
-			$documentpath = $dirPath . '/' . $imageName;
+			$fileName     = rawurlencode(basename($uri->getPath()));
+			$query        = rawurlencode($uri->getQuery());
+			$documentpath = $dirPath . '/' . $fileName . '?' . $query;
 
 			// Open the connection
 			if ($this->log)

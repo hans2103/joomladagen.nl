@@ -12,39 +12,46 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
 defined('_JEXEC') or die;
-
-// Load PWT CSS
-HTMLHelper::_('stylesheet', 'com_pwtsitemap/pwtsitemap.css', array('relative' => true, 'version' => 'auto'));
 ?>
 <div id="j-sidebar-container" class="span2">
 	<?php echo $this->sidebar; ?>
 </div>
 <div id="j-main-container" class="span10">
-	<div class="pwt-component-section">
+    <div class="row-fluid">
+        <div class="span8">
+        </div>
 
-		<!-- PWT branding -->
-		<div class="pwt-section pwt-section--border-bottom">
-			<div class="pwt-flag-object">
-				<div class="pwt-flag-object__aside">
-					<?php echo HTMLHelper::_('image', 'com_pwtsitemap/PWT-Sitemap.png', 'PWT Sitemap', array('width' => 160), true); ?>
-				</div>
-				<div class="pwt-flag-object__body">
-					<p class="pwt-heading"><?php echo Text::_('COM_PWTSITEMAP_ABOUT_PWTSITEMAP_HEADER'); ?></p>
-					<p><?php echo Text::_('COM_PWTSITEMAP_ABOUT_PWTSITEMAP_DESCRIPTION'); ?></p>
-					<p><a href="https://extensions.perfectwebteam.com/pwt-sitemap"><?php echo Text::_('COM_PWTSITEMAP_ABOUT_PWTSITEMAP_WEBSITE'); ?></a></p>
-				</div>
-			</div>
-		</div><!-- .pwt-branding -->
+        <!-- Start Sidebar -->
+        <div class="span4">
+            <div class="well well-large pwt-extensions">
 
-		<div class="pwt-section">
-			<p>
-				<a class="pwt-button pwt-button--primary" href="https://extensions.perfectwebteam.com/pwt-sitemap/documentation"><?php echo Text::_('COM_PWTSITEMAP_DOCUMENTATION_LINK'); ?></a>
-			</p>
-		</div>
+                <!-- PWT branding -->
+                <div class="pwt-section">
+				    <?php echo HTMLHelper::_('image', 'com_pwtsitemap/pwt-sitemap.png', 'PWT Sitemap', array('class' => 'pwt-extension-logo'), true); ?>
+                    <p class="pwt-heading"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_HEADER'); ?></p>
+                    <p><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_DESC'); ?></p>
+                    <p>
+                        <a href="https://extensions.perfectwebteam.com/pwt-sitemap">https://extensions.perfectwebteam.com/pwt-sitemap</a>
+                    </p>
+                    <p><?php echo Text::sprintf('COM_PWTSITEMAP_DASHBOARD_ABOUT_REVIEW', 'https://extensions.joomla.org/extension/pwt-sitemap'); ?></p>
+                </div>
 
-		<div class="pwt-section pwt-section--border-top">
-			<p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_VERSION', '</strong>1.0.1'); ?></p>
-		</div>
+                <div class="pwt-section">
 
-	</div><!-- .pwt-content -->
+                    <div class="btn-group btn-group-justified">
+                        <a class="btn btn-large" href="https://extensions.perfectwebteam.com/pwt-sitemap/documentation"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_DOCUMENTATION'); ?></a>
+                        <a class="btn btn-large" href="https://extensions.perfectwebteam.com/support"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_SUPPORT'); ?></a>
+                    </div>
+
+                </div>
+
+                <div class="pwt-section pwt-section--border-top">
+                    <p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_DASHBOARD_ABOUT_VERSION', '</strong>1.1.2'); ?></p>
+                </div>
+                <!-- End PWT branding -->
+
+            </div>
+        </div>
+        <!-- End Sidebar -->
+    </div>
 </div>

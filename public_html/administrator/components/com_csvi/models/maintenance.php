@@ -505,9 +505,11 @@ class CsviModelMaintenance extends CsviModelDefault
 		$showMessage = $cache->get($cacheId);
 
 		// Get the latest version of CSVI extension
-		/** @var CsviModelAbout $aboutUsModel */
-		$aboutUsModel     = JModelLegacy::getInstance('About', 'CsviModel', array('ignore_request' => true));
-		$extensionVersion = substr($aboutUsModel->getSchemaVersion(), 0, 3);
+		$component = JComponentHelper::getComponent('com_csvi');
+		$extension = JTable::getInstance('extension');
+		$extension->load($component->id);
+		$extensionManifest = json_decode($extension->manifest_cache, true);
+		$extensionVersion  = substr($extensionManifest['version'], 0, 3);
 
 		if (!$showMessage)
 		{

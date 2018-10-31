@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
-use phpseclib\Net\Sftp;
+use phpseclib\Net\SFTP;
 
 /**
  * Export model.
@@ -959,6 +959,8 @@ class CsviModelExports extends CsviModelDefault
 	{
 		foreach ($data as $name => $value)
 		{
+			$name = (string) $name;
+
 			switch ($name)
 			{
 				default:
@@ -1367,13 +1369,14 @@ class CsviModelExports extends CsviModelDefault
 		if (!JFile::exists($downloadFile))
 		{
 			$this->log->addStats('information', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_NOT_CREATED', $downloadFile));
+			$this->log->add('Could not store the file ' . $downloadFile . ' on the FTP server', false);
 
 			return false;
 		}
 
 		if ($this->template->get('sftp', '', 'int'))
 		{
-			$this->sftpFile($downloadFile);
+			return $this->sftpFile($downloadFile);
 		}
 
 		// Generate the FTP file
@@ -1395,10 +1398,12 @@ class CsviModelExports extends CsviModelDefault
 		if ($result)
 		{
 			$this->log->addStats('information', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_CREATED', $ftpFile));
+			$this->log->add('Stored the file ' . $ftpFile . ' on the FTP server', false);
 		}
 		else
 		{
 			$this->log->addStats('information', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_NOT_CREATED', $downloadFile));
+			$this->log->add('Could not store the file  ' . $downloadFile . ' on the FTP server', false);
 		}
 
 		return $result;
@@ -1417,7 +1422,8 @@ class CsviModelExports extends CsviModelDefault
 	{
 		if (!JFile::exists($downloadFile))
 		{
-			$this->log->addStats('information', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_NOT_CREATED', $downloadFile));
+			$this->log->addStats('incorrect', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_NOT_CREATED', $downloadFile));
+			$this->log->add('The export file  ' . $downloadFile . ' does not exist', false);
 
 			return false;
 		}
@@ -1432,23 +1438,36 @@ class CsviModelExports extends CsviModelDefault
 		$root     = $this->template->get('ftproot', '/', 'string');
 
 		// Start the SFTP
-		$sftp = new Sftp($host, $port);
-		$data = '';
+		$sftp = new SFTP($host, $port);
 
-		if (JFile::exists($downloadFile))
+		// Get the data to store
+		$data = file_get_contents($downloadFile);
+
+		if (!$sftp->login($username, $pass))
 		{
-			$data = JFile::read($downloadFile);
+			$this->log->addStats('incorrect', JText::_('COM_CSVI_FTP_CANNOT_LOGIN'));
+			$this->log->add('Cannot login into the FTP server.', false);
+
+			return false;
 		}
 
-		if ($sftp->login($username, $pass))
+		$this->log->add('Logged into the SFTP server', false);
+
+		if (!$sftp->chdir($root))
 		{
-			if ($sftp->chdir($root))
-			{
-				$sftp->put($ftpFile, $data);
-			}
+			$this->log->add('Cannot change to folder ' . $root, false);
+
+			return false;
 		}
+
+		$this->log->add('Changed to folder ' . $root, false);
+
+		$sftp->put($ftpFile, $data);
 
 		$this->log->addStats('information', JText::sprintf('COM_CSVI_FTP_EXPORTFILE_CREATED', $ftpFile));
+		$this->log->add('Stored the file ' . $ftpFile . ' on the FTP server', false);
+
+		return true;
 	}
 
 	/**
@@ -1758,6 +1777,7 @@ class CsviModelExports extends CsviModelDefault
 		{
 			JFile::delete($file);
 			$this->log->addStats('information', JText::_('COM_CSVI_EXPORTFILE_EMPTY_DELETED'));
+			$this->log->add('No export file has been created because there are no records to export. Set Output empty file to Yes in the template settings to generate an empty file.', false);
 		}
 	}
 }

@@ -3,4 +3,19 @@
     <layout title="COM_PWTSITEMAP_VIEW_SITEMAP_DEFAULT_HTML_TITLE">
         <message>COM_PWTSITEMAP_VIEW_SITEMAP_DEFAULT_HTML_DESC</message>
     </layout>
+
+    <!-- Add fields to the parameters object for the layout. -->
+    <fields name="params">
+
+        <!-- Basic options. -->
+        <fieldset name="basic">
+            <field
+                    name="introtext"
+                    type="textarea"
+                    label="COM_PWTSITEMAP_FIELD_INTROTEXT"
+                    description="COM_PWTSITEMAP_FIELD_INTROTEXT_DESC"
+                    rows="3"
+            />
+        </fieldset>
+    </fields>
 </metadata>

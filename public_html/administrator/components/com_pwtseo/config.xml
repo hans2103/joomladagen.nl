@@ -14,7 +14,6 @@
                     name="clientid"
                     type="text"
                     label="COM_PWTSEO_CONFIG_CLIENT_ID_LABEL"
-                    description="COM_PWTSEO_CONFIG_CLIENT_ID_DESC"
                     class="input-xxlarge"
             />
             <field

@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -23,8 +23,8 @@ defined('_JEXEC') or die;
 				<?php echo JHtml::_('image', 'com_pwtimage/PWT-image.png', 'PWT Image', array('width' => 120), true); ?>
 			</div>
 			<div class="pwt-flag-object__body">
-				<p class="pwt-heading"><?php echo JText::_('COM_PWTIMAGE_ABOUT_PWTIMAGE_HEADER'); ?></p>
-				<p><?php echo Text::_('COM_PWTIMAGE_ABOUT_PWTIMAGE_DESCRIPTION'); ?></p>
+				<p class="pwt-heading"><?php echo JText::_('COM_PWTIMAGE_DASHBOARD_ABOUT_HEADER'); ?></p>
+				<p><?php echo Text::_('COM_PWTIMAGE_DASHBOARD_ABOUT_DESC'); ?></p>
 				<p><a href="https://extensions.perfectwebteam.com/pwt-image"><?php echo Text::_('COM_PWTIMAGE_ABOUT_PWTIMAGE_WEBSITE'); ?></a></p>
 			</div>
 		</div>

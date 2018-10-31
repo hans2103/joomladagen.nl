@@ -37,7 +37,7 @@ class PlgCsvirulesFieldcombine extends RantaiPluginDispatcher
 	 */
 	public function getName()
 	{
-		return array('value' => $this->id, 'text' => 'CSVI Field combine');
+		return array('value' => $this->id, 'text' => 'CSVI Field Combine');
 	}
 
 	/**
@@ -53,7 +53,7 @@ class PlgCsvirulesFieldcombine extends RantaiPluginDispatcher
 	{
 		if ($plugin === $this->id)
 		{
-			return 'CSVI Field combine';
+			return 'CSVI Field Combine';
 		}
 	}
 
@@ -121,6 +121,11 @@ class PlgCsvirulesFieldcombine extends RantaiPluginDispatcher
 				// Check if we have a source value
 				if ($settings->source)
 				{
+					if (!isset($settings->combine_empty))
+					{
+						$settings->combine_empty = 0;
+					}
+
 					// Load the friendly field names that need to be combined
 					$updates = explode(',', $settings->source);
 

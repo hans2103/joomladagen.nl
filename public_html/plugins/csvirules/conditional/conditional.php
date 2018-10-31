@@ -161,7 +161,7 @@ class PlgCsvirulesConditional extends RantaiPluginDispatcher
 						break;
 				}
 
-				if ($replacement)
+				if ($replacement !== 'false')
 				{
 					$fields->updateField($field, $replacement);
 				}

@@ -356,6 +356,9 @@ class Menu extends \RantaiImportEngine
 							// Set the menu location
 							$this->menu->setLocation($data['parent_id'], 'last-child');
 
+							$this->setParameters();
+							$data['params'] = $this->getState('params', null);
+
 							// Bind the data
 							$this->menu->bind($data);
 
@@ -738,6 +741,7 @@ class Menu extends \RantaiImportEngine
 	 */
 	private function getMenuType($name)
 	{
+		$menuType = '';
 		$query = $this->db->getQuery(true)
 			->select($this->db->quoteName(array('menutype', 'id')))
 			->from($this->db->quoteName('#__menu_types'))
@@ -747,8 +751,13 @@ class Menu extends \RantaiImportEngine
 			);
 		$this->db->setQuery($query);
 		$menuTypeRow = $this->db->loadObject();
-		$menuType = $menuTypeRow->menutype;
-		$menuId = $menuTypeRow->id;
+
+		if ($menuTypeRow)
+		{
+			$menuType = $menuTypeRow->menutype;
+			$menuId   = $menuTypeRow->id;
+		}
+
 		$clientId = $this->getState('client_id', 0);
 
 		// No menu type found, let's create it

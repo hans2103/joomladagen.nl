@@ -49,6 +49,15 @@
 				class="input-xlarge advancedSelect">
 				<option value="*">JALL</option>
 			</field>
+
+			<field name="incl_subcategory"
+			       type="list"
+			       size="1"
+			       default="0"
+			       class="input-small advancedSelect">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 		</fieldset>
 	</fields>
 </form>

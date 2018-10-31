@@ -41,6 +41,15 @@ class Com_CsviInstallerScript
 	protected $minimumJoomlaVersion = '3.6.5';
 
 	/**
+	 * The version of the extension installed
+	 *
+	 * @var   string
+	 *
+	 * @since  7.4.1
+	 */
+	protected $extensionVersion;
+
+	/**
 	 * Method to install the component
 	 *
 	 * @param   string  $type    Installation type (install, update, discover_install)
@@ -59,6 +68,9 @@ class Com_CsviInstallerScript
 			define('CSVIPATH_DEBUG', JPath::clean(JFactory::getConfig()->get('log_path'), '/'));
 		}
 
+		// Get the extension version number
+		$this->extensionVersion = $parent->get('manifest')->version;
+
 		// Clean up files and folders if any
 		$this->cleanFiles();
 
@@ -69,6 +81,7 @@ class Com_CsviInstallerScript
 		$app    = JFactory::getApplication();
 		$query  = $db->getQuery(true);
 
+		// Move the settings from the old csvi_settings to the Joomla Global Settings
 		if (in_array($table, $tables))
 		{
 			try
@@ -134,46 +147,9 @@ class Com_CsviInstallerScript
 					->where($db->quoteName('type') . ' = ' . $db->quote('component'));
 				$db->setQuery($query)->execute();
 			}
-
-			// Make sure the column has been renamed
-			$columns = $db->getTableColumns($table);
-
-			if (array_key_exists('id', $columns))
-			{
-				// User removed CSVI before installing, need to run the update scripts
-				$files = JFolder::files(
-					__DIR__ . '/admin/sql/updates/mysql',
-					'\.sql$',
-					1,
-					true,
-					array('.svn', 'CVS', '.DS_Store', '__MACOSX'),
-					array('^\..*', '.*~'),
-					true
-				);
-
-				foreach ($files as $filename)
-				{
-					$queries = $db->splitSql(file_get_contents($filename));
-
-					foreach ($queries as $query)
-					{
-						$query = trim($query);
-
-						if ($query)
-						{
-							try
-							{
-								$db->setQuery($query)->execute();
-							}
-							catch (Exception $e)
-							{
-								$app->enqueueMessage($e->getMessage());
-							}
-						}
-					}
-				}
-			}
 		}
+
+		return true;
 	}
 
 	/**
@@ -190,11 +166,11 @@ class Com_CsviInstallerScript
 	 */
 	public function postflight($type, $parent)
 	{
+		// Check the database structure is OK
+		$this->checkDatabase();
+
 		// Convert any pre version 6 templates if needed
 		$this->convertTemplates();
-
-		// Add the missing im_mac field
-		$this->fixDatabase();
 	}
 
 	/**
@@ -291,8 +267,6 @@ class Com_CsviInstallerScript
 			JPATH_ADMINISTRATOR . '/components/com_csvi/models/forms/settings_site.xml',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/models/forms/settings_yandex.xml',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/models/settings.php',
-			JPATH_ADMINISTRATOR . '/components/com_csvi/sql/updates/mysql/6.0.0.sql',
-			JPATH_ADMINISTRATOR . '/components/com_csvi/sql/updates/mysql/6.1.0.sql',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/map/tmpl/form.php',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/rule/tmpl/form.php',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/task/tmpl/form.form.xml',
@@ -315,15 +289,14 @@ class Com_CsviInstallerScript
 		JFile::delete($files);
 
 		$folders = array(
-			JPATH_ADMINISTRATOR . '/components/com_csvi/install',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/settings',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/cpanel',
-			JPATH_SITE . '/layouts/csvi',
-			JPATH_SITE . '/components/com_csvi',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/assets/render',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/addons',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/views/default',
 			JPATH_ADMINISTRATOR . '/components/com_csvi/addon',
+			JPATH_SITE . '/layouts/csvi',
+			JPATH_SITE . '/components/com_csvi',
 		);
 
 		foreach ($folders as $folder)
@@ -354,55 +327,19 @@ class Com_CsviInstallerScript
 	}
 
 	/**
-	 * Fix the database for missing fields.
+	 * Check the database structure.
 	 *
 	 * @return  void
 	 *
-	 * @throws  Exception
-	 *
-	 * @since   7.4.1
+	 * @since   7.5.0
 	 */
-	private function fixDatabase()
+	private function checkDatabase()
 	{
-		try
-		{
-			/** @var JDatabaseDriver $db */
-			$db = JFactory::getDbo();
+		/** @var JDatabaseDriver $db */
+		$db = JFactory::getDbo();
 
-			$tableColumns = $db->getTableColumns('#__csvi_maps');
-
-			foreach ($tableColumns as $tableColumn => $fieldType)
-			{
-				$columnHeaders[] = $tableColumn;
-			}
-
-			if (!in_array('auto_detect_delimiters', $columnHeaders))
-			{
-				$db->setQuery('ALTER TABLE ' . $db->quoteName('#__csvi_maps') . ' ADD ' . $db->quoteName('auto_detect_delimiters') . ' TINYINT(1) NULL DEFAULT \'1\' AFTER ' . $db->quoteName('operation') . ';');
-				$db->execute();
-			}
-
-			if (!in_array('field_delimiter', $columnHeaders))
-			{
-				$db->setQuery('ALTER TABLE ' . $db->quoteName('#__csvi_maps') . ' ADD ' . $db->quoteName('field_delimiter') . ' VARCHAR(1) NOT NULL DEFAULT \',\' AFTER ' . $db->quoteName('auto_detect_delimiters') . ';');
-				$db->execute();
-			}
-
-			if (!in_array('text_enclosure', $columnHeaders))
-			{
-				$db->setQuery('ALTER TABLE ' . $db->quoteName('#__csvi_maps') . ' ADD ' . $db->quoteName('text_enclosure') . ' VARCHAR(1) NOT NULL DEFAULT \'"\' AFTER ' . $db->quoteName('field_delimiter') . ';');
-				$db->execute();
-			}
-
-			if (!in_array('im_mac', $columnHeaders))
-			{
-				$db->setQuery('ALTER TABLE ' . $db->quoteName('#__csvi_maps') . ' ADD ' . $db->quoteName('im_mac') . ' TINYINT(1) NOT NULL DEFAULT \'0\' AFTER ' . $db->quoteName('text_enclosure') . ';');
-				$db->execute();
-			}
-		}
-		catch (Exception $exception)
-		{
-			JFactory::getApplication()->enqueueMessage($exception->getMessage(), 'error');
-		}
+		require_once JPATH_ADMINISTRATOR . '/components/com_csvi/helper/database.php';
+		$databaseCheck = new CsviHelperDatabase($db);
+		$databaseCheck->process(JPATH_ADMINISTRATOR . '/components/com_csvi/assets/core/database.xml');
 	}
 }

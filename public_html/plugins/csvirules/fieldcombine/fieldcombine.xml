@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.3" type="plugin" group="csvirules" method="upgrade">
-	<name>CSVI Field combine</name>
-	<creationDate>18 January 2018</creationDate>
+	<name>CSVI Field Combine</name>
+	<creationDate>17 April 2018</creationDate>
 	<author>RolandD Cyber Produksi</author>
 	<authorEmail>contact@csvimproved.com</authorEmail>
 	<authorUrl>https://csvimproved.com/</authorUrl>
 	<copyright>Copyright (C) 2006 - 2018 RolandD Cyber Produksi. All rights reserved.</copyright>
 	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-	<version>7.4.1</version>
+	<version>7.6.1</version>
 	<description>Combine one or more fields together</description>
 
 	<files>

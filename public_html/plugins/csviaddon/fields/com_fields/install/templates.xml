@@ -47,7 +47,7 @@
 			<upload_max_filesize></upload_max_filesize>
 			<tags></tags>
 		</settings>
-		<template_name>Example Joomla custom fields import</template_name>
+		<template_name>Example Joomla Custom Fields Import</template_name>
 		<advanced>0</advanced>
 		<action>import</action>
 		<frontend>0</frontend>
@@ -161,7 +161,7 @@
 			<upload_max_filesize></upload_max_filesize>
 			<tags></tags>
 		</settings>
-		<template_name>Example Joomla custom field groups import</template_name>
+		<template_name>Example Joomla Custom Field Groups Import</template_name>
 		<advanced>0</advanced>
 		<action>import</action>
 		<frontend>0</frontend>
@@ -267,7 +267,7 @@
 			<memory_limit></memory_limit>
 			<tags></tags>
 		</settings>
-		<template_name>Example Joomla custom fields export</template_name>
+		<template_name>Example Joomla Custom Fields Export</template_name>
 		<advanced>0</advanced>
 		<action>export</action>
 		<frontend>0</frontend>
@@ -395,7 +395,7 @@
 			<memory_limit></memory_limit>
 			<tags></tags>
 		</settings>
-		<template_name>Example Joomla custom field groups export</template_name>
+		<template_name>Example Joomla Custom Field Groups Export</template_name>
 		<advanced>0</advanced>
 		<action>export</action>
 		<frontend>0</frontend>

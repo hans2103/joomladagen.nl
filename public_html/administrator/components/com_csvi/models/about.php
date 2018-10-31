@@ -122,56 +122,6 @@ class CsviModelAbout extends JModelList
 	}
 
 	/**
-	 * Get database changeset.
-	 *
-	 * @return  JSchemaChangeset  A JSchemaChangeset class.
-	 *
-	 * @since   5.6
-	 */
-	public function getChangeSet()
-	{
-		$folder = JPATH_ADMINISTRATOR . '/components/com_csvi/sql/updates/';
-		$changeSet = JSchemaChangeset::getInstance(JFactory::getDbo(), $folder);
-
-		return $changeSet;
-	}
-
-	/**
-	 * Get version from #__schemas table.
-	 *
-	 * @return  mixed  The return value from the query, or null if the query fails.
-	 *
-	 * @since   5.6
-	 */
-	public function getSchemaVersion()
-	{
-		$db = JFactory::getDbo();
-		$version = false;
-
-		// Get the extension id first
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('extension_id'))
-			->from($db->quoteName('#__extensions'))
-			->where($db->quoteName('type') . ' = ' . $db->quote('component'))
-			->where($db->quoteName('element') . ' = ' . $db->quote('com_csvi'));
-		$db->setQuery($query);
-		$eid = $db->loadResult();
-
-		if ($eid)
-		{
-			// Check if there is a version in the schemas table
-			$query->clear()
-				->select($db->quoteName('version_id'))
-				->from($db->quoteName('#__schemas'))
-				->where($db->quoteName('extension_id') . ' = ' . (int) $eid);
-			$db->setQuery($query);
-			$version = $db->loadResult();
-		}
-
-		return $version;
-	}
-
-	/**
 	 * Fix database inconsistencies.
 	 *
 	 * @return  bool  Returns true.
@@ -180,8 +130,9 @@ class CsviModelAbout extends JModelList
 	 */
 	public function fix()
 	{
-		$changeSet = $this->getChangeSet();
-		$changeSet->fix();
+		require_once JPATH_ADMINISTRATOR . '/components/com_csvi/helper/database.php';
+		$databaseCheck = new CsviHelperDatabase($this->getDbo());
+		$databaseCheck->process(JPATH_ADMINISTRATOR . '/components/com_csvi/assets/core/database.xml');
 
 		return true;
 	}
@@ -198,7 +149,7 @@ class CsviModelAbout extends JModelList
 	 */
 	public function fixMenu()
 	{
-		$db = JFactory::getDbo();
+		$db = $this->getDbo();
 
 		// Get the extension ID
 		$query = $db->getQuery(true)

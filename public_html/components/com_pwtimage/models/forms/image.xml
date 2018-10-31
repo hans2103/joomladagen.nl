@@ -7,9 +7,6 @@
                 type="pwtimage.canvas"
                 label="COM_PWTIMAGE_FIELD_PHOTO_LABEL"
                 description="COM_PWTIMAGE_FIELD_PHOTO_DESC"
-                ratio="4/3"
-                width="400"
-                showTools="true"
         />
     </fieldset>
 </form>

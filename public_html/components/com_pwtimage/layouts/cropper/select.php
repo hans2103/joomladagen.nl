@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -18,7 +18,16 @@ extract($displayData);
 
 Factory::getDocument()->addScriptDeclaration(<<<JS
 	jQuery(document).ready(function (){
-			pwtImage.loadFolder(jQuery('.pwt-gallery__items--folders'), '{$sourcePath}', 'select', '{$tokenName}', '{$tokenValue}');
+			pwtImage.loadFolder(jQuery('.pwt-gallery__items--folders'), '{$sourcePath}', 'select', '{$tokenValue}');
+			
+			jQuery('.pwt-filter').on('change keyup keypress blur', '#selectFilter', function(event) {
+			  	
+			    if (event.keyCode === 13) {
+			  	    event.preventDefault();
+			  	}
+			  	
+			  	pwtImage.selectFilter(this.value);
+			})
 		});
 JS
 );
@@ -29,6 +38,10 @@ JS
 	<?php echo Text::_('COM_PWTIMAGE_IMAGE_SAVED_IN'); ?><span class="has_folder"></span>
 </div>
 
+<!-- Filter -->
+<div class="pwt-filter pwt-form-group">
+	<input type="text" id="selectFilter" value="" class="pwt-form-control" placeholder="<?php echo Text::_('COM_PWTIMAGE_FILTER_IMAGES'); ?>"/>
+</div>
 <!-- File picker -->
 <div class="pwt-content pwt-filepicker">
 

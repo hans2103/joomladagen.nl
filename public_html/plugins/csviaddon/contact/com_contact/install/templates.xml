@@ -47,7 +47,7 @@
 			<upload_max_filesize></upload_max_filesize>
 			<tags></tags>
 		</settings>
-		<template_name>Example contact import template</template_name>
+		<template_name>Example Contact Import</template_name>
 		<advanced>0</advanced>
 		<action>import</action>
 		<frontend>0</frontend>
@@ -187,7 +187,7 @@
 			<csvi_template_id></csvi_template_id>
 			<tags></tags>
 		</settings>
-		<template_name>Example contact export template</template_name>
+		<template_name>Example Contact Export</template_name>
 		<advanced>0</advanced>
 		<action>export</action>
 		<frontend>0</frontend>

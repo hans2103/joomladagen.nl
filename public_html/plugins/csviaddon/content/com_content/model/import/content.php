@@ -14,7 +14,6 @@ namespace content\com_content\model\import;
 defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
-use Nette\Neon\Exception;
 
 /**
  * Content import.

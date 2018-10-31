@@ -18,21 +18,19 @@ defined('_JEXEC') or die;
 abstract class PwtSitemapPlugin extends JPlugin
 {
 	/**
-	 * Automatic load plugin language files
-	 *
-	 * @var    bool
-	 * @since  1.0.0
-	 */
-	protected $autoloadLanguage = true;
-
-	/**
 	 * Joomla Application instance
 	 *
 	 * @var    JApplicationSite
 	 * @since  1.0.0
 	 */
 	public $app;
-
+	/**
+	 * Automatic load plugin language files
+	 *
+	 * @var    bool
+	 * @since  1.0.0
+	 */
+	protected $autoloadLanguage = true;
 	/**
 	 * JDatabase instance
 	 *
@@ -104,8 +102,8 @@ abstract class PwtSitemapPlugin extends JPlugin
 	/**
 	 * Adds additional fields to the user editing form
 	 *
-	 * @param   JForm $form The form to be altered.
-	 * @param   mixed $data The associated data for the form.
+	 * @param   JForm    $form The form to be altered.
+	 * @param   stdClass $data The associated data for the form.
 	 *
 	 * @return  boolean
 	 *
@@ -113,6 +111,11 @@ abstract class PwtSitemapPlugin extends JPlugin
 	 */
 	public function onContentPrepareForm($form, $data)
 	{
+		// We store which datatype it was to make sure we give it back the same way
+		$wasArray = is_array($data);
+
+		$data = (object) $data;
+
 		// Make sure form element is a JForm object
 		if (!($form instanceof JForm))
 		{
@@ -128,10 +131,10 @@ abstract class PwtSitemapPlugin extends JPlugin
 		}
 
 		// Load selected option and view if selected
-		if (isset($data['request']['view']) && isset($data['request']['option']))
+		if (isset($data->request['view']) && isset($data->request['option']))
 		{
-			$view   = $data['request']['view'];
-			$option = $data['request']['option'];
+			$view   = $data->request['view'];
+			$option = $data->request['option'];
 
 			if ($option == $this->component && in_array($view, $this->views))
 			{
@@ -151,6 +154,9 @@ abstract class PwtSitemapPlugin extends JPlugin
 			}
 		}
 
+		// Revert back to it's original state
+		$data = ($wasArray) ? (array) $data : $data;
+
 		return true;
 	}
 
@@ -163,11 +169,13 @@ abstract class PwtSitemapPlugin extends JPlugin
 	 *
 	 * @since   1.0.0
 	 */
-	protected function checkDisplayParameters($item, $format)
+	protected function checkDisplayParameters($item, $format, $extraviews = array())
 	{
+		$views = array_merge($this->views, $extraviews);
+
 		if ($format == 'html' && $item->params->get('add' . $this->component_name . 'tohtmlsitemap', 1) || $format == 'xml' && $item->params->get('add' . $this->component_name . 'toxmlsitemap', 1))
 		{
-			if (isset($item->query['option']) && $item->query['option'] == $this->component && in_array($item->query['view'], $this->views))
+			if (isset($item->query['option']) && $item->query['option'] == $this->component && in_array($item->query['view'], $views))
 			{
 				return true;
 			}

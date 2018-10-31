@@ -24,7 +24,7 @@ $jinput = JFactory::getApplication()->input;
 jimport('joomla.application.component.controller');
 
 // Define our version number
-define('CSVI_VERSION', '7.4.1');
+define('CSVI_VERSION', '7.6.1');
 
 // Set CLI mode
 define('CSVI_CLI', false);
@@ -124,7 +124,7 @@ try
 
 	if (empty($format))
 	{
-		?><div class="span-12 center"><a href="https://csvimproved.com/" target="_blank">CSVI Pro</a> 7.4.1 | Copyright (C) 2006 - 2018 <a href="http://www.rolandd.com/" target="_blank">RolandD Cyber Produksi</a></div><?php
+		?><div class="span-12 center"><a href="https://csvimproved.com/" target="_blank">CSVI Pro</a> 7.6.1 | Copyright (C) 2006 - 2018 <a href="http://www.rolandd.com/" target="_blank">RolandD Cyber Produksi</a></div><?php
 	}
 }
 catch (Exception $e)

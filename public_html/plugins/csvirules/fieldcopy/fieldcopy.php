@@ -37,7 +37,7 @@ class PlgCsvirulesFieldcopy extends RantaiPluginDispatcher
 	 */
 	public function getName()
 	{
-		return array('value' => $this->id, 'text' => 'CSVI Field copy');
+		return array('value' => $this->id, 'text' => 'CSVI Field Copy');
 	}
 
 	/**
@@ -53,7 +53,7 @@ class PlgCsvirulesFieldcopy extends RantaiPluginDispatcher
 	{
 		if ($plugin == $this->id)
 		{
-			return 'CSVI Field copy';
+			return 'CSVI Field Copy';
 		}
 	}
 

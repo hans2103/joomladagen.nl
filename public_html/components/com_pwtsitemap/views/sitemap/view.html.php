@@ -36,6 +36,14 @@ class PwtSitemapViewSitemap extends JViewLegacy
 	protected $params;
 
 	/**
+	 * The model state.
+	 *
+	 * @var    object
+	 * @since  1.1.0
+	 */
+	protected $state;
+
+	/**
 	 * Execute and display a template script.
 	 *
 	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
@@ -50,13 +58,35 @@ class PwtSitemapViewSitemap extends JViewLegacy
 		$this->sitemap = $this->get('Sitemap')->sitemapItems;
 		$this->state   = $this->get('State');
 
-		// get information from the menu
+		// Get information from the menu
 		$this->params = $this->state->get('params');
 
+		// Set page title
 		if ($this->params->get('page_heading'))
 		{
 			$this->params->set('page_title', $this->params->get('page_heading'));
 		}
+
+		// Set meta description
+		if ($this->params->get('menu-meta_description'))
+		{
+			$this->document->setDescription($this->params->get('menu-meta_description'));
+		}
+
+		// Set meta keywords
+		if ($this->params->get('menu-meta_keywords'))
+		{
+			$this->document->setMetadata('keywords', $this->params->get('menu-meta_keywords'));
+		}
+
+		// Set meta robots
+		if ($this->params->get('robots'))
+		{
+			$this->document->setMetadata('robots', $this->params->get('robots'));
+		}
+
+		// Get page class
+		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
 
 		return parent::display($tpl);
 	}

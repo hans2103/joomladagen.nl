@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <extension type="component" version="3.5" method="upgrade">
 	<name>CSVI</name>
-	<creationDate>18 January 2018</creationDate>
+	<creationDate>17 April 2018</creationDate>
 	<author>RolandD Cyber Produksi</author>
 	<authorEmail>contact@csvimproved.com</authorEmail>
 	<authorUrl>https://csvimproved.com/</authorUrl>
 	<copyright>Copyright (C) 2006 - 2018 RolandD Cyber Produksi. All rights reserved.</copyright>
 	<license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-	<version>7.4.1</version>
+	<version>7.6.1</version>
 	<description>COM_CSVI_XML_DESCRIPTION</description>
 
 	  <!-- Front-end files -->
@@ -21,17 +21,6 @@
 
 	<!-- Scripts to run on installation -->
 	<scriptfile>script.php</scriptfile>
-
-	<install> <!-- Runs on install -->
-		<sql>
-			<file driver="mysql" charset="utf8">sql/install/mysql/install.mysql.utf8.sql</file>
-		</sql>
-	</install>
-	<update>
-		<schemas>
-			<schemapath type="mysql">sql/updates/mysql</schemapath>
-		</schemas>
-	</update>
 
 	<administration>
 		<!-- Menu entries -->
@@ -61,7 +50,6 @@
 			<folder>layouts</folder>
 			<folder>models</folder>
 			<folder>rantai</folder>
-			<folder>sql</folder>
 			<folder>tables</folder>
 			<folder>views</folder>
 		</files>

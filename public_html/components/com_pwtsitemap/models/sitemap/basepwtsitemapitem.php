@@ -10,6 +10,8 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Uri\Uri;
+
 /**
  * PWT Sitemap Item Interface
  *
@@ -68,20 +70,29 @@ abstract class BasePwtSitemapItem
 	/**
 	 * Constructor.
 	 *
-	 * @param  string $title    Title
-	 * @param  string $link     URL
-	 * @param  int    $level    Level
-	 * @param  mixed  $modified Modification date
+	 * @param   string  $title    Title
+	 * @param   string  $link     URL
+	 * @param   int     $level    Level
+	 * @param   mixed   $modified Modification date
+	 * @param   boolean $external Internal or External URL
 	 *
 	 * @since  1.0.0
 	 */
-	public function __construct($title, $link, $level, $modified = null)
+	public function __construct($title, $link, $level, $modified = null, $external = false)
 	{
-		$this->title = $title;
-		$this->link  = PwtSitemapUrlHelper::getURL($link);
-		$this->level = $level;
-		$this->type  = ($link) ? 'link' : 'placeholder';
+		$this->title    = $title;
+		$this->link     = PwtSitemapUrlHelper::getURL($link);
+		$this->level    = $level;
+		$this->type     = ($link) ? 'link' : 'placeholder';
+		$this->external = $external;
 
+		// Check if this is an external link
+		if (strpos($this->link, substr(Uri::base(), 0, -1)) === false)
+		{
+			$this->external = true;
+		}
+
+		// Set modified date
 		if (!empty($modified) && $modified != JDatabaseDriver::getInstance()->getNullDate() && $modified != '1001-01-01 00:00')
 		{
 			$this->modified = JHtml::_('date', $modified, 'Y-m-d');

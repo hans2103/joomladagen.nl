@@ -33,17 +33,6 @@ class PwtSitemapModelItems extends MenusModelItems
 		foreach ($items as $i => $item)
 		{
 			$item->params = new Joomla\Registry\Registry(json_decode($item->params));
-
-			// Unset filtered items with no childs or disable the parameters if it has a child
-			if (!PwtSitemapHelper::filterMenuType($item->type) && $item->lft + 1 == $item->rgt)
-			{
-				unset($items[$i]);
-			}
-			elseif (!PwtSitemapHelper::filterMenuType($item->type))
-			{
-				$item->params->set('addtohtmlsitemap', 'disabled');
-				$item->params->set('addtoxmlsitemap', 'disabled');
-			}
 		}
 
 		return $items;

@@ -51,6 +51,7 @@ class PWTSEOViewPWTSEO extends HtmlView
 	 * @return  mixed  A string if successful, otherwise an Error object.
 	 *
 	 * @since   1.0
+	 * @throws  Exception
 	 */
 	public function display($tpl = null)
 	{
@@ -113,13 +114,13 @@ class PWTSEOViewPWTSEO extends HtmlView
 			// Using JMenu covers unpublished menu-items. Due to complexity, we ignore access setting.
 			$this->bHasSitemap
 				= (bool) AbstractMenu::getInstance('site')->getItems(
-					array(
-						'link'
-					),
-					array(
-						'index.php?option=com_pwtsitemap&view=sitemap&layout=sitemapxml&format=xml'
-					)
-				);
+				array(
+					'link'
+				),
+				array(
+					'index.php?option=com_pwtsitemap&view=sitemap&layout=sitemapxml&format=xml'
+				)
+			);
 		}
 
 		return parent::display($tpl);
@@ -138,7 +139,7 @@ class PWTSEOViewPWTSEO extends HtmlView
 	{
 		$canDo = ContentHelper::getActions('com_pwtseo');
 
-		JToolbarHelper::title(Text::_('COM_PWTSEO_PWTSEO'), 'bars');
+		JToolbarHelper::title(Text::_('COM_PWTSEO_DASHBOARD_LABEL'), 'pwtseo');
 
 		if ($canDo->get('core.admin') || $canDo->get('core.options'))
 		{

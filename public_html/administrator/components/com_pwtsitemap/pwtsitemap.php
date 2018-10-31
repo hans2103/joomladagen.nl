@@ -8,12 +8,27 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Access\Exception\NotAllowed;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 defined('_JEXEC') or die;
+
+// Access check.
+if (!Factory::getUser()->authorise('core.manage', 'com_pwtsitemap'))
+{
+	throw new NotAllowed(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+}
+
+// Load PWT CSS
+HTMLHelper::_('stylesheet', 'com_pwtsitemap/pwtsitemap.css', array('relative' => true, 'version' => 'auto'));
 
 JLoader::register('PwtSitemapHelper', __DIR__ . '/helpers/pwtsitemap.php');
 JLoader::register('PwtSitemapMenuHelper', __DIR__ . '/helpers/pwtsitemapmenu.php');
 JLoader::register('JHtmlPwtSitemap', __DIR__ . '/helpers/html/pwtsitemap.php');
 
-$controller = JControllerLegacy::getInstance('PwtSitemap');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance('PwtSitemap');
+$controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();

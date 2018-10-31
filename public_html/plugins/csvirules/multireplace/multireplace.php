@@ -348,4 +348,24 @@ class PlgCsvirulesMultireplace extends RantaiPluginDispatcher
 	{
 		return date($replacement->dateFormat, time());
 	}
+
+	/**
+	 * Format a date and time.
+	 *
+	 * @param   string  $date         The date to convert
+	 * @param   object  $replacement  The replacement settings.
+	 *
+	 * @return  string  A dateformat based on the supplied format.
+	 *
+	 * @since   7.5.0
+	 */
+	private function customDate($date, $replacement)
+	{
+		if ($parsedDate = strtotime($date) === false)
+		{
+			return $date;
+		}
+
+		return date($replacement->customDateFormat, $parsedDate);
+	}
 }

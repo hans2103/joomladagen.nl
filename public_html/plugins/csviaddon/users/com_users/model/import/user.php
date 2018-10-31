@@ -100,13 +100,12 @@ class User extends \RantaiImportEngine
 			}
 
 			// Load the current content data
-			if ($this->userTable->load($this->getState('id')))
+			$this->userTable->load($this->getState('id'));
+
+			if ($this->userTable->get('id', 0) > 0 && !$this->template->get('overwrite_existing_data'))
 			{
-				if (!$this->template->get('overwrite_existing_data'))
-				{
-					$this->log->add(\JText::sprintf('COM_CSVI_DATA_EXISTS_PRODUCT_SKU', $this->getState('email', '')));
-					$this->loaded = false;
-				}
+				$this->log->add(\JText::sprintf('COM_CSVI_DATA_EXISTS_PRODUCT_SKU', $this->getState('email', '')));
+				$this->loaded = false;
 			}
 		}
 		else

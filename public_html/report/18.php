@@ -54,15 +54,93 @@ $db->setQuery($query);
 
 $records = $db->loadObjectList();
 
-$tickets   = array();
-$diets     = array();
-$diners    = array();
-$workshops = array();
-$emails    = array();
+$tickets                             = array();
+$diets                               = array();
+$diners                              = array();
+$workshops                           = array();
+$emails                              = array();
+$earlyBirdFriday                     = 25;
+$earlyBirdSaturday                   = 70;
+$regularFriday                       = 35;
+$regularSaturday                     = 80;
+$free                                = 0;
+$dinner                              = 35;
+$report                              = array();
+$report['Vrijdagticket']['normaal']  = 0;
+$report['Vrijdagticket']['gratis']   = 0;
+$report['Vrijdagticket']['early']    = 0;
+$report['Zaterdagticket']['normaal'] = 0;
+$report['Zaterdagticket']['gratis']  = 0;
+$report['Zaterdagticket']['early']   = 0;
+$report['Vrijdagdiner']['normaal']   = 0;
+$report['Vrijdagdiner']['gratis']    = 0;
 
 // Group the records on the SKU
 foreach ($records as $index => $record)
 {
+	// Group for reporting
+	switch ($record->orderitem_sku)
+	{
+		case 'Vrijdagticket':
+			if ((int) $record->orderitem_discount === 0)
+			{
+				if ((int) $record->orderitem_price === $earlyBirdFriday)
+				{
+					$report[$record->orderitem_sku]['early']++;
+				}
+				elseif ((int) $record->orderitem_price === $regularFriday)
+				{
+					$report[$record->orderitem_sku]['normaal']++;
+				}
+				else
+				{
+					echo 'NO MATCH FOR FRIDAY<br />';
+				}
+			}
+			else
+			{
+				$report[$record->orderitem_sku]['gratis']++; // += 1 * $record->orderitem_quantity;
+			}
+			break;
+		case 'Zaterdagticket':
+			if ($record->orderitemattribute_name !== 'Dieetwensen')
+			{
+				if ((int) $record->orderitem_discount === 0)
+				{
+					if ((int) $record->orderitem_price === $earlyBirdSaturday)
+					{
+						$report[$record->orderitem_sku]['early']++;
+					}
+					elseif ((int) $record->orderitem_price === $regularSaturday)
+					{
+						$report[$record->orderitem_sku]['normaal']++;
+					}
+					else
+					{
+						echo 'NO MATCH FOR SATURDAY<br />';
+					}
+				}
+				else
+				{
+					$report[$record->orderitem_sku]['gratis']++; // += 1 * $record->orderitem_quantity;
+				}
+			}
+			break;
+		case 'Vrijdagdiner':
+			if ($record->orderitemattribute_name !== 'Dieetwensen')
+			{
+				if ((int) $record->orderitem_discount === 0)
+				{
+					$report[$record->orderitem_sku]['normaal']++;
+				}
+				else
+				{
+					$report[$record->orderitem_sku]['gratis']++;
+				}
+			}
+			break;
+	}
+
 	// Get the customer name
 	$query = $db->getQuery(true)
 		->select($db->quoteName(array('name', 'email')))
@@ -213,7 +291,28 @@ $workshops['phpstorm']['names'][] = $record->name  . ' - ' . $record->email;
 
 $total = $diners['price'];
 ?>
-
+<table>
+	<caption>Tickets verdeeld over het type</caption>
+	<thead>
+	<tr>
+		<th>Type</th>
+		<th>Normale prijs</th>
+		<th>Early Bird</th>
+		<th>Gratis</th>
+	</tr>
+	</thead>
+	<tbody>
+		<?php foreach ($report as $index => $item) : ?>
+			<tr>
+				<td><?php echo $index; ?></td>
+				<td><?php echo $item['normaal']; ?></td>
+				<td><?php echo isset($item['early']) ? $item['early'] : 0; ?></td>
+				<td><?php echo $item['gratis']; ?></td>
+			</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<hr />
 <table>
 	<caption>Overzicht</caption>
 	<thead>

@@ -2,32 +2,32 @@
 <extension type="package" version="3.5" method="upgrade">
     <name>CSVI</name>
     <packagename>csvi</packagename>
-    <creationDate>18 January 2018</creationDate>
+    <creationDate>17 April 2018</creationDate>
     <author>RolandD Cyber Produksi</author>
     <authorEmail>contact@csvimproved.com</authorEmail>
     <authorUrl>https://csvimproved.com/</authorUrl>
     <copyright>Copyright (C) 2006 - 2018 RolandD Cyber Produksi. All rights reserved.</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-    <version>7.4.1</version>
+    <version>7.6.1</version>
     <description>CSVI Pro Package</description>
 
     <scriptfile>script.php</scriptfile>
 
     <files folder="packages">
-        <file type="component" id="com_csvi">com_csvi_7.4.1_pro.zip</file>
-        <file type="plugin" group="csviaddon" id="categories">plg_csviaddon_categories_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="contact">plg_csviaddon_contact_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="content">plg_csviaddon_content_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="csvi">plg_csviaddon_csvi_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="fields">plg_csviaddon_fields_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="menus">plg_csviaddon_menus_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="modules">plg_csviaddon_modules_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csviaddon" id="users">plg_csviaddon_users_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="conditional">plg_csvirules_conditional_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="fieldcombine">plg_csvirules_fieldcombine_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="fieldcopy">plg_csvirules_fieldcopy_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="margin">plg_csvirules_margin_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="multireplace">plg_csvirules_multireplace_csvi_7.4.1.zip</file>
-        <file type="plugin" group="csvirules" id="skip">plg_csvirules_skip_csvi_7.4.1.zip</file>
+        <file type="component" id="com_csvi">com_csvi_7.6.1_pro.zip</file>
+        <file type="plugin" group="csviaddon" id="categories">plg_csviaddon_categories_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="contact">plg_csviaddon_contact_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="content">plg_csviaddon_content_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="csvi">plg_csviaddon_csvi_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="fields">plg_csviaddon_fields_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="menus">plg_csviaddon_menus_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="modules">plg_csviaddon_modules_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csviaddon" id="users">plg_csviaddon_users_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="conditional">plg_csvirules_conditional_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="fieldcombine">plg_csvirules_fieldcombine_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="fieldcopy">plg_csvirules_fieldcopy_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="margin">plg_csvirules_margin_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="multireplace">plg_csvirules_multireplace_csvi_7.6.1.zip</file>
+        <file type="plugin" group="csvirules" id="skip">plg_csvirules_skip_csvi_7.6.1.zip</file>
     </files>
 </extension>

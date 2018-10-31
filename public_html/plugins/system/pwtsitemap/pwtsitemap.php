@@ -111,8 +111,8 @@ class PlgSystemPwtSitemap extends JPlugin
 			return true;
 		}
 
-		// Filter type and authorization
-		if (!PwtSitemapHelper::filterMenuType($data['type']) || !JFactory::getUser()->authorise('core.manage', 'com_pwtsitemap'))
+		// Check authorization
+		if (!JFactory::getUser()->authorise('core.manage', 'com_pwtsitemap'))
 		{
 			return true;
 		}
@@ -144,18 +144,32 @@ class PlgSystemPwtSitemap extends JPlugin
 	 * Perform the onPwtSitemapBeforeBuild event. We strip all the menu-items which have a no-index value
 	 *
 	 * @param   $aMenuItems  array  The array holding the menu items
+	 * @param   $sType       string  The sitemap type
+	 * @param   $sFormat     string  The sitemap format
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	public function onPwtSitemapBeforeBuild(&$aMenuItems)
+	public function onPwtSitemapBeforeBuild(&$aMenuItems, $sType, $sFormat)
 	{
-		foreach ($aMenuItems as $iPK => $oItem)
+		// Only for XML format
+		if ($sFormat == 'xml')
 		{
-			if (strpos($oItem->params->get('robots'), 'noindex') !== false)
+			// Check menu-items
+			foreach ($aMenuItems as $iPK => $oItem)
 			{
-				unset($aMenuItems[$iPK]);
+				// Remove no-index menu-items from sitemap
+				if (strpos($oItem->params->get('robots'), 'noindex') !== false)
+				{
+					unset($aMenuItems[$iPK]);
+				}
+
+				// Remove alias menu-items from sitemap
+				if ($oItem->type == 'alias')
+				{
+					unset($aMenuItems[$iPK]);
+				}
 			}
 		}
 	}
@@ -208,13 +222,8 @@ class PlgSystemPwtSitemap extends JPlugin
 			$url       .= $separator . 'key=' . $downloadId;
 		}
 
-		// Get the clean domain
-		$domain = '';
-
-		if (preg_match('/\w+\..{2,3}(?:\..{2,3})?(?:$|(?=\/))/i', Uri::base(), $matches) === 1)
-		{
-			$domain = $matches[0];
-		}
+		// Get the domain for this site
+		$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
 
 		// Append domain
 		$url .= '&domain=' . $domain;

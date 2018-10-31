@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
     </h2>
     <div class="error score-0" v-if="page.error_global">
         <div class="pseo-score__content">
-            {{ page.error_global }}
+            {{ page.error_global }} - <?php echo Text::_('PLG_SYSTEM_PWTSEO_LABELS_REQUESTED_URL') ?> {{ page.url }}
         </div>
     </div>
     <div class="pseo-score" v-else>
@@ -60,6 +60,11 @@ defined('_JEXEC') or die;
                     :plugin-config="pluginConfig"
                     :page="page"
                     @score-change="calculateTotalScore"></test-result-body-keyword-density>
+            <test-keyword-not-used
+                    :local-config="localConfig"
+                    :plugin-config="pluginConfig"
+                    :page="page"
+                    @score-change="calculateTotalScore"></test-keyword-not-used>
 		<?php else: ?>
             <test-keyword-in-title
                     :local-config="localConfig"
@@ -134,7 +139,7 @@ defined('_JEXEC') or die;
 
         <div class="score-0" v-if="page.error">
             <div class="pseo-score__content">
-                {{ page.error }}
+                {{ page.error }} - <?php echo Text::_('PLG_SYSTEM_PWTSEO_LABELS_REQUESTED_URL') ?> {{ page.url }}
             </div>
         </div>
         <div class="pseo-score" v-else>

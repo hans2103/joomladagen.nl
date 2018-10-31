@@ -99,7 +99,7 @@ class PwtSitemapModelSitemap extends JModelItem
 		$menuitems = $this->app->getMenu()->getMenu();
 
 		// allow for plugins to change the menu items
-		$this->jDispatcher->trigger('onPwtSitemapBeforeBuild', array(&$menuitems, $this->type));
+		$this->jDispatcher->trigger('onPwtSitemapBeforeBuild', array(&$menuitems, $this->type, $this->format));
 
 		// Filter menu items and add articles
 		foreach ($menuitems as $menuitem)
@@ -119,13 +119,37 @@ class PwtSitemapModelSitemap extends JModelItem
 				continue;
 			}
 
-			// Convert menu item to a PwtSitemap item
-			$menuitem->link             = ($menuitem->type == 'component') ? 'index.php?Itemid=' . $menuitem->id : null;
+			// Generate link based on menu-item type
+			switch ($menuitem->type)
+			{
+				case 'component':
+					$menuitem->link = 'index.php?Itemid=' . $menuitem->id;
+					break;
+
+				case 'alias':
+					$menuitem->link = 'index.php?Itemid=' . $menuitem->params->get('aliasoptions');
+					break;
+
+				case 'url':
+					break;
+
+				default:
+					$menuitem->link = null;
+					break;
+			}
+
+			// Get the PWT Sitemap settings
 			$menuitem->addtohtmlsitemap = $menuitem->params->get('addtohtmlsitemap', 1);
 			$menuitem->addtoxmlsitemap  = $menuitem->params->get('addtoxmlsitemap', 1);
 
+			// Trigger plugin event
+			$this->jDispatcher->trigger('onPwtSitemapAddMenuItemToSitemap', array($menuitem));
+
 			// Add item to sitemap
-			$this->AddMenuItemToSitemap($menuitem);
+			if (!$menuitem->doNotAdd)
+			{
+				$this->AddMenuItemToSitemap($menuitem);
+			}
 
 			// Trigger plugin event
 			$results = $this->jDispatcher->trigger('onPwtSitemapBuildSitemap', array($menuitem, $this->format, $this->type));
@@ -187,8 +211,7 @@ class PwtSitemapModelSitemap extends JModelItem
 		$lang                   = JFactory::getLanguage();
 		$authorizedAccessLevels = JFactory::getUser()->getAuthorisedViewLevels();
 
-		return (!PwtSitemapHelper::filterMenuType($menuitem->type)
-			|| ($menuitem->language != $lang->getTag() and $menuitem->language != '*')
+		return (($menuitem->language != $lang->getTag() and $menuitem->language != '*')
 			|| !in_array($menuitem->access, $authorizedAccessLevels)
 		);
 	}

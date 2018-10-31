@@ -41,27 +41,6 @@ abstract class PwtSitemapHelper
 	}
 
 	/**
-	 * Filter a menu type
-	 *
-	 * @param   string  $type  Menutype
-	 *
-	 * @return  bool    Returns true if the menutype is not filtered, false otherwise
-	 *
-	 * @since   1.0.0
-	 */
-	public static function filterMenuType($type)
-	{
-		$aFilter = array('separator', 'url', 'alias');
-
-		if (in_array($type, $aFilter))
-		{
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the paraemter of a menu item
 	 *
 	 * @param   int  $itemId  Menu item id

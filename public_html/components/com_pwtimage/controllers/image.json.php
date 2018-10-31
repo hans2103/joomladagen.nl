@@ -3,11 +3,12 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2017 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
@@ -39,66 +40,68 @@ class PwtimageControllerImage extends BaseController
 		// Check for request forgeries
 		$this->checkRequestToken() or jexit('Invalid Token');
 
-		$file         = $this->input->files->get('image', null);
-		$localFile    = $this->input->getString('pwt-image-localFile', null);
-		$targetFile   = $this->input->getString('pwt-image-targetFile', null);
-		$cropData     = $this->input->getString('pwt-image-data', null);
-		$ratio        = $this->input->getString('pwt-image-ratio', null);
-		$setWidth     = $this->input->getString('set-width', null);
-		$widthOptions = $this->input->getString('widthOptions', null);
-		$storeFolder  = $this->input->getString('storeFolder', null);
-		$width        = $this->input->getString('pwt-image-width', null);
-		$sourcePath   = $this->input->getString('pwt-image-sourcePath', null);
-		$subPath      = $this->input->getString('pwt-image-subPath', null);
-
-		// Sanity check that we have an image
-		if (is_null($file) && is_null($localFile))
-		{
-			throw new InvalidArgumentException(Text::_('COM_PWTIMAGE_FILENAME_MISSING'));
-		}
-
-		/** @var PwtimageModelImage $model */
-		$model   = $this->getModel('Image', 'PwtimageModel');
-		$image   = '';
+		$file            = $this->input->files->get('image', null);
+		$localFile       = $this->input->getString('pwt-image-localFile', null);
+		$targetFile      = $this->input->getString('pwt-image-targetFile', null);
+		$cropData        = $this->input->getString('pwt-image-data', null);
+		$ratio           = $this->input->getString('pwt-image-ratio', null);
+		$width           = $this->input->getString('pwt-image-width', null);
+		$sourcePath      = $this->input->getString('pwt-image-sourcePath', null);
+		$subPath         = $this->input->getString('pwt-image-subPath', null);
+		$backgroundColor = $this->input->getString('pwt-image-backgroundColor', '#000000');
+		$origin          = $this->input->getString('pwt-image-origin', null);
+		$keepOriginal    = filter_var($this->input->getString('pwt-image-keepOriginal', null), FILTER_VALIDATE_BOOLEAN);
+		$image           = '';
 
 		try
 		{
-			$image = $model->processImage(
+			// Sanity check that we have an image
+			if (is_null($file) && is_null($localFile))
+			{
+				throw new InvalidArgumentException(Text::_('COM_PWTIMAGE_FILENAME_MISSING'));
+			}
+
+			/** @var PwtimageModelImage $model */
+			$model = $this->getModel('Image', 'PwtimageModel');
+			$error = false;
+
+			$image   = $model->processImage(
 				$file,
 				$localFile,
 				$targetFile,
 				$cropData,
 				$ratio,
 				$width,
-				$setWidth,
-				$widthOptions,
+				$keepOriginal,
 				$sourcePath,
 				$subPath,
-				$storeFolder
+				$origin,
+				$backgroundColor
 			);
 			$message = $model->getMessage();
 		}
 		catch (Exception $e)
 		{
 			$message = $e->getMessage();
+			$error   = true;
 		}
 
-		echo new JsonResponse($image, $message);
+		echo new JsonResponse($image, $message, $error);
 	}
 
 	/**
 	 * Check if the token is valid.
 	 *
-	 * @param   string  $method  The request method being used.
+	 * @param   string $method The request method being used.
 	 *
-	 * @return  bool  True if token is valid, False if token is not valid.
+	 * @return  boolean  True if token is valid, False if token is not valid.
 	 *
-	 * @since   1.2.0
+	 * @since   1.1.0
 	 */
 	private function checkRequestToken($method = 'post')
 	{
 		// Check if we come from the backend
-		if ($sessionId = $this->input->$method->get('sessionId', '', 'alnum'))
+		if ($sessionId = $this->input->server->get('HTTP_X_CSRF_TOKEN', '', 'alnum'))
 		{
 			$db = Factory::getDbo();
 
@@ -119,7 +122,7 @@ class PwtimageControllerImage extends BaseController
 		else
 		{
 			// Coming in from the frontend
-			return Session::checkToken();
+			return Session::checkToken($method);
 		}
 
 		return true;
@@ -130,7 +133,7 @@ class PwtimageControllerImage extends BaseController
 	 *
 	 * @return  void
 	 *
-	 * @since   1.0
+	 * @since   1.0.0
 	 */
 	public function loadFolder()
 	{
@@ -143,7 +146,6 @@ class PwtimageControllerImage extends BaseController
 		$folder     = $this->input->getString('folder', null);
 		$helper     = new PwtimageHelper;
 		$baseFolder = $helper->getImageFolder(true);
-		$path       = str_replace('/index.php', '', Uri::getInstance()->toString(array('path')));
 
 		// Check if baseFolder and the requested folder are the same
 		if ($folder === '/')
@@ -152,8 +154,72 @@ class PwtimageControllerImage extends BaseController
 		}
 
 		$folders = JFolder::folders(JPATH_SITE . $folder);
-		$files   = JFolder::files(JPATH_SITE . $folder, '(.jpg|.jpeg|.png|.gif|.bmp)');
+		$files   = JFolder::files(
+			JPATH_SITE . $folder,
+			'(.' . implode('|.', explode(',', ComponentHelper::getParams('com_media')->get('image_extensions', 'jpg,jpeg,png,gif,bmp'))) . ')'
+		);
 
-		echo new JsonResponse(array('folders' => $folders, 'files' => $files, 'basePath' => str_replace('//', '/', $path . $folder)));
+		echo new JsonResponse(array('folders' => $folders, 'files' => $files, 'basePath' => $folder));
+	}
+
+	/**
+	 * Load the folders for the select picker on the edit tab.
+	 *
+	 * @return  void
+	 *
+	 * @since   1.1.0
+	 */
+	public function loadSelectFolders()
+	{
+		// Check for request forgeries
+		$this->checkRequestToken() or jexit('Invalid Token');
+
+		$sourcePath = $this->input->getString('sourcePath', null);
+
+		// Get the list of folders the user can choose from
+		$folders = JFolder::folders(JPATH_SITE . $sourcePath, '.', true, true);
+
+		if (!is_array($folders))
+		{
+			$folders = array();
+		}
+
+		foreach ($folders as $index => $folder)
+		{
+			$folders[$index] = str_replace(JPATH_SITE . $sourcePath . '/', '', $folder);
+		}
+
+		// Add the current folder as default
+		array_unshift($folders, '/');
+
+		echo new JsonResponse(array($folders));
+	}
+
+	/**
+	 * Returns meta data for a specified image
+	 *
+	 * @return  void
+	 *
+	 * @since   1.3.0
+	 */
+	public function loadMetaData()
+	{
+		// Check for request forgeries
+		$this->checkRequestToken() or jexit('Invalid Token');
+
+		$response = array();
+		$path     = $this->input->getString('image', null);
+
+		if ($path)
+		{
+			if (file_exists(JPATH_SITE . $path))
+			{
+				$response         = getimagesize(JPATH_SITE . $path);
+				$response['size'] = filesize(JPATH_SITE . $path);
+				$response['name'] = basename($path);
+			}
+		}
+
+		echo new JsonResponse($response);
 	}
 }

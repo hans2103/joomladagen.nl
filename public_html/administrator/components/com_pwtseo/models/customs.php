@@ -9,7 +9,6 @@
  */
 
 use Joomla\CMS\MVC\Model\ListModel;
-use Joomla\Utilities\ArrayHelper;
 
 defined('_JEXEC') or die;
 
