@@ -307,8 +307,7 @@ class PWTTemplateHelper
 		HTMLHelper::_('stylesheet', 'bootstrap.min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'font-awesome.min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'style.min.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('stylesheet', 'https://fonts.googleapis.com/css?family=Roboto:400');
-		HTMLHelper::_('stylesheet', 'https://fonts.googleapis.com/css?family=Raleway:700');
+		HTMLHelper::_('stylesheet', 'https://fonts.googleapis.com/css?family=Roboto:400|Raleway:700');
 	}
 
 
