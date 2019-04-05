@@ -703,7 +703,7 @@ PWTTemplateHelper::loadJs();
 		</div>
 	</section>
 
-	<section class="ts-pricing gradient" id="tickets" style="background-image: url(templates/jd19nl/images/pattern/jd19nl-pattern-blue.pn)">
+	<section class="ts-pricing gradient" id="tickets" style="background-image: url(templates/jd19nl/images/pattern/jd19nl-pattern-blue.png)">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
