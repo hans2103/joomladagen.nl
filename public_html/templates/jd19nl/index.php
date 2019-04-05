@@ -949,7 +949,9 @@ PWTTemplateHelper::loadJs();
 					<div class="ts-map">
 						<div class="mapouter">
 							<div class="gmap_canvas">
-								<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d78391.79907233492!2d4.976903782460923!3d52.12079162049092!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x2a1d1cfc1c011850!2sCarlton+President+Hotel!5e0!3m2!1snl!2snl!4v1542579227654"></iframe>
+								<a href="https://www.google.nl/maps/place/Carlton+President+Hotel/@52.1207937,5.0206722,14z/data=!4m5!3m4!1s0x47c66fd67708f46d:0x2a1d1cfc1c011850!8m2!3d52.12079!4d5.0381863">
+									<img src="images/locatie/carlton-president-locatie.png"/>
+								</a>
 							</div>
 						</div>
 					</div>
