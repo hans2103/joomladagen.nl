@@ -838,7 +838,7 @@ PWTTemplateHelper::loadJs();
 			<div class="row">
 				<div class="col-lg-12">
 					<p class="text-center text-white">
-						<br>Stichting Joomla Nederland is vrijgesteld van BTW, er zal dus 0% BTW op de factuur van de tickets staan.
+						<br>Stichting Joomla Nederland is vrijgesteld van BTW, er zal dus 0% BTW op de factuur van de tickets staan. De prijzen zijn exclusief transactiekosten.
 					</p>
 				</div>
 			</div>
