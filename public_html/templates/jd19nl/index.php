@@ -97,7 +97,7 @@ PWTTemplateHelper::loadJs();
 							</div>
 
 							<div class="banner-btn">
-								<a href="https://joomla.paydro.com/jd19nl" class="btn">Koop je tickets</a>
+								<a href="https://joomladagen.paydro.com/jd19nl" class="btn">Koop je tickets</a>
 							</div>
 							<small>Nu met Early Bird korting!</small>
 						</div>
@@ -120,7 +120,7 @@ PWTTemplateHelper::loadJs();
 							Voor iedereen die websites bouwt met Joomla, van beginner tot (ver)gevorderde en van contentbeheerder tot extensie-ontwikkelaar.
 							<br><br>Deel je kennis, ervaring, ideeën en code. Ontmoet andere Joomlers en laat je inspireren!
 						</p>
-						<a href="https://joomla.paydro.com/jd19nl" class="btn">Koop je tickets</a><br>
+						<a href="https://joomladagen.paydro.com/jd19nl" class="btn">Koop je tickets</a><br>
 					</div>
 				</div>
 				<div class="col-lg-8">
@@ -737,7 +737,7 @@ PWTTemplateHelper::loadJs();
 								</ul>
 							</div>
 							<div class="promotional-code">
-								<a href="https://joomla.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
+								<a href="https://joomladagen.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
 							</div>
 						</div>
 						<img class="pricing-dot1" src="templates/jd19nl/images/pricing/dot.png" alt="">
@@ -767,7 +767,7 @@ PWTTemplateHelper::loadJs();
 								</ul>
 							</div>
 							<div class="promotional-code">
-								<a href="https://joomla.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
+								<a href="https://joomladagen.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
 							</div>
 						</div>
 						<img class="pricing-dot1" src="templates/jd19nl/images/pricing/dot.png" alt="">
@@ -797,7 +797,7 @@ PWTTemplateHelper::loadJs();
 								</ul>
 							</div>
 							<div class="promotional-code">
-								<a href="https://joomla.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
+								<a href="https://joomladagen.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
 							</div>
 						</div>
 						<img class="pricing-dot1" src="templates/jd19nl/images/pricing/dot.png" alt="">
@@ -827,7 +827,7 @@ PWTTemplateHelper::loadJs();
 								</ul>
 							</div>
 							<div class="promotional-code">
-								<a href="https://joomla.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
+								<a href="https://joomladagen.paydro.com/jd19nl" class="btn pricing-btn">Koop ticket</a>
 							</div>
 						</div>
 						<img class="pricing-dot1" src="templates/jd19nl/images/pricing/dot.png" alt="">
