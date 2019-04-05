@@ -306,8 +306,6 @@ class PWTTemplateHelper
 	{
 		HTMLHelper::_('stylesheet', 'bootstrap.min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'font-awesome.min.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('stylesheet', 'animate.css', ['version' => 'auto', 'relative' => true]);
-		HTMLHelper::_('stylesheet', 'xsIcon.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'style.min.css', ['version' => 'auto', 'relative' => true]);
 		HTMLHelper::_('stylesheet', 'https://fonts.googleapis.com/css?family=Roboto:400');
 		HTMLHelper::_('stylesheet', 'https://fonts.googleapis.com/css?family=Raleway:700');
@@ -368,15 +366,13 @@ class PWTTemplateHelper
 	 */
 	static public function loadJs()
 	{
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/popper.min.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/bootstrap.min.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.appear.min.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.jCounter.js', array('version' => 'auto'));
-		//HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.magnific-popup.min.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/wow.min.js', array('version' => 'auto'));
-		//HTMLHelper::_('script', 'templates/' . self::template() . '/js/isotope.pkgd.min.js', array('version' => 'auto'));
-		HTMLHelper::_('script', 'templates/' . self::template() . '/js/main.js', array('version' => 'auto'));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/popper.min.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/bootstrap.min.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.appear.min.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/jquery.jCounter.min.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/wow.min.js', array('version' => 'auto'), array('defer' => true));
+		HTMLHelper::_('script', 'templates/' . self::template() . '/js/main.min.js', array('version' => 'auto'), array('defer' => true));
 	}
 
 

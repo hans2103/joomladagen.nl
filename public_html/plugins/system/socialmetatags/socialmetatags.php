@@ -195,7 +195,7 @@ class PlgSystemSocialmetatags extends JPlugin
 
 		if (isset($realname))
 		{
-			$metaproperty['profile:last_name'] = $realname;
+			//$metaproperty['profile:last_name'] = $realname;
 		}
 
 		if (isset($profile_facebook))
