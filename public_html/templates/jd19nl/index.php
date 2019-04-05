@@ -986,12 +986,12 @@ PWTTemplateHelper::loadJs();
 				<h3 class="sponsor-title text-center">Gouden sponsors</h3>
 				<div class="row sponsor-padding text-center justify-content-md-center">
 					<div class="col-lg-4">
-						<a href="http://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
+						<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
 							Wil jij hier staan?
 						</a>
 					</div>
 					<div class="col-lg-4">
-						<a href="http://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
+						<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
 							Wil jij hier staan?
 						</a>
 					</div>
@@ -1002,7 +1002,7 @@ PWTTemplateHelper::loadJs();
 				<h3 class="sponsor-title text-center">Zilveren sponsors</h3>
 				<div class="row sponsor-padding text-center justify-content-md-center">
 					<div class="col-lg-3">
-						<a href="http://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
+						<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
 							Wil jij hier staan?
 						</a>
 					</div>
@@ -1012,7 +1012,7 @@ PWTTemplateHelper::loadJs();
 						</a>
 					</div>
 					<div class="col-lg-3">
-						<a href="http://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
+						<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
 							Wil jij hier staan?
 						</a>
 					</div>
@@ -1022,7 +1022,7 @@ PWTTemplateHelper::loadJs();
 			<div class="row">
 				<div class="col-lg-12 mx-auto">
 					<div class="general-btn text-center">
-						<a class="btn" href="http://joomladagen.nl/sponsoring.pdf">Sponsor worden?</a>
+						<a class="btn" href="https://joomladagen.nl/sponsoring.pdf">Sponsor worden?</a>
 					</div>
 				</div>
 			</div>
@@ -1040,7 +1040,7 @@ PWTTemplateHelper::loadJs();
 								<span>Tot 17 april 2019</span>
 								Early Bird tickets met korting
 							</h2>
-							<a href="#" class="btn">Bestel nu je tickets</a>
+							<a href="https://joomladagen.paydro.com/jd19nl" class="btn">Bestel nu je tickets</a>
 						</div>
 					</div>
 				</div>
