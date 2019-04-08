@@ -258,13 +258,14 @@ PWTTemplateHelper::loadJs();
 									<h3 class="schedule-slot-title">Joomla DIY
 										<strong>Diverse Joomla-experts</strong>
 									</h3>
-									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een onderwerp starten. Je hebt in ieder geval keuze uit:</p>
+									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een bepaald onderwerp starten. Je hebt in ieder geval keuze uit:</p>
 									<ul>
 										<li>Code schrijven voor Joomla 4</li>
 										<li>Testen van Joomla features</li>
 										<li>Joomla Marketing in Nederland</li>
 										<li>Werken aan de website van joomlacommunity.nl (template en/of content)</li>
 										<li>Vertalen van Joomla en extensies</li>
+										<li>... wordt aangevuld</li>
 									</ul>
 									<p>Zelf nog een goed idee voor een onderwerp of vindt je het leuk om een Joomla DIY tafel te begeleiden? Neem dan contact met ons op!</p>
 								</div>
@@ -277,8 +278,7 @@ PWTTemplateHelper::loadJs();
 										<span class="label-workshop">Workshop</span> Je eerste eigen Joomla-template
 										<strong>Rachel Walraven</strong>
 									</h3>
-									<p>Natuurlijk kan je voor je website gebruik maken van gratis of betaalde kant-en-klaar template. Maar je kan ook zelf je template in elkaar zetten en zo de volledige controle houden. In deze workshop laat Rachel zien hoe je zelf je eerste template kan bouwen.
-										<em>Meer informatie volgt binnenkort.</em></p>
+									<p>Je hebt altijd al een eigen template willen bouwen voor je Joomla! website. Maar het is er nooit van gekomen of je weet niet goed hoe je het aan moet pakken. In deze workshop gaan we dit stap voor stap oppakken. Op basis van een ‘lege’ basistemplate ga je je eigen template maken.  Je leert hoe de template in elkaar zit, hoe je de structuur van je site opbouwt, je moduleposities bepaalt en hoe je de site opmaakt. Als we tijd (en zin) hebben kijken we nog even naar eenvoudige template overrides. Niveau: Beginner, met (basis)kennis van HTML en CSS.</p>
 								</div>
 							</div>
 
@@ -334,13 +334,14 @@ PWTTemplateHelper::loadJs();
 									<h3 class="schedule-slot-title">Joomla DIY
 										<strong>Diverse Joomla-experts</strong>
 									</h3>
-									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een onderwerp starten. Je hebt in ieder geval keuze uit:</p>
+									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een bepaald onderwerp starten. Je hebt in ieder geval keuze uit:</p>
 									<ul>
 										<li>Code schrijven voor Joomla 4</li>
 										<li>Testen van Joomla features</li>
 										<li>Joomla Marketing in Nederland</li>
 										<li>Werken aan de website van joomlacommunity.nl (template en/of content)</li>
 										<li>Vertalen van Joomla en extensies</li>
+										<li>... wordt aangevuld</li>
 									</ul>
 									<p>Zelf nog een goed idee voor een onderwerp of vindt je het leuk om een Joomla DIY tafel te begeleiden? Neem dan contact met ons op!</p>
 								</div>
