@@ -34,7 +34,7 @@ PWTTemplateHelper::loadJs();
 	<header id="header" class="header header-classic">
 		<div class="container">
 			<nav class="navbar navbar-expand-lg navbar-light">
-				<a class="navbar-brand" href="index.html">
+				<a class="navbar-brand" href="/">
 					JoomlaDagen 2019
 				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,7 +130,7 @@ PWTTemplateHelper::loadJs();
 								<i class="icon icon-netwrorking"></i>
 								<h3 class="ts-title">Leren op vrijdag</h3>
 								<p>
-									Vergroot je Joomla-kennis door workshops te volgen van experts en leer hoe je zelf kan bijdragen aan het Joomla-project.
+									Vergroot je Joomla-kennis door workshops te volgen van experts en deel tijdens Joomla DIY kennis met elkaar rond allerlei onderwerpen.
 								</p>
 								<span class="count-number green">#1</span>
 							</div>
@@ -213,7 +213,7 @@ PWTTemplateHelper::loadJs();
 						Joomla DIY & workshops
 					</h2>
 					<p class="lead text-center">Op vrijdag organiseren we iets nieuws!
-						<strong>Joomla DIY</strong> (Do It Yourself) waarbij je in groepen onder leiding van een Joomla-expert aan de slag gaat rond een bepaald onderwerp. Uiteraard met als doel om veel van elkaar te leren! Je kan er ook voor kiezen om in de ochtend en/of middag workshops te volgen voor 25 euro per workshop.
+						<strong>Joomla DIY</strong> (Do It Yourself) waarbij je in groepen rond tafels gaat zitten en aan de slag gaat met een onderwerp. Uiteraard met als doel om veel van elkaar te leren! De onderwerpen bepaal je zelf en je kan de gehele dag tussen de tafels wisselen. Je kan er ook voor kiezen om in de ochtend en/of middag een workshop te volgen voor 25 euro per workshop.
 					</p>
 				</div>
 			</div>
@@ -255,17 +255,18 @@ PWTTemplateHelper::loadJs();
 							<div class="schedule-slot-session">
 								<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 								<div class="schedule-slot-info-content">
-									<h3 class="schedule-slot-title">Joomla DIY
-										<strong>Diverse Joomla-experts</strong>
-									</h3>
-									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een bepaald onderwerp starten. Je hebt in ieder geval keuze uit:</p>
+									<h3 class="schedule-slot-title">Joomla DIY</h3>
+									<p>Schuif aan bij een tafel om kennis en ervaring uit te wisselen over een bepaald (Joomla) onderwerp en leer van en mét elkaar. Concreet aan de slag gaan om bijvoorbeeld code voor Joomla 4 te schrijven/testen kan natuurlijk ook. Je kan de gehele dag tussen de tafels wisselen en ook zelf een tafel starten. Het onderwerp bepaal je zelf, bijvoorbeeld:</p>
 									<ul>
-										<li>Code schrijven voor Joomla 4</li>
-										<li>Testen van Joomla features</li>
+										<li>Wat kan en hoe gebruik jij extensie [<em>naam extensie</em>]</li>
 										<li>Joomla Marketing in Nederland</li>
-										<li>Werken aan de website van joomlacommunity.nl (template en/of content)</li>
+										<li>Code schrijven voor Joomla 4</li>
+										<li>Wat zet jij standaard in je eigen template</li>
+										<li>Testen van Joomla 4 features</li>
+										<li>Werken aan de website van joomlacommunity.nl</li>
 										<li>Vertalen van Joomla en extensies</li>
-										<li>... wordt aangevuld</li>
+										<li>Het onderhouden van Joomla-sites</li>
+										<li>... wordt aangevuld, ook op de dag zelf!</li>
 									</ul>
 									<p>Zelf nog een goed idee voor een onderwerp of vindt je het leuk om een Joomla DIY tafel te begeleiden? Neem dan contact met ons op!</p>
 								</div>
@@ -331,17 +332,18 @@ PWTTemplateHelper::loadJs();
 							<div class="schedule-slot-session">
 								<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 								<div class="schedule-slot-info-content">
-									<h3 class="schedule-slot-title">Joomla DIY
-										<strong>Diverse Joomla-experts</strong>
-									</h3>
-									<p>Onder leiding van diverse experts ga je aan de slag om zelf een steentje bij te dragen aan Joomla en daar tegelijkertijd veel van te leren! Schuif aan bij een tafel en leer van en mét elkaar. Je kan de gehele dag tussen de tafels wisselen en met een aantal mensen een nieuwe tafel rond een bepaald onderwerp starten. Je hebt in ieder geval keuze uit:</p>
+									<h3 class="schedule-slot-title">Joomla DIY</h3>
+									<p>Schuif aan bij een tafel om kennis en ervaring uit te wisselen over een bepaald (Joomla) onderwerp en leer van en mét elkaar. Concreet aan de slag gaan om bijvoorbeeld code voor Joomla 4 te schrijven/testen kan natuurlijk ook. Je kan de gehele dag tussen de tafels wisselen en ook zelf een tafel starten. Het onderwerp bepaal je zelf, bijvoorbeeld:</p>
 									<ul>
-										<li>Code schrijven voor Joomla 4</li>
-										<li>Testen van Joomla features</li>
+										<li>Wat kan en hoe gebruik jij extensie [<em>naam extensie</em>]</li>
 										<li>Joomla Marketing in Nederland</li>
-										<li>Werken aan de website van joomlacommunity.nl (template en/of content)</li>
+										<li>Code schrijven voor Joomla 4</li>
+										<li>Wat zet jij standaard in je eigen template</li>
+										<li>Testen van Joomla 4 features</li>
+										<li>Werken aan de website van joomlacommunity.nl</li>
 										<li>Vertalen van Joomla en extensies</li>
-										<li>... wordt aangevuld</li>
+										<li>Het onderhouden van Joomla-sites</li>
+										<li>... wordt aangevuld, ook op de dag zelf!</li>
 									</ul>
 									<p>Zelf nog een goed idee voor een onderwerp of vindt je het leuk om een Joomla DIY tafel te begeleiden? Neem dan contact met ons op!</p>
 								</div>
