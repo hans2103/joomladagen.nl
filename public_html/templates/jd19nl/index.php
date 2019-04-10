@@ -1015,6 +1015,11 @@ PWTTemplateHelper::loadJs();
 						</a>
 					</div>
 					<div class="col-lg-3">
+						<a href="https://www.joomlashine.com" class="sponsors-logo">
+							<img class="img-fluid" src="images/sponsors/joomlashine.png" alt="">
+						</a>
+					</div>
+					<div class="col-lg-3">
 						<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
 							Wil jij hier staan?
 						</a>
