@@ -279,7 +279,7 @@ PWTTemplateHelper::loadJs();
 										<span class="label-workshop">Workshop</span> Je eerste eigen Joomla-template
 										<strong>Rachel Walraven</strong>
 									</h3>
-									<p>Je hebt altijd al een eigen template willen bouwen voor je Joomla! website. Maar het is er nooit van gekomen of je weet niet goed hoe je het aan moet pakken. In deze workshop gaan we dit stap voor stap oppakken. Op basis van een ‘lege’ basistemplate ga je je eigen template maken.  Je leert hoe de template in elkaar zit, hoe je de structuur van je site opbouwt, je moduleposities bepaalt en hoe je de site opmaakt. Als we tijd (en zin) hebben kijken we nog even naar eenvoudige template overrides. Niveau: Beginner, met (basis)kennis van HTML en CSS.</p>
+									<p>Je hebt altijd al een eigen template willen bouwen voor je Joomla! website. Maar het is er nooit van gekomen of je weet niet goed hoe je het aan moet pakken. In deze workshop gaan we dit stap voor stap oppakken. Op basis van een ‘lege’ basistemplate ga je je eigen template maken. Je leert hoe de template in elkaar zit, hoe je de structuur van je site opbouwt, je moduleposities bepaalt en hoe je de site opmaakt. Als we tijd (en zin) hebben kijken we nog even naar eenvoudige template overrides. Niveau: Beginner, met (basis)kennis van HTML en CSS.</p>
 								</div>
 							</div>
 
@@ -291,8 +291,8 @@ PWTTemplateHelper::loadJs();
 										<span class="label-workshop">Workshop</span> Bouw je eigen Joomla-component
 										<strong>Marco Dings & René Kreijveld</strong>
 									</h3>
-									<p>In deze workshop laten Marco en René zien hoe je met behulp van Joomla Component Builder. </p>
-									<p><em>Meer informatie volgt binnenkort.</em></p>
+									<p>Heb jij ook al zo vaak componenten uit de JED geïnstalleerd die allemaal net niet doen wat jij zoekt? Je eigen component maken kan dan de oplossing zijn. Met Joomla Component Builder (JCB) maak je zelf componenten waarbij je veel werk uit handen wordt genomen. Bovendien voldoen deze componenten aan de Joomla 3 standaards. Componenten voor Joomla 3 zijn straks met JCB ook te genereren voor Joomla 4. In deze workshop laten Marco en René zien hoe je met behulp van JCB zelf een Joomla 3 component bouwt. We leren je de basistheorie van Joomla MVC en datamodellering. Gezamenlijk bouwen we een basis projectmanagement component voor het beheer van klanten en projecten.</p>
+									<p>Als voorkennis heb je nodig: basiskennis PHP en MySQL. Je hebt een lokale webserver werkend op je PC zodat je lokaal Joomla 3 kunt draaien. Elke deelnemer krijgt vooraf een Akeeba .jpa backup en die moet je geïnstalleerd hebben voor aanvang van de workshop. Een werkende code-editor zoals PhpStorm, Visual Studio Code, Notepad++ en dergelijke is noodzakelijk. En je moet MySQL Workbench hebben geïnstalleerd en verbonden met je database. Alle deelnemers ontvangen vooraf links naar de te installeren zaken. Niveau: gevorderd joomla gebruiker, aspirerend ontwikkelaar.</p>
 								</div>
 							</div>
 
