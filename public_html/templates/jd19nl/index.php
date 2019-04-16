@@ -557,7 +557,7 @@ PWTTemplateHelper::loadJs();
 								<img class="schedule-slot-speakers second" src="images/sprekers/peter-van-westen.jpg" alt="">
 								<div class="schedule-slot-info-content">
 									<h3 class="schedule-slot-title">
-										<span class="session-label average">Gemiddeld</span> Articles Anywhere biedt je een andere manier om naar je Joomla-website te kijken
+										<span class="session-label average">Regular</span> Articles Anywhere biedt je een andere manier om naar je Joomla-website te kijken
 										<strong>Anja de Crom & Peter van Westen</strong>
 									</h3>
 									<p>Met Articles Anywhere, de naam zegt het al, kan je overal in de website content laten zien. Artikelen dus, of onderdelen daarvan. Een, of meer. Jij bepaalt wat waar getoond wordt en op welke manier. En je kunt daar heel ver in gaan, zeker als je het combineert met custom fields. Ben je een beetje creatief? Dan kan je Articles Anywhere inzetten voor tal van mogelijkheden waar je anders meerdere andere extensies voor nodig zou hebben.
