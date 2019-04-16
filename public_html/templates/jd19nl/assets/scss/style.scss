@@ -1394,8 +1394,7 @@
   }
 }
 
-.label-workshop {
-  background: $yellow;
+.session-label {
   display: inline-block;
   padding: 5px 10px;
   font-size: 65%;
@@ -1404,18 +1403,26 @@
   margin-right: 5px;
   position: relative;
   top: -2px;
-}
 
-.label-engels {
-  background: $blue;
-  display: inline-block;
-  padding: 5px 10px;
-  font-size: 65%;
-  text-transform: uppercase;
-  color: #fff;
-  margin-right: 5px;
-  position: relative;
-  top: -2px;
+  &.workshop {
+    background: $yellow;
+  }
+
+  &.all {
+    background: $blue;
+  }
+
+  &.average {
+    background: $green;
+  }
+
+  &.advanced {
+    background: $yellow;
+  }
+
+  &.developer {
+    background: $red;
+  }
 }
 
 .ts-schedule {
