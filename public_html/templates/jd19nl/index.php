@@ -575,15 +575,16 @@ PWTTemplateHelper::loadJs();
 									<p>In this session Hannes will present the new backend template and show how to use the new features in your 3rd-party components and what to look out for.</p>
 								</div>
 							</div>
-							<!--<div class="schedule-slot-session">
+							<div class="schedule-slot-session">
 								<img class="schedule-slot-speakers" src="images/sprekers/joris-stolker.jpg" alt="">
 								<div class="schedule-slot-info-content">
 									<h3 class="schedule-slot-title">
-										<span class="session-label average">Gemiddeld</span> Eventbooking
+										<span class="session-label average">Gemiddeld</span> Event Booking
 										<strong>Joris Stolker</strong>
 									</h3>
+									<p>Steeds vaker verkopen mensen cursussen, workshops en online trainingen. Hoe verkoop je deze met iDEAL via je Joomla website? In deze presentatie laat ik zien hoe je met Event Booking een cursus registratie systeem opzet. Een overview door de standaard instellingen en mogelijke uitbreidingen.</p>
 								</div>
-							</div>-->
+							</div>
 							<div class="schedule-slot-session">
 								<img class="schedule-slot-speakers" src="images/sprekers/rene-kreijveld.jpg" alt="">
 								<div class="schedule-slot-info-content">
@@ -691,6 +692,7 @@ PWTTemplateHelper::loadJs();
 										<span class="session-label average">Gemiddeld</span> Acymailing
 										<strong>Joris Stolker</strong>
 									</h3>
+									<p>Wie verstuurt er geen nieuwsbrieven of emails aan groepen? Acymailing is al jaren een populair mailsysteem in Joomla en nu zelfs W*rdPr*ss. Sinds kort is er een volledig nieuwe versie gelanceerd, Acymailing 6. Een tour door de nieuwe Acymailing en voor welke situaties je deze kan inzetten. Is Acymailing voor jou de beste optie of toch beter Mailchimp? Heb jij al Acymailing en wil je weten of je al over kan? Zo ja hoe verloopt de migratie?</p>
 								</div>
 							</div>
 							<div class="schedule-slot-session">
