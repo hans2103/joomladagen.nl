@@ -99,7 +99,6 @@ PWTTemplateHelper::loadJs();
 							<div class="banner-btn">
 								<a href="https://joomladagen.paydro.com/jd19nl" class="btn">Koop je tickets</a>
 							</div>
-							<small>Nu met Early Bird korting!</small>
 						</div>
 					</div>
 				</div>
@@ -838,7 +837,6 @@ PWTTemplateHelper::loadJs();
 			<div class="row">
 				<div class="col-lg-12">
 					<h2 class="section-title white">
-						<span>Tot 17 april met Early Bird korting!</span>
 						Koop je tickets voor de JoomlaDagen
 					</h2>
 				</div>
@@ -852,9 +850,9 @@ PWTTemplateHelper::loadJs();
 							<div class="ts-pricing-header">
 								<h2 class="ts-pricing-name">Vrijdagticket</h2>
 								<h3 class="ts-pricing-price">
-									<span class="currency">€</span>30
+									<span class="currency">€</span>40
 								</h3>
-								<small>Na 17 april: 40 euro</small>
+								<small>&nbsp;</small>
 							</div>
 							<div class="ts-pricing-progress">
 								<h4>Inclusief:</h4>
@@ -942,9 +940,9 @@ PWTTemplateHelper::loadJs();
 							<div class="ts-pricing-header">
 								<h2 class="ts-pricing-name">Zaterdag</h2>
 								<h3 class="ts-pricing-price">
-									<span class="currency">€</span>80
+									<span class="currency">€</span>100
 								</h3>
-								<small>Na 17 april: 100 euro</small>
+								<small>&nbsp;</small>
 							</div>
 							<div class="ts-pricing-progress">
 								<h4>Inclusief:</h4>
@@ -1177,8 +1175,18 @@ PWTTemplateHelper::loadJs();
 					<div class="col-lg-8 mx-auto">
 						<div class="book-seat-content text-center mb-70">
 							<h2 class="section-title white">
-								<span>Tot 17 april 2019</span>
-								Early Bird tickets met korting
+								Tot op de JoomlaDagen<!doctype html>
+								<html lang="en">
+								<head>
+									<meta charset="UTF-8">
+									<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+									<meta http-equiv="X-UA-Compatible" content="ie=edge">
+									<title>Document</title>
+								</head>
+								<body>
+								
+								</body>
+								</html>
 							</h2>
 							<a href="https://joomladagen.paydro.com/jd19nl" class="btn">Bestel nu je tickets</a>
 						</div>
