@@ -56,7 +56,7 @@ PWTTemplateHelper::loadJs();
 								<a href="#locatie">Locatie</a>
 							</li>
 							<li class="nav-item scroll">
-								<a href="/  sponsors">Sponsors</a>
+								<a href="/sponsors">Sponsors</a>
 							</li>
 							<li class="header-ticket nav-item scroll">
 								<a class="ticket-btn btn" href="#tickets">Tickets</a>
