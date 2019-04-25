@@ -1430,12 +1430,21 @@ PWTTemplateHelper::loadJs();
 				</div>
 
 				<div class="row">
-					<div class="col-lg-8 align-self-center">
+					<div class="col-lg-4 align-self-center">
 						<div class="ts-exp-wrap">
 							<div class="ts-exp-content">
 								<h3>Cloudfaction</h3>
 								<p>Bezoek Cloudfaction op
 									<a href="https://cloudfaction.nl">https://cloudfaction.nl</a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 align-self-center">
+						<div class="ts-exp-wrap">
+							<div class="ts-exp-content">
+								<h3>Yolknet</h3>
+								<p>Bezoek Yolknet op
+									<a href="https://yolknet.nl">https://yolknet.nl</a></p>
 							</div>
 						</div>
 					</div>
