@@ -1325,7 +1325,7 @@ PWTTemplateHelper::loadJs();
 					</div>
 					<div class="col-lg-4">
 						<a href="https://www.cyberfusion.nl" class="sponsors-logo">
-							<img class="img-fluid" src="images/sponsors/cyberfusion.png" alt="">
+							<img class="img-fluid" src="images/sponsors/cyberfusion.png" alt="" style="width: 100%;">
 						</a>
 					</div>
 				</div>
@@ -1368,56 +1368,43 @@ PWTTemplateHelper::loadJs();
 					</div>
 					<div class="col-lg-4">
 						<a href="https://www.joomlashine.com" class="sponsors-logo">
-							<img class="img-fluid" src="images/sponsors/joomlashine.png" alt="">
+							<img class="img-fluid" src="images/sponsors/joomlashine.png" alt="" style="width: 100%;">
 						</a>
 					</div>
 				</div>
 			</div>
 		</section>
 
-		<!--
-			<section class="section-bg">
-				<div class="container">
-					<div class="row text-center">
-						<div class="col-lg-12 mx-auto">
-							<h2 class="section-title text-center">
-								Bronzen sponsors
-							</h2>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-8 align-self-center">
-							<div class="ts-exp-wrap">
-								<div class="ts-exp-content">
-									<h3>DSD Business Internet</h3>
-									<p>Bezoek DSD Business Internet op
-										<a href="https://www.dsd.nl">https://www.dsd.nl</a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4">
-
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-8 align-self-center">
-							<div class="ts-exp-wrap">
-								<div class="ts-exp-content">
-									<h3>Joomshaper</h3>
-									<p>Bezoek Joomshaper op
-										<a href="https://www.joomshaper.com">https://www.joomshaper.com</a></p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4">
-
-						</div>
+		<section class="section-bg">
+			<div class="container">
+				<div class="row text-center">
+					<div class="col-lg-12 mx-auto">
+						<h2 class="section-title text-center">
+							Bronzen sponsors
+						</h2>
 					</div>
 				</div>
-			</section>
-		-->
+
+				<div class="row">
+					<div class="col-lg-8 align-self-center">
+						<div class="ts-exp-wrap">
+							<div class="ts-exp-content">
+								<h3>DSD Business Internet</h3>
+								<p><strong>Wij maken Joomla websites</strong></p>
+								<p>DSD levert Publicanda, een Joomla website inclusief hosting, onderhoud en support. Wij verzorgen het ontwerp, de templatebouw, inrichting, beveiliging, training voor de beheerders, onderhoud en support en daar waar nodig maken we maatwerk oplossingen. Wij ontzorgen onze klanten, zodat zij zich kunnen concentreren op het contentbeheer.</p>
+								<p>Bezoek DSD op
+									<a href="https://www.dsd.nl">https://www.dsd.nl</a></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<a href="https://www.dsd.nl" class="sponsors-logo">
+							<img class="img-fluid" src="images/sponsors/dsd.png" alt="" style="width: 100%;">
+						</a>
+					</div>
+				</div>
+			</div>
+		</section>
 
 		<section>
 			<div class="container">
