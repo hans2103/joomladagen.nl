@@ -1420,18 +1420,19 @@ PWTTemplateHelper::loadJs();
 					<div class="col-lg-4 align-self-center">
 						<div class="ts-exp-wrap">
 							<div class="ts-exp-content">
-								<h3>Cloudfaction</h3>
-								<p>Bezoek Cloudfaction op
-									<a href="https://cloudfaction.nl">https://cloudfaction.nl</a></p>
+								<a href="https://cloudfaction.nl" class="sponsors-logo">
+									<img class="img-fluid" src="images/sponsors/cloudfaction.jpg" alt="" style="width: 100%;">
+								</a>
+
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4 align-self-center">
 						<div class="ts-exp-wrap">
 							<div class="ts-exp-content">
-								<h3>Yolknet</h3>
-								<p>Bezoek Yolknet op
-									<a href="https://yolknet.nl">https://yolknet.nl</a></p>
+								<a href="https://yolknet.nl" class="sponsors-logo">
+									<img class="img-fluid" src="images/sponsors/yolknet.png" alt="" style="width: 100%;">
+								</a>
 							</div>
 						</div>
 					</div>
