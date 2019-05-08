@@ -1122,18 +1122,13 @@ PWTTemplateHelper::loadJs();
 					<h3 class="sponsor-title text-center">Gouden sponsors</h3>
 					<div class="row sponsor-padding text-center justify-content-md-center">
 						<div class="col-lg-4">
-							<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
-								Wil jij hier staan?
-							</a>
-						</div>
-						<div class="col-lg-4">
 							<a href="https://extensions.perfectwebteam.com" class="sponsors-logo">
 								<img class="img-fluid" src="images/sponsors/pwtextensions.png" alt="">
 							</a>
 						</div>
 						<div class="col-lg-4">
-							<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
-								Wil jij hier staan?
+							<a href="https://domains.joomla.org" class="sponsors-logo">
+								<img class="img-fluid" src="images/sponsors/joomlabrandit.png" alt="">
 							</a>
 						</div>
 					</div>
@@ -1143,11 +1138,6 @@ PWTTemplateHelper::loadJs();
 					<h3 class="sponsor-title text-center">Zilveren sponsors</h3>
 					<div class="row sponsor-padding text-center justify-content-md-center">
 						<div class="col-lg-3">
-							<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
-								Wil jij hier staan?
-							</a>
-						</div>
-						<div class="col-lg-3">
 							<a href="https://www.cyberfusion.nl" class="sponsors-logo">
 								<img class="img-fluid" src="images/sponsors/cyberfusion.png" alt="">
 							</a>
@@ -1155,11 +1145,6 @@ PWTTemplateHelper::loadJs();
 						<div class="col-lg-3">
 							<a href="https://www.joomlashine.com" class="sponsors-logo">
 								<img class="img-fluid" src="images/sponsors/joomlashine.png" alt="">
-							</a>
-						</div>
-						<div class="col-lg-3">
-							<a href="https://joomladagen.nl/sponsoring.pdf" class="sponsors-logo placeholder">
-								Wil jij hier staan?
 							</a>
 						</div>
 					</div>
@@ -1290,12 +1275,30 @@ PWTTemplateHelper::loadJs();
 									<br/><br/>Bekijk ze allemaal op
 									<a href="https://extensions.perfectwebteam.com/" target="_blank" rel="noopener">https://extensions.perfectwebteam.com</a>
 								</p>
+								<p>&nbsp;</p>
 							</div>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<a href="https://extensions.perfectwebteam.com" class="sponsors-logo">
 							<img class="img-fluid" src="images/sponsors/pwtextensions.png" alt="">
+						</a>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-8 align-self-center">
+						<div class="ts-exp-wrap">
+							<div class="ts-exp-content">
+								<h3>Brandit & Joomla</h3>
+								<p>In een spannende nieuwe samenwerking met BRANDIT krijgt het Joomla! project een commissie voor elk domein dat is geregistreerd of overgedragen via <a href="https://domains.joomla.org">domains.joomla.org</a>. Met scherpe prijzen, een robuuste beheerinterface en ondersteuning van wereldklasse, is deze samenwerking een uitstekende manier voor iedereen om een bijdrage te leveren aan het project. De huidige beschikbare domainnaam extensies zijn: </p>
+								<p>.ac .academy .africa .ag .art .asia .at .auto .band .beer .best .bike .bio .biz .black .blog .business .buzz .cam .camera .car .cc .center .ch .chat .city .cloud .club .co .co.uk .com .com.br .community .company .cool .de .digital .dog .email .es .eu .family .fan .fr .fun .fyi .gallery .game .global .guide .guru .help .hosting .house .how .icu .info .io .it .kim .life .me .media .net .network .news .ninja .nl .online .org .photo .photos .pics .pictures .plus .sale .shop .shopping .site .social .stream .team .tv .uk .webcam .website .wiki .world .xyz </p>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4">
+						<a href="https://domains.joomla.org" class="sponsors-logo">
+							<img class="img-fluid" src="images/sponsors/joomlabrandit.png" alt="">
 						</a>
 					</div>
 				</div>
@@ -1423,7 +1426,6 @@ PWTTemplateHelper::loadJs();
 								<a href="https://cloudfaction.nl" class="sponsors-logo">
 									<img class="img-fluid" src="images/sponsors/cloudfaction.jpg" alt="" style="width: 100%;">
 								</a>
-
 							</div>
 						</div>
 					</div>
