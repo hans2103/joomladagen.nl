@@ -1319,9 +1319,9 @@ PWTTemplateHelper::loadJs();
 						<div class="ts-exp-wrap">
 							<div class="ts-exp-content">
 								<h3>Cyberfusion</h3>
+								<p>Managed hosting voor webbureaus. Verbeter uptime en laadtijden van al je websites. Vraag direct advies van onze experts!</p>
 								<p>Bezoek Cyberfusion op
 									<a href="https://www.cyberfusion.nl">https://www.cyberfusion.nl</a></p>
-								<p>&nbsp;</p>
 							</div>
 						</div>
 					</div>
