@@ -569,14 +569,14 @@ PWTTemplateHelper::loadJs();
 									</div>
 								</div>
 								<div class="schedule-slot-session">
-									<img class="schedule-slot-speakers" src="images/sprekers/hannes-papenberg.jpg" alt="">
+									<img class="schedule-slot-speakers" src="images/sprekers/robert-lamb.jpg" alt="">
 									<div class="schedule-slot-info-content">
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Gevorderd</span> Joomla 4 Backend Template
+											<span class="session-label advanced">Algemeen</span> domains.joomla.org
 											<img src="media/mod_languages/images/en.gif"/>
-											<strong>Hannes Papenberg</strong>
+											<strong>Robert Lamb</strong>
 										</h3>
-										<p>In this session Hannes will present the new backend template and show how to use the new features in your 3rd-party components and what to look out for.</p>
+										<p>In this session Robert will present the new domains.joomla.org, powered by a collaboration between BRANDIT & Joomla!. For each domain you register you will support the Joomla-project as well!</p>
 									</div>
 								</div>
 								<div class="schedule-slot-session">
@@ -701,12 +701,11 @@ PWTTemplateHelper::loadJs();
 									</div>
 								</div>
 								<div class="schedule-slot-session">
-									<img class="schedule-slot-speakers" src="images/sprekers/hannes-papenberg.jpg" alt="">
+									<img class="schedule-slot-speakers" src="images/sprekers/roland-dalmulder.jpg" alt="">
 									<div class="schedule-slot-info-content">
 										<h3 class="schedule-slot-title">
 											<span class="session-label developer">Developer</span>Namespacing, Interfaces, Traits
-											<img src="media/mod_languages/images/en.gif"/>
-											<strong>Hannes Papenberg</strong>
+											<strong>Roland Dalmulder</strong>
 										</h3>
 										<p>Presenting the new namespaced structure for classes and how to translate your old code to the new classes. I would also show how Joomla tries to use more interfaces and how you could get tree data structures with traits.</p>
 									</div>
