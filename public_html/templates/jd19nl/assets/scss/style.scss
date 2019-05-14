@@ -1397,12 +1397,14 @@
 .session-label {
   display: inline-block;
   padding: 5px 10px;
-  font-size: 65%;
+  font-size: 70%;
+  font-weight: bold;
   text-transform: uppercase;
   color: #fff;
   margin-right: 5px;
+  margin-bottom: 10px;
   position: relative;
-  top: -2px;
+  line-height: 100%;
 
   &.workshop {
     background: $yellow;
@@ -1422,6 +1424,10 @@
 
   &.developer {
     background: $red;
+  }
+
+  &.zaal {
+    background: #25304f;
   }
 }
 

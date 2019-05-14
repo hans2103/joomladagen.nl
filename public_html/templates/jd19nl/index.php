@@ -258,6 +258,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
 										<h3 class="schedule-slot-title">Joomla DIY</h3>
 										<p>Schuif aan bij een tafel om kennis en ervaring uit te wisselen over een bepaald (Joomla) onderwerp en leer van en mét elkaar. Concreet aan de slag gaan om bijvoorbeeld code voor Joomla 4 te schrijven/testen kan natuurlijk ook. Je kan de gehele dag tussen de tafels wisselen en ook zelf een tafel starten. Het onderwerp bepaal je zelf, bijvoorbeeld:</p>
 										<ul>
@@ -276,22 +277,13 @@ PWTTemplateHelper::loadJs();
 								</div>
 
 								<div class="schedule-slot-session">
-									<img class="schedule-slot-speakers" src="images/sprekers/rachel-walraven.jpg" alt="">
-									<div class="schedule-slot-info-content">
-										<h3 class="schedule-slot-title">
-											<span class="session-label workshop">Workshop</span> Je eerste eigen Joomla-template
-											<strong>Rachel Walraven</strong>
-										</h3>
-										<p>Je hebt altijd al een eigen template willen bouwen voor je Joomla! website. Maar het is er nooit van gekomen of je weet niet goed hoe je het aan moet pakken. In deze workshop gaan we dit stap voor stap oppakken. Op basis van een ‘lege’ basistemplate ga je je eigen template maken. Je leert hoe de template in elkaar zit, hoe je de structuur van je site opbouwt, je moduleposities bepaalt en hoe je de site opmaakt. Als we tijd (en zin) hebben kijken we nog even naar eenvoudige template overrides. Niveau: Beginner, met (basis)kennis van HTML en CSS.</p>
-									</div>
-								</div>
-
-								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers first" src="images/sprekers/marco-dings.jpg" alt="">
 									<img class="schedule-slot-speakers second" src="images/sprekers/rene-kreijveld.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label workshop">Workshop</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label workshop">Workshop</span> Bouw je eigen Joomla-component
+											Bouw je eigen Joomla-component
 											<strong>Marco Dings & René Kreijveld</strong>
 										</h3>
 										<p>Heb jij ook al zo vaak componenten uit de JED geïnstalleerd die allemaal net niet doen wat jij zoekt? Je eigen component maken kan dan de oplossing zijn. Met Joomla Component Builder (JCB) maak je zelf componenten waarbij je veel werk uit handen wordt genomen. Bovendien voldoen deze componenten aan de Joomla 3 standaards. Componenten voor Joomla 3 zijn straks met JCB ook te genereren voor Joomla 4. In deze workshop laten Marco en René zien hoe je met behulp van JCB zelf een Joomla 3 component bouwt. We leren je de basistheorie van Joomla MVC en datamodellering. Gezamenlijk bouwen we een basis projectmanagement component voor het beheer van klanten en projecten.</p>
@@ -300,9 +292,26 @@ PWTTemplateHelper::loadJs();
 								</div>
 
 								<div class="schedule-slot-session">
+									<img class="schedule-slot-speakers" src="images/sprekers/rachel-walraven.jpg" alt="">
+									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label workshop">Workshop</span>
+										<h3 class="schedule-slot-title">
+											Je eerste eigen Joomla-template
+											<strong>Rachel Walraven</strong>
+										</h3>
+										<p>Je hebt altijd al een eigen template willen bouwen voor je Joomla! website. Maar het is er nooit van gekomen of je weet niet goed hoe je het aan moet pakken. In deze workshop gaan we dit stap voor stap oppakken. Op basis van een ‘lege’ basistemplate ga je je eigen template maken. Je leert hoe de template in elkaar zit, hoe je de structuur van je site opbouwt, je moduleposities bepaalt en hoe je de site opmaakt. Als we tijd (en zin) hebben kijken we nog even naar eenvoudige template overrides. Niveau: Beginner, met (basis)kennis van HTML en CSS.</p>
+									</div>
+								</div>
+
+
+								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 									<div class="schedule-slot-info-content">
-										<h3 class="schedule-slot-title">Joomla Administrator certificeringsexamen</h3>
+										<span class="session-label zaal">Examen zaal</span>
+										<h3 class="schedule-slot-title">
+											Joomla Administrator certificeringsexamen
+										</h3>
 										<p>Word een gecertificeerd Joomla! beheerder! Toon met trots de Joomla! Administrator badge op je website en laat aan klanten en collega's zien dat je beschikt over grondige Joomla! kennis. Op de JoomlaDagen is het mogelijk om examen te doen. Meer informatie over het Joomla! Certification Program is te vinden op
 											<a href="https://certification.joomla.org">https://certification.joomla.org</a>.
 										</p>
@@ -335,6 +344,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
 										<h3 class="schedule-slot-title">Joomla DIY</h3>
 										<p>Schuif aan bij een tafel om kennis en ervaring uit te wisselen over een bepaald (Joomla) onderwerp en leer van en mét elkaar. Concreet aan de slag gaan om bijvoorbeeld code voor Joomla 4 te schrijven/testen kan natuurlijk ook. Je kan de gehele dag tussen de tafels wisselen en ook zelf een tafel starten. Het onderwerp bepaal je zelf, bijvoorbeeld:</p>
 										<ul>
@@ -353,24 +363,28 @@ PWTTemplateHelper::loadJs();
 								</div>
 
 								<div class="schedule-slot-session">
-									<img class="schedule-slot-speakers" src="images/sprekers/hans-kuijpers.jpg" alt="">
+									<img class="schedule-slot-speakers" src="images/sprekers/patrick-faasse.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label workshop">Workshop</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label workshop">Workshop</span> Joomla Template Overrides & jLayouts
-											<strong>Hans Kuijpers</strong>
+											Optimalisatietechnieken voor een snelle site
+											<strong>Patrick Faasse</strong>
 										</h3>
-										<p>Waarom een 3rd party extensie gebruiken als Joomla core de benodigde content al bevat? Een kalender, slideshow, carrousel en smoelenboek. Allemaal met Joomla, zonder uitbreiding van 3th party extensies. Met deze workshop legt Hans Kuijpers aan de hand van vele voorbeelden uit hoe je template overrides en jLayouts toepast. Als deelnemer ga je ook zelf aan de slag. Dus neem je laptop mee en zorg ervoor dat je met een Joomla website aan de slag kunt. We gaan dingen stuk maken, dus pak niet de website die nu live staat. Voorkennis van PHP, HTML, JS en CSS is wel handig. Een dosis Gezond BoerenVerstand is nog veel belangrijker.</p>
+										<p>Zo scoor je in de 90% bij Yslow & Pagespeed (GTMetrix), zelfs met veel plaatjes en effecten op je website. Tijdens de workshop worden alle aspecten zoals template keuze, extensies, compressie, htaccess, hosting, en foto optimalisatie besproken. Verschillende (eigen) websites worden als praktijkvoorbeeld gebruikt.</p>
 									</div>
 								</div>
 
 								<div class="schedule-slot-session">
-									<img class="schedule-slot-speakers" src="images/sprekers/patrick-faasse.jpg" alt="">
+									<img class="schedule-slot-speakers" src="images/sprekers/hans-kuijpers.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label workshop">Workshop</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label workshop">Workshop</span> Optimalisatietechnieken voor een snelle site
-											<strong>Patrick Faasse</strong>
+											Joomla Template Overrides & jLayouts
+											<strong>Hans Kuijpers</strong>
 										</h3>
-										<p>Zo scoor je in de 90% bij Yslow & Pagespeed (GTMetrix), zelfs met veel plaatjes en effecten op je website. Tijdens de workshop worden alle aspecten zoals template keuze, extensies, compressie, htaccess, hosting, en foto optimalisatie besproken. Verschillende (eigen) websites worden als praktijkvoorbeeld gebruikt.</p>
+										<p>Waarom een 3rd party extensie gebruiken als Joomla core de benodigde content al bevat? Een kalender, slideshow, carrousel en smoelenboek. Allemaal met Joomla, zonder uitbreiding van 3th party extensies. Met deze workshop legt Hans Kuijpers aan de hand van vele voorbeelden uit hoe je template overrides en jLayouts toepast. Als deelnemer ga je ook zelf aan de slag. Dus neem je laptop mee en zorg ervoor dat je met een Joomla website aan de slag kunt. We gaan dingen stuk maken, dus pak niet de website die nu live staat. Voorkennis van PHP, HTML, JS en CSS is wel handig. Een dosis Gezond BoerenVerstand is nog veel belangrijker.</p>
 									</div>
 								</div>
 
@@ -425,6 +439,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/borrel.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal & bar</span>
 										<h3 class="schedule-slot-title">Nieuwe Joomlers leren kennen & borrel</h3>
 										<p>We vertellen nog niet hoe, maar één ding weten we zeker: je gaat nieuwe Joomlers leren kennen tijdens dit social event! Aansluitend gaan we naar de bar voor de Joomla-borrel. Bij je socialticket zijn hapjes en twee drankjes tijdens de borrel inbegrepen.</p>
 									</div>
@@ -440,6 +455,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/diner.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Restaurant</span>
 										<h3 class="schedule-slot-title">3-gangen diner</h3>
 										<p>Tijd voor diner! In het sfeervolle restaurant laten we ons door de chef-kok en zijn team verrassen met klassieke en hedendaagse creaties met een Mediterrane en Oosterse tint in de vorm van een 3-gangen diner. Ook het diner en twee drankjes tijdens het diner zijn bij het socialticket inbegrepen.</p>
 									</div>
@@ -455,6 +471,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/bar.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Bar</span>
 										<h3 class="schedule-slot-title">Evening social</h3>
 										<p>Na het diner is de bar nog geopend zodat je de avond met wellicht wel nieuwe Joomla-vrienden kan afsluiten. Als je in het hotel blijft overnachten ben je in een paar stappen in je prachtige hotelkamer om op te laden voor de zaterdag van de JoomlaDagen.</p>
 									</div>
@@ -507,8 +524,9 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/alexander-metzler.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span> <img src="media/mod_languages/images/en.gif"/>
 										<h3 class="schedule-slot-title">
-											Joomla in Perspective <img src="media/mod_languages/images/en.gif"/>
+											Joomla in Perspective
 											<strong>Alexander Metzler (Joomla vice-president)</strong>
 										</h3>
 										<p>What's Joomla? What are the challenges for an Open Source project in 2019? What prospects does the rapid change of the market offer for our software and for the different (business) models? And why should we be proud of ourselves?</p>
@@ -526,8 +544,9 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/brian-teeman.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span> <img src="media/mod_languages/images/en.gif"/>
 										<h3 class="schedule-slot-title">
-											Joomla 4 <img src="media/mod_languages/images/en.gif"/>
+											Joomla 4
 											<strong>Brian Teeman</strong>
 										</h3>
 										<p>Ben jij ook zo benieuwd naar de status van Joomla 4 en wanneer deze uitkomt? En wat zijn eigenlijk de nieuwe features? Wordt de migratie lastig? Brian Teeman vertelt je alles over Joomla 4 tijdens zijn keynote.</p>
@@ -559,8 +578,10 @@ PWTTemplateHelper::loadJs();
 									<img class="schedule-slot-speakers first" src="images/sprekers/anja-de-crom.jpg" alt="">
 									<img class="schedule-slot-speakers second" src="images/sprekers/peter-van-westen.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
+										<span class="session-label average">Regular</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Regular</span> Articles Anywhere biedt je een andere manier om naar je Joomla-website te kijken
+											Articles Anywhere biedt je een andere manier om naar je Joomla-website te kijken
 											<strong>Anja de Crom & Peter van Westen</strong>
 										</h3>
 										<p>Met Articles Anywhere, de naam zegt het al, kan je overal in de website content laten zien. Artikelen dus, of onderdelen daarvan. Een, of meer. Jij bepaalt wat waar getoond wordt en op welke manier. En je kunt daar heel ver in gaan, zeker als je het combineert met custom fields. Ben je een beetje creatief? Dan kan je Articles Anywhere inzetten voor tal van mogelijkheden waar je anders meerdere andere extensies voor nodig zou hebben.
@@ -571,9 +592,11 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/robert-lamb.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label all">Algemeen</span>
+										<img src="media/mod_languages/images/en.gif"/>
 										<h3 class="schedule-slot-title">
-											<span class="session-label all">Algemeen</span> domains.joomla.org
-											<img src="media/mod_languages/images/en.gif"/>
+											domains.joomla.org
 											<strong>Robert Lamb</strong>
 										</h3>
 										<p>In this session Robert will present the new domains.joomla.org, powered by a collaboration between BRANDIT & Joomla!. For each domain you register you will support the Joomla-project as well!</p>
@@ -582,8 +605,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/joris-stolker.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">BRANDIT zaal</span>
+										<span class="session-label average">Gemiddeld</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Gemiddeld</span> Event Booking
+											Event Booking
 											<strong>Joris Stolker</strong>
 										</h3>
 										<p>Steeds vaker verkopen mensen cursussen, workshops en online trainingen. Hoe verkoop je deze met iDEAL via je Joomla website? In deze presentatie laat ik zien hoe je met Event Booking een cursus registratie systeem opzet. Een overview door de standaard instellingen en mogelijke uitbreidingen.</p>
@@ -592,8 +617,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/rene-kreijveld.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label advanced">Gevorderd</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Gevorderd</span> Je eigen Joomla VPS inrichten en beheren met Runcloud.io
+											Je eigen Joomla VPS inrichten en beheren met Runcloud.io
 											<strong>René Kreijveld</strong>
 										</h3>
 										<p>Een eigen Virtual Private Server (VPS) gebruiken voor jouw websites of die van je klanten kan de voorkeur hebben boven het hosten op een shared hostingomgeving. In deze presentatie vertel ik hoe je een eigen VPS kunt inrichten en beheren met Runcloud.io. Ik toon je alle stappen aan de hand van duidelijke video’s. Een eigen VPS is niet voor iedereen de beste oplossing. Basiskennis van Linux beheer is soms nodig en incidenteel moet je online op zoek naar oplossingen voor problemen. Ik vertel je ook de voor- en nadelen en de aandachtspunten van een eigen VPS.</p>
@@ -610,9 +637,11 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/brian-teeman.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
+										<span class="session-label all">Algemeen</span>
+										<img src="media/mod_languages/images/en.gif"/>
 										<h3 class="schedule-slot-title">
-											<span class="session-label all">Algemeen</span> Tell me what you want , what you really want
-											<img src="media/mod_languages/images/en.gif"/>
+											Tell me what you want , what you really want
 											<strong>Brian Teeman</strong>
 										</h3>
 										<p>Be a responsible developer and deliver what the client needs not want they think they want.</p>
@@ -621,8 +650,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/simon-kloostra.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label all">Algemeen</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label all">Algemeen</span> Joomla SEO set-up
+											Joomla SEO set-up
 											<strong>Simon Kloostra</strong>
 										</h3>
 										<p>In deze presentatie nemen we de complete SEO set-up van een simpele, nieuw gebouwde Joomla website door. Wat moet je doen om te zorgen dat Google je site snel op de goede manier indexeert en waardeert en welke fouten moet je vermijden. Eerst kijken we kort hoe Google werkt en omgaat met zoekwoorden zodat je weet waar je bij het bouwen van je site rekening mee moet houden. Onderwerpen die daarna voorbij komen zijn: paginatitels, metabeschrijvingen, URL-set-up, paginastructuur, sitemaps, robots instellingen, Google Search Console, redirects, enzovoorts. Ook kijken we kort naar een aantal SEO extensies.</p>
@@ -631,8 +662,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/roeland-van-anholt.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">BRANDIT zaal</span>
+										<span class="session-label average">Gemiddeld</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Gemiddeld</span> Website templates maken met Themler
+											Website templates maken met Themler
 											<strong>Roeland van Anholt</strong>
 										</h3>
 										<p>Met Themler is het mogelijk om op een eenvoudige manier een Joomla! template te maken. De template editor is een echte WYSYWIG editor, je ziet hierin jouw content. Responsive bewerken met 1 druk op de knop: de weergave veranderen en aanpassingen maken die voor deze weergave van toepassing zijn.. Oneindig veel module posities aanmaken op de plekken die je zelf wilt en deze een logische naam geven? Geen probleem. Meerdere modules copy/pasten? Alleen opmaak copy/pasten? Met een paar muisklikken gedaan. Een mega-menu of juist een eenvoudige weergave, sticky? Geen probleem. Maar juist niet sticky voor mobiele telefoons? Ook geen probleem!</p>
@@ -641,8 +674,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/peter-martin.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label advanced">Gevorderd</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Gevorderd</span> Joomla onder de motorkap
+											Joomla onder de motorkap
 											<strong>Peter Martin</strong>
 										</h3>
 										<p>Joomla is een geweldig CMS, gemaakt om gemakkelijk een website of webapplicatie te bouwen. Maar wat gebeurt er onder de motorkap van Joomla? Peter bespreekt de technische werking van Joomla en gaat daarbij dieper in op enkele technische aspecten: Categorieen + item counter, Overrides, Menus, Plugins, ACL. Krijg meer inzicht in de werking van Joomla!</p>
@@ -672,8 +707,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/peter-martin.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
+										<span class="session-label average">Gemiddeld</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Gemiddeld</span> De Joomla Administrator Back-end optimaliseren
+											De Joomla Administrator Back-end optimaliseren
 											<strong>Peter Martin</strong>
 										</h3>
 										<p>Standaard biedt Joomla veel functionaliteit. Voor sommige nieuwe gebruikers kan de hoeveelheid functionaliteiten en opties in de back-end een beetje overweldigend zijn. Wat kun je doen om het hen makkelijker te maken? Ervaren gebruikers kunnen dingen anders doen om hun workflow te verbeteren. Wat kun je doen om de back-end te optimaliseren? Peter laat zien wat je in de back-end kunt doen om jouw Joomla-site te optimaliseren voor nieuwe gebruikers en voor ervaren beheerders. Help jouw Joomla-gebruikers om gemakkelijker en sneller te laten werken in de Joomla backend.</p>
@@ -682,8 +719,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/mike-veeckmans.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label all">Algemeen</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label all">Algemeen</span> The webmasters struggle
+											The webmasters struggle
 											<strong>Mike Veeckmans</strong>
 										</h3>
 										<p>Het leven van een webmaster kan een hel zijn, maar dat moet zeker en vast niet zo zijn. In deze meertalige, interactieve presentatie luchten we niet enkel ons hart, maar gaan we eveneens tools, tips en tricks zien passeren om het leven als webmaster aangenamer te maken. Of het nu in Joomla! of een ander CMS systeem is als webmaster lopen we dagelijks tegen uitdagingen aan. We lossen problemen op waarvan de klant niet wist dat die ze had, op manieren die ze niet verstaan. Wil je alvast een topic mee opnemen? Tweet me @MVeeckmans met de hashtag #webstruggle.</p>
@@ -693,8 +732,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/joris-stolker.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">BRANDIT zaal</span>
+										<span class="session-label average">Gemiddeld</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Gemiddeld</span> Acymailing
+											Acymailing
 											<strong>Joris Stolker</strong>
 										</h3>
 										<p>Wie verstuurt er geen nieuwsbrieven of emails aan groepen? Acymailing is al jaren een populair mailsysteem in Joomla en nu zelfs W*rdPr*ss. Sinds kort is er een volledig nieuwe versie gelanceerd, Acymailing 6. Een tour door de nieuwe Acymailing en voor welke situaties je deze kan inzetten. Is Acymailing voor jou de beste optie of toch beter Mailchimp? Heb jij al Acymailing en wil je weten of je al over kan? Zo ja hoe verloopt de migratie?</p>
@@ -703,8 +744,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/roland-dalmulder.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label developer">Developer</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label developer">Developer</span>Namespacing, Interfaces, Traits
+											Namespacing, Interfaces, Traits
 											<strong>Roland Dalmulder</strong>
 										</h3>
 										<p>Presenting the new namespaced structure for classes and how to translate your old code to the new classes. I would also show how Joomla tries to use more interfaces and how you could get tree data structures with traits.</p>
@@ -721,8 +764,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/simon-kloostra.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
+										<span class="session-label advanced">Gevorderd</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Gevorderd</span> Advanced SEO voor Joomla
+											Advanced SEO voor Joomla
 											<strong>Simon Kloostra</strong>
 										</h3>
 										<p>Deze presentatie duikt wat dieper in de SEO materie. We gaan er van uit dat je met je website en content al de nodige zichtbaarheid en rankings hebt en kijken wat je dan verder nog kunt doen. Dan kijken we met name naar het optimaliseren van de indexatie in Google plus hoe je je zichtbaarheid in die index kunt verbeteren. We kijken daarbij hoe je een SEO audit kunt uitvoeren en hoe je daarbij tools als (de nieuwe versie van) Google Search Console en gespecialiseerde SEO software kunt inzetten.</p>
@@ -731,8 +776,10 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/patrick-faasse.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">PWT Extensions zaal</span>
+										<span class="session-label all">Algemeen</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label all">Algemeen</span> Succesvolle websites voor klanten
+											Succesvolle websites voor klanten
 											<strong>Patrick Faasse</strong>
 										</h3>
 										<p>Bij het bouwen van een website voor een opdrachtgever is de voorbereiding (bijna) belangrijker dan het bouwen. Afspraken maken, verwachtingen managen, voorwaarden opstellen en nagaan wat de klant echt nodig heeft kost veel tijd maar bepaalt vaak wel het succes. Tips, ervaringen en concrete voorbeelden.</p>
@@ -742,8 +789,10 @@ PWTTemplateHelper::loadJs();
 									<img class="schedule-slot-speakers first" src="images/sprekers/arend-henk-huzen.jpg" alt="">
 									<img class="schedule-slot-speakers second" src="images/sprekers/maarten-blokdijk.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">BRANDIT zaal</span>
+										<span class="session-label advanced">Gevorderd</span>
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Gevorderd</span> Fabrik: werken met gegevens uit databases
+											Fabrik: werken met gegevens uit databases
 											<strong>Arend-Henk Huzen & Maarten Blokdijk</strong>
 										</h3>
 										<p>In deze presentatie laten we zien hoe je met Fabrik gegevens op je Joomla-site kunt ontsluiten. Of het nu gaat om een ledenlijst van de sportclub, het incasso-proces van de klant of de takenlijst van je team. We laten zien hoe de structuur van Fabrik in elkaar zit en hoe je functionaliteit aan je Fabrik-applicatie kunt toevoegen. Met Fabrik bouw je snel en eenvoudig je eigen data-gedreven applicaties. Daarmee vult Fabrik het gat tussen out-of-the-box Joomla-componenten en maatwerk-applicaties. Fabrik is zeer geschikt voor klanten die werkprocessen op hun intranet willen ontsluiten.</p>
@@ -753,9 +802,11 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/matias-aguirre.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Joomla zaal</span>
+										<span class="session-label average">Gemiddeld</span>
+										<img src="media/mod_languages/images/en.gif"/>
 										<h3 class="schedule-slot-title">
-											<span class="session-label average">Gemiddeld</span> Upgrading Joomla 3 (or older) to Joomla 4
-											<img src="media/mod_languages/images/en.gif"/>
+											Upgrading Joomla 3 (or older) to Joomla 4
 											<strong>Matias Aguirre</strong>
 										</h3>
 										<p>In this session Matias (creator of jUpgrade) will show you how you can upgrade your Joomla 3 site to Joomla 4. How much work will this be and how to upgrade the extensions installed? Still on a older Joomla version? No problem, you can migrate from Joomla 1.0!</p>
@@ -788,6 +839,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/algemeen.png" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
 										<h3 class="schedule-slot-title">Tips & tricks voor je eigen Joomla bedrijf
 											<strong>Diverse sprekers</strong>
 										</h3>
@@ -805,6 +857,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/sprekers/bokaal.jpg" alt="">
 									<div class="schedule-slot-info-content">
+										<span class="session-label zaal">Regular Labs zaal</span>
 										<h3 class="schedule-slot-title">De Joomla-bokaal
 											<strong>Neem jij de bokaal mee naar huis?</strong>
 										</h3>
@@ -1290,7 +1343,9 @@ PWTTemplateHelper::loadJs();
 						<div class="ts-exp-wrap">
 							<div class="ts-exp-content">
 								<h3>BRANDIT & Joomla!</h3>
-								<p>In een spannende nieuwe samenwerking met BRANDIT krijgt het Joomla! project een commissie voor elk domein dat is geregistreerd of overgedragen via <a href="https://domains.joomla.org">domains.joomla.org</a>. Met scherpe prijzen, een robuuste beheerinterface en ondersteuning van wereldklasse, is deze samenwerking een uitstekende manier voor iedereen om een bijdrage te leveren aan het project. De huidige beschikbare domainnaam extensies zijn: </p>
+								<p>In een spannende nieuwe samenwerking met BRANDIT krijgt het Joomla! project een commissie voor elk domein dat is geregistreerd of overgedragen via
+									<a href="https://domains.joomla.org">domains.joomla.org</a>. Met scherpe prijzen, een robuuste beheerinterface en ondersteuning van wereldklasse, is deze samenwerking een uitstekende manier voor iedereen om een bijdrage te leveren aan het project. De huidige beschikbare domainnaam extensies zijn:
+								</p>
 								<p>.ac .academy .africa .ag .art .asia .at .auto .band .beer .best .bike .bio .biz .black .blog .business .buzz .cam .camera .car .cc .center .ch .chat .city .cloud .club .co .co.uk .com .com.br .community .company .cool .de .digital .dog .email .es .eu .family .fan .fr .fun .fyi .gallery .game .global .guide .guru .help .hosting .house .how .icu .info .io .it .kim .life .me .media .net .network .news .ninja .nl .online .org .photo .photos .pics .pictures .plus .sale .shop .shopping .site .social .stream .team .tv .uk .webcam .website .wiki .world .xyz </p>
 							</div>
 						</div>
