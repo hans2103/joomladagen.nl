@@ -572,7 +572,7 @@ PWTTemplateHelper::loadJs();
 									<img class="schedule-slot-speakers" src="images/sprekers/robert-lamb.jpg" alt="">
 									<div class="schedule-slot-info-content">
 										<h3 class="schedule-slot-title">
-											<span class="session-label advanced">Algemeen</span> domains.joomla.org
+											<span class="session-label all">Algemeen</span> domains.joomla.org
 											<img src="media/mod_languages/images/en.gif"/>
 											<strong>Robert Lamb</strong>
 										</h3>
