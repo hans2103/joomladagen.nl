@@ -304,7 +304,7 @@ PWTTemplateHelper::loadJs();
 									<div class="schedule-slot-info-content">
 										<h3 class="schedule-slot-title">Joomla Administrator certificeringsexamen</h3>
 										<p>Word een gecertificeerd Joomla! beheerder! Toon met trots de Joomla! Administrator badge op je website en laat aan klanten en collega's zien dat je beschikt over grondige Joomla! kennis. Op de JoomlaDagen is het mogelijk om examen te doen. Meer informatie over het Joomla! Certification Program is te vinden op
-											<a href=" https://certification.joomla.org">https://certification.joomla.org</a>.
+											<a href="https://certification.joomla.org">https://certification.joomla.org</a>.
 										</p>
 									</div>
 								</div>
