@@ -747,10 +747,10 @@ PWTTemplateHelper::loadJs();
 										<span class="session-label zaal">Joomla zaal</span>
 										<span class="session-label developer">Developer</span>
 										<h3 class="schedule-slot-title">
-											Namespacing, Interfaces, Traits
+											Joomla! 4 Developer Checklist
 											<strong>Roland Dalmulder</strong>
 										</h3>
-										<p>Presenting the new namespaced structure for classes and how to translate your old code to the new classes. I would also show how Joomla tries to use more interfaces and how you could get tree data structures with traits.</p>
+										<p>We gaan langs de checklist die nodig is om te kijken of je extensie klaar is voor Joomla 4 maar ook op Joomla 3 nog werkt. Namespaces die je nu al kan gebruiken, nieuwigheden in Joomla 4 en andere weetjes. Verder komen PHP 7.2 functies aan bod die gebruikt worden.</p>
 									</div>
 								</div>
 							</div>
