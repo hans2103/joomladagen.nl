@@ -439,7 +439,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/borrel.jpg" alt="">
 									<div class="schedule-slot-info-content">
-										<span class="session-label zaal">Regular Labs zaal & bar</span>
+										<span class="session-label zaal">Bar (begange grond)</span>
 										<h3 class="schedule-slot-title">Nieuwe Joomlers leren kennen & borrel</h3>
 										<p>We vertellen nog niet hoe, maar één ding weten we zeker: je gaat nieuwe Joomlers leren kennen tijdens dit social event! Aansluitend gaan we naar de bar voor de Joomla-borrel. Bij je socialticket zijn hapjes en twee drankjes tijdens de borrel inbegrepen.</p>
 									</div>
@@ -455,7 +455,7 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/diner.jpg" alt="">
 									<div class="schedule-slot-info-content">
-										<span class="session-label zaal">Restaurant</span>
+										<span class="session-label zaal">Restaurant (begange grond)</span>
 										<h3 class="schedule-slot-title">3-gangen diner</h3>
 										<p>Tijd voor diner! In het sfeervolle restaurant laten we ons door de chef-kok en zijn team verrassen met klassieke en hedendaagse creaties met een Mediterrane en Oosterse tint in de vorm van een 3-gangen diner. Ook het diner en twee drankjes tijdens het diner zijn bij het socialticket inbegrepen.</p>
 									</div>
@@ -472,7 +472,7 @@ PWTTemplateHelper::loadJs();
 									<img class="schedule-slot-speakers" src="images/locatie/bar.jpg" alt="">
 									<div class="schedule-slot-info-content">
 										<span class="session-label zaal">Bar</span>
-										<h3 class="schedule-slot-title">Evening social</h3>
+										<h3 class="schedule-slot-title">Evening social (begange grond)</h3>
 										<p>Na het diner is de bar nog geopend zodat je de avond met wellicht wel nieuwe Joomla-vrienden kan afsluiten. Als je in het hotel blijft overnachten ben je in een paar stappen in je prachtige hotelkamer om op te laden voor de zaterdag van de JoomlaDagen.</p>
 									</div>
 								</div>
