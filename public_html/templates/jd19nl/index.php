@@ -471,8 +471,8 @@ PWTTemplateHelper::loadJs();
 								<div class="schedule-slot-session">
 									<img class="schedule-slot-speakers" src="images/locatie/bar.jpg" alt="">
 									<div class="schedule-slot-info-content">
-										<span class="session-label zaal">Bar</span>
-										<h3 class="schedule-slot-title">Evening social (begange grond)</h3>
+										<span class="session-label zaal">Bar (begange grond)</span>
+										<h3 class="schedule-slot-title">Evening social</h3>
 										<p>Na het diner is de bar nog geopend zodat je de avond met wellicht wel nieuwe Joomla-vrienden kan afsluiten. Als je in het hotel blijft overnachten ben je in een paar stappen in je prachtige hotelkamer om op te laden voor de zaterdag van de JoomlaDagen.</p>
 									</div>
 								</div>
