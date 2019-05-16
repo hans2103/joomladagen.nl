@@ -1,10 +1,16 @@
 <?php
-/**
- * @package Blue Flame Network (bfNetwork)
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017 Blue Flame Digital Solutions Ltd. All rights reserved.
- * @license GNU General Public License version 3 or later
- * @link https://myJoomla.com/
- * @author Phil Taylor / Blue Flame Digital Solutions Limited.
+
+/*
+ * @package   bfNetwork
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @license   GNU General Public License version 3 or later
+ *
+ * @see       https://myJoomla.guru/
+ * @see       https://myWP.guru/
+ * @see       https://mySites.guru/
+ * @see       https://www.phil-taylor.com/
+ *
+ * @author    Phil Taylor / Blue Flame Digital Solutions Limited.
  *
  * bfNetwork is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +24,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this package.  If not, see http://www.gnu.org/licenses/
+ *
+ * If you have any questions regarding this code, please contact phil@phil-taylor.com
  */
+
 defined('_JEXEC') or die();
 
-/**
+/*
  * Our very own myJoomla implementation of some core Joomla features
  * We need this so that we can overwrite troublesome methods in the class
  *
@@ -29,11 +38,11 @@ defined('_JEXEC') or die();
  */
 if (class_exists('JApplicationCms')) {
     /**
-     * Joomla 3.0.0 +
+     * Joomla 3.0.0 +.
      *
      * Class JApplicationMyjoomla
      */
-    Class JApplicationMyjoomla extends JApplicationCms
+    class JApplicationMyjoomla extends JApplicationCms
     {
         /**
          * @var array The details of the redirect
@@ -44,10 +53,10 @@ if (class_exists('JApplicationCms')) {
          * Override the redirect method
          * We need this so we can stop Joomla from running exit(0) and killing us!
          * This is useful when an extension update aborts and redirects to com_installer
-         * It will probably be even more use as we blur the edges of what Joomla can achieve
+         * It will probably be even more use as we blur the edges of what Joomla can achieve.
          *
          * @param string $url
-         * @param bool $moved
+         * @param bool   $moved
          */
         public function redirect($url, $moved = false)
         {
@@ -59,14 +68,14 @@ if (class_exists('JApplicationCms')) {
         private function setRedirect($url, $moved = false)
         {
             $this->_redirectDetails = array(
-                'headers' => $this->getHeaders(),
+                'headers'      => $this->getHeaders(),
                 'messagequeue' => $this->getMessageQueue(),
-                'url' => $url,
+                'url'          => $url,
             );
         }
 
         /**
-         * Return the details of any set redirect
+         * Return the details of any set redirect.
          *
          * @return array
          */
@@ -78,7 +87,7 @@ if (class_exists('JApplicationCms')) {
         /**
          * Return the current state of the language filter.
          *
-         * @return	boolean
+         * @return bool
          *
          * @since	3.2
          */
@@ -86,18 +95,15 @@ if (class_exists('JApplicationCms')) {
         {
             return false;
         }
-
     }
-
-} else if (class_exists('JApplication')) {
-
+} elseif (class_exists('JApplication')) {
     /**
      * Joomla 1.5.0 - 1.5.26
-     * Joomla 2.5.0 - 2.5.28
+     * Joomla 2.5.0 - 2.5.28.
      *
      * Class JApplicationMyjoomla
      */
-    Class JApplicationMyjoomla extends JApplication
+    class JApplicationMyjoomla extends JApplication
     {
         /**
          * @var array The details of the redirect
@@ -108,10 +114,10 @@ if (class_exists('JApplicationCms')) {
          * Override the redirect method
          * We need this so we can stop Joomla from running exit(0) and killing us!
          * This is useful when an extension update aborts and redirects to com_installer
-         * It will probably be even more use as we blur the edges of what Joomla can achieve
+         * It will probably be even more use as we blur the edges of what Joomla can achieve.
          *
          * @param string $url
-         * @param bool $moved
+         * @param bool   $moved
          */
         public function redirect($url, $moved = false)
         {
@@ -123,14 +129,14 @@ if (class_exists('JApplicationCms')) {
         private function setRedirect($url, $moved = false)
         {
             $this->_redirectDetails = array(
-                'headers' => $this->getHeaders(),
+                'headers'      => $this->getHeaders(),
                 'messagequeue' => $this->getMessageQueue(),
-                'url' => $url,
+                'url'          => $url,
             );
         }
 
         /**
-         * Return the details of any set redirect
+         * Return the details of any set redirect.
          *
          * @return array
          */
@@ -138,6 +144,5 @@ if (class_exists('JApplicationCms')) {
         {
             return $this->_redirectDetails;
         }
-
     }
 }
