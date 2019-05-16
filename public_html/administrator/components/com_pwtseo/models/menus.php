@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -95,6 +95,7 @@ class PWTSEOModelMenus extends ListModel
 			->leftJoin($db->quoteName('#__plg_pwtseo', 'seo') . ' ON seo.context_id = menu.id')
 			->leftJoin($db->quoteName('#__languages', 'language') . ' ON language.lang_code = menu.language')
 			->where($db->quoteName('menu.client_id') . ' = 0')
+			->where($db->quoteName('seo.context_id') . ' NOT IN (' . implode(',', $db->quote(array('com_content.article', 'com_pwtseo.custom'))) . ')')
 			->where($db->quoteName('menu.alias') . ' <> ' . $db->quote('root'));
 
 		$search = $this->getState('filter.search');

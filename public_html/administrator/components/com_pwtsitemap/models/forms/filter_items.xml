@@ -23,6 +23,7 @@
 				type="menu"
 				label="JOPTION_SELECT_MENU"
 				description="JOPTION_FILTER_LANGUAGE_DESC"
+				clientid="0"
 				onchange="this.form.submit();"
 		>
 			<option value="">JOPTION_SELECT_MENU</option>

@@ -1,4 +1,9 @@
-.page-title .icon-pwtsitemap {
+.com_pwtsitemap header.header {
+	background-image: url('../images/pwt-bg.jpg');
+	background-size: cover;
+}
+
+.com_pwtsitemap header.header .icon-pwtsitemap {
 	background-image: url('../images/pwt-sitemap.png');
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -9,77 +14,57 @@
 	margin-right: 5px !important;
 }
 
-.pwt-extensions {
-	background-image: url('../images/pwt-sitemap-bg.png');
-	background-size: cover;
+.com_pwtsitemap .pwt-extensions {
 	font-size: 1.05em;
 	line-height: 130%;
 }
 
-.pwt-extensions p {
-	color: #fff;
-}
-
-.pwt-extensions p a {
-	color: #fff;
-	font-weight: 700;
-}
-
-.pwt-extensions p a:hover {
-	color: #fff;
-	text-decoration: underline;
-}
-
-.pwt-extensions p :last-child {
+.com_pwtsitemap .pwt-extensions p:last-child {
 	margin-bottom: 0;
 }
 
-.pwt-extensions .btn-group-justified {
+.com_pwtsitemap .pwt-extensions .pwt-heading {
+	margin: 20px 0 8px;
+	font-size: 1.2em;
+	font-weight: 700;
+}
+
+.com_pwtsitemap .pwt-extensions .pwt-section {
+	margin-bottom: 16px;
+}
+
+.com_pwtsitemap .pwt-extensions .pwt-section:last-child {
+	margin-bottom: 0;
+}
+
+.com_pwtsitemap .pwt-extensions .pwt-section--border-top {
+	border-top: 1px solid #CCC;
+	padding-top: 16px;
+}
+
+.com_pwtsitemap .pwt-extensions .pwt-extension-logo {
+	max-height: 75px;
+}
+
+.com_pwtsitemap .pwt-extensions .btn-group-justified {
 	display: table;
 	width: 100%;
 	table-layout: fixed;
 	border-collapse: separate;
 }
 
-.pwt-extensions .btn-group-justified > .btn,
-.pwt-extensions .btn-group-justified > .btn-group {
+.com_pwtsitemap .pwt-extensions .btn-group-justified > .btn,
+.com_pwtsitemap .pwt-extensions .btn-group-justified > .btn-group {
 	display: table-cell;
 	float: none;
 	width: 1%;
 }
 
-.pwt-extensions .btn-group-justified > .btn-group .btn {
+.com_pwtsitemap .pwt-extensions .btn-group-justified > .btn .btn,
+.com_pwtsitemap .pwt-extensions .btn-group-justified > .btn-group .btn {
 	width: 100%;
 }
 
-.pwt-extensions .btn-group-justified > .btn-group .dropdown-menu {
-	left: auto;
-}
-
-.pwt-extensions .pwt-heading {
-	margin: 20px 0 8px;
-	font-size: 1.2em;
-	font-weight: 700;
-}
-
-.pwt-extensions .pwt-section {
-	margin-bottom: 16px;
-}
-
-.pwt-extensions .pwt-section:last-child {
-	margin-bottom: 0;
-}
-
-.pwt-extensions .pwt-section--border-top {
-	border-top: 1px solid #CCC;
-	padding-top: 16px;
-}
-
-.pwt-extensions .pwt-section--border-bottom {
-	border-bottom: 1px solid #CCC;
-	padding-bottom: 16px;
-}
-
-.pwt-extensions .pwt-extension-logo {
-	max-height: 75px;
+.com_pwtsitemap form#adminForm span.save-indication {
+	margin-left: 5px;
 }

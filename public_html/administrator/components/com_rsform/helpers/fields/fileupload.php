@@ -11,11 +11,9 @@ require_once JPATH_ADMINISTRATOR.'/components/com_rsform/helpers/field.php';
 class RSFormProFieldFileUpload extends RSFormProField
 {
 	// backend preview
-	public function getPreviewInput() {
-		
-		$caption	 = $this->getProperty('CAPTION', '');
-		$html = '<td>'.$caption.'</td><td><input type="file" /></td>';
-		return $html;
+	public function getPreviewInput()
+	{
+		return '<input type="file" />';
 	}
 	
 	// functions used for rendering in front view
@@ -49,10 +47,56 @@ class RSFormProFieldFileUpload extends RSFormProField
 				 ' id="'.$this->escape($id).'"';
 		// Additional HTML
 		$html .= $additional;
+
+		$html .= $this->addDataAttributes();
+
 		// Close the tag
 		$html .= ' />';
 		
 		return $html;
+	}
+
+	protected function addDataAttributes()
+	{
+		$html = '';
+
+		if ($this->getProperty('REQUIRED'))
+		{
+			$html .= ' data-rsfp-required="true"';
+		}
+
+		if ($this->getProperty('ACCEPTEDFILESIMAGES'))
+		{
+			$acceptedExts = array('jpg', 'jpeg', 'png', 'gif');
+		}
+		elseif ($exts = $this->getProperty('ACCEPTEDFILES'))
+		{
+			$acceptedExts = RSFormProHelper::explode($exts);
+		}
+		else
+		{
+			$acceptedExts = array();
+		}
+
+		if ($acceptedExts)
+		{
+			array_walk($acceptedExts, array($this, 'cleanExtension'));
+			$html .= ' data-rsfp-exts="' . $this->escape(json_encode($acceptedExts)) . '"';
+		}
+
+		$size = (int) $this->getProperty('FILESIZE');
+
+		if ($size)
+		{
+			$html .= ' data-rsfp-size="' . ($size * 1024) . '"';
+		}
+
+		return $html;
+	}
+
+	public function cleanExtension(&$value, $key = null)
+	{
+		$value = strtolower(trim($value));
 	}
 	
 	// @desc All upload fields should have a 'rsform-upload-box' class for easy styling
@@ -112,6 +156,31 @@ class RSFormProFieldFileUpload extends RSFormProField
 		// Upload File
 		if (JFile::upload($actualFile['tmp_name'], $file, false, (bool) RSFormProHelper::getConfig('allow_unsafe')))
 		{
+		    if ($this->getProperty('ACCEPTEDFILESIMAGES', false) && function_exists('imagecreatefromstring'))
+            {
+                $newWidth  = (int) $this->getProperty('THUMBSIZE', 220);
+                $quality   = (int) $this->getProperty('THUMBQUALITY', 75);
+                $image     = imagecreatefromstring(file_get_contents($file));
+
+                if (is_resource($image))
+                {
+                    $image = imagescale($image, $newWidth);
+                    if (is_resource($image))
+                    {
+                        $thumbFile = JFile::stripExt($file) . '.jpg';
+
+                        // Delete old file, we no longer need it
+                        JFile::delete($file);
+
+                        imagejpeg($image, $thumbFile, $quality);
+
+                        $file = $thumbFile;
+
+                        unset($image);
+                    }
+                }
+            }
+
 			// Trigger Event - onBeforeStoreSubmissions
 			JFactory::getApplication()->triggerEvent('rsfp_f_onAfterFileUpload', array(array('formId' => $this->formId, 'fieldname' => $this->name, 'file' => $file, 'name' => $prefix . $actualFile['name'])));
 

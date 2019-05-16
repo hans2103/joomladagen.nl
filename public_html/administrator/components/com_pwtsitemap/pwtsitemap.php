@@ -27,7 +27,7 @@ HTMLHelper::_('stylesheet', 'com_pwtsitemap/pwtsitemap.css', array('relative' =>
 
 JLoader::register('PwtSitemapHelper', __DIR__ . '/helpers/pwtsitemap.php');
 JLoader::register('PwtSitemapMenuHelper', __DIR__ . '/helpers/pwtsitemapmenu.php');
-JLoader::register('JHtmlPwtSitemap', __DIR__ . '/helpers/html/pwtsitemap.php');
+JLoader::register('PwtHtmlPwtSitemap', __DIR__ . '/helpers/html/pwtsitemap.php');
 
 $controller = BaseController::getInstance('PwtSitemap');
 $controller->execute(Factory::getApplication()->input->get('task'));

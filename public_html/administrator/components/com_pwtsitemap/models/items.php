@@ -8,6 +8,8 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\Registry\Registry;
+
 defined('_JEXEC') or die;
 
 require_once JPATH_ADMINISTRATOR . '/components/com_menus/models/items.php';
@@ -32,7 +34,7 @@ class PwtSitemapModelItems extends MenusModelItems
 
 		foreach ($items as $i => $item)
 		{
-			$item->params = new Joomla\Registry\Registry(json_decode($item->params));
+			$item->params = new Registry(json_decode($item->params));
 		}
 
 		return $items;
@@ -41,8 +43,8 @@ class PwtSitemapModelItems extends MenusModelItems
 	/**
 	 * Method to auto-populate the model state.
 	 *
-	 * @param   string  $ordering
-	 * @param   string  $direction
+	 * @param   string  $ordering   Ordering
+	 * @param   string  $direction  Direction
 	 *
 	 * @return  void
 	 *

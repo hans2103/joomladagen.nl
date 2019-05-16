@@ -1,18 +1,14 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses
  */
-defined('_JEXEC') or die('RESTRICTED');
-
-// Load class dependencies
-wfimport('editor.libraries.classes.plugin');
-wfimport('editor.libraries.classes.browser');
+defined('JPATH_PLATFORM') or die;
 
 class WFMediaManagerBase extends WFEditorPlugin
 {
@@ -28,11 +24,11 @@ class WFMediaManagerBase extends WFEditorPlugin
         }
 
         if (!array_key_exists('view_path', $config)) {
-            $config['view_path'] = WF_EDITOR_LIBRARIES.'/views/plugin';
+            $config['view_path'] = WF_EDITOR_LIBRARIES . '/views/plugin';
         }
 
         if (!array_key_exists('template_path', $config)) {
-            $config['template_path'] = WF_EDITOR_LIBRARIES.'/views/plugin/tmpl';
+            $config['template_path'] = WF_EDITOR_LIBRARIES . '/views/plugin/tmpl';
         }
 
         // Call parent
@@ -59,7 +55,7 @@ class WFMediaManagerBase extends WFEditorPlugin
 
         // add caller if set
         if ($caller) {
-            $name .= '.'.$caller;
+            $name .= '.' . $caller;
         }
 
         if (!isset(self::$browser[$name])) {
@@ -97,7 +93,6 @@ class WFMediaManagerBase extends WFEditorPlugin
         parent::display();
 
         $document = WFDocument::getInstance();
-        $layout = JRequest::getCmd('layout', 'plugin');
 
         $view = $this->getView();
         $browser = $this->getFileBrowser();
@@ -111,12 +106,12 @@ class WFMediaManagerBase extends WFEditorPlugin
         $options['dir'] = $browser->getFileSystem()->getRootDir();
 
         // set global options
-        $document->addScriptDeclaration('FileBrowser.options='.json_encode($options).';');
+        $document->addScriptDeclaration('FileBrowser.options=' . json_encode($options) . ';');
     }
 
-    public function getFileTypes()
+    public function getFileTypes($format = 'array', $list = '')
     {
-        return $this->getFileBrowser()->getFileTypes('array');
+        return $this->getFileBrowser()->getFileTypes($format, $list);
     }
 
     protected function setFileTypes($filetypes)
@@ -126,7 +121,7 @@ class WFMediaManagerBase extends WFEditorPlugin
 
     private function getFileSystem()
     {
-        $filesystem = $this->getParam('filesystem.name', '', '', 'string', false);
+        $filesystem = $this->getParam('filesystem.name', '');
 
         // if an object, get the name
         if (is_object($filesystem)) {
@@ -150,7 +145,7 @@ class WFMediaManagerBase extends WFEditorPlugin
                 // set tmp directory
                 define('GETID3_TEMP_DIR', $app->getCfg('tmp_path'));
 
-                require_once WF_EDITOR_LIBRARIES.'/classes/vendor/getid3/getid3/getid3.php';
+                require_once WF_EDITOR_LIBRARIES . '/classes/vendor/getid3/getid3/getid3.php';
             }
 
             $id3 = new getID3();
@@ -164,7 +159,7 @@ class WFMediaManagerBase extends WFEditorPlugin
         jimport('joomla.filesystem.file');
         clearstatcache();
 
-        $meta = array('width' => '', 'height' => '', 'time' => '');
+        $meta = array('width' => '', 'height' => '', 'time' => '', 'x' => '', 'y' => '');
 
         $ext = JFile::getExt($path);
 
@@ -198,8 +193,8 @@ class WFMediaManagerBase extends WFEditorPlugin
         }
 
         if ($ext == 'wmv' && $meta['x'] == '') {
-            $meta['width']  = round($fileinfo['asf']['video_media']['2']['image_width']);
-            $meta['height'] = round(($fileinfo['asf']['video_media']['2']['image_height']));
+            $meta['width'] = round($fileinfo['asf']['video_media']['1']['image_width']);
+            $meta['height'] = round(($fileinfo['asf']['video_media']['1']['image_height']));
         }
 
         return $meta;
@@ -227,13 +222,13 @@ class WFMediaManagerBase extends WFEditorPlugin
 
             if ($svg && isset($svg['viewBox'])) {
                 list($start_x, $start_y, $end_x, $end_y) = explode(' ', $svg['viewBox']);
-                
-                $width 	= (int) $end_x;
-                $height	= (int) $end_y;
-                
+
+                $width = (int) $end_x;
+                $height = (int) $end_y;
+
                 if ($width && $height) {
-                    $data['width'] 	= $width;
-                    $data['height']	= $height;
+                    $data['width'] = $width;
+                    $data['height'] = $height;
 
                     return $data;
                 }
@@ -269,32 +264,31 @@ class WFMediaManagerBase extends WFEditorPlugin
 
         // implode textcase array to create string
         if (is_array($textcase)) {
-            $textcase = implode(",", $textcase);
+            $textcase = implode(',', $textcase);
         }
+        
+        $filter = $this->getParam('editor.dir_filter', array());
 
-        $filter = (array) $this->getParam('editor.dir_filter', array());
+        // explode to array if string - 2.7.x...2.7.11
+        if (!is_array($filter)) {
+            $filter = explode(',', $filter);
+        }
 
         // remove empty values
-        $filter = array_filter($filter);
+        $filter = array_filter((array) $filter);
 
-        // get directory from parameter
-        $dir = $this->getParam('dir', '', '', 'string', false);
+        // get base directory from editor parameter
+        $baseDir = $this->getParam('editor.dir', '', '', false);
+        
+        // get directory from plugin parameter, fallback to base directory as it cannot itself be empty
+        $dir = $this->getParam($this->getName() . '.dir', $baseDir);
 
-        // fix Link plugin legacy "direction" conflict
-        if ($this->get('caller') === 'link') {
-            // get directory from File Browser parameters
-            $dir = $this->getParam('browser.dir');
-            // if value is empty, use editor parameter
-            if (empty($dir)) {
-                $dir = $this->getParam('editor.dir');
-            }
-        }
-
+        // get websafe spaces parameter and convert legacy values
         $websafe_spaces = $this->getParam('editor.websafe_allow_spaces', '_');
 
         if (is_numeric($websafe_spaces)) {
             // legacy replacement
-            if ($websafe_spaces == 0) {           
+            if ($websafe_spaces == 0) {
                 $websafe_spaces = '_';
             }
             // convert to space
@@ -309,7 +303,7 @@ class WFMediaManagerBase extends WFEditorPlugin
             'filetypes' => $filetypes,
             'filter' => $filter,
             'upload' => array(
-                'max_size' => $this->getParam('max_size', 1024, '', 'string', false),
+                'max_size' => $this->getParam('max_size', 1024),
                 'validate_mimetype' => (int) $this->getParam('editor.validate_mimetype', 1),
                 'add_random' => (int) $this->getParam('editor.upload_add_random', 0),
                 'total_files' => (float) $this->getParam('editor.total_files', 0),

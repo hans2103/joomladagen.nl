@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-    <fields name="pwtseo">
+    <fields name="pwtseo" addfieldpath="plugins/system/pwtseo/models/fields">
 
         <fieldset name="advanced_og">
             <field type="spacer" name="canonical_word_spacer" hr="true" />
@@ -48,7 +48,7 @@
             <field name="adv_open_graph"
                    type="repeatable"
                    icon="list"
-                   select="PLG_SYTEM_PWTSEO_FORM_ADV_CREATE_LABEL"
+                   select="PLG_SYSTEM_PWTSEO_FORM_ADV_CREATE_LABEL"
                    label=""
             >
                 <fieldset hidden="true" name="adv_open_graph_modal" repeat="true">
@@ -189,6 +189,29 @@
                     ratio="4/3"
                     width="968"
             />
+        </fieldset>
+
+        <fieldset name="datalayers">
+            <field name="datalayers_spacer" type="spacer" class="pwtseo__datalayers" hr="true" />
+            <field
+                    name="datalayers"
+                    type="pwtseo.datalayers"
+                    label="PLG_SYSTEM_PWTSEO_FORM_DATALAYER_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_FORM_DATALAYER_DESC"
+            />
+
+        </fieldset>
+
+        <fieldset name="structureddata">
+            <field name="structureddata_spacer" type="spacer" class="pwtseo__structureddata" hr="true" />
+
+            <field
+                    name="structureddata"
+                    type="pwtseo.structureddata"
+                    label="PLG_SYSTEM_PWTSEO_FORM_STRUCTUREDDATA_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_FORM_STRUCTUREDDATA_DESC"
+            />
+
         </fieldset>
 
         <fieldset name="left-side">

@@ -1,22 +1,8 @@
 <?php
 /**
- * @package   AdminTools
- * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @package   admintools
+ * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
- * @version   $Id$
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Protect from unauthorized access
@@ -49,14 +35,14 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 	 *
 	 * @var   string
 	 */
-	protected $minimumPHPVersion = '5.3.3';
+	protected $minimumPHPVersion = '5.6.0';
 
 	/**
 	 * The minimum Joomla! version required to install this extension
 	 *
 	 * @var   string
 	 */
-	protected $minimumJoomlaVersion = '3.3.0';
+	protected $minimumJoomlaVersion = '3.8.0';
 
 	/**
 	 * The maximum Joomla! version this extension can be installed on
@@ -66,15 +52,175 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 	protected $maximumJoomlaVersion = '4.0.999';
 
 	/**
+	 * Obsolete files and folders to remove from the free version only. This is used when you move a feature from the
+	 * free version of your extension to its paid version. If you don't have such a distinction you can ignore this.
+	 *
+	 * @var   array
+	 */
+	protected $removeFilesFree = [
+		'files'   => [
+			// Pro WAF features
+			'plugins/system/admintools/feature/apache401.php',
+			'plugins/system/admintools/feature/autoipfiltering.php',
+			'plugins/system/admintools/feature/awayschedule.php',
+			'plugins/system/admintools/feature/badwords.php',
+			'plugins/system/admintools/feature/blockemaildomains.php',
+			'plugins/system/admintools/feature/cachecleaner.php',
+			'plugins/system/admintools/feature/cacheexpire.php',
+			'plugins/system/admintools/feature/cleantemp.php',
+			'plugins/system/admintools/feature/configmonitor.php',
+			'plugins/system/admintools/feature/consolewarn.php',
+			'plugins/system/admintools/feature/criticalfiles.php',
+			'plugins/system/admintools/feature/criticalfilesglobal.php',
+			'plugins/system/admintools/feature/csrfshield.php',
+			'plugins/system/admintools/feature/customadminfolder.php',
+			'plugins/system/admintools/feature/customblock.php',
+			'plugins/system/admintools/feature/customgenerator.php',
+			'plugins/system/admintools/feature/deleteinactive.php',
+			'plugins/system/admintools/feature/dfishield.php',
+			'plugins/system/admintools/feature/disableobsoleteadmins.php',
+			'plugins/system/admintools/feature/emailfailedadminlong.php',
+			'plugins/system/admintools/feature/emailonlogin.php',
+			'plugins/system/admintools/feature/emailphpexceptions.php',
+			'plugins/system/admintools/feature/geoblock.php',
+			'plugins/system/admintools/feature/ipblacklist.php',
+			'plugins/system/admintools/feature/ipwhitelist.php',
+			'plugins/system/admintools/feature/leakedpwd.php',
+			'plugins/system/admintools/feature/muashield.php',
+			'plugins/system/admintools/feature/nofesalogin.php',
+			'plugins/system/admintools/feature/nonewadmins.php',
+			'plugins/system/admintools/feature/phpshield.php',
+			'plugins/system/admintools/feature/projecthoneypot.php',
+			'plugins/system/admintools/feature/quickstart.php',
+			'plugins/system/admintools/feature/removeoldlog.php',
+			'plugins/system/admintools/feature/resetjoomlatfa.php',
+			'plugins/system/admintools/feature/rfishield.php',
+			'plugins/system/admintools/feature/saveusersignupip.php',
+			'plugins/system/admintools/feature/secretword.php',
+			'plugins/system/admintools/feature/selfprotect.php',
+			'plugins/system/admintools/feature/sessioncleaner.php',
+			'plugins/system/admintools/feature/sessionoptimiser.php',
+			'plugins/system/admintools/feature/sessionshield.php',
+			'plugins/system/admintools/feature/shield404.php',
+			'plugins/system/admintools/feature/sqlishield.php',
+			'plugins/system/admintools/feature/superuserslist.php',
+			'plugins/system/admintools/feature/templateswitch.php',
+			'plugins/system/admintools/feature/tempsuperuser.php',
+			'plugins/system/admintools/feature/thirdpartyexception.php',
+			'plugins/system/admintools/feature/tmplswitch.php',
+			'plugins/system/admintools/feature/trackfailedlogins.php',
+			'plugins/system/admintools/feature/uploadshield.php',
+			'plugins/system/admintools/feature/wafblacklist.php',
+
+			// Pro features
+			'administrator/components/com_admintools/Controller/AutoBannedAddress.php',
+			'administrator/components/com_admintools/Controller/AutoBannedAddresses.php',
+			'administrator/components/com_admintools/Controller/BadWord.php',
+			'administrator/components/com_admintools/Controller/BadWords.php',
+			'administrator/components/com_admintools/Controller/BlacklistedAddress.php',
+			'administrator/components/com_admintools/Controller/BlacklistedAddresses.php',
+			'administrator/components/com_admintools/Controller/ConfigureWAF.php',
+			'administrator/components/com_admintools/Controller/ExceptionsFromWAF.php',
+			'administrator/components/com_admintools/Controller/GeographicBlocking.php',
+			'administrator/components/com_admintools/Controller/HtaccessMaker.php',
+			'administrator/components/com_admintools/Controller/ImportAndExport.php',
+			'administrator/components/com_admintools/Controller/IPAutoBanHistories.php',
+			'administrator/components/com_admintools/Controller/IPAutoBanHistory.php',
+			'administrator/components/com_admintools/Controller/NginXConfMaker.php',
+			'administrator/components/com_admintools/Controller/QuickStart.php',
+			'administrator/components/com_admintools/Controller/Scan.php',
+			'administrator/components/com_admintools/Controller/ScanAlert.php',
+			'administrator/components/com_admintools/Controller/ScanAlerts.php',
+			'administrator/components/com_admintools/Controller/Scanner.php',
+			'administrator/components/com_admintools/Controller/Scans.php',
+			'administrator/components/com_admintools/Controller/SchedulingInformation.php',
+			'administrator/components/com_admintools/Controller/SecurityException.php',
+			'administrator/components/com_admintools/Controller/SecurityExceptions.php',
+			'administrator/components/com_admintools/Controller/ServerConfigMaker.php',
+			'administrator/components/com_admintools/Controller/WAFBlacklistedRequest.php',
+			'administrator/components/com_admintools/Controller/WAFBlacklistedRequests.php',
+			'administrator/components/com_admintools/Controller/WAFEmailTemplate.php',
+			'administrator/components/com_admintools/Controller/WAFEmailTemplates.php',
+			'administrator/components/com_admintools/Controller/WebApplicationFirewall.php',
+			'administrator/components/com_admintools/Controller/WebConfigMaker.php',
+			'administrator/components/com_admintools/Controller/WhitelistedAddress.php',
+			'administrator/components/com_admintools/Controller/WhitelistedAddresses.php',
+
+			'administrator/components/com_admintools/Model/AutoBannedAddresses.php',
+			'administrator/components/com_admintools/Model/BadWords.php',
+			'administrator/components/com_admintools/Model/BlacklistedAddresses.php',
+			'administrator/components/com_admintools/Model/ConfigureWAF.php',
+			'administrator/components/com_admintools/Model/ExceptionsFromWAF.php',
+			'administrator/components/com_admintools/Model/GeographicBlocking.php',
+			'administrator/components/com_admintools/Model/HtaccessMaker.php',
+			'administrator/components/com_admintools/Model/ImportAndExport.php',
+			'administrator/components/com_admintools/Model/IPAutoBanHistories.php',
+			'administrator/components/com_admintools/Model/NginXConfMaker.php',
+			'administrator/components/com_admintools/Model/QuickStart.php',
+			'administrator/components/com_admintools/Model/ScanAlerts.php',
+			'administrator/components/com_admintools/Model/Scanner.php',
+			'administrator/components/com_admintools/Model/Scans.php',
+			'administrator/components/com_admintools/Model/SchedulingInformation.php',
+			'administrator/components/com_admintools/Model/SecurityExceptions.php',
+			'administrator/components/com_admintools/Model/ServerConfigMaker.php',
+			'administrator/components/com_admintools/Model/WAFBlacklistedRequests.php',
+			'administrator/components/com_admintools/Model/WAFEmailTemplates.php',
+			'administrator/components/com_admintools/Model/WebApplicationFirewall.php',
+			'administrator/components/com_admintools/Model/WebConfigMaker.php',
+			'administrator/components/com_admintools/Model/WhitelistedAddresses.php',
+
+			// CLI scripts
+			'cli/admintools-dbrepair.php',
+			'cli/admintools-filescanner.php',
+		],
+		'folders' => [
+			// CLI common files
+			'administrator/components/com_admintools/assets/cli',
+
+			// File Change Scanner files
+			'administrator/components/com_admintools/engine',
+			'administrator/components/com_admintools/platform',
+
+			// Pro features
+			'administrator/components/com_admintools/View/AutoBannedAddresses',
+			'administrator/components/com_admintools/View/BadWords',
+			'administrator/components/com_admintools/View/BlacklistedAddresses',
+			'administrator/components/com_admintools/View/ConfigureWAF',
+			'administrator/components/com_admintools/View/ExceptionsFromWAF',
+			'administrator/components/com_admintools/View/GeographicBlocking',
+			'administrator/components/com_admintools/View/HtaccessMaker',
+			'administrator/components/com_admintools/View/ImportAndExport',
+			'administrator/components/com_admintools/View/IPAutoBanHistories',
+			'administrator/components/com_admintools/View/NginXConfMaker',
+			'administrator/components/com_admintools/View/QuickStart',
+			'administrator/components/com_admintools/View/ScanAlerts',
+			'administrator/components/com_admintools/View/Scanner',
+			'administrator/components/com_admintools/View/Scans',
+			'administrator/components/com_admintools/View/SchedulingInformation',
+			'administrator/components/com_admintools/View/SecurityExceptions',
+			'administrator/components/com_admintools/View/WAFBlacklistedRequests',
+			'administrator/components/com_admintools/View/WAFEmailTemplates',
+			'administrator/components/com_admintools/View/WebApplicationFirewall',
+			'administrator/components/com_admintools/View/WebConfigMaker',
+			'administrator/components/com_admintools/View/WhitelistedAddresses',
+
+			// Frontend pro features
+			'components/com_admintools/Controller',
+			'components/com_admintools/Model',
+			'components/com_admintools/View',
+		],
+	];
+
+	/**
 	 * Obsolete files and folders to remove from both paid and free releases. This is used when you refactor code and
 	 * some files inevitably become obsolete and need to be removed.
 	 *
 	 * @var   array
 	 */
-	protected $removeFilesAllVersions = array(
-		'files'   => array(
-            // Obsolete CLI scripts
-            'cli/admintools-update.php',
+	protected $removeFilesAllVersions = [
+		'files'   => [
+			// Obsolete CLI scripts
+			'cli/admintools-update.php',
 
 			// Old cached updates from Live Update
 			'cache/com_admintools.updates.php',
@@ -83,14 +229,14 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 			'administrator/cache/com_admintools.updates.php',
 			'administrator/cache/com_admintools.updates.ini',
 
-		    // Obsolete files
+			// Obsolete files
 			'administrator/components/com_admintools/restore.php',
 			'administrator/components/com_admintools/dispatcher.php',
 			'administrator/components/com_admintools/toolbar.php',
 
 			'components/com_admintools/dispatcher.php',
 
-            'components/com_admintools/Helper/Plugin.php',
+			'components/com_admintools/Helper/Plugin.php',
 
 			// PLUGIN "System - Admin Tools"
 
@@ -107,45 +253,106 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 			// ...because some people have never updated to 3.6, apparently?!
 			'plugins/system/admintools/feature/blockinstall.php',
 
-            // Obsolete engine files
-            'administrator/components/com_admintools/engine/Base/Object.php',
+			// Obsolete engine files
+			'administrator/components/com_admintools/engine/Base/Object.php',
 
-            // Moving to FEF
+			// Moving to FEF
 			'administrator/components/com_admintools/Helper/Coloriser.php',
-            'administrator/components/com_admintools/View/ScanAlerts/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/ScanAlerts/Form.php',
-            'administrator/components/com_admintools/View/Scans/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/Scans/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/Scans/Form.php',
-            'administrator/components/com_admintools/View/WAFEmailTemplates/Form.php',
-            'administrator/components/com_admintools/View/WAFEmailTemplates/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/IPAutoBanHistories/Form.php',
-            'administrator/components/com_admintools/View/IPAutoBanHistories/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/AutoBannedAddresses/Form.php',
-            'administrator/components/com_admintools/View/AutoBannedAddresses/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/ExceptionsFromWAF/Form.php',
-            'administrator/components/com_admintools/View/ExceptionsFromWAF/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/ExceptionsFromWAF/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/WAFBlacklistedRequests/Form.php',
-            'administrator/components/com_admintools/View/WAFBlacklistedRequests/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/WAFBlacklistedRequests/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/WhitelistedAddresses/Form.php',
-            'administrator/components/com_admintools/View/WhitelistedAddresses/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/WhitelistedAddresses/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/SecurityExceptions/Form.php',
-            'administrator/components/com_admintools/View/SecurityExceptions/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/BadWords/Form.php',
-            'administrator/components/com_admintools/View/BadWords/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/BadWords/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/BlacklistedAddresses/Form.php',
-            'administrator/components/com_admintools/View/BlacklistedAddresses/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/BlacklistedAddresses/tmpl/form.form.xml',
-            'administrator/components/com_admintools/View/Redirections/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/ScanAlerts/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/ScanAlerts/Form.php',
+			'administrator/components/com_admintools/View/Scans/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/Scans/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/Scans/Form.php',
+			'administrator/components/com_admintools/View/WAFEmailTemplates/Form.php',
+			'administrator/components/com_admintools/View/WAFEmailTemplates/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/IPAutoBanHistories/Form.php',
+			'administrator/components/com_admintools/View/IPAutoBanHistories/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/AutoBannedAddresses/Form.php',
+			'administrator/components/com_admintools/View/AutoBannedAddresses/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/ExceptionsFromWAF/Form.php',
+			'administrator/components/com_admintools/View/ExceptionsFromWAF/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/ExceptionsFromWAF/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/WAFBlacklistedRequests/Form.php',
+			'administrator/components/com_admintools/View/WAFBlacklistedRequests/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/WAFBlacklistedRequests/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/WhitelistedAddresses/Form.php',
+			'administrator/components/com_admintools/View/WhitelistedAddresses/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/WhitelistedAddresses/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/SecurityExceptions/Form.php',
+			'administrator/components/com_admintools/View/SecurityExceptions/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/BadWords/Form.php',
+			'administrator/components/com_admintools/View/BadWords/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/BadWords/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/BlacklistedAddresses/Form.php',
+			'administrator/components/com_admintools/View/BlacklistedAddresses/tmpl/form.default.xml',
+			'administrator/components/com_admintools/View/BlacklistedAddresses/tmpl/form.form.xml',
+			'administrator/components/com_admintools/View/Redirections/tmpl/form.form.xml',
 			'administrator/components/com_admintools/View/Redirections/tmpl/form.default.xml',
-            'administrator/components/com_admintools/View/Redirections/Form.php',
+			'administrator/components/com_admintools/View/Redirections/Form.php',
 
-		),
-		'folders' => array(
+			// Replace jQplot with Chart.js
+			'administrator/components/com_admintools/media/css/jquery.jqplot.min.css',
+			'administrator/components/com_admintools/media/js/jquery.jqplot.min.js',
+			'administrator/components/com_admintools/media/js/jqplot.highlighter.min.js',
+			'administrator/components/com_admintools/media/js/jqplot.dateAxisRenderer.min.js',
+			'administrator/components/com_admintools/media/js/jqplot.barRenderer.min.js',
+			'administrator/components/com_admintools/media/js/jqplot.pieRenderer.min.js',
+			'administrator/components/com_admintools/media/js/jqplot.hermite.min.js',
+			'administrator/components/com_admintools/media/js/cpanelgraphs.min.js',
+
+			// Change config.ini to config.json
+			'administrator/components/com_admintools/Platform/Filescan/Archiver/jfscan.ini',
+			'administrator/components/com_admintools/Platform/Filescan/Config/config.ini',
+
+			// Migration of Akeeba Engine to JSON format
+			"administrator/components/com_admintools/engine/Dump/native.ini",
+			"administrator/components/com_admintools/engine/Dump/reverse.ini",
+			"administrator/components/com_admintools/engine/Postproc/none.ini",
+			"administrator/components/com_admintools/engine/Postproc/webdav.ini",
+			"administrator/components/com_admintools/engine/Postproc/sugarsync.ini",
+			"administrator/components/com_admintools/engine/Postproc/email.ini",
+			"administrator/components/com_admintools/engine/Postproc/box.ini",
+			"administrator/components/com_admintools/engine/Postproc/dropbox2.ini",
+			"administrator/components/com_admintools/engine/Postproc/ovh.ini",
+			"administrator/components/com_admintools/engine/Postproc/cloudme.ini",
+			"administrator/components/com_admintools/engine/Postproc/idrivesync.ini",
+			"administrator/components/com_admintools/engine/Postproc/ftpcurl.ini",
+			"administrator/components/com_admintools/engine/Postproc/dreamobjects.ini",
+			"administrator/components/com_admintools/engine/Postproc/azure.ini",
+			"administrator/components/com_admintools/engine/Postproc/sftp.ini",
+			"administrator/components/com_admintools/engine/Postproc/amazons3.ini",
+			"administrator/components/com_admintools/engine/Postproc/cloudfiles.ini",
+			"administrator/components/com_admintools/engine/Postproc/googlestorage.ini",
+			"administrator/components/com_admintools/engine/Postproc/googlestoragejson.ini",
+			"administrator/components/com_admintools/engine/Postproc/swift.ini",
+			"administrator/components/com_admintools/engine/Postproc/sftpcurl.ini",
+			"administrator/components/com_admintools/engine/Postproc/onedrive.ini",
+			"administrator/components/com_admintools/engine/Postproc/googledrive.ini",
+			"administrator/components/com_admintools/engine/Postproc/backblaze.ini",
+			"administrator/components/com_admintools/engine/Postproc/ftp.ini",
+			"administrator/components/com_admintools/engine/Archiver/zipnative.ini",
+			"administrator/components/com_admintools/engine/Archiver/directftp.ini",
+			"administrator/components/com_admintools/engine/Archiver/directsftpcurl.ini",
+			"administrator/components/com_admintools/engine/Archiver/zip.ini",
+			"administrator/components/com_admintools/engine/Archiver/directftpcurl.ini",
+			"administrator/components/com_admintools/engine/Archiver/directsftp.ini",
+			"administrator/components/com_admintools/engine/Archiver/jps.ini",
+			"administrator/components/com_admintools/engine/Archiver/jpa.ini",
+			"administrator/components/com_admintools/engine/Scan/smart.ini",
+			"administrator/components/com_admintools/engine/Scan/large.ini",
+			"administrator/components/com_admintools/engine/Filter/Stack/dateconditional.ini",
+			"administrator/components/com_admintools/engine/Filter/Stack/errorlogs.ini",
+			"administrator/components/com_admintools/engine/Filter/Stack/hoststats.ini",
+			"administrator/components/com_admintools/engine/Core/04.quota.ini",
+			"administrator/components/com_admintools/engine/Core/02.advanced.ini",
+			"administrator/components/com_admintools/engine/Core/01.basic.ini",
+			"administrator/components/com_admintools/engine/Core/scripting.ini",
+			"administrator/components/com_admintools/engine/Core/05.tuning.ini",
+
+			// Obsolete eAccelerator warning
+			"administrator/components/com_admintools/View/eaccelerator.php",
+		],
+		'folders' => [
 			// Obsolete folders from AT 1.x, 2.x and 3.x
 			'administrator/components/com_admintools/akeeba',
 			'administrator/components/com_admintools/classes',
@@ -165,11 +372,14 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 			// Public media directory (moved to administrator)
 			'media/com_admintools',
 
-            // Moving to FEF
-            'administrator/components/com_admintools/Form',
-            'administrator/components/com_admintools/media/images',
-		)
-	);
+			// Moving to FEF
+			'administrator/components/com_admintools/Form',
+			'administrator/components/com_admintools/media/images',
+
+			// Common tables (they're installed by FOF)
+			'administrator/components/com_admintools/sql/common',
+		],
+	];
 
 	/**
 	 * Runs on installation
@@ -246,20 +456,6 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 			}
 		}
 
-		if (is_object($model) && class_exists('Akeeba\\AdminTools\\Admin\\Model\\Stats')
-		    && ($model instanceof Akeeba\AdminTools\Admin\Model\Stats)
-		    && method_exists($model, 'checkAndFixCommonTables'))
-		{
-			try
-			{
-				$model->checkAndFixCommonTables();
-			}
-			catch (Exception $e)
-			{
-				// Do nothing if that failed.
-			}
-		}
-
 		// Parent method
 		parent::postflight($type, $parent);
 
@@ -293,29 +489,20 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 		}
 
 		/**
-		 * If this is an update disable the "Monitor Super User accounts" feature. It only happens ONCE. This will
-		 * prevent people from complaining about this feature doing exactly what it's supposed to do.
+		 * Code to execute only on updates
 		 */
+
 		if (!defined('ADMINTOOLS_THIS_IS_INSTALLATION_FROM_SCRATCH'))
         {
-	        if (!class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
-	        {
-		        @include_once $parent->getParent()->getPath('source') . '/backend/Helper/Storage.php';
-	        }
+	        $this->_upgradeDisableMonitorSuperUsers($parent);
 
-	        if (class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
-	        {
-		        $params = new \Akeeba\AdminTools\Admin\Helper\Storage();
-		        $params->load();
-		        $mustDisable = $params->getValue('disabled_superuserslist', 0) == 0;
+	        $this->_upgradeRemoveObsoleteLoginSecurityLogEntries($parent);
 
-		        if ($mustDisable)
-                {
-	                $params->setValue('superuserslist', 0, false);
-	                $params->setValue('disabled_superuserslist', 1, true);
-                }
-	        }
+	        $this->_upgradeDeleteTextLogfiles();
         }
+
+		// Replace the system plugin with the actionlog plugin for logging user actions
+		$this->switchActionLogPlugins();
 	}
 
 	/**
@@ -347,11 +534,6 @@ class Com_AdmintoolsInstallerScript extends \FOF30\Utils\InstallScript
 		<img src="../administrator/components/com_admintools/media/images/admintools-48.png" width="48" height="48" alt="Admin Tools" align="right"/>
 
 		<h2>Welcome to Admin Tools!</h2>
-
-		<div style="margin: 1em; font-size: 14pt; background-color: #fffff9; color: black">
-			You can download translation files <a href="http://cdn.akeebabackup.com/language/admintools/index.html">directly
-				from our CDN page</a>.
-		</div>
 
 		<fieldset>
 			<?php if (ADMINTOOLS_PRO): ?>
@@ -610,6 +792,187 @@ HTML;
 				// Do not fail in this case
 			}
 		}
+	}
+
+	/**
+	 * If this is an update, disable the "Monitor Super User accounts" feature. It only happens ONCE. This will
+	 * prevent people from complaining about this feature doing exactly what it's supposed to do.
+     *
+	 * @param   JInstallerAdapterComponent  $parent
+     *
+     * @return  void
+     *
+     * @since   5.0.0
+	 */
+	private function _upgradeDisableMonitorSuperUsers($parent)
+	{
+		if (!class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
+		{
+			@include_once $parent->getParent()->getPath('source') . '/backend/Helper/Storage.php';
+		}
+
+		if (!class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
+        {
+            return;
+        }
+
+		$params = new \Akeeba\AdminTools\Admin\Helper\Storage();
+		$params->load();
+
+
+		if ($params->getValue('disabled_superuserslist', 0) != 0)
+        {
+            return;
+        }
+
+		$params->setValue('superuserslist', 0, false);
+		$params->setValue('disabled_superuserslist', 1, true);
+	}
+
+	/**
+	 * If this is an update, find the security exception logs for failed logins which may have contained failed
+	 * login passwords and remove them from the database.
+     *
+	 * @param   JInstallerAdapterComponent  $parent
+     *
+     * @return  void
+	 *
+	 * @since   5.1.0
+	 */
+	private function _upgradeRemoveObsoleteLoginSecurityLogEntries($parent)
+	{
+		if (!class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
+		{
+			@include_once $parent->getParent()->getPath('source') . '/backend/Helper/Storage.php';
+		}
+
+		if (!class_exists('Akeeba\\AdminTools\\Admin\\Helper\\Storage'))
+        {
+            return;
+        }
+
+		$params = new \Akeeba\AdminTools\Admin\Helper\Storage();
+		$params->load();
+
+		if ($params->getValue('showpwonloginfailure', 0) != 1)
+        {
+            return;
+        }
+
+		// Delete existing records
+        $db = JFactory::getDbo();
+		$query = $db->getQuery(true)
+            ->delete($db->qn('#__admintools_log'))
+            ->where($db->qn('reason') . ' = ' . $db->q('loginfailure'))
+            ->where($db->qn('reason') . ' = ' . $db->q('loginfailure'))
+			->where($db->qn('extradata') . ' LIKE ' . $db->q('%Password%'));
+
+		try
+        {
+		    $db->setQuery($query)->execute();
+        }
+        catch (Exception $e)
+        {
+            // Don't die if that fails
+        }
+
+		$params->setValue('showpwonloginfailure', 0, true);
+	}
+
+	/**
+	 * Delete the old style Admin Tools text log files with a .log extension
+	 *
+	 * @since   5.1.0
+	 */
+	private function _upgradeDeleteTextLogfiles()
+	{
+		$logpath = JFactory::getConfig()->get('log_path');
+		$files   = [
+			$logpath . DIRECTORY_SEPARATOR . 'admintools_breaches.log',
+			$logpath . DIRECTORY_SEPARATOR . 'admintools_breaches.log.1'
+		];
+
+		foreach ($files as $file)
+		{
+			if (!@file_exists($file))
+			{
+				continue;
+			}
+
+			if (@unlink($file))
+			{
+				continue;
+			}
+
+			JFile::delete($file);
+		}
+	}
+
+	private function switchActionLogPlugins()
+	{
+		$db = \Joomla\CMS\Factory::getDbo();
+
+		// Does the plg_system_admintoolsactionlog plugin exist? If not, there's nothing to do here.
+		$query = $db->getQuery(true)
+			->select('*')
+			->from('#__extensions')
+			->where($db->qn('type') . ' = ' . $db->q('plugin'))
+			->where($db->qn('folder') . ' = ' . $db->q('system'))
+			->where($db->qn('element') . ' = ' . $db->q('admintoolsactionlog'));
+		try
+		{
+			$result = $db->setQuery($query)->loadAssoc();
+
+			if (empty($result))
+			{
+				return;
+			}
+
+			$eid = $result['extension_id'];
+		}
+		catch (Exception $e)
+		{
+			return;
+		}
+
+		// If plg_system_admintoolsactionlog is enabled: enable plg_actionlog_admintools
+		if (\Joomla\CMS\Plugin\PluginHelper::isEnabled('system', 'admintoolsactionlog'))
+		{
+			$query = $db->getQuery(true)
+				->update($db->qn('#__extensions'))
+				->set($db->qn('enabled') . ' = ' . $db->q(1))
+				->where($db->qn('type') . ' = ' . $db->q('plugin'))
+				->where($db->qn('folder') . ' = ' . $db->q('actionlog'))
+				->where($db->qn('element') . ' = ' . $db->q('admintools'));
+			try
+			{
+				$db->setQuery($query)->execute();
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+
+		// Deactivate plg_system_admintoolsactionlog
+		$query = $db->getQuery(true)
+			->update($db->qn('#__extensions'))
+			->set($db->qn('enabled') . ' = ' . $db->q(0))
+			->where($db->qn('type') . ' = ' . $db->q('plugin'))
+			->where($db->qn('folder') . ' = ' . $db->q('system'))
+			->where($db->qn('element') . ' = ' . $db->q('admintoolsactionlog'));
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+		}
+
+		// Uninstall plg_system_admintoolsactionlog
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
+		/** @var InstallerModelManage|\Joomla\Component\Installer\Administrator\Model\ManageModel $model */
+		$model = JModelLegacy::getInstance('Manage', 'InstallerModel');
+		$model->remove([$eid]);
 	}
 
 }

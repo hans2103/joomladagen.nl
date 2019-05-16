@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright    Copyright (c) 2009-2017 Ryan Demmer. All rights reserved
+ * @copyright    Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -17,14 +17,49 @@ if (function_exists('mb_internal_encoding')) {
 
 abstract class WFUtility
 {
+    /**
+     * Get the file extension from a path
+     *
+     * @param  string $path The file path
+     * @return string The file extension
+     */
     public static function getExtension($path)
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 
+    /**
+     * Remove the extension from a file name or path
+     *
+     * @param  string $path The file path
+     * @return string The file path without the extension
+     */
     public static function stripExtension($path)
     {
-        return pathinfo($path, PATHINFO_FILENAME);
+        return preg_replace('#\.[^.]*$#', '', $path);
+    }
+
+    /**
+     * Get the file name
+     *
+     * @param  string $path The file path
+     * @return string The file name without the path or extension
+     */
+    public static function getFilename($path)
+    {
+        $info = pathinfo($path);
+
+        // basename should be set
+        if (empty($info['basename'])) {
+            return $path;
+        }
+
+        // "filename" is empty, posssibly due to incorrect locale
+        if (empty($info['filename'])) {
+            return self::stripExtension($info['basename']);
+        }
+
+        return $info['filename'];
     }
 
     public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '')
@@ -128,10 +163,10 @@ abstract class WFUtility
         if (function_exists('transliterator_transliterate')) {
             if (is_array($subject)) {
                 /*array_walk($subject, function (&$string) {
-                    $string = WFUtility::utf8_latin_to_ascii($string);
+                $string = WFUtility::utf8_latin_to_ascii($string);
                 });*/
 
-                for($i = 0; $i < count($subject); $i++) {
+                for ($i = 0; $i < count($subject); $i++) {
                     $subject[$i] = WFUtility::utf8_latin_to_ascii($subject[$i]);
                 }
 
@@ -157,21 +192,46 @@ abstract class WFUtility
         }
 
         if (is_array($string)) {
-            for($i = 0; $i < count($string); $i++) {
+            for ($i = 0; $i < count($string); $i++) {
                 $string[$i] = WFUtility::changeCase($string[$i], $case);
             }
         } else {
             switch ($case) {
-                case 'lowercase' :
+                case 'lowercase':
                     $string = mb_strtolower($string);
                     break;
-                case 'uppercase' :
+                case 'uppercase':
                     $string = mb_strtoupper($string);
                     break;
             }
         }
 
         return $string;
+    }
+
+    private static function cleanUTF8($string)
+    {
+        // remove some common characters
+        $string = preg_replace('#[\+\\\/\?\#%&<>"\'=\[\]\{\},;@\^\(\)£€$]#', '', $string);
+
+        $result = '';
+        $length = strlen($string);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $string[$i];
+
+            // only process on possible restricted characters or utf-8 letters/numbers
+            if (preg_match('#[^\w\.\-~\s ]#', $char)) {
+                // skip any character less than 127, eg: &?@* etc.
+                if (ord($char) < 127) {
+                    continue;
+                }
+            }
+
+            $result .= $char;
+        }
+
+        return $result;
     }
 
     /**
@@ -185,6 +245,11 @@ abstract class WFUtility
     {
         $search = array();
 
+        // set default mode if none is passed in
+        if (empty($mode)) {
+            $mode = 'utf-8';
+        }
+
         if (!function_exists('mb_internal_encoding')) {
             $mode = 'ascii';
         }
@@ -192,24 +257,20 @@ abstract class WFUtility
         // trim
         if (is_array($subject)) {
             $subject = array_map('trim', $subject);
-        }
-        else {
+        } else {
             $subject = trim($subject);
         }
 
         // replace spaces with specified character or space
-        $subject = preg_replace('#[\s ]+#', $spaces, $subject);
+        if (is_string($spaces)) {
+            $subject = preg_replace('#[\s ]+#', $spaces, $subject);
+        }
 
-        switch ($mode) {
-            default :
-            case 'utf-8' :
-                $search[] = '#[^a-zA-Z0-9_\.\-~\p{L}\p{N}\s ]#u';
-                $mode = 'utf-8';
-                break;
-            case 'ascii' :
-                $subject = self::utf8_latin_to_ascii($subject);
-                $search[] = '#[^a-zA-Z0-9_\.\-~\s ]#';
-                break;
+        if ($mode === 'utf-8') {
+            $search[] = '#[^\pL\pM\pN_\.\-~\s ]#u';
+        } else {
+            $subject = self::utf8_latin_to_ascii($subject);
+            $search[] = '#[^a-zA-Z0-9_\.\-~\s ]#';
         }
 
         // remove multiple . characters
@@ -268,11 +329,9 @@ abstract class WFUtility
     {
         if ($size < 1024) {
             return $size . ' ' . WFText::_('WF_LABEL_BYTES');
-        }
-        elseif ($size >= 1024 && $size < 1024 * 1024) {
+        } elseif ($size >= 1024 && $size < 1024 * 1024) {
             return sprintf('%01.2f', $size / 1024.0) . ' ' . WFText::_('WF_LABEL_KB');
-        }
-        else {
+        } else {
             return sprintf('%01.2f', $size / (1024.0 * 1024)) . ' ' . WFText::_('WF_LABEL_MB');
         }
     }
@@ -381,7 +440,7 @@ abstract class WFUtility
         preg_match('#([0-9]+)\s?([a-z]*)#i', $value, $matches);
 
         if (isset($matches[1])) {
-            $value = (int)$matches[1];
+            $value = (int) $matches[1];
         }
 
         if (isset($matches[2])) {
@@ -390,13 +449,13 @@ abstract class WFUtility
 
         // Convert to bytes
         switch (strtolower($unit)) {
-            case 'g' :
+            case 'g':
                 $value = intval($value) * 1073741824;
                 break;
-            case 'm' :
+            case 'm':
                 $value = intval($value) * 1048576;
                 break;
-            case 'k' :
+            case 'k':
                 $value = intval($value) * 1024;
                 break;
         }
@@ -468,25 +527,48 @@ abstract class WFUtility
         // list of invalid extensions
         $executable = array(
             'php', 'php3', 'php4', 'php5', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
-            'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh',
+            'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh', 'svg'
         );
-        // get file parts, eg: ['image', 'jpg']
+
+        // get file parts, eg: ['image', 'php', 'jpg']
         $parts = explode('.', $name);
-        // reverse so that name is last array item
-        $parts = array_reverse($parts);
-        // remove name
+
+        // remove extension
         array_pop($parts);
+
+        // remove name
+        array_shift($parts);
+
+        // no extensions in file name
+        if (empty($parts)) {
+            return true;
+        }
+
         // lowercase it
         array_map('strtolower', $parts);
 
-        // check for extension in file name, eg: image.php.jpg or as extension, eg: image.php
-        foreach ($executable as $ext) {
-            if (in_array($ext, $parts)) {
+        // check for extension in file name, eg: image.php.jpg
+        foreach ($executable as $extension) {
+            if (in_array($extension, $parts)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Method to determine if an array is an associative array.
+     *
+     * @param    array        An array to test
+     *
+     * @return bool True if the array is an associative array
+     *
+     * @link    http://www.php.net/manual/en/function.is-array.php#98305
+     */
+    private static function is_associative_array($array)
+    {
+        return is_array($array) && (count($array) == 0 || 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
     }
 
     /**
@@ -510,21 +592,29 @@ abstract class WFUtility
      *
      * @param array $array1
      * @param array $array2
+     * @param boolean $ignore_empty_string
      *
      * @return array
      *
      * @author Daniel <daniel (at) danielsmedegaardbuus (dot) dk>
      * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
      */
-    public static function array_merge_recursive_distinct(array &$array1, array &$array2)
+    public static function array_merge_recursive_distinct(array &$array1, array &$array2, $ignore_empty_string = false)
     {
         $merged = $array1;
 
         foreach ($array2 as $key => &$value) {
-            if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
-                $merged[$key] = self::array_merge_recursive_distinct($merged[$key], $value);
-            }
-            else {
+            if (self::is_associative_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+                $merged[$key] = self::array_merge_recursive_distinct($merged[$key], $value, $ignore_empty_string);
+            } else {
+                if (is_null($value)) {
+                    continue;
+                }
+                
+                if (array_key_exists($key, $merged) && $ignore_empty_string && $value === "") {
+                    continue;
+                }
+
                 $merged[$key] = $value;
             }
         }

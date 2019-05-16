@@ -1707,6 +1707,7 @@
       flex: 1 1 auto;
   overflow: auto;
   padding: 16px 16px 0;
+  background: white;
 }
 
 /* Footer */
@@ -1729,9 +1730,13 @@
   .pwt-grid {
     display: -ms-flexbox;
     display: flex;
-    -ms-flex: 1 1 auto;
-        flex: 1 1 auto;
+    -ms-flex: 1 0 auto;
+        flex: 1 0 auto;
   }
+}
+
+.pwt-grid__main {
+  overflow: hidden;
 }
 
 @media screen and (min-width: 560px) {
@@ -1761,6 +1766,25 @@
     -ms-flex: 0 0 30%;
         flex: 0 0 30%;
   }
+}
+
+/* Wrapper */
+.pwt-wrapper {
+  overflow: auto;
+  height: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+}
+
+.pwt-canvas-wrapper {
+  height: 100%;
+  width: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
 }
 
 /* Breadcrumb */
@@ -1934,6 +1958,33 @@
       flex: 1 1 auto;
   overflow: auto;
   padding-bottom: 16px;
+}
+
+/**
+ * Flag object
+ *
+ * Using flexbox since this is only for backend / admin area
+ */
+.pwt-flag-object {
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.pwt-flag-object__aside {
+  -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
+}
+
+.pwt-flag-object__body {
+  -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+}
+
+.pwt-flag-object--spaced .pwt-flag-object__aside + .pwt-flag-object__aside,
+.pwt-flag-object--spaced .pwt-flag-object__aside + .pwt-flag-object__body,
+.pwt-flag-object--spaced .pwt-flag-object__body + .pwt-flag-object__aside,
+.pwt-flag-object--spaced .pwt-flag-object__body + .pwt-flag-object__body {
+  padding-left: 1em;
 }
 
 /* Form styling */
@@ -2714,13 +2765,14 @@ dialog.pwt-modal {
 
 .pwt-tabs-scroller-prev:after {
   position: absolute;
-  top: 8px;
+  top: 4px;
   left: 6px;
   text-align: center;
   display: block;
   content: "‹";
   font-family: 'Times', serif;
   font-size: 32px;
+  line-height: 32px;
 }
 
 .pwt-tabs-scroller-next {
@@ -2732,13 +2784,14 @@ dialog.pwt-modal {
 
 .pwt-tabs-scroller-next:after {
   position: absolute;
-  top: 8px;
+  top: 4px;
   right: 6px;
   text-align: center;
   display: block;
   content: "›";
   font-family: 'Times', serif;
   font-size: 32px;
+  line-height: 32px;
 }
 
 .has-tabs-overflow {
@@ -2834,6 +2887,53 @@ dialog.pwt-modal {
   outline: none;
 }
 
+.pwt-table {
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.pwt-table {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.pwt-table th,
+.pwt-table td {
+  padding: 8px;
+  line-height: 19px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.pwt-table th {
+  font-weight: bold;
+}
+
+.pwt-table thead th {
+  vertical-align: bottom;
+}
+
+.pwt-table tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+
+.pwt-table .pwt-table {
+  background-color: #fff;
+}
+
+.pwt-table-striped tbody > tr:nth-child(odd) > td,
+.pwt-table-striped tbody > tr:nth-child(odd) > th {
+  background-color: #f9f9f9;
+}
+
+.pwt-table-hover tbody tr:hover > td,
+.pwt-table-hover tbody tr:hover > th {
+  background-color: #F0F0F0;
+}
+
 /* Toolbar */
 .pwt-toolbar:before, .pwt-toolbar:after {
   display: table;
@@ -2856,6 +2956,12 @@ dialog.pwt-modal {
 
 .pwt-toolbar__item:last-child {
   margin-right: 0;
+}
+
+/* Wrapping for long names like filenames and urls */
+.pwt-word-wrap {
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .pwt-component {

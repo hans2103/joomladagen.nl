@@ -23,6 +23,7 @@
             <field name="override_canonical" type="hidden" class="js-remove" />
             <field name="canonical" type="hidden" class="js-remove" />
             <field name="articletitleselector" type="hidden" class="js-remove" />
+            <field name="datalayers" type="hidden" class="js-remove" />
             <!-- End fake fields -->
 
             <field
@@ -32,6 +33,9 @@
             />
 
             <field type="hidden" name="pwtseo_score" default="0" />
+            <field type="hidden" name="serptitle" value="" />
+            <field type="hidden" name="serpurl" value="" />
+            <field type="hidden" name="serpmetadescription" value="" />
         </fieldset>
     </fields>
 </form>

@@ -98,7 +98,7 @@ class RSFormProJQueryCalendar
 		self::$calendarOptions[$formId][$customId]['value'] = $value;
 		self::$calendarOptions[$formId][$customId]['timepicker'] = $timepicker;
 		self::$calendarOptions[$formId][$customId]['theme'] = $theme;
-		if ($timepicker == 'YES') {
+		if ($timepicker) {
 			// in case the user leaves the input empty and save the settings
 			$timepickerformat = trim($timepickerformat);
 			if (empty($timepickerformat)) {
@@ -123,6 +123,17 @@ class RSFormProJQueryCalendar
 		}
 		if (!empty($maxTime)) {
 			$extras['maxTime'] = $maxTime;
+		}
+
+		if (!empty($allowDates)) {
+			$allowDates = str_replace("\r\n", "\n", $allowDates);
+			$allowDates = explode("\n", $allowDates);
+
+			$extras['allowDates'] = $allowDates;
+		}
+
+		if (!empty($allowDateRe)) {
+			$extras['allowDateRe'] = $allowDateRe;
 		}
 
 		// Set the time step (Ex: 5, 10, 15, 30 minutes)

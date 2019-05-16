@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     FOF
- * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright   Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license     GNU GPL version 2 or later
  */
 
@@ -24,13 +24,6 @@ defined('_JEXEC') or die;
  */
 class DataController extends Controller
 {
-	/**
-	 * The tasks for which caching should be enabled by default
-	 *
-	 * @var  array
-	 */
-	protected $cacheableTasks = array('browse', 'read');
-
     /**
      * Variables that should be taken in account while working with the cache. You can set them in Controller constructor
      * or inside onBefore* methods
@@ -127,6 +120,14 @@ class DataController extends Controller
 			}
 
 			$this->cacheableTasks = $config['cacheableTasks'];
+		}
+		elseif ($this->container->platform->isBackend())
+		{
+			$this->cacheableTasks = [];
+		}
+		else
+		{
+			$this->cacheableTasks = ['browse', 'read'];
 		}
 
 		if (isset($config['taskPrivileges']) && is_array($config['taskPrivileges']))
@@ -811,7 +812,7 @@ class DataController extends Controller
 	 */
 	public function cancel()
 	{
-		$model = $this->getModel()->savestate(false);
+		$model = $this->getModel()->tmpInstance()->savestate(false);
 
 		if (!$model->getId())
 		{

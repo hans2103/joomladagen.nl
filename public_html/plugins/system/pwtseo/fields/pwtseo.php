@@ -3,21 +3,20 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
 /**
- * Perfect SEO field
+ * PWT SEO field
  * The field that is added to the content form
  *
  * @since  1.0
@@ -60,6 +59,18 @@ class JFormFieldPWTSeo extends FormField
 	}
 
 	/**
+	 * Get the any datalayers associated with this page
+	 *
+	 * @return string The label - the left side of the panel
+	 *
+	 * @since 1.0
+	 */
+	protected function getDataLayers()
+	{
+		return true;
+	}
+
+	/**
 	 * Get the html/view of the input field. We abuse this to create our own layout.
 	 *
 	 * @return string The input - the right side of the panel
@@ -80,13 +91,6 @@ class JFormFieldPWTSeo extends FormField
 
 		$dispatcher = JEventDispatcher::getInstance();
 		$dispatcher->trigger('onContentPrepareForm', array(&$form, array()));
-
-		if (ComponentHelper::isEnabled('com_pwtimage') && $this->params->get('enable_pwtimage', 1))
-		{
-			$form->setFieldAttribute('facebook_image', 'type', 'pwtimage.image', 'pwtseo');
-			$form->setFieldAttribute('twitter_image', 'type', 'pwtimage.image', 'pwtseo');
-			$form->setFieldAttribute('google_image', 'type', 'pwtimage.image', 'pwtseo');
-		}
 
 		// Now we update the original form with all our fields
 		$fieldsets = $form->getFieldsets();
@@ -112,8 +116,23 @@ class JFormFieldPWTSeo extends FormField
 			}
 		}
 
+		if ($this->form->getValue('expand_og', 'pwtseo') === null)
+		{
+			$this->form->setValue('expand_og', 'pwtseo', $form->getValue('expand_og', 'pwtseo'));
+		}
+
 		echo $this->form->renderFieldset('left-side');
 		echo $this->form->renderFieldset('basic_og');
+
+		if ($this->params->get('show_datalayers', 0))
+		{
+			echo $this->form->renderFieldset('datalayers');
+		}
+
+		if ($this->params->get('show_structureddata', 0))
+		{
+			echo $this->form->renderFieldset('structureddata');
+		}
 
 		if ($this->params->get('advanced_mode'))
 		{

@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <fieldset name="update">
-        <field name="downloadid" type="text" default="" size="50" label="COM_PWTSEO_DOWNLOAD_LABEL" description ="COM_PWTSEO_DOWNLOAD_DESC" />
+        <field name="downloadid" type="text" default="" size="50" label="COM_PWTSEO_DOWNLOAD_LABEL"
+               description="COM_PWTSEO_DOWNLOAD_DESC"/>
+    </fieldset>
+    <fieldset name="plugin">
+        <field
+            name="autofillmeta"
+            label="COM_PWTSEO_CONFIG_PLUGIN_AUTOFILL_META"
+            description="COM_PWTSEO_CONFIG_PLUGIN_AUTOFILL_META_DESC"
+            default="0"
+            type="list"
+            >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+            name="openog"
+            label="COM_PWTSEO_CONFIG_PLUGIN_OPEN_OG"
+            description="COM_PWTSEO_CONFIG_PLUGIN_OPEN_OG_DESC"
+            default="0"
+            type="list"
+            >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
     </fieldset>
     <fieldset name="oauth">
         <fields>
@@ -19,7 +42,7 @@
             <field
                     name="clientsecret"
                     type="text"
-                        label="COM_PWTSEO_CONFIG_CLIENT_SECRET_LABEL"
+                    label="COM_PWTSEO_CONFIG_CLIENT_SECRET_LABEL"
                     description="COM_PWTSEO_CONFIG_CLIENT_SECRET_DESC"
             />
             <field
@@ -29,6 +52,54 @@
                     description="COM_PWTSEO_CONFIG_OAUTH_DOMAIN_DESC"
             />
         </fields>
+    </fieldset>
+    <fieldset name="structureddata">
+        <field
+                name="enable_breadcrumbs"
+                type="list"
+                label="COM_PWTSEO_CONFIG_STRUCTUREDDATA_ENABLE_BREADCRUMBS"
+                description="COM_PWTSEO_CONFIG_STRUCTUREDDATA_ENABLE_BREADCRUMBS_DESC"
+                default="0"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+        <field
+                name="show_home"
+                type="list"
+                label="COM_PWTSEO_CONFIG_STRUCTUREDDATA_SHOW_HOME"
+                description="COM_PWTSEO_CONFIG_STRUCTUREDDATA_SHOW_HOME_DESC"
+                default="1"
+                showon="enable_breadcrumbs:1"
+        >
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+            <option value="2">COM_PWTSEO_CUSTOM</option>
+        </field>
+        <field
+                name="breadcrumbs_home"
+                type="text"
+                label="COM_PWTSEO_CONFIG_STRUCTUREDDATA_CUSTOM_HOME"
+                description="COM_PWTSEO_CONFIG_STRUCTUREDDATA_CUSTOM_HOME_DESC"
+                showon="show_home:2"
+        />
+        <field
+                type="spacer"
+                name="spacer_02"
+                hr="true"
+        />
+        <field
+                name="publisher_name"
+                type="text"
+                label="COM_PWTSEO_CONFIG_STRUCTUREDDATA_PUBLISHER_NAME"
+                description="COM_PWTSEO_CONFIG_STRUCTUREDDATA_PUBLISHER_NAME_DESC"
+        />
+        <field
+                name="publisher_logo"
+                type="media"
+                label="COM_PWTSEO_CONFIG_STRUCTUREDDATA_PUBLISHER_LOGO"
+                description="COM_PWTSEO_CONFIG_STRUCTUREDDATA_PUBLISHER_LOGO_DESC"
+        />
     </fieldset>
     <fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
         <field name="rules"

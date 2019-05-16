@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -54,6 +54,12 @@ class PWTSEOHelper
 			'index.php?option=com_pwtseo&view=menus',
 			$vName == 'menus'
 		);
+
+		JHtmlSidebar::addEntry(
+			Text::_('COM_PWTSEO_DATALAYER_LABEL'),
+			'index.php?option=com_pwtseo&view=datalayers',
+			$vName == 'datalayers'
+		);
 	}
 
 	/**
@@ -103,5 +109,37 @@ class PWTSEOHelper
 		}
 
 		return 0;
+	}
+
+	/**
+	 * @param   string $text      The text of which the words should be counted
+	 * @param   string $blacklist Optional string with words that should be ignored
+	 * @param   int    $max       Max number of words to return
+	 *
+	 * @return  array The list of most common words, sorted by occurrence
+	 *
+	 * @since   1.3.0
+	 */
+	public static function getMostCommenWords($text, $blacklist = '', $max = 15)
+	{
+		// Remove most common tags and html
+		$text = array_count_values(explode(' ', preg_replace('/{+?.*?}+?|\.|:/i', ' ', strip_tags($text))));
+
+		uasort(
+			$text,
+			function ($a, $b) {
+				return $b - $a;
+			}
+		);
+
+		foreach ($text as $word => $count)
+		{
+			if (stripos($blacklist, $word) !== false)
+			{
+				unset($text[$word]);
+			}
+		}
+
+		return array_slice(array_keys($text), 0, $max);
 	}
 }

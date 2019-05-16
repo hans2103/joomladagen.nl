@@ -1,7 +1,7 @@
 <?php
 /**
  * @package     FOF
- * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright   Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license     GNU GPL version 2 or later
  */
 
@@ -75,8 +75,9 @@ class HasMany extends Relation
 					}
 				}
 
-				// Keep only unique values
-				$values = array_unique($values);
+				// Keep only unique values. This double step is required to re-index the array and avoid issues with
+				// Joomla Registry class. See issue #681
+				$values = array_values(array_unique($values));
 
 				// Apply the filter
 				if (!empty($values))

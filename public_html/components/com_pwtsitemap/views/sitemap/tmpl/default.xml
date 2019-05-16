@@ -16,6 +16,17 @@
                     description="COM_PWTSITEMAP_FIELD_INTROTEXT_DESC"
                     rows="3"
             />
+            <field
+                    name="showTitle"
+                    type="radio"
+                    label="COM_PWTSITEMAP_SHOWTITLE_LABEL"
+                    description="COM_PWTSITEMAP_SHOWTITLE_DESC"
+                    default="1"
+                    class="btn-group btn-group-yesno"
+            >
+                <option value="1">JYES</option>
+                <option value="0">JNO</option>
+            </field>
         </fieldset>
     </fields>
 </metadata>

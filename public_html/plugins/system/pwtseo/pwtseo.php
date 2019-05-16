@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -18,7 +18,9 @@ use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\LanguageHelper;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Router\Router;
@@ -40,7 +42,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	protected $db;
 
 	/**
-	 * @var JApplication
+	 * @var Joomla\CMS\Application\SiteApplication
 	 * @since 1.0
 	 */
 	protected $app;
@@ -59,7 +61,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $aAllowedContext = array('com_content.article', 'com_pwtseo.custom', 'com_menus.item');
+	private $aAllowedContext = array('com_content.article', 'com_pwtseo.custom', 'com_menus.item', 'com_content.form');
 
 	/**
 	 * @var    String  base update url, to decide whether to process the event or not
@@ -80,7 +82,21 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 *
 	 * @since  1.0.0
 	 */
-	private $extensiontitle = 'PWT SEO';
+	private $extensionTitle = 'PWT SEO';
+
+	/**
+	 * @var     array  Holding all the seo data for this particular id/context
+	 *
+	 * @since   1.3.0
+	 */
+	private $aSEOData = array();
+
+	/**
+	 * @var     Registry  The component params
+	 *
+	 * @since   1.3.0
+	 */
+	private $componentParams;
 
 	/**
 	 * Adding required headers for successful extension update
@@ -107,37 +123,63 @@ class PlgSystemPWTSEO extends CMSPlugin
 		$jLanguage->load($this->extension, JPATH_ADMINISTRATOR . '/components/' . $this->extension . '/', 'en-GB', true, true);
 		$jLanguage->load($this->extension, JPATH_ADMINISTRATOR . '/components/' . $this->extension . '/', null, true, false);
 
-		// Get the Download ID from component params
-		$downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
-
-		// Set Download ID first
-		if (empty($downloadId))
+		// Append key to url if not set yet
+		if (strpos($url, 'key') == false)
 		{
-			Factory::getApplication()->enqueueMessage(
-				Text::sprintf($this->extension . '_DOWNLOAD_ID_REQUIRED',
-					$this->extension,
-					$this->extensiontitle
-				),
-				'error'
-			);
+			// Get the Download ID from component params
+			$downloadId = $this->componentParams->get('downloadid', '');
 
-			return true;
-		}
-		// Append the Download ID
-		else
-		{
+			// Check if Download ID is set
+			if (empty($downloadId))
+			{
+				Factory::getApplication()->enqueueMessage(
+					Text::sprintf('COM_PWTSEO_DOWNLOAD_ID_REQUIRED',
+						$this->extension,
+						$this->extensionTitle
+					),
+					'error'
+				);
+
+				return true;
+			}
+
+			// Append the Download ID from component options
 			$separator = strpos($url, '?') !== false ? '&' : '?';
-			$url       .= $separator . 'key=' . $downloadId;
+			$url       .= $separator . 'key=' . trim($downloadId);
 		}
 
-		// Get the domain for this site
-		$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
+		// Append domain to url if not set yet
+		if (strpos($url, 'domain') == false)
+		{
+			// Get the domain for this site
+			$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
 
-		// Append domain
-		$url .= '&domain=' . $domain;
+			// Append domain
+			$url .= '&domain=' . $domain;
+		}
 
 		return true;
 	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param   object  &$subject  The object to observe
+	 * @param   array    $config   An optional associative array of configuration settings.
+	 *                             Recognized key values include 'name', 'group', 'params', 'language'
+	 *                             (this list is not meant to be comprehensive).
+	 *
+	 * @since   1.3.0
+	 */
+	public function __construct($subject, array $config = array())
+	{
+		JLoader::register('PWTSEOHelper', JPATH_ROOT . '/administrator/components/com_pwtseo/helpers/pwtseo.php');
+
+		$this->componentParams = ComponentHelper::getComponent($this->extension)->params;
+
+		parent::__construct($subject, $config);
+	}
+
 
 	/**
 	 * Once the user is logged in, we want to check for the robots setting in global config.
@@ -182,9 +224,10 @@ class PlgSystemPWTSEO extends CMSPlugin
 		if ($form->getName() === 'com_pwtseo')
 		{
 			$form->setValue('articletitleselector', 'pwtseo', $this->params->get('articletitleselector', ''));
+			$form->setValue('expand_og', 'pwtseo', $this->componentParams->get('openog', ''));
 		}
 
-		if (in_array($form->getName(), $this->aAllowedContext))
+		if (in_array($form->getName(), $this->aAllowedContext) && Factory::getUser()->authorise('core.create', 'com_pwtseo'))
 		{
 			HTMLHelper::_('jquery.framework');
 			$form->loadFile(JPATH_PLUGINS . '/system/pwtseo/form/' . $form->getName() . '.xml', false);
@@ -229,8 +272,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 					$sWords = $sDefault;
 				}
 
-				$aWordsFilter[$lang->lang_code]
-					= array_values(
+				$aWordsFilter[$lang->lang_code] = array_values(
 					array_filter(
 						array_map(
 							'trim',
@@ -280,6 +322,8 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'requirements_images_none'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_NONE'),
 					'requirements_images_bad'                        => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_BAD'),
 					'requirements_images_good'                       => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_GOOD'),
+					'requirements_images_alt_bad'                    => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_ALT_BAD'),
+					'requirements_images_alt_good'                   => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_ALT_GOOD'),
 					'requirements_images_resulting_none'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_NONE'),
 					'requirements_images_resulting_bad'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_BAD'),
 					'requirements_images_resulting_good'             => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_IMAGES_RESULTING_GOOD'),
@@ -341,6 +385,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'requirements_metadesc_unique_none'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_NONE'),
 					'requirements_metadesc_unique_good'              => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_GOOD'),
 					'requirements_metadesc_unique_bad'               => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_METADESC_UNIQUE_BAD'),
+					'requirements_loading_times_ttfb'                => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_LOADING_TIMES_TTFB'),
 					'information_most_common_words'                  => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_INFORMATION_COMMON_WORDS'),
 					'information_most_common_blocked_words'          => Text::_('PLG_SYSTEM_PWTSEO_REQUIREMENTS_INFORMATION_COMMON_BLACKLISTED_WORDS'),
 					'show_counters'                                  => (int) $this->params->get('show_counters', 1),
@@ -357,7 +402,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 		if ($form->getField('plg_system_pwtseo', 'params'))
 		{
 			$language        = Factory::getLanguage();
-			$currentLanguage = $language->getName();
+			$currentLanguage = $language->getTag();
 			$langs           = LanguageHelper::getContentLanguages(true, false);
 
 			// Load the language file for each installed content language
@@ -382,12 +427,66 @@ class PlgSystemPWTSEO extends CMSPlugin
 			Factory::getLanguage()->load('plg_system_pwtseo', JPATH_PLUGINS . '/system/pwtseo', $currentLanguage, true);
 		}
 
+		// Get the datalayers for this content item
+		if ($form->getName() === 'plg_pwtseo_datalayers')
+		{
+			$query = $this->db->getQuery(true);
+
+			$query
+				->select($this->db->quoteName(array('map.datalayer_id', 'map.values')))
+				->from($this->db->quoteName('#__plg_pwtseo_datalayers_map', 'map'))
+				->where($this->db->quoteName('map.context_id') . ' = ' . (int) $data['context_id'])
+				->where($this->db->quoteName('map.context') . ' = ' . $this->db->quote($data['context']));
+
+			$aDatalayerValues = $this->db->setQuery($query)->loadObjectList();
+
+			array_walk(
+				$aDatalayerValues,
+				function (&$el) {
+					$el->values = json_decode($el->values);
+				}
+			);
+
+			$fieldSets = $form->getFieldsets();
+
+			foreach ($fieldSets as $fieldSet)
+			{
+				$fields = $form->getFieldset($fieldSet->name);
+
+				/** @var \Joomla\CMS\Form\FormField $field */
+				foreach ($fields as $field)
+				{
+					if (method_exists($field, 'getAttribute') === false)
+					{
+						continue;
+					}
+
+					$name = $field->getAttribute('name');
+
+					// Should be faster then a regexp
+					$parts        = explode('[', $name);
+					$iDatalayerId = substr($parts[1], 0, stripos($parts[1], ']'));
+
+					foreach ($aDatalayerValues as $aDatalayerValue)
+					{
+						// Get the data off the correct datalayer
+						if ($aDatalayerValue->datalayer_id == $iDatalayerId)
+						{
+							if (isset($aDatalayerValue->values->{$parts[2]}))
+							{
+								$form->setValue($name, 'pwtseo', $aDatalayerValue->values->{$parts[2]});
+							}
+						}
+					}
+				}
+			}
+		}
+
 		return true;
 	}
 
 	/**
-	 * Alters the loaded data that is injected into the form. When we are given an object we don't need the reference
-	 * but when we are given an array we *do* need it.
+	 * Alters the loaded data that is injected into the form.
 	 *
 	 * @param   string $context Context of the content being passed to the plugin
 	 * @param   mixed  $data    Array|Object containing the data for the form
@@ -398,7 +497,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 */
 	public function onContentPrepareData($context, $data)
 	{
-		if (in_array($context, $this->aAllowedContext) && !$this->app->isSite())
+		if (in_array($context, $this->aAllowedContext))
 		{
 			// Com_menus gives us an array, while com_content gives us an object
 			if (is_object($data))
@@ -407,7 +506,46 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 				if ($iId > 0)
 				{
-					$data->pwtseo = $this->getSEOData($iId, 'context_id', $context);
+					// Reset datalayers due to them having the values or not any layer if there is no value
+					$data->pwtseo             = $this->getSEOData($iId, 'context_id', $context);
+					$data->pwtseo->datalayers = $this->getDatalayersForm($iId, $context);
+
+					if ($this->componentParams->get('autofillmeta', 0))
+					{
+						if (isset($data->metakey) && !strlen($data->metakey))
+						{
+							$content = (isset($data->articletext) && strlen($data->articletext) ? $data->articletext : $data->introtext);
+
+							if (strlen($content))
+							{
+								$blacklist = '';
+
+								if ($data->language !== '*')
+								{
+									$blacklist = $this->params->get('blacklist_' . $data->language);
+								}
+								else
+								{
+									$params = $this->params->toArray();
+
+									foreach ($params as $key => $val)
+									{
+										if (stripos($key, 'blacklist_') === 0)
+										{
+											$blacklist .= ' ' . $val;
+										}
+									}
+								}
+
+								$data->metakey = implode(' ', PWTSEOHelper::getMostCommenWords($content, $blacklist));
+							}
+						}
+
+						if (isset($data->metadesc) && !strlen($data->metadesc))
+						{
+							$data->metadesc = rtrim(HTMLHelper::_('string.truncate', $data->introtext, $this->params->get('count_max_metadesc', 160), true, false), '.');
+						}
+					}
 				}
 			}
 
@@ -417,12 +555,100 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 				if ($iId > 0)
 				{
-					$data['pwtseo'] = (array) $this->getSEOData($iId, 'context_id', $context);
+					// Reset datalayers due to them having the values or not any layer if there is no value
+					$data['pwtseo']               = (array) $this->getSEOData($iId, 'context_id', $context);
+					$data['pwtseo']['datalayers'] = $this->getDatalayersForm($iId, $context);
 				}
 			}
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get datalayers for the items
+	 *
+	 * @param   string $sValue   The value to look for
+	 * @param   string $sContext The context of the item
+	 *
+	 * @return  false|string The datalayers
+	 *
+	 * @since   1.0
+	 */
+	private function getDatalayersForm($sValue, $sContext = 'com_content.article')
+	{
+		$query = $this->db->getQuery(true)
+			->select(
+				array_merge(
+					array(
+						$this->db->quote($sValue) . ' AS context_id',
+						$this->db->quote($sContext) . ' AS context'
+					),
+					$this->db->quoteName(
+						array(
+							'layers.id',
+							'layers.title',
+							'layers.name',
+							'layers.fields',
+							'layers.language',
+							'layers.template',
+
+						),
+						array(
+							'id',
+							'title',
+							'name',
+							'fields',
+							'language',
+							'template'
+						)
+					)
+				)
+			)
+			->from($this->db->quoteName('#__plg_pwtseo_datalayers', 'layers'))
+			->where($this->db->quoteName('layers.published') . ' = 1');
+
+		return json_encode($this->db->setQuery($query)->loadObjectList());
+	}
+
+	/**
+	 * Utility function to get the id of an internal record in our own table
+	 *
+	 * @param   int|string $value   The value that the column should have
+	 * @param   string     $key     The column to check (optional)
+	 * @param   string     $context Any specific context to validate against (optional)
+	 *
+	 * @return  bool|mixed The internal id of the record holding data for given value and context
+	 */
+	private function getSEOIdForItem($value, $key = 'context_id', $context = 'com_content.article')
+	{
+		$q = $this->db->getQuery(true);
+
+		$q
+			->select(
+				$this->db->quoteName(
+					array(
+						'pwtseo.id'
+					)
+				)
+			)
+			->from($this->db->quoteName('#__plg_pwtseo', 'pwtseo'))
+			->where($this->db->quoteName('pwtseo.' . $key) . ' = ' . $this->db->quote($value));
+
+		if ($context !== false)
+		{
+			$q->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($context));
+		}
+
+		try
+		{
+			return (int) $this->db->setQuery($q)->loadResult();
+		}
+		catch (Exception $e)
+		{
+		}
+
+		return false;
 	}
 
 	/**
@@ -444,6 +670,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 			->select(
 				$this->db->quoteName(
 					array(
+						'pwtseo.id',
 						'pwtseo.context',
 						'pwtseo.context_id',
 						'pwtseo.focus_word',
@@ -458,6 +685,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 						'pwtseo.google_description',
 						'pwtseo.google_image',
 						'pwtseo.adv_open_graph',
+						'pwtseo.structureddata',
 						'pwtseo.override_page_title',
 						'pwtseo.page_title',
 						'pwtseo.expand_og',
@@ -471,18 +699,280 @@ class PlgSystemPWTSEO extends CMSPlugin
 			)
 			->from($this->db->quoteName('#__plg_pwtseo', 'pwtseo'))
 			->where($this->db->quoteName('pwtseo.' . $sKey) . ' = ' . $this->db->quote($sValue))
-			->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($sContext))
-			->where($this->db->quoteName('pwtseo.focus_word') . ' <> ""');
+			->where($this->db->quoteName('pwtseo.context') . ' = ' . $this->db->quote($sContext));
 
 		try
 		{
-			return $this->db->setQuery($q)->loadObject();
+			$obj = $this->db->setQuery($q)->loadObject();
+
+			if ($obj === null)
+			{
+				$obj = new stdClass;
+
+				$obj->context    = $sContext;
+				$obj->context_id = $sValue;
+			}
+
+			if ($obj)
+			{
+				$query = $this->db->getQuery(true)
+					->select(
+						array_merge(
+							array(
+								$this->db->quote($obj->context) . ' AS context',
+								$this->db->quote($obj->context_id) . ' AS context_id'
+							),
+							$this->db->quoteName(
+								array(
+									'layers.id',
+									'layers.title',
+									'layers.name',
+									'layers.fields',
+									'layers.language',
+									'layers.template',
+									'map.values'
+
+								),
+								array(
+									'id',
+									'title',
+									'name',
+									'fields',
+									'language',
+									'template',
+									'values'
+								)
+							)
+						)
+					)
+					->from($this->db->quoteName('#__plg_pwtseo_datalayers', 'layers'))
+					->rightJoin($this->db->quoteName('#__plg_pwtseo_datalayers_map', 'map') . ' ON ' . $this->db->quoteName('map.datalayer_id') . ' = ' . $this->db->quoteName('layers.id'))
+					->where($this->db->quoteName('map.context_id') . ' = ' . $this->db->quote($obj->context === 'com_pwtseo.custom' && isset($obj->id) ? $obj->id : $obj->context_id))
+					->where($this->db->quoteName('map.context') . ' = ' . $this->db->quote($obj->context))
+					->where($this->db->quoteName('layers.published') . ' = 1')
+					->order($this->db->quoteName('layers.ordering') . ' ASC');
+
+				$obj->datalayers = $this->db->setQuery($query)->loadObjectList();
+
+				if ($obj->datalayers)
+				{
+					// Prepare the data for consumption
+					array_walk(
+						$obj->datalayers,
+						function (&$el) {
+							$el->values = (array) json_decode($el->values);
+							$el->fields = json_decode($el->fields);
+
+							// We have to transform the fields as well
+							array_walk(
+								$el->fields,
+								function (&$el) {
+									$el = json_decode($el);
+								}
+							);
+						}
+					);
+				}
+				else
+				{
+					/**
+					 * So, we didn't find any data for datalayer, but when enabled assume there should be some so we use default values that we can find
+					 * We only check on com_pwtseo.custom to avoid additional queries as we always call this context
+					 */
+					if ($this->params->get('show_datalayers', 0) === 1 && $sContext === 'com_pwtseo.custom')
+					{
+						$query
+							->clear()
+							->select(array_merge(
+								array(
+									$this->db->quote($obj->context) . ' AS context',
+									$this->db->quote($obj->context_id) . ' AS context_id'
+								),
+								$this->db->quoteName(
+									array(
+										'layers.id',
+										'layers.title',
+										'layers.name',
+										'layers.fields',
+										'layers.language',
+										'layers.template'
+
+									),
+									array(
+										'id',
+										'title',
+										'name',
+										'fields',
+										'language',
+										'template'
+									)
+								)
+							))
+							->from($this->db->quoteName('#__plg_pwtseo_datalayers', 'layers'))
+							->where($this->db->quoteName('published') . ' = 1');
+
+						$layers = $this->db->setQuery($query)->loadObjectList();
+
+						foreach ($layers as &$layer)
+						{
+							$fields = json_decode($layer->fields);
+							$values = array();
+
+							foreach ($fields as &$field)
+							{
+								$field = json_decode($field);
+
+								if ($field->default || strlen($field->default) > 0)
+								{
+									$values[$field->name] = $field->default;
+								}
+
+								$field->values = $values;
+							}
+
+							if (is_array($values) && count($values))
+							{
+								$layer->values = $values;
+							}
+							else
+							{
+								$layer = null;
+							}
+						}
+
+						$obj->datalayers = array_filter($layers);
+					}
+				}
+			}
+
+			return $obj ?: new stdClass;
 		}
 		catch (Exception $e)
 		{
 		}
 
 		return new stdClass;
+	}
+
+	/**
+	 * Compiles complete SEO data for the current id/context
+	 *
+	 * @param   int|bool The id to get data for
+	 * @param   string|bool The context
+	 *
+	 * @return  array
+	 *
+	 * @since   1.3.0
+	 */
+	private function getCurrentSEOData($id = false, $context = false)
+	{
+		$input    = $this->app->input;
+		$sId      = $id ?: (int) $input->getInt('id');
+		$sContext = $context ?: $input->getCmd('context', $input->getCmd('option') . '.' . $input->getCmd('view'));
+
+		$key = $sId . '.' . $sContext;
+
+		if (!isset($this->aSEOData[$key]))
+		{
+			// First we try original context
+			$aContent = (array) $this->getSEOData($sId, 'context_id', $sContext);
+
+			// Check for link, which is new way, make sure we have b/c so check for path as well
+			try
+			{
+				/** @var \Joomla\CMS\Menu\AbstractMenu $menu */
+				$menu     = Factory::getApplication()->getMenu();
+				$menuItem = $menu->getActive();
+			}
+			catch (Exception $e)
+			{
+				$menuItem = false;
+			}
+
+			// There are cases where there is no active menu item or where the current url is not actually the menu-item (eg Category Blogs)
+			if ($menuItem && Route::_($menuItem->link) === Uri::getInstance()->getPath())
+			{
+				// First try to find via context_id
+				$aMenu = (array) $this->getSEOData($menuItem->id, 'context_id', 'com_menus.item');
+
+				// If that fails, make sure the menu-item targets this page
+				if (!$aMenu)
+				{
+					$arr = array(
+						'option' => $input->getCmd('option'),
+						'view'   => $input->getCmd('view')
+					);
+
+					if ($sId)
+					{
+						$arr['id'] = $sId;
+					}
+
+					if (isset($menuItem->link)
+						&& count(array_intersect(
+							$menuItem->query,
+							$arr
+						)) === count($arr))
+					{
+						$link  = $menuItem->link;
+						$aMenu = (array) $this->getSEOData($link, 'url', 'com_menus.item');
+					}
+				}
+
+				// Everything failed, final ditch
+				if (!$aMenu)
+				{
+					$aMenu = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_menus.item');
+				}
+			}
+			else
+			{
+				$aMenu = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_menus.item');
+			}
+
+			// Finally maybe custom url
+			$aCustom = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
+
+			// Build the datalayers apart from the merge, due to them being json_objects which makes it all a bit complex
+			$datalayers = array();
+
+			// Due to the ordering in array_merge, the Content gets highest priority in the foreach below
+			$layers = array_merge(
+				isset($aCustom['datalayers']) ? $aCustom['datalayers'] : array(),
+				isset($aMenu['datalayers']) ? $aMenu['datalayers'] : array(),
+				isset($aContent['datalayers']) ? $aContent['datalayers'] : array()
+			);
+
+			foreach ($layers as $datalayer)
+			{
+				if (!isset($datalayers[$datalayer->name]))
+				{
+					$datalayers[$datalayer->name] = $datalayer;
+				}
+
+				foreach ($datalayer->values as $key => $val)
+				{
+					// Do not set value if it's empty, but allow something like '0' to pass through
+					if ($val || strlen($val) > 0)
+					{
+						$datalayers[$datalayer->name]->values[$key] = $val;
+					}
+				}
+			}
+
+			// We filter before the merge because some fields are always present but might be empty
+			$this->aSEOData[$key] = array_merge(array_filter($aCustom), array_filter($aMenu), array_filter($aContent));
+
+			// Prepare for consumption
+			$this->aSEOData[$key]['datalayers'] = $datalayers;
+
+			if (isset($this->aSEOData[$key]['structureddata']))
+			{
+				$this->aSEOData[$key]['structureddata'] = json_decode($this->aSEOData[$key]['structureddata']);
+			}
+		}
+
+		return $this->aSEOData[$key];
 	}
 
 	/**
@@ -575,10 +1065,16 @@ class PlgSystemPWTSEO extends CMSPlugin
 				$aSEO['url'] = $article->link;
 			}
 
+			// Frontend editing uses a different context which we don't want to store
+			if ($context === 'com_content.form')
+			{
+				$context = 'com_content.article';
+			}
+
 			$oInput = (object) $aSEO;
 
 			// Replace any version modifiers when inserting
-			$oInput->version = preg_replace('/-\w+/', '', '1.2.1');
+			$oInput->version = preg_replace('/-\w+/', '', '1.3.0');
 			$oInput->context = $context;
 
 			$iId = $this->getHasSEOData($article->id, 'context_id', $context);
@@ -593,6 +1089,30 @@ class PlgSystemPWTSEO extends CMSPlugin
 				$this->db->insertObject('#__plg_pwtseo', $oInput);
 			}
 
+			// Check for datalayers
+			$aDataLayers = $this->app->input->post->get('pwtseo', array(), 'array');
+
+			if (isset($aDataLayers['datalayers']))
+			{
+				foreach ($aDataLayers['datalayers'] as $id => $values)
+				{
+					$item = (object) array(
+						'context_id'   => $article->id,
+						'context'      => $context,
+						'datalayer_id' => $id,
+						'values'       => json_encode($values)
+					);
+
+					try
+					{
+						$this->db->insertObject('#__plg_pwtseo_datalayers_map', $item);
+					}
+					catch (Exception $e)
+					{
+						$this->db->updateObject('#__plg_pwtseo_datalayers_map', $item, array('context_id', 'context', 'datalayer_id'));
+					}
+				}
+			}
 		}
 
 		return true;
@@ -636,38 +1156,18 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 * @return  void
 	 *
 	 * @since   1.0
+	 * @throws  Exception
 	 */
 	public function onBeforeRender()
 	{
-		$input = $this->app->input;
-		$doc   = Factory::getDocument();
+		$input           = $this->app->input;
+		$doc             = Factory::getDocument();
+		$componentParams = ComponentHelper::getComponent($this->extension)->getParams();
 
 		if ($this->app->isSite() && $doc instanceof HtmlDocument)
 		{
-			$sId      = (int) $input->getInt('id');
-			$sContext = $input->getCmd('context', $input->getCmd('option') . '.' . $input->getCmd('view'));
-
-			// First we try original context
-			$aSEO = (array) $this->getSEOData($sId, 'context_id', $sContext);
-
-			// Try menu-items
-			if (!$aSEO)
-			{
-				// Check for link, which is new way, make sure we have b/c so check for path aswell
-				$link = Factory::getApplication()->getMenu()->getActive()->link;
-				$aSEO = (array) $this->getSEOData($link, 'url', 'com_menus.item');
-
-				if (!$aSEO)
-				{
-					$aSEO = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_menus.item');
-				}
-			}
-
-			// Finally maybe custom url
-			if (!$aSEO)
-			{
-				$aSEO = (array) $this->getSEOData(Uri::getInstance()->getPath(), 'url', 'com_pwtseo.custom');
-			}
+			// We filter before the merge because the fields are always present
+			$aSEO = $this->getCurrentSEOData();
 
 			$bPreview = $input->getBool('pwtseo_preview', false);
 
@@ -675,10 +1175,29 @@ class PlgSystemPWTSEO extends CMSPlugin
 			{
 				if ($bPreview)
 				{
-					$aSEO = (array) $input->post->get('jform', '', 'raw')['pwtseo'];
+					$post = $input->post->get('jform', '', 'raw');
+					$aSEO = (array) $post['pwtseo'];
+
+					// Even in the preview we want the article settings to override the menu-item, because that's the actual end result
+					if ($input->get('context') !== 'com_content.article' && isset($post['link']))
+					{
+						$link = $post['link'];
+
+						if ($link && stripos($link, 'view=article'))
+						{
+							preg_match('/id=([0-9]+)/i', $link, $matches);
+
+							$seo = $this->getCurrentSEOData($matches[1], 'com_content.article');
+
+							if ($seo)
+							{
+								$aSEO = array_merge($aSEO, $seo);
+							}
+						}
+					}
 				}
 
-				if (strlen($aSEO['page_title']) && $aSEO['override_page_title'] === '1')
+				if (isset($aSEO['page_title']) && strlen($aSEO['page_title']) && isset($aSEO['override_page_title']) && $aSEO['override_page_title'] === '1')
 				{
 					$doc->setTitle($this->getFullTitle($aSEO['page_title']));
 				}
@@ -706,7 +1225,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 				}
 
 				// Handle repeatable field
-				if (isset($aSEO['adv_open_graph']))
+				if (isset($aSEO['adv_open_graph']) && $aSEO['adv_open_graph'])
 				{
 					$aAdvancedFields = json_decode($aSEO['adv_open_graph']);
 
@@ -723,83 +1242,105 @@ class PlgSystemPWTSEO extends CMSPlugin
 					}
 				}
 
-				if (strlen($aSEO['facebook_title']))
+				if (isset($aSEO['facebook_title']) && strlen($aSEO['facebook_title']))
 				{
 					$doc->setMetaData(
 						'og:title', $aSEO['facebook_title'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['facebook_description']))
+				if (isset($aSEO['facebook_description']) && strlen($aSEO['facebook_description']))
 				{
 					$doc->setMetaData(
 						'og:description', $aSEO['facebook_description'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['facebook_image']))
+				if (isset($aSEO['facebook_image']) && strlen($aSEO['facebook_image']))
 				{
 					$doc->setMetaData(
 						'og:image', Uri::base() . $aSEO['facebook_image'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['twitter_title']))
+				if (isset($aSEO['twitter_title']) && strlen($aSEO['twitter_title']))
 				{
 					$doc->setMetaData(
 						'twitter:title', $aSEO['twitter_title'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['twitter_description']))
+				if (isset($aSEO['twitter_description']) && strlen($aSEO['twitter_description']))
 				{
 					$doc->setMetaData(
 						'twitter:description', $aSEO['twitter_description'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['twitter_image']))
+				if (isset($aSEO['twitter_image']) && strlen($aSEO['twitter_image']))
 				{
 					$doc->setMetaData(
 						'twitter:image', Uri::base() . $aSEO['twitter_image'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['twitter_card']))
+				if (isset($aSEO['twitter_card']) && strlen($aSEO['twitter_card']))
 				{
 					$doc->setMetaData(
 						'twitter:card', $aSEO['twitter_card'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['twitter_site_username']))
+				if (isset($aSEO['twitter_site_username']) && strlen($aSEO['twitter_site_username']))
 				{
 					$doc->setMetaData(
 						'twitter:site', $aSEO['twitter_site_username'], 'property'
 					);
 				}
 
-				if (strlen($aSEO['google_title']))
+				if (isset($aSEO['google_title']) && strlen($aSEO['google_title']))
 				{
 					$doc->setMetaData(
 						'google:title', $aSEO['google_title']
 					);
 				}
 
-				if (strlen($aSEO['google_description']))
+				if (isset($aSEO['google_description']) && strlen($aSEO['google_description']))
 				{
 					$doc->setMetaData(
 						'google:description', $aSEO['google_description']
 					);
 				}
 
-				if (strlen($aSEO['google_image']))
+				if (isset($aSEO['google_image']) && strlen($aSEO['google_image']))
 				{
 					$doc->setMetaData(
 						'google:image', Uri::base() . $aSEO['google_image']
 					);
 				}
 
+				if (isset($aSEO['structureddata']))
+				{
+					$config = Factory::getConfig();
+
+					foreach ($aSEO['structureddata'] as $data)
+					{
+						$layout = new FileLayout($data->data_type, JPATH_PLUGINS . '/system/pwtseo/tmpl/structured/');
+
+						$doc->addScriptDeclaration(
+							$layout->render(
+								array(
+									'config'    => $config,
+									'params'    => $this->params,
+									'component' => $componentParams,
+									'data'      => $data,
+									'seo'       => $aSEO
+								)
+							),
+							'application/ld+json'
+						);
+					}
+				}
 			}
 			else
 			{
@@ -808,7 +1349,185 @@ class PlgSystemPWTSEO extends CMSPlugin
 					$this->setCanonical(Uri::getInstance());
 				}
 			}
+
+			if ($componentParams->get('enable_breadcrumbs'))
+			{
+				$layout = new FileLayout('breadcrumbs', JPATH_PLUGINS . '/system/pwtseo/tmpl/structured/');
+
+				$doc->addScriptDeclaration(
+					$layout->render(
+						array(
+							'params'    => $this->params,
+							'component' => $componentParams
+						)
+					),
+					'application/ld+json'
+				);
+			}
 		}
+	}
+
+	/**
+	 * Cleanup any unused script elements from the DOM when it's only used for analysis. This prevents the javascript
+	 * from choking on large chuncks of json data
+	 *
+	 * @return   void
+	 *
+	 * @since    1.2.3
+	 * @throws   Exception
+	 */
+	public function onAfterRender()
+	{
+		if ($this->app->isClient('site') && $this->app->input->getInt('pwtseo_preview', 0))
+		{
+			$buffer = $this->app->getBody();
+
+			$buffer = preg_replace('/\<script.*?<\/script>/s', '', $buffer);
+
+			$this->app->setBody($buffer);
+		}
+
+		$doc = Factory::getDocument();
+
+		if ($this->app->isSite() && $doc instanceof HtmlDocument)
+		{
+			$tagid = $this->params->get('tagid', 0);
+			/*$ga    = $this->params->get('analytics', 0);*/
+
+			$aSEO = $this->getCurrentSEOData();
+
+			if (!$aSEO || (is_array($aSEO) && !count($aSEO)))
+			{
+				return;
+			}
+
+			$app    = Factory::getApplication();
+			$buffer = $app->getBody();
+			$script = array();
+
+			$language = $app->getLanguage()->getTag();
+			$template = $app->getTemplate('template')->id;
+
+			// Filter only the ones we're after
+			$aDatalayerValues = array_filter(
+				$aSEO['datalayers'],
+				function ($el) use ($language, $template) {
+					return ($el->template === '0' || $el->template === $template) && ($el->language === '*' || $el->language === $language);
+				}
+			);
+
+			if (is_array($aDatalayerValues) && count($aDatalayerValues))
+			{
+				$script[]      = '<script>';
+				$dataLayerName = '';
+
+				foreach ($aDatalayerValues as $oDatalayervalue)
+				{
+					// Use the first global we find
+					$dataLayerName = ($oDatalayervalue->language === '*' && !$dataLayerName ? $oDatalayervalue->name : $dataLayerName);
+
+					$arr = (array) $oDatalayervalue->values;
+
+					array_walk(
+						$arr,
+						function (&$item, $key) use ($doc, $app) {
+							switch ($item)
+							{
+								case '{pagetitle}':
+									$item = $doc->getTitle();
+									break;
+								case '{language}':
+									$item = Factory::getLanguage()->getTag();
+									break;
+								case '{breadcrumbs}':
+									$pathway = $app->getPathway();
+									$items   = $pathway->getPathWay();
+
+									// We loop here to avoid array_column because of 5.6
+									$crumbs = array_map(
+										function ($el) {
+											return stripslashes(htmlspecialchars($el->name, ENT_COMPAT, 'UTF-8'));
+										},
+										$items
+									);
+
+									array_unshift($crumbs, 'Home');
+
+									$item = implode(' > ', $crumbs);
+									break;
+							}
+
+							$item = '\'' . $key . '\':\'' . $item . '\'';
+						}
+					);
+
+					$script[] = $oDatalayervalue->name . ' = [{' . implode(',', $arr) . '}];';
+				}
+
+				$script[] = '</script>';
+
+				if ($tagid)
+				{
+					if (!$dataLayerName)
+					{
+						$dataLayerName = reset($aDatalayerValues)->name;
+					}
+
+					$script[] = '<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':
+						new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],
+						j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=
+						\'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);
+						})(window,document,\'script\',\'' . $dataLayerName . '\',\'' . $tagid . '\');</script>';
+
+					// Add noscript version to the top of the body
+					$begin  = stripos($buffer, '<body');
+					$end    = stripos($buffer, '>', $begin);
+					$buffer = substr_replace($buffer, '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $tagid . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>', $end + 1, 0);
+				}
+
+				// Add datalayers to the top of the head
+				$begin  = stripos($buffer, '<head');
+				$end    = stripos($buffer, '>', $begin);
+				$buffer = substr_replace($buffer, implode('', $script), $end + 1, 0);
+
+				$app->setBody($buffer);
+			}
+
+
+			// TODO: implement GA
+			/*if ($ga)
+			{
+				$script[] = '<script src="https://www.googletagmanager.com/gtag/js?id=' . $ga . '" async></script>';
+				$script[] = '<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag(\'js\', new Date());gtag(\'config\', \'' . $ga . '\');</script>';
+			}*/
+		}
+
+	}
+
+	/**
+	 * Checks if the given menu-item query targets the current url. Problem with array_intersect is sub-arrays which generate
+	 * notice erros and it doesn't take into account false or null values.
+	 *
+	 * @param   array $query The query array from an menu-item
+	 * @param   array $keys  Optional array of keys to validate
+	 *
+	 * @return  bool True if menu-item query is equal to current url
+	 */
+	protected function menuItemIsCurrentUrl($query, $keys = array('option', 'view', 'id', 'layout', 'category'))
+	{
+		$input = $this->app->input;
+
+		foreach ($keys as $key)
+		{
+			$value = $input->get($key);
+
+			if ($value && $value != $query[$key])
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -842,6 +1561,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 * @return  void
 	 *
 	 * @since   1.0.2
+	 * @throws  Exception
 	 */
 	protected function setCanonical($sUrl)
 	{
@@ -979,7 +1699,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 */
 	public function preprocessBuildRule(&$router, &$uri)
 	{
-		$lang = $this->app->input->get('lang');
+		$lang = $this->app->input->get('lang', '', 'html');
 
 		// If set to all, we resort to default. It will be empty if site is not multi-lingual
 		if ($lang === '*')
@@ -988,7 +1708,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 		}
 
 		// Override the language with the one provided in the form, or use default
-		if ($lang)
+		if ($lang && Multilanguage::isEnabled())
 		{
 			$uri->setVar('lang', $lang);
 		}
@@ -1010,6 +1730,9 @@ class PlgSystemPWTSEO extends CMSPlugin
 
 		$aResponse = array();
 		$aData     = $this->app->input->get('jform', array(), 'array');
+
+		// In the case of frontend editing, we don't get a ID but we can find it from the form_url
+		$aData['form_url'] = $this->app->input->getHtml('form_url', '');
 
 		$iStep = !$this->app->input->getInt('find_unique', 0) ? 1 : 2;
 
@@ -1044,6 +1767,13 @@ class PlgSystemPWTSEO extends CMSPlugin
 		$aArr = array();
 		$iId  = isset($aData['id']) && $aData['id'] ? (int) $aData['id'] : 0;
 
+		// When using frontend editing, we need to get the id from the form_url
+		if (!$iId && isset($aData['form_url']) && $aData['form_url'])
+		{
+			$uri = Uri::getInstance($aData['form_url']);
+			$iId = (int) $uri->getVar('a_id');
+		}
+
 		require_once JPATH_SITE . '/components/com_content/helpers/route.php';
 
 		if ($iStep === 1)
@@ -1055,7 +1785,13 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'/',
 					rawurlencode(
 						urldecode(
-							Route::_(ContentHelperRoute::getArticleRoute($iId, (int) $aData['catid'], $aData['language']))
+							Route::_(
+								ContentHelperRoute::getArticleRoute(
+									$iId,
+									(int) $aData['catid'],
+									$aData['language']
+								)
+							)
 						)
 					)
 				)
@@ -1070,28 +1806,31 @@ class PlgSystemPWTSEO extends CMSPlugin
 			$aArr['page_title_unique']    = $this->isTitleUnique($aData['title'], $iId);
 			$aArr['page_metadesc_unique'] = isset($aData['metadesc']) ? $this->isMetaDescriptionUnique($aData['metadesc']) : true;
 
+
 			// Here we modify the alias and get the route based on the given alias
 			if ($iId > 0)
 			{
-				$db = Factory::getDbo();
-				$q  = $db->getQuery(true);
+				$q = $this->db->getQuery(true);
 
 				$q
-					->select($db->quoteName('a.alias'))
-					->from($db->quoteName('#__content', 'a'))
+					->select($this->db->quoteName('a.alias'))
+					->from($this->db->quoteName('#__content', 'a'))
 					->where('a.id = ' . $iId);
 
 				try
 				{
-					$sOriginalAlias = $db->setQuery($q)->loadResult();
+					$sOriginalAlias = $this->db->setQuery($q)->loadResult();
 					$sModifiedAlias = OutputFilter::stringURLUnicodeSlug($aData['alias']);
 
-					$oTmpAlias = (object) array(
-						'id'    => $iId,
-						'alias' => $sModifiedAlias
-					);
+					if ($sModifiedAlias)
+					{
+						$oTmpAlias = (object) array(
+							'id'    => $iId,
+							'alias' => $sModifiedAlias
+						);
 
-					$db->updateObject('#__content', $oTmpAlias, array('id'));
+						$this->db->updateObject('#__content', $oTmpAlias, array('id'));
+					}
 
 					$aArr['new_url'] = Uri::root(
 						true,
@@ -1107,8 +1846,11 @@ class PlgSystemPWTSEO extends CMSPlugin
 					);
 
 					// Revert the change
-					$oTmpAlias->alias = $sOriginalAlias;
-					$db->updateObject('#__content', $oTmpAlias, array('id'));
+					if ($sModifiedAlias)
+					{
+						$oTmpAlias->alias = $sOriginalAlias;
+						$this->db->updateObject('#__content', $oTmpAlias, array('id'));
+					}
 				}
 				catch (Exception $e)
 				{
@@ -1275,8 +2017,15 @@ class PlgSystemPWTSEO extends CMSPlugin
 	 */
 	protected function processMenuItem($aData, $iStep = 1)
 	{
-		$aArr = array();
-		$iId  = (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
+		$aArr   = array();
+		$iId    = (int) Uri::getInstance($this->app->input->get('form_url', '', 'html'))->getQuery(true)['id'];
+		$itemId = $aData['id'];
+
+		// In the case of an alias, we want to check the resulting page
+		if ($this->app->input->get('jform', '', 'array')['type'] === 'alias')
+		{
+			$itemId = (int) $this->app->input->get('jform', '', 'array')['params']['aliasoptions'];
+		}
 
 		if ($iStep === 1)
 		{
@@ -1288,12 +2037,11 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'/',
 					rawurlencode(
 						urldecode(
-							Route::_('index.php?Itemid=' . $aData['id'])
+							Route::_('index.php?Itemid=' . $itemId)
 						)
 					)
 				)
 			);
-
 
 			$aArr['reachable'] = $this->isReachable($aArr['url']);
 			$aArr['count']     = $this->findUsages($aData['pwtseo']['focus_word'], $iId);
@@ -1310,7 +2058,7 @@ class PlgSystemPWTSEO extends CMSPlugin
 					'/',
 					rawurlencode(
 						urldecode(
-							Route::_('index.php?Itemid=' . $aData['id'])
+							Route::_('index.php?Itemid=' . $itemId)
 						)
 					)
 				)

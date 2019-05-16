@@ -3,11 +3,12 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Table\Table;
@@ -83,6 +84,7 @@ class PWTSEOModelCustom extends AdminModel
 	 * @return  boolean  True on success, False on error.
 	 *
 	 * @since   1.1.0
+	 * @throws  Exception
 	 */
 	public function save($data)
 	{
@@ -91,12 +93,39 @@ class PWTSEOModelCustom extends AdminModel
 			$data = array_merge($data, $data['pwtseo']);
 
 			// Due to form constraints, we have the wrong name on the field
-			$data['pwtseo_score'] = $data['seo_pwtseo_score'];
+			$data['pwtseo_score'] = $data['pwtseo_pwtseo_score'];
 		}
 
 		if (isset($data['url']))
 		{
 			$data['url'] = $this->getPath($data['url']);
+		}
+
+		// Check for datalayers
+		$aDataLayers = Factory::getApplication()->input->post->get('pwtseo', array(), 'array');
+
+		if (isset($aDataLayers['datalayers']))
+		{
+			$db = Factory::getDbo();
+
+			foreach ($aDataLayers['datalayers'] as $id => $values)
+			{
+				$item = (object) array(
+					'context_id'   => $data['id'],
+					'context'      => 'com_pwtseo.custom',
+					'datalayer_id' => $id,
+					'values'       => json_encode($values)
+				);
+
+				try
+				{
+					$db->insertObject('#__plg_pwtseo_datalayers_map', $item);
+				}
+				catch (Exception $e)
+				{
+					$db->updateObject('#__plg_pwtseo_datalayers_map', $item, array('context_id', 'context', 'datalayer_id'));
+				}
+			}
 		}
 
 		return parent::save($data);
@@ -144,6 +173,43 @@ class PWTSEOModelCustom extends AdminModel
 		}
 
 		$data->pwtseo = clone $data;
+
+		$db = Factory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select(
+				array_merge(
+					array(
+						$db->quote($data->id) . ' AS context_id',
+						$db->quote('com_pwtseo.custom') . ' AS context'
+					),
+					$db->quoteName(
+						array(
+							'layers.id',
+							'layers.title',
+							'layers.name',
+							'layers.fields',
+							'layers.language',
+							'layers.template',
+
+						),
+						array(
+							'id',
+							'title',
+							'name',
+							'fields',
+							'language',
+							'template'
+						)
+					)
+				)
+			)
+			->from($db->quoteName('#__plg_pwtseo_datalayers', 'layers'))
+			->where($db->quoteName('layers.published') . ' = 1');
+
+		$data->pwtseo->datalayers = json_encode($db->setQuery($query)->loadObjectList());
+
+		//$this->preprocessData('com_pwtseo.custom', $data);
 
 		return $data;
 	}

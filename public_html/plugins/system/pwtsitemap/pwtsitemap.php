@@ -65,7 +65,7 @@ class PlgSystemPwtSitemap extends JPlugin
 	 *
 	 * @since  1.0.0
 	 */
-	private $extensiontitle = 'PWT Sitemap';
+	private $extensionTitle = 'PWT Sitemap';
 
 	/**
 	 * Load PwtSitemap plugin group and register helpers and classes
@@ -135,7 +135,7 @@ class PlgSystemPwtSitemap extends JPlugin
 	{
 		$itemId    = $this->app->input->getInt('itemId');
 		$parameter = $this->app->input->get('parameter');
-		$value     = $this->app->input->getInt('value');
+		$value     = $this->app->input->get('value');
 
 		PwtSitemapHelper::SaveMenuItemParameter($itemId, $parameter, $value);
 	}
@@ -199,34 +199,40 @@ class PlgSystemPwtSitemap extends JPlugin
 		$jLanguage->load('com_pwtsitemap', JPATH_ADMINISTRATOR . '/components/com_pwtsitemap/', 'en-GB', true, true);
 		$jLanguage->load('com_pwtsitemap', JPATH_ADMINISTRATOR . '/components/com_pwtsitemap/', null, true, false);
 
-		// Get the Download ID from component params
-		$downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
+        // Append key to url if not set yet
+        if (strpos($url, 'key') == false)
+        {
+            // Get the Download ID from component params
+            $downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
 
-		// Set Download ID first
-		if (empty($downloadId))
-		{
-			Factory::getApplication()->enqueueMessage(
-				Text::sprintf('COM_PWTSITEMAP_DOWNLOAD_ID_REQUIRED',
-					$this->extension,
-					$this->extensiontitle
-				),
-				'error'
-			);
+            // Check if Download ID is set
+            if (empty($downloadId))
+            {
+                Factory::getApplication()->enqueueMessage(
+                    Text::sprintf('COM_PWTSITEMAP_DOWNLOAD_ID_REQUIRED',
+                        $this->extension,
+                        $this->extensionTitle
+                    ),
+                    'error'
+                );
 
-			return true;
-		}
-		// Append the Download ID
-		else
-		{
-			$separator = strpos($url, '?') !== false ? '&' : '?';
-			$url       .= $separator . 'key=' . $downloadId;
-		}
+                return true;
+            }
 
-		// Get the domain for this site
-		$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
+            // Append the Download ID from component options
+            $separator = strpos($url, '?') !== false ? '&' : '?';
+            $url       .= $separator . 'key=' . $downloadId;
+        }
 
-		// Append domain
-		$url .= '&domain=' . $domain;
+        // Append domain to url if not set yet
+        if (strpos($url, 'domain') == false)
+        {
+            // Get the domain for this site
+            $domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
+
+            // Append domain
+            $url .= '&domain=' . $domain;
+        }
 
 		return true;
 	}

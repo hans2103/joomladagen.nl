@@ -8,47 +8,67 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
-defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
 
-// Current menu level
-$level = 1;
+defined('_JEXEC') or die;
 ?>
 
 <div class="pwtsitemap<?php echo $this->pageclass_sfx; ?>">
 	<?php if ($this->params->get('show_page_heading')) : ?>
-		<div class="page-header">
-			<h1><?php echo $this->escape($this->params->get('page_title')); ?></h1>
-		</div>
+        <div class="page-header">
+            <h1><?php echo $this->escape($this->params->get('page_title')); ?></h1>
+        </div>
 	<?php endif; ?>
 
 	<?php if ($this->params->get('introtext')): ?>
-		<p class="sitemap-intro"><?php echo $this->params->get('introtext'); ?></p>
+        <p class="sitemap-intro"><?php echo $this->params->get('introtext'); ?></p>
 	<?php endif; ?>
 
-    <ul class="sitemap-list">
-		<?php foreach ($this->sitemap as $sitemap) : ?>
-			<?php foreach ($sitemap as $item) : ?>
-				<?php if ($level > $item->level) : ?>
-					<?php for ($i = $item->level; $i < $level; $i++): ?>
-						</ul>
-					<?php endfor; ?>
-				<?php endif; ?>
+	<?php foreach ($this->sitemap as $title => $sitemaps) : ?>
 
-				<?php if ($level < $item->level): ?>
-					<ul class="sitemap-list sitemap-list-child level-<?php echo $item->level;?>">
-				<?php else: ?>
-					</li>
-				<?php endif; ?>
+		<?php if ($this->params->get('showTitle')): ?>
+            <h3><?php echo $title; ?></h3>
+		<?php endif; ?>
 
-                <li class="sitemap-item level-<?php echo $item->level;?>">
-                <?php if ($item->type == 'link'): ?>
-                    <a href="<?php echo $item->link; ?>"><?php echo $item->title; ?></a>
-                <?php else: ?>
-	                <?php echo $item->title; ?>
-                <?php endif; ?>
+		<?php
+		$sitemapHtml = '<ul class="sitemap-list">';
 
-				<?php $level = $item->level; ?>
-			<?php endforeach; ?>
-		<?php endforeach; ?>
-	</ul>
+		foreach ($sitemaps as $sitemap)
+		{
+			$previousLevel = 1;
+
+			foreach ($sitemap as $i => $item)
+			{
+				if ($item->level > $previousLevel)
+				{
+					$sitemapHtml .= str_repeat('<ul>', ($item->level - $previousLevel));
+				}
+                elseif ($item->level < $previousLevel)
+				{
+					$sitemapHtml .= '</li>';
+					$sitemapHtml .= str_repeat('</ul></li>', ($previousLevel - $item->level));
+				}
+                elseif ($i != 0 && $item->level = $previousLevel)
+				{
+					$sitemapHtml .= '</li>';
+				}
+
+				$sitemapHtml .= '<li class="sitemap-item level-' . $item->level . '">';
+				$sitemapHtml .= ($item->type == 'link') ? HTMLHelper::_('link', $item->link, $item->title) : $item->title;
+
+				if (end($sitemap) === $item)
+				{
+					$sitemapHtml .= str_repeat('</li></ul>', ($item->level - 1));
+					$sitemapHtml .= '</li>';
+
+				}
+
+				$previousLevel = $item->level;
+			}
+		}
+
+		$sitemapHtml .= '</ul>';
+		?>
+		<?php echo $sitemapHtml; ?>
+	<?php endforeach; ?>
 </div>

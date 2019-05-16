@@ -1,15 +1,14 @@
 <?php
 /**
  * @package     FOF
- * @copyright Copyright (c)2010-2018 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright   Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license     GNU GPL version 2 or later
  */
 
 namespace FOF30\Params;
 
 use FOF30\Container\Container;
-use JComponentHelper;
-use JLoader;
+use FOF30\Utils\CacheCleaner;
 
 defined('_JEXEC') or die;
 
@@ -128,6 +127,8 @@ class Params
 		try
 		{
 			$db->execute();
+			// The component parameters are cached. We just changed them. Therefore we MUST reset the system cache which holds them.
+			CacheCleaner::clearCacheGroups(['_system'], $this->container->platform->isBackend() ? [0] : [1]);
 		}
 		catch (\Exception $e)
 		{

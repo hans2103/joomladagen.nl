@@ -190,7 +190,7 @@ JS
 			<div class="pwt-grid__main js-image-cropper is-hidden">
 
 				<!-- Cropper canvas -->
-				<div id="<?php echo $modalId; ?>_canvas">
+				<div class="pwt-canvas-wrapper" id="<?php echo $modalId; ?>_canvas">
 
 					<!-- Cancel button -->
 					<?php if ($showTools && $canEdit) : ?>
@@ -494,11 +494,11 @@ JS
 				<?php endif; ?>
 
                 <div class="pwt-form-group">
-                    <table class="table table-striped">
+                    <table class="pwt-table pwt-table-striped">
 	                    <tbody>
 	                    <tr>
 		                    <td><?php echo Text::_('COM_PWTIMAGE_LABELS_NAME') ?></td>
-		                    <td><span class="js-pwt-filename"></span></td>
+		                    <td><span class="pwt-word-wrap js-pwt-filename"></span></td>
 	                    </tr>
 	                    <tr>
 		                    <td><?php echo Text::_('COM_PWTIMAGE_LABELS_TYPE') ?></td>

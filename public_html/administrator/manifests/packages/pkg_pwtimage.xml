@@ -3,21 +3,21 @@
     <name>PWT Image - Package</name>
     <packagename>pwtimage</packagename>
     <author>Perfect Web Team</author>
-    <creationDate>20 October 2018</creationDate>
+    <creationDate>6 November 2018</creationDate>
     <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
     <description>PWT Image Package</description>
 
     <scriptfile>script.php</scriptfile>
 
     <files folder="packages">
-        <file type="component" id="com_pwtimage">com_pwtimage-1.3.0.zip</file>
-        <file type="plugin" group="editors-xtd" id="pwtimage">plg_editors-xtd_pwtimage-1.3.0.zip</file>
-        <file type="plugin" group="system" id="pwtimage">plg_system_pwtimage-1.3.0.zip</file>
-        <file type="plugin" group="fields" id="pwtimage">plg_fields_pwtimage-1.3.0.zip</file>
+        <file type="component" id="com_pwtimage">com_pwtimage-1.3.1.zip</file>
+        <file type="plugin" group="editors-xtd" id="pwtimage">plg_editors-xtd_pwtimage-1.3.1.zip</file>
+        <file type="plugin" group="system" id="pwtimage">plg_system_pwtimage-1.3.1.zip</file>
+        <file type="plugin" group="fields" id="pwtimage">plg_fields_pwtimage-1.3.1.zip</file>
     </files>
 
     <updateservers>

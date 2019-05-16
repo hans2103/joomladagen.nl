@@ -39,14 +39,14 @@ defined('_JEXEC') or die;
                 <div class="pwt-section">
 
                     <div class="btn-group btn-group-justified">
-                        <a class="btn btn-large" href="https://extensions.perfectwebteam.com/pwt-sitemap/documentation"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_DOCUMENTATION'); ?></a>
-                        <a class="btn btn-large" href="https://extensions.perfectwebteam.com/support"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_SUPPORT'); ?></a>
+                        <a class="btn btn-large btn-primary" href="https://extensions.perfectwebteam.com/pwt-sitemap/documentation"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_DOCUMENTATION'); ?></a>
+                        <a class="btn btn-large btn-primary" href="https://extensions.perfectwebteam.com/support"><?php echo Text::_('COM_PWTSITEMAP_DASHBOARD_ABOUT_SUPPORT'); ?></a>
                     </div>
 
                 </div>
 
                 <div class="pwt-section pwt-section--border-top">
-                    <p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_DASHBOARD_ABOUT_VERSION', '</strong>1.1.2'); ?></p>
+                    <p><strong><?php echo Text::sprintf('COM_PWTSITEMAP_DASHBOARD_ABOUT_VERSION', '</strong>1.2.1'); ?></p>
                 </div>
                 <!-- End PWT branding -->
 

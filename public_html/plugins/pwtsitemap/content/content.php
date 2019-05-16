@@ -8,6 +8,7 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\Registry\Registry;
 
@@ -54,13 +55,13 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 		if ($this->checkDisplayParameters($item, $format, array('article')))
 		{
 			// Prepare article menu-item
-			if ($item->query['view'] == 'article')
+			if ($item->query['view'] === 'article')
 			{
 				return $this->buildSitemapArticle($item, $format, $sitemap_type);
 			}
 
 			// Prepare category menu-item
-			if ($item->query['view'] == 'category')
+			if ($item->query['view'] === 'category')
 			{
 				return $this->buildSitemapCategory($item, $format, $sitemap_type);
 			}
@@ -199,9 +200,11 @@ class PlgPwtSitemapContent extends PwtSitemapPlugin
 	 */
 	private function getArticles($categories, $language, $params)
 	{
+		$globalParams = ComponentHelper::getParams('com_content');
+
 		// Get ordering from menu
-		$articleOrderby   = $params->get('orderby_sec', 'rdate');
-		$articleOrderDate = $params->get('order_date');
+		$articleOrderby   = $params->get('orderby_sec', $globalParams->get('orderby_sec', 'rdate'));
+		$articleOrderDate = $params->get('order_date', $globalParams->get('order_date', 'published'));
 		$secondary        = ContentHelperQuery::orderbySecondary($articleOrderby, $articleOrderDate);
 
 		// Get an instance of the generic articles model

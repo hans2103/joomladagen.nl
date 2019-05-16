@@ -2,12 +2,12 @@
 <extension version="3.8" type="component" method="upgrade">
     <name>com_pwtimage</name>
     <author>Perfect Web Team</author>
-    <creationDate>20 October 2018</creationDate>
+    <creationDate>6 November 2018</creationDate>
     <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
     <description>COM_PWTIMAGE_XML_DESCRIPTION</description>
 
     <!-- Script file -->
@@ -49,7 +49,10 @@
     <!-- Administrator back-end section -->
     <administration>
         <!-- Administration menu -->
-        <menu view="cpanel">COM_PWTIMAGE_VIEW_CPANEL</menu>
+        <menu>COM_PWTIMAGE_VIEW_CPANEL</menu>
+        <submenu>
+            <menu view="profiles">COM_PWTIMAGE_SUBMENU_PROFILES</menu>
+        </submenu>
 
         <!-- Back-end files -->
         <files folder="administrator/components/com_pwtimage">

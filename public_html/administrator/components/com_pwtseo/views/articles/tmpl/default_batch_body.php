@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -53,15 +53,9 @@ $params = new Registry($plugin->params);
 	jQuery(document).ready(function () {
 		var $sDescription = jQuery('#batch-metadesc');
 
-		if ($sDescription.length) {
+		if ($sDescription && $sDescription.length) {
 			$sDescription.on('keyup', function () {
 				document.querySelector('.js-pwtseo-medescription-counter-amount').innerHTML = this.value.length;
-
-                /*if (this.value.length > iTitleLimit) {
-                    jQuery('#jform_title + .pseo-meta-counter').removeClass('pwtseo-color-green').addClass('pwtseo-color-red');
-                } else {
-                    jQuery('#jform_title + .pseo-title-counter').removeClass('pwtseo-color-red').addClass('pwtseo-color-green');
-                }*/
 
 				if (this.value.length > <?php echo $params->get('count_max_metadesc'); ?>) {
                     jQuery('.pseo-meta-counter').removeClass('pwtseo-color-green').addClass('pwtseo-color-red');

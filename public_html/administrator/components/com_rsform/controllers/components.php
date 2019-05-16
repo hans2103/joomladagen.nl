@@ -20,18 +20,16 @@ class RsformControllerComponents extends RsformController
 
 		$this->registerTask('setrequired',   'changerequired');
 		$this->registerTask('unsetrequired', 'changerequired');
-
-		$this->_db = JFactory::getDbo();
 	}
 
 	public function save()
 	{
-		$db = JFactory::getDbo();
-
-		$app               = JFactory::getApplication();
-		$componentType 	   = $app->input->getInt('COMPONENTTYPE');
-		$componentIdToEdit = $app->input->getInt('componentIdToEdit');
-		$formId 		   = $app->input->getInt('formId');
+		$db 				= JFactory::getDbo();
+		$app               	= JFactory::getApplication();
+		$componentType 	   	= $app->input->getInt('COMPONENTTYPE');
+		$componentIdToEdit 	= $app->input->getInt('componentIdToEdit');
+		$formId 		   	= $app->input->getInt('formId');
+		$published			= $app->input->getInt('Published');
 
         $params = $app->input->post->get('param', array(), 'raw');
 		$params['EMAILATTACH'] = !empty($params['EMAILATTACH']) ? implode(',',$params['EMAILATTACH']) : '';
@@ -43,13 +41,32 @@ class RsformControllerComponents extends RsformController
 		$just_added = false;
 		if ($componentIdToEdit < 1)
 		{
-			$db->setQuery("SELECT MAX(`Order`)+1 AS MO FROM #__rsform_components WHERE FormId='".$formId."'");
-			$nextOrder = $db->loadResult();
+		    $query = $db->getQuery(true)
+                ->select('MAX( ' . $db->qn('Order') . ')')
+                ->from($db->qn('#__rsform_components'))
+                ->where($db->qn('FormId') . ' = ' . $db->q($formId));
+		    $nextOrder = (int) $db->setQuery($query)->loadResult() + 1;
 
-			$db->setQuery("INSERT INTO #__rsform_components SET FormId='".$formId."', ComponentTypeId='".$componentType."', `Order`='".$nextOrder."'");
-			$db->execute();
-			$componentIdToEdit = $db->insertid();
+		    $component = (object) array(
+		        'FormId'            => $formId,
+                'ComponentTypeId'   => $componentType,
+                'Order'             => $nextOrder,
+				'Published'			=> $published
+            );
+
+		    $db->insertObject('#__rsform_components', $component, 'ComponentId');
+
+			$componentIdToEdit = $component->ComponentId;
 			$just_added = true;
+		}
+		else
+		{
+			$component = (object) array(
+				'ComponentId'	=> $componentIdToEdit,
+				'Published'		=> $published
+			);
+
+			$db->updateObject('#__rsform_components', $component, array('ComponentId'));
 		}
 
 		$model = $this->getModel('forms');
@@ -93,15 +110,24 @@ class RsformControllerComponents extends RsformController
 			}
 		}
 
-		array_walk($params, array('RSFormProHelper', 'escapeArray'));
-		if ($model->_form->Lang != $lang)
-			$model->saveFormPropertyTranslation($formId, $componentIdToEdit, $params, $lang, $just_added);
+		$properties = array();
+		if ($componentIdToEdit > 0)
+		{
+            $query = $db->getQuery(true);
+            $query->select($db->qn('PropertyName'))
+                ->from($db->qn('#__rsform_properties'))
+                ->where($db->qn('ComponentId') . ' = ' . $db->q($componentIdToEdit))
+                ->where($db->qn('PropertyName') . ' IN (' . implode(',', $db->q(array_keys($params))) . ')');
+            $db->setQuery($query);
+            $properties = $db->loadColumn();
+        }
+
+		if ($model->_form->Lang != $lang && !RSFormProHelper::getConfig('global.disable_multilanguage')) {
+            $model->saveFormPropertyTranslation($formId, $componentIdToEdit, $params, $lang, $just_added, $properties);
+        }
 
 		if ($componentIdToEdit > 0)
 		{
-			$db->setQuery("SELECT PropertyName FROM #__rsform_properties WHERE ComponentId='".$componentIdToEdit."' AND PropertyName IN ('".implode("','", array_keys($params))."')");
-			$properties = $db->loadColumn();
-
 			foreach ($params as $key => $val)
 			{
 				/**
@@ -119,19 +145,22 @@ class RsformControllerComponents extends RsformController
 					$val = implode('\r\n', $sanitized);
 				}
 
+				$property = (object) array(
+				    'PropertyValue' => $val,
+                    'PropertyName'  => $key,
+                    'ComponentId'   => $componentIdToEdit
+                );
+
 				if (in_array($key, $properties))
 				{
-					$db->setQuery("UPDATE #__rsform_properties SET PropertyValue='".$val."' WHERE PropertyName='".$key."' AND ComponentId='".$componentIdToEdit."'");
+                    $db->updateObject('#__rsform_properties', $property, array('PropertyName', 'ComponentId'));
 				}
 				else
 				{
-					$db->setQuery("INSERT INTO #__rsform_properties SET PropertyValue='".$val."', PropertyName='".$key."', ComponentId='".$componentIdToEdit."'");
+                    $db->insertObject('#__rsform_properties', $property);
 				}
-
-				$db->execute();
 			}
 		}
-
 
 		$link = 'index.php?option=com_rsform&task=forms.edit&formId='.$formId;
         if ($app->input->getInt('tabposition')) {
@@ -259,7 +288,11 @@ class RsformControllerComponents extends RsformController
 	{
 		$formId = JFactory::getApplication()->input->getInt('formId');
 		$db = JFactory::getDbo();
-		$db->setQuery("SELECT FormId FROM #__rsform_forms WHERE FormId != '".$formId."'");
+		$query = $db->getQuery(true)
+			->select($db->qn('FormId'))
+			->from($db->qn('#__rsform_forms'))
+			->where($db->qn('FormId') . ' != ' . $db->q($formId));
+		$db->setQuery($query);
 		if (!$db->loadResult())
 			return $this->setRedirect('index.php?option=com_rsform&task=forms.edit&formId='.$formId, JText::_('RSFP_NEED_MORE_FORMS'));
 
@@ -321,7 +354,6 @@ class RsformControllerComponents extends RsformController
 	{
 		$model = $this->getModel('formajax');
 		$model->componentsChangeRequired();
-		$componentId = $model->getComponentId();
 
 		JFactory::getApplication()->input->set('view', 'formajax');
 		JFactory::getApplication()->input->set('layout', 'component_required');

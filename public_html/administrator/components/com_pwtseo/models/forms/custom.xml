@@ -15,10 +15,10 @@
         <field
                 name="version"
                 type="hidden"
-                default="1.2.1"
+                default="1.3.0"
         />
 
-        <field type="hidden" name="seo_pwtseo_score" default="0" />
+        <field type="hidden" name="pwtseo_pwtseo_score" default="0" />
     </fieldset>
 
     <fields name="pwtseo">
@@ -50,7 +50,11 @@
             <field name="override_canonical" type="hidden" class="js-remove" />
             <field name="canonical" type="hidden" class="js-remove" />
             <field name="articletitleselector" type="hidden" class="js-remove" />
+            <field name="datalayers" type="hidden" class="js-remove" />
 
+            <field type="hidden" name="serptitle" value="" />
+            <field type="hidden" name="serpurl" value="" />
+            <field type="hidden" name="serpmetadescription" value="" />
         </fieldset>
     </fields>
 

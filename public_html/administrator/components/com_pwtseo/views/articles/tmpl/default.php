@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -122,11 +122,11 @@ HTMLHelper::_('formbehavior.chosen', 'select');
                                 <span class="seoscore seoscore-<?php echo $scoreClass ?>"
 									<?php if ($item->flag_outdated): ?> title="<?php echo Text::_('COM_PWTSEO_FLAGS_OUTDATED_LABEL') ?>" <?php endif; ?>>
 		                            <?php echo $item->pwtseo_score ?>
-                                </span>
 								<?php if ($item->flag_outdated): ?>
                                     *
 								<?php endif; ?>
-							<?php endif; ?>
+                                </span>
+                            <?php endif; ?>
                         </td>
                         <td>
 							<?php echo HTMLHelper::_('date', $item->publish_up, Text::_('DATE_FORMAT_LC4')); ?>

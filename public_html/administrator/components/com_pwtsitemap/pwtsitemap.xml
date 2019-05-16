@@ -2,16 +2,30 @@
 <extension version="3.8" type="component" method="upgrade">
     <name>com_pwtsitemap</name>
     <author>Perfect Web Team</author>
-    <creationDate>19 July 2018</creationDate>
+    <creationDate>9 November 2018</creationDate>
     <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.1.2</version>
+    <version>1.2.1</version>
     <description>COM_PWTSITEMAP_XML_DESCRIPTION</description>
 
     <!-- Script file -->
     <scriptfile>script.php</scriptfile>
+
+    <!-- Runs on install -->
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install/install.sql</file>
+        </sql>
+    </install>
+
+    <!-- Runs on update -->
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
 
     <files folder="components/com_pwtsitemap">
         <folder>helpers</folder>
@@ -30,16 +44,19 @@
     </media>
 
     <administration>
-        <menu view="com_pwtsitemap" img="class:tree">com_pwtsitemap</menu>
+        <menu>com_pwtsitemap</menu>
         <submenu>
-            <menu link="option=com_pwtsitemap&amp;view=dashboard" view="dashboard" alt="Dashboard">COM_PWTSITEMAP_TITLE_DASHBOARD</menu>
-            <menu link="option=com_pwtsitemap&amp;view=items" view="items" alt="Sitemap items">COM_PWTSITEMAP_TITLE_ITEMS</menu>
+            <menu view="dashboard">COM_PWTSITEMAP_TITLE_DASHBOARD</menu>
+            <menu view="menus">COM_PWTSITEMAP_TITLE_MENUS</menu>
+            <menu view="items">COM_PWTSITEMAP_TITLE_ITEMS</menu>
         </submenu>
+
         <files folder="administrator/components/com_pwtsitemap">
             <folder>controllers</folder>
             <folder>helpers</folder>
             <folder>language</folder>
             <folder>models</folder>
+            <folder>sql</folder>
             <folder>views</folder>
             <filename>access.xml</filename>
             <filename>config.xml</filename>

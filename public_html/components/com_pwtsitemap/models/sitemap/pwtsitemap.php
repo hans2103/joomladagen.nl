@@ -60,31 +60,39 @@ class PwtSitemap
 	/**
 	 * Constructor
 	 *
+	 * @param   string  $format  The sitemap format (HTML/XML)
+	 *
 	 * @since  1.0.0
 	 */
 	public function __construct($format)
 	{
 		$this->format        = $format;
-
 		$this->maxCount      = 50000;
 		$this->currentCount  = 0;
-		$this->sitemapItems  = array(array());
+		$this->sitemapItems  = array();
 		$this->sitemapArrays = 0;
 	}
 
 	/**
 	 * Add an item to the sitemap
 	 *
-	 * @param  mixed  $item  Array of PwtSitemapItem objects or a single object
+	 * @param   mixed   $item   Array of PwtSitemapItem objects or a single object
+	 * @param   string  $group  Set the group the item belongs to
 	 *
 	 * @since  1.0.0
 	 */
-	public function addItem($item)
+	public function addItem($item, $group = '')
 	{
-		// If the amount of maximum sitemap items is exceeded, create a new array
-		if (count($this->sitemapItems[$this->sitemapArrays]) >= $this->maxCount)
+		// Check if the group exist
+		if (!isset($this->sitemapItems[$group]))
 		{
-			$this->addSitemapArray();
+			$this->sitemapItems[$group][$this->sitemapArrays] = array();
+		}
+
+		// If the amount of maximum sitemap items is exceeded, create a new array
+		if (count($this->sitemapItems[$group][$this->sitemapArrays]) >= $this->maxCount)
+		{
+			$this->addSitemapArray($group);
 		}
 
 		// Add the new item or merge the array of new items
@@ -96,20 +104,20 @@ class PwtSitemap
 			if ($diff > 0)
 			{
 				// Add first part of the array
-				$this->sitemapItems[$this->sitemapArrays] = array_merge($this->sitemapItems[$this->sitemapArrays], array_slice($item, 0, count($item) - $diff));
+				$this->sitemapItems[$group][$this->sitemapArrays] = array_merge($this->sitemapItems[$group][$this->sitemapArrays], array_slice($item, 0, count($item) - $diff));
 
 				// Create new sitemap array and remaining items
 				$this->addItem(array_slice($item, -$diff));
 			}
 			else
 			{
-				$this->sitemapItems[$this->sitemapArrays] = array_merge($this->sitemapItems[$this->sitemapArrays], $item);
-				$this->currentCount = $this->currentCount + count($item);
+				$this->sitemapItems[$group][$this->sitemapArrays] = array_merge($this->sitemapItems[$group][$this->sitemapArrays], $item);
+				$this->currentCount                               = $this->currentCount + count($item);
 			}
 		}
 		else
 		{
-			$this->sitemapItems[$this->sitemapArrays][] = $item;
+			$this->sitemapItems[$group][$this->sitemapArrays][] = $item;
 			$this->currentCount++;
 		}
 	}
@@ -135,20 +143,22 @@ class PwtSitemap
 			return $this->sitemapItems[$part];
 		}
 
-		return $this->sitemapItems[0];
+		return $this->sitemapItems;
 	}
 
 	/**
 	 * Add a new array to the internal sitemap array
 	 *
+	 * @param   string  $group  Set the group the item belongs to
+	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	private function addSitemapArray()
+	private function addSitemapArray($group)
 	{
-		$this->sitemapItems[] = array();
-		$this->currentCount   = 0;
+		$this->sitemapItems[$group] = array();
+		$this->currentCount         = 0;
 		$this->sitemapArrays++;
 	}
 

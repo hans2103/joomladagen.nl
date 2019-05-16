@@ -44,6 +44,14 @@ class PwtSitemapViewSitemap extends JViewLegacy
 	protected $state;
 
 	/**
+	 * Page class
+	 *
+	 * @var    string
+	 * @since  1.0.0
+	 */
+	protected $pageclass_sfx = '';
+
+	/**
 	 * Execute and display a template script.
 	 *
 	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
@@ -55,8 +63,10 @@ class PwtSitemapViewSitemap extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Get some data from the models
-		$this->sitemap = $this->get('Sitemap')->sitemapItems;
-		$this->state   = $this->get('State');
+		/** @var PwtSitemapModelSitemap $model */
+		$model         = $this->getModel();
+		$this->sitemap = $model->getSitemap()->sitemapItems;
+		$this->state   = $model->getState();
 
 		// Get information from the menu
 		$this->params = $this->state->get('params');

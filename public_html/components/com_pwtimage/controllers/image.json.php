@@ -153,10 +153,12 @@ class PwtimageControllerImage extends BaseController
 			$folder = $baseFolder;
 		}
 
-		$folders = JFolder::folders(JPATH_SITE . $folder);
-		$files   = JFolder::files(
+		$folders         = JFolder::folders(JPATH_SITE . $folder);
+		$legalExtensions = ComponentHelper::getParams('com_media')->get('image_extensions', 'jpg,jpeg,png,gif,bmp');
+		$legalExtensions = $legalExtensions . ',' . strtoupper($legalExtensions);
+		$files           = JFolder::files(
 			JPATH_SITE . $folder,
-			'(.' . implode('|.', explode(',', ComponentHelper::getParams('com_media')->get('image_extensions', 'jpg,jpeg,png,gif,bmp'))) . ')'
+			'(.' . implode('|.', explode(',', $legalExtensions)) . ')'
 		);
 
 		echo new JsonResponse(array('folders' => $folders, 'files' => $files, 'basePath' => $folder));

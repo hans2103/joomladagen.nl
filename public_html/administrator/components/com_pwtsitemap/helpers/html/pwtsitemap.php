@@ -8,23 +8,26 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 
 /**
-* JHtml module helper class.
-*
-* @since  1.0.0
-*/
-abstract class JHtmlPwtSitemap
+ * PWT HTML module helper class.
+ *
+ * @since  1.0.0
+ */
+abstract class PwtHtmlPwtSitemap
 {
 	/**
 	 * Create a radio field
 	 *
-	 * @param  string $name
-	 * @param  string $id
-	 * @param  string $class
-	 * @param  mixed  $active
-	 * @param  string $tooltip
+	 * @param   string $name    Name
+	 * @param   string $id      ID
+	 * @param   string $class   Class
+	 * @param   mixed  $active  Active
+	 * @param   string $tooltip Tooltip
 	 *
 	 * @return string
 	 *
@@ -33,18 +36,20 @@ abstract class JHtmlPwtSitemap
 	public static function radio($name, $id, $class, $active, $tooltip)
 	{
 		return '<div class="btn-group btn-group-yesno radio hasTooltip" data-original-title="' . $tooltip . '">
-					<input type="radio" id="' . $name . '_' . $id . '_1" class="' . $class .'" name="' . $name . '_' . $id . '" value="1" ' . ((int) $active === 1 ? 'checked="checked"' : '') . '>
-					<label for="' . $name . '_' . $id . '_1" class="btn">' . JText::_("JYES"). '</label>
+					<input type="radio" id="' . $name . '_' . $id . '_1" class="' . $class . '" name="' . $name . '_' . $id . '" value="1" '
+			. ((int) $active === 1 ? 'checked="checked"' : '') . '>
+					<label for="' . $name . '_' . $id . '_1" class="btn">' . Text::_("JYES") . '</label>
 	
-					<input type="radio" id="' . $name . '_' . $id . '_0"  class="' . $class .'" name="' . $name . '_' . $id . '" value="0" ' . ((int) $active === 0 ? 'checked="checked"' : '') . '>
-					<label for="' . $name . '_' . $id . '_0" class="btn">' . JText::_("JNO"). '</label>
+					<input type="radio" id="' . $name . '_' . $id . '_0"  class="' . $class . '" name="' . $name . '_' . $id . '" value="0" '
+			. ((int) $active === 0 ? 'checked="checked"' : '') . '>
+					<label for="' . $name . '_' . $id . '_0" class="btn">' . Text::_("JNO") . '</label>
 				</div><span class="save-indication"></span>';
 	}
 
 	/**
 	 * Convert a language tag to a language flag
 	 *
-	 * @param   string  $languageTag  Language tag
+	 * @param   string $languageTag Language tag
 	 *
 	 * @return  string
 	 *
@@ -54,7 +59,7 @@ abstract class JHtmlPwtSitemap
 	{
 		if ($languageTag != '*')
 		{
-			return JHtml::_('image', 'mod_languages/' . substr($languageTag, 0, 2) . '.gif', $languageTag, array('title' => $languageTag), true);
+			return HTMLHelper::_('image', 'mod_languages/' . substr($languageTag, 0, 2) . '.gif', $languageTag, array('title' => $languageTag), true);
 		}
 	}
 }

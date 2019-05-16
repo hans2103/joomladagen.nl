@@ -1,11 +1,11 @@
 <?php
 /**
- * @package    NPO Radio 4
+ * @package    Pwtseo
  *
- * @author     Perfect Web Team <hallo@perfectwebteam.nl>
- * @copyright  Copyright (C) 2017 Perfect Web Team. All rights reserved.
+ * @author     Perfect Web Team <extensions@perfectwebteam.com>
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
- * @link       https://perfectwebteam.nl
+ * @link       https://extensions.perfectwebteam.com
  */
 
 use Joomla\CMS\Factory;

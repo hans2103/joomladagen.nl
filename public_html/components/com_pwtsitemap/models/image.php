@@ -30,13 +30,14 @@ class PwtSitemapModelImage extends PwtSitemapModelSitemap
 	/**
 	 * Add a menu item to the sitemap
 	 *
-	 * @param   $menuitem  JMenuItem  Menu item to add to the sitemap
+	 * @param   JMenuItem $menuitem Menu item to add to the sitemap
+	 * @param   string    $group    Set the group the item belongs to
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	protected function addMenuItemToSitemap($menuitem)
+	protected function addMenuItemToSitemap($menuitem, $group)
 	{
 		// Empty because menu items do not have images
 	}
@@ -44,13 +45,14 @@ class PwtSitemapModelImage extends PwtSitemapModelSitemap
 	/**
 	 * Add a array of PwtSitemapItems to the sitemap (used for the result of plugin triggers)
 	 *
-	 * @param   $items  array  Menu item to add to the sitemap
+	 * @param   array   $items  Menu item to add to the sitemap
+	 * @param   string  $group  Set the group the item belongs to
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	protected function addItemsToSitemap($items)
+	protected function addItemsToSitemap($items, $group)
 	{
 		foreach ($items as $item)
 		{

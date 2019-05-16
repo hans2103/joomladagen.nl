@@ -31,15 +31,16 @@ class PwtSitemapModelMultilanguage extends PwtSitemapModelSitemap
 	/**
 	 * Add a menu item to the sitemap
 	 *
-	 * @param   $menuitem  JMenuItem  Menu item to add to the sitemap
+	 * @param   JMenuItem $menuitem Menu item to add to the sitemap
+	 * @param   string    $group    Set the group the item belongs to
 	 *
 	 * @return  void
 	 *
 	 * @since   1.0.0
 	 */
-	protected function addMenuItemToSitemap($menuitem)
+	protected function addMenuItemToSitemap($menuitem, $group)
 	{
-		$sitemapItem = new PwtMultilanguageSitemapItem($menuitem->title, $menuitem->link, $menuitem->level, null);
+		$sitemapItem               = new PwtMultilanguageSitemapItem($menuitem->title, $menuitem->link, $menuitem->level, null);
 		$sitemapItem->associations = $this->getAssociations($menuitem);
 
 		$this->sitemap->addItem($sitemapItem);
@@ -59,7 +60,7 @@ class PwtSitemapModelMultilanguage extends PwtSitemapModelSitemap
 		$helper = new MenusAssociationsHelper();
 
 		// Get associations and map to JMenu objects
-		$associations = array_map(function($value) use ($helper) {
+		$associations = array_map(function ($value) use ($helper) {
 			return $helper->getItem('item', explode(':', $value->id)[0]);
 		}, $helper->getAssociations('item', $menuitem->id));
 

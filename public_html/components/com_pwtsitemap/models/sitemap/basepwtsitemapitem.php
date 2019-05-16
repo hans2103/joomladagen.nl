@@ -10,6 +10,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 
 /**
@@ -68,6 +69,14 @@ abstract class BasePwtSitemapItem
 	public $type;
 
 	/**
+	 * Set if it is an external URL
+	 *
+	 * @var    boolean
+	 * @since  1.0.0
+	 */
+	public $external = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param   string  $title    Title
@@ -93,9 +102,9 @@ abstract class BasePwtSitemapItem
 		}
 
 		// Set modified date
-		if (!empty($modified) && $modified != JDatabaseDriver::getInstance()->getNullDate() && $modified != '1001-01-01 00:00')
+		if (!empty($modified) && $modified != JDatabaseDriver::getInstance()->getNullDate() && $modified !== '1001-01-01 00:00')
 		{
-			$this->modified = JHtml::_('date', $modified, 'Y-m-d');
+			$this->modified = HTMLHelper::_('date', $modified, 'Y-m-d');
 		}
 	}
 

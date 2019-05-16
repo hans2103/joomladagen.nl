@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -101,6 +101,11 @@ defined('_JEXEC') or die;
                     :plugin-config="pluginConfig"
                     :page="page"
                     @score-change="calculateTotalScore"></test-body-has-images>
+            <test-body-images-have-alt
+                    :local-config="localConfig"
+                    :plugin-config="pluginConfig"
+                    :page="page"
+                    @score-change="calculateTotalScore"></test-body-images-have-alt>
             <test-body-has-heading
                     :local-config="localConfig"
                     :plugin-config="pluginConfig"
@@ -168,6 +173,12 @@ defined('_JEXEC') or die;
                     :page="page"
                     :applyscore="false"
                     @score-change="calculateTotalScore"></test-result-page-metadesc-unique>
+            <test-result-loading-times
+                    :local-config="localConfig"
+                    :plugin-config="pluginConfig"
+                    :page="page"
+                    :applyscore="false"
+                    @score-change="calculateTotalScore"></test-result-loading-times>
         </div>
     </div>
 <?php endif; ?>

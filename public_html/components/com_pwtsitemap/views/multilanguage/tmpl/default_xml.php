@@ -13,7 +13,11 @@ defined('_JEXEC') or die;
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
 		xmlns:xhtml="http://www.w3.org/1999/xhtml">
-	<?php foreach ($this->items as $item) : ?>
-		<?php echo $item->renderXml(); ?>
+	<?php foreach ($this->items as $menu) : ?>
+		<?php foreach ($menu as $sitemapitems) : ?>
+			<?php foreach ($sitemapitems as $item) : ?>
+				<?php echo $item->renderXml(); ?>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
 	<?php endforeach; ?>
 </urlset>

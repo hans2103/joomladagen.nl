@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -110,7 +110,7 @@ defined('_JEXEC') or die;
                 </div>
 
                 <div class="pwt-section pwt-section--border-top">
-                    <p><strong><?php echo Text::sprintf('COM_PWTSEO_DASHBOARD_ABOUT_VERSION', '</strong>1.2.1'); ?>
+                    <p><strong><?php echo Text::sprintf('COM_PWTSEO_DASHBOARD_ABOUT_VERSION', '</strong>1.3.0'); ?>
                     </p>
                 </div>
                 <!-- End PWT branding -->

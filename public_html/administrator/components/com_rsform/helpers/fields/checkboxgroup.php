@@ -25,10 +25,10 @@ class RSFormProFieldCheckboxGroup extends RSFormProFieldMultiple
 	protected $columns = array('VERTICAL2COLUMNS' => 2, 'VERTICAL3COlUMNS' => 3, 'VERTICAL4COLUMNS' => 4, 'VERTICAL6COLUMNS' => 6);
 	
 	// backend preview
-	public function getPreviewInput() {
+	public function getPreviewInput()
+	{
 		$id			= $this->getId();
 		$flow		= $this->getProperty('FLOW', 'HORIZONTAL');
-		$caption 	= $this->getProperty('CAPTION','');
 		
 		// Add the items
 		$parsed = array();
@@ -70,9 +70,7 @@ class RSFormProFieldCheckboxGroup extends RSFormProFieldMultiple
 			$checkboxgroup .= $this->start.implode('', $parsed).$this->end;
 		}
 		
-		$html = '<td>'.$caption.'</td><td class="controls formControls preview-checkbox'.($flow == 'HORIZONTAL' ? '-inline' : '').'">'.$this->codeIcon.$checkboxgroup.'</td>';
-		
-		return $html;
+		return '<div class="controls formControls preview-checkbox' . ($flow == 'HORIZONTAL' ? '-inline' : '') . '">' . $this->codeIcon . $checkboxgroup . '</div>';
 	}
 	
 	// functions used for rendering in front view
@@ -144,6 +142,11 @@ class RSFormProFieldCheckboxGroup extends RSFormProFieldMultiple
 		} else {
 			$output .= $this->start.implode($this->glue, $parsed).$this->end;
 		}
+
+        if ($max = (int) $this->getProperty('MAXSELECTIONS'))
+        {
+            $this->addScriptDeclaration("RSFormPro.limitSelections({$this->formId}, '{$id}', {$max});");
+        }
 		
 		return $output;
 	}

@@ -24,10 +24,10 @@ class Pkg_PwtSitemapInstallerScript
 	/**
 	 * Method to run before an install/update/uninstall method
 	 *
-	 * @param   string  $type    The type of change (install, update or discover_install).
-	 * @param   object  $parent  The class calling this method.
+	 * @param   string $type   The type of change (install, update or discover_install).
+	 * @param   object $parent The class calling this method.
 	 *
-	 * @return  bool  True on success | False on failure
+	 * @return  boolean  True on success | False on failure
 	 *
 	 * @since   1.0
 	 *
@@ -62,9 +62,9 @@ class Pkg_PwtSitemapInstallerScript
 	/**
 	 * Run after installing.
 	 *
-	 * @param   object  $parent  The calling class.
+	 * @param   object $parent The calling class.
 	 *
-	 * @return  bool  True on success | False on failure.
+	 * @return  boolean  True on success | False on failure.
 	 *
 	 * @since   1.0
 	 *
@@ -77,8 +77,8 @@ class Pkg_PwtSitemapInstallerScript
 		$db  = Factory::getDbo();
 
 		// Enable the plugins
-		$plugins = array();
-		$plugins['system'][] = 'pwtsitemap';
+		$plugins                 = array();
+		$plugins['system'][]     = 'pwtsitemap';
 		$plugins['pwtsitemap'][] = 'contact';
 		$plugins['pwtsitemap'][] = 'content';
 		$plugins['pwtsitemap'][] = 'newsfeed';
@@ -114,4 +114,84 @@ class Pkg_PwtSitemapInstallerScript
 
 		return true;
 	}
+
+	/**
+	 * Called on installation
+	 *
+	 * @param   JAdapterInstance $adapter The object responsible for running this script
+	 *
+	 * @return  void
+	 * @since   1.0
+	 */
+	public function install(JAdapterInstance $adapter)
+	{
+		self::addMenuTypesToPwtSiteMap($adapter);
+	}
+
+	/**
+	 * Called on update
+	 *
+	 * @param   JAdapterInstance $adapter The object responsible for running this script
+	 *
+	 * @since   1.0
+	 * @return  void
+	 */
+	public function update(JAdapterInstance $adapter)
+	{
+		self::addMenuTypesToPwtSiteMap($adapter);
+	}
+
+	/**
+	 * Check if pwtsitemap_menu_types has items. If not, get menu types and items to pwt table
+	 *
+	 * @param   JAdapterInstance $adapter The object responsible for running this script
+	 *
+	 * @return  void
+	 * @since   1.0
+	 */
+	public function addMenuTypesToPwtSiteMap(JAdapterInstance $adapter)
+	{
+		// Check if there are already any records in the table
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true)
+			->select('COUNT(*)')
+			->from($db->quoteName('#__pwtsitemap_menu_types'));
+		$db->setQuery($query);
+		$count = $db->loadResult();
+
+		// Quit this method if there are already any records
+		if ($count > 0)
+		{
+			return;
+		}
+
+		// Get all Menu Types and insert them with ordering in pwtsitemap_menu_types
+		try
+		{
+			$db    = Factory::getDbo();
+			$query = $db->getQuery(true)
+				->select($db->quoteName('id'))
+				->from($db->quoteName('#__menu_types'))
+				->where($db->quoteName('client_id') . ' = 0');
+
+			$db->setQuery($query);
+			$results = $db->loadColumn();
+
+			$query = $db->getQuery(true)
+				->insert($db->quoteName('#__pwtsitemap_menu_types'))
+				->columns(array($db->quoteName('menu_types_id'), $db->quoteName('ordering')));
+
+			foreach ($results as $key => $result)
+			{
+				$query->values($result . ',' . ($key + 1));
+			}
+
+			$db->setQuery($query);
+			$db->execute();
+		}
+		catch (\Exception $e)
+		{
+		}
+	}
+
 }

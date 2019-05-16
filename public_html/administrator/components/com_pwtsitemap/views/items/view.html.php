@@ -8,6 +8,13 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Toolbar\Toolbar;
+
 defined('_JEXEC') or die;
 
 /**
@@ -15,15 +22,39 @@ defined('_JEXEC') or die;
  *
  * @since  1.0.0
  */
-class PwtSitemapViewItems extends JViewLegacy
+class PwtSitemapViewItems extends HtmlView
 {
 	/**
 	 * The item data.
 	 *
-	 * @var    object
+	 * @var    array
 	 * @since  1.0.0
 	 */
-	protected $items;
+	protected $items = array();
+
+	/**
+	 * Pagination class
+	 *
+	 * @var    Pagination
+	 * @since  1.0.0
+	 */
+	protected $pagination;
+
+	/**
+	 * Filters form
+	 *
+	 * @var    Form
+	 * @since  1.0.0
+	 */
+	public $filterForm;
+
+	/**
+	 * Selected filters
+	 *
+	 * @var    array
+	 * @since  1.0.0
+	 */
+	public $activeFilters = array();
 
 	/**
 	 * The model state.
@@ -34,33 +65,54 @@ class PwtSitemapViewItems extends JViewLegacy
 	protected $state;
 
 	/**
-	 * Display the view
+	 * The sidebar menu
 	 *
-	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
+	 * @var    string
+	 * @since  1.0.0
+	 */
+	protected $sidebar = '';
+
+	/**
+	 * Menu item ordering
 	 *
-	 * @return  void
+	 * @var    array
+	 * @since  1.0.0
+	 */
+	protected $ordering = array();
+
+	/**
+	 * Execute and display a template script.
 	 *
-	 * @throws Exception
+	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
+	 *
+	 * @return  mixed  A string if successful, otherwise an Error object.
+	 *
+	 * @throws  Exception
 	 *
 	 * @since   1.0.0
 	 */
 	public function display($tpl = null)
 	{
-		// Access check.
-		if (!JFactory::getUser()->authorise('core.manage', 'com_pwtsitemap'))
+		/** @var PwtSitemapModelItems $model */
+		$model = $this->getModel();
+
+		$this->items         = $model->getItems();
+		$this->pagination    = $model->getPagination();
+		$this->filterForm    = $model->getFilterForm();
+		$this->activeFilters = $model->getActiveFilters();
+		$this->state         = $model->getState();
+
+		$this->ordering = array();
+
+		// Preprocess the list of items to find ordering divisions.
+		foreach ($this->items as $item)
 		{
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+			$this->ordering[$item->parent_id][] = $item->id;
 		}
 
 		// Add submenus
 		PwtSitemapHelper::addSubmenu('items');
-
-		$this->items         = $this->get('Items');
-		$this->pagination    = $this->get('Pagination');
-		$this->filterForm    = $this->get('FilterForm');
-		$this->activeFilters = $this->get('ActiveFilters');
-		$this->state         = $this->get('State');
-		$this->sidebar       = JHtmlSidebar::render();
+		$this->sidebar = JHtmlSidebar::render();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -70,7 +122,7 @@ class PwtSitemapViewItems extends JViewLegacy
 
 		$this->addToolbar();
 
-		parent::display($tpl);
+		return parent::display($tpl);
 	}
 
 	/**
@@ -78,18 +130,18 @@ class PwtSitemapViewItems extends JViewLegacy
 	 *
 	 * @return  void
 	 *
-	 * @since   1.6
+	 * @since   1.0.0
 	 */
 	protected function addToolbar()
 	{
-		JToolBarHelper::title(JText::_('COM_PWTSITEMAP_TITLE_ITEMS'), 'pwtsitemap');
+		JToolBarHelper::title(Text::_('COM_PWTSITEMAP_TITLE_ITEMS'), 'pwtsitemap');
 
-		$title = JText::_('JTOOLBAR_BATCH');
+		$title = Text::_('JTOOLBAR_BATCH');
 
 		// Instantiate a new JLayoutFile instance and render the batch button
-		$layout = new JLayoutFile('joomla.toolbar.batch');
+		$layout = new FileLayout('joomla.toolbar.batch');
 
 		$dhtml = $layout->render(array('title' => $title));
-		JToolbar::getInstance()->appendButton('Custom', $dhtml, 'batch');
+		Toolbar::getInstance()->appendButton('Custom', $dhtml, 'batch');
 	}
 }

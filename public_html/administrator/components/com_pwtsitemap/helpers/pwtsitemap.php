@@ -8,6 +8,9 @@
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die;
 
 /**
@@ -29,12 +32,19 @@ abstract class PwtSitemapHelper
 	public static function addSubmenu($vName)
 	{
 		JHtmlSidebar::addEntry(
-			JText::_('COM_PWTSITEMAP_TITLE_DASHBOARD'),
+			Text::_('COM_PWTSITEMAP_TITLE_DASHBOARD'),
 			'index.php?option=com_pwtsitemap&view=dashboard',
 			$vName == 'dashboard'
 		);
+
 		JHtmlSidebar::addEntry(
-			JText::_('COM_PWTSITEMAP_TITLE_ITEMS'),
+			Text::_('COM_PWTSITEMAP_TITLE_MENUS'),
+			'index.php?option=com_pwtsitemap&view=menus',
+			$vName == 'menus'
+		);
+
+		JHtmlSidebar::addEntry(
+			Text::_('COM_PWTSITEMAP_TITLE_ITEMS'),
 			'index.php?option=com_pwtsitemap&view=items',
 			$vName == 'items'
 		);
@@ -51,7 +61,7 @@ abstract class PwtSitemapHelper
 	 */
 	public static function GetMenuItemParameters($itemId)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q  = $db
 			->getQuery(true)
 			->select($db->qn('params'))
@@ -75,19 +85,19 @@ abstract class PwtSitemapHelper
 	public static function SaveMenuItemParameter($itemId, $parameter, $value)
 	{
 		// Get current parameters and set new
-		$params = self::GetMenuItemParameters($itemId);
+		$params               = self::GetMenuItemParameters($itemId);
 		$params->{$parameter} = $value;
 
 		// Save parameters
 		$params = json_encode($params);
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$q  = $db
 			->getQuery(true)
 			->clear()
-			->update($db->qn('#__menu'))
-			->set($db->qn('params') . '=' . $db->q($params))
-			->where($db->qn('id') . '=' . (int) $itemId);
+			->update($db->quoteName('#__menu'))
+			->set($db->quoteName('params') . '=' . $db->quote($params))
+			->where($db->quoteName('id') . '=' . (int) $itemId);
 		$db->setQuery($q)->execute();
 
 		return true;

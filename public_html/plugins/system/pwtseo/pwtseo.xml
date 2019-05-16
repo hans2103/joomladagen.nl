@@ -2,12 +2,12 @@
 <extension version="3.8" type="plugin" group="system" method="upgrade">
     <name>PLG_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>27 July 2018</creationDate>
-    <copyright>Copyright (C) 2016 - 2018 Perfect Web Team</copyright>
+    <creationDate>11 March 2019</creationDate>
+    <copyright>Copyright (C) 2016 - 2019 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
     <description>PLG_PWTSEO_XML_DESCRIPTION</description>
 
     <files>
@@ -104,6 +104,38 @@
                 </field>
 
                 <field
+                        name="show_datalayers"
+                        type="list"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_DATALAYERS_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_DATALAYERS_DESC"
+                        filter="intval"
+                        size="1"
+                        default="0">
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+                <field
+                        name="show_structureddata"
+                        type="list"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_STRUCTUREDDATA_LABEL"
+                        description="PLG_SYSTEM_PWTSEO_PARAMS_SHOW_STRUCTUREDDATA_DESC"
+                        filter="intval"
+                        size="1"
+                        default="0">
+                    <option value="1">
+                        JYES
+                    </option>
+                    <option value="0">
+                        JNO
+                    </option>
+                </field>
+
+                <field
                         name="set_canonical"
                         type="list"
                         label="PLG_SYSTEM_PWTSEO_PARAMS_SET_CANONICAL_LABEL"
@@ -121,22 +153,6 @@
 
                 <field name="basic_spacer_1" type="spacer" hr="true"/>
 
-                <field
-                        name="enable_pwtimage"
-                        type="list"
-                        label="PLG_SYSTEM_PWTSEO_PARAMS_ENABLE_PWTIMAGE_LABEL"
-                        description="PLG_SYSTEM_PWTSEO_PARAMS_ENABLE_PWTIMAGE_DESC"
-                        filter="intval"
-                        size="1"
-                        default="1">
-                    <option value="1">
-                        JYES
-                    </option>
-                    <option value="0">
-                        JNO
-                    </option>
-                </field>
-
             </fieldset>
             <fieldset name="advanced">
                 <field name="spacer_1" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_TITLE_LABEL"/>
@@ -147,7 +163,7 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_TITLE_DESC"
                         filter="intval"
-                        default="40"/>
+                        default="50"/>
 
                 <field
                         name="count_max_title"
@@ -155,7 +171,7 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_TITLE_DESC"
                         filter="intval"
-                        default="50"/>
+                        default="70"/>
 
                 <field name="spacer_2" type="spacer" label="PLG_SYSTEM_PWTSEO_PARAMS_SPACER_COUNT_METADESC_LABEL"/>
 
@@ -165,7 +181,7 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MIN_METADESC_DESC"
                         filter="intval"
-                        default="100"
+                        default="150"
                 />
 
                 <field
@@ -174,7 +190,7 @@
                         label="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_LABEL"
                         description="PLG_SYSTEM_PWTSEO_PARAMS_COUNT_MAX_METADESC_DESC"
                         filter="intval"
-                        default="150"
+                        default="160"
                 />
 
                 <field name="spacer_3" type="spacer"
@@ -191,7 +207,17 @@
             </fieldset>
             <fieldset name="lang">
             </fieldset>
-
+            <fieldset name="google">
+                <field
+                        name="tagid"
+                        type="text"
+                        default=""
+                        size="50"
+                        hint="GTM-XXXX"
+                        label="PLG_SYSTEM_PWTSEO_PARAMS_TAGID_LABEL"
+                />
+                <!--<field name="analytics" type="text" default="" size="50" hint="UA-XXXX" label="PLG_SYSTEM_PWTSEO_PARAMS_ANALYTICS_LABEL" description ="PLG_SYSTEM_PWTSEO_PARAMS_ANALYTICS_DESC" />-->
+            </fieldset>
         </fields>
     </config>
 </extension>
