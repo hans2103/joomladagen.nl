@@ -247,6 +247,7 @@ PWTTemplateHelper::loadJs();
 										</h3>
 										<p>Heb jij ook al zo vaak componenten uit de JED geïnstalleerd die allemaal net niet doen wat jij zoekt? Je eigen component maken kan dan de oplossing zijn. Met Joomla Component Builder (JCB) maak je zelf componenten waarbij je veel werk uit handen wordt genomen. Bovendien voldoen deze componenten aan de Joomla 3 standaards. Componenten voor Joomla 3 zijn straks met JCB ook te genereren voor Joomla 4. In deze workshop laten Marco en René zien hoe je met behulp van JCB zelf een Joomla 3 component bouwt. We leren je de basistheorie van Joomla MVC en datamodellering. Gezamenlijk bouwen we een basis projectmanagement component voor het beheer van klanten en projecten.</p>
 										<p>Als voorkennis heb je nodig: basiskennis PHP en MySQL. Je hebt een lokale webserver werkend op je PC zodat je lokaal Joomla 3 kunt draaien. Elke deelnemer krijgt vooraf een Akeeba .jpa backup en die moet je geïnstalleerd hebben voor aanvang van de workshop. Een werkende code-editor zoals PhpStorm, Visual Studio Code, Notepad++ en dergelijke is noodzakelijk. En je moet MySQL Workbench hebben geïnstalleerd en verbonden met je database. Alle deelnemers ontvangen vooraf links naar de te installeren zaken. Niveau: gevorderd joomla gebruiker, aspirerend ontwikkelaar.</p>
+										<p><a href="https://jcbworkshop.com/joomladagen-2019" class="btn btn-sm" target="_blank">Workshop materiaal</a></p>
 									</div>
 								</div>
 
@@ -391,6 +392,7 @@ PWTTemplateHelper::loadJs();
 											<strong>René Kreijveld</strong>
 										</h3>
 										<p>Een eigen Virtual Private Server (VPS) gebruiken voor jouw websites of die van je klanten kan de voorkeur hebben boven het hosten op een shared hostingomgeving. In deze presentatie vertel ik hoe je een eigen VPS kunt inrichten en beheren met Runcloud.io. Ik toon je alle stappen aan de hand van duidelijke video’s. Een eigen VPS is niet voor iedereen de beste oplossing. Basiskennis van Linux beheer is soms nodig en incidenteel moet je online op zoek naar oplossingen voor problemen. Ik vertel je ook de voor- en nadelen en de aandachtspunten van een eigen VPS.</p>
+										<p><a href="https://www.renekreijveld.nl/slides/jd19nl" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 							</div>
@@ -437,6 +439,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Peter Martin</strong>
 										</h3>
 										<p>Joomla is een geweldig CMS, gemaakt om gemakkelijk een website of webapplicatie te bouwen. Maar wat gebeurt er onder de motorkap van Joomla? Peter bespreekt de technische werking van Joomla en gaat daarbij dieper in op enkele technische aspecten: Categorieen + item counter, Overrides, Menus, Plugins, ACL. Krijg meer inzicht in de werking van Joomla!</p>
+										<p><a href="https://slides.db8.nl/md/jd19nl-joomla-under-the-hood.html" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 							</div>
@@ -453,6 +456,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Peter Martin</strong>
 										</h3>
 										<p>Standaard biedt Joomla veel functionaliteit. Voor sommige nieuwe gebruikers kan de hoeveelheid functionaliteiten en opties in de back-end een beetje overweldigend zijn. Wat kun je doen om het hen makkelijker te maken? Ervaren gebruikers kunnen dingen anders doen om hun workflow te verbeteren. Wat kun je doen om de back-end te optimaliseren? Peter laat zien wat je in de back-end kunt doen om jouw Joomla-site te optimaliseren voor nieuwe gebruikers en voor ervaren beheerders. Help jouw Joomla-gebruikers om gemakkelijker en sneller te laten werken in de Joomla backend.</p>
+										<p><a href="https://slides.db8.nl/md/jd19nl-optimizing-joomla-backend.html" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 								<div class="schedule-slot-session">
@@ -523,6 +527,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Arend-Henk Huzen & Maarten Blokdijk</strong>
 										</h3>
 										<p>In deze presentatie laten we zien hoe je met Fabrik gegevens op je Joomla-site kunt ontsluiten. Of het nu gaat om een ledenlijst van de sportclub, het incasso-proces van de klant of de takenlijst van je team. We laten zien hoe de structuur van Fabrik in elkaar zit en hoe je functionaliteit aan je Fabrik-applicatie kunt toevoegen. Met Fabrik bouw je snel en eenvoudig je eigen data-gedreven applicaties. Daarmee vult Fabrik het gat tussen out-of-the-box Joomla-componenten en maatwerk-applicaties. Fabrik is zeer geschikt voor klanten die werkprocessen op hun intranet willen ontsluiten.</p>
+										<p><a href="http://www.joofabrik.com" class="btn btn-sm" target="_blank">Workshop materiaal</a></p>
 									</div>
 								</div>
 
