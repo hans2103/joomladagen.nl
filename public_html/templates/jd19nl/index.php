@@ -492,6 +492,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Roland Dalmulder</strong>
 										</h3>
 										<p>We gaan langs de checklist die nodig is om te kijken of je extensie klaar is voor Joomla 4 maar ook op Joomla 3 nog werkt. Namespaces die je nu al kan gebruiken, nieuwigheden in Joomla 4 en andere weetjes. Verder komen PHP 7.2 functies aan bod die gebruikt worden.</p>
+										<p><a href="https://rolandd.com/slides/31-joomla-4-developer-checklist" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 							</div>
