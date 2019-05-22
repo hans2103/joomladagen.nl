@@ -362,6 +362,7 @@ PWTTemplateHelper::loadJs();
 										<p>Met Articles Anywhere, de naam zegt het al, kan je overal in de website content laten zien. Artikelen dus, of onderdelen daarvan. Een, of meer. Jij bepaalt wat waar getoond wordt en op welke manier. En je kunt daar heel ver in gaan, zeker als je het combineert met custom fields. Ben je een beetje creatief? Dan kan je Articles Anywhere inzetten voor tal van mogelijkheden waar je anders meerdere andere extensies voor nodig zou hebben.
 											Daarmee maak je het beheer gemakkelijk en logisch, zodat de contentbeheerder met plezier en vertrouwen aan zijn of haar website werkt.
 										</p>
+										<p><a href="http://demo.webularlab.nl/" class="btn btn-sm" target="_blank">Demosite met voorbeelden</a></p>
 									</div>
 								</div>
 								<div class="schedule-slot-session">
