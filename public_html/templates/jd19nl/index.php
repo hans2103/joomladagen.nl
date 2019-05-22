@@ -344,6 +344,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Brian Teeman</strong>
 										</h3>
 										<p>Ben jij ook zo benieuwd naar de status van Joomla 4 en wanneer deze uitkomt? En wat zijn eigenlijk de nieuwe features? Wordt de migratie lastig? Brian Teeman vertelt je alles over Joomla 4 tijdens zijn keynote.</p>
+										<p><a href="https://www.slideshare.net/brianteeman/joomla-4" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 							</div>
@@ -410,6 +411,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Brian Teeman</strong>
 										</h3>
 										<p>Be a responsible developer and deliver what the client needs not want they think they want.</p>
+										<p><a href="https://www.slideshare.net/brianteeman/building-websites-client-want" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 								<div class="schedule-slot-session">
