@@ -289,6 +289,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Hans Kuijpers</strong>
 										</h3>
 										<p>Waarom een 3rd party extensie gebruiken als Joomla core de benodigde content al bevat? Een kalender, slideshow, carrousel en smoelenboek. Allemaal met Joomla, zonder uitbreiding van 3th party extensies. Met deze workshop legt Hans Kuijpers aan de hand van vele voorbeelden uit hoe je template overrides en jLayouts toepast. Als deelnemer ga je ook zelf aan de slag. Dus neem je laptop mee en zorg ervoor dat je met een Joomla website aan de slag kunt. We gaan dingen stuk maken, dus pak niet de website die nu live staat. Voorkennis van PHP, HTML, JS en CSS is wel handig. Een dosis Gezond BoerenVerstand is nog veel belangrijker.</p>
+                                          <p><a href="https://www.slideshare.net/hans2103/jd19nl-joomla-template-overrides-alternate-layouts-en-jlayouts" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 
