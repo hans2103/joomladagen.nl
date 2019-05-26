@@ -433,7 +433,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Roeland van Anholt</strong>
 										</h3>
 										<p>Met Themler is het mogelijk om op een eenvoudige manier een Joomla! template te maken. De template editor is een echte WYSYWIG editor, je ziet hierin jouw content. Responsive bewerken met 1 druk op de knop: de weergave veranderen en aanpassingen maken die voor deze weergave van toepassing zijn.. Oneindig veel module posities aanmaken op de plekken die je zelf wilt en deze een logische naam geven? Geen probleem. Meerdere modules copy/pasten? Alleen opmaak copy/pasten? Met een paar muisklikken gedaan. Een mega-menu of juist een eenvoudige weergave, sticky? Geen probleem. Maar juist niet sticky voor mobiele telefoons? Ook geen probleem!</p>
-										<p><a href="https://jaccs.nl/downloads/presentatie-joomladagen-2019.pdf" class="btn btn-sm" target="_blank">Workshop materiaal</a></p>
+										<p><a href="https://jaccs.nl/downloads/presentatie-joomladagen-2019.pdf" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 								<div class="schedule-slot-session">
