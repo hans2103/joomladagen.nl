@@ -534,7 +534,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Arend-Henk Huzen & Maarten Blokdijk</strong>
 										</h3>
 										<p>In deze presentatie laten we zien hoe je met Fabrik gegevens op je Joomla-site kunt ontsluiten. Of het nu gaat om een ledenlijst van de sportclub, het incasso-proces van de klant of de takenlijst van je team. We laten zien hoe de structuur van Fabrik in elkaar zit en hoe je functionaliteit aan je Fabrik-applicatie kunt toevoegen. Met Fabrik bouw je snel en eenvoudig je eigen data-gedreven applicaties. Daarmee vult Fabrik het gat tussen out-of-the-box Joomla-componenten en maatwerk-applicaties. Fabrik is zeer geschikt voor klanten die werkprocessen op hun intranet willen ontsluiten.</p>
-										<p><a href="http://www.joofabrik.com" class="btn btn-sm" target="_blank">Workshop materiaal</a></p>
+										<p><a href="http://www.joofabrik.com" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 
