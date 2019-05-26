@@ -472,6 +472,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Mike Veeckmans</strong>
 										</h3>
 										<p>Het leven van een webmaster kan een hel zijn, maar dat moet zeker en vast niet zo zijn. In deze meertalige, interactieve presentatie luchten we niet enkel ons hart, maar gaan we eveneens tools, tips en tricks zien passeren om het leven als webmaster aangenamer te maken. Of het nu in Joomla! of een ander CMS systeem is als webmaster lopen we dagelijks tegen uitdagingen aan. We lossen problemen op waarvan de klant niet wist dat die ze had, op manieren die ze niet verstaan. Wil je alvast een topic mee opnemen? Tweet me @MVeeckmans met de hashtag #webstruggle.</p>
+										<p><a href="https://www.slideshare.net/mikeveeckmans/the-webmasters-struggle-jd19nl" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 
