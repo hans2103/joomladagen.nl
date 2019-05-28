@@ -546,6 +546,7 @@ PWTTemplateHelper::loadJs();
 											<strong>Matias Aguirre</strong>
 										</h3>
 										<p>In this session Matias (creator of jUpgrade) will show you how you can upgrade your Joomla 3 site to Joomla 4. How much work will this be and how to upgrade the extensions installed? Still on a older Joomla version? No problem, you can migrate from Joomla 1.0!</p>
+										<p><a href="https://matware.com.ar/jdnl/" class="btn btn-sm" target="_blank">Slides</a></p>
 									</div>
 								</div>
 							</div>
