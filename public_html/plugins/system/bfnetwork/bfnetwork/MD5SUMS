@@ -20,7 +20,7 @@ d41d8cd98f00b204e9800998ecf8427e|bfnetwork/VERSION
 b34f5c588f36c26ded511e9fee871b86|bfnetwork/bfActivitylog.php
 6e4851ac641af3565a58e4de82c9cf8d|bfnetwork/bfApplicationMyjoomla.php
 d970225e641bf4ef088b890029f3f17f|bfnetwork/bfAudit.php
-576066b2770574f111c6d6d65474fb7b|bfnetwork/bfAuditor.php
+a06bf31621d0fcd9084197bd47124667|bfnetwork/bfAuditor.php
 1ea8ef7017bc6f6a742fc8611d20556c|bfnetwork/bfAutologin.php
 51d4b92686ca6db68913f34842e1271d|bfnetwork/bfBackup.php
 e34c7ec12ff1b9892b43b04c148008a2|bfnetwork/bfConfig.php
@@ -40,8 +40,8 @@ ba00f339719575e142d67f0d6aa94c18|bfnetwork/bfRestore.php
 94cd8774935a9c93048cc2acc1cd432e|bfnetwork/bfSnapshot.php
 1103bb8bc8a0f0938a56eadc33d5d963|bfnetwork/bfStep.php
 e1066adc9ea09f42b4c3f323ec7b3adb|bfnetwork/bfTimer.php
-ad6d023249b4d1ab81f3417f3d7831a8|bfnetwork/bfTools.php
-93e400d239764dfc3bb9ae90c9af98b7|bfnetwork/bfUpdates.php
+d12fba062d0078a56ede8d67f149355f|bfnetwork/bfTools.php
+4836a001cba4f9f9503758fd387864d3|bfnetwork/bfUpdates.php
 c24ca06d33136bde6c3ff309dd36c6df|bfnetwork/bfUpgrade.php
 083114ee9d70a8de5008074211388307|bfnetwork/bfUpgradeConnector.php
 d091c8093c2b87e24a8f04593d74f347|bfnetwork/bfVersion.php
@@ -78,5 +78,5 @@ ea149611ae21cb2de47973a352098144|bfnetwork/tmp/.htaccess
 5206637339f365a4b0be439c92ebabb0|bfnetwork/tmp/index.php
 ba5fccabe071ecb008efdba0f05b4fd6|install.bfnetwork.php
 e1bcf0d52f465ce6c26985db0b0a207a|j25_30_bfnetwork.xml
-70DB02F38B705208CBFAF4E0074B501931D1447D
-70DB0
+D80A20BF5C5DDA4734A974E7BA6A7916FB3B92A6
+D80A2
