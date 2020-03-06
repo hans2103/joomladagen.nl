@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -37,10 +35,11 @@ final class bfUpdates
 {
     /**
      * @param bool $returnCount
+     * @param int  $dontEnableUpdateSites
      *
      * @return bool|int|string
      */
-    public function getUpdates($returnCount = false)
+    public function getUpdates($returnCount = false, $dontEnableUpdateSites = 0)
     {
         if (
             // If Joomla 1.5 - No concept of updates
@@ -59,7 +58,12 @@ final class bfUpdates
 
         // clear cache and enable disabled sites again
         $db = JFactory::getDbo();
-        $db->setQuery('update #__update_sites SET last_check_timestamp = 0, enabled = 1');
+        if (1 === $dontEnableUpdateSites) {
+            $db->setQuery('update #__update_sites SET last_check_timestamp = 0');
+        } else {
+            $db->setQuery('update #__update_sites SET last_check_timestamp = 0, enabled = 1');
+        }
+
         $db->query();
         $db->setQuery('TRUNCATE #__updates');
         $db->query();
@@ -102,11 +106,13 @@ final class bfUpdates
             // if there is a newer version we want that!
             if (null !== $item->current_version) {
                 // compose a nice new class, doesnt matter as we are json_encoding later anyway
-                $i                  = new stdClass();
-                $i->name            = $item->name;
-                $i->eid             = $item->extension_id;
-                $i->current_version = $item->current_version;
-                $i->infourl         = $item->infourl;
+                $i                            = new stdClass();
+                $i->name                      = $item->name;
+                $i->eid                       = $item->extension_id;
+                $i->current_version           = $item->current_version;
+                $i->infourl                   = $item->infourl;
+                $i->update_site_id            = $item->update_site_id;
+                $i->installed_version         = json_decode($item->manifest_cache)->version;
 
                 // inject to our array we will return
                 $updatesAvailable[] = $i;

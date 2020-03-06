@@ -15,15 +15,11 @@ class RsformModelFormajax extends JModelLegacy
 		return ($a->Ordering < $b->Ordering) ? -1 : 1;
 	}
 	
-	protected function getTooltip($name) {
-		static $lang;
-		if (!$lang) {
-			$lang = JFactory::getLanguage();
-		}
-		
+	protected function getTooltip($name)
+	{
 		$tooltip = '';
 		
-		if ($lang->hasKey('RSFP_COMP_FIELD_'.$name.'_DESC')) {
+		if (JFactory::getLanguage()->hasKey('RSFP_COMP_FIELD_'.$name.'_DESC')) {
 			$title = JText::_('RSFP_COMP_FIELD_'.$name);
 			$content = JText::_('RSFP_COMP_FIELD_'.$name.'_DESC');
 			$tooltip .= ' class="fieldHasTooltip" data-content="'. $content .'" data-title="' . $title . '"';
@@ -39,12 +35,14 @@ class RsformModelFormajax extends JModelLegacy
 		$return = array(
 			'general'		=> array(),
 			'validations' 	=> array(),
-			'attributes' 	=> array()
+			'attributes' 	=> array(),
+			'editor'		=> array()
 		);
 		$data = $this->getComponentData();
 
-		$general		= array('NAME','CAPTION','LABEL','DEFAULTVALUE','ITEMS','TEXT','DESCRIPTION','COMPONENTTYPE');
+		$general		= array('NAME','CAPTION','LABEL','DEFAULTVALUE','ITEMS','DESCRIPTION','COMPONENTTYPE');
 		$validations	= array('REQUIRED','VALIDATIONRULE','VALIDATIONMESSAGE','VALIDATIONEXTRA', 'VALIDATIONDATE');
+		$editor			= array('TEXT');
 
 		$componentId = $this->getComponentId();
 		$componentType = $this->getComponentType();
@@ -219,6 +217,8 @@ class RsformModelFormajax extends JModelLegacy
 				$return['general'][] = $field;
 			elseif (in_array($field->name, $validations) || strpos($field->name, 'VALIDATION') !== false)
 				$return['validations'][] = $field;
+			elseif (in_array($field->name, $editor))
+				$return['editor'][] = $field;
 			else
 				$return['attributes'][] = $field;
 		}

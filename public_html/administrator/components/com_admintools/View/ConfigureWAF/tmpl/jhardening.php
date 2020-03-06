@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -161,11 +161,23 @@ defined('_JEXEC') or die;
     <?php echo \JHtml::_('FEFHelper.select.booleanswitch', 'trackfailedlogins', $this->wafconfig['trackfailedlogins']); ?>
 </div>
 
+<div class="akeeba-form-group">
+    <label
+            for="logusernames"
+            rel="akeeba-sticky-tooltip"
+            data-original-title="<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_LOGUSERNAMES'); ?>"
+            data-content="<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_LOGUSERNAMES_TIP'); ?>">
+		<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_OPT_LOGUSERNAMES'); ?>
+    </label>
+
+	<?php echo \JHtml::_('FEFHelper.select.booleanswitch', 'logusernames', $this->wafconfig['logusernames']); ?>
+</div>
+
 <?php
 // Detect user registration and activation type
 $disabled = '';
 $message  = '';
-$classes  = array('class' => 'akeeba-input-mini');
+$classes = [];
 
 JLoader::import('cms.component.helper');
 $userParams = JComponentHelper::getParams('com_users');
@@ -185,8 +197,8 @@ elseif ($userParams->get('useractivation') == 2)
 // No user activation
 elseif ($userParams->get('useractivation') == 0)
 {
-	$classes['disabled'] = 'true';
-	$disabled = ' disabled="true" ';
+	$classes['disabled'] = 'disabled';
+	$disabled = ' disabled="disabled" ';
 	$message = '<div style="margin-top:10px" class="akeeba-block--info">' . JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_ALERT_NOUSERACTIVATION') . '</div>';
 }
 ?>

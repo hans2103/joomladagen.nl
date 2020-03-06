@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -19,8 +19,9 @@ class WFFileManagerPlugin extends WFMediaManager
     /*
      * @var string
      */
+    protected $name = 'filemanager';
 
-    public $_filetypes = 'acrobat=pdf;office=doc,docx,dot,dotx,ppt,pps,pptx,ppsx,xls,xlsx;image=gif,jpeg,jpg,png,webp;archive=zip,tar,gz;video=swf,mov,wmv,avi,flv,mp4,ogv,ogg,webm,mpeg,mpg;audio=wav,mp3,ogg,webm,aiff;openoffice=odt,odg,odp,ods,odf;text=txt,rtf,md';
+    public $_filetypes = 'acrobat=pdf;office=doc,docx,dot,dotx,ppt,pps,pptx,ppsx,xls,xlsx;image=gif,jpeg,jpg,png,apng,webp;archive=zip,tar,gz;video=swf,mov,wmv,avi,flv,mp4,ogv,ogg,webm,mpeg,mpg;audio=wav,mp3,ogg,webm,aiff;openoffice=odt,odg,odp,ods,odf;text=txt,rtf,md';
 
     public function __construct()
     {

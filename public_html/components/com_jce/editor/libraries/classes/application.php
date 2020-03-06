@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -128,12 +128,12 @@ class WFApplication extends JObject
 
             if ($context) {
                 $component = $this->getComponent($context);
-                $option = isset($component->element) ? $component->element : $component->option;
+                $option = $component->element;
             }
         }
 
-        // get the Joomla! area (admin or site)
-        $area = $app->isClient('administrator') ? 2 : 1;
+        // get the Joomla! area, default to "site"
+        $area = $app->getClientId() === 0 ? 1 : 2;
 
         if (!class_exists('Wf_Mobile_Detect')) {
             // load mobile detect class
@@ -226,8 +226,10 @@ class WFApplication extends JObject
                 }
 
                 // check component
-                if ($options['option'] !== 'com_jce' && $item->components && in_array($options['option'], explode(',', $item->components)) === false) {
-                    continue;
+                if (!empty($item->components)) {
+                    if (in_array($options['option'], explode(',', $item->components)) === false) {
+                        continue;
+                    }
                 }
 
                 // set device default as 'desktop,tablet,mobile'

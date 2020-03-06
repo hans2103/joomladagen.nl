@@ -3,12 +3,13 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -90,6 +91,8 @@ class PWTSEOViewMenus extends HtmlView
 		$this->state         = $model->getState();
 		$this->pagination    = $model->getPagination();
 
+		$this->batchForm = Form::getInstance('pwtseo_batch', JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/batch.xml');
+
 		$this->toolbar();
 
 		PWTSEOHelper::addSubmenu('menus');
@@ -110,7 +113,6 @@ class PWTSEOViewMenus extends HtmlView
 		JToolBarHelper::title(Text::_('COM_PWTSEO_MENUS_HEADER'), 'pwtseo');
 		$user  = Factory::getUser();
 
-		// Get the toolbar object instance
 		$bar = Toolbar::getInstance('toolbar');
 
 		if ($user->authorise('core.edit', 'com_content'))

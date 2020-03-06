@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -14,7 +14,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Session\Session;
-use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
@@ -50,6 +49,7 @@ class PwtimageControllerImage extends BaseController
 		$subPath         = $this->input->getString('pwt-image-subPath', null);
 		$backgroundColor = $this->input->getString('pwt-image-backgroundColor', '#000000');
 		$origin          = $this->input->getString('pwt-image-origin', null);
+		$useOriginal     = filter_var($this->input->getString('pwt-image-useOriginal', null), FILTER_VALIDATE_BOOLEAN);
 		$keepOriginal    = filter_var($this->input->getString('pwt-image-keepOriginal', null), FILTER_VALIDATE_BOOLEAN);
 		$image           = '';
 
@@ -61,24 +61,34 @@ class PwtimageControllerImage extends BaseController
 				throw new InvalidArgumentException(Text::_('COM_PWTIMAGE_FILENAME_MISSING'));
 			}
 
-			/** @var PwtimageModelImage $model */
-			$model = $this->getModel('Image', 'PwtimageModel');
-			$error = false;
+			$message = '';
+			$error   = false;
 
-			$image   = $model->processImage(
-				$file,
-				$localFile,
-				$targetFile,
-				$cropData,
-				$ratio,
-				$width,
-				$keepOriginal,
-				$sourcePath,
-				$subPath,
-				$origin,
-				$backgroundColor
-			);
-			$message = $model->getMessage();
+			if ($useOriginal)
+			{
+				// Remove '/' from localfile to get correct image path to store
+				$image = substr($localFile, 1);
+			}
+			else
+			{
+				/** @var PwtimageModelImage $model */
+				$model = $this->getModel('Image', 'PwtimageModel');
+
+				$image   = $model->processImage(
+					$file,
+					$localFile,
+					$targetFile,
+					$cropData,
+					$ratio,
+					$width,
+					$keepOriginal,
+					$sourcePath,
+					$subPath,
+					$origin,
+					$backgroundColor
+				);
+				$message = $model->getMessage();
+			}
 		}
 		catch (Exception $e)
 		{
@@ -103,8 +113,7 @@ class PwtimageControllerImage extends BaseController
 		// Check if we come from the backend
 		if ($sessionId = $this->input->server->get('HTTP_X_CSRF_TOKEN', '', 'alnum'))
 		{
-			$db = Factory::getDbo();
-
+			$db    = Factory::getDbo();
 			$query = $db->getQuery(true)
 				->select($db->quoteName('userid'))
 				->from($db->quoteName('#__session'))
@@ -114,7 +123,10 @@ class PwtimageControllerImage extends BaseController
 
 			$userId = $db->loadResult();
 
-			if (!$userId || is_null($userId) || $userId < 1)
+			$params      = ComponentHelper::getParams('com_pwtimage');
+			$guestUpload = $params->get('guestupload', 0);
+
+			if (!$guestUpload && (!$userId || is_null($userId) || $userId < 1))
 			{
 				return false;
 			}
@@ -153,12 +165,10 @@ class PwtimageControllerImage extends BaseController
 			$folder = $baseFolder;
 		}
 
-		$folders         = JFolder::folders(JPATH_SITE . $folder);
-		$legalExtensions = ComponentHelper::getParams('com_media')->get('image_extensions', 'jpg,jpeg,png,gif,bmp');
-		$legalExtensions = $legalExtensions . ',' . strtoupper($legalExtensions);
-		$files           = JFolder::files(
+		$folders = JFolder::folders(JPATH_SITE . $folder);
+		$files   = JFolder::files(
 			JPATH_SITE . $folder,
-			'(.' . implode('|.', explode(',', $legalExtensions)) . ')'
+			'(.' . implode('|.', explode(',', ComponentHelper::getParams('com_media')->get('image_extensions', 'jpg,jpeg,png,gif,bmp'))) . ')'
 		);
 
 		echo new JsonResponse(array('folders' => $folders, 'files' => $files, 'basePath' => $folder));
@@ -178,8 +188,11 @@ class PwtimageControllerImage extends BaseController
 
 		$sourcePath = $this->input->getString('sourcePath', null);
 
+		// Clean site path
+		$sitePath = JPath::clean(JPATH_SITE, '/');
+
 		// Get the list of folders the user can choose from
-		$folders = JFolder::folders(JPATH_SITE . $sourcePath, '.', true, true);
+		$folders = JFolder::folders($sitePath . $sourcePath, '.', true, true);
 
 		if (!is_array($folders))
 		{
@@ -188,7 +201,8 @@ class PwtimageControllerImage extends BaseController
 
 		foreach ($folders as $index => $folder)
 		{
-			$folders[$index] = str_replace(JPATH_SITE . $sourcePath . '/', '', $folder);
+			$folder          = JPath::clean($folder, '/');
+			$folders[$index] = str_replace($sitePath . $sourcePath . '/', '', $folder);
 		}
 
 		// Add the current folder as default

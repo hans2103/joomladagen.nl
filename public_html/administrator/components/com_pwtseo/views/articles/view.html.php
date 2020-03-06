@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -13,6 +13,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\Toolbar;
+use \Joomla\CMS\Form\Form;
 
 defined('_JEXEC') or die;
 
@@ -72,6 +73,14 @@ class PWTSEOViewArticles extends HtmlView
 	protected $sidebar;
 
 	/**
+	 * The form for the batch dialog
+	 *
+	 * @var    Form
+	 * @since  1.3.1
+	 */
+	protected $batchForm;
+
+	/**
 	 * Execute and display a template script.
 	 *
 	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
@@ -80,6 +89,7 @@ class PWTSEOViewArticles extends HtmlView
 	 *
 	 * @see     fetch()
 	 * @since   1.0
+	 * @throws  Exception
 	 */
 	public function display($tpl = null)
 	{
@@ -89,6 +99,8 @@ class PWTSEOViewArticles extends HtmlView
 		$this->activeFilters = $model->getActiveFilters();
 		$this->state         = $model->getState();
 		$this->pagination    = $model->getPagination();
+
+		$this->batchForm = Form::getInstance('pwtseo_batch', JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/batch.xml');
 
 		$this->toolbar();
 

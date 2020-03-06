@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -111,14 +111,45 @@ class JFormFieldPWTSeo extends FormField
 
 				if ($xml)
 				{
+					if ($this->form->getName() !== 'com_menus.item')
+					{
+						if ($field->getAttribute('name') === 'cascade_settings')
+						{
+							continue;
+						}
+					}
+
 					$this->form->setField($xml, '', true, $set->name);
 				}
 			}
 		}
 
+		if ($this->form->getValue('strip_canonical_choice', 'pwtseo') === null)
+		{
+			$this->form->setValue('strip_canonical_choice', 'pwtseo', $form->getValue('strip_canonical_choice', 'pwtseo'));
+		}
+
 		if ($this->form->getValue('expand_og', 'pwtseo') === null)
 		{
 			$this->form->setValue('expand_og', 'pwtseo', $form->getValue('expand_og', 'pwtseo'));
+		}
+
+		if ($this->form->getName() === 'com_content.article')
+		{
+			$this->form->removeField('strip_canonical', 'pwtseo');
+			$this->form->removeField('strip_canonical_choice', 'pwtseo');
+		}
+
+		if ($this->form->getName() !== 'com_menus.item')
+		{
+			$this->form->removeField('cascade_settings', 'pwtseo');
+		}
+		else
+		{
+			if ($this->form->getValue('cascade_settings', 'pwtseo') === null)
+			{
+				$this->form->setValue('cascade_settings', 'pwtseo', $form->getValue('cascade_settings', 'pwtseo'));
+			}
 		}
 
 		echo $this->form->renderFieldset('left-side');

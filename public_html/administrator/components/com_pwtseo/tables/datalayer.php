@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -49,7 +49,35 @@ class PWTSEOTableDatalayer extends Table
 		}
 
 		$this->name = str_replace('-', '_', ApplicationHelper::stringURLSafe($this->name, $this->language));
+		$this->template = implode(',', $this->template);
 
 		return true;
+	}
+
+	/**
+	 * Overloaded load to prepare the template field for a Form.
+	 *
+	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.
+	 *                           If not set the instance property value is used.
+	 * @param   boolean  $reset  True to reset the default values before loading the new row.
+	 *
+	 * @return  boolean  True if successful. False if row not found.
+	 *
+	 * @since   1.5.0
+	 *
+	 * @throws  InvalidArgumentException
+	 * @throws  RuntimeException
+	 * @throws  UnexpectedValueException
+	 */
+	public function load($keys = null, $reset = true)
+	{
+		$result = parent::load($keys, $reset);
+
+		if ($result)
+		{
+			$this->template = json_encode(explode(',', $this->template));
+		}
+
+		return $result;
 	}
 }

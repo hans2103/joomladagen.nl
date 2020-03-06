@@ -15,7 +15,7 @@
         <field
                 name="version"
                 type="hidden"
-                default="1.3.0"
+                default="1.5.0"
         />
 
         <field type="hidden" name="pwtseo_pwtseo_score" default="0" />
@@ -51,10 +51,12 @@
             <field name="canonical" type="hidden" class="js-remove" />
             <field name="articletitleselector" type="hidden" class="js-remove" />
             <field name="datalayers" type="hidden" class="js-remove" />
+            <field name="google_rank" type="hidden" class="js-remove" />
 
             <field type="hidden" name="serptitle" value="" />
             <field type="hidden" name="serpurl" value="" />
             <field type="hidden" name="serpmetadescription" value="" />
+            <field type="hidden" name="google_rank" value="0" />
         </fieldset>
     </fields>
 

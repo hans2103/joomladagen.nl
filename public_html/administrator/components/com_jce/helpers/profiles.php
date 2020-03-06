@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -333,9 +333,24 @@ abstract class JceProfilesHelper
                         case 'components':
                             break;
                         case 'params':
+                            if (!empty($value)) {
+                                $data = json_decode($value, true);
+
+                                if (is_array($data)) {
+                                    array_walk($data, function (&$param, $key) {
+                                        if (is_string($param) && WFUtility::isJson($param)) {
+                                            $param = json_decode($param, true);
+                                        }
+                                    });
+                                }
+
+                                $value = json_encode($data);
+                            }
+
                             if (empty($value)) {
                                 $value = "{}";
                             }
+
                             break;
                         case 'rows':
                             break;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -67,12 +67,12 @@ class WFImageEditor extends JObject
         return $src;
     }
 
-    public function resize($src, $dest, $width, $height, $quality, $sx = null, $sy = null, $sw = null, $sh = null)
+    public function resize($src, $dest, $width, $height, $quality, $box = array())
     {
         $ext = strtolower(JFile::getExt($src));
-        $data = @JFile::read($src);
+        $data = @file_get_contents($src);
 
-        if ($src) {
+        if ($data) {
             $options = $this->getOptions();
 
             // resize original
@@ -87,9 +87,10 @@ class WFImageEditor extends JObject
             $image->loadString($data);
 
             // cropped thumbnail
-            if ((isset($sx) || isset($sy)) && isset($sw) && isset($sh)) {
-                $image->crop($sw, $sh, $sx, $sy);
+            if (!empty($box)) {
+                $image->crop($box['sw'], $box['sh'], $box['sx'], $box['sy']);
             }
+
             // resize
             $image->resize($width, $height);
 
@@ -128,7 +129,7 @@ class WFImageEditor extends JObject
     public function rotate($file, $direction)
     {
         $ext = strtolower(JFile::getExt($file));
-        $src = @JFile::read($file);
+        $src = @file_get_contents($file);
 
         if ($src) {
             $options = $this->getOptions();

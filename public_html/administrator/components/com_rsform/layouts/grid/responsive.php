@@ -119,10 +119,7 @@ class RSFormProGridResponsive extends RSFormProGrid
 			
 			$html[] = "\t"."\t"."\t".'<div class="rsform-block rsform-block-' . $block . $placeholders['error'] . '">';
 				$label = "\t"."\t"."\t"."\t".'<label class="formControlLabel"';
-				if (!in_array($data->ComponentTypeId, array(RSFORM_FIELD_CHECKBOXGROUP, RSFORM_FIELD_RADIOGROUP, RSFORM_FIELD_BIRTHDAY)))
-				{
-					$label .= ' for="' . $data->ComponentName . '"';
-				}
+				$label .= $this->generateFor($data);
 				$label .= '>';
 				$label .= $placeholders['caption'];
                 if ($data->Required && $this->requiredMarker)

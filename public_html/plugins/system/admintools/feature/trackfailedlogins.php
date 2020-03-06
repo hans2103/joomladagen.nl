@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -36,17 +36,11 @@ class AtsystemFeatureTrackfailedlogins extends AtsystemFeatureAbstract
 			return;
 		}
 
-		$user = $this->input->getString('username', null);
-		$pass = $this->input->getString('password', null);
-
-		if (empty($pass))
-		{
-			$pass = $this->input->getString('passwd', null);
-		}
-
 		$extraInfo = null;
+		$user      = $this->input->getString('username', null);
 
-		if (!empty($user))
+		// Log the username only if we have a user AND we told Admin Tools to store usernames, too
+		if ($this->cparams->getValue('logusernames', 0) && !empty($user))
 		{
 			$extraInfo = 'Username: ' . $user;
 		}

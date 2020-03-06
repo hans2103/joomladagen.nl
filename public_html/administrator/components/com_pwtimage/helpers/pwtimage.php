@@ -3,12 +3,13 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
@@ -41,6 +42,14 @@ class PwtimageHelper extends ContentHelper
 	 * @since  1.1.0
 	 */
 	private $settings;
+
+	/**
+	 * The profile ID
+	 *
+	 * @var    integer
+	 * @since  1.1.0
+	 */
+	private $profileId;
 
 	/**
 	 * Construct the helper.
@@ -87,7 +96,7 @@ class PwtimageHelper extends ContentHelper
 		$db = Factory::getDbo();
 
 		$query = $db->getQuery(true)
-			->select($db->quoteName(array('profiles.settings', 'extensions.path')))
+			->select($db->quoteName(array('profiles.settings', 'extensions.path', 'profiles.id')))
 			->from($db->quoteName('#__pwtimage_profiles', 'profiles'))
 			->leftJoin(
 				$db->quoteName('#__pwtimage_extensions', 'extensions')
@@ -129,7 +138,9 @@ class PwtimageHelper extends ContentHelper
 				$settings = array($settings['all']);
 			}
 
-			$this->settings = (new Registry(array_shift($settings)->settings));
+			$profileSettings = array_shift($settings);
+			$this->profileId = $profileSettings->id;
+			$this->settings  = (new Registry($profileSettings->settings));
 		}
 
 		// Check if the user is part of the selected user group
@@ -258,8 +269,10 @@ class PwtimageHelper extends ContentHelper
 	 */
 	public function replaceVariables($subPath)
 	{
-		$find    = array('{year}', '{month}', '{day}', '{Y}', '{m}', '{d}', '{W}');
-		$replace = array(date('Y'), date('m'), date('d'), date('Y'), date('m'), date('d'), date('W'));
+		$user     = Factory::getUser();
+		$username = ($user->name) ? OutputFilter::stringURLSafe($user->name) : 'guest';
+		$find     = array('{year}', '{month}', '{day}', '{Y}', '{m}', '{d}', '{W}', '{userid}', '{username}');
+		$replace  = array(date('Y'), date('m'), date('d'), date('Y'), date('m'), date('d'), date('W'), $user->id, $username);
 
 		return str_replace($find, $replace, $subPath);
 	}
@@ -269,7 +282,7 @@ class PwtimageHelper extends ContentHelper
 	 *
 	 * Thanks to Drupal
 	 *
-	 * @return  int  The maximum allowed upload size.
+	 * @return  integer  The maximum allowed upload size.
 	 *
 	 * @since   1.0.0
 	 */
@@ -354,5 +367,17 @@ class PwtimageHelper extends ContentHelper
 	public function getSettings()
 	{
 		return $this->settings->toArray();
+	}
+
+	/**
+	 * Return the profile ID.
+	 *
+	 * @return  integer  The profile ID.
+	 *
+	 * @since   1.0.0
+	 */
+	public function getProfileId()
+	{
+		return $this->profileId;
 	}
 }

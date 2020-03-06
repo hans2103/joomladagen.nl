@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -170,7 +170,14 @@ abstract class JcePluginsHelper
 
                         $row = (int)$xml->attributes()->row;
 
-                        $attribs->row = $row ? $row : 4;
+                        // set row from passed in value or 0
+                        $attribs->row = $row;
+
+                        // if an icon is set and no row, default to 4
+                        if (!empty($attribs->icon) && !$row) {
+                            $attribs->row = 4;
+                        }
+
                         $attribs->description = (string)$xml->description;
                         $attribs->core = 0;
 

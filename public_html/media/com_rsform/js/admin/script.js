@@ -136,8 +136,8 @@ function orderMapping(mp, task)
 {
     if (task == 'orderdown' || task == 'orderup')
     {
-        var table = RSFormPro.$('#mappingTable');
-        currentRow = RSFormPro.$(document.getElementById(mp)).parent().parent();
+        var table = jQuery('#mappingTable');
+        currentRow = jQuery(document.getElementById(mp)).parent().parent();
         if (task == 'orderdown')
         {
             try { currentRow.insertAfter(currentRow.next()); }
@@ -371,6 +371,7 @@ function generateDirectoryLayout(formId, alert) {
 	}
 
 	var hideEmptyValues = document.getElementsByName('jform[HideEmptyValues]')[1].checked ? 1 : 0;
+	var showGoogleMap = document.getElementsByName('jform[ShowGoogleMap]')[1].checked ? 1 : 0;
 
 	stateLoading();
 	var xml = buildXmlHttp();
@@ -384,7 +385,7 @@ function generateDirectoryLayout(formId, alert) {
 			stateDone();
 		}
 	};
-	xml.open('GET', 'index.php?option=com_rsform&task=directory.generate&layoutName=' + layoutName + '&formId=' + formId + '&hideEmptyValues=' + hideEmptyValues + '&randomTime=' + Math.random(), true);
+	xml.open('GET', 'index.php?option=com_rsform&task=directory.generate&layoutName=' + layoutName + '&formId=' + formId + '&hideEmptyValues=' + hideEmptyValues + '&showGoogleMap=' + showGoogleMap + '&randomTime=' + Math.random(), true);
 	xml.send(null);
 }
 
@@ -482,9 +483,9 @@ function exportProcess(start, limit, total) {
 	xml.onreadystatechange = function () {
 		if (xml.readyState == 4) {
 			var post = xml.responseText;
-			if (post.indexOf('END') != -1) {
+			if (post.indexOf('END') > -1) {
 				document.getElementById('progressBar').style.width = document.getElementById('progressBar').innerHTML = '100%';
-				document.location = 'index.php?option=com_rsform&task=submissions.export.file&ExportFile=' + document.getElementById('ExportFile').value + '&ExportType=' + document.getElementById('exportType').value;
+				document.location = 'index.php?option=com_rsform&task=submissions.export.file&ExportFile=' + document.getElementById('ExportFile').value + '&ExportType=' + document.getElementById('exportType').value + '&formId=' + document.getElementsByName('formId')[0].value;
 			}
 			else {
 				document.getElementById('progressBar').style.width = Math.ceil(start * 100 / total) + '%';
@@ -628,13 +629,13 @@ function changeValidation(elem) {
 		
 		var clonedElement = document.getElementById('idVALIDATIONEXTRA').cloneNode(true);
 		clonedElement.removeAttribute('id');
-		clonedElement.removeClass('hideVALIDATIONEXTRA');
+		jQuery(clonedElement).removeClass('hideVALIDATIONEXTRA');
 		
 		var afterElement = document.getElementById('idVALIDATIONMULTIPLE');
 		
-		for(i = 0; i < selectedValues.length; i++) {
+		for (var i = 0; i < selectedValues.length; i++) {
 			var newclonedElement = clonedElement.cloneNode(true);
-			newclonedElement.addClass('mValidation '+selectedValues[i]);
+			jQuery(newclonedElement).addClass('mValidation '+selectedValues[i]);
 			
 			var captionElement = newclonedElement.querySelector('#captionVALIDATIONEXTRA');
 			var validationElement = newclonedElement.querySelector('#VALIDATIONEXTRA');
@@ -1113,7 +1114,7 @@ function addCalculation(formId) {
 
 	stateLoading();
 
-	params = [];
+	var params = [];
 	params.push('formId=' + formId);
 	params.push('total=' + document.getElementById('rsfp_total_add').value);
 	params.push('expression=' + encodeURIComponent(document.getElementById('rsfp_expression').value));
@@ -1121,7 +1122,7 @@ function addCalculation(formId) {
 	params.push('randomTime=' + Math.random());
 	params = params.join('&');
 
-	xmlHttp = buildXmlHttp();
+	var xmlHttp = buildXmlHttp();
 	xmlHttp.open("POST", 'index.php?option=com_rsform&task=calculations&controller=forms', true);
 
 	//Send the proper header information along with the request
@@ -1233,18 +1234,23 @@ function removeCalculation(id) {
 	
 	stateLoading();
 
-	params = 'id=' + id + '&tmpl=component&randomTime=' + Math.random();
+	var params = 'id=' + id + '&tmpl=component&randomTime=' + Math.random();
 
-	xmlHttp = buildXmlHttp();
-	xmlHttp.open("POST", 'index.php?option=com_rsform&task=removeCalculation&controller=forms', true);
+	var xmlHttp = buildXmlHttp();
+	xmlHttp.open('POST', 'index.php?option=com_rsform&task=removeCalculation&controller=forms', true);
 
 	//Send the proper header information along with the request
 	xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	xmlHttp.onreadystatechange = function () {//Call a function when the state changes.
 		if (xmlHttp.readyState == 4) {
-			if (xmlHttp.responseText == 1)
-				document.getElementById('calculationRow' + id).dispose();
+			if (xmlHttp.responseText == 1) {
+				var el = document.getElementById('calculationRow' + id);
+
+				if (typeof el !== 'undefined') {
+					el.parentNode.removeChild(el);
+				}
+			}
 
 			stateDone();
 		}
@@ -1296,6 +1302,8 @@ function validateEmailFields() {
     var fieldName, field, fieldValue, values, value, match;
     var pattern = /{.*?}/g;
 
+    var hasPlaceholder, wrongPlaceholder, notAnEmail, wrongDelimiter;
+
     for (var i = 0; i < fields.length; i++) {
         // Grab field name from array
         fieldName 	= fields[i];
@@ -1303,7 +1311,7 @@ function validateEmailFields() {
         // Grab value
         fieldValue 	= field.value;
 
-        RSFormPro.$(field).removeClass('rs_error_field');
+        jQuery(field).removeClass('rs_error_field');
 
         // Something's been typed in
         if (fieldValue.length > 0) {
@@ -1323,9 +1331,9 @@ function validateEmailFields() {
                 if (hasPlaceholder) {
                     do {
                         match = pattern.exec(value);
-                        if (match && typeof match[0] != 'undefined') {
+                        if (match && typeof match[0] !== 'undefined') {
                             // Wrong placeholder
-                            if (RSFormPro.Placeholders.indexOf(match[0]) == -1) {
+                            if (RSFormPro.Placeholders.indexOf(match[0]) === -1) {
                                 wrongPlaceholder = true;
                             }
                         }
@@ -1333,21 +1341,21 @@ function validateEmailFields() {
                 }
 
                 // Not an email
-                notAnEmail = !hasPlaceholder && value.indexOf('@') == -1;
+                notAnEmail = !hasPlaceholder && value.indexOf('@') === -1;
                 // A situation where we have a wrong delimiter thus ending up in multiple @ addresses
                 wrongDelimiter = !hasPlaceholder && (value.match(/@/g) || []).length > 1;
 
                 if (wrongPlaceholder || notAnEmail || wrongDelimiter) {
                     // Switch to the correct tab only on the first error
-                    if (result == true) {
-                        RSFormPro.$('#properties').click();
+                    if (result === true) {
+                        jQuery('#properties').click();
                         if (fieldName.indexOf('User') > -1) {
-                            RSFormPro.$('#useremails').click();
+                            jQuery('#useremails').click();
                         } else {
-                            RSFormPro.$('#adminemails').click();
+                            jQuery('#adminemails').click();
                         }
                     }
-                    RSFormPro.$(field).addClass('rs_error_field');
+                    jQuery(field).addClass('rs_error_field');
                     result = false;
                 }
             }
@@ -1436,6 +1444,13 @@ RSFormPro.Post.addField = function () {
 
 RSFormPro.Post.deleteField = function () {
 	jQuery(this).parents('tr').remove();
+};
+
+RSFormPro.removeFile = function(button) {
+	if (button.parentNode)
+	{
+		button.parentNode.parentNode.removeChild(button.parentNode);
+	}
 };
 
 jQuery(document).ready(initRSFormPro);

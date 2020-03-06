@@ -170,6 +170,17 @@
         </field>
 
         <field
+                name="useOriginal"
+                type="radio"
+                label="COM_PWTIMAGE_CONFIG_USEORIGINAL_LABEL"
+                description="COM_PWTIMAGE_CONFIG_USEORIGINAL_DESC"
+                default="1"
+                class="btn-group btn-group-yesno">
+            <option value="1">JYES</option>
+            <option value="0">JNO</option>
+        </field>
+
+        <field
                 name="keepOriginal"
                 type="radio"
                 label="COM_PWTIMAGE_CONFIG_KEEPORIGINAL_LABEL"

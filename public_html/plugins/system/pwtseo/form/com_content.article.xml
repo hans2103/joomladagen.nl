@@ -8,6 +8,7 @@
             <field name="facebook_title" type="hidden" class="js-remove" />
             <field name="facebook_description" type="hidden" class="js-remove" />
             <field name="facebook_image" type="hidden" class="js-remove" />
+            <field name="facebook_url" type="hidden" class="js-remove" />
             <field name="twitter_title" type="hidden" class="js-remove" />
             <field name="twitter_description" type="hidden" class="js-remove" />
             <field name="twitter_image" type="hidden" class="js-remove" />
@@ -24,6 +25,7 @@
             <field name="canonical" type="hidden" class="js-remove" />
             <field name="articletitleselector" type="hidden" class="js-remove" />
             <field name="datalayers" type="hidden" class="js-remove" />
+            <field name="google_rank" type="hidden" class="js-remove" />
             <!-- End fake fields -->
 
             <field

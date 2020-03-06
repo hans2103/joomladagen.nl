@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -168,6 +168,13 @@ class PWTSEOModelArticles extends ListModel
 			$query->where('article.created_by ' . $type . (int) $authorId);
 		}
 
+		$language = $this->getState('filter.language');
+
+		if (!empty($language) && $language !== '*')
+		{
+			$query->where('article.language = ' . $db->quote($language));
+		}
+
 		$tagId = $this->getState('filter.tag');
 
 		if (is_numeric($tagId))
@@ -180,6 +187,12 @@ class PWTSEOModelArticles extends ListModel
 					. ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_content.article')
 				);
 		}
+
+		$query
+			->where(
+				'(' . $db->quoteName('seo.context') . ' = ' . $db->quote('com_content.article') .
+				' OR ' . $db->quoteName('seo.context') . ' IS NULL)'
+			);
 
 		$orderCol  = $this->getState('list.ordering', 'article.publish_up');
 		$orderDirn = $this->getState('list.direction', 'DESC');

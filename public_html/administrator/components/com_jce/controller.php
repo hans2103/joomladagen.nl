@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 3 - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -113,7 +113,7 @@ class JceController extends JControllerLegacy
 
             JceHelperAdmin::addSubmenu($vName);
 
-            $document->addStyleSheet('components/com_jce/media/css/global.min.css', array('version' => WF_VERSION));
+            $document->addStyleSheet('components/com_jce/media/css/global.min.css?' . md5(WF_VERSION));
 
             $view->display();
         }

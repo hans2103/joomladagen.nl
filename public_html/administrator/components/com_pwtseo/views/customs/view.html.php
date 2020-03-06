@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -11,8 +11,10 @@
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\FileLayout;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Pagination\Pagination;
+use Joomla\CMS\Toolbar\Toolbar;
 
 defined('_JEXEC') or die;
 
@@ -72,9 +74,17 @@ class PWTSEOViewCustoms extends HtmlView
 	protected $sidebar;
 
 	/**
+	 * The form for the batch dialog
+	 *
+	 * @var    Form
+	 * @since  1.5.0
+	 */
+	protected $batchForm;
+
+	/**
 	 * Execute and display a template script.
 	 *
-	 * @param   string $tpl The name of the template file to parse; automatically searches through the template paths.
+	 * @param   string  $tpl  The name of the template file to parse; automatically searches through the template paths.
 	 *
 	 * @return  mixed  A string if successful, otherwise a JError object.
 	 *
@@ -88,6 +98,8 @@ class PWTSEOViewCustoms extends HtmlView
 		$this->activeFilters = $model->getActiveFilters();
 		$this->state         = $model->getState();
 		$this->pagination    = $model->getPagination();
+
+		$this->batchForm = Form::getInstance('pwtseo_batch', JPATH_COMPONENT_ADMINISTRATOR . '/models/forms/batch.xml');
 
 		$this->toolbar();
 
@@ -108,6 +120,7 @@ class PWTSEOViewCustoms extends HtmlView
 	{
 		JToolBarHelper::title(Text::_('COM_PWTSEO_CUSTOMS_HEADER'), 'pwtseo');
 
+		$bar   = Toolbar::getInstance('toolbar');
 		$canDo = ContentHelper::getActions('com_pwtseo');
 
 		if ($canDo->get('core.create'))
@@ -117,6 +130,13 @@ class PWTSEOViewCustoms extends HtmlView
 
 		if ($canDo->get('core.edit'))
 		{
+			$title = Text::_('JTOOLBAR_BATCH');
+
+			$layout = new FileLayout('joomla.toolbar.batch');
+
+			$dhtml = $layout->render(array('title' => $title));
+			$bar->appendButton('Custom', $dhtml, 'batch');
+
 			JToolbarHelper::editList('custom.edit');
 		}
 

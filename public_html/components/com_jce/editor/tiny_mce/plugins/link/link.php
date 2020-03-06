@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -13,19 +13,22 @@ defined('JPATH_PLATFORM') or die;
 // Link Plugin Controller
 class WFLinkPlugin extends WFEditorPlugin
 {
+    protected $name = 'link';
+    
     public $extensions = array();
     public $popups = array();
     public $tabs = array();
 
     /**
-     * Constructor activating the default information of the class.
+     * Override execute function to intialize links and search
+     *
+     * @return void
      */
-    public function __construct()
-    {
-        parent::__construct();
-
+    public function execute() {
         $this->getLinks();
         $this->getSearch('link');
+
+        parent::execute();
     }
 
     public function display()

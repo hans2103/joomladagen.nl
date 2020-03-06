@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -11,13 +11,14 @@ defined('_JEXEC') or die;
 
 use Akeeba\AdminTools\Admin\Controller\Mixin\CustomACL;
 use Akeeba\AdminTools\Admin\Controller\Mixin\PredefinedTaskList;
+use Akeeba\AdminTools\Admin\Controller\Mixin\SendTroubleshootingEmail;
 use Akeeba\AdminTools\Admin\Model\ConfigureWAF;
 use FOF30\Container\Container;
 use FOF30\Controller\Controller;
 
 class QuickStart extends Controller
 {
-	use PredefinedTaskList, CustomACL;
+	use PredefinedTaskList, CustomACL, SendTroubleshootingEmail;
 
 	public function __construct(Container $container, array $config)
 	{
@@ -30,6 +31,8 @@ class QuickStart extends Controller
 	{
 		// CSRF prevention
 		$this->csrfProtection();
+
+		$this->sendTroubelshootingEmail($this->getName());
 
 		/** @var \Akeeba\AdminTools\Admin\Model\QuickStart $model */
 		$model = $this->getModel();

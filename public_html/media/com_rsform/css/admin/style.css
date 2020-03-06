@@ -563,6 +563,9 @@ textarea.rs_textarea:focus {
 .calendar {
     line-height: 12px;
 }
+.rsform_spacer {
+	margin-right: 3px;
+}
 @media (max-width: 480px) {
     #search.rs_10 {
         width: 100% !important;
@@ -840,4 +843,17 @@ textarea.rs_textarea:focus {
 .rsfp-grid-column1 .rsfp-grid-field-buttons .btn-small {
 	padding: 1px;
 	font-size: 11px;
+}
+
+#rsfp-editor-container {
+	padding: 5px;
+	width: 95%;
+}
+
+.rsfp-hidden {
+	position: absolute;
+	left: -20000px;
+	top: -20000px;
+	opacity: 0;
+	visibility: hidden;
 }

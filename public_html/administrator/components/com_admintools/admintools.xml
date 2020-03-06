@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ @package   admintools
+  ~ @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
+  ~ @license   GNU General Public License version 3, or later
+  -->
+
 <extension type="component" version="2.5.0" method="upgrade">
 	<name>Admintools</name>
-	<creationDate>2019-05-28</creationDate>
+	<creationDate>2020-01-03</creationDate>
 	<author>Nicholas K. Dionysopoulos</author>
 	<authorEmail>nicholas@akeebabackup.com</authorEmail>
 	<authorUrl>http://www.akeebabackup.com</authorUrl>
 	<copyright>Copyright (c)2010-2019 Nicholas K. Dionysopoulos</copyright>
 	<license>This component in released under the GNU/GPL v3 or later license</license>
-	<version>5.3.2</version>
+	<version>5.5.0</version>
 	<description>Security and utilitarian tools for Joomla! site administrators</description>
 
 	<!-- Public front end files -->
@@ -35,11 +41,9 @@
 			<folder>assets</folder>
 			<folder>Controller</folder>
 			<folder>Dispatcher</folder>
-			<folder>engine</folder>
 			<folder>Helper</folder>
 			<folder>media</folder>
 			<folder>Model</folder>
-			<folder>platform</folder>
 			<folder>sql</folder>
 			<folder>Toolbar</folder>
 			<folder>View</folder>

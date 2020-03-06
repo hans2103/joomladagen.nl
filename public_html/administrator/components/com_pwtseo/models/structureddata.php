@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -56,54 +56,6 @@ class PWTSEOModelStructuredData extends AdminModel
 		if (empty($form))
 		{
 			return false;
-		}
-
-		// We remove fields and options depending on our context
-		//$form = $this->clearContextLimitedOptions($form);
-
-		return $form;
-	}
-
-	/**
-	 * Abstract method for getting the form from the model.
-	 *
-	 * @param   Form $form The Form object to clear
-	 *
-	 * @return  Form|boolean  A Form object on success, false on failure
-	 *
-	 * @since   1.3.0
-	 */
-	private function clearContextLimitedOptions($form)
-	{
-		$context = $this->getState('pwtseo.context');
-
-		foreach ($form->getFieldSet() as $field)
-		{
-			if (method_exists($field, 'getAttribute') === false)
-			{
-				continue;
-			}
-
-			$fieldContext = explode(',', $field->getAttribute('context'));
-
-			if (is_array($fieldContext) && !empty($fieldContext[0]))
-			{
-				if (!in_array($context, $fieldContext))
-				{
-					$form->removeField($field->fieldname, $field->group);
-				}
-			}
-			else
-			{
-				// Recurse into subforms
-				if ($field->formsource)
-				{
-					$childForm = new Form($field->fieldname);
-					$childForm->load($field->formsource);
-
-					$field->formsource = $this->clearContextLimitedOptions($childForm)->getXml();
-				}
-			}
 		}
 
 		return $form;

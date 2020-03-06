@@ -29,7 +29,9 @@ JText::script('COM_RSFORM_ARE_YOU_SURE_YOU_WANT_TO_CLEAR');
 			<th width="1%" nowrap="nowrap" class="title"><?php echo JText::_('RSFP_SUBMISSIONS'); ?></th>
             <?php } ?>
 			<th class="title"><?php echo JText::_('RSFP_TOOLS'); ?></th>
+			<?php if (!$this->disable_multilanguage) { ?>
 			<th class="title" width="1%" nowrap="nowrap"><?php echo JText::_('RSFP_LAST_LANGUAGE'); ?></th>
+			<?php } ?>
 			<th width="1%" nowrap="nowrap" class="title"><?php echo JHtml::_('grid.sort', JText::_('RSFP_FORM_ID'), 'FormId', $this->sortOrder, $this->sortColumn, 'forms.manage'); ?></th>
 		</tr>
 		</thead>
@@ -49,9 +51,9 @@ JText::script('COM_RSFORM_ARE_YOU_SURE_YOU_WANT_TO_CLEAR');
 			<td width="1%" nowrap="nowrap" align="center"><?php echo JHtml::_('jgrid.published', $row->published, $i, 'forms.'); ?></td>
             <?php if ($this->user->authorise('submissions.manage', 'com_rsform')) { ?>
 			<td width="1%" nowrap="nowrap">
-				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_TODAY_SUBMISSIONS', $row->_todaySubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>"><i class="rsficon rsficon-calendar"></i> <?php echo $row->_todaySubmissions; ?></a></span>
-				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_MONTH_SUBMISSIONS', $row->_monthSubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>"><i class="rsficon rsficon-calendar"></i> <?php echo $row->_monthSubmissions; ?></a></span>
-				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_ALL_SUBMISSIONS', $row->_allSubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>"><i class="rsficon rsficon-calendar"></i> <?php echo $row->_allSubmissions; ?></a></span>
+				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_TODAY_SUBMISSIONS', $row->_todaySubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>&amp;dateFrom=<?php echo $this->today; ?>"><i class="rsficon rsficon-calendar"></i> <?php echo $row->_todaySubmissions; ?></a></span>
+				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_MONTH_SUBMISSIONS', $row->_monthSubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>&amp;dateFrom=<?php echo $this->month; ?>"><i class="rsficon rsficon-calendar"></i> <?php echo $row->_monthSubmissions; ?></a></span>
+				<span class="<?php echo RSFormProHelper::getTooltipClass(); ?>" title="<?php echo JText::sprintf('RSFP_ALL_SUBMISSIONS', $row->_allSubmissions); ?>"><a href="index.php?option=com_rsform&amp;view=submissions&amp;formId=<?php echo $row->FormId; ?>&amp;dateFrom="><i class="rsficon rsficon-calendar"></i> <?php echo $row->_allSubmissions; ?></a></span>
 			</td>
             <?php } ?>
 			<td align="center" nowrap="nowrap">
@@ -71,7 +73,9 @@ JText::script('COM_RSFORM_ARE_YOU_SURE_YOU_WANT_TO_CLEAR');
 					</ul>
 				</div>
 			</td>
+			<?php if (!$this->disable_multilanguage) { ?>
 			<td width="1%" nowrap="nowrap"><?php echo $this->escape(RSFormProHelper::getCurrentLanguage($row->FormId)); ?></td>
+			<?php } ?>
 			<td width="1%" nowrap="nowrap"><?php echo $row->FormId; ?></td>
 		</tr>
 	<?php

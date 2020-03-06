@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .pwt-component {
-  /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+  /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
   /* Document
    ========================================================================== */
   /**
@@ -11,6 +11,9 @@
    ========================================================================== */
   /**
  * Remove the margin in all browsers.
+ */
+  /**
+ * Render the `main` element consistently in IE.
  */
   /**
  * Correct the font size and margin on `h1` elements within `section` and
@@ -311,6 +314,10 @@
   margin: 0;
 }
 
+.pwt-component main {
+  display: block;
+}
+
 .pwt-component h1 {
   font-size: 2em;
   margin: 0.67em 0;
@@ -345,14 +352,11 @@
   /* 2 */
 }
 
-.pwt-component b,
-.pwt-component strong {
+.pwt-component b, .pwt-component strong {
   font-weight: bolder;
 }
 
-.pwt-component code,
-.pwt-component kbd,
-.pwt-component samp {
+.pwt-component code, .pwt-component kbd, .pwt-component samp {
   font-family: monospace, monospace;
   /* 1 */
   font-size: 1em;
@@ -363,8 +367,7 @@
   font-size: 80%;
 }
 
-.pwt-component sub,
-.pwt-component sup {
+.pwt-component sub, .pwt-component sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
@@ -383,11 +386,7 @@
   border-style: none;
 }
 
-.pwt-component button,
-.pwt-component input,
-.pwt-component optgroup,
-.pwt-component select,
-.pwt-component textarea {
+.pwt-component button, .pwt-component input, .pwt-component optgroup, .pwt-component select, .pwt-component textarea {
   font-family: inherit;
   /* 1 */
   font-size: 100%;
@@ -398,37 +397,26 @@
   /* 2 */
 }
 
-.pwt-component button,
-.pwt-component input {
+.pwt-component button, .pwt-component input {
   /* 1 */
   overflow: visible;
 }
 
-.pwt-component button,
-.pwt-component select {
+.pwt-component button, .pwt-component select {
   /* 1 */
   text-transform: none;
 }
 
-.pwt-component button,
-.pwt-component [type="button"],
-.pwt-component [type="reset"],
-.pwt-component [type="submit"] {
+.pwt-component button, .pwt-component [type="button"], .pwt-component [type="reset"], .pwt-component [type="submit"] {
   -webkit-appearance: button;
 }
 
-.pwt-component button::-moz-focus-inner,
-.pwt-component [type="button"]::-moz-focus-inner,
-.pwt-component [type="reset"]::-moz-focus-inner,
-.pwt-component [type="submit"]::-moz-focus-inner {
+.pwt-component button::-moz-focus-inner, .pwt-component [type="button"]::-moz-focus-inner, .pwt-component [type="reset"]::-moz-focus-inner, .pwt-component [type="submit"]::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
 
-.pwt-component button:-moz-focusring,
-.pwt-component [type="button"]:-moz-focusring,
-.pwt-component [type="reset"]:-moz-focusring,
-.pwt-component [type="submit"]:-moz-focusring {
+.pwt-component button:-moz-focusring, .pwt-component [type="button"]:-moz-focusring, .pwt-component [type="reset"]:-moz-focusring, .pwt-component [type="submit"]:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 
@@ -459,16 +447,14 @@
   overflow: auto;
 }
 
-.pwt-component [type="checkbox"],
-.pwt-component [type="radio"] {
+.pwt-component [type="checkbox"], .pwt-component [type="radio"] {
   box-sizing: border-box;
   /* 1 */
   padding: 0;
   /* 2 */
 }
 
-.pwt-component [type="number"]::-webkit-inner-spin-button,
-.pwt-component [type="number"]::-webkit-outer-spin-button {
+.pwt-component [type="number"]::-webkit-inner-spin-button, .pwt-component [type="number"]::-webkit-outer-spin-button {
   height: auto;
 }
 
@@ -498,11 +484,7 @@
   display: list-item;
 }
 
-.pwt-component template {
-  display: none;
-}
-
-.pwt-component [hidden] {
+.pwt-component template, .pwt-component [hidden] {
   display: none;
 }
 
@@ -521,7 +503,7 @@
   /* 1 */
   margin-top: 0;
   /* 2 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 3 */
 }
 
@@ -535,7 +517,7 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  color: #222222;
+  color: #222;
 }
 
 .pwt-component fieldset {
@@ -546,7 +528,7 @@
 }
 
 .pwt-component fieldset legend {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .pwt-component fieldset legend:last-child {
@@ -557,7 +539,7 @@
   margin-top: 0;
   margin-right: 0;
   margin-left: 0;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .pwt-component figure:last-child {
@@ -594,7 +576,7 @@
 .pwt-component ul, .pwt-component ol {
   margin-top: 0;
   /* 1 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 2 */
 }
 
@@ -605,7 +587,7 @@
 .pwt-component p {
   margin-top: 0;
   /* 1 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 2 */
 }
 
@@ -941,7 +923,8 @@
   margin-bottom: 0;
 }
 
-.pwt-component .choices.is-disabled .choices__inner, .pwt-component .choices.is-disabled .choices__input {
+.pwt-component .choices.is-disabled .choices__inner,
+.pwt-component .choices.is-disabled .choices__input {
   background-color: #EAEAEA;
   cursor: not-allowed;
   -webkit-user-select: none;
@@ -972,10 +955,9 @@
 }
 
 .pwt-component .choices[data-type*="select-one"] .choices__button {
-  background-image: url("../../icons/cross-inverse.svg");
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMSAyMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMDAwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yLjU5Mi4wNDRsMTguMzY0IDE4LjM2NC0yLjU0OCAyLjU0OEwuMDQ0IDIuNTkyeiIvPjxwYXRoIGQ9Ik0wIDE4LjM2NEwxOC4zNjQgMGwyLjU0OCAyLjU0OEwyLjU0OCAyMC45MTJ6Ii8+PC9nPjwvc3ZnPg==);
   padding: 0;
   background-size: 8px;
-  height: 100%;
   position: absolute;
   top: 50%;
   right: 0;
@@ -1026,11 +1008,13 @@
   margin-right: 0;
 }
 
-.pwt-component .choices[data-type*="select-multiple"] .choices__inner, .pwt-component .choices[data-type*="text"] .choices__inner {
+.pwt-component .choices[data-type*="select-multiple"] .choices__inner,
+.pwt-component .choices[data-type*="text"] .choices__inner {
   cursor: text;
 }
 
-.pwt-component .choices[data-type*="select-multiple"] .choices__button, .pwt-component .choices[data-type*="text"] .choices__button {
+.pwt-component .choices[data-type*="select-multiple"] .choices__button,
+.pwt-component .choices[data-type*="text"] .choices__button {
   position: relative;
   display: inline-block;
   margin-top: 0;
@@ -1039,14 +1023,17 @@
   margin-left: 8px;
   padding-left: 16px;
   border-left: 1px solid #008fa1;
-  background-image: url("../../icons/cross.svg");
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjEiIGhlaWdodD0iMjEiIHZpZXdCb3g9IjAgMCAyMSAyMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjRkZGIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yLjU5Mi4wNDRsMTguMzY0IDE4LjM2NC0yLjU0OCAyLjU0OEwuMDQ0IDIuNTkyeiIvPjxwYXRoIGQ9Ik0wIDE4LjM2NEwxOC4zNjQgMGwyLjU0OCAyLjU0OEwyLjU0OCAyMC45MTJ6Ii8+PC9nPjwvc3ZnPg==);
   background-size: 8px;
   width: 8px;
   line-height: 1;
   opacity: .75;
+  border-radius: 0;
 }
 
-.pwt-component .choices[data-type*="select-multiple"] .choices__button:hover, .pwt-component .choices[data-type*="select-multiple"] .choices__button:focus, .pwt-component .choices[data-type*="text"] .choices__button:hover, .pwt-component .choices[data-type*="text"] .choices__button:focus {
+.pwt-component .choices[data-type*="select-multiple"] .choices__button:hover, .pwt-component .choices[data-type*="select-multiple"] .choices__button:focus,
+.pwt-component .choices[data-type*="text"] .choices__button:hover,
+.pwt-component .choices[data-type*="text"] .choices__button:focus {
   opacity: 1;
 }
 
@@ -1063,15 +1050,16 @@
   overflow: hidden;
 }
 
-.is-focused .pwt-component .choices__inner, .is-open .pwt-component .choices__inner {
+.pwt-component .is-focused .choices__inner,
+.pwt-component .is-open .choices__inner {
   border-color: #b7b7b7;
 }
 
-.is-open .pwt-component .choices__inner {
+.pwt-component .is-open .choices__inner {
   border-radius: 2.5px 2.5px 0 0;
 }
 
-.is-flipped.is-open .pwt-component .choices__inner {
+.pwt-component .is-flipped.is-open .choices__inner {
   border-radius: 0 0 2.5px 2.5px;
 }
 
@@ -1087,7 +1075,7 @@
   width: 100%;
 }
 
-[dir="rtl"] .pwt-component .choices__list--single {
+.pwt-component [dir="rtl"] .choices__list--single {
   padding-right: 4px;
   padding-left: 16px;
 }
@@ -1119,7 +1107,7 @@
   padding-right: 5px;
 }
 
-[dir="rtl"] .pwt-component .choices__list--multiple .choices__item {
+.pwt-component [dir="rtl"] .choices__list--multiple .choices__item {
   margin-right: 0;
   margin-left: 3.75px;
 }
@@ -1129,7 +1117,7 @@
   border: 1px solid #008fa1;
 }
 
-.is-disabled .pwt-component .choices__list--multiple .choices__item {
+.pwt-component .is-disabled .choices__list--multiple .choices__item {
   background-color: #aaaaaa;
   border: 1px solid #919191;
 }
@@ -1153,11 +1141,11 @@
   display: block;
 }
 
-.is-open .pwt-component .choices__list--dropdown {
+.pwt-component .is-open .choices__list--dropdown {
   border-color: #b7b7b7;
 }
 
-.is-flipped .pwt-component .choices__list--dropdown {
+.pwt-component .is-flipped .choices__list--dropdown {
   top: auto;
   bottom: 100%;
   margin-top: 0;
@@ -1179,7 +1167,7 @@
   font-size: 14px;
 }
 
-[dir="rtl"] .pwt-component .choices__list--dropdown .choices__item {
+.pwt-component [dir="rtl"] .choices__list--dropdown .choices__item {
   text-align: right;
 }
 
@@ -1196,12 +1184,12 @@
     top: 50%;
     transform: translateY(-50%);
   }
-  [dir="rtl"] .pwt-component .choices__list--dropdown .choices__item--selectable {
+  .pwt-component [dir="rtl"] .choices__list--dropdown .choices__item--selectable {
     text-align: right;
     padding-left: 100px;
     padding-right: 10px;
   }
-  [dir="rtl"] .pwt-component .choices__list--dropdown .choices__item--selectable:after {
+  .pwt-component [dir="rtl"] .choices__list--dropdown .choices__item--selectable:after {
     right: auto;
     left: 10px;
   }
@@ -1236,8 +1224,8 @@
   font-weight: 600;
   font-size: 12px;
   padding: 10px;
-  border-bottom: 1px solid #f7f6f6;
-  color: #807f7f;
+  border-bottom: 1px solid #f7f7f7;
+  color: gray;
 }
 
 .pwt-component .choices__button {
@@ -1272,13 +1260,19 @@
   outline: 0;
 }
 
-[dir="rtl"] .pwt-component .choices__input {
+.pwt-component [dir="rtl"] .choices__input {
   padding-right: 2px;
   padding-left: 0;
 }
 
 .pwt-component .choices__placeholder {
   opacity: .5;
+}
+
+.pwt-component .choices__input.is-hidden,
+.pwt-component .choices[data-type*="select-one"] .choices__input.is-hidden,
+.pwt-component .choices[data-type*="select-multiple"] .choices__input.is-hidden {
+  display: none;
 }
 
 .pwt-component a {
@@ -1296,7 +1290,7 @@
   /* 1 */
   margin-top: 0;
   /* 2 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 3 */
 }
 
@@ -1310,7 +1304,7 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  color: #222222;
+  color: #222;
 }
 
 .pwt-component fieldset {
@@ -1321,7 +1315,7 @@
 }
 
 .pwt-component fieldset legend {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .pwt-component fieldset legend:last-child {
@@ -1332,7 +1326,7 @@
   margin-top: 0;
   margin-right: 0;
   margin-left: 0;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .pwt-component figure:last-child {
@@ -1369,7 +1363,7 @@
 .pwt-component ul, .pwt-component ol {
   margin-top: 0;
   /* 1 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 2 */
 }
 
@@ -1380,7 +1374,7 @@
 .pwt-component p {
   margin-top: 0;
   /* 1 */
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   /* 2 */
 }
 
@@ -1553,11 +1547,11 @@
 }
 
 .pwt-component .choices__list--multiple .choices__item {
+  padding: 2px 6px;
+  margin: 0 4px;
   background: #328cdb;
   border: 1px solid #2172b9;
   border-radius: 8px;
-  margin: 0 4px;
-  padding: 2px 6px;
 }
 
 .pwt-component .choices__list--multiple .choices__item:first-child {
@@ -1575,18 +1569,18 @@
 
 .pwt-component .choices__input[type="text"] {
   display: block;
+  width: 100%;
+  height: auto;
   margin: 8px 0 4px;
   line-height: 26px;
-  height: auto;
-  width: 100%;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  border: 1px solid #dddddd;
 }
 
 .pwt-component .choices__list--multiple .choices__button.choices__button {
-  border: none;
   margin-left: 0;
   vertical-align: top;
+  border: none;
   background-image: url("data:image/svg+xml,%3Csvg style='fill: white;' xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24'%3E%3Cg transform='matrix(1.29296,0,0,1.29296,-2.22261,-7.39446)'%3E%3Cpath d='M20.3 20.7C20.3 21.1 20.1 21.4 19.8 21.7L17.7 23.8C17.4 24.1 17.1 24.3 16.7 24.3 16.2 24.3 15.9 24.1 15.6 23.8L11 19.2 6.4 23.8C6.1 24.1 5.8 24.3 5.3 24.3 4.9 24.3 4.6 24.1 4.3 23.8L2.2 21.7C1.9 21.4 1.7 21.1 1.7 20.7 1.7 20.2 1.9 19.9 2.2 19.6L6.8 15 2.2 10.4C1.9 10.1 1.7 9.8 1.7 9.3 1.7 8.9 1.9 8.6 2.2 8.3L4.3 6.2C4.6 5.9 4.9 5.7 5.3 5.7 5.8 5.7 6.1 5.9 6.4 6.2L11 10.8 15.6 6.2C15.9 5.9 16.2 5.7 16.7 5.7 17.1 5.7 17.4 5.9 17.7 6.2L19.8 8.3C20.1 8.6 20.3 8.9 20.3 9.3 20.3 9.8 20.1 10.1 19.8 10.4L15.2 15 19.8 19.6C20.1 19.9 20.3 20.2 20.3 20.7L20.3 20.7Z'/%3E%3C/g%3E%3C/svg%3E");
   background-position: center;
   background-repeat: no-repeat;
@@ -1601,21 +1595,21 @@
   padding-right: 10px;
 }
 
-.pwt-component .choices__list--dropdown .choices__item--selectable.choices__item--selectable:after {
+.pwt-component .choices__list--dropdown .choices__item--selectable.choices__item--selectable::after {
   display: none;
 }
 
-.pwt-component .choices[data-type*="select-one"]:after {
+.pwt-component .choices[data-type*="select-one"]::after {
   right: 8px;
 }
 
 .pwt-component .pwt-cropper-wrapper {
   margin-bottom: 8px;
-  height: 33vh;
   display: -ms-flexbox;
   display: flex;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
+  height: 33vh;
 }
 
 .pwt-component .pwt-cropper-wrapper:last-child {
@@ -1626,8 +1620,8 @@
   position: relative;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.25);
 }
 
 .pwt-component .cropper-container img:not([src]) {
@@ -1646,16 +1640,16 @@
   right: 0;
   bottom: 0;
   left: 0;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  padding: 0;
+  margin: 0;
   overflow: hidden;
-  box-sizing: border-box;
 }
 
 /**
@@ -1664,18 +1658,21 @@
  * The only parent should be the <form>
  */
 .pwt-component {
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 14px;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
+  -ms-flex-direction: column;
+      flex-direction: column;
   overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
-.pwt-component, .pwt-component *, .pwt-component *:before, .pwt-component *:after {
+.pwt-component,
+.pwt-component *,
+.pwt-component *::before,
+.pwt-component *::after {
   box-sizing: inherit;
 }
 
@@ -1683,10 +1680,10 @@
 .pwt-id {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
+  -ms-flex-direction: column;
+      flex-direction: column;
   overflow: hidden;
 }
 
@@ -1694,9 +1691,9 @@
 .pwt-header {
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
-  background: #f3f3f3;
   padding: 16px 16px 0;
-  box-shadow: inset 0 -1px 0 #dddddd;
+  background: #f3f3f3;
+  box-shadow: inset 0 -1px 0 #ddd;
 }
 
 /* Body */
@@ -1705,8 +1702,8 @@
   display: flex;
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
-  overflow: auto;
   padding: 16px 16px 0;
+  overflow: auto;
   background: white;
 }
 
@@ -1714,10 +1711,10 @@
 .pwt-footer {
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
+  padding: 16px;
   margin-top: 16px;
   background: #f3f3f3;
-  padding: 16px;
-  box-shadow: inset 0 1px 0 #dddddd;
+  box-shadow: inset 0 1px 0 #ddd;
 }
 
 .pwt-footer .pwt-button {
@@ -1732,6 +1729,7 @@
     display: flex;
     -ms-flex: 1 0 auto;
         flex: 1 0 auto;
+    overflow: hidden;
   }
 }
 
@@ -1754,10 +1752,10 @@
 
 @media screen and (min-width: 560px) {
   .pwt-grid__sub {
-    margin-top: 0;
     -ms-flex: 0 0;
         flex: 0 0;
     padding-left: 16px;
+    margin-top: 0;
   }
 }
 
@@ -1768,41 +1766,51 @@
   }
 }
 
+.pwt-grid__content {
+  width: 100%;
+  /* IE fix so images will not escape their parent container anymore */
+}
+
 /* Wrapper */
 .pwt-wrapper {
-  overflow: auto;
-  height: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.pwt-wrapper > label {
+  -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
 }
 
 .pwt-canvas-wrapper {
-  height: 100%;
-  width: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 /* Breadcrumb */
 .pwt-breadcrumb {
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
-  background: #f3f3f3;
-  border-top: 1px solid #dddddd;
-  border-bottom: 1px solid #dddddd;
   padding: 7px 8px;
   margin-bottom: 16px;
+  background: #f3f3f3;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .pwt-breadcrumb a {
   display: inline-block;
-  vertical-align: middle;
-  line-height: 24px;
   margin-right: 8px;
+  line-height: 24px;
+  vertical-align: middle;
   cursor: pointer;
 }
 
@@ -1827,16 +1835,16 @@
 
 /* Elements inside button groups that are not buttons */
 .pwt-button-group__addon {
-  border-radius: 4px 0 0 4px;
   padding: 0 8px;
   background: #f3f3f3;
   border: 1px solid #dad9d9;
+  border-radius: 4px 0 0 4px;
 }
 
 /* Button */
 .pwt-button-group .pwt-button {
-  padding-left: 8px;
   padding-right: 8px;
+  padding-left: 8px;
   margin-left: -1px;
 }
 
@@ -1871,19 +1879,19 @@
  */
 .pwt-dropper {
   position: relative;
-  -ms-flex: 1 1 auto;
-      flex: 1 1 auto;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
   -ms-flex-line-pack: center;
       align-content: center;
   -ms-flex-align: center;
       align-items: center;
   -ms-flex-pack: center;
       justify-content: center;
-  background: #f9f9f9;
-  border: 1px solid #dddddd;
   overflow: hidden;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
   margin-bottom: 8px;
 }
 
@@ -1892,9 +1900,9 @@
 }
 
 .pwt-dropper.hover {
+  background: #e0edf9;
   outline: 3px dashed #328cdb;
   outline-offset: -1px;
-  background: #e0edf9;
 }
 
 .pwt-dropper .pwt-dropper__content {
@@ -1903,8 +1911,6 @@
   right: 16px;
   bottom: 16px;
   left: 16px;
-  text-align: center;
-  overflow: hidden;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
@@ -1915,6 +1921,8 @@
       align-items: center;
   -ms-flex-pack: center;
       justify-content: center;
+  overflow: hidden;
+  text-align: center;
 }
 
 .pwt-dropper p {
@@ -1936,16 +1944,16 @@
 .pwt-dropper__support {
   font-size: 16px;
   line-height: 24px;
-  opacity: 0.8;
+  opacity: .8;
 }
 
 /* Filepicker */
 .pwt-filepicker {
-  overflow: hidden;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
+  overflow: hidden;
 }
 
 .pwt-filepicker__pages {
@@ -1956,8 +1964,8 @@
 .pwt-filepicker__content {
   -ms-flex: 1 1 auto;
       flex: 1 1 auto;
-  overflow: auto;
   padding-bottom: 16px;
+  overflow: auto;
 }
 
 /**
@@ -1998,14 +2006,14 @@
 
 .pwt-form-control.pwt-form-control {
   width: 100%;
-  border: 1px solid #dddddd;
-  background: white;
-  box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.05);
+  height: auto;
   padding: 3px 8px;
   font-size: 16px;
   line-height: 24px;
-  height: auto;
+  background: white;
+  border: 1px solid #ddd;
   border-radius: 4px;
+  box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.05);
   margin-bottom: 16px;
 }
 
@@ -2014,8 +2022,8 @@
 }
 
 .pwt-form-control.pwt-form-control:focus {
-  outline: none;
   border-color: #328cdb;
+  outline: none;
 }
 
 /**
@@ -2025,19 +2033,19 @@
  * This message spans the entire parent and holds it's content in the middle
  */
 .pwt-fulltab-message {
-  background: #f9f9f9;
-  border: 1px solid #dddddd;
-  width: 100%;
-  height: 100%;
-  text-align: center;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
-  -ms-flex-pack: center;
-      justify-content: center;
   -ms-flex-align: center;
       align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
 }
 
 .pwt-fulltab-message p {
@@ -2077,8 +2085,8 @@
   display: flex;
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
-  padding: 8px;
   width: 144px;
+  padding: 8px;
   overflow: hidden;
 }
 
@@ -2086,18 +2094,18 @@
   position: relative;
   display: block;
   width: 100%;
-  border: 1px solid #dddddd;
-  background: radial-gradient(circle, white 0%, #f3f3f3 100%);
-  transition: all 200ms ease-in-out;
-  background: white;
   cursor: pointer;
+  background: radial-gradient(circle, white 0%, #f3f3f3 100%);
+  background: white;
+  border: 1px solid #ddd;
+  transition: all 200ms ease-in-out;
 }
 
-.pwt-gallery__item a:before {
+.pwt-gallery__item a::before {
   display: block;
-  content: " ";
   width: 100%;
   padding-top: 100%;
+  content: " ";
 }
 
 .pwt-gallery__item a.is-selected {
@@ -2125,44 +2133,44 @@
   left: 1px;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
   -ms-flex-align: center;
       align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
   overflow: hidden;
 }
 
 .pwt-gallery__item__content {
-  padding-left: 8px;
   padding-right: 8px;
+  padding-left: 8px;
 }
 
 .pwt-gallery__item__title {
+  max-width: 100%;
   margin-left: 4px;
   overflow: hidden;
-  max-width: 100%;
   text-overflow: ellipsis;
 }
 
 .pwt-gallery__item__center {
-  -ms-flex-negative: 1;
-      flex-shrink: 1;
-  height: 100%;
-  width: 100%;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: center;
-      justify-content: center;
+  -ms-flex-negative: 1;
+      flex-shrink: 1;
   -ms-flex-align: center;
       align-items: center;
+  -ms-flex-pack: center;
+      justify-content: center;
+  width: 100%;
+  height: 100%;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC");
 }
 
 .pwt-gallery__item__center img {
-  vertical-align: middle;
-  max-width: 100%;
   -ms-flex: 1 1;
       flex: 1 1;
+  max-width: 100%;
+  vertical-align: middle;
 }
 
 .pwt-gallery__item__center .is-landscape {
@@ -2174,13 +2182,13 @@
 .pwt-gallery__item__imagename {
   position: absolute;
   bottom: 0;
-  background-color: white;
-  overflow: hidden;
   width: 100%;
   max-width: 100%;
-  text-overflow: ellipsis;
+  overflow: hidden;
   font-size: small;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: white;
 }
 
 /* When CSS Grid is supported */
@@ -2195,7 +2203,7 @@
 }
 
 /* Fixed height for folder */
-.pwt-gallery__items--folders a:before {
+.pwt-gallery__items--folders a::before {
   padding-top: 56px;
 }
 
@@ -2205,25 +2213,25 @@
 }
 
 .pwt-image-preview-holder .pwt-image-preview {
-  padding: 1px;
-  background: white;
   min-width: 200px;
   min-height: 48px;
+  padding: 1px;
+  background: white;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC");
 }
 
 .pwt-image-preview {
-  margin-bottom: 8px;
+  display: -ms-flexbox;
+  display: flex;
   min-width: 80px;
   min-height: 80px;
+  margin-bottom: 8px;
   background-color: #eee;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background-image: url("data:image/svg+xml,%3Csvg style='fill: %23444;' xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cg transform='matrix(0.8,0,0,0.8,1.08696e-06,0.800001)'%3E%3Cpath d='M10 9C10 9.8 9.7 10.5 9.1 11.1 8.5 11.7 7.8 12 7 12 6.2 12 5.5 11.7 4.9 11.1 4.3 10.5 4 9.8 4 9 4 8.2 4.3 7.5 4.9 6.9 5.5 6.3 6.2 6 7 6 7.8 6 8.5 6.3 9.1 6.9 9.7 7.5 10 8.2 10 9ZM26 15L26 22 4 22 4 19 9 14 11.5 16.5 19.5 8.5 26 15ZM27.5 4L2.5 4C2.4 4 2.2 4 2.1 4.1 2 4.2 2 4.4 2 4.5L2 23.5C2 23.6 2 23.8 2.1 23.9 2.2 24 2.4 24 2.5 24L27.5 24C27.6 24 27.8 24 27.9 23.9 28 23.8 28 23.6 28 23.5L28 4.5C28 4.4 28 4.2 27.9 4.1 27.8 4 27.6 4 27.5 4L27.5 4ZM30 4.5L30 23.5C30 24.2 29.8 24.8 29.3 25.3 28.8 25.8 28.2 26 27.5 26L2.5 26C1.8 26 1.2 25.8 0.7 25.3 0.2 24.8 0 24.2 0 23.5L0 4.5C0 3.8 0.2 3.2 0.7 2.7 1.2 2.2 1.8 2 2.5 2L27.5 2C28.2 2 28.8 2.2 29.3 2.7 29.8 3.2 30 3.8 30 4.5Z'/%3E%3C/g%3E%3C/svg%3E");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 32px 32px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  display: -ms-flexbox;
-  display: flex;
 }
 
 .pwt-image-preview img {
@@ -2257,9 +2265,9 @@
  */
 .pwt-input-group {
   display: block;
-  max-width: 100%;
   -ms-flex-negative: 0;
       flex-shrink: 0;
+  max-width: 100%;
   margin-bottom: 16px;
 }
 
@@ -2270,20 +2278,20 @@
 .pwt-input-group__addon,
 .pwt-input-group__input {
   display: block;
-  white-space: nowrap;
   -ms-flex: 0 0 auto;
       flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .pwt-input-group__addon {
-  border: 1px solid #dddddd;
-  background: #f9f9f9;
   padding: 3px 8px;
+  margin: 0;
   line-height: 24px;
-  border-radius: 4px;
   white-space: nowrap;
   vertical-align: middle;
-  margin: 0;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 label.pwt-input-group__addon {
@@ -2301,6 +2309,10 @@ label.pwt-input-group__addon {
 .pwt-input-group__input {
   -ms-flex-positive: 1;
       flex-grow: 1;
+}
+
+.pwt-input-group__input .pwt-form-control {
+  height: 100%;
 }
 
 /* Radius settings */
@@ -2378,8 +2390,8 @@ label.pwt-input-group__addon {
 .pwt-input-group__row:first-child:not(:only-child) .pwt-input-group__addon,
 .pwt-input-group__row:first-child:not(:only-child) .pwt-input-group__input .pwt-form-control,
 .pwt-input-group__row:first-child:not(:only-child) .pwt-input-group__choices .choices__inner {
-  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .pwt-input-group__row:last-child:not(:only-child) .pwt-input-group__addon,
@@ -2436,10 +2448,10 @@ label.pwt-input-group__addon {
 
 /* Rows */
 .pwt-input-group__row {
-  -ms-flex: 0 0 auto;
-      flex: 0 0 auto;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex: 0 0 auto;
+      flex: 0 0 auto;
 }
 
 /* Choices */
@@ -2454,8 +2466,8 @@ label.pwt-input-group__addon {
 }
 
 .pwt-input-group__choices .choices__inner.choices__inner.choices__inner {
-  padding: 0;
   min-height: 32px;
+  padding: 0;
 }
 
 .pwt-input-group__choices .choices__list--single {
@@ -2475,13 +2487,13 @@ label.pwt-input-group__addon {
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling {
   position: fixed !important;
+  top: 1% !important;
+  left: 1% !important;
   box-sizing: border-box;
   width: 98% !important;
   height: 98% !important;
-  top: 1% !important;
-  left: 1% !important;
-  border: none !important;
   padding: 0 !important;
+  border: none !important;
 }
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling iframe {
@@ -2491,30 +2503,30 @@ label.pwt-input-group__addon {
 
 @media screen and (min-width: 560px) {
   .pwt-custom-modal-styling.pwt-custom-modal-styling {
-    width: 95% !important;
-    height: 95% !important;
     top: 2.5% !important;
     left: 2.5% !important;
+    width: 95% !important;
+    height: 95% !important;
   }
 }
 
 @media screen and (min-width: 768px) {
   .pwt-custom-modal-styling.pwt-custom-modal-styling {
-    width: 90% !important;
-    height: 90% !important;
     top: 5% !important;
     left: 5% !important;
+    width: 90% !important;
+    height: 90% !important;
   }
 }
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling .mce-window-head {
   position: relative;
   z-index: 99;
+  display: none;
   height: 0;
   padding: 0;
   margin: 0;
   border: none;
-  display: none;
 }
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling .mce-title,
@@ -2525,8 +2537,8 @@ label.pwt-input-group__addon {
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling .mce-reset,
 .pwt-custom-modal-styling.pwt-custom-modal-styling .mce-container-body {
-  height: 100% !important;
   width: 100% !important;
+  height: 100% !important;
 }
 
 .pwt-custom-modal-styling.pwt-custom-modal-styling #sbox-btn-close {
@@ -2535,14 +2547,14 @@ label.pwt-input-group__addon {
 
 /* Message */
 .pwt-message {
-  border-radius: 4px;
-  background: #27ae60;
-  color: white;
+  display: none;
   min-height: 32px;
-  line-height: 24px;
   padding: 4px 8px;
   margin-bottom: 8px;
-  display: none;
+  line-height: 24px;
+  color: white;
+  background: #27ae60;
+  border-radius: 4px;
 }
 
 /* needed for old browsers */
@@ -2560,8 +2572,8 @@ dialog.pwt-modal {
 .pwt-modal-overlay {
   position: fixed;
   top: 0;
-  bottom: 0;
   right: 0;
+  bottom: 0;
   left: 0;
   z-index: 9999;
   background: rgba(0, 0, 0, 0.6);
@@ -2570,43 +2582,43 @@ dialog.pwt-modal {
 /* modal */
 .pwt-modal {
   position: fixed;
-  margin: 0;
+  top: 1%;
+  left: 1%;
+  z-index: 99999;
   width: 98%;
   height: 98%;
-  left: 1%;
-  top: 1%;
-  background: #fff;
-  z-index: 99999;
   padding: 0;
+  margin: 0;
+  background: #fff;
 }
 
 @media screen and (min-width: 560px) {
   .pwt-modal {
-    width: 95%;
-    height: 95%;
     top: 2.5%;
     left: 2.5%;
+    width: 95%;
+    height: 95%;
   }
 }
 
 @media screen and (min-width: 768px) {
   .pwt-modal {
-    width: 90%;
-    height: 90%;
     top: 5%;
     left: 5%;
+    width: 90%;
+    height: 90%;
   }
 }
 
 .pwt-modal > div,
 .pwt-modal .pwt-modal__content,
 .pwt-modal .pwt-modal__content > div {
-  width: 100%;
-  height: 100%;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-direction: column;
       flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .pwt-modal__content iframe {
@@ -2625,8 +2637,8 @@ dialog.pwt-modal {
   display: inline-block;
   width: 32px;
   height: 32px;
-  text-align: center;
   line-height: 32px;
+  text-align: center;
   vertical-align: middle;
   background: white;
   border: 1px solid #ccc;
@@ -2634,11 +2646,11 @@ dialog.pwt-modal {
 }
 
 .pwt-pagination__pages {
+  padding: 7px 8px;
   margin-bottom: 0;
   background: #f3f3f3;
-  border-top: 1px solid #dddddd;
-  border-bottom: 1px solid #dddddd;
-  padding: 7px 8px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 /* System message */
@@ -2646,13 +2658,13 @@ dialog.pwt-modal {
   position: fixed;
   top: -1px;
   right: -1px;
+  bottom: auto;
+  left: 10%;
   z-index: 99;
   width: 80%;
-  left: 10%;
-  bottom: auto;
   height: auto;
-  margin: 0;
   padding: 0;
+  margin: 0;
   animation-name: slideUp;
   animation-duration: 1s;
   animation-delay: 8s;
@@ -2660,30 +2672,30 @@ dialog.pwt-modal {
 }
 
 .pwt-image-styling #system-message-container#system-message-container .alert {
+  padding: 8px 32px 8px 12px;
   margin-bottom: 0;
-  border-radius: 0;
-  border: none;
   font-size: 13px;
   line-height: 20px;
-  padding: 8px 32px 8px 12px;
-  background: #e67e22;
   color: white;
+  background: #e67e22;
+  border: none;
+  border-radius: 0;
 }
 
 .pwt-image-styling #system-message-container#system-message-container .alert-success {
-  background: #27ae60;
   color: white;
+  background: #27ae60;
 }
 
 .pwt-image-styling #system-message-container#system-message-container .alert-danger,
 .pwt-image-styling #system-message-container#system-message-container .alert-error {
-  background: #c0392b;
   color: white;
+  background: #c0392b;
 }
 
 .pwt-image-styling #system-message-container#system-message-container .alert-info {
-  background: #328cdb;
   color: white;
+  background: #328cdb;
 }
 
 .pwt-image-styling #system-message-container#system-message-container .alert-heading {
@@ -2695,9 +2707,9 @@ dialog.pwt-modal {
 }
 
 .pwt-image-styling #system-message-container#system-message-container .close {
+  right: -27px;
   color: white;
   opacity: 1;
-  right: -27px;
 }
 
 @keyframes slideUp {
@@ -2737,18 +2749,18 @@ dialog.pwt-modal {
  */
 .pwt-tabs-scroller-prev,
 .pwt-tabs-scroller-next {
-  margin: 0;
-  padding: 0;
   position: absolute;
   top: 0;
   width: 32px;
+  height: 0;
+  padding: 0;
+  padding-top: 40px;
+  margin: 0;
   overflow: hidden;
+  background: transparent;
+  border: none;
   opacity: 0;
   transition: all 200ms ease-in-out;
-  border: none;
-  height: 0;
-  padding-top: 40px;
-  background: transparent;
 }
 
 .pwt-tabs-scroller-prev span,
@@ -2758,62 +2770,62 @@ dialog.pwt-modal {
 
 .pwt-tabs-scroller-prev {
   left: 0;
+  border-right: 1px solid #ddd;
   border-left: none;
   transform: translateX(-100%);
-  border-right: 1px solid #dddddd;
 }
 
-.pwt-tabs-scroller-prev:after {
+.pwt-tabs-scroller-prev::after {
   position: absolute;
   top: 4px;
   left: 6px;
-  text-align: center;
   display: block;
-  content: "‹";
-  font-family: 'Times', serif;
+  font-family: "Times", serif;
   font-size: 32px;
   line-height: 32px;
+  text-align: center;
+  content: "‹";
 }
 
 .pwt-tabs-scroller-next {
   right: 0;
   border-right: none;
+  border-left: 1px solid #ddd;
   transform: translateX(100%);
-  border-left: 1px solid #dddddd;
 }
 
-.pwt-tabs-scroller-next:after {
+.pwt-tabs-scroller-next::after {
   position: absolute;
   top: 4px;
   right: 6px;
-  text-align: center;
   display: block;
-  content: "›";
-  font-family: 'Times', serif;
+  font-family: "Times", serif;
   font-size: 32px;
   line-height: 32px;
+  text-align: center;
+  content: "›";
 }
 
 .has-tabs-overflow {
-  padding-left: 32px;
   padding-right: 32px;
+  padding-left: 32px;
 }
 
 .has-tabs-overflow .pwt-tabs-scroller-prev,
 .has-tabs-overflow .pwt-tabs-scroller-next {
-  transform: translateX(0);
   cursor: no-drop;
-  opacity: 0.33;
+  opacity: .33;
+  transform: translateX(0);
 }
 
 .has-tabs-left-overflow .pwt-tabs-scroller-prev {
-  opacity: 1;
   cursor: pointer;
+  opacity: 1;
 }
 
 .has-tabs-right-overflow .pwt-tabs-scroller-next {
-  opacity: 1;
   cursor: pointer;
+  opacity: 1;
 }
 
 .pwt-tabs {
@@ -2822,8 +2834,8 @@ dialog.pwt-modal {
   list-style: none;
   border: none;
   background: transparent;
-  font-size: 0;
   display: inline-block;
+  font-size: 0;
   white-space: nowrap;
 }
 
@@ -2837,33 +2849,33 @@ dialog.pwt-modal {
 }
 
 .pwt-tabs a {
-  font-size: 16px;
   display: block;
   padding: 8px 24px 6px;
+  font-size: 16px;
   line-height: 24px;
   color: inherit;
   border-top: 1px solid #f3f3f3;
   border-right: 1px solid #f3f3f3;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid #ddd;
   border-left: 1px solid #f3f3f3;
 }
 
 .pwt-tabs a:hover, .pwt-tabs a:focus {
   background: #f9f9f9;
-  border-color: #dddddd;
+  border-color: #ddd;
 }
 
 .pwt-tabs .is-active a {
+  padding-top: 6px;
   background: white;
   border-top: 3px solid #328cdb;
-  border-right-color: #dddddd;
+  border-right-color: #ddd;
   border-bottom-color: white;
-  border-left-color: #dddddd;
-  padding-top: 6px;
+  border-left-color: #ddd;
 }
 
 .has-tabs-overflow a {
-  border-color: #dddddd;
+  border-color: #ddd;
 }
 
 .pwt-tabs-panes,
@@ -2889,9 +2901,9 @@ dialog.pwt-modal {
 
 .pwt-table {
   max-width: 100%;
-  background-color: transparent;
-  border-collapse: collapse;
   border-spacing: 0;
+  border-collapse: collapse;
+  background-color: transparent;
 }
 
 .pwt-table {
@@ -2931,7 +2943,7 @@ dialog.pwt-modal {
 
 .pwt-table-hover tbody tr:hover > td,
 .pwt-table-hover tbody tr:hover > th {
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
 }
 
 /* Toolbar */
@@ -3010,26 +3022,26 @@ dialog.pwt-modal {
 .pwt-image-extension ~ #system-debug {
   position: fixed;
   /* 1 */
-  left: 16px;
-  /* 1 */
   bottom: 0;
   /* 2 */
-  margin: -36px 0 0;
-  /* 3 */
-  padding: 0;
-  /* 4 */
-  border: none;
-  /* 4 */
+  left: 16px;
+  /* 1 */
   width: auto;
   /* 4 */
   height: auto;
   /* 4 */
   max-height: 88%;
   /* 5 */
+  padding: 0;
+  /* 4 */
+  margin: -36px 0 0;
+  /* 3 */
   overflow: hidden;
   /* 6 */
   text-align: center;
   /* 7 */
+  border: none;
+  /* 4 */
   /**
    * 1. On top of hidden divs
    * 1. Inline-block to make it small
@@ -3061,54 +3073,54 @@ dialog.pwt-modal {
   /* 1 */
   display: inline-block;
   /* 2 */
-  margin-left: auto;
-  /* 3 */
   margin-right: auto;
+  /* 3 */
+  margin-left: auto;
   /* 3 */
 }
 
 .pwt-image-extension ~ #system-debug > div {
-  text-align: left;
-  /* 1 */
-  display: none;
+  position: absolute;
   /* 2 */
-  height: 0;
+  display: none;
   /* 2 */
   width: 0;
   /* 2 */
-  position: absolute;
+  height: 0;
   /* 2 */
   overflow: hidden;
   /* 2 */
+  text-align: left;
+  /* 1 */
 }
 
 .pwt-image-extension ~ #system-debug:hover, .pwt-image-extension ~ #system-debug:focus {
-  left: 0;
-  /* 1 */
   right: 0;
   /* 1 */
-  transform: none;
-  /* 2 */
+  left: 0;
+  /* 1 */
   overflow: auto;
   /* 3 */
   box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.25);
   /* 4 */
+  transform: none;
+  /* 2 */
   /* 100% width header */
   /* Display divs again */
 }
 
 .pwt-image-extension ~ #system-debug:hover > h1, .pwt-image-extension ~ #system-debug:focus > h1 {
   display: block;
-  margin-left: 0;
   margin-right: 0;
+  margin-left: 0;
 }
 
 .pwt-image-extension ~ #system-debug:hover > div, .pwt-image-extension ~ #system-debug:focus > div {
-  display: block;
-  height: auto;
-  width: auto;
-  overflow: visible;
   position: relative;
+  display: block;
+  width: auto;
+  height: auto;
+  overflow: visible;
 }
 
 .pwt-image-extension ~ #system-debug ~ .tooltip {
@@ -3121,14 +3133,14 @@ dialog.pwt-modal {
 }
 
 .com_pwtimage header.header .icon-pwtimage {
-  background-image: url("../images/pwt-image.png");
-  background-size: contain;
-  background-repeat: no-repeat;
+  position: relative;
   width: 115px;
   height: 35px;
-  position: relative;
-  margin-bottom: -10px;
   margin-right: 5px !important;
+  margin-bottom: -10px;
+  background-image: url("../images/pwt-image.png");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .com_pwtimage .pwt-extensions {
@@ -3155,8 +3167,8 @@ dialog.pwt-modal {
 }
 
 .com_pwtimage .pwt-extensions .pwt-section--border-top {
-  border-top: 1px solid #CCC;
   padding-top: 16px;
+  border-top: 1px solid #ccc;
 }
 
 .com_pwtimage .pwt-extensions .pwt-extension-logo {

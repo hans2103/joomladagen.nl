@@ -19,6 +19,7 @@ class RSFormProField
 	
 	protected $name;
 	protected $namespace = 'form';
+	protected $id;
 	
 	// calculation handling
 	public $pricePattern = '#\[p([0-9\.\-\+]+)\]#s';
@@ -33,37 +34,49 @@ class RSFormProField
 		}
 
 		$this->name = $this->getProperty('NAME');
+		$this->id = $this->name;
 	}
 
-	public function __get($property) {
-		if ($property == 'output') {
+	public function __get($property)
+	{
+		if ($property == 'output')
+		{
 			// generate the actual field
-			return  ($this->preview ? $this->getPreviewInput() : $this->getFormInput());
+			return $this->preview ? $this->getPreviewInput() : $this->getFormInput();
 		}
+
+		return null;
 	}
 	
 	// @desc Get the input's preview HTML
-	public function getPreviewInput() {
+	public function getPreviewInput()
+	{
 		return '';
 	}
+
 	// @desc Get the input's HTML
-	public function getFormInput() {
+	public function getFormInput()
+	{
 		return '';
 	}
 	
 	// @desc Escapes HTML user input
-	protected function escape($value) {
+	protected function escape($value)
+	{
 		return htmlentities($value, ENT_COMPAT, 'UTF-8');
 	}
 	
 	// @desc Checks if <code> tags are found.
-	protected function hasCode($value) {
+	protected function hasCode($value)
+	{
 		return strpos($value, '<code>') !== false;
 	}
 	
 	// @desc If <code> tags are found executes it as a PHP script
-	protected function isCode($value) {
-		if ($this->hasCode($value)) {
+	protected function isCode($value)
+	{
+		if ($this->hasCode($value))
+		{
 			return eval($value);
 		}
 		
@@ -71,57 +84,77 @@ class RSFormProField
 	}
 	
 	// @desc Checks if a property exists.
-	public function hasProperty($prop) {
+	public function hasProperty($prop)
+	{
 		return isset($this->data[$prop]);
 	}
 	
 	// @desc Returns a field property from $data
-	public function getProperty($prop, $default=null) {
+	public function getProperty($prop, $default = null)
+	{
 		// Special case, we no longer use == 'YES' or == 'NO'
-		if (isset($this->data[$prop])) {
-			if ($this->data[$prop] === 'YES') {
+		if (isset($this->data[$prop]))
+		{
+			if ($this->data[$prop] === 'YES')
+			{
 				return true;
-			} else if ($this->data[$prop] === 'NO') {
+			}
+			else if ($this->data[$prop] === 'NO')
+			{
 				return false;
-			} else {
+			}
+			else
+			{
 				return $this->data[$prop];
 			}
 		}
 		
-		if ($default === 'YES') {
+		if ($default === 'YES')
+		{
 			return true;
-		} elseif ($default === 'NO') {
+		}
+		elseif ($default === 'NO')
+		{
 			return false;
-		} else {
+		}
+		else
+		{
 			return $default;
 		}
 	}
 	
 	// @desc Sets a property - useful for overriding them, such as the validation message.
-	public function setProperty($prop, $value) {
+	public function setProperty($prop, $value)
+	{
 		$this->data[$prop] = $value;
 	}
 	
 	// @desc Returns the full name of the name HTML tag (eg. form[textbox])
-	public function getName() {
+	public function getName()
+	{
 		return $this->namespace.'['.$this->name.']';
 	}
 	
 	// @desc Returns just the name to be used as an ID
-	public function getId() {
-		return $this->name;
+	public function getId()
+	{
+		return $this->id;
+	}
+
+	public function setId($id)
+	{
+		$this->id = $id;
 	}
 	
 	// @desc Parses attributes from HTML code.
 	protected function parseAttributes($string) {
-		if (!isset($this->attr)) {
+		if (!isset($this->attr))
+		{
 			$this->attr = array();
 			$attr = array();
 
 			// Let's grab all the key/value pairs using a regular expression
-			preg_match_all('/([\w:-]+)[\s]?(=[\s]?"([^"]*)")?/i', $string, $attr);
-
-			if (is_array($attr))
+			if (preg_match_all('/([\w:-]+)[\s]?(=[\s]?"([^"]*)")?/i', $string, $attr))
 			{
 				$numPairs = count($attr[1]);
 				for ($i = 0; $i < $numPairs; $i++)
@@ -149,8 +182,15 @@ class RSFormProField
 			$return['class'] = '';
 		}
 
+		if ($this->isRequired())
+		{
+			$return['aria-required'] = 'true';
+		}
+
 		if ($this->invalid)
         {
+        	$return['aria-invalid'] = 'true';
+
 			if (strlen($this->fieldErrorClass))
 			{
 				if (strlen($return['class']))
@@ -175,20 +215,25 @@ class RSFormProField
 		return $return;
 	}
 
-	public function attributeToHtml($key, $values) {
+	public function attributeToHtml($key, $values)
+	{
 		$html = '';
 
 		// Add only valid attributes
-		if (strlen($key)) {
+		if (strlen($key))
+		{
 			// Skip adding empty class value
-			if ($key == 'class' && !strlen($values)) {
+			if ($key == 'class' && !strlen($values))
+			{
 				return $html;
 			}
+
 			// Escape HTML
 			$html .= ' '.$this->escape($key);
 
 			// If we have a value, append it, otherwise just attribute is fine according to HTML5
-			if (strlen($values)) {
+			if (strlen($values))
+			{
 				$html .= '='.'"'.$this->escape($values).'"';
 			}
 		}
@@ -196,9 +241,11 @@ class RSFormProField
 		return $html;
 	}
 	
-	public function getValue() {
+	public function getValue()
+	{
 		// Default value processing
-		if (!isset($this->value[$this->name])) {
+		if (!isset($this->value[$this->name]))
+		{
 			$default = $this->getProperty('DEFAULTVALUE', '');
 			return $default ? $this->isCode($default) : $default;
 		}
@@ -207,20 +254,39 @@ class RSFormProField
 		return $this->value[$this->name];
 	}
 	
-	public function addScript($path) {
+	public function addScript($path)
+	{
 		RSFormProAssets::addScript($path);
 	}
+
+	public function addStyleSheet($path)
+	{
+		RSFormProAssets::addStyleSheet($path);
+	}
 	
-	public function addCustomTag($tag) {
+	public function addCustomTag($tag)
+	{
 		RSFormProAssets::addCustomTag($tag);
 	}
 	
-	public function addScriptDeclaration($script) {
+	public function addScriptDeclaration($script)
+	{
 		RSFormProAssets::addScriptDeclaration($script);
 	}
 
+	public function addStyleDeclaration($style)
+	{
+		RSFormProAssets::addStyleDeclaration($style);
+	}
+
 	// process field or file before storing it to the database
-	public function processBeforeStore($submissionId, &$post, &$files) {
+	public function processBeforeStore($submissionId, &$post, &$files)
+	{
 		return;
+	}
+
+	public function isRequired()
+	{
+		return $this->getProperty('REQUIRED', false);
 	}
 }

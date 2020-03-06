@@ -131,16 +131,9 @@ function rsformBuildRoute(&$query)
 			{
 				$segments[] = JText::_('COM_RSFORM_SEF_FORM');
 				
-				$formId = (int) $query['formId'];
+				$formId 	= (int) $query['formId'];
+				$formName 	= JFilterOutput::stringURLSafe(rsformGetFormTitle($formId));
 
-                $db = JFactory::getDbo();
-				$sql = $db->getQuery(true)
-                    ->select($db->qn('FormTitle'))
-                    ->from($db->qn('#__rsform_forms'))
-                    ->where($db->qn('FormId') . ' = ' . $db->q($formId));
-
-				$formName = JFilterOutput::stringURLSafe($db->setQuery($sql)->loadResult());
-				
 				$segments[] = $formId . (!empty($formName) ? ':' . $formName : '');
 				
 				unset($query['formId'], $query['view']);
@@ -153,10 +146,41 @@ function rsformBuildRoute(&$query)
 	{
         switch ($query['task'])
         {
+			case 'submissions.view.file':
+				$segments[] = JText::_('COM_RSFORM_SEF_SUBMISSIONS_VIEW_FILE');
+
+				if (isset($query['hash']))
+				{
+					$segments[] = $query['hash'];
+					unset($query['hash']);
+
+					if (isset($query['file']))
+					{
+						$segments[] = $query['file'];
+						unset($query['file']);
+					}
+				}
+
+				unset($query['task']);
+				break;
+
             case 'confirm':
                 $segments[] = JText::_('COM_RSFORM_SEF_CONFIRM_SUBMISSION');
                 unset($query['task']);
                 break;
+
+			case 'delete':
+				if (isset($query['controller']) && $query['controller'] == 'directory')
+				{
+					$segments[] = JText::_('COM_RSFORM_SEF_DIRECTORY_DELETE_SUBMISSION');
+					if (isset($query['id']))
+					{
+						$segments[] = $query['id'];
+					}
+
+					unset($query['controller'], $query['task'], $query['id']);
+				}
+				break;
         }
     }
 
@@ -227,9 +251,68 @@ function rsformParseRoute($segments)
                 $query['id'] = $segments[1];
             }
 		break;
+
+		case JText::_('COM_RSFORM_SEF_DIRECTORY_DELETE_SUBMISSION'):
+			$query['controller'] = 'directory';
+			$query['task'] = 'delete';
+			if (isset($segments[1]))
+			{
+				$query['id'] = (int) $segments[1];
+			}
+
+			break;
+
+		case JText::_('COM_RSFORM_SEF_SUBMISSIONS_VIEW_FILE'):
+			$query['task'] = 'submissions.view.file';
+
+			if (isset($segments[1]))
+			{
+				$query['hash'] = $segments[1];
+			}
+			if (isset($segments[2]))
+			{
+				$query['file'] = $segments[2];
+			}
+
+			break;
 	}
 	
 	$app->triggerEvent('rsfp_onAfterFormParseRoute', array(&$segments, &$query));
 	
 	return $query;
+}
+
+function rsformGetFormTitle($formId)
+{
+	require_once JPATH_ADMINISTRATOR . '/components/com_rsform/helpers/rsform.php';
+
+	static $titles = array();
+
+	$lang = RSFormProHelper::getCurrentLanguage($formId);
+
+	if (!isset($titles[$lang]))
+	{
+		$titles[$lang] = array();
+	}
+
+	if (!isset($titles[$lang][$formId]))
+	{
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true)
+			->select($db->qn('FormTitle'))
+			->from($db->qn('#__rsform_forms'))
+			->where($db->qn('FormId') . ' = ' . $db->q($formId));
+		$titles[$lang][$formId] = $db->setQuery($query)->loadResult();
+
+		if ($translations = RSFormProHelper::getTranslations('forms', $formId, $lang))
+		{
+			if (isset($translations['FormTitle']))
+			{
+				$titles[$lang][$formId] = $translations['FormTitle'];
+			}
+		}
+	}
+
+	return $titles[$lang][$formId];
 }

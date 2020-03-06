@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 3 - http://www.gnu.org/copyleft/gpl.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -16,13 +16,8 @@ class JceControllerEditor extends JControllerLegacy
 {
     public function execute($task)
     {
-        $app = WFApplication::getInstance();
-
         // check for session token
         JSession::checkToken('get') or jexit(JText::_('JINVALID_TOKEN'));
-
-        // check a valid profile exists
-        $app->getProfile() or jexit();
 
         $editor = new WFEditor();
 

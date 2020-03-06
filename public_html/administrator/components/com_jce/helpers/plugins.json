@@ -35,7 +35,7 @@
         "title": "WF_CHARMAP_TITLE",
         "description": "WF_CHARMAP_DESC",
         "icon": "charmap",
-        "editable": 0,
+        "editable": 1,
         "row": 2,
         "core": 1
     },
@@ -140,6 +140,14 @@
         "row": 3,
         "core": 1
     },
+    "help": {
+        "title": "WF_HELP_TITLE",
+        "description": "WF_HELP_DESC",
+        "icon": "help",
+        "editable": 0,
+        "row": 1,
+        "core": 1
+    },
     "imgmanager": {
         "title": "WF_IMGMANAGER_TITLE",
         "description": "WF_IMGMANAGER_DESC",
@@ -148,18 +156,19 @@
         "row": 4,
         "core": 1
     },
-    "inlinepopups": {
-        "title": "WF_INLINEPOPUPS_TITLE",
-        "description": "WF_INLINEPOPUPS_DESC",
-        "icon": "",
+    "joomla": {
+        "title": "WF_JOOMLABUTTONS_TITLE",
+        "description": "WF_JOOMLABUTTONS_DESC",
+        "icon": "joomla",
         "editable": 0,
         "row": 4,
-        "core": 1
+        "core": 1,
+        "class": "split-button"
     },
     "layer": {
         "title": "WF_LAYER_TITLE",
         "description": "WF_LAYER_DESC",
-        "icon": "insertlayer,moveforward,movebackward,absolute",
+        "icon": "insertlayer,layerforward,layerbackward,layerabsolute",
         "editable": 0,
         "row": 4,
         "core": 1
@@ -170,7 +179,8 @@
         "icon": "link",
         "editable": 1,
         "row": 4,
-        "core": 1
+        "core": 1,
+        "class": "split-button"
     },
     "lists": {
         "title": "WF_LISTS_TITLE",
@@ -195,6 +205,14 @@
         "icon": "nonbreaking",
         "editable": 0,
         "row": 4,
+        "core": 1
+    },
+    "noneditable": {
+        "title": "WF_NONEDITABLE_TITLE",
+        "description": "WF_NONEDITABLE_DESC",
+        "icon": "",
+        "editable": 1,
+        "row": 0,
         "core": 1
     },
     "preview": {
@@ -225,7 +243,7 @@
         "title": "WF_SOURCE_TITLE",
         "description": "WF_SOURCE_DESC",
         "icon": "",
-        "editable": 0,
+        "editable": 1,
         "row": 0,
         "core": 1
     },

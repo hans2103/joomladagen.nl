@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -42,6 +42,6 @@ class WFMediaPluginConfig
         }
 
         $settings['invalid_elements'] = array_diff($settings['invalid_elements'], $tags);
-        $settings['media_live_embed'] = $wf->getParam('media.live_embed', 0, 0);
+        $settings['media_live_embed'] = $wf->getParam('media.live_embed', 1);
     }
 }

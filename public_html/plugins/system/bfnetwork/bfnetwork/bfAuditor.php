@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -41,6 +39,7 @@ final class bfAudit
      * @var JDatabaseMysql The database Connector
      */
     private $db;
+
     /**
      * @var array
      */
@@ -325,7 +324,7 @@ final class bfAudit
             if (!$data) {
                 $ch = curl_init();
 
-                // Set up bare minimum CURL Options needed for myJoomla.com
+                // Set up bare minimum CURL Options needed for mysites.guru
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
                 curl_setopt($ch, CURLOPT_HEADER, false);
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -415,7 +414,7 @@ final class bfAudit
             if (!$patterns) {
                 $ch = curl_init();
 
-                // Set up bare minimum CURL Options needed for myJoomla.com
+                // Set up bare minimum CURL Options needed for mysites.guru
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
                 curl_setopt($ch, CURLOPT_HEADER, false);
                 curl_setopt($ch, CURLOPT_URL, $url);
@@ -474,7 +473,7 @@ final class bfAudit
 
         // reset permissions - just to be sure!
         // @ error supressor to hid errors when crappy servers dont allow chmod from php
-        @chmod('tmp/', 0755);
+        @chmod($base.'/tmp/', 0755);
 
         // remove all the request
         unset($request);
@@ -617,6 +616,42 @@ final class bfAudit
         @unlink(dirname(__FILE__).'/tmp/Files');
 
         bfLog::truncate();
+
+        $this->logStartAudit();
+    }
+
+    private function logfinishAudit()
+    {
+        bfActivitylog::getInstance()->log(
+            'bfNetwork',
+            '',
+            'Audit Finished',
+            'onAuditFinished',
+            'bfNetwork',
+            null,
+            null,
+            '',
+            bfEvents::onAuditFinished,
+            'onAuditFinished',
+            bfEvents::onAuditFinished
+        );
+    }
+
+    private function logStartAudit()
+    {
+        bfActivitylog::getInstance()->log(
+            'bfNetwork',
+            '',
+            'Audit Started',
+            'onAuditStarted',
+            'bfNetwork',
+            null,
+            null,
+            '',
+            bfEvents::onAuditStarted,
+            'onAuditStarted',
+            bfEvents::onAuditStarted
+        );
     }
 
     /**
@@ -817,14 +852,21 @@ final class bfAudit
         foreach ($arr as $folder) {
             // clean up
             $folder = $this->_cleanupFileFolderName($folder);
-            $folder = trim(str_replace('\\', '/', $folder));
-            $folder = str_replace('////', '/', $folder);
+//            $folder = trim(str_replace('\\', '/', $folder));
+//            $folder = str_replace('////', '/', $folder);
+
+            // Dont allow duplicates - ffs
+            $this->db->setQuery(sprintf('SELECT count(*) from bf_folders where folderwithpath = "%s"', $folder));
+            if ($this->db->loadResult()) {
+                bfLog::log(sprintf('WARNING: Skipping adding %s to db as its already there', $folder));
+                continue;
+            }
 
             // Dont allow blank or invalid folders
-            if (!is_dir(JPATH_BASE.DIRECTORY_SEPARATOR.$folder)
-                && !is_dir(JPATH_BASE.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR)
-                || is_link(JPATH_BASE.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR)
-                || is_link(JPATH_BASE.DIRECTORY_SEPARATOR.$folder) || !$folder
+            if (!is_dir($this->_cleanupFileFolderName(JPATH_BASE.DIRECTORY_SEPARATOR.$folder))
+                && !is_dir($this->_cleanupFileFolderName(JPATH_BASE.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR))
+                || is_link($this->_cleanupFileFolderName(JPATH_BASE.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR))
+                || is_link($this->_cleanupFileFolderName(JPATH_BASE.DIRECTORY_SEPARATOR.$folder)) || !$folder
             ) {
                 continue;
             }
@@ -870,7 +912,31 @@ final class bfAudit
     }
 
     /**
+     * THANK YOU WORDPRESS !!! I love you xxx.
+     *
+     * @param $path
+     *
+     * @return mixed|string|string[]|null
+     */
+    private function wp_normalize_path($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        $path = preg_replace('|(?<=.)/+|', '/', $path);
+        if (':' === substr($path, 1, 1)) {
+            $path = ucfirst($path);
+        }
+
+        // Mine, removes // from the start of a path
+        if ('/' === substr($path, 0, 1) && '/' === substr($path, 1, 1)) {
+            $path = substr($path, 1, strlen($path) - 1);
+        }
+
+        return $path;
+    }
+
+    /**
      * Clean up a string, a path name.
+     * Wrapper to wp_normalize_path which does a better job than we did.
      *
      * @param string $str
      *
@@ -878,18 +944,7 @@ final class bfAudit
      */
     private function _cleanupFileFolderName($str)
     {
-        $str = str_replace('////', '/', $str);
-        $str = str_replace('///', '/', $str);
-        $str = str_replace('//', '/', $str);
-        $str = str_replace('\\/', '/', $str);
-        $str = str_replace('\\t', '/t', $str);
-        $str = str_replace("\/", '/', $str);
-
-        if ('/' !== substr($str, 0, 1) && JPATH_BASE === '/') {
-            $str = '/'.$str;
-        }
-
-        return addslashes($str);
+        return $this->wp_normalize_path($str);
     }
 
     /**
@@ -921,7 +976,7 @@ final class bfAudit
             return $folder;
         }
 
-        $str = JPATH_BASE.str_replace(JPATH_BASE, '', stripslashes($this->_cleanupFileFolderName($folder)));
+        $str = $this->wp_normalize_path(JPATH_BASE.str_replace($this->wp_normalize_path(JPATH_BASE), '', $this->wp_normalize_path($this->_cleanupFileFolderName($folder))));
 
         return $str;
     }
@@ -932,7 +987,7 @@ final class bfAudit
             return $str;
         }
 
-        return str_replace(JPATH_BASE, '', stripslashes($this->ensureRooted($str)));
+        return str_replace($this->wp_normalize_path(JPATH_BASE), '', $this->wp_normalize_path($this->ensureRooted($str)));
     }
 
     /**
@@ -994,9 +1049,7 @@ final class bfAudit
                 $dir   = trim($folder.$ds.$file);
                 $isDir = @is_dir($dir);
                 if ($isDir) {
-                    $fidledFolderName = preg_replace('#^'.JPATH_BASE.'#i', '', $folder.DIRECTORY_SEPARATOR.$file);
-                    $r                = $this->_cleanupFileFolderName($fidledFolderName);
-                    $arr[]            = $r;
+                    $arr[] = $this->removeJPATHBASE($folder.DIRECTORY_SEPARATOR.$file);
                 }
             }
         }
@@ -1053,6 +1106,8 @@ final class bfAudit
         @unlink('tmp/Files');
 
         bfLog::log('===== AUDIT COMPLETE =====');
+
+        $this->logfinishAudit();
     }
 
     /**
@@ -1085,6 +1140,15 @@ final class bfAudit
         // Ask Joomla API for some settings
         $config = JFactory::getApplication('site');
 
+        // Get some Joomla version
+        $VERSION = new JVersion();
+
+        if ('1.5' == $VERSION->RELEASE) {
+            $this->nextStepPlease();
+
+            return;
+        }
+
         try {
             // Send an email to see if we received it... Tests if the Joomla Global Config mailer settings are correct.
             $mailer = JFactory::getMailer();
@@ -1093,7 +1157,7 @@ final class bfAudit
                 $config->getCfg('fromname'), );
 
             $mailer->setSender($sender);
-            $mailer->addRecipient('AuditMailerTest@myjoomla.io'); // This is not a real mailbox, its a service that reads the body of the email, and lets the myJoomla.com service know the domain name.
+            $mailer->addRecipient('AuditMailerTest@myjoomla.io'); // This is not a real mailbox, its a service that reads the body of the email, and lets the mysites.guru service know the domain name.
             $mailer->setSubject('Audit Mailer Test');
 
             $s        = empty($_SERVER['HTTPS']) ? '' : ('on' == $_SERVER['HTTPS']) ? 's' : '';
@@ -1224,6 +1288,10 @@ final class bfAudit
         // See how much is left
         $this->db->setQuery('SELECT COUNT(*) FROM bf_folders WHERE queued = 1');
         $totalLeft = $this->db->loadResult();
+
+        // re-set the sql because mysqlpdo in Joomla borks when trying to run loadResult twice, with 0 - 00000, , :-(
+        // Time wasted: days and days and days...
+        $this->db->setQuery('SELECT COUNT(*)  FROM bf_folders WHERE queued = 1');
 
         // Nothing left so die
         if (!$totalLeft) {
@@ -1541,6 +1609,10 @@ final class bfAudit
         $this->db->setQuery('SELECT COUNT(*)  FROM bf_folders WHERE queued = 1');
         $totalLeft = $this->db->loadResult();
 
+        // re-set the sql because mysqlpdo in Joomla borks when trying to run loadResult twice, with 0 - 00000, , :-(
+        // Time wasted: days and days and days...
+        $this->db->setQuery('SELECT COUNT(*)  FROM bf_folders WHERE queued = 1');
+
         if (!$totalLeft) {
             $addToScanQueue = $this->addDirToScanQueue(array('/'), 0);
             $this->toggleQueued('folders', 1);
@@ -1564,9 +1636,10 @@ final class bfAudit
             while (count($dirs_to_scan) && $this->_timer->getTimeLeft() > _BF_CONFIG_FOLDERS_TIMER_ONE) {
                 $dirToScanObj = array_pop($dirs_to_scan);
 
-                $dirToScan = stripslashes($dirToScanObj->folderwithpath);
+//                $dirToScan = stripslashes($dirToScanObj->folderwithpath);
 
-                $dirToScan = str_replace('////', '/', $dirToScan);
+//                $dirToScan = str_replace('////', '/', $dirToScan);
+                $dirToScan           = $this->wp_normalize_path($dirToScanObj->folderwithpath);
 
                 // Redundant?
                 if ($this->_timer->getTimeLeft() <= _BF_CONFIG_FOLDERS_TIMER_TWO) {
@@ -1576,28 +1649,35 @@ final class bfAudit
                 }
 
                 // Get the subdirectories in this folder and add to the list of folders to scan enforce only from base root...
-                $dirToScanWithPath = JPATH_BASE.preg_replace('#^'.JPATH_BASE.'#i', '', $dirToScan, 1);
+//                $dirToScanWithPath = JPATH_BASE.preg_replace('#^'.JPATH_BASE.'#i', '', $dirToScan, 1);
+                $dirToScanWithPath = $this->ensureRooted($dirToScan);
 
                 // but if our$dirToScanWithPath is now blank it means a path of /var/www/var/www !
                 if (JPATH_BASE == $dirToScanWithPath) {
                     // need this else we loop when /home/public_html/home/public_html is found!!
-                    $dirToScanWithPath = JPATH_BASE.$dirToScan;
+                    $dirToScanWithPath = $this->wp_normalize_path(JPATH_BASE.$dirToScan);
                 }
 
                 $subDirectorys = $this->getFolders($dirToScanWithPath);
 
-                bfLog::log('Found '.count($subDirectorys).' subfolders in '.$this->ensureRooted($dirToScan));
+                bfLog::log('Found '.count($subDirectorys).' subfolders in '.$this->removeJPATHBASE($dirToScan));
 
-                foreach ($subDirectorys as $folder) {
-                    $folder           = str_replace('////', '/', $folder);
-                    $addToScanQueue[] = $folder;
+                if (count($subDirectorys)) {
+                    foreach ($subDirectorys as $folder) {
+//                    $folder           = str_replace('////', '/', $folder);
+                        $folder           = $this->wp_normalize_path($folder);
+                        $addToScanQueue[] = $folder;
+                    }
+                } else {
+                    bfLog::log('Found NO subfolders in '.$this->removeJPATHBASE($dirToScan));
                 }
 
                 $deleteFoldersIds[] = $dirToScanObj->id;
 
                 if ((count($deleteFoldersIds) > 1000) || (count($addToScanQueue) > 1000) || $this->_timer->getTimeLeft() <= _BF_CONFIG_FOLDERS_TIMER_TWO) {
                     // remove this current dir form the scan queue;
-                    $addToScanQueue   = str_replace('////', '/', $addToScanQueue);
+//                    $addToScanQueue   = str_replace('////', '/', $addToScanQueue);
+                    $addToScanQueue   = $this->wp_normalize_path($addToScanQueue);
                     $addToScanQueue   = $this->addDirToScanQueue($addToScanQueue);
                     $deleteFoldersIds = $this->removeFromQueue('folders', $deleteFoldersIds);
                     $this->saveState(false, __LINE__); // Exits with reply
@@ -1737,22 +1817,41 @@ final class bfAudit
                             )";
                 $this->db->setQuery($sql);
 
+                $ids = array();
                 if (method_exists($this->db, 'loadColumn')) {
                     $ids = $this->db->loadColumn();
                 } else {
                     $ids = $this->db->loadResultArray();
                 }
 
+                bfLog::log('FOUND SOME IDS TO QUEUE: '.count($ids));
                 bfLog::log($this->db->getErrorMsg());
 
                 if (!count($ids)) {
                     bfLog::log('NO FILES TO DEEP SCAN = THIS CANNOT BE POSSIBLE RIGHT?');
-                    $this->db->setQuery($sql);
-                    $some = $this->db->query();
+                    bfEncrypt::reply(bfReply::ERROR, 'We could not identify any files to audit, please contact phil@phil-taylor.com to debug this for you.');
                 } else {
-                    $sql = 'UPDATE bf_files SET queued = 1 WHERE id IN ( %s )';
+                    $sql = 'UPDaTE bf_files SET queued = 1 WHERE id IN ( %s )';
 
-                    if (strlen(sprintf($sql, implode(', ', $ids))) > $this->max_allowed_packet) {
+                    $len                = strlen(sprintf($sql, implode(', ', $ids)));
+                    $max_allowed_packet = $this->max_allowed_packet;
+
+                    // ffs - I hate badly configured servers
+                    if (!$this->max_allowed_packet) {
+                        $this->db->setQuery('SHOW VARIABLES LIKE "max_allowed_packet"');
+                        $max_allowed_packet = $this->db->loadObjectList();
+                        if (!$this->max_allowed_packet) {
+                            $max_allowed_packet = 1048576 / 1.2; // default - safety margin
+                        }
+                    }
+
+                    bfLog::log(sprintf('The len is %s and the $max_allowed_packet is %s, and this means %s',
+                        $len,
+                        $max_allowed_packet,
+                        ($len > $max_allowed_packet)
+                    ));
+
+                    if ($len > $max_allowed_packet) {
                         $parts = $this->array_split($ids, 4);
 
                         $sqlToRun1 = sprintf($sql, implode(', ', $parts[0]));
@@ -1775,9 +1874,9 @@ final class bfAudit
                         $this->db->setQuery($sqlToRun4);
                         $this->db->query();
                     } else {
-                        $sql = 'UPDATE bf_files SET queued = 1 WHERE id IN
+                        $sql = 'UPdATE bf_files SET queued = 1 WHERE id IN
                         (
-                        '.implode(',', $ids).'
+                        '.implode(', ', $ids).'
                         )';
                         $this->db->setQuery($sql);
                         $this->db->query();
@@ -1788,7 +1887,7 @@ final class bfAudit
                 bfLog::log('DONE Adding '.count($ids).' files to the scan queue db table');
 
                 bfLog::log('Retrieving global whitelist from cdn');
-                $url = 'https://cdn.myjoomla.com/public/global/whitelist';
+                $url = 'https://cdn.mysites.guru/public/global/whitelist';
 
                 $options = array(
                     'http' => array(
@@ -1807,7 +1906,7 @@ final class bfAudit
                 if (!$whitelist) {
                     $ch = curl_init();
 
-                    // Set up bare minimum CURL Options needed for myJoomla.com
+                    // Set up bare minimum CURL Options needed for mysites.guru
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
                     curl_setopt($ch, CURLOPT_HEADER, false);
                     curl_setopt($ch, CURLOPT_URL, $url);
@@ -1846,7 +1945,7 @@ final class bfAudit
                 bfLog::log('Global whitelist applied!');
 
                 bfLog::log('Retrieving global hacklist from cdn');
-                $url = 'https://cdn.myjoomla.com/public/global/hacklist';
+                $url = 'https://cdn.mysites.guru/public/global/hacklist';
 
                 $options = array(
                     'http' => array(
@@ -1865,7 +1964,7 @@ final class bfAudit
                 if (!$hacklist) {
                     $ch = curl_init();
 
-                    // Set up bare minimum CURL Options needed for myJoomla.com
+                    // Set up bare minimum CURL Options needed for mysites.guru
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
                     curl_setopt($ch, CURLOPT_HEADER, false);
                     curl_setopt($ch, CURLOPT_URL, $url);
@@ -1986,14 +2085,23 @@ final class bfAudit
 
             if (file_exists('tmp/speedup.sql') && (_BF_SPEED == 'DEFAULT' || _BF_SPEED == 'FAST')) {
                 bfLog::log('SPEEDUP Found speedup sql files - removing files to deepscan');
-                $this->db->setQuery(file_get_contents('tmp/speedup.sql'));
-                $this->db->query();
+
+                // get contents and delete the file quickly in case the sql fails and then we dont end up in a loop
+                $speedSQL = file_get_contents('tmp/speedup.sql');
+
+                bfLog::log('SPEEDUP - removing speedup file after applying it');
+                unlink('tmp/speedup.sql');
+
+                $this->db->setQuery('SHOW TABLES LIKE "bf_files_last"');
+                if ($this->db->loadResult()) {
+                    $this->db->setQuery($speedSQL);
+                    $this->db->query();
+                }
 
                 // force at least one file to be audited to prevent broken loop
                 $this->db->setQuery('UPDATE bf_files SET queued = 1 WHERE filewithpath = "/configuration.php"');
                 $this->db->query();
-                bfLog::log('SPEEDUP - removing speedup file after applying it');
-                unlink('tmp/speedup.sql');
+
                 $this->saveState(false, __LINE__);
             } else {
                 if (file_exists(dirname(__FILE__).'/tmp/speedup.sql')) {
@@ -2138,11 +2246,33 @@ final class bfAudit
                                 }
                             }
 
-                            //100% Certain if a file matches this regex then its hacked
+                            // 100% Certain if a file matches this regex then its hacked
                             if (preg_match('/index\.html\.bak\.bak/i', $chunk)) {
                                 $isHacked = true;
-                            } else {
-                                $isHacked = false;
+                            }
+
+                            // 100% Certain if a file matches this regex then its hacked
+                            if (preg_match('/@include\s\"\\057hom/i', $chunk)) {
+                                $isHacked = true;
+                            }
+
+                            // 100% Certain if a file matches this regex then its hacked
+                            if (preg_match('/143o\";/i', $chunk)) {
+                                $isHacked = true;
+                            }
+
+                            // 100% Certain if a file matches this regex then its hacked
+                            // UTF-8 for GLOBALS
+//                            if (preg_match('/\\x47\\x4c\\x4fB\\x41\\x4c\\x53/i', $chunk)) {
+//                                $isHacked = true;
+//                            }
+
+                            // 100% Certain if a file matches this regex then its hacked
+                            if (preg_match('/well-known\/acme-challenge\/index\.php/', $file_to_scan->filewithpath)
+                                || preg_match('/well-known\/pki-validation\/index\.php/', $file_to_scan->filewithpath)
+                                || preg_match('/well-known\/index\.php/', $file_to_scan->filewithpath)
+                            ) {
+                                $isHacked = 1;
                             }
 
                             if (!$isHacked) {
@@ -2234,7 +2364,7 @@ final class bfAudit
             if (!defined('_BF_LAST_BREATH')) {
                 define('_BF_LAST_BREATH', $e->getMessage());
             }
-            bfLog::log(' ======== EXCEPTION ========='.$e->getMessage());
+            bfLog::log(' ======== EXCEPTION ========='.$e->getMessage().$this->db->getQuery());
         }
     }
 
@@ -2250,7 +2380,7 @@ final class bfAudit
             $this->_uploaderIds,
             $this->_suspectIds,
             $this->_hackedIds
-            );
+        );
     }
 
     /**
@@ -2362,7 +2492,7 @@ final class bfAudit
 
         bfLog::log(' =Marking this number of files as _hacked = '.count($this->_hackedIds));
         if (count($this->_hackedIds)) {
-            $sql = 'UPDATE bf_files SET `hacked` = 1, queued = 0  WHERE id IN(%s)';
+            $sql = 'UPDATE bf_files SET `hacked` = 1, suspectcontent = 1, queued = 0  WHERE id IN(%s)';
             $sql = sprintf($sql, implode(', ', $this->_hackedIds));
             $this->db->setQuery($sql);
             if ($this->db->query()) {
@@ -2436,13 +2566,13 @@ final class bfAudit
      * Lets munge the files contents to reduce the number of false hits we get for eval and stuff
      * Try to keep this list as small as possible.
      *
-     * @todo benchmark this against a preg_replace
-     * @todo add this to the configurable audit configuration
-     *
      * @param $chunk
      * @param $file_to_scan
      *
      * @return mixed
+     *
+     * @todo add this to the configurable audit configuration
+     * @todo benchmark this against a preg_replace
      */
     private function applyStringExceptions($chunk, $file_to_scan)
     {
@@ -2703,7 +2833,7 @@ filewithpath like '%utf8\-%'
         $this->encrypted_files = $this->db->LoadResult();
 
         // Report suspect files
-        $this->db->setQuery('SELECT COUNT(*) FROM bf_files WHERE suspectcontent = 1');
+        $this->db->setQuery('SELECT COUNT(*) FROM bf_files WHERE suspectcontent = 1 or hacked = 1');
         $this->suspectfiles = $this->db->LoadResult();
 
         // Report mailer files

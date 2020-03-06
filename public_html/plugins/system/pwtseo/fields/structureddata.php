@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -49,9 +49,9 @@ class PWTSeoFormFieldStructuredData extends FormField
 
 		return '<button data-toggle="modal" onclick="jQuery( \'#structureddataModal\' ).modal(\'show\'); return false;" class="btn">
 	<span class="icon-list" aria-hidden="true"></span>' . Text::_('PLG_SYSTEM_PWTSEO_FORM_DATALAYERS_CUSTOMIZE_LABEL') . '</button>' . HTMLHelper::_(
-				'bootstrap.renderModal',
-				'structureddataModal',
-				array(
+			'bootstrap.renderModal',
+			'structureddataModal',
+			array(
 					'title'      => Text::_('PLG_SYSTEM_PWTSEO_FORM_STRUCTUREDDATA_LABEL'),
 					'url'        => $url,
 					'height'     => '400px',
@@ -66,6 +66,6 @@ class PWTSeoFormFieldStructuredData extends FormField
 						. '<button type="button" class="btn btn-success" aria-hidden="true" onclick="jQuery(\'#structureddataModal iframe\').contents().find(\'#applyBtn\').click(); return false;">'
 						. JText::_("JAPPLY") . '</button>'
 				)
-			);
+		);
 	}
 }

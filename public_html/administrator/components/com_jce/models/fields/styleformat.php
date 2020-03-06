@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -22,7 +22,7 @@ class JFormFieldStyleFormat extends JFormField
 
     protected $sections = array('section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main');
     protected $grouping = array('p', 'pre', 'blockquote', 'figure', 'figcaption', 'div');
-    protected $textlevel = array('em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo', 'span', 'wbr');
+    protected $textlevel = array('a', 'em', 'strong', 'small', 's', 'cite', 'q', 'dfn', 'abbr', 'data', 'time', 'code', 'var', 'samp', 'kbd', 'sub', 'i', 'b', 'u', 'mark', 'ruby', 'rt', 'rp', 'bdi', 'bdo', 'span', 'wbr');
     protected $formelements = array('form', 'input', 'button', 'fieldset', 'legend');
     /*
      * Element type
@@ -79,7 +79,7 @@ class JFormFieldStyleFormat extends JFormField
 
             foreach ($default as $key => $value) {
                 if (array_key_exists($key, $item)) {
-                    $value = $item[$key];
+                    $value = htmlspecialchars_decode($item[$key], ENT_QUOTES);
                 }
 
                 $elements[] = '<div class="styleformat-item-' . $key . '">' . $this->getField($key, $value) . '</div>';

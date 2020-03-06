@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -56,10 +56,10 @@ defined('JPATH_PLATFORM') or die;
 		</div>
 	</div>
 	<div class="uk-form-row uk-align-right uk-margin-top uk-margin-bottom">
-		<button id="resize_apply" class="uk-button uk-button-primary apply" data-function="resize">
+		<button  type="button" id="resize_apply" class="uk-button uk-button-primary apply" data-function="resize">
 			<?php echo JText::_('WF_LABEL_APPLY'); ?>
 		</button>
-		<button id="resize_reset" class="uk-button reset" data-function="resize">
+		<button  type="button" id="resize_reset" class="uk-button reset" data-function="resize">
 			<?php echo JText::_('WF_LABEL_RESET'); ?>
 		</button>
 	</div>

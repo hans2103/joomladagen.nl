@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -60,21 +60,21 @@ class PlgSystemPwtimage extends CMSPlugin
 	private $fieldGroup = '';
 
 	/**
-	 * @var    String  base update url, to decide whether to process the event or not
+	 * @var    string  base update url, to decide whether to process the event or not
 	 *
 	 * @since  1.0.0
 	 */
 	private $baseUrl = 'https://extensions.perfectwebteam.com/pwt-image';
 
 	/**
-	 * @var    String  Extension identifier, to retrieve its params
+	 * @var    string  Extension identifier, to retrieve its params
 	 *
 	 * @since  1.0.0
 	 */
 	private $extension = 'com_pwtimage';
 
 	/**
-	 * @var    String  Extension title, to retrieve its params
+	 * @var    string  Extension title, to retrieve its params
 	 *
 	 * @since  1.0.0
 	 */
@@ -83,8 +83,8 @@ class PlgSystemPwtimage extends CMSPlugin
 	/**
 	 * Constructor
 	 *
-	 * @param   object  $subject  The object to observe
-	 * @param   array   $config   An optional associative array of configuration settings.
+	 * @param   object $subject   The object to observe
+	 * @param   array  $config    An optional associative array of configuration settings.
 	 *                            Recognized key values include 'name', 'group', 'params', 'language'
 	 *                            (this list is not meant to be comprehensive).
 	 *
@@ -125,8 +125,8 @@ class PlgSystemPwtimage extends CMSPlugin
 	 *
 	 * Turns all media fields to pwtimage.image fields
 	 *
-	 * @param   Form     $form  The form object
-	 * @param   integer  $data  The form data
+	 * @param   Form    $form The form object
+	 * @param   integer $data The form data
 	 *
 	 * @return  boolean
 	 *
@@ -154,9 +154,9 @@ class PlgSystemPwtimage extends CMSPlugin
 		$fieldPath = false;
 
 		// Build the extension identifier
-		$identifier   = array();
-		$option       = $this->app->input->get('option');
-		$all          = in_array('all', $this->extensions);
+		$identifier = array();
+		$option     = $this->app->input->get('option');
+		$all        = in_array('all', $this->extensions);
 
 		// Check if we are in com_modules
 		if ($option === 'com_modules')
@@ -231,33 +231,46 @@ class PlgSystemPwtimage extends CMSPlugin
 					}
 					elseif ($set === 'fieldset')
 					{
-						$identifier[] = (string) $item->attributes()->name;
+						/**
+						 * If the structure of the XML is as follows, then there are no attributes, so no name. If there is no name
+						 * don't add an empty identifier
+						 *
+						 * <form>
+						 *  <fieldset>
+						 *   <field name="id"
+						 */
+						$fieldsetName = (string) $item->attributes()->name;
+
+						if ($fieldsetName)
+						{
+							$identifier[] = $fieldsetName;
+						}
 					}
 
 					// Set the field name
 					$identifier[] = (string) $field->attributes()->name;
 
 					/**
-                     * If we in com_content, and we have a profile for a specific category, load that one instead.
-                     * With a fallback to general com_content
-                     */
+					 * If we in com_content, and we have a profile for a specific category, load that one instead.
+					 * With a fallback to general com_content
+					 */
 					if ($option === 'com_content')
-                    {
-                        // Depending on the alignment of celestial bodies (ugh) data can be either array or object
-                        $isArray = is_array($data);
+					{
+						// Depending on the alignment of celestial bodies (ugh) data can be either array or object
+						$isArray = is_array($data);
 
-                        $data = (object) $data;
+						$data = (object) $data;
 
-                        if (isset($data->catid) && $data->catid > 0)
-                        {
-                            if (in_array(implode('.', $identifier) . '.' . $data->catid, $this->extensions))
-                            {
-                                $identifier[] = $data->catid;
-                            }
-                        }
+						if (isset($data->catid) && $data->catid > 0)
+						{
+							if (in_array(implode('.', $identifier) . '.' . $data->catid, $this->extensions))
+							{
+								$identifier[] = $data->catid;
+							}
+						}
 
-                        $data = $isArray ? (array) $data : $data;
-                    }
+						$data = $isArray ? (array) $data : $data;
+					}
 
 					// If there is a profile that applies to all fields or if the identifier is matched we set the field
 					if ($all || in_array(implode('.', $identifier), $this->extensions))
@@ -304,8 +317,8 @@ class PlgSystemPwtimage extends CMSPlugin
 	/**
 	 * Get the fields from the different XPaths.
 	 *
-	 * @param   SimpleXMLElement  $item  The item to check for paths
-	 * @param   string            $set   The parent group name
+	 * @param   SimpleXMLElement $item The item to check for paths
+	 * @param   string           $set  The parent group name
 	 *
 	 * @return  array  List of fields.
 	 *
@@ -314,7 +327,7 @@ class PlgSystemPwtimage extends CMSPlugin
 	private function findFields($item, $set)
 	{
 		$fieldCollection = array();
-		$paths  = array(
+		$paths           = array(
 			'fieldset/fields',
 			'fields/fieldset',
 			'fieldset',
@@ -365,7 +378,7 @@ class PlgSystemPwtimage extends CMSPlugin
 	/**
 	 * Find the real module name.
 	 *
-	 * @param   int  $moduleId  The ID of the module
+	 * @param   int $moduleId The ID of the module
 	 *
 	 * @return  string  The module name.
 	 *
@@ -373,7 +386,7 @@ class PlgSystemPwtimage extends CMSPlugin
 	 */
 	private function getModuleName($moduleId)
 	{
-		$db = $this->db;
+		$db    = $this->db;
 		$query = $db->getQuery(true)
 			->select($db->quoteName('module'))
 			->from($db->quoteName('#__modules'))
@@ -392,10 +405,15 @@ class PlgSystemPwtimage extends CMSPlugin
 	 */
 	public function onAfterRender()
 	{
+		// List of excluded extensions
+		$excludedExtensions = [
+			'com_acymailing'
+		];
+
 		// Only run on frontend, do not run when we are in AJAX mode
-		if ($this->app->isClient('administrator')
-			|| $this->app->input->get('format') === 'json'
+		if ($this->app->input->get('format') === 'json'
 			|| ($this->app->input->get('layout') === 'edit')
+			|| in_array($this->app->input->get('option'), $excludedExtensions)
 		)
 		{
 			return;
@@ -409,8 +427,8 @@ class PlgSystemPwtimage extends CMSPlugin
 	/**
 	 * Replace tags in a given text.
 	 *
-	 * @param   string  $text    The text to replace.
-	 * @param   bool    $remove  Set if the matched string should be replaced.
+	 * @param   string $text   The text to replace.
+	 * @param   bool   $remove Set if the matched string should be replaced.
 	 *
 	 * @return  void
 	 *
@@ -424,8 +442,8 @@ class PlgSystemPwtimage extends CMSPlugin
 	/**
 	 * Replace Image.
 	 *
-	 * @param   string  $text    The text to replace.
-	 * @param   bool    $remove  Set if the matched string should be replaced.
+	 * @param   string $text   The text to replace.
+	 * @param   bool   $remove Set if the matched string should be replaced.
 	 *
 	 * @return  void
 	 *
@@ -490,8 +508,11 @@ class PlgSystemPwtimage extends CMSPlugin
 							}
 						}
 
-						$data = array (
-							'image'   => $image,
+						// Using absolute path makes certain we can use it anywhere
+						$image = Uri::root(false, '/' . $image);
+
+						$data = array(
+							'image'   => rtrim($image, '/'),
 							'alt'     => $alt,
 							'caption' => $caption
 						);
@@ -531,40 +552,40 @@ class PlgSystemPwtimage extends CMSPlugin
 		$jLanguage->load('com_pwtimage', JPATH_ADMINISTRATOR . '/components/com_pwtimage/', 'en-GB', true, true);
 		$jLanguage->load('com_pwtimage', JPATH_ADMINISTRATOR . '/components/com_pwtimage/', null, true, false);
 
-        // Append key to url if not set yet
-        if (strpos($url, 'key') == false)
-        {
-            // Get the Download ID from component params
-            $downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
+		// Append key to url if not set yet
+		if (strpos($url, 'key') == false)
+		{
+			// Get the Download ID from component params
+			$downloadId = ComponentHelper::getComponent($this->extension)->params->get('downloadid', '');
 
-            // Check if Download ID is set
-            if (empty($downloadId))
-            {
-                Factory::getApplication()->enqueueMessage(
-                    Text::sprintf('COM_PWTIMAGE_DOWNLOAD_ID_REQUIRED',
-                        $this->extension,
-                        $this->extensionTitle
-                    ),
-                    'error'
-                );
+			// Check if Download ID is set
+			if (empty($downloadId))
+			{
+				Factory::getApplication()->enqueueMessage(
+					Text::sprintf('COM_PWTIMAGE_DOWNLOAD_ID_REQUIRED',
+						$this->extension,
+						$this->extensionTitle
+					),
+					'error'
+				);
 
-                return true;
-            }
+				return true;
+			}
 
-            // Append the Download ID from component options
-            $separator = strpos($url, '?') !== false ? '&' : '?';
-            $url       .= $separator . 'key=' . $downloadId;
-        }
+			// Append the Download ID from component options
+			$separator = strpos($url, '?') !== false ? '&' : '?';
+			$url       .= $separator . 'key=' . trim($downloadId);
+		}
 
-        // Append domain to url if not set yet
-        if (strpos($url, 'domain') == false)
-        {
-            // Get the domain for this site
-            $domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
+		// Append domain to url if not set yet
+		if (strpos($url, 'domain') == false)
+		{
+			// Get the domain for this site
+			$domain = preg_replace('(^https?://)', '', rtrim(Uri::root(), '/'));
 
-            // Append domain
-            $url .= '&domain=' . $domain;
-        }
+			// Append domain
+			$url .= '&domain=' . $domain;
+		}
 
 		return true;
 	}

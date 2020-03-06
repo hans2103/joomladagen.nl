@@ -1,19 +1,6 @@
 <?php
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
- * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * JCE is free software. This version may have been modified pursuant
- * to the GNU General Public License, and as distributed it includes or
- * is derivative of works licensed under the GNU General Public License or
- * other free or open source software licenses
- */
-defined('JPATH_PLATFORM') or die;
-?>
-
-<?php
-
-/**
- * @copyright    Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright    Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -22,33 +9,27 @@ defined('JPATH_PLATFORM') or die;
  */
 defined('JPATH_PLATFORM') or die;
 ?>
-<div class="uk-form-row">
-    <label for="style" class="hastip uk-form-label uk-width-1-5"
-           title="<?php echo JText::_('WF_LABEL_STYLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_STYLE'); ?></label>
-    <div class="uk-form-controls uk-width-4-5"><input id="style" type="text" value=""/></div>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label for="style" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_STYLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_STYLE'); ?></label>
+    <div class="uk-form-controls uk-width-4-5"><input id="style" type="text" value="" /></div>
 </div>
-<div class="uk-form-row">
-    <label for="classlist" class="hastip uk-form-label uk-width-1-5"
-           title="<?php echo JText::_('WF_LABEL_CLASSES_DESC'); ?>"><?php echo JText::_('WF_LABEL_CLASSES'); ?></label>
-    <div class="uk-form-controls uk-width-4-5 uk-datalist">
-        <input id="classes" type="text" value=""/>
-        <select id="classlist">
-          <option value=""><?php echo JText::_('WF_OPTION_NOT_SET'); ?></option>
-        </select>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label class="uk-form-label uk-width-2-10" for="classes" class="hastip" title="<?php echo JText::_('WF_LABEL_CLASSES_DESC'); ?>"><?php echo JText::_('WF_LABEL_CLASSES'); ?></label>
+    <div class="uk-form-controls uk-width-8-10">
+        <input type="text" id="classes" class="uk-datalist" list="classes_datalist" multiple />
+        <datalist id="classes_datalist"></datalist>
     </div>
 </div>
-<div class="uk-form-row">
-    <label for="title" class="hastip uk-form-label uk-width-1-5"
-           title="<?php echo JText::_('WF_LABEL_TITLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_TITLE'); ?></label>
-    <div class="uk-form-controls uk-width-4-5"><input id="title" type="text" value=""/></div>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label for="title" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_TITLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_TITLE'); ?></label>
+    <div class="uk-form-controls uk-width-4-5"><input id="title" type="text" value="" /></div>
 </div>
-<div class="uk-form-row">
-    <label for="id" class="hastip uk-form-label uk-width-1-5"
-           title="<?php echo JText::_('WF_LABEL_ID_DESC'); ?>"><?php echo JText::_('WF_LABEL_ID'); ?></label>
-    <div class="uk-form-controls uk-width-4-5"><input id="id" type="text" value=""/></div>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label for="id" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_ID_DESC'); ?>"><?php echo JText::_('WF_LABEL_ID'); ?></label>
+    <div class="uk-form-controls uk-width-4-5"><input id="id" type="text" value="" /></div>
 </div>
 
-<div class="uk-form-row">
+<div class="uk-form-row uk-grid uk-grid-small">
     <label for="border" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_BORDER_DESC'); ?>">
         <?php echo JText::_('WF_LABEL_BORDER'); ?>
     </label>
@@ -59,12 +40,11 @@ defined('JPATH_PLATFORM') or die;
         </div>
 
         <div class="uk-width-1-5">
-            <label for="border_width" class="hastip uk-form-label uk-width-4-10"
-                   title="<?php echo JText::_('WF_LABEL_BORDER_WIDTH_DESC'); ?>"><?php echo JText::_('WF_LABEL_WIDTH'); ?></label>
-            <div class="uk-form-controls uk-width-6-10 uk-datalist">
-                <input type="text" id="border_width" />
-                <select>
-                    <option value="inherit"><?php echo JText::_('WF_OPTION_NOT_SET'); ?></option>
+            <label for="border_width" class="hastip uk-form-label uk-width-4-10" title="<?php echo JText::_('WF_LABEL_BORDER_WIDTH_DESC'); ?>"><?php echo JText::_('WF_LABEL_WIDTH'); ?></label>
+            <div class="uk-form-controls uk-width-6-10">
+                <input type="text" pattern="[0-9]+" id="border_width" class="uk-datalist" list="border_width_datalist">
+                <datalist id="border_width_datalist">
+                    <option value="">--</option>
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -78,16 +58,15 @@ defined('JPATH_PLATFORM') or die;
                     <option value="thin"><?php echo JText::_('WF_OPTION_BORDER_THIN'); ?></option>
                     <option value="medium"><?php echo JText::_('WF_OPTION_BORDER_MEDIUM'); ?></option>
                     <option value="thick"><?php echo JText::_('WF_OPTION_BORDER_THICK'); ?></option>
-                </select>
+                </datalist>
             </div>
         </div>
 
         <div class="uk-width-1-5 uk-margin-left">
-            <label for="border_style" class="hastip uk-form-label uk-width-4-10"
-                   title="<?php echo JText::_('WF_LABEL_BORDER_STYLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_STYLE'); ?></label>
+            <label for="border_style" class="hastip uk-form-label uk-width-4-10" title="<?php echo JText::_('WF_LABEL_BORDER_STYLE_DESC'); ?>"><?php echo JText::_('WF_LABEL_STYLE'); ?></label>
             <div class="uk-form-controls uk-width-6-10">
                 <select id="border_style">
-                    <option value="inherit"><?php echo JText::_('WF_OPTION_NOT_SET'); ?></option>
+                    <option value="">--</option>
                     <option value="none"><?php echo JText::_('WF_OPTION_BORDER_NONE'); ?></option>
                     <option value="solid"><?php echo JText::_('WF_OPTION_BORDER_SOLID'); ?></option>
                     <option value="dashed"><?php echo JText::_('WF_OPTION_BORDER_DASHED'); ?></option>
@@ -102,8 +81,7 @@ defined('JPATH_PLATFORM') or die;
         </div>
 
         <div class="uk-width-1-3 uk-margin-left">
-            <label for="border_color" class="hastip uk-form-label uk-width-4-10"
-                   title="<?php echo JText::_('WF_LABEL_BORDER_COLOR_DESC'); ?>"><?php echo JText::_('WF_LABEL_COLOR'); ?></label>
+            <label for="border_color" class="hastip uk-form-label uk-width-4-10" title="<?php echo JText::_('WF_LABEL_BORDER_COLOR_DESC'); ?>"><?php echo JText::_('WF_LABEL_COLOR'); ?></label>
             <div class="uk-form-controls uk-width-5-10">
                 <input id="border_color" class="color" type="text" value="#000000" />
             </div>
@@ -111,17 +89,15 @@ defined('JPATH_PLATFORM') or die;
     </div>
 </div>
 
-<div class="uk-form-row">
-    <label for="controller_height" class="hastip uk-form-label uk-width-1-5"
-               title="<?php echo JText::_('WF_LABEL_CONTROLLER_HEIGHT_DESC'); ?>"><?php echo JText::_('WF_LABEL_CONTROLLER_HEIGHT'); ?></label>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label for="controller_height" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_CONTROLLER_HEIGHT_DESC'); ?>"><?php echo JText::_('WF_LABEL_CONTROLLER_HEIGHT'); ?></label>
     <div class="uk-form-controls uk-width-4-5">
         <input type="text" id="controller_height" value="" pattern="[0-9]+" />
     </div>
 </div>
-    <div class="uk-form-row">
-    <label for="html" class="hastip uk-form-label uk-width-1-5"
-               title="<?php echo JText::_('WF_LABEL_HTML_DESC'); ?>"><?php echo JText::_('WF_LABEL_HTML'); ?></label>
-        <div class="uk-form-controls uk-width-4-5">
-            <textarea id="html"></textarea>
-        </div>
+<div class="uk-form-row uk-grid uk-grid-small">
+    <label for="html" class="hastip uk-form-label uk-width-1-5" title="<?php echo JText::_('WF_LABEL_HTML_DESC'); ?>"><?php echo JText::_('WF_LABEL_HTML'); ?></label>
+    <div class="uk-form-controls uk-width-4-5">
+        <textarea id="html"></textarea>
+    </div>
 </div>

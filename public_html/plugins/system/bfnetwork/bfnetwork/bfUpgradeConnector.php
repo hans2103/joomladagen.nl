@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -62,22 +60,18 @@ try {
         throw new Exception('bfNetwork Folder not writeable');
     }
 
-    // check file is from myJoomla.com for security
+    // check file is from mysites.guru for security
 
     // Allow for local development with a local endpoint
     switch ($_POST['APPLICATION_ENV']) { // Switch from insecure $_POST to a known clean value locally
         case'development':
         case 'local':
             // Never used on public servers
-            $upgradeFile = 'https://local-maintain.myjoomla.com/public/connector';
-            break;
-        case 'staging':
-            // staging Mode Endpoint - by invitation only - email phil@phil-taylor.com for early access!
-            $upgradeFile = 'https://staging.myjoomla.com/public/connector';
+            $upgradeFile = 'https://dev.mysites.guru/public/connector';
             break;
         default:
             // Production Mode Endpoint... ...
-            $upgradeFile = 'https://cdn.myjoomla.com/public/connector';
+            $upgradeFile = 'https://cdn.mysites.guru/public/connector';
             break;
     }
 
@@ -90,7 +84,7 @@ try {
 
         $ch = curl_init();
 
-        // Set up bare minimum CURL Options needed for myJoomla.com
+        // Set up bare minimum CURL Options needed for mysites.guru
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_URL, $upgradeFile);
@@ -168,9 +162,38 @@ try {
         @unlink('../j25_30_bfnetwork.xml');
     }
 
+    if (!class_exists('bfEvents')) {
+        require 'bfEvents.php';
+    }
+
+    if (!class_exists('bfActivitylog')) {
+        require 'bfActivitylog.php';
+    }
+
+    if (!defined('_BF_AUDIT')) {
+        require 'bfInitJoomla.php';
+    }
+
+    // Log that the connector was upgraded
+    bfActivitylog::getInstance()->log(
+        'bfNetwork',
+        null,
+        'mySites.guru connector auto-upgraded to '.file_get_contents('./VERSION'),
+        'bfnetwork',
+        null,
+        null,
+        null,
+        'bfnetwork',
+        json_encode(array(
+            'version' => file_get_contents('./VERSION'),
+        )),
+        'onConnectorUpgrade',
+        bfEvents::onConnectorUpgrade
+    );
+
     // Reply with a great big high five!
     bfEncrypt::reply(bfReply::SUCCESS, array(
-        'version' => file_get_contents('VERSION'),
+        'version' => file_get_contents('./VERSION'),
     ));
 } catch (Exception $e) {
     bfEncrypt::reply(bfReply::ERROR, 'EXCEPTION: '.$e->getMessage());

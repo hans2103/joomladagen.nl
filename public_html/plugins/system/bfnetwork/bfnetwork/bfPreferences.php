@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -86,8 +84,7 @@ final class bfPreferences
     {
         $this->ensurePrefsFileCreated();
 
-        $prefs = file_get_contents($this->_configFile);
-        $prefs = trim(str_replace($this->dieStatement, '', $prefs));
+        $prefs = trim(str_replace($this->dieStatement, '', str_replace(PHP_EOL, "\n", file_get_contents($this->_configFile))));
 
         if (trim($prefs)) {
             $data = json_decode($prefs);

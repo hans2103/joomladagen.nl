@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -24,9 +24,9 @@ class PlgFieldsPwtimage extends FieldsPlugin
 	/**
 	 * Transforms the field into a DOM XML element and appends it as a child on the given parent.
 	 *
-	 * @param   stdClass   $field  The field.
-	 * @param   DOMElement $parent The field node parent.
-	 * @param   JForm      $form   The form.
+	 * @param   stdClass    $field   The field.
+	 * @param   DOMElement  $parent  The field node parent.
+	 * @param   JForm       $form    The form.
 	 *
 	 * @return  DOMElement
 	 *
@@ -41,15 +41,17 @@ class PlgFieldsPwtimage extends FieldsPlugin
 			return $fieldNode;
 		}
 
-		// Set fieldpath the PWT Image field
-		$fieldNode->setAttribute('addfieldpath', '/administrator/components/com_pwtimage/models/fields');
+		// Set field path the PWT Image field
+		$fieldNode->setAttribute('addfieldpath', '/components/com_pwtimage/models/fields');
+		$origin = $field->fieldparams->get('origin');
+		$fieldNode->setAttribute('origin', $origin . ':');
 	}
 
 	/**
 	 * Before the data is validated save the ratioWidth + the ratioHeight in ratio.
 	 *
-	 * @param   JForm $form joomla form
-	 * @param   array $data data to be validated
+	 * @param   JForm  $form  joomla form
+	 * @param   array  $data  data to be validated
 	 *
 	 * @return  boolean always return true but if we are in pwtimage.image and ratio is set we update it  .
 	 *
@@ -59,8 +61,8 @@ class PlgFieldsPwtimage extends FieldsPlugin
 	{
 		if (array_key_exists('type', $data) && $data['type'] === 'pwtimage.image')
 		{
-			if (array_key_exists('ratioWidth', $data['fieldparams']) &&
-				array_key_exists('ratioHeight', $data['fieldparams'])
+			if (array_key_exists('ratioWidth', $data['fieldparams'])
+				&& array_key_exists('ratioHeight', $data['fieldparams'])
 			)
 			{
 				$data['fieldparams']['ratio'] =
@@ -78,7 +80,8 @@ class PlgFieldsPwtimage extends FieldsPlugin
 		if (array_key_exists('com_fields', $data))
 		{
 			$db = Factory::getDbo();
-			//Check for seach name in com field if the name belongs to a pwtimage.image field
+
+			// Check for seach name in com field if the name belongs to a pwtimage.image field
 			foreach ($data['com_fields'] as $name => $value)
 			{
 				$query = $db->getQuery(true);
@@ -112,14 +115,17 @@ class PlgFieldsPwtimage extends FieldsPlugin
 	 *
 	 * @return  string[][]
 	 *
+	 * @throws  Exception If no Application can be loaded
+	 *
 	 * @since   1.0
 	 */
 	public function onCustomFieldsGetTypes()
 	{
-		$types = parent::onCustomFieldsGetTypes();
+		$types      = parent::onCustomFieldsGetTypes();
+		$typesCount = count($types);
 
 		// If types is empty return it
-		if (!(is_array($types) && count($types) > 0))
+		if (!(is_array($types) && $typesCount > 0))
 		{
 			return $types;
 		}
@@ -127,11 +133,13 @@ class PlgFieldsPwtimage extends FieldsPlugin
 		// We only need to edit is on the backend
 		if (Factory::getApplication()->isClient('site'))
 		{
+			$types[]['type'] = 'pwtimage.image';
+
 			return $types;
 		}
 
 		// Update pwtimage to pwtimage.image because Custom fields uses this for filenames as well
-		for ($i = 0; $i < count($types); $i++)
+		for ($i = 0; $i < $typesCount; $i++)
 		{
 			if (isset($types[$i]['type']) && $types[$i]['type'] === 'pwtimage')
 			{
@@ -144,37 +152,15 @@ class PlgFieldsPwtimage extends FieldsPlugin
 	}
 
 	/**
-	 * Returns true if the given type is supported by the plugin.
-	 *
-	 * @param   string $type The type
-	 *
-	 * @return  boolean
-	 *
-	 * @since   1.0
-	 */
-	public function isTypeSupported($type)
-	{
-		// On the client side we need to update pwtimage.image to pwtimage since joomla will look for the tmpl file
-		// in the directory with the name of the type
-		if (Factory::getApplication()->isClient('site'))
-		{
-			if ($type === 'pwtimage.image')
-			{
-				$type = 'pwtimage';
-			}
-		}
-
-		return parent::isTypeSupported($type);
-	}
-
-	/**
 	 * Prepares the field value.
 	 *
-	 * @param   string   $context The context.
-	 * @param   stdclass $item    The item.
-	 * @param   stdclass $field   The field.
+	 * @param   string    $context  The context.
+	 * @param   stdclass  $item     The item.
+	 * @param   stdclass  $field    The field.
 	 *
 	 * @return  string
+	 *
+	 * @throws  Exception If no Application can be loaded
 	 *
 	 * @since   1.0
 	 */
@@ -182,15 +168,11 @@ class PlgFieldsPwtimage extends FieldsPlugin
 	{
 		// On the client side we need to update pwtimage.image to pwtimage since joomla will look for the tmpl file
 		// in the directory with the name of the type
-		if (Factory::getApplication()->isClient('site'))
+		if ($field->type === 'pwtimage.image' && Factory::getApplication()->isClient('site'))
 		{
-			if ($field->type === 'pwtimage.image')
-			{
-				$field->type = 'pwtimage';
-			}
+			$field->type = 'pwtimage';
 		}
 
 		return parent::onCustomFieldsPrepareField($context, $item, $field);
 	}
-
 }

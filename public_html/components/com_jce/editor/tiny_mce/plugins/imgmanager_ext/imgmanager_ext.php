@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -20,7 +20,9 @@ require_once WF_EDITOR_LIBRARIES . '/classes/extensions/popups.php';
 
 class WFImgManager_ExtPlugin extends WFMediaManager
 {
-    public $_filetypes = 'jpg,jpeg,png,gif,webp';
+    public $_filetypes = 'jpg,jpeg,png,apng,gif,webp';
+
+    protected $name = 'imgmanager_ext';
 
     public function __construct($config = array())
     {
@@ -46,6 +48,8 @@ class WFImgManager_ExtPlugin extends WFMediaManager
             $this->addFileBrowserEvent('onGetItems', array($this, 'processListItems'));
             $this->addFileBrowserEvent('onUpload', array($this, 'onUpload'));
         }
+
+        $request->setRequest(array($this, 'getImageProperties'));
     }
 
     /**
@@ -114,13 +118,35 @@ class WFImgManager_ExtPlugin extends WFMediaManager
         }
     }
 
+    private function cleanExifString($string)
+    {
+        $string = (string) filter_var($string, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES | FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_BACKTICK);
+        return htmlspecialchars($string);
+    }
+
+    private function getImageDescription($image)
+    {
+        $description = '';
+
+        // must be a jpeg
+        if (!preg_match('#\.(jpg|jpeg)$#', strtolower($image))) {
+            return $description;
+        }
+
+        $data = $this->getExifData($image, WFUtility::mb_basename($image));
+
+        if (!empty($data) && isset($data['ImageDescription'])) {
+            $description = $this->cleanExifString($data['ImageDescription']);
+        }
+
+        return $description;
+    }
+
     public function onUpload($file, $relative = '')
     {
         parent::onUpload($file, $relative);
 
         $app = JFactory::getApplication();
-
-        $params = $this->getParams(array('key' => 'imgmanager_ext'));
 
         if ($app->input->getInt('inline', 0) === 1) {
             $result = array(
@@ -128,7 +154,7 @@ class WFImgManager_ExtPlugin extends WFMediaManager
                 'name' => basename($file),
             );
 
-            if ($params->get('always_include_dimensions', 1)) {
+            if ($this->getParam('imgmanager_ext.always_include_dimensions', 1)) {
                 $dim = @getimagesize($file);
 
                 if ($dim) {
@@ -137,87 +163,15 @@ class WFImgManager_ExtPlugin extends WFMediaManager
                 }
             }
 
-            $defaults = $this->getDefaults();
+            $defaults = $this->getDefaultAttributes();
 
-            unset($defaults['always_include_dimensions']);
+            $description = $this->getImageDescription($file);
 
-            if (!empty($defaults)) {
-                $styles = array();
+            if ($description) {
+                $result['alt'] = $description;
             }
 
-            foreach ($defaults as $k => $v) {
-                switch ($k) {
-                    case 'align':
-                        // convert to float
-                        if ($v == 'left' || $v == 'right') {
-                            $k = 'float';
-                        } else {
-                            $k = 'vertical-align';
-                        }
-
-                        $styles[$k] = $v;
-
-                        break;
-                    case 'border_width':
-                    case 'border_style':
-                    case 'border_color':
-                        // only if border state set
-                        $v = $defaults['border'] ? $v : '';
-
-                        // add px unit to border-width
-                        if ($v && $k == 'border_width' && is_numeric($v)) {
-                            $v .= 'px';
-                        }
-
-                        // check for value and exclude border state parameter
-                        if ($v != '') {
-                            $styles[str_replace('_', '-', $k)] = $v;
-                        }
-
-                        break;
-                    case 'margin_left':
-                    case 'margin_right':
-                    case 'margin_top':
-                    case 'margin_bottom':
-                        // add px unit to border-width
-                        if ($v && is_numeric($v)) {
-                            $v .= 'px';
-                        }
-
-                        // check for value and exclude border state parameter
-                        if ($v != '') {
-                            $styles[str_replace('_', '-', $k)] = $v;
-                        }
-                        break;
-                    case 'classes':
-                    case 'title':
-                    case 'id':
-                    case 'direction':
-                    case 'usemap':
-                    case 'longdesc':
-                    case 'style':
-                    case 'alt':
-                        if ($k == 'direction') {
-                            $k = 'dir';
-                        }
-
-                        if ($k == 'classes') {
-                            $k = 'class';
-                        }
-
-                        if ($v != '') {
-                            $result[$k] = $v;
-                        }
-
-                        break;
-                }
-            }
-
-            if (!empty($styles)) {
-                $result['styles'] = $styles;
-            }
-
-            return $result;
+            return array_merge($result, $defaults);
         }
 
         return array();
@@ -244,14 +198,20 @@ class WFImgManager_ExtPlugin extends WFMediaManager
         for ($i = 0; $i < count($result['files']); ++$i) {
             $file = $result['files'][$i];
 
+            if (empty($file['id'])) {
+                continue;
+            }
+
+            // only some image types
+            if (!in_array(strtolower($file['extension']), array('jpg', 'jpeg', 'png'))) {
+                continue;
+            }
+
             $thumbnail = $this->getThumbnail($file['id']);
 
             $classes = array();
             $properties = array();
             $trigger = array();
-
-            // add transform trigger
-            $trigger[] = 'transform';
 
             // add thumbnail properties
             if ($thumbnail && $thumbnail != $file['id']) {
@@ -272,27 +232,20 @@ class WFImgManager_ExtPlugin extends WFMediaManager
             // add trigger properties
             $properties['trigger'] = implode(',', $trigger);
 
-            $result['files'][$i] = array_merge($file, 
+            $image = $filesystem->toAbsolute($file['id']);
+            $description = $this->getImageDescription($image);
+
+            if ($description) {
+                $properties['description'] = $description;
+            }
+
+            $result['files'][$i] = array_merge($file,
                 array(
-                    'classes' => implode(' ', array_merge(explode(' ', $file['classes']), $classes)), 
-                    'properties' => array_merge($file['properties'], $properties)
+                    'classes' => implode(' ', array_merge(explode(' ', $file['classes']), $classes)),
+                    'properties' => array_merge($file['properties'], $properties),
                 )
             );
         }
-    }
-
-    private function getExifData($relative)
-    {
-        $data = array();
-
-        $browser = $this->getFileBrowser();
-        $image = WFUtility::makePath($browser->getBaseDir(), $relative);
-
-        if (function_exists('exif_read_data')) {
-            $data = exif_read_data($image);
-        }
-
-        return $data;
     }
 
     /**
@@ -382,32 +335,38 @@ class WFImgManager_ExtPlugin extends WFMediaManager
     private function getThumbnailOptions()
     {
         $options = array();
-        
+
         $values = array(
-            'thumbnail_width'   => 120, 
-            'thumbnail_height'  => 90,
-            'thumbnail_quality' => 80
+            'thumbnail_width' => 120,
+            'thumbnail_height' => 90,
+            'thumbnail_quality' => 80,
         );
 
         $states = array(
             'upload_thumbnail' => 1,
             'upload_thumbnail_state' => 0,
-            'upload_thumbnail_crop' => 0
+            'upload_thumbnail_crop' => 0,
         );
-        
-        foreach($values as $key => $default) {
-            $fallback = $this->getParam('editor.upload_' . $key, $default);
+
+        foreach ($values as $key => $default) {
+            $fallback = $this->getParam('editor.upload_' . $key, '', '$');
             $value = $this->getParam('imgmanager_ext.' . $key, '', '$');
 
             // indicates an unset value, so use the global value or default
             if ($value === '$') {
-                $value = $fallback;
+                $value = $fallback === '$' ? $default : $fallback;
             }
 
             $options['upload_' . $key] = $value;
         }
 
-        foreach($states as $key => $default) {
+        // unset thumbnail width and height if both are empty, use global values
+        if ($options['upload_thumbnail_width'] === '' && $options['upload_thumbnail_height'] === '') {
+            unset($options['upload_thumbnail_width']);
+            unset($options['upload_thumbnail_height']);
+        }
+
+        foreach ($states as $key => $default) {
             $value = $this->getParam('editor.' . $key, $default);
             $options[$key] = $this->getParam('imgmanager_ext.' . $key, '');
 
@@ -418,6 +377,104 @@ class WFImgManager_ExtPlugin extends WFMediaManager
         }
 
         return $options;
+    }
+
+    protected function getDefaultAttributes()
+    {
+        $attribs = array();
+        $defaults = $this->getDefaults();
+
+        unset($defaults['always_include_dimensions']);
+
+        if (!empty($defaults)) {
+            $styles = array();
+        }
+
+        foreach ($defaults as $k => $v) {
+            switch ($k) {
+                case 'align':
+                    // convert to float
+                    if ($v == 'left' || $v == 'right') {
+                        $k = 'float';
+                    } else {
+                        $k = 'vertical-align';
+                    }
+
+                    $styles[$k] = $v;
+
+                    break;
+                case 'border_width':
+                case 'border_style':
+                case 'border_color':
+                    // only if border state set
+                    $v = $defaults['border'] ? $v : '';
+
+                    // add px unit to border-width
+                    if ($v && $k == 'border_width' && is_numeric($v)) {
+                        $v .= 'px';
+                    }
+
+                    // check for value and exclude border state parameter
+                    if ($v != '') {
+                        $styles[str_replace('_', '-', $k)] = $v;
+                    }
+
+                    break;
+                case 'margin_left':
+                case 'margin_right':
+                case 'margin_top':
+                case 'margin_bottom':
+                    // add px unit to border-width
+                    if ($v && is_numeric($v)) {
+                        $v .= 'px';
+                    }
+
+                    // check for value and exclude border state parameter
+                    if ($v != '') {
+                        $styles[str_replace('_', '-', $k)] = $v;
+                    }
+                    break;
+                case 'classes':
+                case 'title':
+                case 'id':
+                case 'direction':
+                case 'usemap':
+                case 'longdesc':
+                case 'style':
+                case 'alt':
+                    if ($k == 'direction') {
+                        $k = 'dir';
+                    }
+
+                    if ($k == 'classes') {
+                        $k = 'class';
+                    }
+
+                    if ($v != '') {
+                        $attribs[$k] = $v;
+                    }
+
+                    break;
+            }
+        }
+
+        if (!empty($styles)) {
+            if (!empty($attribs['style'])) {
+                // explode passed in style value to array
+                $attribs['style'] = explode(';', $attribs['style']);
+                // merge with specific styles array
+                $styles = array_merge($attribs['style'], $styles);
+            }
+
+            $attribs['style'] = $styles;
+        }
+
+        return $attribs;
+    }
+
+    public function getImageProperties()
+    {
+        return $this->getDefaultAttributes();
     }
 
     public function getSettings($settings = array())
@@ -431,15 +488,15 @@ class WFImgManager_ExtPlugin extends WFMediaManager
             ),
             'always_include_dimensions' => $this->getParam('imgmanager_ext.always_include_dimensions', 0),
             'can_edit_images' => 1,
-            'thumbnail_width'   => $this->getParam('imgmanager_ext.thumbnail_width', '', 120), 
-            'thumbnail_height'  => $this->getParam('imgmanager_ext.thumbnail_height', '', 90)
+            'thumbnail_width' => $this->getParam('imgmanager_ext.thumbnail_width', ''),
+            'thumbnail_height' => $this->getParam('imgmanager_ext.thumbnail_height', ''),
         );
 
         return parent::getSettings($settings);
     }
 
     protected function getFileBrowserConfig($config = array())
-    {       
+    {
         $config = $this->getThumbnailOptions();
         return parent::getFileBrowserConfig($config);
     }

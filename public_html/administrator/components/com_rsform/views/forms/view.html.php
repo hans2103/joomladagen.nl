@@ -65,6 +65,10 @@ class RsformViewForms extends JViewLegacy
 			$this->tabposition = JFactory::getApplication()->input->getInt('tabposition', 0);
 			$this->tab 		   = JFactory::getApplication()->input->getInt('tab', 0);
 			$this->form 	   = $this->get('form');
+			if (empty($this->form->FormId))
+			{
+				throw new Exception(JText::_('COM_RSFORM_FORM_DOES_NOT_EXIST'));
+			}
 			$this->form_post   = $this->get('formPost');
 			$this->show_previews = RSFormProHelper::getConfig('global.grid_show_previews');
 			$this->show_caption  = RSFormProHelper::getConfig('global.grid_show_caption');
@@ -262,6 +266,17 @@ class RsformViewForms extends JViewLegacy
 
 			$this->sortColumn = $this->get('sortColumn');
 			$this->sortOrder  = $this->get('sortOrder');
+
+			$this->month = JFactory::getDate();
+			$this->month->setDate($this->month->year, $this->month->month, 1);
+			$this->month->setTime(0, 0, 0);
+			$this->month = $this->month->format('Y-m-d');
+
+			$this->today = JFactory::getDate();
+			$this->today->setTime(0, 0, 0);
+			$this->today = $this->today->format('Y-m-d');
+
+			$this->disable_multilanguage = RSFormProHelper::getConfig('global.disable_multilanguage');
 		}
 
 		parent::display($tpl);
@@ -505,6 +520,23 @@ class RsformViewForms extends JViewLegacy
 			{
 				$preview = '<div>' . $preview . '</div>';
 			}
+		}
+
+		if (function_exists('mb_convert_encoding'))
+		{
+			$preview = mb_convert_encoding($preview, 'HTML-ENTITIES', 'UTF-8');
+		}
+
+		if (class_exists('DOMDocument'))
+		{
+			$doc    = new DOMDocument();
+			$errors = libxml_use_internal_errors(true);
+			$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?><html_tags>' . $preview . '</html_tags>');
+			$doc->encoding = 'UTF-8';
+			libxml_clear_errors();
+			$preview = substr($doc->saveHTML($doc->getElementsByTagName('html_tags')->item(0)), strlen('<html_tags>'), -strlen('</html_tags>'));
+
+			libxml_use_internal_errors($errors);
 		}
 
 		return $preview;

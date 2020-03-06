@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -50,6 +50,7 @@ $tokenValue = Factory::getSession()->getId();
 $modalId            = $input->getCmd('modalId', uniqid());
 $ratio              = array();
 $freeRatio          = true;
+$useOriginal        = true;
 $keepOriginal       = true;
 $width              = null;
 $sourcePath         = '/images';
@@ -101,6 +102,7 @@ extract($helper->getSettings());
  * @param   int    $modalId            The unique ID for the modal
  * @param   string $ratio              The image ratio to use
  * @param   bool   $freeRatio          Set if the free ratio should be shown
+ * @param   bool   $useOriginal        Use the original image
  * @param   bool   $keepOriginal       Set if the user should get the option to keep the original image size
  * @param   int    $width              The fixed with for an image
  * @param   string $sourcePath         The main image path
@@ -196,6 +198,7 @@ if ($multiple || $repeatable)
 $displayData['modalId']            = $modalId;
 $displayData['ratio']              = $ratio;
 $displayData['freeRatio']          = $freeRatio;
+$displayData['useOriginal']        = filter_var($useOriginal, FILTER_VALIDATE_BOOLEAN);
 $displayData['keepOriginal']       = filter_var($keepOriginal, FILTER_VALIDATE_BOOLEAN);
 $displayData['width']              = $width;
 $displayData['sourcePath']         = $sourcePath;
@@ -307,22 +310,33 @@ JS
 			<div class="pwt-tabs-wrapper" data-tabs-wrapper-<?php echo $modalId; ?>>
 				<div class="pwt-tabs-scroller" data-tabs-scroller>
 					<ul class="pwt-tabs" data-tabs>
-						<?php if ($showUpload) : ?>
+						<?php if ($showUpload)
+						:
+							?>
 							<li class="<?php echo $uploadActive; ?>">
 								<a data-tab href="#upload"><?php echo Text::_('COM_PWTIMAGE_TAB_UPLOAD'); ?></a>
 							</li>
 						<?php endif; ?>
-						<?php if ($showFolder) : ?>
+						<?php
+						if ($showFolder)
+						:
+							?>
 						<li class="<?php echo $folderActive; ?>">
 							<a data-tab href="#select"><?php echo Text::_('COM_PWTIMAGE_TAB_SELECT'); ?></a>
 						</li>
 						<?php endif; ?>
-						<?php if ($showUpload || $showFolder) : ?>
+						<?php
+						if ($showUpload || $showFolder)
+						:
+							?>
 						<li>
 							<a data-tab href="#edit"><?php echo Text::_('COM_PWTIMAGE_TAB_EDIT'); ?></a>
 						</li>
 						<?php endif; ?>
-						<?php if ($showHelp) : ?>
+						<?php
+						if ($showHelp)
+						:
+							?>
 						<li>
 							<a data-tab href="#help"><?php echo Text::_('COM_PWTIMAGE_TAB_HELP'); ?></a>
 						</li>
@@ -338,22 +352,33 @@ JS
 
 			<!-- Tabs panes -->
 			<div class="pwt-tabs-panes" data-tabs-content>
-				<?php if ($showUpload) : ?>
+				<?php if ($showUpload)
+				:
+					?>
 					<div class="pwt-tabs-pane <?php echo $uploadActive; ?>" data-tabs-pane id="upload">
 						<?php echo $this->sublayout('upload', $displayData); ?>
 					</div>
 				<?php endif; ?>
-				<?php if ($showFolder) : ?>
+				<?php
+				if ($showFolder)
+				:
+					?>
 					<div class="pwt-tabs-pane <?php echo $folderActive; ?>" data-tabs-pane id="select">
 						<?php echo $this->sublayout('select', array('baseFolder' => $baseFolder, 'sourcePath' => $sourcePath, 'tokenName' => $tokenName, 'tokenValue' => $tokenValue, 'wysiwyg' => $wysiwyg)); ?>
 					</div>
 				<?php endif; ?>
-				<?php if ($showUpload || $showFolder) : ?>
+				<?php
+				if ($showUpload || $showFolder)
+				:
+					?>
 					<div class="pwt-tabs-pane" data-tabs-pane id="edit">
 						<?php echo $this->sublayout('edit', $displayData); ?>
 					</div>
 				<?php endif; ?>
-				<?php if ($showHelp) : ?>
+				<?php
+				if ($showHelp)
+				:
+					?>
 				<div class="pwt-tabs-pane" data-tabs-pane id="help">
 					<?php echo $this->sublayout('help', array()); ?>
 				</div>

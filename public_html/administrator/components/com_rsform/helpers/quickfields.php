@@ -65,10 +65,12 @@ class RSFormProQuickFields
 							if (isset($properties['DESCRIPTION']))
 							{
 								$componentPlaceholders['generate'][] = '{' . $properties['NAME'] . ':description}';
+								$componentPlaceholders['generate'][] = '{' . $properties['NAME'] . ':descriptionhtml}';
 							}
 							
 							// Validation placeholder
 							$componentPlaceholders['generate'][] = '{' . $properties['NAME'] . ':validation}';
+							$componentPlaceholders['generate'][] = '{' . $properties['NAME'] . ':errorClass}';
 
 							// Value placeholder
 							$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':value}';
@@ -77,6 +79,12 @@ class RSFormProQuickFields
 								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':path}';
 								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':localpath}';
 								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':filename}';
+								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':image}';
+								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':localimage}';
+							}
+
+							if ($component->ComponentTypeId == RSFORM_FIELD_GMAPS) {
+								$componentPlaceholders['display'][] = '{' . $properties['NAME'] . ':map}';
 							}
 
 							if (isset($properties['ITEMS'])) {

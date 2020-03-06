@@ -3,19 +3,19 @@
     <name>PWT SEO - Package</name>
     <packagename>pwtseo</packagename>
     <author>Perfect Web Team</author>
-    <creationDate>11 March 2019</creationDate>
-    <copyright>Copyright (C) 2016 - 2019 Perfect Web Team</copyright>
+    <creationDate>13 February 2020</creationDate>
+    <copyright>Copyright (C) 2016 - 2020 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.3.0</version>
+    <version>1.5.0</version>
     <description>PWT SEO Package</description>
 
     <scriptfile>script.php</scriptfile>
 
     <files folder="packages">
-        <file type="component" id="com_pwtseo">com_pwtseo-1.3.0.zip</file>
-        <file type="plugin" group="system" id="pwtseo">plg_system_pwtseo-1.3.0.zip</file>
+        <file type="component" id="com_pwtseo">com_pwtseo-1.5.0.zip</file>
+        <file type="plugin" group="system" id="pwtseo">plg_system_pwtseo-1.5.0.zip</file>
     </files>
 
     <updateservers>

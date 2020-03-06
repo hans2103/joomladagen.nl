@@ -17,7 +17,7 @@
                 <option value="1">
                     PLG_SYSTEM_PWTSEO_FORM_PLUGIN_SETTINGS_LABEL
                 </option>
-                <option value="0">
+                <option value="4">
                     JNONE
                 </option>
                 <option value="2">
@@ -35,6 +35,28 @@
                     description="PLG_SYSTEM_PWTSEO_FORM_CANONICAL_DESC"
                     showon="override_canonical:3"
             />
+
+	        <field
+		        name="strip_canonical_choice"
+		        label="PLG_SYSTEM_CONFIG_PLUGIN_IGNORE_CANONICAL_LABEL"
+		        description="PLG_SYSTEM_CONFIG_PLUGIN_IGNORE_CANONICAL_DESC"
+		        type="list"
+		        default="4"
+	        >
+		        <option value="4">PLG_SYSTEM_PWTSEO_FORM_PLUGIN_SETTINGS_LABEL</option>
+		        <!-- 1 is none, because 0 would be stripped as a value -->
+		        <option value="1">JNONE</option>
+		        <option value="2">JALL</option>
+		        <option value="3">PLG_SYSTEM_CUSTOM</option>
+	        </field>
+
+	        <field
+		        name="strip_canonical"
+		        label="PLG_SYSTEM_CONFIG_PLUGIN_IGNORE_PARAMS_LABEL"
+		        description="PLG_SYSTEM_CONFIG_PLUGIN_IGNORE_PARAMS_DESC"
+		        type="text"
+		        showon="strip_canonical_choice:2"
+	        />
 
             <field
                     type="text"
@@ -73,7 +95,6 @@
                     name="expand_og"
                     type="list"
                     label="PLG_SYSTEM_PWTSEO_FORM_EXPAND_OG_LABEL"
-                    description="PLG_SYSTEM_PWTSEO_FORM_EXPAND_OG_DESC"
                     class=""
                     filter="intval"
                     size="1"
@@ -112,6 +133,13 @@
                     ratio="16/9"
                     width="600|1200"
                     showon="expand_og:1"/>
+
+	        <field
+		        name="facebook_url"
+		        type="text"
+		        label="PLG_SYSTEM_PWTSEO_FORM_OPEN_GRAPH_FACEBOOK_URL_LABEL"
+		        showon="expand_og:1"
+	        />
 
             <field name="twitter_spacer" type="spacer" class="pwtseo__twitter" label="PLG_SYSTEM_PWTSEO_FORM_SPACER_TWITTER"  showon="expand_og:1" />
 
@@ -224,6 +252,8 @@
                     hint="PLG_SYSTEM_PWTSEO_FORM_FOCUS_WORD_HINT"
                     onchange="" />
 
+
+
             <field type="spacer" name="focus_word_spacer" hr="true" />
 
             <field
@@ -251,7 +281,25 @@
                     showon="override_page_title:1"
             />
 
+            <field
+                    name="cascade_settings"
+                    type="list"
+                    label="PLG_SYSTEM_PWTSEO_FORM_CASCADE_SETTINGS_LABEL"
+                    description="PLG_SYSTEM_PWTSEO_FORM_CASCADE_SETTINGS_DESC"
+                    class=""
+                    filter="intval"
+                    size="1"
+                    default="0" >
+                <option value="1">
+                    JYES
+                </option>
+                <option value="0">
+                    JNO
+                </option>
+            </field>
+
             <field type="hidden" name="flag_outdated" value="0" />
+            <field type="hidden" name="google_rank" value="0" />
         </fieldset>
     </fields>
 </form>

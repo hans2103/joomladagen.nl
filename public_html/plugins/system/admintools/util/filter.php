@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -140,6 +140,31 @@ class AtsystemUtilFilter
 			}
 
 			return $ip;
+		}, $ipTable);
+
+		/**
+		 * Resolve any IPv6 domains given in the list (e.g. #example.dyndns.info) into IP addresses.
+		 *
+		 * WARNING! This incurs a significant time penalty, up to 3 seconds per DNS query.
+		 */
+		$ipTable = array_map(function ($v) {
+			if (substr($v, 0, 1) != '#')
+			{
+				return $v;
+			}
+
+			$domain = substr($v, 1);
+			$dns   = dns_get_record($domain, DNS_AAAA);
+
+			foreach ($dns as $record)
+			{
+				if ($record['type'] === 'AAAA')
+				{
+					return $record['ipv6'];
+				}
+			}
+
+			return '';
 		}, $ipTable);
 
 		// Perform the filtering
@@ -384,18 +409,18 @@ class AtsystemUtilFilter
 	{
 		if (strlen($inet) == 4)
 		{
-			$unpacked = unpack('A4', $inet);
+			$unpacked = unpack('C4', $inet);
 		}
 		else
 		{
-			$unpacked = unpack('A16', $inet);
+			$unpacked = unpack('C16', $inet);
 		}
-		$unpacked = str_split($unpacked[1]);
+
 		$binaryip = '';
 
-		foreach ($unpacked as $char)
+		foreach ($unpacked as $byte)
 		{
-			$binaryip .= str_pad(decbin(ord($char)), 8, '0', STR_PAD_LEFT);
+			$binaryip .= str_pad(decbin($byte), 8, '0', STR_PAD_LEFT);
 		}
 
 		return $binaryip;

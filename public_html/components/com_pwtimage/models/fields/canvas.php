@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -78,6 +78,11 @@ class PwtimageFormFieldCanvas extends FormField
 			if (isset($this->element['freeRatio']))
 			{
 				$data['freeRatio'] = (string) $this->element['freeRatio'] === 'false' ? false : true;
+			}
+
+			if (isset($this->element['useOriginal']))
+			{
+				$data['useOriginal'] = (string) $this->element['useOriginal'] === 'false' ? false : true;
 			}
 
 			if (isset($this->element['keepOriginal']))

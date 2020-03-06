@@ -1,9 +1,11 @@
 CREATE TABLE IF NOT EXISTS `#__rsform_directory` (
   `formId` int(11) NOT NULL,
   `filename` VARCHAR(255) NOT NULL DEFAULT 'export.pdf',
+  `csvfilename` VARCHAR(255) NOT NULL DEFAULT '{alias}.csv',
   `enablepdf` tinyint(1) NOT NULL,
   `enablecsv` tinyint(1) NOT NULL,
   `HideEmptyValues` tinyint(1) NOT NULL,
+  `ShowGoogleMap` tinyint(1) NOT NULL,
   `ViewLayout` longtext NOT NULL,
   `ViewLayoutName` text NOT NULL,
   `ViewLayoutAutogenerate` tinyint(1) NOT NULL,

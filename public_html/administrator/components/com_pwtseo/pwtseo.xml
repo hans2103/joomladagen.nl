@@ -2,12 +2,12 @@
 <extension version="3.8" type="component" method="upgrade">
     <name>COM_PWTSEO</name>
     <author>Perfect Web Team</author>
-    <creationDate>11 March 2019</creationDate>
-    <copyright>Copyright (C) 2016 - 2019 Perfect Web Team</copyright>
+    <creationDate>13 February 2020</creationDate>
+    <copyright>Copyright (C) 2016 - 2020 Perfect Web Team</copyright>
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>extensions@perfectwebteam.com</authorEmail>
     <authorUrl>https://extensions.perfectwebteam.com</authorUrl>
-    <version>1.3.0</version>
+    <version>1.5.0</version>
     <description>COM_PWTSEO_XML_DESCRIPTION</description>
 
     <!-- Runs on install -->
@@ -29,6 +29,13 @@
         <folder>css</folder>
         <folder>images</folder>
     </media>
+
+    <!-- CLI Script -->
+    <site>
+        <files folder="cli">
+            <filename>pwt_rsseo2pwtseo.php</filename>
+        </files>
+    </site>
 
     <!-- Back-end files -->
     <administration>

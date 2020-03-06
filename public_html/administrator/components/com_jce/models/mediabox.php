@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -48,6 +48,7 @@ class JceModelMediabox extends JModelForm
         JForm::addFormPath(JPATH_PLUGINS . '/system/jcemediabox');
 
         JFactory::getLanguage()->load('plg_system_jcemediabox', JPATH_ADMINISTRATOR);
+        JFactory::getLanguage()->load('plg_system_jcemediabox', JPATH_PLUGINS . '/system/jcemediabox');
 
         // Get the form.
         $form = $this->loadForm('com_jce.mediabox', 'jcemediabox', array('control' => 'jform', 'load_data' => $loadData), true, '//config');
@@ -116,22 +117,27 @@ class JceModelMediabox extends JModelForm
      *
      * @return bool True on success
      *
-     * @since    3.0
+     * @since    2.7
      */
     public function save($data)
     {
-        $table = JTable::getInstance('extension');
+        $table = $this->getTable();
 
-        $plugin = JPluginHelper::getPlugin('system', 'jcemediabox');
+        $id = $table->find(array(
+            'type'      => 'plugin',
+            'element'   => 'jcemediabox',
+            'folder'    => 'system'
+        )); 
 
-        if (!$plugin->id) {
+        if (!$id) {
             $this->setError('Invalid plugin');
             return false;
         }
 
         // Load the previous Data
-        if (!$table->load($plugin->id)) {
-            $this->setError($table->getError());
+		if (!$table->load($id))
+		{
+			$this->setError($table->getError());
             return false;
         }
 

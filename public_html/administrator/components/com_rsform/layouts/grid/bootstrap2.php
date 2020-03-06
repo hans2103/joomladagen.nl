@@ -91,7 +91,7 @@ class RSFormProGridBootstrap2 extends RSFormProGrid
 		$placeholders = array(
 			'body' 		 	=> '{' . $data->ComponentName . ':body}',
 			'caption'	 	=> '{' . $data->ComponentName . ':caption}',
-			'description' 	=> '{' . $data->ComponentName . ':description}',
+			'description' 	=> '{' . $data->ComponentName . ':descriptionhtml}',
 			'error' 	 	=> '{' . $data->ComponentName . ':errorClass}',
 			'validation' 	=> '{' . $data->ComponentName . ':validation}',
 		);
@@ -116,17 +116,16 @@ class RSFormProGridBootstrap2 extends RSFormProGrid
 			$html[] = "\t"."\t"."\t".'<div class="control-group rsform-block rsform-block-' . $block . $placeholders['error'] . '">';
 				if ($data->ComponentTypeId != RSFORM_FIELD_PAGEBREAK)
 				{
-					$label = "\t"."\t"."\t"."\t".'<label class="control-label formControlLabel hasTooltip" title="' . $placeholders['description'] . '"';
-					if (!in_array($data->ComponentTypeId, array(RSFORM_FIELD_CHECKBOXGROUP, RSFORM_FIELD_RADIOGROUP, RSFORM_FIELD_BIRTHDAY)))
-					{
-						$label .= ' for="' . $data->ComponentName . '"';
-					}
+					$label = "\t"."\t"."\t"."\t".'<label class="control-label formControlLabel"';
+					$label .= $this->generateFor($data);
 					$label .= '>';
+					$label .= '<span class="hasTooltip" title="' . $placeholders['description'] . '">';
 					$label .= $placeholders['caption'];
 					if ($data->Required && $this->requiredMarker)
 					{
 						$label .= '<strong class="formRequired">' . $this->requiredMarker . '</strong>';
 					}
+					$label .= '</span>';
 					$label .= '</label>';
 					$html[] = $label;
 				}

@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -45,28 +45,28 @@ JS
 <!-- File picker -->
 <div class="pwt-content pwt-filepicker">
 
-    <!-- Path / breadcrumbs -->
+	<!-- Path / breadcrumbs -->
 	<div class="pwt-breadcrumb js-breadcrumb">
-        <?php // @TODO: Replace below class icon with SVG; ?>
+		<?php // @TODO: Replace below class icon with SVG; ?>
 		<?php echo HTMLHelper::_('link', $baseFolder, '<span class="icon-folder-2"></span>' . basename($baseFolder), 'onclick="pwtImage.loadFolder(this, \'' . $sourcePath . '\', \'select\', \'' . $tokenName . '\', \'' . $tokenValue . '\'); return false;"'); ?>
 	</div><!-- .pwt-filepicker__path -->
 
-    <!-- File picker content area -->
+	<!-- File picker content area -->
 	<div class="pwt-filepicker__content">
 
-        <!-- Folders -->
+		<!-- Folders -->
 		<div class="pwt-gallery" data-gallery>
 			<div class="pwt-gallery__items pwt-gallery__items--folders"></div>
 		</div><!-- .pwt-gallery -->
 
-        <!-- Files -->
+		<!-- Files -->
 		<div class="pwt-gallery" data-gallery>
 			<div class="pwt-gallery__items pwt-gallery__items--images"></div>
 		</div><!-- .pwt-gallery -->
 
 	</div><!-- .pwt-filepicker__content -->
 
-    <!-- File picker pagination -->
+	<!-- File picker pagination -->
 	<div class="pwt-filepicker__pages">
 		<div class="pwt-pagination"></div>
 	</div><!-- .pwt-filepicker__pages -->

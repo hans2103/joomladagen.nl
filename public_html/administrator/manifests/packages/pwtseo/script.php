@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -32,8 +32,8 @@ class Pkg_PwtSEOInstallerScript
 	/**
 	 * Method to run before an install/update/uninstall method
 	 *
-	 * @param   string  $type    The type of change (install, update or discover_install).
-	 * @param   object  $parent  The class calling this method.
+	 * @param   string $type   The type of change (install, update or discover_install).
+	 * @param   object $parent The class calling this method.
 	 *
 	 * @return  bool  True on success | False on failure
 	 *
@@ -99,6 +99,7 @@ class Pkg_PwtSEOInstallerScript
 
 		if ($type === 'update')
 		{
+			// Check if there's an update to the scoring, so we can notify the user
 			$query
 				->clear()
 				->select('COUNT(*)')

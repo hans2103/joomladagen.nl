@@ -113,7 +113,7 @@ class RSFormProGridUikit extends RSFormProGrid
 		$placeholders = array(
 			'body' 		 	=> '{' . $data->ComponentName . ':body}',
 			'caption'	 	=> '{' . $data->ComponentName . ':caption}',
-			'description' 	=> '{' . $data->ComponentName . ':description}',
+			'description' 	=> '{' . $data->ComponentName . ':descriptionhtml}',
 			'error' 	 	=> '{' . $data->ComponentName . ':errorClass}',
 			'validation' 	=> '{' . $data->ComponentName . ':validation}',
 		);
@@ -139,10 +139,7 @@ class RSFormProGridUikit extends RSFormProGrid
 			if ($data->ComponentTypeId != RSFORM_FIELD_PAGEBREAK)
 			{
 				$label = "\t"."\t"."\t"."\t".'<label class="uk-form-label formControlLabel" data-uk-tooltip="{pos:\'top-left\'}" title="' . $placeholders['description'] . '"';
-				if (!in_array($data->ComponentTypeId, array(RSFORM_FIELD_CHECKBOXGROUP, RSFORM_FIELD_RADIOGROUP, RSFORM_FIELD_BIRTHDAY)))
-				{
-					$label .= ' for="' . $data->ComponentName . '"';
-				}
+				$label .= $this->generateFor($data);
 				$label .= '>';
 				$label .= $placeholders['caption'];
 				if ($data->Required && $this->requiredMarker)

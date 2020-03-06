@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -132,7 +132,7 @@ class PwtimageModelProfile extends AdminModel
 	 *
 	 * @param   array $data The form data.
 	 *
-	 * @return  bool  True on success or false on failure.
+	 * @return  boolean  True on success or false on failure.
 	 *
 	 * @since   1.1.0
 	 *
@@ -159,32 +159,32 @@ class PwtimageModelProfile extends AdminModel
 		{
 			if ($data['catids'] && count($data['catids']))
 			{
-			    // Add the specified category with the path
+				// Add the specified category with the path
 				foreach ($data['catids'] as $catid)
 				{
 					if (in_array('com_content.images.image_fulltext', $settings['extensions']))
-                    {
-                        $settings['extensions'][] = 'com_content.images.image_fulltext.' . $catid;
-                    }
+					{
+						$settings['extensions'][] = 'com_content.images.image_fulltext.' . $catid;
+					}
 
-                    if (in_array('com_content.images.image_intro', $settings['extensions']))
-                    {
-                        $settings['extensions'][] = 'com_content.images.image_intro.' . $catid;
-                    }
+					if (in_array('com_content.images.image_intro', $settings['extensions']))
+					{
+						$settings['extensions'][] = 'com_content.images.image_intro.' . $catid;
+					}
 				}
 
 				// Remove all the general com_content paths, we no longer need them
-                $extensions = array_filter(
-                    $settings['extensions'],
-                    function($el) {
-                        return stripos($el, 'com_content') === false || preg_match('/\d+/', $el);
-                    }
-                );
+				$extensions = array_filter(
+					$settings['extensions'],
+					function ($el) {
+						return stripos($el, 'com_content') === false || preg_match('/\d+/', $el);
+					}
+				);
 			}
 			else
-            {
-                $extensions = $settings['extensions'];
-            }
+			{
+				$extensions = $settings['extensions'];
+			}
 		}
 
 		unset($settings['extensions']);
@@ -328,7 +328,7 @@ class PwtimageModelProfile extends AdminModel
 
 				// Set the current path and file
 				$this->path = $path;
-				$this->file = $file;
+				$this->file = JPath::clean($file, '/');
 
 				// Get the children of the XML
 				$children = $xml->children();
@@ -340,20 +340,6 @@ class PwtimageModelProfile extends AdminModel
 					if (!$child->xpath("//field[@type='media']") && !$child->xpath("//field[@type='pwtimage.image']"))
 					{
 						continue;
-					}
-
-					// Check for a valid identifier name
-					$this->identifier = array((string) $child->attributes()->name);
-					$this->breadcrumb = array((string) $child->attributes()->label);
-
-					if ((int) strlen($this->identifier[0]) === 0)
-					{
-						$this->identifier = array();
-					}
-
-					if ((int) strlen($this->breadcrumb[0]) === 0)
-					{
-						$this->breadcrumb = array();
 					}
 
 					// Check for a valid identifier name
@@ -474,8 +460,11 @@ class PwtimageModelProfile extends AdminModel
 			&& stristr($this->file, '/tmpl/') === false
 			&& count($this->identifier) > 0)
 		{
+			// Clean the site path
+			$sitePath = JPath::clean(JPATH_SITE, '/');
+
 			// Get the XML path
-			$extensionPath = str_replace(JPATH_SITE . '/', '', $this->file);
+			$extensionPath = str_replace($sitePath . '/', '', $this->file);
 
 			// Get the extension name
 			$name          = str_replace($this->path . '/', '', $extensionPath);
@@ -717,13 +706,14 @@ class PwtimageModelProfile extends AdminModel
 
 		// We have to remove the specific category identifiers from the paths
 		array_walk(
-		    $data->extensions,
-            function(&$el) {
-		        if (stripos($el, 'com_content') === 0 && preg_match('/\d+/', $el)) {
-		            $el = substr($el, 0, strrpos($el, '.'));
-                }
-            }
-        );
+			$data->extensions,
+			function (&$el) {
+				if (stripos($el, 'com_content') === 0 && preg_match('/\d+/', $el))
+				{
+					$el = substr($el, 0, strrpos($el, '.'));
+				}
+			}
+		);
 
 		return $data;
 	}

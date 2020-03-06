@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -39,13 +39,13 @@ JS
 <!-- Content -->
 <div class="pwt-content">
 
-    <!-- Message -->
-    <?php // @TODO: rename `has_folder` class below; ?>
+	<!-- Message -->
+	<?php // @TODO: rename `has_folder` class below; ?>
 	<div class="pwt-message">
 		<?php echo Text::_('COM_PWTIMAGE_IMAGE_SAVED_IN'); ?><span class="has_folder"></span>
 	</div><!-- .pwt-message -->
 
-    <!-- Dropper area -->
+	<!-- Dropper area -->
 	<div class="pwt-dropper" id="js-dragarea">
 		<div class="pwt-dropper__content" id="dragarea-content">
 			<p class="pwt-dropper__lead"><?php echo Text::_('COM_PWTIMAGE_DRAG_AND_UPLOAD'); ?></p>

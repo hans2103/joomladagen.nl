@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -24,29 +24,29 @@ $position = 1;
 
 if ($component->get('show_home', 0))
 {
-    $home = '';
+	$home = '';
 
-    if ($component->get('show_home') === '2' && $component->get('breadcrumbs_home', ''))
-    {
-	    $home = $component->get('breadcrumbs_home', '');
-    }
-    else
-    {
-        try
-        {
-	        $home = Factory::getApplication()->getMenu()->getDefault()->title;
-        }
-        catch (Exception $e)
-        {
-            $home = 'Home';
-        }
-    }
+	if ($component->get('show_home') === '2' && $component->get('breadcrumbs_home', ''))
+	{
+		$home = $component->get('breadcrumbs_home', '');
+	}
+	else
+	{
+		try
+		{
+			$home = Factory::getApplication()->getMenu()->getDefault()->title;
+		}
+		catch (Exception $e)
+		{
+			$home = 'Home';
+		}
+	}
 
 	$list[] = (object) array(
 		'@type' => 'ListItem',
 		'position' => $position,
 		'name' => $home,
-        'item' => Uri::base()
+		'item' => Uri::base()
 	);
 
 	$position++;
@@ -66,7 +66,7 @@ foreach ($pathway->getPathway() as $i => $item)
 
 ?>
 {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": <?php echo json_encode($list) ?>
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": <?php echo json_encode($list) ?>
 }

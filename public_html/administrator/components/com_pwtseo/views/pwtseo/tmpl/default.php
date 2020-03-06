@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -83,6 +83,21 @@ defined('_JEXEC') or die;
 					<?php endif; ?>
 				<?php endif; ?>
             </div>
+            <?php if (is_array($this->aDomain) && isset($this->aDomain['google'])): ?>
+                <div class="well">
+                    <h3><?php echo Text::_('COM_PWTSEO_GENERAL_DOMAIN_INFORMATION') ?></h3>
+                    <table>
+                        <tr>
+                            <td><?php echo Text::_('COM_PWTSEO_GENERAL_DOMAIN_GOOGLE_PAGES') ?>:&nbsp;</td>
+                            <td><?php echo $this->aDomain['google']['pages'] ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo Text::_('COM_PWTSEO_GENERAL_DOMAIN_GOOGLE_BACKLINK') ?>:&nbsp;</td>
+                            <td><?php echo $this->aDomain['google']['backlinks'] ?></td>
+                        </tr>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
 
         <!-- Start Sidebar -->
@@ -110,7 +125,7 @@ defined('_JEXEC') or die;
                 </div>
 
                 <div class="pwt-section pwt-section--border-top">
-                    <p><strong><?php echo Text::sprintf('COM_PWTSEO_DASHBOARD_ABOUT_VERSION', '</strong>1.3.0'); ?>
+                    <p><strong><?php echo Text::sprintf('COM_PWTSEO_DASHBOARD_ABOUT_VERSION', '</strong>1.5.0'); ?>
                     </p>
                 </div>
                 <!-- End PWT branding -->

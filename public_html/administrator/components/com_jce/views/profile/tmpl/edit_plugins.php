@@ -1,13 +1,13 @@
 <?php
-
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
  * is derivative of works licensed under the GNU General Public License or
  * other free or open source software licenses
  */
+
 $plugins = array_values(array_filter($this->plugins, function($plugin) {
     return $plugin->editable && !empty($plugin->form);
 }));
@@ -46,7 +46,7 @@ $plugins = array_values(array_filter($this->plugins, function($plugin) {
                 $icons .= '<div class="mce-widget mce-btn mceButton ' . $plugin->class . '" title="' . $plugin->title . '"><span class="mce-ico mce-i-' . $icon . ' mceIcon mce_' . $icon . '"></span></div>';
             }
 
-            $title .= '<div class="mceEditor defaultSkin"><div class="mce-container mce-toolbar mceToolBarItem">' . $icons . '</div></div>';
+            $title .= '<div class="mceEditor mceDefaultSkin"><div class="mce-container mce-toolbar mceToolbarItem">' . $icons . '</div></div>';
         }
 
         //echo JHtml::_('bootstrap.addTab', 'profile-plugins', 'profile-plugins-' . $plugin->name, $title); ?>
@@ -60,7 +60,7 @@ $plugins = array_values(array_filter($this->plugins, function($plugin) {
             <div class="row-fluid">
 
                 <?php if ($plugin->form) :
-                    $plugin->fieldsname = "";
+                    $plugin->fieldsname = "config";
                     $plugin->name = $plugin->title;
                     $plugin->description = "";
                     echo JLayoutHelper::render('joomla.content.options_default', $plugin);

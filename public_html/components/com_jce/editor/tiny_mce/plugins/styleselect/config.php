@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -19,7 +19,7 @@ class WFStyleselectPluginConfig
         $app = JFactory::getApplication();
         $id = 0;
 
-        if ($app->isClient('site')) {
+        if ($app->getClientId() === 0) {
             $menus = $app->getMenu();
             $menu = $menus->getActive();
 
@@ -30,13 +30,7 @@ class WFStyleselectPluginConfig
 
         $query = $db->getQuery(true);
 
-        if (is_object($query)) {
-            $query->select('id, template')->from('#__template_styles')->where(array('client_id = 0', "home = '1'"));
-        } else {
-            $query = 'SELECT menuid as id, template'
-                .' FROM #__templates_menu'
-                .' WHERE client_id = 0';
-        }
+        $query->select('id, template')->from('#__template_styles')->where(array('client_id = 0', "home = '1'"));
 
         $db->setQuery($query);
         $templates = $db->loadObjectList();
@@ -90,9 +84,17 @@ class WFStyleselectPluginConfig
             if (!empty($custom_styles)) {
                 $styles = array();
 
-                $blocks = array('section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main', 'p', 'pre', 'blockquote', 'figure', 'figcaption', 'div');
+                $blocks = array(
+                    'section', 'nav', 'article', 'aside', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'footer', 'address', 'main', 'p', 'pre', 'blockquote', 'figure', 'figcaption', 'div'
+                );
 
-                foreach ((array) $custom_styles as $style) {
+                $wrapper = array(
+                    'section', 'nav', 'article', 'aside', 'header', 'footer', 'main', 'div'
+                );
+
+                foreach ((array) $custom_styles as $style) {                    
+                    $style = (object) $style;
+                    
                     // clean up title
                     if (isset($style->title)) {
                         $style->title = self::cleanString($style->title);
@@ -117,17 +119,19 @@ class WFStyleselectPluginConfig
                     }
 
                     if (isset($style->styles)) {
-                        $style->styles = self::cleanJSON($style->styles);
-                    }
-
-                    if (isset($style->attributes)) {
-                        $style->attributes = self::cleanJSON($style->attributes, ' ', '=');
+                        // replace comma with semi-colon and remove duplicates
+                        $style->styles = preg_replace('#[,;]+#', ';', $style->styles);
                     }
 
                     // set block or inline element
                     if (isset($style->element)) {
                         if (in_array($style->element, $blocks)) {
                             $style->block = $style->element;
+
+                            if (in_array($style->element, $wrapper)) {
+                                $style->wrapper = true;
+                            }
+
                         } else {
                             $style->inline = $style->element;
                         }
@@ -206,35 +210,11 @@ class WFStyleselectPluginConfig
     {
         $string = trim($string, '"');
         $string = trim($string, "'");
-        $string = htmlentities($string, ENT_NOQUOTES, 'UTF-8');
+
+        // convert from stored value
+        $string = html_entity_decode($string, ENT_COMPAT, 'UTF-8');
 
         return trim($string);
-    }
-
-    protected static function cleanJSON($string, $delim1 = ';', $delim2 = ':')
-    {
-        $ret = array();
-
-        foreach (explode($delim1, $string) as $item) {
-            $item = trim($item);
-
-            // split style at colon
-            $parts = explode($delim2, $item);
-
-            if (count($parts) < 2) {
-                continue;
-            }
-
-            $key = $parts[0];
-            $value = $parts[1];
-
-            $key = self::cleanString($key);
-            $value = self::cleanString($value);
-
-            $ret[$key] = $value;
-        }
-
-        return $ret;
     }
 
     /**

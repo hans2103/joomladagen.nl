@@ -360,6 +360,44 @@ class com_rsformInstallerScript
 			$db->execute();
 		}
 
+		// #__rsform_translations updates
+		$columns = $db->getTableColumns('#__rsform_translations', false);
+		if ($columns['lang_code']->Key != 'MUL')
+		{
+			try
+			{
+				$db->setQuery("ALTER TABLE #__rsform_translations ADD KEY `lang_code` (`lang_code`)")->execute();
+				$db->setQuery("ALTER TABLE #__rsform_translations ADD KEY `reference` (`reference`)")->execute();
+				$db->setQuery("ALTER TABLE #__rsform_translations ADD KEY `lang_search` (`form_id`,`lang_code`,`reference`)")->execute();
+			}
+			catch (Exception $e)
+			{
+				// Do nothing
+			}
+		}
+
+		$columns = $db->getTableColumns('#__rsform_conditions', false);
+		if ($columns['component_id']->Type != 'text')
+		{
+			try
+			{
+				$db->setQuery("ALTER TABLE `#__rsform_conditions` DROP INDEX `component_id`")->execute();
+			}
+			catch (Exception $e)
+			{
+
+			}
+
+			try
+			{
+				$db->setQuery("ALTER TABLE `#__rsform_conditions` CHANGE `component_id` `component_id` TEXT NOT NULL")->execute();
+			}
+			catch (Exception $e)
+			{
+
+			}
+		}
+
 		// add the VALIDATIONMULTIPLE to the textBox field
 		$db->setQuery("SELECT COUNT(`FieldName`) FROM #__rsform_component_type_fields  WHERE `ComponentTypeId` = 1 AND `FieldName` = 'VALIDATIONMULTIPLE'");
 		if (!$db->loadResult()) {
@@ -597,6 +635,10 @@ class com_rsformInstallerScript
 			$db->setQuery("ALTER TABLE `#__rsform_directory` ADD `filename` VARCHAR(255) NOT NULL DEFAULT 'export.pdf' AFTER `formId`");
 			$db->execute();
 		}
+		if (!isset($columns['csvfilename'])) {
+			$db->setQuery("ALTER TABLE `#__rsform_directory` ADD `csvfilename` VARCHAR(255) NOT NULL DEFAULT '{alias}.csv' AFTER `filename`");
+			$db->execute();
+		}
 		if (!isset($columns['EmailsCreatedScript'])) {
 			$db->setQuery("ALTER TABLE `#__rsform_directory` ADD `EmailsCreatedScript` TEXT NOT NULL AFTER `EmailsScript`");
 			$db->execute();
@@ -607,6 +649,10 @@ class com_rsformInstallerScript
         }
 		if (!isset($columns['HideEmptyValues'])) {
 			$db->setQuery("ALTER TABLE `#__rsform_directory` ADD `HideEmptyValues` tinyint(1) NOT NULL AFTER `enablecsv`");
+			$db->execute();
+		}
+		if (!isset($columns['ShowGoogleMap'])) {
+			$db->setQuery("ALTER TABLE `#__rsform_directory` ADD `ShowGoogleMap` tinyint(1) NOT NULL AFTER `HideEmptyValues`");
 			$db->execute();
 		}
 
@@ -635,6 +681,12 @@ class com_rsformInstallerScript
 			  ->where($db->qn('FieldValues').' = '.$db->q('%RSgetValidationRules%'));
 		$db->setQuery($query);
 		$db->execute();
+
+		$columns = $db->getTableColumns('#__rsform_calculations', false);
+		if (!$columns['formId']->Key)
+		{
+			$db->setQuery('ALTER TABLE `#__rsform_calculations` ADD INDEX(`formId`), ADD INDEX (`ordering`), ADD INDEX (`formId`, `ordering`)')->execute();
+		}
 
 		if (!empty($this->migrateResponsiveLayoutFramework)) {
 			$query = $db->getQuery(true);
@@ -709,9 +761,9 @@ class com_rsformInstallerScript
 		}
 		
 		// Running 3.x
-		if (!$jversion->isCompatible('3.7.0'))
+		if (!$jversion->isCompatible('3.8.0'))
 		{
-			$app->enqueueMessage('Please upgrade to at least Joomla! 3.7.0 before continuing!', 'error');
+			$app->enqueueMessage('Please upgrade to at least Joomla! 3.8.0 before continuing!', 'error');
 			return false;
 		}
 
@@ -938,9 +990,14 @@ class com_rsformInstallerScript
 				<p>It seems you are still using legacy layouts - they have been removed from RSForm! Pro since they are no longer usable today as they do not provide responsive features.<br>If you still want to keep using them, please install the <a href="https://www.rsjoomla.com/support/documentation/rsform-pro/plugins-and-modules/plugin-legacy-layouts.html" target="_blank">Legacy Layouts Plugin</a>.</p>
 			</div>
 		<?php } ?>
-		<h2>Changelog v2.2.3</h2>
+		<h2>Changelog v2.3.8</h2>
 		<ul class="version-history">
-            <li><span class="version-upgraded">Upg</span> Range Slider can be used in conditions.</li>
+			<li><span class="version-upgraded">Upg</span> Fields will now have 'aria-required' and 'aria-invalid' attributes for better accessibility compliance.</li>
+			<li><span class="version-upgraded">Upg</span> Global placeholders are now shown in the 'Toggle Quick Add' sections.</li>
+			<li><span class="version-fixed">Fix</span> Geolocation search inside a 'Google Map' field would trigger too many requests and sometimes provide duplicate results.</li>
+			<li><span class="version-fixed">Fix</span> Selecting a date in the 'Date and Time Picker' field using a mobile device would jump the focus to an incorrect field.</li>
+			<li><span class="version-fixed">Fix</span> In some cases deleting a calculation would trigger a Javascript error.</li>
+			<li><span class="version-fixed">Fix</span> TinyMCE dialogs inside the Free Text editing modal were not clickable.</li>
 		</ul>
 		<a class="btn btn-large btn-primary" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="btn" href="https://www.rsjoomla.com/support/documentation/rsform-pro.html" target="_blank">Read the RSForm! Pro User Guide</a>

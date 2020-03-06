@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -271,8 +271,8 @@ class HtaccessMaker extends ServerConfigMaker
 			'swf', 'html', 'mpg', 'mp3', 'mpeg', 'mp4', 'avi', 'wav', 'ogg', 'ogv',
 			'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'rar', 'pdf', 'xps',
 			'txt', '7z', 'svg', 'odt', 'ods', 'odp', 'flv', 'mov', 'htm', 'ttf',
-			'woff', 'woff2', 'eot',
-			'JPG', 'JPEG', 'PNG', 'GIF', 'CSS', 'JS', 'TTF', 'WOFF', 'WOFF2', 'EOT'
+			'woff', 'woff2', 'eot', 'webp',
+			'JPG', 'JPEG', 'PNG', 'GIF', 'CSS', 'JS', 'TTF', 'WOFF', 'WOFF2', 'EOT', 'WEBP'
 		),
 		// Front-end directories where file type exceptions are allowed
 		'fepexdirs'           => array('components', 'modules', 'templates', 'images', 'plugins', 'media', 'libraries',
@@ -283,8 +283,8 @@ class HtaccessMaker extends ServerConfigMaker
 			'swf', 'html', 'mpg', 'mp3', 'mpeg', 'mp4', 'avi', 'wav', 'ogg', 'ogv',
 			'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'zip', 'rar', 'pdf', 'xps',
 			'txt', '7z', 'svg', 'odt', 'ods', 'odp', 'flv', 'mov', 'ico', 'htm',
-			'ttf', 'woff', 'woff2', 'eot',
-			'JPG', 'JPEG', 'PNG', 'GIF', 'CSS', 'JS', 'TTF', 'WOFF', 'WOFF2', 'EOT'
+			'ttf', 'woff', 'woff2', 'eot', 'webp',
+			'JPG', 'JPEG', 'PNG', 'GIF', 'CSS', 'JS', 'TTF', 'WOFF', 'WOFF2', 'EOT', 'WEBP'
 		),
 		// -- Exceptions
 		// Allow direct access to these files
@@ -338,6 +338,7 @@ class HtaccessMaker extends ServerConfigMaker
 	protected $allowedCallersForWrite = [
 		'Akeeba\AdminTools\Admin\Controller\ServerConfigMaker::apply',
 		'Akeeba\AdminTools\Admin\Controller\HtaccessMaker::apply',
+		'Akeeba\AdminTools\Admin\Controller\ControlPanel::regenerateServerConfig',
 		'Akeeba\AdminTools\Admin\Model\QuickStart::applyHtmaker'
 	];
 
@@ -1065,7 +1066,7 @@ Header set X-XSS-Protection "1; mode=block"
 </IfModule>
 
 # mod_headers cannot match based on the content-type, however,
-# the X-XSS-Protection response header should be send only for
+# the X-XSS-Protection response header should be sent only for
 # HTML documents and not for the other resources.
 
 <IfModule mod_headers.c>

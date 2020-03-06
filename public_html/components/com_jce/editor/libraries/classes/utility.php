@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright    Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright    Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license    GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -18,6 +18,66 @@ if (function_exists('mb_internal_encoding')) {
 abstract class WFUtility
 {
     /**
+     * Multi-byte-safe pathinfo replacement.
+     * Drop-in replacement for pathinfo(), but multibyte- and cross-platform-safe.
+     *
+     * From PHPMailer - https://github.com/PHPMailer/PHPMailer/blob/v6.1.4/src/PHPMailer.php#L4256-L4302
+     *
+     * @see http://www.php.net/manual/en/function.pathinfo.php#107461
+     *
+     * @param string     $path    A filename or path, does not need to exist as a file
+     * @param int|string $options Either a PATHINFO_* constant,
+     *                            or a string name to return only the specified piece
+     *
+     * @return string|array
+     */
+    public static function mb_pathinfo($path, $options = null)
+    {
+        // check if multibyte string, use pathname() if not
+        if (function_exists('mb_strlen')) {
+            if (mb_strlen($path) === strlen($path)) {
+                return pathinfo($path, $options);
+            }
+        }
+
+        $ret = array('dirname' => '', 'basename' => '', 'extension' => '', 'filename' => '');
+
+        $pathinfo = array();
+
+        if (preg_match('#^(.*?)[\\\\/]*(([^/\\\\]*?)(\.([^.\\\\/]+?)|))[\\\\/.]*$#m', $path, $pathinfo)) {
+            if (array_key_exists(1, $pathinfo)) {
+                $ret['dirname'] = $pathinfo[1];
+            }
+            if (array_key_exists(2, $pathinfo)) {
+                $ret['basename'] = $pathinfo[2];
+            }
+            if (array_key_exists(5, $pathinfo)) {
+                $ret['extension'] = $pathinfo[5];
+            }
+            if (array_key_exists(3, $pathinfo)) {
+                $ret['filename'] = $pathinfo[3];
+            }
+        }
+
+        switch ($options) {
+            case PATHINFO_DIRNAME:
+            case 'dirname':
+                return $ret['dirname'];
+            case PATHINFO_BASENAME:
+            case 'basename':
+                return $ret['basename'];
+            case PATHINFO_EXTENSION:
+            case 'extension':
+                return $ret['extension'];
+            case PATHINFO_FILENAME:
+            case 'filename':
+                return $ret['filename'];
+            default:
+                return $ret;
+        }
+    }
+
+    /**
      * Get the file extension from a path
      *
      * @param  string $path The file path
@@ -25,7 +85,8 @@ abstract class WFUtility
      */
     public static function getExtension($path)
     {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        $dot = strrpos($path, '.') + 1;
+        return substr($path, $dot);
     }
 
     /**
@@ -47,19 +108,17 @@ abstract class WFUtility
      */
     public static function getFilename($path)
     {
-        $info = pathinfo($path);
-
-        // basename should be set
-        if (empty($info['basename'])) {
-            return $path;
+        // check if multibyte string, use basename() if not
+        if (function_exists('mb_strlen')) {
+            if (mb_strlen($path) === strlen($path)) {
+                return pathinfo($path, PATHINFO_FILENAME);
+            }
         }
+        // get basename
+        $path = self::mb_basename($path);
 
-        // "filename" is empty, posssibly due to incorrect locale
-        if (empty($info['filename'])) {
-            return self::stripExtension($info['basename']);
-        }
-
-        return $info['filename'];
+        // remove name without extension
+        return self::stripExtension($path);
     }
 
     public static function cleanPath($path, $ds = DIRECTORY_SEPARATOR, $prefix = '')
@@ -372,6 +431,52 @@ abstract class WFUtility
         return self::formatSize(@filesize($file));
     }
 
+    /**
+     * Multi-byte-safe dirname replacement.
+     * https://gist.github.com/tcyrus/257a1ed93c5e115b7b33426d029b5c5f
+     *
+     * @param string $path A Path
+     * @param int $levels The number of parent directories to go up.
+     * @return string The path of a parent directory.
+     */
+    public static function mb_dirname($path)
+    {
+        // check if multibyte string, use dirname() if not
+        if (function_exists('mb_strlen')) {
+            if (mb_strlen($path) === strlen($path)) {
+                return dirname($path);
+            }
+        }
+
+        // clean
+        $path = self::cleanPath($path, '/');
+
+        // get last slash position
+        $slash = strrpos($path, '/') + 1;
+
+        // return dirname
+        return substr($path, 0, $slash);
+    }
+
+    public static function mb_basename($path, $ext = '')
+    {
+        // check if multibyte string, use basename() if not
+        if (function_exists('mb_strlen')) {
+            if (mb_strlen($path) === strlen($path)) {
+                return basename($path, $ext);
+            }
+        }
+
+        // clean
+        $path = self::cleanPath($path, '/');
+
+        // split path
+        $parts = explode('/', $path);
+
+        // return basename
+        return end($parts);
+    }
+
     public static function convertEncoding($string)
     {
         if (!function_exists('mb_detect_encoding')) {
@@ -491,7 +596,13 @@ abstract class WFUtility
             while (!feof($fp)) {
                 $data .= @fread($fp, 131072);
                 // we can only reliably check for the full <?php tag here (short tags conflict with valid exif xml data), so users are reminded to disable short_open_tag
-                if (stristr($data, '<?php')) {
+                if (stripos($data, '<?php') !== false) {
+                    @unlink($file['tmp_name']);
+                    throw new InvalidArgumentException('The file contains PHP code.');
+                }
+
+                // check for `__HALT_COMPILER()` phar stub
+                if (stripos($data, '__HALT_COMPILER()') !== false) {
                     @unlink($file['tmp_name']);
                     throw new InvalidArgumentException('The file contains PHP code.');
                 }
@@ -526,8 +637,8 @@ abstract class WFUtility
 
         // list of invalid extensions
         $executable = array(
-            'php', 'php3', 'php4', 'php5', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
-            'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh', 'svg'
+            'php', 'php3', 'php4', 'php5', 'php6', 'php7', 'phar', 'js', 'exe', 'phtml', 'java', 'perl', 'py', 'asp', 'dll', 'go', 'ade', 'adp', 'bat', 'chm', 'cmd', 'com', 'cpl', 'hta', 'ins', 'isp',
+            'jse', 'lib', 'mde', 'msc', 'msp', 'mst', 'pif', 'scr', 'sct', 'shb', 'sys', 'vb', 'vbe', 'vbs', 'vxd', 'wsc', 'wsf', 'wsh', 'svg',
         );
 
         // get file parts, eg: ['image', 'php', 'jpg']
@@ -564,11 +675,47 @@ abstract class WFUtility
      *
      * @return bool True if the array is an associative array
      *
-     * @link    http://www.php.net/manual/en/function.is-array.php#98305
+     * @link    https://www.php.net/manual/en/function.is-array.php#84488
      */
-    private static function is_associative_array($array)
+    public static function is_associative_array($array)
     {
-        return is_array($array) && (count($array) == 0 || 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
+        if (!is_array($array)) {
+            return false;
+        }
+
+        $i = count($array);
+
+        while ($i > 0) {
+            if (!array_key_exists(--$i, $array)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function isJson($value)
+    {
+        // value must be a string
+        if (!$value || !is_string($value)) {
+            return false;
+        }
+
+        // trim
+        $value = trim($value);
+
+        if (!$value) {
+            return false;
+        }
+
+        // quick syntax check
+        if ($value[0] !== '{' && $value[0] !== '[') {
+            return false;
+        }
+
+        // full check using json_decode
+        json_decode($value);
+        return json_last_error() == JSON_ERROR_NONE;
     }
 
     /**
@@ -599,18 +746,18 @@ abstract class WFUtility
      * @author Daniel <daniel (at) danielsmedegaardbuus (dot) dk>
      * @author Gabriel Sobrinho <gabriel (dot) sobrinho (at) gmail (dot) com>
      */
-    public static function array_merge_recursive_distinct(array &$array1, array &$array2, $ignore_empty_string = false)
+    public static function array_merge_recursive_distinct(array $array1, array $array2, $ignore_empty_string = false)
     {
         $merged = $array1;
 
-        foreach ($array2 as $key => &$value) {
-            if (self::is_associative_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+        foreach ($array2 as $key => $value) {
+            if (self::is_associative_array($value) && array_key_exists($key, $merged) && self::is_associative_array($merged[$key])) {
                 $merged[$key] = self::array_merge_recursive_distinct($merged[$key], $value, $ignore_empty_string);
             } else {
                 if (is_null($value)) {
                     continue;
                 }
-                
+
                 if (array_key_exists($key, $merged) && $ignore_empty_string && $value === "") {
                     continue;
                 }

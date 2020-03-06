@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -52,10 +52,10 @@ class PWTSEOControllerExport extends FormController
 			->where('(' . $db->quoteName('publish_down') . ' < ' . $now . ' OR ' . $db->quoteName('publish_down') . ' = ' . $db->quote($db->getNullDate()) . ')')
 			->where($db->quoteName('publish_up') . ' <' . $now);
 
-
 		$query
 			->leftJoin($db->quoteName('#__plg_pwtseo', 'seo') . ' ON ' . $db->quoteName('seo.context_id') . ' = ' . $db->quoteName('content.id') .
-				'AND ' . $db->quoteName('seo.context') . ' = ' . $db->quote('com_content.article'));
+				'AND ' . $db->quoteName('seo.context') . ' = ' . $db->quote('com_content.article')
+			);
 
 		$list = $db->setQuery($query, 0, 0)->loadObjectList();
 
@@ -69,12 +69,12 @@ class PWTSEOControllerExport extends FormController
 			Text::_('COM_PWTSEO_EXPORT_SCORE')
 		);
 
-		// clean up any Joomla! stuff, we don't need it
+		// Clean up any Joomla! stuff, we don't need it
 		ob_end_clean();
 
-		// set headers so browser will download
+		// Set headers so browser will download
 		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename=content-' . (new \Joomla\CMS\Date\Date())->toISO8601() . '.csv');
+		header('Content-Disposition: attachment; filename=content-' . (new \Joomla\CMS\Date\Date)->toISO8601() . '.csv');
 
 		$out = fopen('php://output', 'w');
 		ob_start();
@@ -132,12 +132,12 @@ class PWTSEOControllerExport extends FormController
 			Text::_('COM_PWTSEO_EXPORT_SCORE')
 		);
 
-		// clean up any Joomla! stuff, we don't need it
+		// Clean up any Joomla! stuff, we don't need it
 		ob_end_clean();
 
-		// set headers so browser will download
+		// Set headers so browser will download
 		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename=menu-' . (new \Joomla\CMS\Date\Date())->toISO8601() . '.csv');
+		header('Content-Disposition: attachment; filename=menu-' . (new \Joomla\CMS\Date\Date)->toISO8601() . '.csv');
 
 		$out = fopen('php://output', 'w');
 		ob_start();
@@ -192,12 +192,12 @@ class PWTSEOControllerExport extends FormController
 			Text::_('COM_PWTSEO_EXPORT_SCORE')
 		);
 
-		// clean up any Joomla! stuff, we don't need it
+		// Clean up any Joomla! stuff, we don't need it
 		ob_end_clean();
 
-		// set headers so browser will download
+		// Set headers so browser will download
 		header('Content-Type: text/csv; charset=utf-8');
-		header('Content-Disposition: attachment; filename=seo-' . (new \Joomla\CMS\Date\Date())->toISO8601() . '.csv');
+		header('Content-Disposition: attachment; filename=seo-' . (new \Joomla\CMS\Date\Date)->toISO8601() . '.csv');
 
 		$out = fopen('php://output', 'w');
 		ob_start();

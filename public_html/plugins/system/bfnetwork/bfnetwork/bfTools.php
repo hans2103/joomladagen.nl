@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -161,6 +159,7 @@ final class bfTools
         113 => 'getUserRegistration',
         114 => 'setUserRegistration',
         115 => 'getPostInstallMessages',
+        999 => 'getDebugLog',
     );
 
     private $fluffFiles = array(
@@ -276,6 +275,11 @@ final class bfTools
         }
     }
 
+    public function getDebugLog()
+    {
+        bfEncrypt::reply('success', array('data' => bfLog::getLog()));
+    }
+
     /**
      * Get the post install messages from a Joomla 3+ site.
      */
@@ -330,8 +334,13 @@ final class bfTools
 
         $params = \json_decode($this->_db->LoadResult());
 
-        // enabled
-        $params->allowUserRegistration = 0;
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            // enabled
+            $params->allowUserRegistration = 0;
+        } else {
+            // disabled
+            $params->allowUserRegistration = 1;
+        }
 
         $this->_db->setQuery("UPDATE `#__extensions` set params = '".\json_encode($params)."' WHERE `name` = 'com_users'");
         $this->_db->query();
@@ -395,7 +404,11 @@ final class bfTools
      */
     public function setGzip()
     {
-        return $this->_setConfigParam('gzip', 1, 'int');
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            return $this->_setConfigParam('gzip', 1, 'int');
+        } else {
+            return $this->_setConfigParam('gzip', 0, 'int');
+        }
     }
 
     /**
@@ -404,9 +417,9 @@ final class bfTools
     public function getSessionlifetime()
     {
         bfEncrypt::reply('success', array(
-                     'lifetime' => JFactory::getApplication()->getCfg('lifetime', 0),
-                 )
-             );
+                'lifetime' => JFactory::getApplication()->getCfg('lifetime', 0),
+            )
+        );
     }
 
     /**
@@ -719,24 +732,24 @@ final class bfTools
 
         if (preg_match('/^1\.5/', JVERSION)) {
             $filesToPatch[] = array(
-                'source'      => 'https://cdn.myjoomla.com/public/patchfile/1',
+                'source'      => 'https://cdn.mysites.guru/public/patchfile/1',
                 'destination' => JPATH_BASE.'/libraries/joomla/filesystem/file.php',
             );
             $filesToPatch[] = array(
-                'source'      => 'https://cdn.myjoomla.com/public/patchfile/2',
+                'source'      => 'https://cdn.mysites.guru/public/patchfile/2',
                 'destination' => JPATH_BASE.'/administrator/components/com_media/helpers/media.php',
             );
             $filesToPatch[] = array(
-                'source'      => 'https://cdn.myjoomla.com/public/patchfile/3',
+                'source'      => 'https://cdn.mysites.guru/public/patchfile/3',
                 'destination' => JPATH_BASE.'/libraries/joomla/session/session.php',
             );
         } elseif (preg_match('/^2\.5/', JVERSION)) {
             $filesToPatch[] = array(
-                'source'      => 'https://cdn.myjoomla.com/public/patchfile/4',
+                'source'      => 'https://cdn.mysites.guru/public/patchfile/4',
                 'destination' => JPATH_BASE.'/libraries/joomla/session/session.php',
             );
             $filesToPatch[] = array(
-                'source'      => 'https://cdn.myjoomla.com/public/patchfile/5',
+                'source'      => 'https://cdn.mysites.guru/public/patchfile/5',
                 'destination' => JPATH_BASE.'/plugins/system/debug/debug.php',
             );
         }
@@ -781,18 +794,28 @@ final class bfTools
         $params = json_decode($this->_db->LoadResult());
 
         $items = explode(',', $params->upload_extensions);
-        foreach ($items as $k => $item) {
-            if ('swf' == strtolower(trim($item))) {
-                unset($items[$k]);
+
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            foreach ($items as $k => $item) {
+                if ('swf' == strtolower(trim($item))) {
+                    unset($items[$k]);
+                }
             }
+        } else {
+            $items[] = 'swf';
         }
         $params->upload_extensions = implode(',', $items);
 
         $items = explode(',', $params->upload_mime);
-        foreach ($items as $k => $item) {
-            if ('application/x-shockwave-flash' == strtolower(trim($item))) {
-                unset($items[$k]);
+
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            foreach ($items as $k => $item) {
+                if ('application/x-shockwave-flash' == strtolower(trim($item))) {
+                    unset($items[$k]);
+                }
             }
+        } else {
+            $items[] = 'application/x-shockwave-flash';
         }
         $params->upload_mime = implode(',', $items);
         $sql                 = sprintf("UPDATE #__extensions set `params` = '%s' WHERE `element` = 'com_media'", json_encode($params));
@@ -1658,7 +1681,7 @@ final class bfTools
     {
         $limitstart = (int) $this->_dataObj->ls;
         $limit      = (int) $this->_dataObj->limit;
-        $order      =  $this->_dataObj->orderby;
+        $order      = $this->_dataObj->orderby;
 
         if (!in_array($order, array('filewithpath', 'filemtime', 'size'))) {
             $order = 'filewithpath';
@@ -2375,9 +2398,15 @@ final class bfTools
             $config = JFactory::getConfig();
 
             // Our sane defaults
-            $sef         = 1;
-            $sef_rewrite = 1;
-            $sef_suffix  = 0;
+            if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+                $sef         = 1;
+                $sef_rewrite = 1;
+                $sef_suffix  = 0;
+            } else {
+                $sef         = 0;
+                $sef_rewrite = 0;
+                $sef_suffix  = 0;
+            }
 
             if (version_compare(JVERSION, '3.0', 'ge')) {
                 $config->set('sef', $sef);
@@ -2530,13 +2559,13 @@ final class bfTools
             /**
              * Performs the actual schema change.
              *
-             * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
-             * @license   GNU General Public License version 3, or later
-             *
              * @param $prefix string
              *                The new prefix
              *
              * @return bool False if the schema could not be changed
+             *
+             * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
+             * @license   GNU General Public License version 3, or later
              */
             $config = JFactory::getConfig();
             if (version_compare(JVERSION, '3.0', 'ge')) {
@@ -2575,13 +2604,13 @@ final class bfTools
             /**
              * Updates the configuration.php file with the given prefix.
              *
-             * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
-             * @license   GNU General Public License version 3, or later
-             *
              * @param $prefix string
              *                The prefix to write to the configuration.php file
              *
              * @return bool False if writing to the file was not possible
+             *
+             * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
+             * @license   GNU General Public License version 3, or later
              */
             // Load the configuration and replace the db prefix
             $config = JFactory::getConfig();
@@ -2637,14 +2666,14 @@ final class bfTools
      * an underscore and must not alrady exist in the current database. It must
      * also not be jos_ or bak_.
      *
-     * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
-     *
      * @param $prefix string
      *                The prefix to check
      *
+     * @return string bool validated prefix or false if the prefix is invalid
+     *
      * @throws exception
      *
-     * @return string bool validated prefix or false if the prefix is invalid
+     * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
      */
     private function _validateDbPrefix($prefix)
     {
@@ -2796,7 +2825,7 @@ final class bfTools
 
     /**
      * ok ok I know this looks bad, it probably is, but this allows a subscriber to edit a file on
-     * myJoomla.com and then save the contents back to myJoomla.com.
+     * mysites.guru and then save the contents back to mysites.guru.
      *
      * In order to get to this method a lot of security jumps have to have gone through already
      *
@@ -2857,7 +2886,7 @@ final class bfTools
             $obj->filename     = '';
             $obj->filemd5      = md5('');
             $obj->filewithpath = '';
-            $obj->filecontents = base64_encode('Could not load content for your own security, run a full audit before attempting to edit file content with myJoomla.com');
+            $obj->filecontents = base64_encode('Could not load content for your own security, run a full audit before attempting to edit file content with mySites.guru');
             $obj->filesize     = 0;
             $obj->basepath     = JPATH_BASE;
             $obj->writeable    = 0;
@@ -3079,13 +3108,13 @@ final class bfTools
          * Updates the configuration.php file with the given prefix
          * (some code from below).
          *
-         * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
-         * @license   GNU General Public License version 3, or later
-         *
          * @param $prefix string
          *                The prefix to write to the configuration.php file
          *
          * @return bool False if writing to the file was not possible
+         *
+         * @copyright Copyright (c)2010-2011 Nicholas K. Dionysopoulos
+         * @license   GNU General Public License version 3, or later
          */
         // Load the configuration and replace the db prefix
         $config = JFactory::getConfig();
@@ -3216,7 +3245,7 @@ final class bfTools
         $bfUpdates = new bfUpdates();
 
         bfEncrypt::reply('success', array(
-            'count' => $bfUpdates->getupdates(true),
+            'count' => $bfUpdates->getupdates(true, $this->_dataObj->d),
         ));
     }
 
@@ -3227,7 +3256,7 @@ final class bfTools
         require 'bfUpdates.php';
 
         $bfUpdates = new bfUpdates();
-        $updates   = $bfUpdates->getupdates();
+        $updates   = $bfUpdates->getupdates(false, $this->_dataObj->d);
 
         @ob_clean();
 
@@ -3289,9 +3318,16 @@ final class bfTools
         ));
     }
 
+    /**
+     * Toggles the @offline property of JConfig in /configuration.php.
+     */
     private function toggleOnline()
     {
-        return $this->_setConfigParam('offline', $this->_dataObj->status, 'int');
+        if ('true' == $this->_dataObj->s) { // false = set to online, true = set to offline
+            return $this->_setConfigParam('offline', 0, 'int');
+        } else {
+            return $this->_setConfigParam('offline', 1, 'int');
+        }
     }
 
     /**
@@ -3353,7 +3389,11 @@ final class bfTools
 
     private function toggleCache()
     {
-        return $this->_setConfigParam('caching', $this->_dataObj->status, 'int');
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            return $this->_setConfigParam('caching', 1, 'int');
+        } else {
+            return $this->_setConfigParam('caching', 0, 'int');
+        }
     }
 
     private function getOfflineStatus()
@@ -3394,7 +3434,7 @@ final class bfTools
         // Support crappy extensions like OSMap that implement their own license manager via plugins
         JPluginHelper::importPlugin('system');
 
-        // init reply to myJoomla.com
+        // init reply to mysites.guru
         $result             = array();
         $result['messages'] = array();
 
@@ -3514,7 +3554,11 @@ final class bfTools
      */
     private function setDebugMode()
     {
-        return $this->_setConfigParam('debug', 'false', 'int');
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            return $this->_setConfigParam('debug', 'false', 'int');
+        } else {
+            return $this->_setConfigParam('debug', 'true', 'int');
+        }
     }
 
     /**
@@ -3538,7 +3582,11 @@ final class bfTools
      */
     private function setErrorReporting()
     {
-        return $this->_setConfigParam('error_reporting', 'none', 'string');
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            return $this->_setConfigParam('error_reporting', 'none', 'string');
+        } else {
+            return $this->_setConfigParam('error_reporting', 'development', 'string');
+        }
     }
 
     /**
@@ -3620,7 +3668,7 @@ final class bfTools
             $lang->load('plg_system_actionlogs', JPATH_ADMINISTRATOR, null, false, true);
             $lang->load('plg_system_privacyconsent', JPATH_ADMINISTRATOR, null, false, true);
 
-            // manipulate data to push to myJoomla.com
+            // manipulate data to push to mysites.guru
             foreach ($rows as $row) {
                 $row->what   = ActionlogsHelper::getHumanReadableLogMessage($row);
                 $row->ip     = $row->ip_address;
@@ -3681,7 +3729,11 @@ final class bfTools
      */
     private function setSessionGCStatus()
     {
-        $this->_db->setQuery("update #__extensions set enabled = 1 where name = 'plg_system_sessiongc'");
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $this->_db->setQuery("update #__extensions set enabled = 1 where name = 'plg_system_sessiongc'");
+        } else {
+            $this->_db->setQuery("update #__extensions set enabled = 0 where name = 'plg_system_sessiongc'");
+        }
         $this->_db->query();
 
         bfEncrypt::reply('success', array(
@@ -3715,7 +3767,11 @@ final class bfTools
      */
     private function enable2FAPlugins()
     {
-        $this->_db->setQuery("UPDATE `#__extensions` SET enabled = 1 WHERE `folder` = 'twofactorauth'");
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $this->_db->setQuery("UPDATE `#__extensions` SET enabled = 1 WHERE `folder` = 'twofactorauth'");
+        } else {
+            $this->_db->setQuery("UPDATE `#__extensions` SET enabled = 0 WHERE `folder` = 'twofactorauth'");
+        }
         $this->_db->LoadResult();
 
         $this->get2FAPlugins();
@@ -3738,8 +3794,13 @@ final class bfTools
     private function setAdminFilterFixed()
     {
         $this->_db->setQuery("SELECT `params` from #__extensions WHERE `element` = 'com_config'");
-        $params                            = json_decode($this->_db->LoadResult());
-        $params->filters->{7}->filter_type = 'BL';
+        $params = json_decode($this->_db->LoadResult());
+
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $params->filters->{7}->filter_type = 'BL';
+        } else {
+            $params->filters->{7}->filter_type = 'NONE';
+        }
         $this->_db->setQuery(sprintf("UPDATE #__extensions set `params` = '%s' WHERE `element` = 'com_config'", json_encode($params)));
         $this->_db->query();
 
@@ -3763,8 +3824,12 @@ final class bfTools
     private function setPlaintextpasswords()
     {
         $this->_db->setQuery("SELECT `params` from #__extensions WHERE `element` = 'com_users'");
-        $params               = json_decode($this->_db->LoadResult());
-        $params->sendpassword = '0';
+        $params = json_decode($this->_db->LoadResult());
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $params->sendpassword = '0';
+        } else {
+            $params->sendpassword = '1';
+        }
         $this->_db->setQuery(sprintf("UPDATE #__extensions set `params` = '%s' WHERE `element` = 'com_users'", json_encode($params)));
         $this->_db->query();
 
@@ -3788,8 +3853,14 @@ final class bfTools
     private function setMailtofrienddisabled()
     {
         $this->_db->setQuery("SELECT `params` from #__extensions WHERE `element` = 'com_content'");
-        $params                  = json_decode($this->_db->LoadResult());
-        $params->show_email_icon = '0';
+        $params = json_decode($this->_db->LoadResult());
+
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $params->show_email_icon = '0';
+        } else {
+            $params->show_email_icon = '1';
+        }
+
         $this->_db->setQuery(sprintf("UPDATE #__extensions set `params` = '%s' WHERE `element` = 'com_content'", json_encode($params)));
         $this->_db->query();
 
@@ -3813,8 +3884,14 @@ final class bfTools
     private function setTemplatePositionDisplay()
     {
         $this->_db->setQuery("SELECT `params` from #__extensions WHERE `element` = 'com_templates'");
-        $params                             = json_decode($this->_db->LoadResult());
-        $params->template_positions_display = '0';
+        $params = json_decode($this->_db->LoadResult());
+
+        if ('true' == $this->_dataObj->s) {// true means, set to the OK value
+            $params->template_positions_display = '0';
+        } else {
+            $params->template_positions_display = '1';
+        }
+
         $this->_db->setQuery(sprintf("UPDATE #__extensions set `params` = '%s' WHERE `element` = 'com_templates'", json_encode($params)));
         $this->_db->query();
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -10,13 +10,14 @@ namespace Akeeba\AdminTools\Admin\Model;
 defined('_JEXEC') or die;
 
 use Akeeba\AdminTools\Admin\Helper\Storage;
-use Akeeba\Engine\Platform;
-use Akeeba\Engine\Util\Complexify;
+use Akeeba\AdminTools\Admin\Model\Scanner\Complexify;
 use FOF30\Database\Installer;
+use FOF30\Encrypt\Randval;
 use FOF30\Model\Model;
 use FOF30\Utils\CacheCleaner;
 use FOF30\Utils\Ip;
 use JText;
+use RuntimeException;
 
 class ControlPanel extends Model
 {
@@ -39,13 +40,13 @@ class ControlPanel extends Model
 			$db = $this->container->db;
 
 			$query = $db->getQuery(true)
-						->select($db->qn('extension_id'))
-						->from($db->qn('#__extensions'))
-						->where($db->qn('enabled') . ' >= ' . $db->q('1'))
-						->where($db->qn('folder') . ' = ' . $db->q('system'))
-						->where($db->qn('element') . ' = ' . $db->q('admintools'))
-						->where($db->qn('type') . ' = ' . $db->q('plugin'))
-						->order($db->qn('ordering') . ' ASC');
+				->select($db->qn('extension_id'))
+				->from($db->qn('#__extensions'))
+				->where($db->qn('enabled') . ' >= ' . $db->q('1'))
+				->where($db->qn('folder') . ' = ' . $db->q('system'))
+				->where($db->qn('element') . ' = ' . $db->q('admintools'))
+				->where($db->qn('type') . ' = ' . $db->q('plugin'))
+				->order($db->qn('ordering') . ' ASC');
 
 			static::$pluginId = $db->setQuery($query)->loadResult();
 		}
@@ -73,21 +74,21 @@ class ControlPanel extends Model
 		$db = $this->container->db;
 
 		$query         = $db->getQuery(true)
-							->select(array(
-								$db->qn('extension_id'),
-								$db->qn('ordering'),
-							))
-							->from($db->qn('#__extensions'))
-							->where($db->qn('type') . ' = ' . $db->q('plugin'))
-							->where($db->qn('folder') . ' = ' . $db->q('system'))
-							->order($db->qn('ordering') . ' ASC');
+			->select([
+				$db->qn('extension_id'),
+				$db->qn('ordering'),
+			])
+			->from($db->qn('#__extensions'))
+			->where($db->qn('type') . ' = ' . $db->q('plugin'))
+			->where($db->qn('folder') . ' = ' . $db->q('system'))
+			->order($db->qn('ordering') . ' ASC');
 		$orderingPerId = $db->setQuery($query)->loadAssocList('extension_id', 'ordering');
 
 		$orderings   = array_values($orderingPerId);
 		$orderings   = array_unique($orderings);
 		$minOrdering = reset($orderings);
 
-		$myOrdering = $orderingPerId[ $id ];
+		$myOrdering = $orderingPerId[$id];
 
 		reset($orderings);
 		$sharedOrderings = 0;
@@ -109,9 +110,9 @@ class ControlPanel extends Model
 		if (($myOrdering > $minOrdering) || ($sharedOrderings > 1))
 		{
 			$query = $db->getQuery(true)
-						->update($db->qn('#__extensions'))
-						->set($db->qn('ordering') . ' = ' . $db->q($minOrdering - 1))
-						->where($db->qn('extension_id') . ' = ' . $db->q($id));
+				->update($db->qn('#__extensions'))
+				->set($db->qn('ordering') . ' = ' . $db->q($minOrdering - 1))
+				->where($db->qn('extension_id') . ' = ' . $db->q($id));
 			$db->setQuery($query);
 			$db->execute();
 
@@ -133,23 +134,27 @@ class ControlPanel extends Model
 			return false;
 		}
 
-		$dlid = $this->container->params->get('downloadid', '');
+		/** @var Updates $updateModel */
+		$updateModel = $this->container->factory->model('Updates')->tmpInstance();
 
-		if (!preg_match('/^([0-9]{1,}:)?[0-9a-f]{32}$/i', $dlid))
-		{
-			return true;
-		}
+		// Migrate J3 to J4 settings
+		$updateModel->upgradeLicenseKey();
 
-		return false;
+		// Save the J4 license key in the component options, if necessary
+		$updateModel->backportLicenseKey();
+
+		$dlid = $updateModel->sanitizeLicenseKey($updateModel->getLicenseKey());
+
+		return !$updateModel->isValidLicenseKey($dlid);
 	}
 
 	/**
 	 * Checks the database for missing / outdated tables using the $dbChecks
 	 * data and runs the appropriate SQL scripts if necessary.
 	 *
-	 * @throws  \RuntimeException    If the previous database update is stuck
-	 *
 	 * @return  $this
+	 * @throws  RuntimeException    If the previous database update is stuck
+	 *
 	 */
 	public function checkAndFixDatabase()
 	{
@@ -160,7 +165,7 @@ class ControlPanel extends Model
 
 		if ($stuck)
 		{
-			throw new \RuntimeException('Previous database update is flagged as stuck');
+			throw new RuntimeException('Previous database update is flagged as stuck');
 		}
 
 		// Then set the flag
@@ -183,7 +188,7 @@ class ControlPanel extends Model
 	/**
 	 * Checks all the available places if we just blocked our own IP?
 	 *
-	 * @param	string	$externalIp	 Additional IP address to check
+	 * @param   string  $externalIp  Additional IP address to check
 	 *
 	 * @return  bool
 	 */
@@ -244,76 +249,17 @@ class ControlPanel extends Model
 	}
 
 	/**
-	 * Check the strength of the Secret Word for front-end and remote scans. If it is insecure return the reason it
-	 * is insecure as a string. If the Secret Word is secure return an empty string.
-	 *
-	 * @return  string
-	 */
-	public function getFrontendSecretWordError()
-	{
-		// Load the Akeeba Engine autoloader
-		define('AKEEBAENGINE', 1);
-		require_once JPATH_ADMINISTRATOR . '/components/com_admintools/engine/Autoloader.php';
-
-		// Load the platform
-		Platform::addPlatform('filescan', JPATH_ADMINISTRATOR . '/components/com_admintools/platform/Filescan');
-
-		// Is frontend backup enabled?
-		$febEnabled = Platform::getInstance()->get_platform_configuration_option('frontend_enable', 0) != 0;
-
-		if (!$febEnabled)
-		{
-			return '';
-		}
-
-		$secretWord = Platform::getInstance()->get_platform_configuration_option('frontend_secret_word', '');
-
-		try
-		{
-			Complexify::isStrongEnough($secretWord);
-		}
-		catch (\RuntimeException $e)
-		{
-			// Ah, the current Secret Word is bad. Create a new one if necessary.
-			$newSecret = $this->container->platform->getSessionVar('newSecretWord', null, 'admintools.cpanel');
-
-			if (empty($newSecret))
-			{
-				$random = new \Akeeba\Engine\Util\RandomValue();
-				$newSecret = $random->generateString(32);
-				$this->container->platform->setSessionVar('newSecretWord', $newSecret, 'admintools.cpanel');
-			}
-
-			return $e->getMessage();
-		}
-
-		return '';
-	}
-
-	/**
 	 * Performs some checks about Joomla configuration (log and tmp path correctly set)
 	 *
 	 * @return  string|bool  Warning message. Boolean FALSE if no warning is found.
 	 */
 	public function checkJoomlaConfiguration()
 	{
-		// Let's get the site root using the Platform code
-		if (!defined('AKEEBAENGINE'))
-		{
-			define('AKEEBAENGINE', 1);
-		}
+		// Get the absolute path to the site's root
+		$absoluteRoot = @realpath(JPATH_ROOT);
+		$siteroot     = empty($absoluteRoot) ? JPATH_ROOT : $absoluteRoot;
 
-		require_once JPATH_ADMINISTRATOR . '/components/com_admintools/engine/Autoloader.php';
-
-		$siteroot      = Platform::getInstance()->get_site_root();
-		$siteroot_real = @realpath($siteroot);
-
-		if (!empty($siteroot_real))
-		{
-			$siteroot = $siteroot_real;
-		}
-
-		//First of all, do we have a VALID log folder?
+		// First of all, do we have a VALID log folder?
 		$config  = $this->container->platform->getConfig();
 		$log_dir = $config->get('log_path');
 
@@ -377,7 +323,7 @@ class ControlPanel extends Model
 	 *
 	 * @return bool
 	 */
-	public function needsIpWorkarounds()
+	public function needsIpWorkaroundsForPrivNetwork()
 	{
 		$WAFparams = Storage::getInstance();
 		$params    = $this->container->params;
@@ -386,6 +332,43 @@ class ControlPanel extends Model
 		if (!$WAFparams->getValue('ipworkarounds', -1) && ($params->get('detected_exceptions_from_private_network') === 1))
 		{
 			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Checks if we have detected a prozy header AND the IP Workaround feature is turned off
+	 *
+	 * @return bool
+	 */
+	public function needsIpWorkaroundsHeaders()
+	{
+		$WAFparams = Storage::getInstance();
+		$params    = $this->container->params;
+
+		// IP Workarounds are already loaded, no notice
+		if ($WAFparams->getValue('ipworkarounds', -1))
+		{
+			return false;
+		}
+
+		// User suppressed the notice
+		if ($params->get('detected_proxy_header') === -1)
+		{
+			return false;
+		}
+
+		// Ok let's check if we truly have any proxy header
+		$headers = Ip::getProxyHeaders();
+
+		foreach ($headers as $header)
+		{
+			// Proxy header found, warn the user
+			if (isset($_SERVER[$header]))
+			{
+				return true;
+			}
 		}
 
 		return false;
@@ -405,9 +388,10 @@ class ControlPanel extends Model
 		}
 		else
 		{
-			// If we user wants to ignore the warning, let's set the flag to -1 (ignore)
+			// If we user wants to ignore the warning, let's set every flag about IP workarounds to -1 (so they will be ignored)
 			$params = $this->container->params;
 			$params->set('detected_exceptions_from_private_network', -1);
+			$params->set('detected_proxy_header', -1);
 			$params->save();
 		}
 	}
@@ -473,7 +457,7 @@ class ControlPanel extends Model
 		$from = $folder . '/' . $altName;
 		$to   = $folder . '/main.php';
 
-		$res  = @rename($from, $to);
+		$res = @rename($from, $to);
 
 		if (!$res)
 		{
@@ -507,13 +491,13 @@ class ControlPanel extends Model
 	 */
 	public function getRenamedMainPhp()
 	{
-		$possibleNames = array(
+		$possibleNames = [
 			'main-disable.php',
 			'main.php.bak',
 			'main.bak.php',
 			'main.bak',
 			'-main.php',
-		);
+		];
 
 		$folder = JPATH_PLUGINS . '/system/admintools/admintools';
 
@@ -569,5 +553,104 @@ class ControlPanel extends Model
 
 			\JFile::delete($file);
 		}
+	}
+
+	/**
+	 * Checks if the current contents of the server configuration file (ie .htaccess) match with the saved one.
+	 */
+	public function serverConfigEdited()
+	{
+		// Core version? No need to continue
+		if (!defined('ADMINTOOLS_PRO') || !ADMINTOOLS_PRO)
+		{
+			return false;
+		}
+
+		// User decided to ignore any warning about manual edits
+		if (!$this->container->params->get('serverconfigwarn', 1))
+		{
+			return false;
+		}
+
+		$storage    = Storage::getInstance();
+		$configInfo = $storage->getValue('configInfo', []);
+
+		// Sanity checks
+		if (!$configInfo || !isset($configInfo->technology) || !isset($configInfo->contents))
+		{
+			return false;
+		}
+
+		// Sanity checks - part 2
+		if (!in_array($configInfo->technology, [
+				'HtaccessMaker', 'NginXConfMaker', 'WebConfigMaker',
+			]) || !$configInfo->contents)
+		{
+			return false;
+		}
+
+		try
+		{
+			/** @var ServerConfigMaker $serverModel */
+			$serverModel = $this->container->factory->model($configInfo->technology)->tmpInstance();
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
+
+		$serverFile = JPATH_ROOT . '/' . $serverModel->getConfigFileName();
+
+		if (!file_exists($serverFile))
+		{
+			return false;
+		}
+
+		$actualContents = md5(file_get_contents($serverFile));
+
+		// Is the hash of current file different from the saved one? If so, warn the user
+		return ($actualContents != $configInfo->contents);
+	}
+
+	/**
+	 * Check the strength of the Secret Word for front-end and remote scans. If it is insecure return the reason it
+	 * is insecure as a string. If the Secret Word is secure return an empty string.
+	 *
+	 * @return  string
+	 */
+	public function getFrontendSecretWordError()
+	{
+		$params = $this->container->params;
+
+		// Is frontend backup enabled?
+		$febEnabled = $params->get('frontend_enable', 0) != 0;
+
+		if (!$febEnabled)
+		{
+			return '';
+		}
+
+		$secretWord = $params->get('frontend_secret_word', '');
+
+		try
+		{
+			Complexify::isStrongEnough($secretWord);
+		}
+		catch (RuntimeException $e)
+		{
+			// Ah, the current Secret Word is bad. Create a new one if necessary.
+			$newSecret = $this->container->platform->getSessionVar('newSecretWord', null, 'admintools.cpanel');
+
+			if (empty($newSecret))
+			{
+				$random    = new Randval();
+				$newSecret = $random->getRandomPassword(32);
+				$this->container->platform->setSessionVar('newSecretWord', $newSecret, 'admintools.cpanel');
+			}
+
+			return $e->getMessage();
+		}
+
+		return '';
 	}
 }

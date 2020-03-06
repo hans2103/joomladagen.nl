@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -25,6 +25,8 @@ class JceViewProfile extends JViewLegacy
         $this->item = $this->get('Item');
         $this->form = $this->get('Form');
 
+        $this->formclass = 'form-horizontal options-grid-form options-grid-form-full';
+
         $this->plugins = $this->get('Plugins');
         $this->rows = $this->get('Rows');
         $this->available = $this->get('AvailableButtons');
@@ -45,39 +47,22 @@ class JceViewProfile extends JViewLegacy
             return false;
         }
 
-        JHtml::_('behavior.modal', 'a.modal_users');
         JHtml::_('jquery.ui', array('core', 'sortable'));
 
         $this->addToolbar();
-        //$this->sidebar = JHtmlSidebar::render();
         parent::display($tpl);
 
-        $document = JFactory::getDocument();
-        $document->addStyleSheet('components/com_jce/media/css/profile.min.css', array('version' => WF_VERSION));
+        // version hash
+        $hash = md5(WF_VERSION);
 
-        $document->addScript('components/com_jce/media/js/core.min.js', array('version' => WF_VERSION));
-        $document->addScript('components/com_jce/media/js/profile.min.js', array('version' => WF_VERSION));
+        $document = JFactory::getDocument();
+        $document->addStyleSheet('components/com_jce/media/css/profile.min.css?' . $hash);
+
+        $document->addScript('components/com_jce/media/js/core.min.js?' . $hash);
+        $document->addScript('components/com_jce/media/js/profile.min.js?' . $hash);
 
         // default theme
-        $document->addStyleSheet(JURI::root(true) . '/components/com_jce/editor/tiny_mce/themes/advanced/skins/default/ui.admin.css', array('version' => WF_VERSION));
-
-        $colorpickerOptions = array(
-            'parent' => '.ui-jce',
-            'stylesheets' => JceHelperAdmin::getTemplateStyleSheets(),
-            'labels' => array(
-                'title' => JText::_('WF_COLORPICKER_TITLE'),
-                'picker' => JText::_('WF_COLORPICKER_PICKER'),
-                'palette' => JText::_('WF_COLORPICKER_PALETTE'),
-                'named' => JText::_('WF_COLORPICKER_NAMED'),
-                'template' => JText::_('WF_COLORPICKER_TEMPLATE'),
-                'custom' => JText::_('WF_COLORPICKER_CUSTOM'),
-                'color' => JText::_('WF_COLORPICKER_COLOR'),
-                'apply' => JText::_('WF_COLORPICKER_APPLY'),
-                'name' => JText::_('WF_COLORPICKER_NAME'),
-            ),
-        );
-
-        JFactory::getDocument()->addScriptDeclaration('jQuery(document).ready(function($){$(".colorpicker").colorpicker(' . json_encode($colorpickerOptions) . ');});');
+        $document->addStyleSheet(JURI::root(true) . '/components/com_jce/editor/tiny_mce/themes/advanced/skins/default/ui.admin.css?' . $hash);
     }
 
     /**

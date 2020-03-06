@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright 	Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright 	Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license   	GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -22,8 +22,8 @@ class WFLinkSearchExtension extends WFSearchExtension
         parent::__construct();
 
         $request = WFRequest::getInstance();
-        $request->setRequest(array($this, 'doSearch'));
 
+        $request->setRequest(array($this, 'doSearch'));
         $request->setRequest(array($this, 'getAreas'));
 
         $wf = WFEditorPlugin::getInstance();
@@ -38,9 +38,10 @@ class WFLinkSearchExtension extends WFSearchExtension
 
         foreach ($plugins as $plugin) {
             if (JPluginHelper::isEnabled('search', $plugin)) {
-                JPluginHelper::importPlugin('search', $plugin);
-
-                $this->enabled[] = $plugin;
+                // check plugin imports correctly - plugin may have a db entry, but is missing files
+                if (JPluginHelper::importPlugin('search', $plugin)) {
+                    $this->enabled[] = $plugin;
+                }
             }
         }
     }
@@ -239,7 +240,7 @@ class WFLinkSearchExtension extends WFSearchExtension
             $row->text = SearchHelper::prepareSearchContent($row->text, $needle);
 
             // remove base url
-            if (strpos($row->href, JURI::base(true)) !== false) {
+            if (JURI::base(true) && strpos($row->href, JURI::base(true)) !== false) {
                 $row->href = substr_replace($row->href, '', 0, strlen(JURI::base(true)) + 1);
             }
 

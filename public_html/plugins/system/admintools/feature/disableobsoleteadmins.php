@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -431,10 +431,12 @@ class AtsystemFeatureDisableobsoleteadmins extends AtsystemFeatureAbstract
 		if (empty($groups))
 		{
 			$groups = $this->getAllJoomlaUserGroups();
+			// Filter the configured user groups by those with backend access
+			$groups = array_filter($groups, [$this, 'isBackendAccessGroup']);
 		}
 
-		// Filter the configured user groups by those with backend access
-		return array_filter($groups, [$this, 'isBackendAccessGroup']);
+		return $groups;
+
 	}
 
 	/**

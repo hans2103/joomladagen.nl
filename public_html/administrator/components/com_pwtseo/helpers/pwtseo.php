@@ -3,13 +3,16 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Http\Http;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 defined('_JEXEC') or die;
 
@@ -83,7 +86,7 @@ class PWTSEOHelper
 	/**
 	 * Returns the ID of the PWT SEO plugin on this system
 	 *
-	 * @return  int The ID or 0 on failure
+	 * @return  integer The ID or 0 on failure
 	 *
 	 * @since   1.2.0
 	 */
@@ -141,5 +144,94 @@ class PWTSEOHelper
 		}
 
 		return array_slice(array_keys($text), 0, $max);
+	}
+
+	/**
+	 * Get general information about a domain like amount of pages that have been indexed
+	 *
+	 * @return  array An array with data separated for Google and Bing
+	 *
+	 * @since   1.3.1
+	 */
+	public static function getDomainInformation()
+	{
+		$params       = ComponentHelper::getParams('com_pwtseo');
+		$googleDomain = $params->get('google_domain', 'www.google.com');
+
+		$http = new Http;
+		$site = Uri::getInstance()->getHost();
+
+		// Get amount of pages that have been crawled
+		$response = $http->get('https://' . $googleDomain . '/search?q=site%3A' . urlencode($site));
+		preg_match('/id="resultStats".*?([0-9]+)/', $response->body, $googlePages);
+
+		// Get amount of backlinks
+		$response = $http->get('https://' . $googleDomain . '/search?q="' . urlencode($site . '" -site:' . $site) . '&filter=0&gws_rd=cr');
+		preg_match('/id="resultStats".*?([0-9]+)/', $response->body, $googleBacklinks);
+
+		return array(
+			'google' => array(
+				'pages'     => is_array($googlePages) && isset($googlePages[1]) ? $googlePages[1] : 0,
+				'backlinks' => is_array($googleBacklinks) && isset($googleBacklinks[1]) ? $googleBacklinks[1] : 0
+			)
+		);
+	}
+
+	/**
+	 * Get the ranking for a key-phrase.
+	 *
+	 * @param   string $keyphrase The key-phrase to check
+	 * @param   string $path      If restriction to a certain url should be applied, otherwise only domain will be checked
+	 *
+	 * @return  array  Returns the first match found with rank and url that was found
+	 */
+	public static function getRankingForKeyPhrase($keyphrase, $path = '')
+	{
+		$ret = array(
+			'rank' => 0
+		);
+
+		$params       = ComponentHelper::getParams('com_pwtseo');
+		$googleDomain = $params->get('google_domain', 'www.google.com');
+		$thisDomain   = Uri::getInstance()->getHost();
+
+		$http = new Http;
+
+		// Anything above 100 we just ignore
+		$response = $http->get('https://' . $googleDomain . '/search?q=' . urlencode($keyphrase) . '&num=100');
+		$reader   = new DOMDocument;
+
+		// Suppress errors because google might give invalid html
+		@$reader->loadHTML(mb_convert_encoding($response->body, 'HTML-ENTITIES', 'UTF-8'));
+
+		$readerX = new DOMXPath($reader);
+		$url     = Uri::getInstance();
+
+		foreach ($readerX->query('//div[@class="g"] //a') as $i => $result)
+		{
+			preg_match('/q=(.*?)\&/', $result->getAttribute('href'), $href);
+
+			if ($href && isset($href[1]))
+			{
+				$url->parse($href[1]);
+
+				if ($url->getHost() === $thisDomain)
+				{
+					if ($path && stripos($href[1], $path) === false)
+					{
+						continue;
+					}
+
+					$ret = array(
+						'rank' => ++$i,
+						'url'  => $href[1]
+					);
+
+					break;
+				}
+			}
+		}
+
+		return $ret;
 	}
 }

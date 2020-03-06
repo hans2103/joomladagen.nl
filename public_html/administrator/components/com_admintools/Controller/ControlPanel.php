@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -10,13 +10,13 @@ namespace Akeeba\AdminTools\Admin\Controller;
 defined('_JEXEC') or die;
 
 use Akeeba\AdminTools\Admin\Controller\Mixin\PredefinedTaskList;
+use Akeeba\AdminTools\Admin\Helper\ServerTechnology;
 use Akeeba\AdminTools\Admin\Model\MasterPassword;
 use Akeeba\AdminTools\Admin\Model\Updates;
-use Akeeba\Engine\Util\RandomValue;
-use AkeebaGeoipProvider;
+use Exception;
 use FOF30\Container\Container;
 use FOF30\Controller\Controller;
-use JFactory;
+use FOF30\Encrypt\Randval;
 use JText;
 use JUri;
 
@@ -31,7 +31,6 @@ class ControlPanel extends Controller
 		$this->predefinedTaskList = [
 			'browse',
 			'login',
-			'updategeoip',
 			'updateinfo',
 			'selfblocked',
 			'unblockme',
@@ -39,9 +38,11 @@ class ControlPanel extends Controller
 			'resetSecretWord',
 			'forceUpdateDb',
 			'IpWorkarounds',
-		    'changelog',
-		    'endRescue',
+			'changelog',
+			'endRescue',
 			'renameMainPhp',
+			'ignoreServerConfigWarn',
+			'regenerateServerConfig',
 		];
 	}
 
@@ -82,7 +83,7 @@ class ControlPanel extends Controller
 	public function login()
 	{
 		/** @var MasterPassword $model */
-		$model = $this->getModel('MasterPassword');
+		$model    = $this->getModel('MasterPassword');
 		$password = $this->input->get('userpw', '', 'raw');
 		$model->setUserPassword($password);
 
@@ -90,77 +91,22 @@ class ControlPanel extends Controller
 		$this->setRedirect($url);
 	}
 
-	public function updategeoip()
-	{
-		$this->csrfProtection();
-
-		// Load the GeoIP library if it's not already loaded
-		if (!class_exists('AkeebaGeoipProvider'))
-		{
-			if (@file_exists(JPATH_PLUGINS . '/system/akgeoip/lib/akgeoip.php'))
-			{
-				if (@include_once JPATH_PLUGINS . '/system/akgeoip/lib/vendor/autoload.php')
-				{
-					@include_once JPATH_PLUGINS . '/system/akgeoip/lib/akgeoip.php';
-				}
-			}
-		}
-
-		$url = 'index.php?option=com_admintools';
-
-		/**
-		 * Sanity check.
-		 *
-		 * We had a case where the user deleted the plugin files but did not uninstall the plugin. Therefore he saw the
-		 * message to update the database, clicked on the button and got an error page because the plugin (therefore,
-		 * the AkeebaGeoipProvider class) did not really exist on his site.
-		 */
-		if (!class_exists('AkeebaGeoipProvider'))
-		{
-			$message = JText::_('COM_ADMINTOOLS_LBL_GEOGRAPHICBLOCKING_GEOIPPLUGINMISSING');
-			$this->setRedirect($url, $message, 'error');
-
-			return;
-		}
-
-		$geoip  = new AkeebaGeoipProvider();
-		$result = $geoip->updateDatabase();
-
-		$customRedirect = $this->input->getBase64('returnurl', '');
-		$customRedirect = empty($customRedirect) ? '' : base64_decode($customRedirect);
-
-		if ($customRedirect && JUri::isInternal($customRedirect))
-		{
-			$url = $customRedirect;
-		}
-
-		if ($result === true)
-		{
-			$msg = JText::_('COM_ADMINTOOLS_MSG_GEOGRAPHICBLOCKING_DOWNLOADEDGEOIPDATABASE');
-			$this->setRedirect($url, $msg);
-		}
-		else
-		{
-			$this->setRedirect($url, $result, 'error');
-		}
-	}
-
 	public function updateinfo()
 	{
 		/** @var Updates $updateModel */
 		$updateModel = $this->container->factory->model('Updates')->tmpInstance();
-		$updateInfo  = (object)$updateModel->getUpdates();
+		$updateInfo  = (object) $updateModel->getUpdates();
 
 		$result = '';
 
 		if ($updateInfo->hasUpdate)
 		{
-			$strings = array(
+			$strings = [
 				'header'  => JText::sprintf('COM_ADMINTOOLS_MSG_CONTROLPANEL_UPDATEFOUND', $updateInfo->version),
 				'button'  => JText::sprintf('COM_ADMINTOOLS_MSG_CONTROLPANEL_UPDATENOW', $updateInfo->version),
 				'infourl' => $updateInfo->infoURL,
 				'infolbl' => JText::_('COM_ADMINTOOLS_MSG_CONTROLPANEL_MOREINFO'),
-			);
+			];
 
 			$result = <<<ENDRESULT
 	<div class="akeeba-block--warning">
@@ -192,7 +138,7 @@ ENDRESULT;
 		/** @var \Akeeba\AdminTools\Admin\Model\ControlPanel $model */
 		$model = $this->getModel();
 
-		$result = (int)$model->isMyIPBlocked($externalIP);
+		$result = (int) $model->isMyIPBlocked($externalIP);
 
 		echo '###' . $result . '###';
 
@@ -204,7 +150,7 @@ ENDRESULT;
 		$unblockIP[] = $this->input->getString('ip', '');
 
 		/** @var \Akeeba\AdminTools\Admin\Model\ControlPanel $model */
-		$model = $this->getModel();
+		$model       = $this->getModel();
 		$unblockIP[] = $model->getVisitorIP();
 
 		/** @var \Akeeba\AdminTools\Admin\Model\UnblockIP $unblockModel */
@@ -233,14 +179,18 @@ ENDRESULT;
 		$msgType = 'error';
 		$dlid    = $this->input->getString('dlid', '');
 
+		/** @var Updates $updateModel */
+		$updateModel = $this->container->factory->model('Updates')->tmpInstance();
+		$dlid        = $updateModel->sanitizeLicenseKey($dlid);
+		$isValidDLID = $updateModel->isValidLicenseKey($dlid);
+
 		// If the Download ID seems legit let's apply it
-		if (preg_match('/^([0-9]{1,}:)?[0-9a-f]{32}$/i', $dlid))
+		if ($isValidDLID)
 		{
 			$msg     = null;
 			$msgType = null;
 
-			$this->container->params->set('downloadid', $dlid);
-			$this->container->params->save();
+			$updateModel->setLicenseKey($dlid);
 		}
 
 		// Redirect back to the control panel
@@ -257,34 +207,6 @@ ENDRESULT;
 			$url = \JUri::base() . 'index.php?option=com_admintools';
 		}
 
-		$this->setRedirect($url, $msg, $msgType);
-	}
-
-	/**
-	 * Reset the Secret Word for front-end and remote backup
-	 *
-	 * @return  void
-	 */
-	public function resetSecretWord()
-	{
-		$this->csrfProtection();
-
-		$newSecret = $this->container->platform->getSessionVar('newSecretWord', null, 'admintools.cpanel');
-
-		if (empty($newSecret))
-		{
-			$random    = new RandomValue();
-			$newSecret = $random->generateString(32);
-			$this->container->platform->setSessionVar('newSecretWord', $newSecret, 'admintools.cpanel');
-		}
-
-		$this->container->params->set('frontend_secret_word', $newSecret);
-		$this->container->params->save();
-
-		$msg     = JText::sprintf('COM_ADMINTOOLS_MSG_CONTROLPANEL_FESECRETWORD_RESET', $newSecret);
-		$msgType = null;
-
-		$url = 'index.php?option=com_admintools';
 		$this->setRedirect($url, $msg, $msgType);
 	}
 
@@ -377,5 +299,79 @@ ENDRESULT;
 		$returnUrl = $customURL ? $customURL : 'index.php?option=com_admintools&view=ControlPanel';
 
 		$this->setRedirect($returnUrl);
+	}
+
+	/**
+	 * Put a flag inside component configuration so user won't be warned again if he manually edits any server
+	 * configuration file. He can enable it again by changing its value inside the component options
+	 */
+	public function ignoreServerConfigWarn()
+	{
+		$this->container->params->set('serverconfigwarn', 0);
+		$this->container->params->save();
+
+		$this->setRedirect('index.php?option=com_admintools&view=ControlPanel');
+	}
+
+	public function regenerateServerConfig()
+	{
+		$classModel = '';
+
+		if (ServerTechnology::isHtaccessSupported())
+		{
+			$classModel = 'HtaccessMaker';
+		}
+		elseif (ServerTechnology::isNginxSupported())
+		{
+			$classModel = 'NginXConfMaker';
+		}
+		elseif (ServerTechnology::isWebConfigSupported())
+		{
+			$classModel = 'WebConfigMaker';
+		}
+
+		if (!$classModel)
+		{
+
+			$this->setRedirect('index.php?option=com_admintools&view=ControlPanel', JText::_('COM_ADMINTOOLS_CPANEL_SERVERCONFIGWARN_ERR_REGENERATE'), 'error');
+
+			return;
+		}
+
+		/** @var \Akeeba\AdminTools\Admin\Model\ServerConfigMaker $model */
+		$model = $this->container->factory->model($classModel)->tmpInstance();
+
+		$model->writeConfigFile();
+
+		$this->setRedirect('index.php?option=com_admintools&view=ControlPanel', JText::_('COM_ADMINTOOLS_CPANEL_SERVERCONFIGWARN_REGENERATED'));
+	}
+
+	/**
+	 * Reset the Secret Word for front-end and remote backup
+	 *
+	 * @return  void
+	 * @throws  Exception
+	 */
+	public function resetSecretWord()
+	{
+		$this->csrfProtection();
+
+		$newSecret = $this->container->platform->getSessionVar('newSecretWord', null, 'admintools.cpanel');
+
+		if (empty($newSecret))
+		{
+			$random    = new Randval();
+			$newSecret = $random->getRandomPassword(32);
+			$this->container->platform->setSessionVar('newSecretWord', $newSecret, 'admintools.cpanel');
+		}
+
+		$this->container->params->set('frontend_secret_word', $newSecret);
+		$this->container->params->save();
+
+		$msg     = JText::sprintf('COM_ADMINTOOLS_MSG_CONTROLPANEL_FESECRETWORD_RESET', $newSecret);
+		$msgType = null;
+
+		$url = 'index.php?option=com_admintools';
+		$this->setRedirect($url, $msg, $msgType);
 	}
 }

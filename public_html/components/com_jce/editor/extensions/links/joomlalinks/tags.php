@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -95,7 +95,7 @@ class JoomlalinksTags extends JObject
         $query = $db->getQuery(true);
         $query->select('a.id, a.title, a.alias');
 
-        if ($wf->getParam('joomlalinks.tag_alias', 1)) {    
+        if ($wf->getParam('links.joomlalinks.tag_alias', 1)) {    
             $case_when_item_alias = ' CASE WHEN ';
             $case_when_item_alias .= $query->charLength('a.alias', '!=', '0');
             $case_when_item_alias .= ' THEN ';
@@ -131,7 +131,7 @@ class JoomlalinksTags extends JObject
     {
         $wf = WFEditorPlugin::getInstance();
         
-        if ($wf->getParam('joomlalinks.sef_url', 0)) {
+        if ($wf->getParam('links.joomlalinks.sef_url', 0)) {
             $url = WFLinkBrowser::route($url);
         }
 

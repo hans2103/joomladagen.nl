@@ -18,7 +18,7 @@ JText::script('RSFP_COMP_FIELD_VALIDATIONEXTRA');
 JText::script('RSFP_REMOVE_COMPONENT_CONFIRM');
 JText::script('RSFP_AUTOGENERATE_LAYOUT_WARNING_SURE');
 ?>
-	<form action="index.php?option=com_rsform&amp;task=forms.edit&amp;formId=<?php echo $this->form->FormId; ?>" method="post" name="adminForm" id="adminForm">
+	<form action="<?php echo JRoute::_('index.php?option=com_rsform&view=forms&layout=edit&formId=' . $this->form->FormId); ?>" method="post" name="adminForm" id="adminForm">
 		<?php
 		echo JHtml::_('bootstrap.renderModal', 'editModal', array(
 			'title' => JText::_('RSFP_FORM_FIELD'),
@@ -32,7 +32,9 @@ JText::script('RSFP_AUTOGENERATE_LAYOUT_WARNING_SURE');
         <?php if (!RSFormProHelper::getConfig('global.disable_multilanguage')) { ?>
             <span><?php echo $this->lists['Languages']; ?></span>
             <span><?php echo JText::sprintf('RSFP_YOU_ARE_EDITING_IN', $this->lang, RSFormProHelper::translateIcon()); ?></span>
-        <?php } ?>
+        <?php } else { ?>
+			<p><span><?php echo JText::sprintf('RSFP_YOU_ARE_EDITING_IN_SHORT', $this->lang); ?></span></p>
+		<?php } ?>
 
 		<div id="rsform_container">
 			<div id="state" style="display: none;"><?php echo JHtml::image('com_rsform/admin/load.gif', JText::_('RSFP_PROCESSING'), null, true); ?><?php echo JText::_('RSFP_PROCESSING'); ?></div>
@@ -163,17 +165,13 @@ JText::script('RSFP_AUTOGENERATE_LAYOUT_WARNING_SURE');
 
             document.getElementById('tabposition').value = jQuery('#properties').hasClass('btn-primary') ? 1 : 0;
 
-			if (pressbutton == 'forms.cancel')
+			if (['components.remove', 'components.publish', 'components.unpublish', 'components.save', 'submissions.back', 'forms.directory', 'forms.cancel'].indexOf(pressbutton) > -1)
 			{
 				Joomla.submitform(pressbutton);
 			}
 			else if (pressbutton == 'forms.preview')
 			{
 				window.open('<?php echo JUri::root(); ?>index.php?option=com_rsform&view=rsform&formId=<?php echo $this->form->FormId; ?>');
-			}
-			else if (pressbutton == 'components.remove' || pressbutton == 'components.publish' || pressbutton == 'components.unpublish' || pressbutton == 'components.save' || pressbutton == 'submissions.back' || pressbutton == 'forms.directory')
-			{
-				Joomla.submitform(pressbutton);
 			}
 			else
 			{
@@ -192,7 +190,7 @@ JText::script('RSFP_AUTOGENERATE_LAYOUT_WARNING_SURE');
                     messages.error.push(Joomla.JText._('RSFP_SPECIFY_FORM_NAME'));
                     Joomla.renderMessages(messages);
 				} else {
-					if (RSFormPro.$('#properties').hasClass('btn-primary')) {
+					if (jQuery('#properties').hasClass('btn-primary')) {
 						document.getElementById('tabposition').value = 1;
 					}
 					Joomla.submitform(pressbutton);
@@ -249,7 +247,7 @@ JText::script('RSFP_AUTOGENERATE_LAYOUT_WARNING_SURE');
 				if(xml.readyState==4)
 				{
 					var cell = document.getElementById(theId);
-					RSFormPro.$(cell).html(xml.responseText);
+					jQuery(cell).html(xml.responseText);
 
 					stateDone();
 

@@ -61,16 +61,43 @@ RSFormPro.setHTML5Validation = function (formId, isDisabledSubmit, errorClasses,
 					event.preventDefault();
 				} else {
 					if (isDisabledSubmit) {
-						// if the submit button or any other element has the id submit the form.submit() function is overwritten
-						if (typeof this.form.submit != 'function') {
-							document.createElement('form').submit.call(this.form)
-						} else {
-							this.form.submit();
-						}
+						RSFormPro.submitForm(this.form);
 					}
 				}
 			}));
 		}
+	}
+};
+
+RSFormPro.formEvents = {};
+
+RSFormPro.addFormEvent = function(formId, func) {
+	if (typeof RSFormPro.formEvents[formId] !== 'object') {
+		RSFormPro.formEvents[formId] = [];
+	}
+
+	RSFormPro.formEvents[formId].push(func);
+};
+
+RSFormPro.submitForm = function(form) {
+	var formId = form.elements['form[formId]'].value;
+	var func;
+
+	if (typeof RSFormPro.formEvents[formId] === 'object' && RSFormPro.formEvents[formId].length > 0) {
+		if (func = RSFormPro.formEvents[formId].shift()) {
+			if (typeof func === 'function') {
+				func();
+
+				return false;
+			}
+		}
+	}
+
+	// if the submit button or any other element has the id submit the form.submit() function is overwritten
+	if (typeof form.submit === 'function') {
+		form.submit();
+	} else {
+		document.createElement('form').submit.call(form)
 	}
 };
 
@@ -82,6 +109,7 @@ RSFormPro.setDisabledSubmit = function(formId, ajaxValidation){
 		for (i = 0; i < submitElement.length; i++) {
 			if (RSFormProUtils.hasClass(submitElement[i],'rsform-submit-button')) {
 				RSFormProUtils.addEvent(submitElement[i],'click', (function(event) {
+					event.preventDefault();
 					for (j = 0; j < submitElement.length; j++) {
 						submitElement[j].disabled = true;
 					}
@@ -97,26 +125,41 @@ RSFormPro.showThankYouPopup = function (thankYouContainer){
 	var gotoUrl = thankYouContainer.querySelector('#rsfp-thankyou-popup-return-link').value;
 
 	// remove the html part from the layout
-	thankYouContainer.parentNode.removeChild( thankYouContainer );
+	thankYouContainer.parentNode.removeChild(thankYouContainer);
 
-	document.body.className = document.body.className+' rsfp_popup_activated';
-	document.body.innerHTML += '<div class="rsfp_thankyou_popup_outer" onclick="RSFormPro.accessLink(event,\''+gotoUrl+'\')"><div class="rsfp_thankyou_popup_inner" id="rsfp_thankyou_popup_inner"><div class="rsfp_thankou_popup_close_btn">&times;</div>'+content+'</div></div>';
+	RSFormProUtils.addClass(document.body, 'rsfp_popup_activated');
+
+	var outer = document.createElement('div');
+	outer.setAttribute('class', 'rsfp_thankyou_popup_outer');
+	outer.onclick = function() {
+		if (event && event.target && (RSFormProUtils.hasClass(event.target, 'rsfp_thankyou_popup_outer') || RSFormProUtils.hasClass(event.target, 'rsfp_thankou_popup_close_btn'))) {
+			if (gotoUrl.length > 0) {
+				document.location = gotoUrl;
+			} else {
+				document.location.reload(true);
+			}
+		}
+	};
+
+	var inner = document.createElement('div');
+	inner.setAttribute('class', 'rsfp_thankyou_popup_inner');
+	inner.setAttribute('id', 'rsfp_thankyou_popup_inner');
+	inner.innerHTML = content;
+
+	var close = document.createElement('div');
+	close.setAttribute('class', 'rsfp_thankou_popup_close_btn');
+	close.innerHTML = '&times;';
+
+	outer.appendChild(inner);
+	inner.appendChild(close);
+
+	document.body.appendChild(outer);
 
 	var popupWindowHeight = document.getElementById('rsfp_thankyou_popup_inner').offsetHeight;
 	var windowHeight = window.innerHeight;
 
 	var marginTop = (windowHeight - popupWindowHeight) / 2;
-	document.getElementById('rsfp_thankyou_popup_inner').style.marginTop = marginTop+'px';
-};
-RSFormPro.accessLink = function(event,link) {
-	var clickedElementClass = event.target.className;
-	if (clickedElementClass == 'rsfp_thankyou_popup_outer' || clickedElementClass == 'rsfp_thankou_popup_close_btn') {
-		if (link.length > 0) {
-			document.location = link;
-		} else {
-			document.location.reload();
-		}
-	}
+	document.getElementById('rsfp_thankyou_popup_inner').style.marginTop = marginTop + 'px';
 };
 
 /* Scroll to first error element */
@@ -137,12 +180,21 @@ RSFormPro.findAncestor = function(el, cls){
 	while(el = el.parentElement) {
 		var elementClasses = el.className;
 		elementClasses = elementClasses.split(' ');
-		if (elementClasses.indexOf(cls) >= 0) {
+		if (elementClasses.indexOf(cls) > -1) {
 			return el;
 		}
 	}
 
 	return false;
+};
+
+/* Reset all values, used with reset button for the submit */
+RSFormPro.resetElements = function(formId) {
+	var form 	= RSFormPro.getForm(formId);
+
+	if (form && form.elements.length) {
+		RSFormPro.resetValues(form.elements);
+	}
 };
 
 /* ScrollTo functions */
@@ -152,7 +204,7 @@ RSFormPro.scrollToElement = function(element){
 	var documentView = window.innerHeight + scrollTop;
 
 	// this is more specific for the modern browsers
-	if (typeof element.getBoundingClientRect == 'function') {
+	if (typeof element.getBoundingClientRect === 'function') {
 		to = element.getBoundingClientRect().top + scrollTop;
 	}
 
@@ -167,7 +219,7 @@ RSFormPro.scrollTo = function(to, duration) {
 	var difference = to - elementScrollTop;
 	var perTick = difference / duration * 10;
 	
-	setTimeout(function() {
+	window.setTimeout(function() {
 		var limitControl;
 		limitControl = window.pageYOffset ?  window.pageYOffset : document.documentElement.scrollTop;
 		limitControl = limitControl + perTick;
@@ -190,7 +242,9 @@ RSFormPro.refreshCaptcha = function(componentId, captchaPath) {
 	document.getElementById('captchaTxt' + componentId).focus();
 };
 
-RSFormPro.initGeoLocation = function(term, id, mapid,  map, marker, geocoder, type) {
+RSFormPro.geoLocationTimeouts = {};
+
+RSFormPro.initGeoLocation = function(term, id, mapid, map, marker, geocoder, type) {
 	var content = document.getElementById('rsform_geolocation'+id);
 	var address	= document.getElementById(mapid).clientWidth;
 
@@ -198,35 +252,63 @@ RSFormPro.initGeoLocation = function(term, id, mapid,  map, marker, geocoder, ty
 	document.getElementById('rsform_geolocation'+id).style.display = 'none';
 	document.getElementById('rsform_geolocation'+id).innerHTML = '';
 
+	if (typeof RSFormPro.geoLocationTimeouts[id] !== 'undefined')
+	{
+		window.clearTimeout(RSFormPro.geoLocationTimeouts[id]);
+	}
+
 	if (term != '') {
-		geocoder.geocode( {'address': term }, function(results, status) {
-			if (status == 'OK') {
-				for (var i=0; i<results.length; i++) {
-					var item	= results[i];
-					var theli	= document.createElement('li');
-					var thea	= document.createElement('a');
+		RSFormPro.geoLocationTimeouts[id] = window.setTimeout(function(){
+			geocoder.geocode( {'address': term }, function(results, status) {
+				if (status == 'OK') {
+					for (var i=0; i<results.length; i++) {
+						var item	= results[i];
+						var theli	= document.createElement('li');
+						var thea	= document.createElement('a');
 
-					thea.setAttribute('href','javascript:void(0)');
-					thea.innerHTML = item.formatted_address;
+						thea.setAttribute('href','javascript:void(0)');
+						thea.innerHTML = item.formatted_address;
 
-					RSFormProUtils.addEvent(thea,'click', (function() {
-						var mapValue = type ? item.formatted_address : item.geometry.location.lat().toFixed(5) + ',' + item.geometry.location.lng().toFixed(5);
-						var mapId	 = mapid;
-						var location = new google.maps.LatLng(item.geometry.location.lat().toFixed(5), item.geometry.location.lng().toFixed(5));
+						RSFormProUtils.addEvent(thea,'click', (function() {
+							var mapValue = type ? item.formatted_address : item.geometry.location.lat().toFixed(5) + ',' + item.geometry.location.lng().toFixed(5);
+							var mapId	 = mapid;
+							var location = new google.maps.LatLng(item.geometry.location.lat().toFixed(5), item.geometry.location.lng().toFixed(5));
 
-						return function() {
-							document.getElementById(mapId).value = mapValue;
-							marker.setPosition(location);
-							map.setCenter(location);
-							document.getElementById('rsform_geolocation'+id).style.display = 'none';
-						}
-					})());
+							return function() {
+								document.getElementById(mapId).value = mapValue;
+								marker.setPosition(location);
+								map.setCenter(location);
+								document.getElementById('rsform_geolocation'+id).style.display = 'none';
+							}
+						})());
 
-					theli.appendChild(thea);
-					content.appendChild(theli);
+						theli.appendChild(thea);
+						content.appendChild(theli);
+					}
+
+					document.getElementById('rsform_geolocation'+id).style.display = '';
 				}
+			});
+		}, 500);
+	}
+};
 
-				document.getElementById('rsform_geolocation'+id).style.display = '';
+RSFormPro.googleMapIds = [];
+
+RSFormPro.requestLocation = function() {
+	if (navigator && navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			var id, map, marker;
+
+			for (var i = 0; i < RSFormPro.googleMapIds.length; i++)
+			{
+				id = RSFormPro.googleMapIds[i];
+				map = window['rsformmap' + id];
+				marker = window['rsformmarker' + id];
+
+				map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
+				marker.setPosition({lat: position.coords.latitude, lng: position.coords.longitude});
+				google.maps.event.trigger(marker, 'drag');
 			}
 		});
 	}
@@ -268,6 +350,114 @@ RSFormPro.disableInvalidDates = function(fieldName) {
 				document.getElementById(fieldName + 'd').value = day;
 				break;
 			}
+		}
+	}
+};
+
+RSFormPro.addMoreFiles = function(button) {
+	var clone = button.previousSibling.cloneNode(true);
+
+	var inputs = clone.getElementsByTagName('input');
+	if (inputs.length)
+	{
+		for (var i = 0; i < inputs.length; i++)
+		{
+			if (inputs[i].type && inputs[i].type.toUpperCase() === 'FILE')
+			{
+				var fieldName = inputs[i].getAttribute('id');
+				inputs[i].value = '';
+			}
+		}
+	}
+
+	var images = clone.getElementsByTagName('img');
+	if (images.length)
+	{
+		for (var j = 0; j < images.length; j++)
+		{
+			if (RSFormProUtils.hasClass(images[j], 'rsfp-image-polaroid'))
+			{
+				images[j].parentNode.parentNode.removeChild(images[j].parentNode);
+			}
+		}
+	}
+
+	button.parentNode.appendChild(clone);
+
+	var maxFiles = parseInt(button.getAttribute('data-rsfp-maxfiles'));
+	if (maxFiles > 0)
+	{
+		if (RSFormPro.getFieldsByName(button.getAttribute('data-rsfp-formid'), fieldName).length / 2 >= maxFiles)
+		{
+			button.disabled = true;
+		}
+	}
+};
+
+RSFormPro.loadImage = function(input) {
+	if ('files' in input && typeof FileReader === 'function')
+	{
+		var file, reader;
+
+		var images = input.parentNode.querySelectorAll('.rsfp-image-container');
+
+		for (var j = 0; j < images.length; j++)
+		{
+			images[j].parentNode.removeChild(images[j]);
+		}
+
+		for (var i = 0; i < input.files.length; i++)
+		{
+			file = input.files[i];
+
+			reader = new FileReader();
+			reader.onload = function(e) {
+				var div = document.createElement('div');
+				div.setAttribute('class', 'rsfp-image-container');
+
+				var img = document.createElement('img');
+				img.setAttribute('src', e.target.result);
+				img.setAttribute('alt', file.name);
+				img.setAttribute('title', file.name);
+				img.setAttribute('class', 'rsfp-image-polaroid');
+				img.onerror = function() {
+					img.src = "data:image/svg+xml,%3Csvg role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='currentColor' d='M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z'%3E%3C/path%3E%3C/svg%3E";
+					img.onclick = false;
+				};
+				img.onclick = function() {
+					var modal = document.createElement('div');
+					modal.setAttribute('class', 'rsfp-modal');
+
+					var close = document.createElement('span');
+					close.innerHTML = '&times;';
+					close.setAttribute('class', 'rsfp-modal-close-button');
+					modal.onclick = close.onclick = function() {
+						modal.parentNode.removeChild(modal);
+					};
+
+					var img = document.createElement('img');
+					img.setAttribute('class', 'rsfp-modal-image');
+					img.setAttribute('src', this.getAttribute('src'));
+
+					var caption = document.createElement('div');
+					caption.setAttribute('class', 'rsfp-modal-caption');
+					caption.innerHTML = this.getAttribute('alt');
+
+					modal.appendChild(close);
+					modal.appendChild(img);
+					modal.appendChild(caption);
+
+					document.getElementsByTagName('body')[0].appendChild(modal);
+
+					modal.style.display = 'block';
+				};
+
+				div.appendChild(img);
+
+				input.parentNode.insertBefore(div, input.nextSibling);
+			};
+
+			reader.readAsDataURL(file);
 		}
 	}
 };
@@ -767,7 +957,7 @@ RSFormPro.HTML5 = {
 				// if the multiple form is present and also validation we will need to find in which page the element is located
 				if (form.elements[i].type == 'button') {
 					var onclick = form.elements[i].getAttribute('onclick');
-					if (typeof onclick == 'string' && onclick.indexOf('rsfp_changePage') >= 0){
+					if (typeof onclick == 'string' && (onclick.indexOf('rsfp_changePage') > -1 || onclick.indexOf('RSFormPro.Pages.change') > -1)) {
 						var countCommas = 0;
 						var pos = onclick.indexOf(',');
 						while (pos > -1) {
@@ -813,13 +1003,21 @@ RSFormPro.HTML5 = {
 		}
 
 		if (typeof RSFormPro.HTML5.componentIds[formId][elementAlias] == 'undefined') {
+			RSFormPro.HTML5.componentIds[formId][elementAlias] = false;
 			var block = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(elementAlias));
-			var componentIdBlock = RSFormProUtils.getElementsByClassName('formNoError', 'span', block[0]);
-			if (componentIdBlock.length) {
-				var componentId = componentIdBlock[0].getAttribute('id');
-				RSFormPro.HTML5.componentIds[formId][elementAlias] = componentId.replace('component', '');
-			} else {
-				RSFormPro.HTML5.componentIds[formId][elementAlias] = false;
+
+			if (typeof block[0] !== 'undefined') {
+				var componentIdBlock;
+
+				componentIdBlock = RSFormProUtils.getElementsByClassName('formNoError', 'span', block[0]);
+				if (componentIdBlock.length === 0) {
+					componentIdBlock = RSFormProUtils.getElementsByClassName('formError', 'span', block[0]);
+				}
+
+				if (componentIdBlock.length > 0) {
+					var componentId = componentIdBlock[0].getAttribute('id');
+					RSFormPro.HTML5.componentIds[formId][elementAlias] = componentId.replace('component', '');
+				}
 			}
 		}
 
@@ -850,13 +1048,13 @@ RSFormPro.Pages = {
 		for (var i = 0; i <= totalPages; i++) {
 			thePage = document.getElementById('rsform_' + formId + '_page_' + i);
 			if (thePage) {
-				rsfp_hidePage(thePage);
+				RSFormPro.Pages.hide(thePage);
 			}
 		}
 
 		thePage = document.getElementById('rsform_' + formId + '_page_' + page);
 		if (thePage) {
-			rsfp_showPage(thePage);
+			RSFormPro.Pages.show(thePage);
 			try {
 				var func = window["rsfp_showProgress_" + formId];
 				if (typeof func == "function") {
@@ -915,22 +1113,32 @@ RSFormPro.Conditions = {
             items = [],
 			detail, isChecked, displayValue, match;
 
+		var i, c;
+
 		if (typeof condition.details === 'object')
 		{
-			for (var i = 0; i < condition.details.length; i++)
+			for (i = 0; i < condition.details.length; i++)
 			{
 				detail = condition.details[i];
                 isChecked = RSFormPro.isChecked(formId, detail.ComponentName, detail.value);
                 conditions.push(isChecked === (detail.operator === 'is'));
 			}
 
-			if (parseInt(condition.block) === 1)
+			items = [];
+
+			if (condition.ComponentNames)
 			{
-				items = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(condition.ComponentName));
-			}
-			else
-			{
-				items = RSFormPro.getFieldsByName(formId, condition.ComponentName);
+				for (c = 0; c < condition.ComponentNames.length; c++)
+				{
+					if (parseInt(condition.block) === 1)
+					{
+						items = items.concat(RSFormPro.getBlock(formId, RSFormProUtils.getAlias(condition.ComponentNames[c])));
+					}
+					else
+					{
+						items = items.concat(RSFormPro.getFieldsByName(formId, condition.ComponentNames[c]));
+					}
+				}
 			}
 
 			if (items.length > 0)
@@ -958,14 +1166,20 @@ RSFormPro.Conditions = {
 				RSFormProUtils.setDisplay(items, displayValue);
                 if (displayValue === 'none')
 				{
-					RSFormPro.resetValues(RSFormPro.getFieldsByName(formId, condition.ComponentName));
+					if (condition.ComponentNames)
+					{
+						for (c = 0; c < condition.ComponentNames.length; c++)
+						{
+							RSFormPro.resetValues(RSFormPro.getFieldsByName(formId, condition.ComponentNames[c]));
+						}
+					}
 				}
 			}
 		}
 	},
 	runAll: function(formId) {
-		var func = window["rsfp_runAllConditions" + formId];
-		if (typeof func == "function") {
+		var func = window['rsfp_runAllConditions' + formId];
+		if (typeof func === 'function') {
 			func();
 		}
 	},
@@ -984,8 +1198,8 @@ RSFormPro.Conditions = {
 		}
 	},
 	delayRun: function(formId) {
-		var func = window["rsfp_runAllConditions" + formId];
-		if (typeof func == "function") {
+		var func = window['rsfp_runAllConditions' + formId];
+		if (typeof func === 'function') {
 			RSFormProUtils.addEvent(window, 'load', func);
 		}
 	}
@@ -1006,7 +1220,7 @@ RSFormPro.Calculations = {
 		});
 	},
 	_addEvents: function(formId, fields) {
-		var func 		= window["rsfp_Calculations" + formId];
+		var func 		= window['rsfp_Calculations' + formId];
 		var thefields	= fields ? fields : RSFormProPrices;
 		var event 		= 'change';
 		
@@ -1016,7 +1230,7 @@ RSFormPro.Calculations = {
 			for (var i = 0; i < resetElements.length; i++)
 			{
 				RSFormProUtils.addEvent(resetElements[i], 'click', function() {
-					if (typeof func == "function") {
+					if (typeof func === 'function') {
 						window.setTimeout(func, 1);
 					}
 				});
@@ -1128,42 +1342,54 @@ RSFormPro.Ajax = {
 	},
 	displayValidationErrors: function(formComponents, task, formId, data) {
 		if (task == 'afterSend') {
-			var ids,
-				i,
-				j,
-				id,
-				formComponent,
-				firstErrorElement,
-				elementBlock;
+			var ids, i, j, id, formComponent, elementBlock;
+			var parentErrorClass = typeof data.parentErrorClass !== 'undefined' && data.parentErrorClass.length > 0 ? data.parentErrorClass : false;
+			var fieldErrorClass = typeof data.fieldErrorClass !== 'undefined' && data.fieldErrorClass.length > 0 ? data.fieldErrorClass : false;
 
 			ids = data.response[0].split(',');
-			for (i = 0; i < ids.length; i++) {
+			for (i = 0; i < ids.length; i++)
+			{
 				id = parseInt(ids[i]);
-				if (!isNaN(id) && typeof formComponents[id] != 'undefined') {
-					formComponent = RSFormPro.getFieldsByName(formId, formComponents[id]);
-					if (formComponent && formComponent.length > 0) {
-						for (j = 0; j < formComponent.length; j++) {
-							if (formComponent[j]) {
-								RSFormProUtils.removeClass(formComponent[j], 'rsform-error');
-								if (typeof data.parentErrorClass != 'undefined' && data.parentErrorClass.length > 0) {
-									try {
-										elementBlock = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(formComponents[id]));
-										RSFormProUtils.removeClass(elementBlock[0], data.parentErrorClass);
-									} catch (err) {}
-								}
-								if (typeof data.fieldErrorClass != 'undefined' && data.fieldErrorClass.length > 0) {
-									try {
-										results = RSFormPro.getFieldsByName(formId, formComponents[id]);
-										if (results.length > 0)
-										{
-											for (var r = 0; r < results.length; r++)
-											{
-												RSFormProUtils.removeClass(results[r], data.fieldErrorClass);
-											}
-										}
-									} catch (err) {}
+
+				if (isNaN(id))
+				{
+					continue;
+				}
+
+				if (typeof formComponents[id] === 'undefined')
+				{
+					continue;
+				}
+
+				formComponent = RSFormPro.getFieldsByName(formId, formComponents[id]);
+
+				if (!formComponent || formComponent.length < 1)
+				{
+					continue;
+				}
+
+				for (j = 0; j < formComponent.length; j++)
+				{
+					if (formComponent[j])
+					{
+						RSFormProUtils.removeClass(formComponent[j], 'rsform-error');
+						formComponent[j].removeAttribute('aria-invalid');
+
+						if (parentErrorClass)
+						{
+							try
+							{
+								if (elementBlock = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(formComponents[id])))
+								{
+									RSFormProUtils.removeClass(elementBlock[0], parentErrorClass);
 								}
 							}
+							catch (err) {}
+						}
+
+						if (fieldErrorClass)
+						{
+							RSFormProUtils.removeClass(formComponent[j], fieldErrorClass);
 						}
 					}
 				}
@@ -1181,12 +1407,13 @@ RSFormPro.Ajax = {
 					continue;
 				}
 				
-				if (typeof formComponents[id] == 'undefined')
+				if (typeof formComponents[id] === 'undefined')
 				{
 					continue;
 				}
 				
 				formComponent = RSFormPro.getFieldsByName(formId, formComponents[id]);
+
 				if (!formComponent || formComponent.length < 1)
 				{
 					continue;
@@ -1203,36 +1430,33 @@ RSFormPro.Ajax = {
 							doScroll = true;
 						}
 						
-						if (typeof data.parentErrorClass != 'undefined' && data.parentErrorClass.length > 0)
+						if (parentErrorClass)
 						{
 							try
 							{
-								elementBlock = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(formComponents[id]));
-								RSFormProUtils.addClass(elementBlock[0], data.parentErrorClass);
+								if (elementBlock = RSFormPro.getBlock(formId, RSFormProUtils.getAlias(formComponents[id])))
+								{
+									RSFormProUtils.addClass(elementBlock[0], parentErrorClass);
+								}
 							}
 							catch (err) {}
 						}
-						try
+
+						if (fieldErrorClass)
 						{
-							results = RSFormPro.getFieldsByName(formId, formComponents[id]);
-							if (results.length > 0)
+							RSFormProUtils.addClass(formComponent[j], fieldErrorClass);
+						}
+
+						if (['INPUT', 'SELECT', 'TEXTAREA'].indexOf(formComponent[j].nodeName) > -1)
+						{
+							formComponent[j].setAttribute('aria-invalid', 'true');
+
+							if (!doFocus && typeof formComponent[j].focus === 'function')
 							{
-								for (var r = 0; r < results.length; r++)
-								{									
-									if (typeof data.fieldErrorClass != 'undefined' && data.fieldErrorClass.length > 0)
-									{
-										RSFormProUtils.addClass(results[r], data.fieldErrorClass);
-									}
-									
-									if (!doFocus)
-									{
-										results[r].focus();
-										doFocus = true;
-									}
-								}
+								formComponent[j].focus();
+								doFocus = true;
 							}
 						}
-						catch (err) {}
 					}
 				}
 			}
@@ -1263,11 +1487,15 @@ RSFormPro.Ajax = {
 			errorFields = [],
 			success = false,
 			formId = form.elements['form[formId]'].value,
-			ids,
 			totalJSDetectedPages = 0,
-			lastClickedElement,
 			i,
 			j;
+
+		// File uploads AJAX validation variabiles
+		var ajaxSkippedFileUploads = [],
+			filesLength = 0,
+			filesCollection = [],
+			identicalFiles = [];
 		
 		if (typeof errorClasses != 'object')
 		{
@@ -1279,7 +1507,7 @@ RSFormPro.Ajax = {
 			// try and detect total pages of the form
 			if (form.elements[i].type == 'button') {
 				var onclick = form.elements[i].getAttribute('onclick');
-				if (typeof onclick == 'string' && onclick.indexOf('rsfp_changePage') >= 0) {
+				if (typeof onclick === 'string' && (onclick.indexOf('rsfp_changePage') > -1 || onclick.indexOf('RSFormPro.Pages.change') > -1)) {
 					var countCommas = 0;
 					var pos = onclick.indexOf(',');
 					while (pos > -1) {
@@ -1324,7 +1552,6 @@ RSFormPro.Ajax = {
 				{
 					try
 					{
-
 						if (RSFormPro.usePositioning)
 						{
 							if (form.elements[i].offsetParent !== document.getElementsByTagName('body')[0])
@@ -1340,20 +1567,90 @@ RSFormPro.Ajax = {
 							}
 						}
 
-						if (form.elements[i].files.length === 0 && form.elements[i].getAttribute('data-rsfp-required') === 'true')
+						if (form.elements[i].getAttribute('data-rsfp-skip-ajax') === 'true')
 						{
-							throw 'VALIDATION_ERROR';
+							// Not already processed
+							if (ajaxSkippedFileUploads.indexOf(form.elements[i].name) === -1)
+							{
+								// All fields are identical, make sure this code is only run once.
+								ajaxSkippedFileUploads.push(form.elements[i].name);
+
+								// Get all identical fields
+								identicalFiles = form.elements[form.elements[i].name];
+
+								filesLength = 0;
+								filesCollection = [];
+
+								if (typeof identicalFiles === 'object')
+								{
+									// NodeList (multiple inputs)
+									if (typeof identicalFiles.length !== 'undefined' && identicalFiles.length > 0)
+									{
+										for (var tmp = 0; tmp < identicalFiles.length; tmp++)
+										{
+											if (identicalFiles[tmp].files.length > 0)
+											{
+												filesLength += identicalFiles[tmp].files.length;
+												filesCollection = filesCollection.concat(identicalFiles[tmp].files[0]);
+											}
+										}
+									}
+									else if (typeof identicalFiles.files !== 'undefined')
+									{
+										// Just one input
+										filesLength += identicalFiles.files.length;
+										filesCollection = filesCollection.concat(identicalFiles.files[0]);
+									}
+								}
+							}
+							else
+							{
+								throw 'AJAX_SKIPPED_FILE_UPLOAD';
+							}
+						}
+						else
+						{
+							filesLength = form.elements[i].files.length;
+							filesCollection = form.elements[i].files;
 						}
 
-						for (var f = 0; f < form.elements[i].files.length; f++)
+						if (filesLength === 0 && form.elements[i].getAttribute('data-rsfp-required') === 'true')
 						{
-							var file = form.elements[i].files[f];
+							throw new RSFormPro.validationError('VALIDATION_ERROR', RSFormPro.Translations.translate(formId, form.elements[i].getAttribute('id'), 'VALIDATIONMESSAGE'));
+						}
+
+						if (form.elements[i].getAttribute('data-rsfp-required') === 'true' || filesLength > 0)
+						{
+							if (form.elements[i].getAttribute('data-rsfp-minfiles'))
+							{
+								var minFiles = parseInt(form.elements[i].getAttribute('data-rsfp-minfiles'));
+
+								if (filesLength < minFiles)
+								{
+									throw new RSFormPro.validationError('VALIDATION_ERROR', RSFormProUtils.sprintf(RSFormPro.Translations.translate(formId, form.elements[i].getAttribute('id'), 'COM_RSFORM_MINFILES_REQUIRED'), minFiles));
+								}
+							}
+
+							if (form.elements[i].getAttribute('data-rsfp-maxfiles'))
+							{
+								var maxFiles = parseInt(form.elements[i].getAttribute('data-rsfp-maxfiles'));
+
+								if (filesLength > maxFiles)
+								{
+									throw new RSFormPro.validationError('VALIDATION_ERROR', RSFormProUtils.sprintf(RSFormPro.Translations.translate(formId, form.elements[i].getAttribute('id'), 'COM_RSFORM_MAXFILES_REQUIRED'), maxFiles));
+								}
+							}
+						}
+
+						for (var f = 0; f < filesLength; f++)
+						{
+							var file = filesCollection[f];
 							var maxSize = parseInt(form.elements[i].getAttribute('data-rsfp-size'));
 							if ('size' in file && maxSize > 0)
 							{
 								if (file.size > maxSize)
 								{
-									throw 'VALIDATION_ERROR';
+									throw new RSFormPro.validationError('VALIDATION_ERROR', RSFormProUtils.sprintf(RSFormPro.Translations.translate(formId, form.elements[i].getAttribute('id'), 'COM_RSFORM_FILE_EXCEEDS_LIMIT'), file.name, maxSize / 1024));
 								}
 							}
 							if ('name' in file)
@@ -1366,7 +1663,7 @@ RSFormPro.Ajax = {
 									var ext = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2);
 									if (exts.indexOf(ext.toLowerCase()) === -1)
 									{
-										throw 'VALIDATION_ERROR';
+										throw new RSFormPro.validationError('VALIDATION_ERROR', RSFormProUtils.sprintf(RSFormPro.Translations.translate(formId, form.elements[i].getAttribute('id'), 'COM_RSFORM_FILE_EXTENSION_NOT_ALLOWED'), file.name));
 									}
 								}
 							}
@@ -1374,51 +1671,66 @@ RSFormPro.Ajax = {
 					}
 					catch (error)
 					{
-						if (error === 'VALIDATION_ERROR')
+						if (typeof error === 'object')
 						{
-							var parents = RSFormProUtils.getParents(form.elements[i]);
-							var page_number;
-							if (parents.length > 0)
+							if (error.toString() === 'VALIDATION_ERROR')
 							{
-								for (var p = 0; p < parents.length; p++)
+								var parents = RSFormProUtils.getParents(form.elements[i]),
+									page_number,
+									parent;
+								if (parents.length > 0)
 								{
-									var parent = parents[p];
-
-									if ('getAttribute' in parent)
+									for (var p = 0; p < parents.length; p++)
 									{
-										var hasId = parents[p].getAttribute('id');
-										var pageId = 'rsform_' + formId + '_page_';
-										if (hasId && hasId.indexOf(pageId) === 0)
+										parent = parents[p];
+
+										if ('getAttribute' in parent)
 										{
-											page_number = hasId.slice(pageId.length);
-											break;
+											var hasId = parents[p].getAttribute('id');
+											var pageId = 'rsform_' + formId + '_page_';
+											if (hasId && hasId.indexOf(pageId) === 0)
+											{
+												page_number = hasId.slice(pageId.length);
+												break;
+											}
 										}
 									}
 								}
+
+								var elementObj = {
+									field: form.elements[i],
+									page: page_number
+								};
+
+								// try to get the componentId
+								var componentId = RSFormPro.HTML5.getComponentId(formId, form.elements[i].getAttribute('id'));
+								if (componentId)
+								{
+									elementObj.componentId = componentId;
+
+									if (document.getElementById('component' + componentId) && error.message.length > 0)
+									{
+										document.getElementById('component' + componentId).innerText = error.message;
+									}
+								}
+
+								errorFields.push(elementObj);
 							}
-
-							var elementObj = {
-								field: form.elements[i],
-								page: page_number
-							};
-
-							// try to get the componentId
-							var componentId = RSFormPro.HTML5.getComponentId(formId, form.elements[i].getAttribute('id'));
-							if (componentId)
-							{
-								elementObj.componentId = componentId;
-							}
-
-							errorFields.push(elementObj);
 						}
 					}
 				}
 			}
 
-			if (typeof RSFormPro.Editors[form.elements[i].name] == 'function') {
-				RSFormPro.Ajax.Params.push(form.elements[i].name + '=' + encodeURIComponent(RSFormPro.Editors[form.elements[i].name]()));
-			} else {
-				RSFormPro.Ajax.Params.push(form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value));
+			if (form.elements[i].type !== 'file')
+			{
+				if (typeof RSFormPro.Editors[form.elements[i].name] === 'function')
+				{
+					RSFormPro.Ajax.Params.push(form.elements[i].name + '=' + encodeURIComponent(RSFormPro.Editors[form.elements[i].name]()));
+				}
+				else
+				{
+					RSFormPro.Ajax.Params.push(form.elements[i].name + '=' + encodeURIComponent(form.elements[i].value));
+				}
 			}
 		}
 
@@ -1445,141 +1757,219 @@ RSFormPro.Ajax = {
 		success = true;
 		
 		RSFormPro.Ajax.xhr.onreadystatechange = function() {
-			if (RSFormPro.Ajax.xhr.readyState == 4 && RSFormPro.Ajax.xhr.status == 200) {
-				if (RSFormPro.Ajax.xhr.responseText.indexOf("\n") != -1)
+			if (RSFormPro.Ajax.xhr.readyState === 4 && RSFormPro.Ajax.xhr.status === 200) {
+				try
 				{
+					var RSFormProResponse = JSON.parse(RSFormPro.Ajax.xhr.responseText);
+				}
+				catch (error)
+				{
+					// Parse invalid data
+					if (typeof RSFormProResponse !== 'object')
+					{
+						var match = RSFormPro.Ajax.xhr.responseText.match(/{.*}/);
 
-					var response = RSFormPro.Ajax.xhr.responseText.split("\n");
+						if (match.length > 0)
+						{
+							RSFormProResponse = JSON.parse(match[0]);
+						}
+					}
+				}
+
+				var response = [];
+				var ids;
+				var i;
+
+				if (typeof RSFormProResponse.formComponents !== 'undefined')
+				{
 					// All spans set to no error
-					ids = response[0].split(',');
+					ids = RSFormProResponse.formComponents;
+
 					for (i = 0; i < ids.length; i++)
-						if (!isNaN(parseInt(ids[i])) && document.getElementById('component'+ids[i])) {
+					{
+						if (!isNaN(parseInt(ids[i])) && document.getElementById('component'+ids[i]))
+						{
 							document.getElementById('component'+ids[i]).className = 'formNoError';
 						}
+					}
 
-					// Show errors
-					ids = response[1].split(',');
+					// Legacy
+					response.push(RSFormProResponse.formComponents.join(','));
+				}
 
-					// add the HTML5 elements with errors
-					var errorOnPage;
-					if (errorFields.length) {
-						for (i = 0; i < errorFields.length; i++) {
-							if (typeof errorFields[i].componentId != 'undefined') {
-								if (typeof page == 'undefined' || (page - 1) == errorFields[i].page) {
-									ids.push(errorFields[i].componentId);
-									if (typeof errorOnPage != 'undefined') {
-										errorOnPage = errorFields[i].page < errorOnPage ? errorFields[i].page : errorOnPage;
-									} else {
-										errorOnPage = errorFields[i].page;
-									}
+				if (typeof RSFormProResponse.invalidComponents === 'undefined')
+				{
+					RSFormProResponse.invalidComponents = [];
+				}
+
+				// add the HTML5 elements with errors
+				var errorOnPage;
+				if (errorFields.length)
+				{
+					for (i = 0; i < errorFields.length; i++)
+					{
+						if (typeof errorFields[i].componentId !== 'undefined')
+						{
+							if (typeof page === 'undefined' || (page - 1) == errorFields[i].page)
+							{
+								RSFormProResponse.invalidComponents.push(errorFields[i].componentId);
+								if (typeof errorOnPage !== 'undefined')
+								{
+									errorOnPage = errorFields[i].page < errorOnPage ? errorFields[i].page : errorOnPage;
+								}
+								else 
+								{
+									errorOnPage = errorFields[i].page;
 								}
 							}
 						}
 					}
+				}
 
+				// Show errors
+				var errorComponents = [];
 
-					var errorComponents = [];
-					for (i = 0; i < ids.length; i++) {
-						if (!isNaN(parseInt(ids[i])))
-						{
-							if (document.getElementById('component' + ids[i]))
-							{
-								document.getElementById('component' + ids[i]).className = 'formError';
-							}
-							errorComponents.push(ids[i]);
-							success = false;
-						}
-					}
+				var errorMessageContainer;
 
-					// lets detect if the multiple page form is submitted
-
-					var changePageHTML5Errors = false;
-					if (totalJSDetectedPages > 0 && RSClickedSubmitElement && submits.indexOf(RSClickedSubmitElement) >= 0 && typeof errorOnPage != 'undefined') {
-						changePageHTML5Errors = true;
-					}
-					//return false;
-					if (response.length == 4 || changePageHTML5Errors)
+				for (i = 0; i < RSFormProResponse.invalidComponents.length; i++)
+				{
+					if (!isNaN(parseInt(RSFormProResponse.invalidComponents[i])))
 					{
-						if (response.length == 4) {
-							page = parseInt(response[2]) - 1;
-							totalPages = parseInt(response[3]);
-							if (changePageHTML5Errors) {
-								page = page > errorOnPage ? errorOnPage : page;
-							}
-						} else {
-							if (changePageHTML5Errors) {
-								page = errorOnPage;
-								totalPages = totalJSDetectedPages;
+						errorMessageContainer = document.getElementById('component' + RSFormProResponse.invalidComponents[i]);
+
+						if (errorMessageContainer)
+						{
+							errorMessageContainer.className = 'formError';
+
+							if (RSFormProResponse.validationMessages && typeof RSFormProResponse.validationMessages[RSFormProResponse.invalidComponents[i]] !== 'undefined')
+							{
+								errorMessageContainer.innerHTML = RSFormProResponse.validationMessages[RSFormProResponse.invalidComponents[i]];
 							}
 						}
 
-						rsfp_changePage(formId, page, totalPages, false);
-					}
-
-					if (typeof ajaxExtraValidationScript[formId] == 'function') {
-						// rewrite the response so that all the error components are added (that includes HTML5 fields)
-						if (errorComponents.length) {
-							response[1] = errorComponents.join();
-						}
-						ajaxExtraValidationScript[formId]('afterSend', formId, {'url': url, 'params': RSFormPro.Ajax.Params, 'response': response, 'parentErrorClass': errorClasses.parent, 'fieldErrorClass': errorClasses.field});
+						errorComponents.push(RSFormProResponse.invalidComponents[i]);
+						success = false;
 					}
 				}
+
+				// lets detect if the multiple page form is submitted
+				var changePageHTML5Errors = false;
+				if (totalJSDetectedPages > 0 && RSClickedSubmitElement && submits.indexOf(RSClickedSubmitElement) >= 0 && typeof errorOnPage !== 'undefined') {
+					changePageHTML5Errors = true;
+				}
+
+				// Legacy
+				response.push(RSFormProResponse.invalidComponents.join(','));
+
+				if (typeof RSFormProResponse.allPages !== 'undefined' || changePageHTML5Errors)
+				{
+					// Legacy
+					response.push(RSFormProResponse.currentPage);
+					response.push(RSFormProResponse.allPages);
+
+					if (typeof RSFormProResponse.allPages !== 'undefined')
+					{
+						page = parseInt(RSFormProResponse.currentPage) - 1;
+						totalPages = parseInt(RSFormProResponse.allPages);
+						if (changePageHTML5Errors)
+						{
+							page = page > errorOnPage ? errorOnPage : page;
+						}
+					}
+					else
+					{
+						if (changePageHTML5Errors)
+						{
+							page = errorOnPage;
+							totalPages = totalJSDetectedPages;
+						}
+					}
+
+					RSFormPro.Pages.change(formId, page, totalPages, false);
+				}
+
+				if (typeof ajaxExtraValidationScript[formId] === 'function')
+				{
+					// rewrite the response so that all the error components are added (that includes HTML5 fields)
+					if (errorComponents.length)
+					{
+						response[1] = errorComponents.join();
+					}
+
+					ajaxExtraValidationScript[formId]('afterSend', formId, {'url': url, 'params': RSFormPro.Ajax.Params, 'response': response, 'parentErrorClass': errorClasses.parent, 'fieldErrorClass': errorClasses.field, 'json': RSFormProResponse});
+				}
 				
-				if (success == false)
+				if (success === false)
 				{
 					// The submits must be clickable again
-					for (i = 0; i < submits.length; i++) {
+					for (i = 0; i < submits.length; i++)
+					{
 						submits[i].disabled = false;
 					}
 
-					try {
-						if (typeof page == 'undefined' || page == 0) {
+					try
+					{
+						if (typeof page === 'undefined' || page == 0)
+						{
 							RSFormPro.callbacks.runCallback(formId, 'afterValidationFailed'); // callback functions if validation fails when form is submitted
-						} else {
+						}
+						else
+						{
 							RSFormPro.callbacks.runCallback(formId, 'nextPageFailed'); // callback functions if validation fails when a specific page of the form is checked
 						}
-						if (document.getElementById('rsform_error_' + formId)) {
+
+						if (document.getElementById('rsform_error_' + formId))
+						{
 							document.getElementById('rsform_error_' + formId).style.display = 'block';
 						}
 					}
 					catch (err) { }
 				}
-
-				if (success == true) {
+				else
+				{
 					// Change the page if the validation passes
-					if (page) {
-						rsfp_changePage(formId, page, totalPages, false);
+					if (page)
+					{
+						RSFormPro.Pages.change(formId, page, totalPages, false);
 						// The submits must be clickable again
-						for (i = 0; i < submits.length; i++) {
+						for (i = 0; i < submits.length; i++)
+						{
 							submits[i].disabled = false;
 						}
-					} else {
-						// the submit button has been presed so we need to submit the form
+					}
+					else
+					{
+						// the submit button has been pressed so we need to submit the form
 						// if the submit button or any other element has the id submit the form.submit() function is overwritten
-						if (typeof form.submit != 'function') {
-							document.createElement('form').submit.call(form)
-						} else {
-							form.submit();
-						}
+						RSFormPro.submitForm(form);
 					}
 
-					try {
-						if (typeof page == 'undefined' || page == 0) {
+					try
+					{
+						if (typeof page === 'undefined' || page == 0)
+						{
 							RSFormPro.callbacks.runCallback(formId, 'afterValidationSuccess'); // callback functions if validation succeeds
-						} else {
+						}
+						else
+						{
 							RSFormPro.callbacks.runCallback(formId, 'nextPageSuccess'); // callback functions if validation succeeds when a specific page of the form is checked
 						}
-						document.getElementById('rsform_error_' + formId).style.display = 'none';
+
+						if (document.getElementById('rsform_error_' + formId))
+						{
+							document.getElementById('rsform_error_' + formId).style.display = 'none';
+						}
 					}
 					catch (err) { }
 				}
+
 				return success;
 			}
 		};
 
 		return false;
 	},
-	overrideSubmit: function(formId, validationParams) {
+	overrideSubmit: function(formId, validationParams, disableSubmitButton) {
         var form = RSFormPro.getForm(formId);
         var submitElement = RSFormPro.getElementByType(formId, 'submit');
 		var i, j;
@@ -1588,14 +1978,26 @@ RSFormPro.Ajax = {
 				RSFormProUtils.addEvent(submitElement[i],'click', (function(event) {
 					event.preventDefault();
 					RSClickedSubmitElement = this;
-					for (j = 0; j < submitElement.length; j++) {
-						submitElement[j].setAttribute('data-disableonsubmit','1');
+					if (disableSubmitButton) {
+						for (j = 0; j < submitElement.length; j++) {
+							submitElement[j].setAttribute('data-disableonsubmit','1');
+						}
 					}
+
 					RSFormPro.Ajax.validate(form, undefined, validationParams);
 				}));
 			}
 		}
 	}
+};
+
+RSFormPro.validationError = function(type, message) {
+	this.type = type;
+	this.message = message;
+};
+
+RSFormPro.validationError.prototype.toString = function() {
+	return this.type;
 };
 
 RSFormPro.callbacks = {
@@ -1631,6 +2033,30 @@ RSFormPro.callbacks = {
 				functionName.apply(self, functionArgs);
 			}
 		}
+	}
+};
+
+/* Translations */
+
+RSFormPro.Translations = {
+	translations: {},
+
+	add: function(formId, name, key, translation) {
+		if (typeof this.translations[formId + '-' + name] !== 'object')
+		{
+			this.translations[formId + '-' + name] = {};
+		}
+
+		this.translations[formId + '-' + name][key] = translation;
+	},
+
+	translate: function(formId, name, key) {
+		if (typeof this.translations[formId + '-' + name][key] == 'string')
+		{
+			return this.translations[formId + '-' + name][key];
+		}
+
+		return key;
 	}
 };
 
@@ -1814,6 +2240,257 @@ var RSFormProUtils = {
 		}
 
 		return getElementsByClassName(className, tag, elm);
+	},
+
+	/*!
+	**  sprintf.js -- POSIX sprintf(3)-style String Formatting for JavaScript
+	**  Copyright (c) 2006-2019 Dr. Ralf S. Engelschall <rse@engelschall.com>
+	**  Partly based on Public Domain code by Jan Moesen <http://jan.moesen.nu/>
+	**
+	**  Permission is hereby granted, free of charge, to any person obtaining
+	**  a copy of this software and associated documentation files (the
+	**  "Software"), to deal in the Software without restriction, including
+	**  without limitation the rights to use, copy, modify, merge, publish,
+	**  distribute, sublicense, and/or sell copies of the Software, and to
+	**  permit persons to whom the Software is furnished to do so, subject to
+	**  the following conditions:
+	**
+	**  The above copyright notice and this permission notice shall be included
+	**  in all copies or substantial portions of the Software.
+	**
+	**  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	**  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	**  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+	**  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+	**  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+	**  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+	**  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	*/
+	sprintf: function () {
+		/*  argument sanity checking  */
+		if (!arguments || arguments.length < 1)
+			throw new Error("sprintf: ERROR: not enough arguments");
+
+		/*  initialize processing queue  */
+		var argumentnum = 0;
+		var done = "", todo = arguments[argumentnum++];
+
+		/*  parse still to be done format string  */
+		var m;
+		while ((m = /^([^%]*)%(?:(\d+)\$|\((.*?)\))?([#0 +'-]+)?(\*|\d+)?(\.\*|\.\d+)?([%diouxXfFeEcs])((?:.|[\r\n])*)$/.exec(todo))) {
+			var pProlog    = m[1],
+				pAccessD   = m[2],
+				pAccessN   = m[3],
+				pFlags     = m[4],
+				pMinLength = m[5],
+				pPrecision = m[6],
+				pType      = m[7],
+				pEpilog    = m[8];
+
+			/*  determine substitution  */
+			var subst;
+			if (pType === "%")
+			/*  special case: escaped percent character  */
+				subst = "%";
+			else {
+				/*  parse padding and justify aspects of flags  */
+				var padWith = " ";
+				var justifyRight = true;
+				if (pFlags) {
+					if (pFlags.indexOf("0") >= 0)
+						padWith = "0";
+					if (pFlags.indexOf("-") >= 0) {
+						padWith = " ";
+						justifyRight = false;
+					}
+				}
+				else
+					pFlags = "";
+
+				/*  determine minimum length  */
+				var access;
+				var minLength = -1;
+				if (pMinLength) {
+					if (pMinLength === "*") {
+						access = argumentnum++;
+						if (access >= arguments.length)
+							throw new Error("sprintf: ERROR: not enough arguments");
+						minLength = arguments[access];
+					}
+					else
+						minLength = parseInt(pMinLength, 10);
+				}
+
+				/*  determine precision  */
+				var precision = -1;
+				if (pPrecision) {
+					if (pPrecision === ".*") {
+						access = argumentnum++;
+						if (access >= arguments.length)
+							throw new Error("sprintf: ERROR: not enough arguments");
+						precision = arguments[access];
+					}
+					else
+						precision = parseInt(pPrecision.substring(1), 10);
+				}
+
+				/*  determine how to fetch argument  */
+				access = argumentnum++;
+				if (pAccessD) {
+					access = parseInt(pAccessD, 10);
+					if (access >= arguments.length)
+						throw new Error("sprintf: ERROR: not enough arguments");
+					subst = arguments[access];
+				}
+				else if (pAccessN) {
+					if (typeof arguments[1] !== "object")
+						throw new Error("sprintf: ERROR: invalid non-object arguments for named argument");
+					subst = arguments[1][pAccessN];
+					if (typeof subst === "undefined")
+						throw new Error("sprintf: ERROR: invalid undefined value for named argument");
+				}
+				else {
+					if (access >= arguments.length)
+						throw new Error("sprintf: ERROR: not enough arguments");
+					subst = arguments[access];
+				}
+
+				/*  dispatch into expansions according to type  */
+				var prefix = "";
+				switch (pType) {
+					/*  decimal number  */
+					case "d":
+					case "i":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = subst.toString(10);
+						if (pFlags.indexOf("#") >= 0 && subst >= 0)
+							subst = "+" + subst;
+						if (pFlags.indexOf(" ") >= 0 && subst >= 0)
+							subst = " " + subst;
+						break;
+
+					/*  binary number  */
+					case "b":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = subst.toString(2);
+						break;
+
+					/*  octal number  */
+					case "o":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = subst.toString(8);
+						break;
+
+					/*  unsigned decimal number  */
+					case "u":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = Math.abs(subst);
+						subst = subst.toString(10);
+						break;
+
+					/*  (lower-case) hexadecimal number  */
+					case "x":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = subst.toString(16).toLowerCase();
+						if (pFlags.indexOf("#") >= 0)
+							prefix = "0x";
+						break;
+
+					/*  (upper-case) hexadecimal number  */
+					case "X":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = subst.toString(16).toUpperCase();
+						if (pFlags.indexOf("#") >= 0)
+							prefix = "0X";
+						break;
+
+					/*  (lower/upper-case) floating point number (fixed precision)  */
+					case "f":
+					case "F":
+						if (typeof subst !== "number")
+							subst = 0.0;
+						subst = 0.0 + subst;
+						if (precision > -1) {
+							if (subst.toFixed)
+								subst = subst.toFixed(precision);
+							else {
+								subst = (Math.round(subst * Math.pow(10, precision)) / Math.pow(10, precision));
+								subst += "0000000000";
+								subst = subst.substr(0, subst.indexOf(".") + precision + 1);
+							}
+						}
+						subst = "" + subst;
+						if (pFlags.indexOf("'") >= 0) {
+							var k = 0;
+							for (var i = (subst.length - 1) - 3; i >= 0; i -= 3) {
+								subst = subst.substring(0, i) + (k === 0 ? "." : ",") + subst.substring(i);
+								k = (k + 1) % 2;
+							}
+						}
+						break;
+
+					/*  (lower/upper-case) floating point number (exponential-based precision)  */
+					case "e":
+					case "E":
+						if (typeof subst !== "number")
+							subst = 0.0;
+						subst = 0.0 + subst;
+						if (precision > -1) {
+							if (subst.toExponential)
+								subst = subst.toExponential(precision);
+							else
+								throw new Error("sprintf: ERROR: toExponential() method not supported");
+						}
+						subst = "" + subst;
+						if (pType === "E")
+							subst = subst.replace(/e\+/, "E+");
+						break;
+
+					/*  single character  */
+					case "c":
+						if (typeof subst !== "number")
+							subst = 0;
+						subst = String.fromCharCode(subst);
+						break;
+
+					/*  string  */
+					case "s":
+						if (typeof subst !== "string")
+							subst = String(subst);
+						if (precision > -1)
+							subst = subst.substr(0, precision);
+						break;
+					default:
+						throw new Error("sprintf: ERROR: invalid conversion character \"" + pType + "\"");
+				}
+
+				/*  apply optional padding  */
+				var padding = minLength - subst.toString().length - prefix.toString().length;
+				if (padding > 0) {
+					var arrTmp = new Array(padding + 1);
+					if (justifyRight)
+						subst = arrTmp.join(padWith) + subst;
+					else
+						subst = subst + arrTmp.join(padWith);
+				}
+
+				/*  add optional prefix  */
+				subst = prefix + subst;
+			}
+
+			/*  update the processing queue  */
+			done = done + pProlog + subst;
+			todo = pEpilog;
+		}
+
+		/*  return finally formatted string  */
+		return (done + todo);
 	}
 };
 

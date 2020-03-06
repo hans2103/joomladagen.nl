@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -16,8 +16,8 @@ $canEditPref = $user->authorise('core.admin', 'com_jce');
 ?>
 <div class="ui-jce row row-fluid">
 	<div class="span12 col-md-12">
-        <nav id="wf-cpanel" class="quick-icons">
-			<ul class="unstyled">
+        <nav id="wf-cpanel" class="quick-icons bg-transparent">
+			<ul class="unstyled mb-0 nav flex-wrap row-fluid">
 				<?php echo implode("\n", $this->icons); ?>
 			</ul>
 		</nav>    

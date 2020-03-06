@@ -3,7 +3,7 @@
  * @package    Pwtimage
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2018 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -84,16 +84,19 @@ class PwtimageModelImage extends FormModel
 		$backgroundColor = '#000000'
 	)
 	{
+		// Clean site path
+		$sitePath = JPath::clean(JPATH_SITE, '/');
+
 		// Remove any overlap in folder path
 		$dirname = str_replace($sourcePath, '', dirname($localFile));
 
-		if ($dirname && strpos(JPATH_SITE, $dirname) !== false)
+		if ($dirname && strpos($sitePath, $dirname) !== false)
 		{
 			$localFile = str_replace($dirname, '', $localFile);
 		}
 
 		// Check if local file exists
-		if (!file_exists(JPATH_SITE . $localFile))
+		if (!file_exists($sitePath . $localFile))
 		{
 			throw new InvalidArgumentException(Text::sprintf('COM_PWTIMAGE_FILE_MISSING', $localFile));
 		}
@@ -127,17 +130,17 @@ class PwtimageModelImage extends FormModel
 
 		$mode = intval($helper->getSetting('chmod', 0755), 8);
 
-		if (!JFolder::exists(JPATH_SITE . $baseFolder))
+		if (!JFolder::exists($sitePath . $baseFolder))
 		{
-			JFolder::create(JPATH_SITE . $baseFolder, $mode);
+			JFolder::create($sitePath . $baseFolder, $mode);
 		}
 		else
 		{
-			@chmod(JPATH_SITE . $baseFolder, $mode);
+			@chmod($sitePath . $baseFolder, $mode);
 		}
 
 		// Get Variables
-		$imageFolder = JPATH_SITE . $baseFolder . '/';
+		$imageFolder = $sitePath . $baseFolder . '/';
 
 		// Check if user uploaded a file or used a local file
 		if (empty($file['tmp_name']) && $localFile)
@@ -155,30 +158,34 @@ class PwtimageModelImage extends FormModel
 		$filename = $this->formatFilename($file['name'], '{random}');
 
 		// Path
-		$originalFile = JPath::clean($imageFolder . $filename);
+		$originalFile = JPath::clean($imageFolder . $filename, '/');
 
 		// Do the upload if user uploaded a file
 		if (!$localFile && $file['tmp_name'] && !JFile::upload($file['tmp_name'], $originalFile))
 		{
 			throw new RuntimeException(Text::_('Upload file error'));
 		}
-		elseif ($localFile && (JPATH_SITE . $localFile !== $originalFile) && !JFile::copy(JPATH_SITE . $localFile, $originalFile))
+		elseif ($localFile && ($sitePath . $localFile !== $originalFile) && !JFile::copy($sitePath . $localFile, $originalFile))
 		{
 			throw new RuntimeException(Text::_('Upload file error'));
 		}
 
 		if ($keepOriginal)
 		{
-			$filePath = JPath::clean($originalFile);
+			$filePath = JPath::clean($originalFile, '/');
 
-			return str_replace(JPATH_SITE . '/', '', $filePath);
+			return str_replace($sitePath . '/', '', $filePath);
 		}
 
 		// Get the image details
 		$imageDetails = getimagesize($originalFile);
 
 		// Check if the user selected one or more sizes for resizing
-		if ($widths !== 'null' && $widths !== null && $widths !== 'undefined')
+		if ($widths !== 'null'
+			&& $widths !== null
+			&& $widths !== 'undefined'
+			&& strpos($widths, ',')
+		)
 		{
 			$widths = explode(',', $widths);
 		}
@@ -285,7 +292,7 @@ class PwtimageModelImage extends FormModel
 			}
 
 			// Path
-			$filePath = JPath::clean($imageFolder . $filename);
+			$filePath = JPath::clean($imageFolder . $filename, '/');
 
 			// Image type
 			$type = $this->getMimeType($originalFile);
@@ -329,11 +336,13 @@ class PwtimageModelImage extends FormModel
 				$helper->getSetting('dpi', '96')
 			);
 
-			$filePaths[] = str_replace(JPATH_SITE . '/', '', $filePath);
+			$filePaths[] = str_replace($sitePath . '/', '', $filePath);
+
+			$profileId = $helper->getProfileId();
 
 			PluginHelper::importPlugin('pwtimage');
 			$dispatcher = JEventDispatcher::getInstance();
-			$dispatcher->trigger('onAfterResizeImage', array(end($filePaths), $width));
+			$dispatcher->trigger('onAfterResizeImage', array(end($filePaths), $width, $profileId));
 		}
 
 		// Remove the original file as we are done processing
@@ -361,7 +370,9 @@ class PwtimageModelImage extends FormModel
 		}
 
 		// Do some customizing
-		$time = time();
+		$time     = time();
+		$user     = Factory::getUser();
+		$username = ($user->name) ? $user->name : 'guest';
 
 		// Replace the name
 		$extension = JFile::getExt($originalName);
@@ -403,6 +414,12 @@ class PwtimageModelImage extends FormModel
 
 		// Replace seconds
 		$filename = str_replace('{s}', date('s', $time), $filename);
+
+		// Replace user ID
+		$filename = str_replace('{userid}', $user->id, $filename);
+
+		// Replace username
+		$filename = str_replace('{username}', $username, $filename);
 
 		// Clean up the filename so it is a safe name
 		$filename = str_replace(' ', '-', $filename);

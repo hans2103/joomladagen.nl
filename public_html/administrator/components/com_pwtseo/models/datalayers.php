@@ -3,7 +3,7 @@
  * @package    Pwtseo
  *
  * @author     Perfect Web Team <extensions@perfectwebteam.com>
- * @copyright  Copyright (C) 2016 - 2019 Perfect Web Team. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2020 Perfect Web Team. All rights reserved.
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @link       https://extensions.perfectwebteam.com
  */
@@ -55,37 +55,41 @@ class PWTSEOModelDatalayers extends ListModel
 			->select(
 				$this->getState(
 					'list.select',
-					$db->quoteName(
-						array(
-							'datalayer.id',
-							'datalayer.title',
-							'datalayer.name',
-							'datalayer.language',
-							'datalayer.template',
-							'datalayer.published',
-							'datalayer.ordering',
-							'language.title',
-							'language.image',
-							'templates.title'
-						),
-						array(
-							'id',
-							'title',
-							'name',
-							'language',
-							'template',
-							'published',
-							'ordering',
-							'language_title',
-							'language_image',
-							'template_title'
+					array_merge(
+						[
+							'GROUP_CONCAT(templates.title) AS template_title'
+						],
+						$db->quoteName(
+							array(
+								'datalayer.id',
+								'datalayer.title',
+								'datalayer.name',
+								'datalayer.language',
+								'datalayer.template',
+								'datalayer.published',
+								'datalayer.ordering',
+								'language.title',
+								'language.image'
+							),
+							array(
+								'id',
+								'title',
+								'name',
+								'language',
+								'template',
+								'published',
+								'ordering',
+								'language_title',
+								'language_image'
+							)
 						)
 					)
 				)
 			)
 			->from($db->quoteName('#__plg_pwtseo_datalayers', 'datalayer'))
 			->leftJoin($db->quoteName('#__languages', 'language') . ' ON ' . $db->quoteName('language.lang_code') . ' = ' . $db->quoteName('datalayer.language'))
-			->leftJoin($db->quoteName('#__template_styles', 'templates') . ' ON ' . $db->quoteName('templates.id') . ' = ' . $db->quoteName('datalayer.template'));
+			->leftJoin($db->quoteName('#__template_styles', 'templates') . ' ON FIND_IN_SET(' . $db->quoteName('templates.id') . ', ' . $db->quoteName('datalayer.template') . ')')
+			->group($db->quoteName('datalayer.id'));
 
 		$search = $this->getState('filter.search');
 
@@ -104,12 +108,9 @@ class PWTSEOModelDatalayers extends ListModel
 
 		$search = $this->getState('filter.language');
 
-		if (!empty($search))
+		if (!empty($search) && $search !== '*')
 		{
-			if ($search !== '*')
-			{
-				$query->where($db->quoteName('datalayer.language') . ' = ' . $db->quote($search));
-			}
+			$query->where($db->quoteName('datalayer.language') . ' = ' . $db->quote($search));
 		}
 
 		$search = $this->getState('filter.published');

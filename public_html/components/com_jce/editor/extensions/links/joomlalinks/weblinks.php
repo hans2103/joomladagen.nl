@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -47,11 +47,13 @@ class JoomlalinksWeblinks extends JObject
 
     public function getLinks($args)
     {
+        $wf = WFEditorPlugin::getInstance();
         $items = array();
 
         if (!defined('JPATH_PLATFORM')) {
             require_once JPATH_SITE . '/includes/application.php';
         }
+
         require_once JPATH_SITE . '/components/com_weblinks/helpers/route.php';
 
         $language = '';
@@ -60,7 +62,7 @@ class JoomlalinksWeblinks extends JObject
             // Get all WebLink categories
             default:
             case 'categories':
-                $categories = WFLinkBrowser::getCategory('com_weblinks', 1, $this->get('category_alias', 1));
+                $categories = WFLinkBrowser::getCategory('com_weblinks', 1, $wf->getParam('links.joomlalinks.category_alias', 1));
 
                 foreach ($categories as $category) {
                     $url = '';
@@ -92,11 +94,11 @@ class JoomlalinksWeblinks extends JObject
                 break;
             // Get all links in the category
             case 'category':
-                $categories = WFLinkBrowser::getCategory('com_weblinks', $args->id, $this->get('category_alias', 1));
+                $categories = WFLinkBrowser::getCategory('com_weblinks', $args->id, $wf->getParam('links.joomlalinks.category_alias', 1));
 
                 if (count($categories)) {
                     foreach ($categories as $category) {
-                        $children = WFLinkBrowser::getCategory('com_weblinks', $category->id, $this->get('category_alias', 1));
+                        $children = WFLinkBrowser::getCategory('com_weblinks', $category->id, $wf->getParam('links.joomlalinks.category_alias', 1));
 
                         $url = '';
 
@@ -158,6 +160,8 @@ class JoomlalinksWeblinks extends JObject
 
     public static function getWeblinks($id)
     {
+        $wf = WFEditorPlugin::getInstance();
+        
         $db = JFactory::getDBO();
         $user = JFactory::getUser();
 
@@ -169,7 +173,7 @@ class JoomlalinksWeblinks extends JObject
 
         $case = '';
 
-        if ((int) $this->get('weblinks_alias', 1)) {
+        if ((int) $wf->getParam('links.joomlalinks.weblinks_alias', 1)) {
             //sqlsrv changes
             $case_when1 = ' CASE WHEN ';
             $case_when1 .= $dbquery->charLength('a.alias', '!=', '0');
@@ -214,7 +218,7 @@ class JoomlalinksWeblinks extends JObject
     {
         $wf = WFEditorPlugin::getInstance();
         
-        if ($wf->getParam('joomlalinks.sef_url', 0)) {
+        if ($wf->getParam('links.joomlalinks.sef_url', 0)) {
             $url = WFLinkBrowser::route($url);
         }
 

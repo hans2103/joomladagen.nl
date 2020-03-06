@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -31,6 +31,21 @@ class plgEditorJCE extends JPlugin
         parent::__construct($subject, $config);
     }
 
+    protected static function getEditorInstance()
+    {
+        static $instance;
+
+        if (!isset($instance)) {
+            // load base file
+            require_once JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php';
+
+            // create editor
+            $instance = new WFEditor();
+        }
+
+        return $instance;
+    }
+
     /**
      * Method to handle the onInit event.
      *  - Initializes the JCE WYSIWYG Editor.
@@ -53,23 +68,36 @@ class plgEditorJCE extends JPlugin
 
         $app->triggerEvent('onBeforeWfEditorLoad');
 
-        // load base file
-        require_once JPATH_ADMINISTRATOR . '/components/com_jce/includes/base.php';
-
-        // create editor
-        $editor = new WFEditor();
+        $editor = self::getEditorInstance();
         $settings = $editor->getSettings();
 
         $app->triggerEvent('onBeforeWfEditorRender', array(&$settings));
 
         $editor->render($settings);
 
+        // get media version
+        $version = $document->getMediaVersion();
+
         foreach ($editor->getScripts() as $script) {
-            $document->addScript($script, array('version' => 'auto'));
+            // add version directly for backwards compatablity
+            if (strpos($script, '?') === false) {
+                $script .= '?' . $version;
+            } else {
+                $script .= '&' . $version;
+            }
+
+            $document->addScript($script);
         }
 
         foreach ($editor->getStyleSheets() as $style) {
-            $document->addStylesheet($style, array('version' => 'auto'));
+            // add version directly for backwards compatablity
+            if (strpos($style, '?') === false) {
+                $style .= '?' . $version;
+            } else {
+                $style .= '&' . $version;
+            }
+
+            $document->addStylesheet($style);
         }
 
         $document->addScriptDeclaration(implode("\n", $editor->getScriptDeclaration()));
@@ -133,23 +161,98 @@ class plgEditorJCE extends JPlugin
         if (empty($id)) {
             $id = $name;
         }
-        $editor = '<div class="editor wf-editor-container mb-2">';
-        $editor .= '  <div class="wf-editor-header"></div>';
-        $editor .= '  <textarea spellcheck="false" id="' . $id . '" name="' . $name . '" cols="' . $col . '" rows="' . $row . '" style="width:' . $width . ';height:' . $height . ';" class="wf-editor mce_editable" wrap="off">' . $content . '</textarea>';
-        $editor .= '</div>';
-        $editor .= $this->displayButtons($id, $buttons, $asset, $author);
 
-        return $editor;
+        // Data object for the layout
+        $textarea = new stdClass;
+        $textarea->name = $name;
+        $textarea->id = $id;
+        $textarea->class = 'mce_editable wf-editor';
+        $textarea->cols = $col;
+        $textarea->rows = $row;
+        $textarea->width = $width;
+        $textarea->height = $height;
+        $textarea->content = $content;
+
+        // Render Editor markup
+        $html = '<div class="editor wf-editor-container mb-2">';
+        $html .= '<div class="wf-editor-header"></div>';
+        $html .= JLayoutHelper::render('editor.textarea', $textarea, __DIR__ . '/layouts');
+        $html .= '</div>';
+
+        $editor = self::getEditorInstance();
+
+        // no profile assigned or available
+        if (!$editor->hasProfile()) {
+            return $html;
+        }
+
+        if (!$editor->hasPlugin('joomla')) {
+            $html .= $this->displayButtons($id, $buttons, $asset, $author);
+        } else {
+            $options = array(
+                'joomla_xtd_buttons' => $this->getXtdButtonsList($id, $buttons, $asset, $author),
+            );
+
+            JFactory::getDocument()->addScriptOptions('plg_editor_jce', $options, true);
+
+            // render empty container for dynamic buttons
+            $html .= JLayoutHelper::render('joomla.editors.buttons', array());
+        }
+
+        return $html;
     }
 
     public function onGetInsertMethod($name)
     {
     }
 
-    private function displayButtons($name, $buttons, $asset, $author)
+    private function getXtdButtonsList($name, $buttons, $asset, $author)
     {
-        $return = '';
+        $list = array();
 
+        $excluded = array('readmore', 'pagebreak', 'image');
+
+        if (!is_array($buttons)) {
+            $buttons = !$buttons ? false : $excluded;
+        } else {
+            $buttons = array_merge($buttons, $excluded);
+        }
+
+        $buttons = $this->getXtdButtons($name, $buttons, $asset, $author);
+
+        if (!empty($buttons)) {
+            foreach ($buttons as $i => $button) {
+                if ($button->get('name')) {                    
+                    // Set some vars
+                    $name = 'button-' . $i . '-' . str_replace(' ', '-', $button->get('text'));
+                    $title = $button->get('text');
+                    $onclick = $button->get('onclick') ?: '';
+                    $icon = $button->get('name');
+
+                    if ($button->get('link') !== '#') {
+                        $href = JUri::base() . $button->get('link');
+                    } else {
+                        $href = '';
+                    }
+
+                    $icon = 'none icon-' . $icon;
+
+                    $list[] = array(
+                        'name' => $name,
+                        'title' => $title,
+                        'icon' => $icon,
+                        'href' => $href,
+                        'onclick' => $onclick,
+                    );
+                }
+            }
+        }
+        return $list;
+    }
+
+    private function getXtdButtons($name, $buttons, $asset, $author)
+    {
+        $xtdbuttons = array();
         if (is_array($buttons) || (is_bool($buttons) && $buttons)) {
             $buttonsEvent = new Joomla\Event\Event(
                 'getButtons',
@@ -158,18 +261,24 @@ class plgEditorJCE extends JPlugin
                     'buttons' => $buttons,
                 ]
             );
-
             if (method_exists($this, 'getDispatcher')) {
                 $buttonsResult = $this->getDispatcher()->dispatch('getButtons', $buttonsEvent);
-                $buttons = $buttonsResult['result'];
+                $xtdbuttons = $buttonsResult['result'];
             } else {
-                $buttons = $this->_subject->getButtons($name, $buttons, $asset, $author);
+                $xtdbuttons = $this->_subject->getButtons($name, $buttons, $asset, $author);
             }
+        }
+        return $xtdbuttons;
+    }
 
+    private function displayButtons($name, $buttons, $asset, $author)
+    {
+        $buttons = $this->getXtdButtons($name, $buttons, $asset, $author);
+
+        if (!empty($buttons)) {
             // fix some legacy buttons
-            array_walk($buttons, function($button) {
+            array_walk($buttons, function ($button) {
                 $cls = $button->get('class', '');
-
                 if (empty($cls) || strpos($cls, 'btn') === false) {
                     $cls .= ' btn';
                     $button->set('class', trim($cls));

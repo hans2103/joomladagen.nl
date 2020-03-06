@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -31,7 +29,7 @@
 /**
  * This file contains code that can only be run on PHP 5.3.0+ servers.
  *
- * As myJoomla.com service has to support PHP 5.2 for idiot servers with crappy
+ * As mysites.guru service has to support PHP 5.2 for idiot servers with crappy
  * webhosting the main connector needs to be fully PHP 5.2 compliant most of the time
  *
  * The following code will ONLY run with a decent PHP version.

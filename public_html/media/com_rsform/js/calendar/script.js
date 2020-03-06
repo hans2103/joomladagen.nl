@@ -119,13 +119,24 @@ RSFormPro.YUICalendar = {
 	},
 	
 	setExtras: function (formId, calendar, extra) {
-		for (extraType in extra) {
-			if (extraType == 'rule') {
+		for (var extraType in extra) {
+			if (!extra.hasOwnProperty(extraType))
+			{
+				continue;
+			}
+			if (extraType === 'rule') {
 				var rule 				= extra.rule.split('|');
 				var operation 			= rule[0];
 				var otherCalendarName   = rule[1];
+				var offset				= 1;
+				var i;
+
+				if (typeof rule[2] !== 'undefined')
+				{
+					offset = parseInt(rule[2]);
+				}
 				
-				if (typeof RSFormPro.YUICalendar.calendars[formId][otherCalendarName] == 'undefined') {
+				if (typeof RSFormPro.YUICalendar.calendars[formId][otherCalendarName] === 'undefined') {
 					var otherCalendarInput = document.getElementsByName("form["+otherCalendarName+"]");
 					
 					var otherCalendarFound = false;
@@ -149,11 +160,21 @@ RSFormPro.YUICalendar = {
 				// the other calendar object initated
 				var otherCalendar = RSFormPro.YUICalendar.calendars[formId][otherCalendarName];
 				
-				if (operation == 'min' || operation == 'max') {
+				if (['min', 'max'].indexOf(operation) > -1) {
 					calendar.rule = function(theDate) {
-						var newDate = new Date(theDate.getFullYear(), theDate.getMonth(), (operation == 'min' ? theDate.getDate()+1 : theDate.getDate()-1));
+						var offsetDate;
+						if (operation === 'min')
+						{
+							offsetDate = theDate.getDate() + offset;
+						}
+						else
+						{
+							offsetDate = theDate.getDate() - offset;
+						}
+
+						var newDate = new Date(theDate.getFullYear(), theDate.getMonth(), offsetDate);
 						if (otherCalendar) {
-							if (operation == 'min') {
+							if (operation === 'min') {
 								otherCalendar.cfg.setProperty('mindate', newDate.rsfp_format('mm/dd/yyyy'));
 								otherCalendar.cfg.setProperty('pagedate', newDate.rsfp_format('mm/yyyy'));
 							} else {
@@ -172,7 +193,7 @@ RSFormPro.YUICalendar = {
 									
 									var currentDate = new Date(y, m-1, d);
 								
-									if ((operation == 'min' && currentDate.getTime() < newDate.getTime()) || (operation == 'max' && currentDate.getTime() > newDate.getTime())) {
+									if ((operation === 'min' && currentDate.getTime() < newDate.getTime()) || (operation === 'max' && currentDate.getTime() > newDate.getTime())) {
 										hiddenDate.value = '';
 										txtDate.value 	 = '';
 									}
@@ -218,14 +239,14 @@ RSFormPro.YUICalendar = {
 
 		var myDate = new Date();
 		// Bugfix for Joomla! Calendar
-		if (typeof myDate.__msh_oldSetFullYear == 'function') {
+		if (typeof myDate.__msh_oldSetFullYear === 'function') {
 			myDate.__msh_oldSetFullYear(year, month-1, day);
 		} else {
 			myDate.setFullYear(year, month-1, day);
 		}
 		
-		if (typeof rsfp_onSelectDate == 'function') {
-			result = rsfp_onSelectDate(myDate.rsfp_format(calendar.myFormat), type, args, calendar);
+		if (typeof rsfp_onSelectDate === 'function') {
+			var result = rsfp_onSelectDate(myDate.rsfp_format(calendar.myFormat), type, args, calendar);
 			if (!result)
 				return false;
 		}
@@ -236,7 +257,7 @@ RSFormPro.YUICalendar = {
 		var hiddenDate = document.getElementById("hidden" + calendar.myid);
 		hiddenDate.value = myDate.rsfp_format('mm/dd/yyyy');
 		
-		if (typeof calendar.rule == 'function') {
+		if (typeof calendar.rule === 'function') {
 			calendar.rule(myDate);
 		}
 	},
@@ -246,7 +267,7 @@ RSFormPro.YUICalendar = {
 	},
 	
 	showHideCalendar: function(calContainerId){
-		cal = document.getElementById(calContainerId);
+		var cal = document.getElementById(calContainerId);
 		if(cal.style.display == 'none') {
 			cal.style.display = '';
 		} else  {
@@ -255,15 +276,49 @@ RSFormPro.YUICalendar = {
 	},
 	
 	hideAllPopupCalendars: function(formId, calendarsIds) {
-		if (typeof RSFormPro.YUICalendar.calendars[formId] != 'undefined') {
+		if (typeof RSFormPro.YUICalendar.calendars[formId] !== 'undefined') {
 			for (var i = 0; i < calendarsIds.length; i++){
 				var calId = 'cal'+calendarsIds[i]+'Container';
-				cal = document.getElementById(calId);
-				if(cal.style.display != 'none' && cal.style.position == 'absolute') {
+				var cal = document.getElementById(calId);
+				if (cal.style.display != 'none' && cal.style.position == 'absolute') {
 					cal.style.display = 'none';
 				}
 			}
 		}
+	},
+
+	hideOnClick: function(formId, calendarsIds) {
+		RSFormProUtils.addEvent(window, 'DOMContentLoaded', function() {
+			if ('body' in document) {
+				RSFormProUtils.addEvent(document.body, 'click', function(event) {
+					if (!event || !event.target) {
+						return true;
+					}
+
+					var tagName = event.target.tagName || event.target.nodeName;
+
+					if (tagName === 'INPUT' || tagName === 'BUTTON') {
+						if (event.target.id) {
+							if (event.target.id.indexOf('txtcal' + formId + '_') === 0 || event.target.id.indexOf('btn' + formId + '_') === 0) {
+								return true;
+							}
+						}
+					}
+
+					var parents = RSFormProUtils.getParents(event.target);
+
+					if (parents.length) {
+						for (var i = 0; i < parents.length; i++) {
+							if (RSFormProUtils.hasClass(parents[i], 'yui-calcontainer')) {
+								return true;
+							}
+						}
+					}
+
+					RSFormPro.YUICalendar.hideAllPopupCalendars(formId, calendarsIds);
+				});
+			}
+		});
 	},
 	
 	dateFormat: function () {
@@ -355,4 +410,4 @@ RSFormPro.YUICalendar = {
 		isoDateTime:     "yyyy-mm-dd'T'HH:MM:ss",
 		isoFullDateTime: "yyyy-mm-dd'T'HH:MM:ss.lo"
 	}
-}
+};

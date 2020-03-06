@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright     Copyright (c) 2009-2019 Ryan Demmer. All rights reserved
+ * @copyright     Copyright (c) 2009-2020 Ryan Demmer. All rights reserved
  * @license       GNU/GPL 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * JCE is free software. This version may have been modified pursuant
  * to the GNU General Public License, and as distributed it includes or
@@ -10,9 +10,13 @@
  */
 require_once WF_EDITOR_LIBRARIES . '/classes/manager.php';
 
+JLoader::registerNamespace('Michelf', __DIR__ . '/vendor/php-markdown/Michelf', false, false, 'psr4');
+
+use Michelf\Markdown;
+
 final class WFTemplateManagerPlugin extends WFMediaManager
 {
-    protected $_filetypes = 'html=html,htm;text=txt';
+    protected $_filetypes = 'html=html,htm;text=txt,md';
 
     public function __construct($config = array())
     {
@@ -43,7 +47,30 @@ final class WFTemplateManagerPlugin extends WFMediaManager
         $document->addScriptDeclaration('TemplateManager.settings=' . json_encode($this->getSettings()) . ';');
     }
 
-    public function createTemplate($dir, $name, $type)
+    public function onUpload($file, $relative = '')
+    {
+        parent::onUpload($file, $relative);
+
+        $app = JFactory::getApplication();
+
+        if ($app->input->getInt('inline', 0) === 1) {
+            $result = array(
+                'file' => $relative,
+                'name' => basename($file),
+            );
+
+            // get the relative filesystem path
+            $relative = $this->getFileBrowser()->getFileSystem()->toRelative($file);
+
+            $result['data'] = $this->loadTemplate($relative);
+
+            return $result;
+        }
+
+        return array();
+    }
+
+    public function createTemplate($dir, $name)
     {
         $browser = $this->getFileBrowser();
 
@@ -70,7 +97,8 @@ final class WFTemplateManagerPlugin extends WFMediaManager
         // Remove any existing template div
         $data = preg_replace('/<div(.*?)class="mceTmpl"([^>]*?)>([\s\S]*?)<\/div>/i', '$3', $data);
 
-        if ($type == 'template') {
+        // if the template contains any variables, then treat it as a dynamic template
+        if ($this->isDynamicTemplate($data)) {
             $data = '<div class="mceTmpl">' . $data . '</div>';
         }
 
@@ -92,9 +120,31 @@ final class WFTemplateManagerPlugin extends WFMediaManager
         return $browser->getResult();
     }
 
+    protected function isDynamicTemplate($content)
+    {
+        return preg_match('/\{\$(.+?)\}/i', $content);
+    }
+
+    protected function replaceValuesToArray()
+    {
+        $data = array();
+        $params = $this->getParam('replace_values');
+
+        if ($params) {
+            foreach (explode(',', $params) as $param) {
+                list($key, $value) = preg_split('/[:=]/', $param);
+                $data[$key] = trim($value);
+            }
+        }
+
+        return $data;
+    }
+
     protected function replaceVars($matches)
     {
-        switch ($matches[1]) {
+        $key = $matches[1];
+
+        switch ($key) {
             case 'modified':
                 return strftime($this->getParam('mdate_format', '%Y-%m-%d %H:%M:%S'));
                 break;
@@ -107,20 +157,17 @@ final class WFTemplateManagerPlugin extends WFMediaManager
             case 'email':
                 $user = JFactory::getUser();
 
-                return isset($user->$matches[1]) ? $user->$matches[1] : $matches[1];
+                return isset($user->$key) ? $user->$key : $key;
                 break;
             default:
 
                 // Replace other pre-defined variables
-                $params = $this->getParam('replace_values');
-                if ($params) {
-                    foreach (explode(',', $params) as $param) {
-                        $k = preg_split('/[:=]/', $param);
-                        if (trim($k[0]) == $matches[1]) {
-                            return trim($k[1]);
-                        }
-                    }
+                $values = $this->replaceValuesToArray();
+
+                if (isset($values[$key])) {
+                    return $values[$key];
                 }
+
                 break;
         }
     }
@@ -132,11 +179,19 @@ final class WFTemplateManagerPlugin extends WFMediaManager
         // check path
         WFUtility::checkPath($file);
 
+        $ext = WFUtility::getExtension($file);
+
+        // read content
         $content = $browser->getFileSystem()->read($file);
 
         // Remove body etc.
         if (preg_match('/<body[^>]*>([\s\S]+?)<\/body>/', $content, $matches)) {
             $content = trim($matches[1]);
+        }
+
+        // process markdown
+        if (strtolower($ext) === 'md') {
+            $content = Markdown::defaultTransform($content);
         }
 
         // Replace variables
@@ -156,5 +211,24 @@ final class WFTemplateManagerPlugin extends WFMediaManager
         $config['position'] = 'bottom';
 
         return parent::getFileBrowserConfig($config);
+    }
+
+    public function getTemplateList()
+    {
+        $list = array();
+        $items = $this->getFileBrowser()->getItems('', 0);
+
+        foreach ($items['files'] as $item) {
+            if ($item['name'] === "index.html") {
+                continue;
+            }
+
+            $name = WFUtility::getFilename($item['name']);
+            $value = $item['properties']['preview'];
+
+            $list[$name] = $value;
+        }
+
+        return $list;
     }
 }

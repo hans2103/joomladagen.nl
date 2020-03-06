@@ -4,7 +4,7 @@ if (typeof RSFormPro != 'object') {
 
 RSFormPro.Validations = {
 	Numeric: function () {
-		jQuery('.rsform_hide').on("keyup", '[data-properties="numeric"]', function () {
+		jQuery('#rsfp-tabs').on("keyup", '[data-properties="numeric"]', function () {
 			/**
 			 * jQuery.isNumeric
 			 * https://api.jquery.com/jQuery.isNumeric/#jQuery-isNumeric-value
@@ -16,7 +16,7 @@ RSFormPro.Validations = {
 	},
 	
 	Float: function () {
-		jQuery('.rsform_hide').on("keyup", '[data-properties="float"]', function () {
+		jQuery('#rsfp-tabs').on("keyup", '[data-properties="float"]', function () {
 			/**
 			 * jQuery.isNumeric
 			 * https://api.jquery.com/jQuery.isNumeric/#jQuery-isNumeric-value
@@ -39,10 +39,8 @@ RSFormPro.Validations = {
 	},
 
 	Tooltips: function($field) {
-		if (typeof jQuery.fn.popover == 'function') {
+		if (typeof jQuery.fn.popover === 'function') {
 			jQuery('.fieldHasTooltip').popover({"html": true, "container": "body", "trigger": 'hover'});
-		} else {
-			new Tips($$('.fieldHasTooltip'), { maxTitleChars: 50, fixed: false});
 		}
 	},
 
@@ -63,21 +61,48 @@ RSFormPro.Validations = {
 				 * should be like this:
 				 * case -> type -> { show : fields , hide : fields}
 				 */
-				jQuery.each($data.case[$initialVal].hide, function(){
-					jQuery('#id' + this).hide();
-				});
+				if (typeof $data.case !== 'undefined' && $data.case.hasOwnProperty($initialVal)) {
+					jQuery.each($data.case[$initialVal].hide, function () {
+						jQuery('#id' + this).hide();
+					});
+				}
+				if (typeof $data.indexcase !== 'undefined') {
+					jQuery.each($data.indexcase, function(index, value){
+						if ($initialVal.indexOf(index) === 0) {
+							jQuery.each(value.hide, function () {
+								jQuery('#id' + this).hide();
+							});
+						}
+					});
+				}
 
 				$el.change(function () {
 
 					var $value = this.value;
 
-					jQuery.each($data.case[$value].hide, function(){
-						jQuery('#id' + this).hide();
-					});
+					if (typeof $data.case !== 'undefined' && $data.case.hasOwnProperty($value)) {
+						jQuery.each($data.case[$value].hide, function () {
+							jQuery('#id' + this).hide();
+						});
 
-					jQuery.each($data.case[$value].show, function(){
-						jQuery('#id' + this).show();
-					});
+						jQuery.each($data.case[$value].show, function () {
+							jQuery('#id' + this).show();
+						});
+					}
+
+					if (typeof $data.indexcase !== 'undefined') {
+						jQuery.each($data.indexcase, function(index, value){
+							if ($value.indexOf(index) === 0) {
+								jQuery.each(value.show, function () {
+									jQuery('#id' + this).show();
+								});
+
+								jQuery.each(value.hide, function () {
+									jQuery('#id' + this).hide();
+								});
+							}
+						});
+					}
 				});
 			}
 		});
@@ -96,7 +121,7 @@ jQuery(document).ready(function () {
 	 * Bind the functions to the event created
 	 * in administrator\components\com_rsform\assets\js\script.js
 	 */
-	jQuery('.rsform_hide').on('renderedLayout',
+	jQuery('#rsfp-tabs').on('renderedLayout',
 		function (objectEvent, $field) {
 
 			RSFormPro.Validations.Tags($field);

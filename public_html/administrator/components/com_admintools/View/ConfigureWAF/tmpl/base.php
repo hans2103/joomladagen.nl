@@ -1,14 +1,31 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
 /** @var Akeeba\AdminTools\Admin\View\ConfigureWAF\Html    $this */
 use Akeeba\AdminTools\Admin\Helper\Select;
+use FOF30\Date\Date;
 
 defined('_JEXEC') or die;
+
+$serverTZName = $this->container->platform->getConfig()->get('offset', 'UTC');
+
+try
+{
+	$timezone = new DateTimeZone($serverTZName);
+}
+catch (Exception $e)
+{
+	$timezone = new DateTimeZone('UTC');
+}
+
+$date = new Date('now');
+$date->setTimezone($timezone);
+$timezoneName = $date->format('T', true);
+
 ?>
 <div class="akeeba-form-group">
 	<label for="ipworkarounds"
@@ -19,7 +36,8 @@ defined('_JEXEC') or die;
 		<?php echo \JText::_('COM_ADMINTOOLS_CONFIGUREWAF_OPT_IPWORKAROUNDS'); ?>
 	</label>
 
-    <?php echo \JHtml::_('FEFHelper.select.booleanswitch', 'ipworkarounds', $this->wafconfig['ipworkarounds']); ?>
+    <?php //echo \JHtml::_('FEFHelper.select.booleanswitch', 'ipworkarounds', $this->wafconfig['ipworkarounds']); ?>
+    <?php echo Select::ipworkarounds('ipworkarounds', '' , $this->wafconfig['ipworkarounds'])?>
 </div>
 
 <div class="akeeba-form-group">
@@ -78,17 +96,16 @@ defined('_JEXEC') or die;
 	</label>
 
 	<div class="akeeba-form--inline">
-		<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_FROM'); ?>
+		<?php echo \JText::sprintf('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_FROM', $timezoneName); ?>
 		<input type="text" name="awayschedule_from" id="awayschedule_from" class="input-mini"
 			   value="<?php echo $this->wafconfig['awayschedule_from'] ?>"/>
-		<?php echo \JText::_('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_TO'); ?>
+		<?php echo \JText::sprintf('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_TO', $timezoneName); ?>
 		<input type="text" name="awayschedule_to" id="awayschedule_to" class="input-mini"
 			   value="<?php echo $this->escape($this->wafconfig['awayschedule_to']); ?>"/>
 
 		<div class="akeeba-block--info" style="margin-top: 10px">
 			<?php
-			$date = new \FOF30\Date\Date('now', $this->container->platform->getConfig()->get('offset', 'UTC'));
-			echo JText::sprintf('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_TIMEZONE', $date->format('H:i', true));
+			echo JText::sprintf('COM_ADMINTOOLS_LBL_CONFIGUREWAF_AWAYSCHEDULE_TIMEZONE', $date->format('H:i T', true), $serverTZName);
 			?>
 		</div>
 	</div>

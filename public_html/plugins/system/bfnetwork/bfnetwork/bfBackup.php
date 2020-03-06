@@ -2,11 +2,9 @@
 
 /*
  * @package   bfNetwork
- * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019 Blue Flame Digital Solutions Ltd. All rights reserved.
+ * @copyright Copyright (C) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Blue Flame Digital Solutions Ltd. All rights reserved.
  * @license   GNU General Public License version 3 or later
  *
- * @see       https://myJoomla.guru/
- * @see       https://myWP.guru/
  * @see       https://mySites.guru/
  * @see       https://www.phil-taylor.com/
  *
@@ -120,15 +118,22 @@ final class bfBackup
                 }
 
                 $frontend_enable      = $params->get('frontend_enable');
-                $frontend_secret_word = $params->get('frontend_secret_word');
 
                 if (1 != $frontend_enable) {
                     $params->set('frontend_enable', 1);
-                    $saveChanges = true;
                 }
 
-                // Get a complex unique non-crypto string from myJoomla.com
-                $string = file_get_contents('https://manage.myjoomla.com/public/rand?'.time());
+                // Get a complex unique non-crypto string from mysites.guru
+                $string = file_get_contents('https://manage.mysites.guru/public/rand?'.time());
+
+                if (!$string) {
+                    // try again... grrr
+                    $string = file_get_contents('https://manage.mysites.guru/public/rand?'.time());
+                }
+
+                if (!$string) {
+                    bfEncrypt::reply('error', 'Could not generate secure secret');
+                }
 
                 $params->set('frontend_secret_word', $string);
                 $saveChanges = true;
@@ -183,14 +188,19 @@ final class bfBackup
                     $params->frontend_secret_word = (new \Akeeba\Engine\Util\SecureSettings())->encryptSettings($secretWord);
                 } else {
                     if (!$params->frontend_secret_word || preg_match('/\&/', $params->frontend_secret_word)) {
-                        // Get a complex unique non-crypto string from myJoomla.com
-                        $string                       = file_get_contents('https://manage.myjoomla.com/public/rand?'.time());
+                        // Get a complex unique non-crypto string from mysites.guru
+                        $string                       = file_get_contents('https://maange.mysites.guru/public/rand?'.time());
                         $params->frontend_secret_word = $string;
                         $secretWord                   = $params->frontend_secret_word;
                     }
                 }
 
+                // Akeeba 7+
+                $params->jsonapi_enabled = 1;
+
+                // Akeeba 7-
                 $params->frontend_enable = 1;
+
                 $params                  = json_encode($params);
 
                 $sql = 'UPDATE #__extensions SET params = \'%s\' WHERE extension_id = %s';

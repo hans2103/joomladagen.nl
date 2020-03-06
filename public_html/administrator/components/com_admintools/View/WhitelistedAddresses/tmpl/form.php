@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   admintools
- * @copyright Copyright (c)2010-2019 Nicholas K. Dionysopoulos / Akeeba Ltd
+ * @copyright Copyright (c)2010-2020 Nicholas K. Dionysopoulos / Akeeba Ltd
  * @license   GNU General Public License version 3, or later
  */
 
@@ -18,6 +18,7 @@ defined('_JEXEC') or die;
 		<li><?php echo JText::_('COM_ADMINTOOLS_LBL_WHITELISTEDADDRESS_IP_OPT3') ?></li>
 		<li><?php echo JText::_('COM_ADMINTOOLS_LBL_WHITELISTEDADDRESS_IP_OPT4') ?></li>
 		<li><?php echo JText::_('COM_ADMINTOOLS_LBL_WHITELISTEDADDRESS_IP_OPT5') ?></li>
+		<li><?php echo JText::_('COM_ADMINTOOLS_LBL_WHITELISTEDADDRESS_IP_OPT6') ?></li>
 	</ol>
 
 	<p>

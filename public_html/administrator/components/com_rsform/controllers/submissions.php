@@ -11,9 +11,9 @@ class RsformControllerSubmissions extends RsformController
 {
     public $_db;
 
-	public function __construct()
+	public function __construct($config = array())
 	{
-		parent::__construct();
+		parent::__construct($config);
 		
 		$this->registerTask('apply', 			'save');
 		$this->registerTask('exportCSV', 		'export');
@@ -115,9 +115,10 @@ class RsformControllerSubmissions extends RsformController
 		$app 	= JFactory::getApplication();
 		$formId = $app->input->getInt('formId');
         $cid	= $app->input->post->get('cid', array(), 'array');
-		$cid = array_map('intval', $cid);
+		$cid 	= array_map('intval', $cid);
 		
-		foreach ($cid as $SubmissionId) {
+		foreach ($cid as $SubmissionId)
+		{
             RSFormProHelper::sendSubmissionEmails($SubmissionId);
         }
 		
@@ -130,8 +131,8 @@ class RsformControllerSubmissions extends RsformController
 		$formId = $app->input->getInt('formId');
 		$cid	= $app->input->post->get('cid', array(), 'array');
 		$cid 	= array_map('intval', $cid);
+		$model 	= $this->getModel('submissions');
 
-		$model = $this->getModel('submissions');
 		$model->confirm($cid);
 
 		$this->setRedirect('index.php?option=com_rsform&view=submissions&formId=' . $formId, JText::_('COM_RSFORM_SUBMISSIONS_CONFIRMED'));
@@ -139,8 +140,7 @@ class RsformControllerSubmissions extends RsformController
 	
 	public function cancel()
 	{
-		$app = JFactory::getApplication();
-		$app->redirect('index.php?option=com_rsform');
+		JFactory::getApplication()->redirect('index.php?option=com_rsform');
 	}
 	
 	public function cancelForm()
@@ -183,8 +183,7 @@ class RsformControllerSubmissions extends RsformController
 	
 	public function export()
 	{
-		$config   = JFactory::getConfig();
-		$tmp_path = $config->get('tmp_path');
+		$tmp_path = JFactory::getConfig()->get('tmp_path');
 		if (!is_writable($tmp_path))
 		{
             $app = JFactory::getApplication();
@@ -353,15 +352,25 @@ class RsformControllerSubmissions extends RsformController
                     {
                         $query = $db->getQuery(true)
                             ->select($db->qn('SubmissionId'))
+                            ->select($db->qn('FormId'))
                             ->from($db->qn('#__rsform_submissions'))
-                            ->where($db->qn('SubmissionId') . ' = ' . $db->q($submission->SubmissionId))
-                            ->where($db->qn('FormId') . ' = ' . $db->q($formId));
-                        $exists = $db->setQuery($query)->loadResult() !== null;
+                            ->where($db->qn('SubmissionId') . ' = ' . $db->q($submission->SubmissionId));
+                        $exists = $db->setQuery($query)->loadObject();
                     }
 
                     if ($exists)
                     {
-                        $db->updateObject('#__rsform_submissions', $submission, array('SubmissionId'));
+                    	// Same form, update
+                    	if ($exists->FormId == $formId)
+						{
+							$db->updateObject('#__rsform_submissions', $submission, array('SubmissionId'));
+						}
+						else
+						{
+							// Different form, submission ID can't be reused to avoid modifying the wrong submission, unset $submission->SubmissionId and insert new row
+							unset($submission->SubmissionId);
+							$db->insertObject('#__rsform_submissions', $submission, 'SubmissionId');
+						}
                     }
                     else
                     {
@@ -419,23 +428,22 @@ class RsformControllerSubmissions extends RsformController
 	
 	public function exportProcess()
 	{
-		$mainframe = JFactory::getApplication();
-		
-		$config = JFactory::getConfig();
-	
+		$mainframe 	= JFactory::getApplication();
+		$session 	= JFactory::getSession();
+
 		// Get post
-		$session = JFactory::getSession();
 		$post = $session->get('com_rsform.export.data', serialize(array()));
 		$post = unserialize($post);
 		
 		// Limit
 		$start = $mainframe->input->getInt('exportStart');
+		$limit = $mainframe->input->getInt('exportLimit', RSFormProHelper::getConfig('export.limit'));
+
 		$mainframe->setUserState('com_rsform.submissions.limitstart', $start);
-		$limit = $mainframe->input->getInt('exportLimit', 500);
 		$mainframe->setUserState('com_rsform.submissions.limit', $limit);
 		
 		// Tmp path
-		$tmp_path = $config->get('tmp_path');
+		$tmp_path = JFactory::getConfig()->get('tmp_path');
 		$file = $tmp_path.'/'.$post['ExportFile'];
 		
 		$formId = $post['formId'];
@@ -443,22 +451,21 @@ class RsformControllerSubmissions extends RsformController
 		// Type
 		$type = strtolower($post['exportType']);
 		
-		// Selected rows or all rows
-		$rows = !empty($post['ExportRows']) ? explode(',', $post['ExportRows']) : '';
-		
-		// Use headers ?
+		// Use headers
 		$use_headers = !empty($post['ExportHeaders']);
 		
 		// Headers and ordering
-		$staticHeaders = $post['ExportSubmission'];
-		$headers = $post['ExportComponent'];
-		$order = $post['ExportOrder'];
+		$staticHeaders 	= $post['ExportSubmission'];
+		$headers 		= $post['ExportComponent'];
+		$order 			= $post['ExportOrder'];
 		
 		// Remove headers that we're not going to export
 		foreach ($order as $name => $id)
 		{
 			if (!isset($staticHeaders[$name]) && !isset($headers[$name]))
+			{
 				unset($order[$name]);
+			}
 		}
 		
 		// Adjust order array
@@ -466,8 +473,28 @@ class RsformControllerSubmissions extends RsformController
 		ksort($order);
 		
 		$model = $this->getModel('submissions');
-		$model->export = true;
-		$model->rows = $rows;
+
+		switch ($post['ExportRows'])
+		{
+			// All rows
+			case '0':
+				$model->export = true;
+				$model->rows = null;
+				break;
+
+			// Filtered rows
+			case '-1':
+				$model->export = false;
+				$model->rows = null;
+				break;
+
+			// Selected rows
+			default:
+				$model->export = true;
+				$model->rows = explode(',', $post['ExportRows']);
+				break;
+		}
+
 		$model->_query = $model->_buildQuery();
 		$submissions = $model->getSubmissions();
 		
@@ -738,12 +765,10 @@ class RsformControllerSubmissions extends RsformController
 	
 	public function exportFile()
 	{
-		$config = JFactory::getConfig();
 		$file = JFactory::getApplication()->input->getCmd('ExportFile');
-		$file = $config->get('tmp_path').'/'.$file;
+		$file = JFactory::getConfig()->get('tmp_path').'/'.$file;
 		
 		$type = JFactory::getApplication()->input->getCmd('ExportType');
-		$extension = 'csv';
 		
 		switch ($type) {
 			default:
@@ -764,8 +789,14 @@ class RsformControllerSubmissions extends RsformController
 				$extension = 'xlsx';
 			break;
 		}
+
+		$filename = str_replace(
+			array('{domain}', '{date}', '{formId}'),
+			array(JUri::getInstance()->getHost(), JHtml::_('date', 'now', 'Y-m-d_H-i'), JFactory::getApplication()->input->getCmd('formId')),
+			RSFormProHelper::getConfig('export.mask')
+		);
 		
-		RSFormProHelper::readFile($file, JFactory::getDate()->format('Y-m-d').'_rsform.'.$extension);
+		RSFormProHelper::readFile($file, $filename . '.' . $extension);
 	}
 	
 	public function viewFile()
@@ -773,6 +804,7 @@ class RsformControllerSubmissions extends RsformController
 		$app	= JFactory::getApplication();
 		$db		= &$this->_db;
 		$id 	= $app->input->getInt('id');
+		$file   = $app->input->getCmd('file');
 		
 		$query = $db->getQuery(true);
 		$query->select('*')
@@ -781,9 +813,12 @@ class RsformControllerSubmissions extends RsformController
 		$result = $db->setQuery($query)->loadObject();
 		
 		// Not found
-		if (empty($result)) {
+		if (empty($result))
+		{
 			$app->redirect('index.php?option=com_rsform&view=submissions');
 		}
+
+		$allowedTypes = array(RSFORM_FIELD_FILEUPLOAD);
 		
 		$query->clear()
 			  ->select($db->qn('c.ComponentTypeId'))
@@ -793,16 +828,39 @@ class RsformControllerSubmissions extends RsformController
 			  ->where($db->qn('p.PropertyValue').' = '.$db->q($result->FieldName))
 			  ->where($db->qn('c.FormId').' = '.$db->q($result->FormId));
 		$type = $db->setQuery($query)->loadResult();
+
+		$app->triggerEvent('rsfp_onSubmissionsViewFile', array(&$allowedTypes, &$result));
 		
 		// Not an upload field
-		if ($type != 9) {
+		if (!in_array($type, $allowedTypes))
+		{
 			return $this->setRedirect('index.php?option=com_rsform&view=submissions', JText::_('RSFP_VIEW_FILE_NOT_UPLOAD'));
 		}
-		
-		if (file_exists($result->FieldValue)) {
-			RSFormProHelper::readFile($result->FieldValue);
+
+		$foundFile = false;
+		if ($file && strlen($file) == 32)
+		{
+			$values = RSFormProHelper::explode($result->FieldValue);
+
+			foreach ($values as $value)
+			{
+				if (md5($value) == $file)
+				{
+					$foundFile = $value;
+					break;
+				}
+			}
 		}
-		
-		$this->setRedirect('index.php?option=com_rsform&view=submissions', JText::_('RSFP_VIEW_FILE_NOT_FOUND'));
+		else
+		{
+			$foundFile = $result->FieldValue;
+		}
+
+		if (!$foundFile || !file_exists($foundFile))
+		{
+			return $this->setRedirect('index.php?option=com_rsform&view=submissions', JText::_('RSFP_VIEW_FILE_NOT_FOUND'));
+		}
+
+		RSFormProHelper::readFile($foundFile);
 	}
 }
