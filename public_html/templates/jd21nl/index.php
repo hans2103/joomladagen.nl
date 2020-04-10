@@ -100,7 +100,7 @@
 				<h5>30 en 31 januari 2021 - Baarlo</h5>
 				<h1>JoomlaDagen Nederland</h1>
 				<p class="lead">
-					Pak je agenda erbij! En noteer de 15e editie van de Nederlandse JoomlaDagen.<br>Op zaterdag 30 en zondag 31 januari 2021 zal hét jaarlijkse event voor iedereen die websites bouwt met Joomla plaatsvinden in Baarlo, Limburg.
+					Pak je agenda erbij! En noteer (opnieuw<sup>*</sup>) de 15e editie van de JoomlaDagen Nederland.<br>Op zaterdag 30 en zondag 31 januari 2021 zal hét jaarlijkse event voor iedereen die websites bouwt met Joomla plaatsvinden in Baarlo, Limburg.
 				</p>
 				<p>
 					Momenteel werken we onze ideeën en plannen voor deze jubileumeditie uit.<br> Zodra er meer bekend is zal dat uiteraard op deze site te vinden zijn!
@@ -110,7 +110,7 @@
 					<a href="mailto:info@joomladagen.nl">mailbox staat open</a>!
 				</p>
 				<p>
-					<em>De 15e editie stond gepland voor 27 en 28 juni 2020.<br>Vanwege de Coronacrisis hebben we besloten om deze te verplaatsen naar volgend jaar.</em>
+					<em><sup>*</sup>De 15e editie stond gepland voor 27 en 28 juni 2020. Vanwege het coronavirus hebben we besloten om de JoomlaDagen te verplaatsen naar volgend jaar.</em>
 				</p>
 				<p>
 					<small>De JoomlaDagen worden georganiseerd door
