@@ -149,6 +149,14 @@ defined('_JEXEC') or die('Restricted access');
 						<td width="25%" align="right" nowrap="nowrap" class="key"><?php echo JText::_('RSFP_DISABLE_SUBMIT_BUTTON'); ?></td>
 						<td><?php echo $this->lists['DisableSubmitButton']; ?></td>
 					</tr>
+					<tr>
+						<td width="25%" align="right" nowrap="nowrap" class="key"><?php echo JText::_('COM_RSFORM_LIMIT_SUBMISSIONS'); ?></td>
+						<td><input name="LimitSubmissions" class="rs_inp rs_10" value="<?php echo $this->escape($this->form->LimitSubmissions); ?>" min="0" step="1" size="15" id="LimitSubmissions" type="number" /></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><?php echo JText::_('COM_RSFORM_LIMIT_SUBMISSIONS_DESC'); ?></td>
+					</tr>
 				</table>
 			</fieldset>
 			<fieldset>

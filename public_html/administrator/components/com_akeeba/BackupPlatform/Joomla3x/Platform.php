@@ -861,7 +861,7 @@ class Joomla3x extends BasePlatform
 		{
 			if ( !empty($attachFile))
 			{
-				Factory::getLog()->log(LogLevel::WARNING, "-- Attaching $attachFile");
+				Factory::getLog()->log(LogLevel::INFO, "-- Attaching $attachFile");
 
 				if ( !file_exists($attachFile) || !(is_file($attachFile) || is_link($attachFile)))
 				{
@@ -1166,7 +1166,7 @@ class Joomla3x extends BasePlatform
 		$default_out = @realpath($stock_dirs['[DEFAULT_OUTPUT]']);
 
 		$registry = Factory::getConfiguration();
-		$outdir = $registry->get('akeeba.basic.output_directory');
+		$outdir   = $registry->get('akeeba.basic.output_directory');
 
 		foreach ($stock_dirs as $macro => $replacement)
 		{
@@ -1181,11 +1181,52 @@ class Joomla3x extends BasePlatform
 			return false;
 		}
 
-		$component_path = @realpath(JPATH_ROOT.'/administrator/components/com_akeeba');
+		$component_path = @realpath(JPATH_ADMINISTRATOR . '/components/com_akeeba');
 
-		if (strpos($outdir_real, $component_path) !== false)
+		$forbiddenPaths = [
+			'akeeba',
+			'AliceChecks',
+			'AliceEngine',
+			'alice',
+			'assets',
+			'Assets',
+			'BackupEngine',
+			'BackupPlatform',
+			'Controller',
+			'controllers',
+			'Dispatcher',
+			'engine',
+			'fields',
+			'Helper',
+			'helpers',
+			'Master',
+			'Model',
+			'models',
+			'platform',
+			'plugins',
+			'sql',
+			'tables',
+			'Toolbar',
+			'View',
+			'views',
+			'ViewTemplates',
+		];
+
+		foreach ($forbiddenPaths as $subdir)
 		{
-			return true;
+			$checkPath = realpath($component_path . '/' . $subdir);
+
+			if ($checkPath === false)
+			{
+				continue;
+			}
+
+			$checkPath .= DIRECTORY_SEPARATOR;
+
+			if (strpos($outdir_real, $checkPath) === 0)
+			{
+				return true;
+			}
 		}
 
 		return false;

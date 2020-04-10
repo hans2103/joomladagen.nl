@@ -72,6 +72,10 @@ class com_rsformInstallerScript
 			$db->setQuery("ALTER TABLE #__rsform_forms ADD `UserEmailReplyTo` VARCHAR (255) NOT NULL AFTER `UserEmailBCC`");
 			$db->execute();
 		}
+		if (!isset($columns['UserEmailReplyToName'])) {
+			$db->setQuery("ALTER TABLE #__rsform_forms ADD `UserEmailReplyToName` VARCHAR (255) NOT NULL AFTER `UserEmailReplyTo`");
+			$db->execute();
+		}
 		if (!isset($columns['AdminEmailCC'])) {
 			$db->setQuery("ALTER TABLE #__rsform_forms ADD `AdminEmailCC` VARCHAR (255) NOT NULL AFTER `AdminEmailTo`");
 			$db->execute();
@@ -82,6 +86,10 @@ class com_rsformInstallerScript
 		}
 		if (!isset($columns['AdminEmailReplyTo'])) {
 			$db->setQuery("ALTER TABLE #__rsform_forms ADD `AdminEmailReplyTo` VARCHAR (255) NOT NULL AFTER `AdminEmailBCC`");
+			$db->execute();
+		}
+		if (!isset($columns['AdminEmailReplyToName'])) {
+			$db->setQuery("ALTER TABLE #__rsform_forms ADD `AdminEmailReplyToName` VARCHAR (255) NOT NULL AFTER `AdminEmailReplyTo`");
 			$db->execute();
 		}
 		if (!isset($columns['LoadFormLayoutFramework'])) {
@@ -183,6 +191,10 @@ class com_rsformInstallerScript
 			$db->setQuery("ALTER TABLE `#__rsform_forms` ADD `Access` VARCHAR( 5 ) NOT NULL");
 			$db->execute();
 		}
+		if (!isset($columns['LimitSubmissions'])) {
+			$db->setQuery("ALTER TABLE `#__rsform_forms` ADD `LimitSubmissions` INT( 11 ) NOT NULL default '0'");
+			$db->execute();
+		}
 		if (!isset($columns['ScrollToThankYou'])) {
 			$db->setQuery("ALTER TABLE #__rsform_forms ADD `ScrollToThankYou` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `ShowThankyou`");
 			$db->execute();
@@ -237,6 +249,11 @@ class com_rsformInstallerScript
             $db->setQuery("ALTER TABLE #__rsform_forms ADD `DeletionEmailReplyTo` varchar(255) NOT NULL AFTER `DeletionEmailFrom`");
             $db->execute();
         }
+		if (!isset($columns['DeletionEmailReplyToName']))
+		{
+			$db->setQuery("ALTER TABLE #__rsform_forms ADD `DeletionEmailReplyToName` varchar(255) NOT NULL AFTER `DeletionEmailReplyTo`");
+			$db->execute();
+		}
         if (!isset($columns['DeletionEmailFromName']))
         {
             $db->setQuery("ALTER TABLE #__rsform_forms ADD `DeletionEmailFromName` varchar(255) NOT NULL default '' AFTER `DeletionEmailReplyTo`");
@@ -271,6 +288,10 @@ class com_rsformInstallerScript
 			$db->setQuery("ALTER TABLE `#__rsform_emails` ADD `type` VARCHAR( 255 ) NOT NULL AFTER `formId`");
 			$db->execute();
 			$db->setQuery("UPDATE `#__rsform_emails` SET `type` = 'additional'");
+			$db->execute();
+		}
+		if (!isset($columns['replytoname'])) {
+			$db->setQuery("ALTER TABLE `#__rsform_emails` ADD `replytoname` VARCHAR( 255 ) NOT NULL AFTER `replyto`");
 			$db->execute();
 		}
 		
@@ -662,6 +683,10 @@ class com_rsformInstallerScript
 			$db->setQuery("ALTER TABLE `#__rsform_posts` ADD `fields` MEDIUMTEXT NOT NULL AFTER `method`");
 			$db->execute();
 		}
+		if (!isset($columns['headers'])) {
+			$db->setQuery("ALTER TABLE `#__rsform_posts` ADD `headers` MEDIUMTEXT NOT NULL AFTER `fields`");
+			$db->execute();
+		}
 		
 		// Update DESTINATION to relative path format.
 		$query = $db->getQuery(true);
@@ -863,7 +888,7 @@ class com_rsformInstallerScript
 				$queries = $db->splitSql($buffer);
 				foreach ($queries as $query) {
 					$query = trim($query);
-					if ($query != '' && $query{0} != '#') {
+					if ($query != '') {
 						$db->setQuery($query);
 						try
                         {
@@ -990,14 +1015,9 @@ class com_rsformInstallerScript
 				<p>It seems you are still using legacy layouts - they have been removed from RSForm! Pro since they are no longer usable today as they do not provide responsive features.<br>If you still want to keep using them, please install the <a href="https://www.rsjoomla.com/support/documentation/rsform-pro/plugins-and-modules/plugin-legacy-layouts.html" target="_blank">Legacy Layouts Plugin</a>.</p>
 			</div>
 		<?php } ?>
-		<h2>Changelog v2.3.8</h2>
+		<h2>Changelog v2.3.13</h2>
 		<ul class="version-history">
-			<li><span class="version-upgraded">Upg</span> Fields will now have 'aria-required' and 'aria-invalid' attributes for better accessibility compliance.</li>
-			<li><span class="version-upgraded">Upg</span> Global placeholders are now shown in the 'Toggle Quick Add' sections.</li>
-			<li><span class="version-fixed">Fix</span> Geolocation search inside a 'Google Map' field would trigger too many requests and sometimes provide duplicate results.</li>
-			<li><span class="version-fixed">Fix</span> Selecting a date in the 'Date and Time Picker' field using a mobile device would jump the focus to an incorrect field.</li>
-			<li><span class="version-fixed">Fix</span> In some cases deleting a calculation would trigger a Javascript error.</li>
-			<li><span class="version-fixed">Fix</span> TinyMCE dialogs inside the Free Text editing modal were not clickable.</li>
+			<li><span class="version-fixed">Fix</span> 'Radio Group' fields were incorrectly being validated even if hidden by conditional logic.</li>
 		</ul>
 		<a class="btn btn-large btn-primary" href="index.php?option=com_rsform">Start using RSForm! Pro</a>
 		<a class="btn" href="https://www.rsjoomla.com/support/documentation/rsform-pro.html" target="_blank">Read the RSForm! Pro User Guide</a>

@@ -33,7 +33,7 @@ a01cd8784949a753ec82de38f2925902|bfnetwork/bfInitJoomla.php
 e8df014dae7722551ada999892743ed0|bfnetwork/bfPlugin.php
 542a366c1d5bf8a08a7517a4c3e89a50|bfnetwork/bfPref.php
 6aa6e8c6accec0e4cceb88aabe33a14b|bfnetwork/bfPreferences.php
-84513ad4a634db5db40d90b852c1d690|bfnetwork/bfRemoteLog.php
+d398569441db2aff56a2be7d2f5a2556|bfnetwork/bfRemoteLog.php
 2265545082442b4239c4c0e72213013f|bfnetwork/bfRestore.php
 56597ddd6b4f93fd83bb8b222a08712f|bfnetwork/bfSnapshot.php
 0ef703626e9811e4d697efbc5af0c3ad|bfnetwork/bfStep.php
@@ -63,5 +63,5 @@ ea149611ae21cb2de47973a352098144|bfnetwork/tmp/.htaccess
 42c3280b83230ced95b0a591955ddf85|bfnetwork/tmp/index.php
 73a5439d5ec49959d5684405675d3998|install.bfnetwork.php
 52eba135a531b4b4ccdf6e86426bcb06|j25_30_bfnetwork.xml
-82DF974AA88417C300ECF9168AD194058629B985
-82DF9
+1AB32C6DFE2C60CF662442862D77AD7001A43386
+1AB32

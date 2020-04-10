@@ -109,18 +109,18 @@ class Statistics extends Model
 			}
 		}
 
-		$allStats = Platform::getInstance()->get_statistics_list(array(
+		$allStats = Platform::getInstance()->get_statistics_list([
 			'limitstart' => $limitstart,
 			'limit'      => $limit,
 			'filters'    => $filters,
-			'order'      => $order
-		));
+			'order'      => $order,
+		]);
 
-		$validRecords    = Platform::getInstance()->get_valid_backup_records();
+		$validRecords = Platform::getInstance()->get_valid_backup_records();
 
 		if (empty($validRecords))
 		{
-			$validRecords = array();
+			$validRecords = [];
 		}
 
 		// This will hold the entries whose files are no longer present and are
@@ -230,11 +230,18 @@ class Statistics extends Model
 	public function notifyFailed()
 	{
 		// Invalidate stale backups
-		Factory::resetState([
-			'global' => true,
-			'log'    => false,
-			'maxrun' => $this->container->params->get('failure_timeout', 180),
-		]);
+		try
+		{
+			Factory::resetState([
+				'global' => true,
+				'log'    => false,
+				'maxrun' => $this->container->params->get('failure_timeout', 180),
+			]);
+		}
+		catch (Exception $e)
+		{
+			// This will die if the output directory is invalid. Let it die, then.
+		}
 
 		// Get the last execution and search for failed backups AFTER that date
 		$last = $this->getLastCheck();
@@ -459,34 +466,6 @@ ENDBODY;
 	}
 
 	/**
-	 * Deletes the backup-specific log files of a stats record
-	 *
-	 * @param   array $stat The array holding the backup stats record
-	 *
-	 * @return  void
-	 */
-	protected function deleteLogs(array $stat)
-	{
-		// We can't delete logs if there is no backup ID in the record
-		if (!isset($stat['backupid']) || empty($stat['backupid']))
-		{
-			return;
-		}
-
-		$logFileName = 'akeeba.' . $stat['tag'] . '.' . $stat['backupid'] . '.log';
-
-		$logPath = dirname($stat['absolute_path']) . '/' . $logFileName;
-
-		if (@file_exists($logPath))
-		{
-			if (!@unlink($logPath))
-			{
-				JFile::delete($logPath);
-			}
-		}
-	}
-
-	/**
 	 * Get a Joomla! pagination object
 	 *
 	 * @param   array  $filters  Filters to apply. See Platform::get_statistics_list
@@ -514,6 +493,51 @@ ENDBODY;
 	}
 
 	/**
+	 * Set the flag to hide the restoration instructions modal from the Manage Backups page
+	 *
+	 * @return  void
+	 */
+	public function hideRestorationInstructionsModal()
+	{
+		$this->container->params->set('show_howtorestoremodal', 0);
+		$this->container->params->save();
+	}
+
+	/**
+	 * Deletes the backup-specific log files of a stats record
+	 *
+	 * @param   array  $stat  The array holding the backup stats record
+	 *
+	 * @return  void
+	 */
+	protected function deleteLogs(array $stat)
+	{
+		// We can't delete logs if there is no backup ID in the record
+		if (!isset($stat['backupid']) || empty($stat['backupid']))
+		{
+			return;
+		}
+
+		$logFileNames = [
+			'akeeba.' . $stat['tag'] . '.' . $stat['backupid'] . '.log',
+			'akeeba.' . $stat['tag'] . '.' . $stat['backupid'] . '.log.php',
+		];
+
+		foreach ($logFileNames as $logFileName)
+		{
+			$logPath = dirname($stat['absolute_path']) . '/' . $logFileName;
+
+			if (@file_exists($logPath))
+			{
+				if (!@unlink($logPath))
+				{
+					JFile::delete($logPath);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Returns the Super Users' email information. If you provide a comma separated $email list we will check that these
 	 * emails do belong to Super Users and that they have not blocked reception of system emails.
 	 *
@@ -529,12 +553,12 @@ ENDBODY;
 		// Convert the email list to an array
 		if (!empty($email))
 		{
-			$temp = explode(',', $email);
-			$emails = array();
+			$temp   = explode(',', $email);
+			$emails = [];
 
 			foreach ($temp as $entry)
 			{
-				$entry = trim($entry);
+				$entry    = trim($entry);
 				$emails[] = $db->q($entry);
 			}
 
@@ -542,25 +566,25 @@ ENDBODY;
 		}
 		else
 		{
-			$emails = array();
+			$emails = [];
 		}
 
 		// Get a list of groups which have Super User privileges
-		$ret = array();
+		$ret = [];
 
 		// Get a list of groups with core.admin (Super User) permissions
 		try
 		{
 			$query = $db->getQuery(true)
-						->select($db->qn('rules'))
-						->from($db->qn('#__assets'))
-						->where($db->qn('parent_id') . ' = ' . $db->q(0));
+				->select($db->qn('rules'))
+				->from($db->qn('#__assets'))
+				->where($db->qn('parent_id') . ' = ' . $db->q(0));
 			$db->setQuery($query, 0, 1);
-			$rulesJSON	 = $db->loadResult();
-			$rules		 = json_decode($rulesJSON, true);
+			$rulesJSON = $db->loadResult();
+			$rules     = json_decode($rulesJSON, true);
 
 			$rawGroups = $rules['core.admin'];
-			$groups = array();
+			$groups    = [];
 
 			if (empty($rawGroups))
 			{
@@ -589,9 +613,9 @@ ENDBODY;
 		try
 		{
 			$query = $db->getQuery(true)
-						->select($db->qn('user_id'))
-						->from($db->qn('#__user_usergroup_map'))
-						->where($db->qn('group_id') . ' IN(' . implode(',', $groups) . ')' );
+				->select($db->qn('user_id'))
+				->from($db->qn('#__user_usergroup_map'))
+				->where($db->qn('group_id') . ' IN(' . implode(',', $groups) . ')');
 			$db->setQuery($query);
 			$rawUserIDs = $db->loadColumn(0);
 
@@ -600,7 +624,7 @@ ENDBODY;
 				return $ret;
 			}
 
-			$userIDs = array();
+			$userIDs = [];
 
 			foreach ($rawUserIDs as $id)
 			{
@@ -616,13 +640,13 @@ ENDBODY;
 		try
 		{
 			$query = $db->getQuery(true)
-						->select(array(
-							$db->qn('id'),
-							$db->qn('username'),
-							$db->qn('email'),
-						))->from($db->qn('#__users'))
-						->where($db->qn('id') . ' IN(' . implode(',', $userIDs) . ')')
-						->where($db->qn('sendEmail') . ' = ' . $db->q('1'));
+				->select([
+					$db->qn('id'),
+					$db->qn('username'),
+					$db->qn('email'),
+				])->from($db->qn('#__users'))
+				->where($db->qn('id') . ' IN(' . implode(',', $userIDs) . ')')
+				->where($db->qn('sendEmail') . ' = ' . $db->q('1'));
 
 			if (!empty($emails))
 			{
@@ -651,20 +675,20 @@ ENDBODY;
 	{
 		$db = $this->container->db;
 
-		$now = new Date();
+		$now      = new Date();
 		$nowToSql = $now->toSql();
 
 		$query = $db->getQuery(true)
-					->insert($db->qn('#__ak_storage'))
-					->columns(array($db->qn('tag'), $db->qn('lastupdate')))
-					->values($db->q('akeeba_checkfailed') . ', ' . $db->q($nowToSql));
+			->insert($db->qn('#__ak_storage'))
+			->columns([$db->qn('tag'), $db->qn('lastupdate')])
+			->values($db->q('akeeba_checkfailed') . ', ' . $db->q($nowToSql));
 
 		if ($exists)
 		{
 			$query = $db->getQuery(true)
-						->update($db->qn('#__ak_storage'))
-						->set($db->qn('lastupdate') . ' = ' . $db->q($nowToSql))
-						->where($db->qn('tag') . ' = ' . $db->q('akeeba_checkfailed'));
+				->update($db->qn('#__ak_storage'))
+				->set($db->qn('lastupdate') . ' = ' . $db->q($nowToSql))
+				->where($db->qn('tag') . ' = ' . $db->q('akeeba_checkfailed'));
 		}
 
 		try
@@ -686,9 +710,9 @@ ENDBODY;
 		$db = $this->container->db;
 
 		$query = $db->getQuery(true)
-					->select($db->qn('lastupdate'))
-					->from($db->qn('#__ak_storage'))
-					->where($db->qn('tag') . ' = ' . $db->q('akeeba_checkfailed'));
+			->select($db->qn('lastupdate'))
+			->from($db->qn('#__ak_storage'))
+			->where($db->qn('tag') . ' = ' . $db->q('akeeba_checkfailed'));
 
 		$datetime = $db->setQuery($query)->loadResult();
 
@@ -698,16 +722,5 @@ ENDBODY;
 		}
 
 		return $datetime;
-	}
-
-	/**
-	 * Set the flag to hide the restoration instructions modal from the Manage Backups page
-	 *
-	 * @return  void
-	 */
-	public function hideRestorationInstructionsModal()
-	{
-		$this->container->params->set('show_howtorestoremodal', 0);
-		$this->container->params->save();
 	}
 }

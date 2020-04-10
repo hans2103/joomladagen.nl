@@ -120,9 +120,16 @@ class RsformModelForms extends JModelList
 			$query->join('left', $this->_db->qn('#__rsform_translations', 't') . ' ON (' . implode(' AND ', $on) . ')');
 		}
 
-		if (!empty($filter_search))
+		if (strlen($filter_search))
 		{
-			$query->having('(' . $this->_db->qn('FormTitle') . ' LIKE ' . $this->_db->q('%' . $filter_search . '%') . ' OR ' . $this->_db->qn('FormName') . ' LIKE ' . $this->_db->q('%' . $filter_search . '%') . ')');
+			if (stripos($filter_search, 'id:') === 0)
+			{
+				$query->where($this->_db->qn('f.FormId') . ' = ' . (int) substr($filter_search, 3));
+			}
+			else
+			{
+				$query->having('(' . $this->_db->qn('FormTitle') . ' LIKE ' . $this->_db->q('%' . $filter_search . '%') . ' OR ' . $this->_db->qn('FormName') . ' LIKE ' . $this->_db->q('%' . $filter_search . '%') . ')');
+			}
 		}
 
 		$query->order($this->_db->qn($this->getSortColumn()) . ' ' . $this->_db->escape($this->getSortOrder()));
@@ -203,6 +210,7 @@ class RsformModelForms extends JModelList
 		// Search filter
 		$options['search'] = array(
 			'label' => JText::_('JSEARCH_FILTER'),
+			'tooltip' => JText::_('COM_RSFORM_SEARCH_FILTER_PLACEHOLDER'),
 			'value' => $this->getState('filter_search')
 		);
 		$options['reset_button'] = true;
@@ -658,6 +666,17 @@ class RsformModelForms extends JModelList
 					);
 				}
 			}
+			$form_post['headers'] 	= array();
+			if (isset($form_post['headers_name'], $form_post['headers_value']) && is_array($form_post['headers_name']) && is_array($form_post['headers_value']))
+			{
+				for ($i = 0; $i < count($form_post['headers_name']); $i++)
+				{
+					$form_post['headers'][] = array(
+						'name'  => $form_post['headers_name'][$i],
+						'value' => $form_post['headers_value'][$i],
+					);
+				}
+			}
 
 			$row->bind($form_post);
 			$row->store();
@@ -701,7 +720,7 @@ class RsformModelForms extends JModelList
             return true;
         }
 
-		$fields 	  = array('FormTitle', 'UserEmailFromName', 'UserEmailSubject', 'AdminEmailFromName', 'AdminEmailSubject', 'DeletionEmailFromName', 'DeletionEmailSubject', 'MetaDesc', 'MetaKeywords');
+		$fields 	  = array('FormTitle', 'UserEmailFromName', 'UserEmailSubject', 'AdminEmailFromName', 'AdminEmailSubject', 'DeletionEmailFromName', 'DeletionEmailSubject', 'DeletionEmailReplyToName', 'MetaDesc', 'MetaKeywords', 'UserEmailReplyToName', 'AdminEmailReplyToName');
 		$translations = RSFormProHelper::getTranslations('forms', $form->FormId, $lang, 'id');
 		foreach ($fields as $field)
 		{
@@ -919,12 +938,16 @@ class RsformModelForms extends JModelList
 
 		$translations = RSFormProHelper::getTranslations('emails', $row->formId, $this->getEmailLang());
 
-		if (isset($translations[$row->id.'.fromname']))
-			$row->fromname = $translations[$row->id.'.fromname'];
-		if (isset($translations[$row->id.'.subject']))
-			$row->subject = $translations[$row->id.'.subject'];
-		if (isset($translations[$row->id.'.message']))
-			$row->message = $translations[$row->id.'.message'];
+		$translatable = array('fromname', 'subject', 'message', 'replytoname');
+		foreach ($translatable as $property)
+		{
+			$reference = $row->id . '.' . $property;
+
+			if (isset($translations[$reference]))
+			{
+				$row->{$property} = $translations[$reference];
+			}
+		}
 
 		return $row;
 	}
@@ -977,7 +1000,7 @@ class RsformModelForms extends JModelList
 			return false;
 		}
 
-		$fields 	  = array('fromname', 'subject', 'message');
+		$fields 	  = array('fromname', 'subject', 'message', 'replytoname');
 		$translations = RSFormProHelper::getTranslations('emails', $email->formId, $lang, 'id');
 
 		// $translations is false when we're trying to get translations (en-GB) for the same language the form is in (en-GB)

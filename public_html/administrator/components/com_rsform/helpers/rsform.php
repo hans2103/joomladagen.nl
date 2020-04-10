@@ -324,6 +324,23 @@ class RSFormProHelper
 			}
 		}
 
+		// Check if the configured limit of submissions has been reached
+		if (!empty($form->LimitSubmissions))
+		{
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true)
+				->select('COUNT(*)')
+				->from($db->qn('#__rsform_submissions'))
+				->where($db->qn('FormId') . ' = ' . $db->q($formId));
+
+			$limit = $db->setQuery($query)->loadResult();
+
+			if ($limit >= $form->LimitSubmissions)
+			{
+				return JText::_('COM_RSFORM_LIMIT_SUBMISSIONS_HAS_BEEN_REACHED');
+			}
+		}
+
 		if ($form->DisableSubmitButton)
 		{
 			RSFormProAssets::addScriptDeclaration("RSFormProUtils.addEvent(window, 'load', function(){ RSFormPro.setDisabledSubmit('{$formId}', " . ($form->AjaxValidation ? 'true' : 'false') . "); });");
@@ -1206,16 +1223,17 @@ class RSFormProHelper
 		}
 
 		$userEmail = array(
-			'to'        => str_replace($placeholders, $values, $form->UserEmailTo),
-			'cc'        => str_replace($placeholders, $values, $form->UserEmailCC),
-			'bcc'       => str_replace($placeholders, $values, $form->UserEmailBCC),
-			'from'      => str_replace($placeholders, $values, $form->UserEmailFrom),
-			'replyto'   => str_replace($placeholders, $values, $form->UserEmailReplyTo),
-			'fromName'  => str_replace($placeholders, $values, $form->UserEmailFromName),
-			'text'      => str_replace($placeholders, $values, $form->UserEmailText),
-			'subject'   => str_replace($placeholders, $values, $form->UserEmailSubject),
-			'mode'      => $form->UserEmailMode,
-			'files'     => array()
+			'to'        	=> str_replace($placeholders, $values, $form->UserEmailTo),
+			'cc'        	=> str_replace($placeholders, $values, $form->UserEmailCC),
+			'bcc'       	=> str_replace($placeholders, $values, $form->UserEmailBCC),
+			'from'      	=> str_replace($placeholders, $values, $form->UserEmailFrom),
+			'replyto'   	=> str_replace($placeholders, $values, $form->UserEmailReplyTo),
+			'replytoName'   => str_replace($placeholders, $values, $form->UserEmailReplyToName),
+			'fromName'  	=> str_replace($placeholders, $values, $form->UserEmailFromName),
+			'text'      	=> str_replace($placeholders, $values, $form->UserEmailText),
+			'subject'   	=> str_replace($placeholders, $values, $form->UserEmailSubject),
+			'mode'      	=> $form->UserEmailMode,
+			'files'     	=> array()
 		);
 
 		// user cc
@@ -1258,16 +1276,17 @@ class RSFormProHelper
 		}
 
 		$adminEmail = array(
-			'to'        => str_replace($placeholders, $values, $form->AdminEmailTo),
-			'cc'        => str_replace($placeholders, $values, $form->AdminEmailCC),
-			'bcc'       => str_replace($placeholders, $values, $form->AdminEmailBCC),
-			'from'      => str_replace($placeholders, $values, $form->AdminEmailFrom),
-			'replyto'   => str_replace($placeholders, $values, $form->AdminEmailReplyTo),
-			'fromName'  => str_replace($placeholders, $values, $form->AdminEmailFromName),
-			'text'      => str_replace($placeholders, $values, $form->AdminEmailText),
-			'subject'   => str_replace($placeholders, $values, $form->AdminEmailSubject),
-			'mode'      => $form->AdminEmailMode,
-			'files'     => array()
+			'to'        	=> str_replace($placeholders, $values, $form->AdminEmailTo),
+			'cc'        	=> str_replace($placeholders, $values, $form->AdminEmailCC),
+			'bcc'       	=> str_replace($placeholders, $values, $form->AdminEmailBCC),
+			'from'      	=> str_replace($placeholders, $values, $form->AdminEmailFrom),
+			'replyto'   	=> str_replace($placeholders, $values, $form->AdminEmailReplyTo),
+			'replytoName'   => str_replace($placeholders, $values, $form->AdminEmailReplyToName),
+			'fromName'  	=> str_replace($placeholders, $values, $form->AdminEmailFromName),
+			'text'      	=> str_replace($placeholders, $values, $form->AdminEmailText),
+			'subject'   	=> str_replace($placeholders, $values, $form->AdminEmailSubject),
+			'mode'      	=> $form->AdminEmailMode,
+			'files'     	=> array()
 		);
 
 		// admin cc
@@ -1304,7 +1323,7 @@ class RSFormProHelper
 		{
 			$recipients = explode(',', $userEmail['to']);
 
-			RSFormProHelper::sendMail($userEmail['from'], $userEmail['fromName'], $recipients, $userEmail['subject'], $userEmail['text'], $userEmail['mode'], !empty($userEmail['cc']) ? $userEmail['cc'] : null, !empty($userEmail['bcc']) ? $userEmail['bcc'] : null, $userEmail['files'], !empty($userEmail['replyto']) ? $userEmail['replyto'] : '');
+			RSFormProHelper::sendMail($userEmail['from'], $userEmail['fromName'], $recipients, $userEmail['subject'], $userEmail['text'], $userEmail['mode'], !empty($userEmail['cc']) ? $userEmail['cc'] : null, !empty($userEmail['bcc']) ? $userEmail['bcc'] : null, $userEmail['files'], !empty($userEmail['replyto']) ? $userEmail['replyto'] : '', !empty($userEmail['replytoName']) ? $userEmail['replytoName'] : null);
 		}
 
 		$mainframe->triggerEvent('rsfp_beforeAdminEmail', array(array('form' => &$form, 'placeholders' => &$placeholders, 'values' => &$values, 'submissionId' => $SubmissionId, 'adminEmail'=>&$adminEmail)));
@@ -1317,7 +1336,7 @@ class RSFormProHelper
 		{
 			$recipients = explode(',', $adminEmail['to']);
 
-			RSFormProHelper::sendMail($adminEmail['from'], $adminEmail['fromName'], $recipients, $adminEmail['subject'], $adminEmail['text'], $adminEmail['mode'], !empty($adminEmail['cc']) ? $adminEmail['cc'] : null, !empty($adminEmail['bcc']) ? $adminEmail['bcc'] : null, $adminEmail['files'], !empty($adminEmail['replyto']) ? $adminEmail['replyto'] : '');
+			RSFormProHelper::sendMail($adminEmail['from'], $adminEmail['fromName'], $recipients, $adminEmail['subject'], $adminEmail['text'], $adminEmail['mode'], !empty($adminEmail['cc']) ? $adminEmail['cc'] : null, !empty($adminEmail['bcc']) ? $adminEmail['bcc'] : null, $adminEmail['files'], !empty($adminEmail['replyto']) ? $adminEmail['replyto'] : '', !empty($adminEmail['replytoName']) ? $adminEmail['replytoName'] : null);
 		}
 
 		// Additional emails
@@ -1333,7 +1352,7 @@ class RSFormProHelper
 
 			foreach ($emails as $email)
 			{
-			    foreach (array('fromname', 'subject', 'message') as $value)
+			    foreach (array('fromname', 'subject', 'message', 'replytoname') as $value)
                 {
                     if (isset($translations[$email->id . '.' . $value]))
                     {
@@ -1355,16 +1374,17 @@ class RSFormProHelper
 				}
 
 				$additionalEmail = array(
-					'to'        => str_replace($placeholders, $values, $email->to),
-					'cc'        => str_replace($placeholders, $values, $email->cc),
-					'bcc'       => str_replace($placeholders, $values, $email->bcc),
-					'from'      => str_replace($placeholders, $values, $email->from),
-					'replyto'   => str_replace($placeholders, $values, $email->replyto),
-					'fromName'  => str_replace($placeholders, $values, $email->fromname),
-					'text'      => str_replace($placeholders, $values, $email->message),
-					'subject'   => str_replace($placeholders, $values, $email->subject),
-					'mode'      => $email->mode,
-					'files'     => array()
+					'to'        	=> str_replace($placeholders, $values, $email->to),
+					'cc'        	=> str_replace($placeholders, $values, $email->cc),
+					'bcc'       	=> str_replace($placeholders, $values, $email->bcc),
+					'from'      	=> str_replace($placeholders, $values, $email->from),
+					'replyto'   	=> str_replace($placeholders, $values, $email->replyto),
+					'replytoName'   => str_replace($placeholders, $values, $email->replytoname),
+					'fromName'  	=> str_replace($placeholders, $values, $email->fromname),
+					'text'      	=> str_replace($placeholders, $values, $email->message),
+					'subject'   	=> str_replace($placeholders, $values, $email->subject),
+					'mode'      	=> $email->mode,
+					'files'     	=> array()
 				);
 
 				if (isset($additionalEmailUploads, $additionalEmailUploads[$email->id]))
@@ -1398,7 +1418,7 @@ class RSFormProHelper
 				{
 					$recipients = explode(',', $additionalEmail['to']);
 
-					RSFormProHelper::sendMail($additionalEmail['from'], $additionalEmail['fromName'], $recipients, $additionalEmail['subject'], $additionalEmail['text'], $additionalEmail['mode'], !empty($additionalEmail['cc']) ? $additionalEmail['cc'] : null, !empty($additionalEmail['bcc']) ? $additionalEmail['bcc'] : null, $additionalEmail['files'], !empty($additionalEmail['replyto']) ? $additionalEmail['replyto'] : '');
+					RSFormProHelper::sendMail($additionalEmail['from'], $additionalEmail['fromName'], $recipients, $additionalEmail['subject'], $additionalEmail['text'], $additionalEmail['mode'], !empty($additionalEmail['cc']) ? $additionalEmail['cc'] : null, !empty($additionalEmail['bcc']) ? $additionalEmail['bcc'] : null, $additionalEmail['files'], !empty($additionalEmail['replyto']) ? $additionalEmail['replyto'] : '', !empty($additionalEmail['replytoName']) ? $additionalEmail['replytoName'] : null);
 				}
 			}
 		}
@@ -1940,7 +1960,7 @@ class RSFormProHelper
 			$formLayout .= "\n".'}';
 			$formLayout .= "\n".'rsfp_Calculations'.$formId.'();';
 			$formLayout .= RSFormProCalculations::getFields($calculations,$formId);
-			$formLayout .= "\n".'rsfp_setCalculationsEvents('.$formId.',rsfpCalculationFields'.$formId.');';
+			$formLayout .= "\n".'RSFormPro.Calculations.addEvents('.$formId.',rsfpCalculationFields'.$formId.');';
 			$formLayout .= "\n".'</script>';
 		}
 
@@ -2227,6 +2247,13 @@ class RSFormProHelper
 				}
 			}
 
+			if ($silentPost && !empty($silentPost->headers)) {
+				$silentPost->headers = json_decode($silentPost->headers);
+				if (!is_array($silentPost->headers)) {
+					$silentPost->headers = array();
+				}
+			}
+
 			eval($form->ScriptProcess2);
 
 			if ($form->ScrollToThankYou)
@@ -2352,15 +2379,39 @@ class RSFormProHelper
 				try {
 					// Do we need to send data silently?
 					if ($silentPost->silent) {
+                        // Map headers
+						$silentPostHeaders = array();
+						if (!empty($silentPost->headers))
+						{
+							$hasJson = false;
+							foreach ($silentPost->headers as $field)
+							{
+								$headerName  = str_replace($replace, $with, $field->name);
+								$headerValue = str_replace($replace, $with, $field->value);
+								$silentPostHeaders[$headerName] = $headerValue;
+
+								if (strtolower($headerName) === 'content-type' && strpos(strtolower($headerValue), 'json') !== false)
+								{
+									$hasJson = true;
+								}
+							}
+
+							if ($hasJson)
+							{
+								parse_str($data, $dataArray);
+								$data = json_encode($dataArray);
+							}
+						}
+
 						// Get HTTP connector
 						$http = JHttpFactory::getHttp();
 
 						if ($silentPost->method) {
 							// POST
-							$http->post($url, $data);
+							$http->post($url, $data, $silentPostHeaders);
 						} else {
 							// GET
-							$http->get($url.(strpos($url, '?') === false ? '?' : '&').$data);
+							$http->get($url.(strpos($url, '?') === false ? '?' : '&').$data, $silentPostHeaders);
 						}
 					} else {
 						// Try to follow the URL
@@ -3376,6 +3427,8 @@ class RSFormProHelper
 		}
 
 		$html = '<strong><u>' . JText::_('COM_RSFORM_GLOBAL_PLACEHOLDERS') . '</u></strong><br />';
+
+		JFactory::getApplication()->triggerEvent('rsfp_onAfterCreateQuickAddGlobalPlaceholders', array(&$placeholders, $type));
 
 		foreach ($placeholders as $placeholder)
 		{

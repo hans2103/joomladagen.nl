@@ -750,17 +750,12 @@ class RsformModelDirectory extends JModelLegacy
 
 			foreach ($emails as $email)
 			{
-				if (isset($etranslations[$email->id.'.fromname']))
+				foreach (array('fromname', 'subject', 'message', 'replytoname') as $value)
 				{
-					$email->fromname = $etranslations[$email->id.'.fromname'];
-				}
-				if (isset($etranslations[$email->id.'.subject']))
-				{
-					$email->subject = $etranslations[$email->id.'.subject'];
-				}
-				if (isset($etranslations[$email->id.'.message']))
-				{
-					$email->message = $etranslations[$email->id.'.message'];
+					if (isset($etranslations[$email->id . '.' . $value]))
+					{
+						$email->{$value} = $etranslations[$email->id . '.' . $value];
+					}
 				}
 
 				if (empty($email->fromname) || empty($email->subject) || empty($email->message))
@@ -769,16 +764,17 @@ class RsformModelDirectory extends JModelLegacy
 				}
 
 				$directoryEmail = array(
-					'to' 		=> $email->to,
-					'cc' 		=> $email->cc,
-					'bcc' 		=> $email->bcc,
-					'from' 		=> $email->from,
-					'replyto' 	=> $email->replyto,
-					'fromName' 	=> $email->fromname,
-					'text' 		=> $email->message,
-					'subject' 	=> $email->subject,
-					'mode' 		=> $email->mode,
-					'files' 	=> array()
+					'to' 			=> $email->to,
+					'cc' 			=> $email->cc,
+					'bcc' 			=> $email->bcc,
+					'from' 			=> $email->from,
+					'replyto' 		=> $email->replyto,
+					'replytoName' 	=> $email->replytoname,
+					'fromName' 		=> $email->fromname,
+					'text' 			=> $email->message,
+					'subject' 		=> $email->subject,
+					'mode' 			=> $email->mode,
+					'files' 		=> array()
 				);
 				
 				eval($directory->EmailsCreatedScript);
@@ -819,7 +815,7 @@ class RsformModelDirectory extends JModelLegacy
 					{
 						if (!empty($recipient))
 						{
-							RSFormProHelper::sendMail($directoryEmail['from'], $directoryEmail['fromName'], $recipient, $directoryEmail['subject'], $directoryEmail['text'], $directoryEmail['mode'], !empty($directoryEmail['cc']) ? $directoryEmail['cc'] : null, !empty($directoryEmail['bcc']) ? $directoryEmail['bcc'] : null, $directoryEmail['files'], !empty($directoryEmail['replyto']) ? $directoryEmail['replyto'] : '');
+							RSFormProHelper::sendMail($directoryEmail['from'], $directoryEmail['fromName'], $recipient, $directoryEmail['subject'], $directoryEmail['text'], $directoryEmail['mode'], !empty($directoryEmail['cc']) ? $directoryEmail['cc'] : null, !empty($directoryEmail['bcc']) ? $directoryEmail['bcc'] : null, $directoryEmail['files'], !empty($directoryEmail['replyto']) ? $directoryEmail['replyto'] : '', !empty($directoryEmail['replytoName']) ? $directoryEmail['replytoName'] : null);
 						}
 					}
 				}
@@ -939,6 +935,7 @@ class RsformModelDirectory extends JModelLegacy
 		$query = $db->getQuery(true);
 		$query->select($db->qn('ct.ComponentTypeName', 'type'))
 			->select($db->qn('c.ComponentId'))
+			->select($db->qn('ct.ComponentTypeId'))
 			->from($db->qn('#__rsform_components', 'c'))
 			->join('left', $db->qn('#__rsform_component_types', 'ct').' ON ('.$db->qn('c.ComponentTypeId').'='.$db->qn('ct.ComponentTypeId').')')
 			->where($db->qn('c.FormId').'='.$db->q($submission->FormId))
@@ -979,6 +976,9 @@ class RsformModelDirectory extends JModelLegacy
 				}
 			}
 		}
+
+		$YUICalendars = false;
+		$jQueryCalendars = false;
 
 		foreach ($formFields as $field)
 		{
@@ -1143,9 +1143,99 @@ class RsformModelDirectory extends JModelLegacy
 
 					$new_field[1] .= '<input size="45" type="file" name="form['.$name.']' . ($multiple ? '[]' : '') . '" ' . ($multiple ? 'multiple' : '') . ' />';
 					break;
+
+				case 'jQueryCalendar':
+				case 'calendar':
+					if ($field->type === 'jQueryCalendar')
+					{
+						$jQueryCalendars = true;
+					}
+
+					if ($field->type === 'calendar')
+					{
+						$YUICalendars = true;
+					}
+
+					$type = (string) preg_replace('/[^A-Z0-9_\.-]/i', '', strtolower($field->type));
+					$type = ltrim($type, '.');
+					// For legacy reasons...
+					$r = array(
+						'ComponentTypeId' => $field->FieldType,
+						'Order'			  => isset($data['Order']) ? $data['Order'] : 0
+					);
+
+					// Emulate variables
+					$out = '';
+					$formId = $submission->FormId;
+					$val = isset($values[$field->name]) ? $values : $submission->values;
+					$data['componentTypeId'] 	= $field->FieldType;
+					$data['ComponentTypeName'] 	= $field->type;
+					$data['Order'] 				= $field->ordering;
+
+					$app->triggerEvent('rsfp_bk_onBeforeCreateFrontComponentBody', array(array(
+						'out' 			=> &$out,
+						'formId' 		=> $submission->FormId,
+						'componentId' 	=> $field->componentId,
+						'data' 			=> &$data,
+						'value' 		=> &$val
+					)));
+
+					$config = array(
+						'formId' 			=> $formId,
+						'componentId' 		=> $field->componentId,
+						'data' 				=> $data,
+						'value' 			=> $val,
+						'invalid' 			=> $invalid,
+						'errorClass' 		=> '',
+						'fieldErrorClass' 	=> ''
+					);
+
+					require_once JPATH_ADMINISTRATOR . '/components/com_rsform/helpers/fields/' . $type . '.php';
+
+					$class = 'RSFormProField' . $type;
+
+					// Create the field
+					$fieldClass = new $class($config);
+
+					$out .= $fieldClass->output;
+
+					$app->triggerEvent('rsfp_bk_onAfterCreateFrontComponentBody', array(array(
+						'out' 			=> &$out,
+						'formId' 		=> $formId,
+						'componentId' 	=> $fieldClass->componentId,
+						'data' 			=> $data,
+						'value' 		=> $val,
+						'r'				=> $r,
+						'invalid' 		=> $invalid
+					)));
+
+					$new_field[1] = $out;
+
+					break;
 			}
 
 			$return[$field->id] = $new_field;
+		}
+
+		if ($YUICalendars || $jQueryCalendars)
+		{
+			RSFormProAssets::addScript(JHtml::script('com_rsform/script.js', array('pathOnly' => true, 'relative' => true)));
+
+			require_once JPATH_ADMINISTRATOR.'/components/com_rsform/helpers/calendar.php';
+
+			// render the YUI Calendars
+			if ($YUICalendars)
+			{
+				$calendar = RSFormProCalendar::getInstance('YUICalendar');
+				RSFormProAssets::addScriptDeclaration($calendar->printInlineScript($formId));
+			}
+
+			// render the jQuery Calendars
+			if ($jQueryCalendars)
+			{
+				$calendar = RSFormProCalendar::getInstance('jQueryCalendar');
+				RSFormProAssets::addScriptDeclaration($calendar->printInlineScript($formId));
+			}
 		}
 
 		JFactory::getApplication()->triggerEvent('rsfp_f_onGetEditFields', array(&$return, $submission));
