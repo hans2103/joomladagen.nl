@@ -97,26 +97,14 @@
 	<div class="row justify-content-center h-100">
 		<div class="col-sm-11 col-md-10 col-lg-9 col-xl-6 my-auto pt-3 pb-3">
 			<div class="jumbotron text-center mx-auto">
-				<h5>30 en 31 januari 2021 - Baarlo</h5>
 				<h1>JoomlaDagen Nederland</h1>
 				<p class="lead">
-					Pak je agenda erbij! En noteer (opnieuw<sup>*</sup>) de 15e editie van de JoomlaDagen Nederland.<br>Op zaterdag 30 en zondag 31 januari 2021 zal hét jaarlijkse event voor iedereen die websites bouwt met Joomla plaatsvinden in Baarlo, Limburg.
+					Gezien de huidige omstandigheden en onzekerheden rond het coronavirus heeft <a href="https://www.stichtingjoomlanederland.nl/">Stichting Joomla Nederland</a> besloten de JoomlaDagen uit te stellen totdat de situatie dit weer toelaat. Een nieuwe datum zal worden geprikt zodra er voldoende zekerheid is voor doorgang van ons - normaal gesproken - jaarlijkse evenement.
 				</p>
 				<p>
-					Momenteel werken we onze ideeën en plannen voor deze jubileumeditie uit.<br> Zodra er meer bekend is zal dat uiteraard op deze site te vinden zijn!
+					Toe aan een dosis Joomla-inspiratie? Op 14 en 15 november kan je 24 uur lang de online editie van J and Beyond volgen, meer info op <a href="https://jandbeyond.org">https://jandbeyond.org</a>.
 				</p>
-				<p>
-					Ideeën, suggesties of wil je sponsoren?<br> Onze
-					<a href="mailto:info@joomladagen.nl">mailbox staat open</a>!
-				</p>
-				<p>
-					<em><sup>*</sup>De 15e editie stond gepland voor 27 en 28 juni 2020. Vanwege het coronavirus hebben we besloten om de JoomlaDagen te verplaatsen naar volgend jaar.</em>
-				</p>
-				<p>
-					<small>De JoomlaDagen worden georganiseerd door
-						<a href="https://www.stichtingjoomlanederland.nl/">Stichting Joomla Nederland</a>
-					</small>
-				</p>
+				<br>
 			</div>
 			<div class="col-sm-11 mx-auto" style="font-size:10px; color: #fff; text-align: center; margin-top:10px;">JoomlaDay™ events are officially recognized and licensed by, but not organized or operated by, Open Source Matters, Inc. (OSM) on behalf of The Joomla! Project™. Each JoomlaDay is managed independently by a local community. Use of the Joomla!® name, symbol, logo, JoomlaDay,™ and JDay™ and related trademarks is licensed by Open Source Matters, Inc.</div>
 		</div>
