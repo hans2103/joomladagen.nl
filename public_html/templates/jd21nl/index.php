@@ -4,14 +4,14 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<title>JoomlaDagen Nederland - 30 en 31 januari 2021 - Baarlo</title>
-	<meta name="description" content="Op zaterdag 30 en zondag 31 januari 2021 zal hét jaarlijkse event voor iedereen die websites bouwt met Joomla plaatsvinden in Baarlo.">
+	<title>JoomlaDagen Nederland</title>
+	<meta name="description" content="Hét jaarlijkse event voor iedereen die websites bouwt met Joomla.">
 	<meta name="robots" content="index, follow">
 	<meta name="author" content="Stichting Joomla Nederland">
-	<meta property="og:title" content="JoomlaDagen Nederland - 30 en 31 januari 2021 - Baarlo">
-	<meta property="og:site_name" content="JoomlaDagen 2021">
+	<meta property="og:title" content="JoomlaDagen Nederland ">
+	<meta property="og:site_name" content="JoomlaDagen">
 	<meta property="og:url" content="https://www.joomladagen.nl">
-	<meta property="og:description" content="Op zaterdag 30 en zondag 31 januari 2021 zal hét jaarlijkse event voor iedereen die websites bouwt met Joomla plaatsvinden in Baarlo.">
+	<meta property="og:description" content="Hét jaarlijkse event voor iedereen die websites bouwt met Joomla.">
 	<meta property="og:type" content="website">
 	<meta property="og:image" content="https://www.joomladagen.nl/images/joomladagen.jpg">
 	<meta name="twitter:card" content="summary_large_image">
@@ -99,10 +99,11 @@
 			<div class="jumbotron text-center mx-auto">
 				<h1>JoomlaDagen Nederland</h1>
 				<p class="lead">
-					Gezien de huidige omstandigheden en onzekerheden rond het coronavirus heeft <a href="https://www.stichtingjoomlanederland.nl/">Stichting Joomla Nederland</a> besloten de JoomlaDagen uit te stellen totdat de situatie dit weer toelaat. Een nieuwe datum zal worden geprikt zodra er voldoende zekerheid is voor doorgang van ons - normaal gesproken - jaarlijkse evenement.
+					Gezien de huidige omstandigheden en onzekerheden rond het coronavirus heeft
+					<a href="https://www.stichtingjoomlanederland.nl/">Stichting Joomla Nederland</a> besloten de JoomlaDagen uit te stellen totdat de situatie dit weer toelaat.
 				</p>
 				<p>
-					Toe aan een dosis Joomla-inspiratie? Op 14 en 15 november kan je 24 uur lang de online editie van J and Beyond volgen, meer info op <a href="https://jandbeyond.org">https://jandbeyond.org</a>.
+					Een nieuwe datum zal worden geprikt zodra er voldoende zekerheid is voor doorgang van ons - normaal gesproken - jaarlijkse evenement.
 				</p>
 				<br>
 			</div>
